@@ -9,7 +9,7 @@ export default class Profile extends Component {
   render() {
     return (
       <div>
-        {this.props.router.params.geo_id}
+        {this.props.router.params.id}
       </div>
     );
   }

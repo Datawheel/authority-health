@@ -9,7 +9,7 @@ export default function RouteCreate() {
   return (
     <Route path="/" component={App} history={browserHistory}>
       <IndexRoute component={Home} />
-      <Route path="profile(/:geo_id)" component={Profile} />
+      <Route path="profile(/:id)" component={Profile} />
     </Route>
   );
 }

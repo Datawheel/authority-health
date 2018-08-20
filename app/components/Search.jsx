@@ -81,7 +81,6 @@ class Search extends Component {
             S = 83,
             UP = 38;
 
-      console.log("active: ", active);
       if (primary && !active && key === S && !["input", "textarea"].includes(event.target.tagName.toLowerCase()) && !event.target.className.includes("ql-editor")) {
         event.preventDefault();
         this.onToggle.bind(this)();

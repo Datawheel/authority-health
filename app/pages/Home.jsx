@@ -13,6 +13,7 @@ export default class Home extends Component {
           primary={true}
           resultLink={ d => `/profile/${d.geoid}` }
           resultRender={d => <div className="result-container">
+            <a href = {`/profile/${d.geoid}`} />
             <div className="result-text">
               <div className="title">{ d.name }</div>
             </div>

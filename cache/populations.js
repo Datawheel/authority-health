@@ -15,7 +15,7 @@ module.exports = async function() {
           .cut("[Year].[Year].[Year].&[2016]");
         return client.query(query, "jsonrecords");
       })
-      .then(resp => 
+      .then(resp =>
         resp.data.data.reduce((acc, d) => {
           acc[d[`ID ${level}`]] = d["Total Population"];  
           return acc;

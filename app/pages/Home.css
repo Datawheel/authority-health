@@ -53,7 +53,7 @@
       }
       & .result {
         display: block;
-        &:hover {
+        &:hover, &.highlighted {
           background-color: #E9E9E9;
           cursor: pointer;
         }

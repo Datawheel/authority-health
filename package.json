@@ -23,6 +23,7 @@
   "homepage": "https://github.com/Datawheel/authority-health#readme",
   "dependencies": {
     "datawheel-canon": "^0.15.21",
-    "mondrian-rest-client": "^1.0.3"
+    "mondrian-rest-client": "^1.0.3",
+    "prop-types": "^15.6.2"
   }
 }

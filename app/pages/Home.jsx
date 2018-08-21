@@ -12,12 +12,11 @@ export default class Home extends Component {
           placeholder="ex. Woodhaven, Romulus, Wayne"
           primary={true}
           resultLink={ d => `/profile/${d.geoid}` }
-          resultRender={d => <div className="result-container">
-            <a href = {`/profile/${d.geoid}`} />
+          resultRender={d => <a className="result-container" href = {`/profile/${d.geoid}`}>
             <div className="result-text">
               <div className="title">{ d.name }</div>
             </div>
-          </div>}
+          </a>}
           url="/api/search/"
         />
       </div>

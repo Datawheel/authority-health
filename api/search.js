@@ -4,8 +4,7 @@ module.exports = function(app) {
   
   app.get("/api/search", (req, res) => {
 
-    const {q} = req.query;
-    const {id} = req.query;
+    const {q, id} = req.query;
 
     let filteredPopulation = populations;
 

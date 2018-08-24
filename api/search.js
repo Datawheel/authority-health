@@ -5,12 +5,15 @@ module.exports = function(app) {
   app.get("/api/search", (req, res) => {
 
     const {q} = req.query;
+    const {id} = req.query;
 
     let filteredPopulation = populations;
-    if (q) filteredPopulation = populations.filter(obj => obj.name.toLowerCase().includes(q.toLowerCase()));
+
+    if (id) filteredPopulation = populations.find(obj => obj.geoid === id);
+    else if (q) filteredPopulation = populations.filter(obj => obj.name.toLowerCase().includes(q.toLowerCase()));
+
     res.json(filteredPopulation).end();
 
   });
 
 };
-

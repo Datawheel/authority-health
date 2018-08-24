@@ -10,8 +10,10 @@ class Profile extends Component {
   }
 
   render() {
+    
     const {locations} = this.props;
-    const location = locations.find(location => location.geoid === this.props.router.params.id).name;
+    const location = locations.name;
+
     return (
       <div>
         <h1> {location} </h1>
@@ -21,7 +23,7 @@ class Profile extends Component {
 }
 
 Profile.need = [
-  fetchData("profiles", "/api/search")
-];  
+  fetchData("profiles", "/api/search?id=<id>")
+];
 
 export default connect(state => ({locations: state.data.profiles}))(Profile);

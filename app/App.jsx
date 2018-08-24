@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Canon} from "datawheel-canon";
 import "./App.css";
 
 export default class App extends Component {
@@ -13,9 +12,9 @@ export default class App extends Component {
 
   render() {
     return (
-      <Canon>
+      <div>
         { this.props.children }
-      </Canon>
+      </div>
     );
   }
 

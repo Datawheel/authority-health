@@ -10,9 +10,9 @@ class Profile extends Component {
   }
 
   render() {
-    
-    const {locations} = this.props;
-    const location = locations.name;
+
+    const {meta} = this.props;
+    const location = meta.name;
 
     return (
       <div>
@@ -23,7 +23,7 @@ class Profile extends Component {
 }
 
 Profile.need = [
-  fetchData("profiles", "/api/search?id=<id>")
+  fetchData("meta", "/api/search?id=<id>")
 ];
 
-export default connect(state => ({locations: state.data.profiles}))(Profile);
+export default connect(state => ({meta: state.data.meta}))(Profile);

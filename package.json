@@ -24,7 +24,6 @@
   "dependencies": {
     "@datawheel/canon-core": "^0.16.6",
     "mondrian-rest-client": "^1.0.3",
-    "prop-types": "^15.6.2",
-    "react-redux": "^5.0.7"
+    "prop-types": "^15.6.2"
   }
 }

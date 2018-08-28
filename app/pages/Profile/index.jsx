@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {fetchData} from "@datawheel/canon-core";
 import "./index.css";
+import Stat from "./components/Stat";
 
 class Profile extends Component {
 
@@ -17,6 +18,9 @@ class Profile extends Component {
     return (
       <div>
         <h1> {location} </h1>
+        <Stat 
+          title={location}
+        />
       </div>
     );
   }

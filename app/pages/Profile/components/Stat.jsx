@@ -1,28 +1,18 @@
 import React, {Component} from "react";
-import {connect} from "react-redux";
-import {fetchData} from "@datawheel/canon-core";
+import "./Stat.css";
 
-class Stat extends Component {
+export default class Stat extends Component {
 
   constructor(props) {
     super(props);
   }
 
   render() {
-
-    const {population} = this.props;
-    console.log("population from Stat: ", population);
-
     return (
       <div className="stat">
         <div className="title">{ this.props.title }</div>
+        <div className="value">{ this.props.value }</div>
       </div>
     );
   }
 }
-
-Stat.need = [
-  fetchData("population", "https://canon.datausa.io/api/data?measures=Total%20Population&Geography=16000US2684940&year=latest")
-];
-
-export default connect(state => ({population: state.data}))(Stat);

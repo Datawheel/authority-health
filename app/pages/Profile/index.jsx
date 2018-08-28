@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {fetchData} from "@datawheel/canon-core";
-import "./index.css";
 import Stat from "./components/Stat";
+import "./index.css";
 
 class Profile extends Component {
 
@@ -14,12 +14,14 @@ class Profile extends Component {
 
     const {meta} = this.props;
     const location = meta.name;
+    const {population} = this.props;
 
     return (
       <div>
         <h1> {location} </h1>
         <Stat 
           title={location}
+          value={population.data[0]["Total Population"]}
         />
       </div>
     );
@@ -27,7 +29,13 @@ class Profile extends Component {
 }
 
 Profile.need = [
-  fetchData("meta", "/api/search?id=<id>")
+  fetchData("meta", "/api/search?id=<id>"),
+  fetchData("population", "https://canon.datausa.io/api/data?measures=Total%20Population&Geography=<id>&year=latest")
 ];
 
-export default connect(state => ({meta: state.data.meta}))(Profile);
+const mapStateToProps = state => ({
+  meta: state.data.meta,
+  population: state.data.population
+});
+
+export default connect(mapStateToProps)(Profile);

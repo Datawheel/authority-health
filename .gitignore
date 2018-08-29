@@ -16,6 +16,10 @@ packages/*/static/reports
 .env
 .envrc
 
+# editor specific files
+.vscode/*
+jsconfig.json
+
 # docker files
 dockerfiles/nginx/certs/*
 dockerfiles/nginx/conf.d/default.conf

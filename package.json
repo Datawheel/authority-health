@@ -22,7 +22,8 @@
   },
   "homepage": "https://github.com/Datawheel/authority-health#readme",
   "dependencies": {
-    "@datawheel/canon-core": "^0.16.6",
+    "@datawheel/canon-core": "^0.16.7",
+    "@datawheel/canon-vizbuilder": "^0.1.2",
     "mondrian-rest-client": "^1.0.3",
     "prop-types": "^15.6.2"
   }

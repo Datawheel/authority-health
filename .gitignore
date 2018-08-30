@@ -19,3 +19,4 @@ packages/*/static/reports
 # docker files
 dockerfiles/nginx/certs/*
 dockerfiles/nginx/conf.d/default.conf
+package-lock.json

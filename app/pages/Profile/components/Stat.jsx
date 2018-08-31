@@ -3,15 +3,14 @@ import "./Stat.css";
 
 export default class Stat extends Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
+
+    const {title, value} = this.props;
+
     return (
       <div className="stat">
-        <div className="title">{ this.props.title }</div>
-        <div className="value">{ this.props.value }</div>
+        <div className="title">{ title }</div>
+        <div className="value">{ value }</div>
       </div>
     );
   }

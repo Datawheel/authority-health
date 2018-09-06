@@ -15,6 +15,7 @@ class Profile extends Component {
     const {meta} = this.props;
     const location = meta.name;
     const {population} = this.props;
+    const {diabetes} = this.props;
 
     return (
       <div>
@@ -22,6 +23,7 @@ class Profile extends Component {
         <Stat 
           title={location}
           value={population.data[0]["Total Population"]}
+          diabetes={diabetes.data[0]["Diabetes Data Value"]}
         />
       </div>
     );
@@ -29,11 +31,13 @@ class Profile extends Component {
 }
 
 Profile.need = [
+  fetchData("diabetes", "/api/data?measures=Diabetes%20Data%20Value&City=16000US2621000"),
   fetchData("meta", "/api/search?id=<id>"),
   fetchData("population", "https://canon.datausa.io/api/data?measures=Total%20Population&Geography=<id>&year=latest")
 ];
 
 const mapStateToProps = state => ({
+  diabetes: state.data.diabetes,
   meta: state.data.meta,
   population: state.data.population
 });

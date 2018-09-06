@@ -31,7 +31,7 @@ class Profile extends Component {
 }
 
 Profile.need = [
-  fetchData("diabetes", "/api/data?measures=Diabetes%20Data%20Value&City=16000US2621000"),
+  fetchData("diabetes", "/api/data?measures=Diabetes%20Data%20Value&City=<id>"),
   fetchData("meta", "/api/search?id=<id>"),
   fetchData("population", "https://canon.datausa.io/api/data?measures=Total%20Population&Geography=<id>&year=latest")
 ];

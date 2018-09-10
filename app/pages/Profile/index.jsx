@@ -21,9 +21,12 @@ class Profile extends Component {
       <div>
         <h1> {location} </h1>
         <Stat 
-          title={location}
+          title="Population"
           value={population.data[0]["Total Population"]}
-          diabetes={diabetes.data[0]["Diabetes Data Value"]}
+        />
+        <Stat 
+          title="Diabetes Rate"
+          value={diabetes.data[0]["Diabetes Data Value"]}
         />
       </div>
     );

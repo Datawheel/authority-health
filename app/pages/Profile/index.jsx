@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {fetchData} from "@datawheel/canon-core";
 import Stat from "./components/Stat";
+import {formatAbbreviate} from "d3plus-format";
 import "./index.css";
 
 class Profile extends Component {
@@ -20,13 +21,13 @@ class Profile extends Component {
     return (
       <div>
         <h1> {location} </h1>
-        <Stat 
+        <Stat
           title="Population"
           value={population.data[0]["Total Population"]}
         />
         <Stat 
           title="Diabetes Rate"
-          value={diabetes.data[0]["Diabetes Data Value"]}
+          value={formatAbbreviate(diabetes.data[0]["Diabetes Data Value"])}
         />
       </div>
     );

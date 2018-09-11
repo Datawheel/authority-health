@@ -10,7 +10,7 @@ export default class Stat extends Component {
     return (
       <div className="stat">
         <div className="title">{ title }</div>
-        <div className="value">{ value }{title === "Diabetes Rate" ? <span>%</span> : <span></span>}</div>
+        <div className="value">{ value }</div>
       </div>
     );
   }

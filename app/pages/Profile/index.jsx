@@ -17,6 +17,7 @@ class Profile extends Component {
     const location = meta.name;
     const {population} = this.props;
     const {diabetes} = this.props;
+    const diabetesRate = `${formatAbbreviate(diabetes.data[0]["Diabetes Data Value"])}%`;
 
     return (
       <div>
@@ -27,7 +28,7 @@ class Profile extends Component {
         />
         <Stat 
           title="Diabetes Rate"
-          value={formatAbbreviate(diabetes.data[0]["Diabetes Data Value"])}
+          value={diabetesRate}
         />
       </div>
     );

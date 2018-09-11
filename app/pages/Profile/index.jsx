@@ -23,11 +23,11 @@ class Profile extends Component {
         <h1> {location} </h1>
         <Stat
           title="Population"
-          value={population.data[0]["Total Population"]}
+          value={formatAbbreviate(population.data[0]["Total Population"])}
         />
         <Stat 
           title="Diabetes Rate"
-          value={`${formatAbbreviate(diabetes.data[0]["Diabetes Data Value"])}%`}
+          value={`${diabetes.data[0]["Diabetes Data Value"]}%`}
         />
       </div>
     );

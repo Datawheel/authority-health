@@ -10,25 +10,27 @@ class DemographicFoodAccess extends SectionColumns {
 
   render() {
 
+    const formatName = name => name.split(",")[0];
+
     const {foodAccessByRace} = this.props;
     const races = [];
     foodAccessByRace.source[0].measures.forEach(race => races.push(race));
     let largestRaceGroupPercentage = foodAccessByRace.data[0][races[0]];
-    let largestRaceGroup = races[0];
+    let largestRaceGroup = formatName(races[0]);
     races.forEach(race => {
       if (foodAccessByRace.data[0][race] > largestRaceGroupPercentage) {
         largestRaceGroupPercentage = foodAccessByRace.data[0][race];
-        largestRaceGroup = race;
+        largestRaceGroup = formatName(race);
       }
     });
 
     return (
       <SectionColumns>
-        <SectionTitle>Low Access to Food store</SectionTitle>
+        <SectionTitle>Low Access to Food Store</SectionTitle>
         <article>
           <Stat
-            title={`${largestRaceGroup} in the Wayne County:`}
-            value={`${formatAbbreviate(largestRaceGroupPercentage)}%`}
+            title="Low access to store"
+            value={`${largestRaceGroup} race comprises ${formatAbbreviate(largestRaceGroupPercentage)}% of the total races in Wayne County`}
           />
           <br/><br/>
           <BarChart config={{
@@ -69,7 +71,10 @@ class DemographicFoodAccess extends SectionColumns {
           x: "RaceType",
           y: d => d[d.RaceType],
           shapeConfig: {label: false},
-          xConfig: {labelRotation: false},
+          xConfig: {
+            labelRotation: false,
+            tickFormat: d => formatName(d)
+          },
           tooltipConfig: {tbody: [["Value", d => d[d.RaceType]]]}
         }}
         dataFormat={resp => {
@@ -92,6 +97,10 @@ class DemographicFoodAccess extends SectionColumns {
     );
   }
 }
+
+DemographicFoodAccess.defaultProps = {
+  slug: "low access to store"
+};
 
 DemographicFoodAccess.need = [
   fetchData("foodAccessByRace", "/api/data?measures=White%2C%20low%20access%20to%20store%20(%25),Black%2C%20low%20access%20to%20store%20(%25),Hispanic%20ethnicity%2C%20low%20access%20to%20store%20(%25),Asian%2C%20low%20access%20to%20store%20(%25),American%20Indian%20or%20Alaska%20Native%2C%20low%20access%20to%20store%20(%25),Hawaiian%20or%20Pacific%20Islander%2C%20low%20access%20to%20store%20(%25),Multiracial%2C%20low%20access%20to%20store%20(%25)&County=05000US26163&Year=all")

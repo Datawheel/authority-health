@@ -1,11 +1,11 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {fetchData, TopicTitle} from "@datawheel/canon-core";
-import Stat from "./components/Stat";
-import {formatAbbreviate} from "d3plus-format";
+// import Stat from "./components/Stat";
+// import {formatAbbreviate} from "d3plus-format";
 import "./index.css";
 
-import FoodAccess from "./components/FoodAccess";
+import FoodAccess from "./sections/food/FoodAccess";
 
 class Profile extends Component {
 
@@ -17,21 +17,21 @@ class Profile extends Component {
 
     const {meta} = this.props;
     const location = meta.name;
-    const {population} = this.props;
-    const {diabetes} = this.props;
+    // const {population} = this.props;
+    // const {diabetes} = this.props;
 
     return (
       <div>
-        <TopicTitle slug="food">Food</TopicTitle>
         <h1> {location} </h1>
-        <Stat
+        {/* <Stat
           title="Population"
           value={formatAbbreviate(population.data[0].Population)}
         />
         <Stat
           title="Diabetes Rate"
           value={`${diabetes.data[0]["Diabetes Data Value"]}%`}
-        />
+        /> */}
+        <TopicTitle slug="food">Food</TopicTitle>
         <FoodAccess />
       </div>
     );

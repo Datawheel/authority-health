@@ -17,21 +17,20 @@ class Profile extends Component {
 
     const {meta} = this.props;
     const location = meta.name;
-    const {population} = this.props;
-    const {diabetes} = this.props;
+    // const {population} = this.props;
+    // const {diabetes} = this.props;
 
     return (
       <div>
-        <TopicTitle slug="demographic">Demographic</TopicTitle>
         <h1> {location} </h1>
-        <Stat
+        {/* <Stat
           title="Population"
           value={formatAbbreviate(population.data[0].Population)}
         />
         <Stat
           title="Diabetes Rate"
           value={`${diabetes.data[0]["Diabetes Data Value"]}%`}
-        />
+        /> */}
         <DemographicFoodAccess />
       </div>
     );

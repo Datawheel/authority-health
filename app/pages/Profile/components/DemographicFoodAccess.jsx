@@ -10,6 +10,13 @@ const formatName = name => name.split(",")[0];
 
 class DemographicFoodAccess extends SectionColumns {
 
+  constructor(props) {
+    super(props);
+    this.state = {dropdownValue: ""};
+  }
+
+  handleChange = event => this.setState({dropdownValue: event.target.value});
+
   render() {
 
     const {foodAccessByRace} = this.props;
@@ -39,9 +46,22 @@ class DemographicFoodAccess extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Demographic Access</SectionTitle>
         <article>
+
+          <select onChange={this.handleChange} value={this.state.value}>
+            <option value="Children">Children</option>
+            <option value="Seniors">Seniors</option>
+            <option value="White">White</option>
+            <option value="Black">Black</option>
+            <option value="Hispanic ethnicity">Hispanic ethnicity</option>
+            <option value="Asian">Asian</option>
+            <option value="American Indian or Alaska Native">American Indian or Alaska Native</option>
+            <option value="Hawaiian or Pacific Islander">Hawaiian or Pacific Islander</option>
+            <option value="Multiracial">Multiracial</option>
+          </select>
+
           <Stat
-            title="Most common race with low store access"
-            value={`${largestRaceGroup} ${formatAbbreviate(largestRaceGroupPercentage)}%`}
+            title={`Most common ${this.state.dropdownValue} with low store access`}
+            value={`${this.state.dropdownValue} ${formatAbbreviate(largestRaceGroupPercentage)}%`}
           />
           <p>{largestRaceGroup} {formatAbbreviate(largestRaceGroupPercentage)}% in the year {foodAccessByRace.data[0]["ID Year"]} in {foodAccessByRace.data[0].County} County</p>
           <BarChart config={{

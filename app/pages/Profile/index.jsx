@@ -8,7 +8,7 @@ import "./index.css";
 import "./index.css";
 
 import FoodAccess from "./sections/food/FoodAccess";
-import DemographicFoodAccess from "./components/DemographicFoodAccess";
+import DemographicFoodAccess from "./sections/food/DemographicFoodAccess";
 
 class Profile extends Component {
 

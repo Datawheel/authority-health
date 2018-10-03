@@ -12,106 +12,87 @@ class DemographicFoodAccess extends SectionColumns {
 
   constructor(props) {
     super(props);
-    this.state = {dropdownValue: ""};
+    this.state = {dropdownValue: "Children, low access to store (%)"};
   }
 
   handleChange = event => this.setState({dropdownValue: event.target.value});
 
   render() {
 
-    const {foodAccessByRace} = this.props;
-    const races = foodAccessByRace.source[0].measures;
-    const data = foodAccessByRace.source[0].measures.map(race => {
-      const result = foodAccessByRace.data.reduce((acc, currentValue) => {
-        if (acc === null && currentValue[race] !== null) {
-          return Object.assign({}, currentValue, {RaceType: race});
+    const {foodAccessByTypes} = this.props;
+    console.log("foodAccessByTypes: ", foodAccessByTypes);
+
+    const data = foodAccessByTypes.source[0].measures.map(d => {
+      const result = foodAccessByTypes.data.reduce((acc, currentValue) => {
+        if (acc === null && currentValue[d] !== null) {
+          return Object.assign({}, currentValue, {AgeRaceType: d});
         }
         return acc;
       }, null);
       return result;
     });
 
-    data.sort((a, b) =>  b[b.RaceType] - a[a.RaceType]);
+    console.log("data: ", data);
 
-    let largestRaceGroupPercentage = foodAccessByRace.data[0][races[0]];
-    let largestRaceGroup = formatName(races[0]);
-    races.forEach(race => {
-      if (foodAccessByRace.data[0][race] > largestRaceGroupPercentage) {
-        largestRaceGroupPercentage = foodAccessByRace.data[0][race];
-        largestRaceGroup = formatName(race);
-      }
-    });
+    const raceAndAgeTypes = ["Children, low access to store (%)", "Seniors, low access to store (%)", "White, low access to store (%)", "Black, low access to store (%)", "Hispanic ethnicity, low access to store (%)", "Asian, low access to store (%)", "American Indian or Alaska Native, low access to store (%)", "Hawaiian or Pacific Islander, low access to store (%)", "Multiracial, low access to store (%)"];
+    const dropdownValues = item => <option value={item}>{item}</option>;
+    const currentRaceAndAgeData = data.find(d => d.AgeRaceType === this.state.dropdownValue);
+
+    const ageData = [], raceData = [];
+    data.forEach(d => d.AgeRaceType === raceAndAgeTypes[0] || d.AgeRaceType === raceAndAgeTypes[1] ? ageData.push(d) : raceData.push(d));
 
     return (
       <SectionColumns>
         <SectionTitle>Demographic Access</SectionTitle>
         <article>
-
-          <select onChange={this.handleChange} value={this.state.value}>
-            <option value="Children">Children</option>
-            <option value="Seniors">Seniors</option>
-            <option value="White">White</option>
-            <option value="Black">Black</option>
-            <option value="Hispanic ethnicity">Hispanic ethnicity</option>
-            <option value="Asian">Asian</option>
-            <option value="American Indian or Alaska Native">American Indian or Alaska Native</option>
-            <option value="Hawaiian or Pacific Islander">Hawaiian or Pacific Islander</option>
-            <option value="Multiracial">Multiracial</option>
-          </select>
-
+          <select onChange={this.handleChange}>{raceAndAgeTypes.map(dropdownValues)}</select>
           <Stat
-            title={`Most common ${this.state.dropdownValue} with low store access`}
-            value={`${this.state.dropdownValue} ${formatAbbreviate(largestRaceGroupPercentage)}%`}
+            title={`Access in ${currentRaceAndAgeData.County} County`}
+            value={`${formatAbbreviate(currentRaceAndAgeData[this.state.dropdownValue])}%`}
           />
-          <p>{largestRaceGroup} {formatAbbreviate(largestRaceGroupPercentage)}% in the year {foodAccessByRace.data[0]["ID Year"]} in {foodAccessByRace.data[0].County} County</p>
-          <BarChart config={{
-            data: `/api/data?measures=Children%2C%20low%20access%20to%20store%20(%25),Seniors%2C%20low%20access%20to%20store%20(%25)&County=${foodAccessByRace.data[0]["ID County"]}&Year=all`,
-            discrete: "y",
-            height: 200,
-            legend: false,
-            groupBy: "AgeType",
-            x: d => d[d.AgeType],
-            y: "AgeType",
-            yConfig: {ticks: []},
-            tooltipConfig: {tbody: [["Value", d => formatAbbreviate(d[d.AgeType])]]}
-          }}
-          dataFormat={resp => {
-            const data = resp.source[0].measures.map(ageType => {
-              const result = resp.data.reduce((acc, currentValue) => {
-                if (acc === null && currentValue[ageType] !== null) {
-                  return Object.assign({}, currentValue, {AgeType: ageType});
-                }
-                return acc;
-              }, null);
-              return result;
-            });
-            return data;
-          }}
-          />
-          <BarChart config={{
-            data,
-            discrete: "y",
-            height: 300,
-            legend: false,
-            groupBy: "RaceType",
-            x: d => d[d.RaceType],
-            y: "RaceType",
-            yConfig: {
-              ticks: [],
-              tickFormat: d => formatName(d)
-            },
-            tooltipConfig: {tbody: [["Value", d => formatAbbreviate(d[d.RaceType])]]}
-          }}
-          />
+          {/* <p>{largestRaceGroup} {formatAbbreviate(largestRaceGroupPercentage)}% in the year {foodAccessByRace.data[0]["ID Year"]} in {foodAccessByRace.data[0].County} County</p> */}
+
+          {this.state.dropdownValue === raceAndAgeTypes[0] || this.state.dropdownValue === raceAndAgeTypes[1]
+            ? <BarChart config={{
+              data: ageData,
+              discrete: "y",
+              height: 200,
+              legend: false,
+              groupBy: "AgeRaceType",
+              x: d => d[d.AgeRaceType],
+              y: "AgeRaceType",
+              yConfig: {ticks: []},
+              tooltipConfig: {tbody: [["Value", d => formatAbbreviate(d[d.AgeRaceType])]]}
+            }}
+            />
+            : <BarChart config={{
+              data: raceData,
+              discrete: "y",
+              height: 300,
+              legend: false,
+              groupBy: "AgeRaceType",
+              x: d => d[d.AgeRaceType],
+              y: "AgeRaceType",
+              yConfig: {
+                ticks: [],
+                tickFormat: d => formatName(d)
+              },
+              tooltipConfig: {tbody: [["Value", d => formatAbbreviate(d[d.AgeRaceType])]]}
+            }}
+            />
+          }
         </article>
 
         <Geomap config={{
-          data: "/api/data?measures=Children%2C%20low%20access%20to%20store%20(%25),Seniors%2C%20low%20access%20to%20store%20(%25)&drilldowns=County&Year=all",
+          data: "/api/data?measures=White%2C%20low%20access%20to%20store%20(%25),Black%2C%20low%20access%20to%20store%20(%25),Hispanic%20ethnicity%2C%20low%20access%20to%20store%20(%25),Asian%2C%20low%20access%20to%20store%20(%25),American%20Indian%20or%20Alaska%20Native%2C%20low%20access%20to%20store%20(%25),Hawaiian%20or%20Pacific%20Islander%2C%20low%20access%20to%20store%20(%25),Multiracial%2C%20low%20access%20to%20store%20(%25),Children%2C%20low%20access%20to%20store%20(%25),Seniors%2C%20low%20access%20to%20store%20(%25)&drilldowns=County&Year=all",
           groupBy: "ID County",
-          colorScale: "Children, low access to store (%)",
+          colorScale: this.state.dropdownValue,
           label: d => d.County,
           height: 400,
-          tooltipConfig: {tbody: [["Value", d => formatAbbreviate(d["Children, low access to store (%)"])]]},
+          tooltipConfig: {tbody: [["Value", d => {
+            console.log("d[this.state.dropdownValue]: ", d[this.state.dropdownValue]);
+            return formatAbbreviate(d[this.state.dropdownValue]);
+          }]]},
           topojson: "/topojson/county.json",
           topojsonFilter: d => d.id.startsWith("05000US26")
         }}
@@ -127,11 +108,11 @@ DemographicFoodAccess.defaultProps = {
 };
 
 DemographicFoodAccess.need = [
-  fetchData("foodAccessByRace", "/api/data?measures=White%2C%20low%20access%20to%20store%20(%25),Black%2C%20low%20access%20to%20store%20(%25),Hispanic%20ethnicity%2C%20low%20access%20to%20store%20(%25),Asian%2C%20low%20access%20to%20store%20(%25),American%20Indian%20or%20Alaska%20Native%2C%20low%20access%20to%20store%20(%25),Hawaiian%20or%20Pacific%20Islander%2C%20low%20access%20to%20store%20(%25),Multiracial%2C%20low%20access%20to%20store%20(%25)&County=<id>&Year=all")
+  fetchData("foodAccessByTypes", "/api/data?measures=White%2C%20low%20access%20to%20store%20(%25),Black%2C%20low%20access%20to%20store%20(%25),Hispanic%20ethnicity%2C%20low%20access%20to%20store%20(%25),Asian%2C%20low%20access%20to%20store%20(%25),American%20Indian%20or%20Alaska%20Native%2C%20low%20access%20to%20store%20(%25),Hawaiian%20or%20Pacific%20Islander%2C%20low%20access%20to%20store%20(%25),Multiracial%2C%20low%20access%20to%20store%20(%25),Children%2C%20low%20access%20to%20store%20(%25),Seniors%2C%20low%20access%20to%20store%20(%25)&County=<id>&Year=all")
 ];
 
 const mapStateToProps = state => ({
-  foodAccessByRace: state.data.foodAccessByRace
+  foodAccessByTypes: state.data.foodAccessByTypes
 });
   
 export default connect(mapStateToProps)(DemographicFoodAccess);

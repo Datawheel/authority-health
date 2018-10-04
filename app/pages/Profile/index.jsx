@@ -45,6 +45,7 @@ class Profile extends Component {
 }
 
 Profile.need = [
+  FoodStats,
   FoodAccess,
   DemographicFoodAccess,
   fetchData("diabetes", "/api/data?measures=Diabetes%20Data%20Value&City=<id>&Year=latest"),

@@ -12,8 +12,10 @@ class FoodAccess extends SectionColumns {
   render() {
 
     const {snapWicData} = this.props;
-    const snapWicArr = snapWicData.source[0].measures;
-    const snapWicLatestData = snapWicArr.map(d => {
+
+    // Create individual data object for each SNAP and WIC for latest year.
+    // Add FoodServiceType and Group keys in each object.
+    const snapWicLatestData = snapWicData.source[0].measures.map(d => {
       const result = snapWicData.data.reduce((acc, currentValue) => {
         if (acc === null && currentValue[d] !== null) {
           return Object.assign({}, currentValue, {FoodServiceType: d, Group: "Restaurants"});
@@ -43,11 +45,14 @@ class FoodAccess extends SectionColumns {
           <p>The total number of SNAP-authorized stores in {county} County in {snapLatestYear} were {snapLatestValue} and WIC-authorized stores in {snapWicLatestData[1]["ID Year"]} were {formatAbbreviate(snapWicLatestData[1]["WIC-authorized stores"])}.</p>
           <p>The Treemap here shows the percentage of Fast-food restaurants, Full-service restaurants, Convinence stores, Grocery stores, Supercenters and Farmers market in {county} County.</p>
         </article>
+
+        {/* Create a Treemap for store and restaurant types. */}
         <Treemap config={{
-          data: `/api/data?measures=Farmers%27%20markets,Grocery%20stores,Supercenters%20and%20club%20stores,Convenience%20stores,Fast-food%20restaurants,Full-service%20restaurants&County=${countyId}&Year=all`,
+          data: `/api/data?measures=Farmers%27%20markets,Grocery%20stores,Supercenters%20and%20club%20stores,Convenience%20stores,Fast-food%20restaurants,Full-service%20restaurants,Specialized%20food%20stores&County=${countyId}&Year=all`,
           groupBy: ["Group", "FoodServiceType"],
           height: 400,
-          sum: d => d[d.FoodServiceType]
+          sum: d => d[d.FoodServiceType],
+          tooltipConfig: {tbody: [["Value", d => formatAbbreviate(d[d.FoodServiceType])]]}
         }}
         dataFormat={resp => {
           const storeTypes = [];

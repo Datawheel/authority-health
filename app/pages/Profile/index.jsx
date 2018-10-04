@@ -7,6 +7,7 @@ import "./index.css";
 
 import "./index.css";
 
+import FoodStats from "./sections/food/FoodStats";
 import FoodAccess from "./sections/food/FoodAccess";
 import DemographicFoodAccess from "./sections/food/DemographicFoodAccess";
 
@@ -35,6 +36,7 @@ class Profile extends Component {
           value={`${diabetes.data[0]["Diabetes Data Value"]}%`}
         /> */}
         <TopicTitle slug="food">Food</TopicTitle>
+        <FoodStats />
         <FoodAccess />
         <DemographicFoodAccess />
       </div>

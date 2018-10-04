@@ -6,6 +6,7 @@ import {fetchData, TopicTitle} from "@datawheel/canon-core";
 import "./index.css";
 
 import FoodAccess from "./sections/food/FoodAccess";
+import Coverage from "./sections/health/Coverage";
 
 class Profile extends Component {
 
@@ -33,6 +34,8 @@ class Profile extends Component {
         /> */}
         <TopicTitle slug="food">Food</TopicTitle>
         <FoodAccess />
+        <TopicTitle slug="health">Health</TopicTitle>
+        <Coverage />
       </div>
     );
   }

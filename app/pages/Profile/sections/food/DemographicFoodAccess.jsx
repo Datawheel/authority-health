@@ -22,9 +22,12 @@ class DemographicFoodAccess extends SectionColumns {
 
     const {foodAccessByTypes} = this.props;
 
+    // Array of each race and age type.
+    const raceAndAgeTypes = foodAccessByTypes.source[0].measures;
+
     // Create individual data object for each type of age and race.
     // Add AgeRaceType key in each object.
-    const data = foodAccessByTypes.source[0].measures.map(d => {
+    const data = raceAndAgeTypes.map(d => {
       const result = foodAccessByTypes.data.reduce((acc, currentValue) => {
         if (acc === null && currentValue[d] !== null) {
           return Object.assign({}, currentValue, {AgeRaceType: d});
@@ -33,9 +36,6 @@ class DemographicFoodAccess extends SectionColumns {
       }, null);
       return result;
     });
-
-    // Array of each race and age type.
-    const raceAndAgeTypes = ["Children, low access to store (%)", "Seniors, low access to store (%)", "White, low access to store (%)", "Black, low access to store (%)", "Hispanic ethnicity, low access to store (%)", "Asian, low access to store (%)", "American Indian or Alaska Native, low access to store (%)", "Hawaiian or Pacific Islander, low access to store (%)", "Multiracial, low access to store (%)"];
     
     const dropdownValues = item => <option value={item}>{item}</option>;
     

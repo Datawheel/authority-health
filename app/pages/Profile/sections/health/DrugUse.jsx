@@ -7,6 +7,11 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Stat from "../../components/Stat";
 
+const formatName = name => {
+  const nameArr = name.split(" ");
+  return `${nameArr[0]} ${nameArr[1]}`;
+};
+
 class DrugUse extends SectionColumns {
 
   constructor(props) {
@@ -30,7 +35,7 @@ class DrugUse extends SectionColumns {
     allTractDrinkingData.sort((a, b) => b[drugTypes[1]] - a[drugTypes[1]]);
     const topTractDrinkingData = allTractDrinkingData[0];
 
-    const dropdownValues = item => <option value={item}>{item}</option>;
+    const dropdownValues = item => <option value={item}>{formatName(item)}</option>;
 
     return (
       <SectionColumns>

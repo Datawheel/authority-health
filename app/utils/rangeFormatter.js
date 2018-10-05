@@ -1,4 +1,4 @@
-const formatName = n => {
+module.exports = n => {
   const re = new RegExp(/([\$0-9\,]+)[A-z\-\s\&]*([\$0-9\,]*)/g);
   let nums = re.exec(n);
   if (nums) {
@@ -24,5 +24,3 @@ const formatName = n => {
   }
   else return "None";
 };
-
-module.exports = formatName;

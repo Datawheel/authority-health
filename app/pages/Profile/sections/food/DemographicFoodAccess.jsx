@@ -15,17 +15,24 @@ class DemographicFoodAccess extends SectionColumns {
     this.state = {dropdownValue: "Children, low access to store (%)"};
   }
 
-  // Handler for dropdown onChange function.
+  // Handler function for dropdown onChange event.
   handleChange = event => this.setState({dropdownValue: event.target.value});
 
   render() {
 
     const {foodAccessByTypes} = this.props;
+    const {dropdownValue} = this.state;
 
-    // Array of each race and age type.
-    const raceAndAgeTypes = foodAccessByTypes.source[0].measures;
+    // Create an array of each age and race type.
+    // Make sure that the Children and Seniors data are always at the first 2 places in the array.
+    const ageTypes = [], raceTypes = [];
+    foodAccessByTypes.source[0].measures.forEach(d => d.toLowerCase().includes("children") || d.toLowerCase().includes("seniors") ? ageTypes.push(d) : raceTypes.push(d));
+    const raceAndAgeTypes = ageTypes.slice(0);
+    raceTypes.forEach(d => raceAndAgeTypes.push(d));
 
-    // Create individual data object for each type of age and race.
+    const ageSelected = dropdownValue === raceAndAgeTypes[0] || dropdownValue === raceAndAgeTypes[1];
+
+    // Create individual data object for each age and race type.
     // Add AgeRaceType key in each object.
     const data = raceAndAgeTypes.map(d => {
       const result = foodAccessByTypes.data.reduce((acc, currentValue) => {
@@ -37,9 +44,7 @@ class DemographicFoodAccess extends SectionColumns {
       return result;
     });
     
-    const dropdownValues = item => <option value={item}>{item}</option>;
-    
-    const currentRaceAndAgeData = data.find(d => d.AgeRaceType === this.state.dropdownValue);
+    const currentRaceAndAgeData = data.find(d => d.AgeRaceType === dropdownValue);
 
     // Separate data for age and race.
     const ageData = [], raceData = [];
@@ -53,59 +58,44 @@ class DemographicFoodAccess extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Demographic Access</SectionTitle>
         <article>
-          {/* Create a dropdown using raceAndAgeTypes array. */}
-          <select onChange={this.handleChange}>{raceAndAgeTypes.map(dropdownValues)}</select>
+          {/* Create a dropdown for each age and race type using raceAndAgeTypes array. */}
+          <select onChange={this.handleChange}>
+            {raceAndAgeTypes.map((item, i) => <option key={i} value={item}>{item}</option>)}
+          </select>
           <Stat
             title={`Access in ${currentRaceAndAgeData.County} County`}
-            value={`${formatAbbreviate(currentRaceAndAgeData[this.state.dropdownValue])}%`}
+            value={`${formatAbbreviate(currentRaceAndAgeData[dropdownValue])}%`}
           />
 
           {/* Create a paragraph based on the dropdown choice. */}
-          {this.state.dropdownValue === raceAndAgeTypes[0] || this.state.dropdownValue === raceAndAgeTypes[1]
+          {dropdownValue === raceAndAgeTypes[0] || dropdownValue === raceAndAgeTypes[1]
             ? <p> In {ageData[0].County} County {formatName(ageData[0].AgeRaceType)} were the largest age group with {formatAbbreviate(ageData[0][ageData[0].AgeRaceType])}% in the year {ageData[0]["ID Year"]}</p>
             : <p> In {raceData[0].County} County {formatName(raceData[0].AgeRaceType)} were the largest race group with {formatAbbreviate(raceData[0][raceData[0].AgeRaceType])}% in the year {raceData[0]["ID Year"]}</p>
           }
 
           {/* Create a BarChart based on the dropdown choice. */}
-          {this.state.dropdownValue === raceAndAgeTypes[0] || this.state.dropdownValue === raceAndAgeTypes[1]
-            ? <BarChart config={{
-              data: ageData,
-              discrete: "y",
-              height: 200,
-              legend: false,
-              groupBy: "AgeRaceType",
-              x: d => d[d.AgeRaceType],
-              y: "AgeRaceType",
-              yConfig: {ticks: []},
-              tooltipConfig: {tbody: [["Value", d => formatAbbreviate(d[d.AgeRaceType])]]}
-            }}
-            />
-            : <BarChart config={{
-              data: raceData,
-              discrete: "y",
-              height: 300,
-              legend: false,
-              groupBy: "AgeRaceType",
-              x: d => d[d.AgeRaceType],
-              y: "AgeRaceType",
-              yConfig: {
-                ticks: [],
-                tickFormat: d => formatName(d)
-              },
-              tooltipConfig: {tbody: [["Value", d => formatAbbreviate(d[d.AgeRaceType])]]}
-            }}
-            />
-          }
+          <BarChart config={{
+            data: ageSelected ? ageData : raceData,
+            discrete: "y",
+            height: 300,
+            legend: false,
+            groupBy: "AgeRaceType",
+            x: d => d[d.AgeRaceType],
+            y: "AgeRaceType",
+            yConfig: {ticks: []},
+            tooltipConfig: {tbody: [["Value", d => formatAbbreviate(d[d.AgeRaceType])]]}
+          }}
+          />
         </article>
 
         {/* Create a Geomap based on the dropdown choice. */}
         <Geomap config={{
-          data: `/api/data?measures=${this.state.dropdownValue.replace(/\%/g, "%25").replace(/\s/g, "%20").replace(/\,/g, "%2C").replace(/\(/g, "%28").replace(/\)/g, "%29")}&drilldowns=County&Year=all`,
+          data: `/api/data?measures=${dropdownValue.replace(/\%/g, "%25").replace(/\s/g, "%20").replace(/\,/g, "%2C").replace(/\(/g, "%28").replace(/\)/g, "%29")}&drilldowns=County&Year=all`,
           groupBy: "ID County",
-          colorScale: this.state.dropdownValue,
+          colorScale: dropdownValue,
           label: d => d.County,
           height: 400,
-          tooltipConfig: {tbody: [["Value", d => formatAbbreviate(d[this.state.dropdownValue])]]},
+          tooltipConfig: {tbody: [["Value", d => formatAbbreviate(d[dropdownValue])]]},
           topojson: "/topojson/county.json",
           topojsonFilter: d => d.id.startsWith("05000US26")
         }}

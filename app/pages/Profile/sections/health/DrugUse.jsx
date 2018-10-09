@@ -35,14 +35,14 @@ class DrugUse extends SectionColumns {
     allTractDrinkingData.sort((a, b) => b[drugTypes[1]] - a[drugTypes[1]]);
     const topTractDrinkingData = allTractDrinkingData[0];
 
-    const dropdownValues = item => <option value={item}>{formatName(item)}</option>;
-
     return (
       <SectionColumns>
         <SectionTitle>Drug Use</SectionTitle>
         <article>
           {/* Create a dropdown for drug types. */}
-          <select onChange={this.handleChange}>{drugTypes.map(dropdownValues)}</select>
+          <select onChange={this.handleChange}>
+            {drugTypes.map(item => <option key={item} value={item}>{formatName(item)}</option>)}
+          </select>
           {this.state.dropdownValue === drugTypes[0]
             ? <Stat
               title={`${topTractSmokingData.Tract}`}

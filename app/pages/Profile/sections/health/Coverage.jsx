@@ -1,5 +1,4 @@
 import React from "react";
-
 import {sum} from "d3-array";
 import {nest} from "d3-collection";
 import {BarChart} from "d3plus-react";
@@ -38,15 +37,13 @@ class Coverage extends SectionColumns {
           tooltipConfig: {tbody: [["Value", d => formatAbbreviate(d.Population)]]}
         }}
         dataFormat={resp => {
-          const data = nest()
+          nest()
             .key(d => d.Year)
-            .entries(resp.data);
-            
-          data.forEach(group => {
-            const total = sum(group.values, d => d.Population);
-            group.values.forEach(d => d.share = d.Population / total * 100);
-          });
-
+            .entries(resp.data)
+            .forEach(group => {
+              const total = sum(group.values, d => d.Population);
+              group.values.forEach(d => d.share = d.Population / total * 100);
+            });
           return resp.data.filter(d => d["ID Health Insurance Coverage Status"] === 0);
         }}
         />

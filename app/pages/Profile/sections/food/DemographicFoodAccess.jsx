@@ -68,7 +68,7 @@ class DemographicFoodAccess extends SectionColumns {
           />
 
           {/* Create a paragraph based on the dropdown choice. */}
-          {dropdownValue === raceAndAgeTypes[0] || dropdownValue === raceAndAgeTypes[1]
+          {ageSelected
             ? <p> In {ageData[0].County} County {formatName(ageData[0].AgeRaceType)} were the largest age group with {formatAbbreviate(ageData[0][ageData[0].AgeRaceType])}% in the year {ageData[0]["ID Year"]}</p>
             : <p> In {raceData[0].County} County {formatName(raceData[0].AgeRaceType)} were the largest race group with {formatAbbreviate(raceData[0][raceData[0].AgeRaceType])}% in the year {raceData[0]["ID Year"]}</p>
           }

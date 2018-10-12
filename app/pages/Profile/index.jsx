@@ -6,6 +6,7 @@ import {fetchData, TopicTitle} from "@datawheel/canon-core";
 import "./index.css";
 
 import FoodAccess from "./sections/food/FoodAccess";
+import DemographicFoodAccess from "./sections/food/DemographicFoodAccess";
 
 class Profile extends Component {
 
@@ -33,6 +34,7 @@ class Profile extends Component {
         /> */}
         <TopicTitle slug="food">Food</TopicTitle>
         <FoodAccess />
+        <DemographicFoodAccess />
       </div>
     );
   }
@@ -40,6 +42,7 @@ class Profile extends Component {
 
 Profile.need = [
   FoodAccess,
+  DemographicFoodAccess,
   fetchData("diabetes", "/api/data?measures=Diabetes%20Data%20Value&City=<id>&Year=latest"),
   fetchData("meta", "/api/search?id=<id>"),
   fetchData("population", "https://canon.datausa.io/api/data?measures=Population&Geography=<id>&year=latest")

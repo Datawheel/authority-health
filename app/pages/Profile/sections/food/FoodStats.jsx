@@ -11,25 +11,15 @@ class FoodStats extends SectionColumns {
   render() {
     const {childAdultInsecurityRate} = this.props;
 
-    const childAdultInsecurityData = childAdultInsecurityRate.source[0].measures.map(d => {
-      const result = childAdultInsecurityRate.data.reduce((acc, currentValue) => {
-        if (acc === null && currentValue[d] !== null) {
-          return Object.assign({}, currentValue, {AgeType: d});
-        }
-        return acc;
-      }, null);
-      return result;
-    });
-
     return (
       <SectionColumns>
         <Stat
           title={"Child Insecurity"}
-          value={`${formatAbbreviate(childAdultInsecurityData[1][childAdultInsecurityData[1].AgeType])}%`}
+          value={`${formatAbbreviate(childAdultInsecurityRate.data[0]["Child Food Insecurity Rate"])}%`}
         />
         <Stat
           title={"Adult Insecurity"}
-          value={`${formatAbbreviate(childAdultInsecurityData[0][childAdultInsecurityData[0].AgeType])}%`}
+          value={`${formatAbbreviate(childAdultInsecurityRate.data[0]["Adult Food Insecurity Rate"])}%`}
         />
       </SectionColumns>
     );

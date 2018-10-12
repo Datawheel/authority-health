@@ -5,7 +5,9 @@ import {fetchData, TopicTitle} from "@datawheel/canon-core";
 // import {formatAbbreviate} from "d3plus-format";
 import "./index.css";
 
+import FoodStats from "./sections/food/FoodStats";
 import FoodAccess from "./sections/food/FoodAccess";
+import DemographicFoodAccess from "./sections/food/DemographicFoodAccess";
 import HealthCenters from "./sections/health/HealthCenters";
 
 class Profile extends Component {
@@ -33,7 +35,10 @@ class Profile extends Component {
           value={`${diabetes.data[0]["Diabetes Data Value"]}%`}
         /> */}
         <TopicTitle slug="food">Food</TopicTitle>
+        <FoodStats />
         <FoodAccess />
+        <DemographicFoodAccess />
+        
         <TopicTitle slug="health">Health</TopicTitle>
         <HealthCenters />
       </div>
@@ -42,7 +47,9 @@ class Profile extends Component {
 }
 
 Profile.need = [
+  FoodStats,
   FoodAccess,
+  DemographicFoodAccess,
   HealthCenters,
   fetchData("diabetes", "/api/data?measures=Diabetes%20Data%20Value&City=<id>&Year=latest"),
   fetchData("meta", "/api/search?id=<id>"),

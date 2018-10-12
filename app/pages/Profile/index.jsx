@@ -5,6 +5,7 @@ import {fetchData, TopicTitle} from "@datawheel/canon-core";
 // import {formatAbbreviate} from "d3plus-format";
 import "./index.css";
 
+import FoodStats from "./sections/food/FoodStats";
 import FoodAccess from "./sections/food/FoodAccess";
 import DemographicFoodAccess from "./sections/food/DemographicFoodAccess";
 import Coverage from "./sections/health/Coverage";
@@ -35,6 +36,7 @@ class Profile extends Component {
         /> */}
         
         <TopicTitle slug="food">Food</TopicTitle>
+        <FoodStats />
         <FoodAccess />
         <DemographicFoodAccess />
 
@@ -46,6 +48,7 @@ class Profile extends Component {
 }
 
 Profile.need = [
+  FoodStats,
   FoodAccess,
   DemographicFoodAccess,
   Coverage,

@@ -5,8 +5,6 @@ import {fetchData, TopicTitle} from "@datawheel/canon-core";
 // import {formatAbbreviate} from "d3plus-format";
 import "./index.css";
 
-import "./index.css";
-
 import FoodAccess from "./sections/food/FoodAccess";
 import DemographicFoodAccess from "./sections/food/DemographicFoodAccess";
 

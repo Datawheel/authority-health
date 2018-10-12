@@ -13,6 +13,8 @@ const formatName = d => {
   return nameArr.reduce((acc, currValue, i) => i === 0 ? "" : acc.concat(currValue), "").trim();
 };
 
+const formatPercentage = d => `${formatAbbreviate(d * 100)}%`;
+
 class HealthCenters extends SectionColumns {
 
   render() {
@@ -24,13 +26,16 @@ class HealthCenters extends SectionColumns {
           <BarChart config={{
             data: "/api/data?measures=%25%20Non-white,%25%20Hispanic,%25%20Black,%25%20Asian,%25%20American%20Indian%2FAlaska%20Native&Year=all",
             discrete: "y",
-            height: 300,
+            height: 250,
             legend: false,
             groupBy: "RaceType",
+            label: d => formatName(d.RaceType),
             x: d => d[d.RaceType],
             y: "RaceType",
+            time: "ID Year",
+            xConfig: {tickFormat: d => formatPercentage(d)},
             yConfig: {ticks: []},
-            tooltipConfig: {tbody: [["Value", d => formatAbbreviate(d[d.RaceType] * 100)]]}
+            tooltipConfig: {tbody: [["Value", d => formatPercentage(d[d.RaceType])]]}
           }}
           dataFormat={resp => {
             console.log("resp:", resp);
@@ -49,7 +54,6 @@ class HealthCenters extends SectionColumns {
                   data.push(result);
                 });
               });
-            console.log("data: ", data);
             return data;
           }}
           />

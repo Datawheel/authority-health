@@ -32,7 +32,7 @@ class Coverage extends SectionColumns {
 
     const maleCoverageData = recentYearCoverageData.values.filter(d => d.Sex === "Male").sort((a, b) => b.Population - a.Population);
     const topMaleAgeGroup = rangeFormatter(maleCoverageData[0].Age);
-    const ageGroupYear = maleCoverageData.Year;
+    const ageGroupYear = maleCoverageData[0].Year;
 
     return (
       <SectionColumns>
@@ -46,7 +46,7 @@ class Coverage extends SectionColumns {
             title={`Female majority in ${ageGroupYear}`}
             value={topFemaleAgeGroup}
           />
-          <p>In {ageGroupYear} the age groups most likely to have health care coverage in the {maleCoverageData[0].County} county are {topMaleAgeGroup} and {topFemaleAgeGroup}, for men and women respectively.</p>
+          <p>In {ageGroupYear}, the age groups most likely to have health care coverage in the {maleCoverageData[0].County} county are {topMaleAgeGroup} and {topFemaleAgeGroup}, for men and women respectively.</p>
         </article>
 
         <BarChart config={{

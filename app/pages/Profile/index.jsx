@@ -9,6 +9,7 @@ import FoodStats from "./sections/food/FoodStats";
 import FoodAccess from "./sections/food/FoodAccess";
 import DrugUse from "./sections/health/DrugUse";
 import DemographicFoodAccess from "./sections/food/DemographicFoodAccess";
+import Coverage from "./sections/health/Coverage";
 
 class Profile extends Component {
 
@@ -34,12 +35,14 @@ class Profile extends Component {
           title="Diabetes Rate"
           value={`${diabetes.data[0]["Diabetes Data Value"]}%`}
         /> */}
+        
         <TopicTitle slug="food">Food</TopicTitle>
         <FoodStats />
         <FoodAccess />
         <DemographicFoodAccess />
 
         <TopicTitle slug="health">Health</TopicTitle>
+        <Coverage />
         <DrugUse />
       </div>
     );
@@ -50,6 +53,7 @@ Profile.need = [
   FoodStats,
   FoodAccess,
   DemographicFoodAccess,
+  Coverage,
   DrugUse,
   fetchData("diabetes", "/api/data?measures=Diabetes%20Data%20Value&City=<id>&Year=latest"),
   fetchData("meta", "/api/search?id=<id>"),

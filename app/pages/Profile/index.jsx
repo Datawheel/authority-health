@@ -7,6 +7,7 @@ import "./index.css";
 
 import FoodStats from "./sections/food/FoodStats";
 import FoodAccess from "./sections/food/FoodAccess";
+import DrugUse from "./sections/health/DrugUse";
 import DemographicFoodAccess from "./sections/food/DemographicFoodAccess";
 
 class Profile extends Component {
@@ -37,6 +38,9 @@ class Profile extends Component {
         <FoodStats />
         <FoodAccess />
         <DemographicFoodAccess />
+
+        <TopicTitle slug="health">Health</TopicTitle>
+        <DrugUse />
       </div>
     );
   }
@@ -46,6 +50,7 @@ Profile.need = [
   FoodStats,
   FoodAccess,
   DemographicFoodAccess,
+  DrugUse,
   fetchData("diabetes", "/api/data?measures=Diabetes%20Data%20Value&City=<id>&Year=latest"),
   fetchData("meta", "/api/search?id=<id>"),
   fetchData("population", "https://canon.datausa.io/api/data?measures=Population&Geography=<id>&year=latest")

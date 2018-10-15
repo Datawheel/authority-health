@@ -14,40 +14,35 @@ const formatName = d => {
 };
 
 const formatPercentage = d => `${formatAbbreviate(d * 100)}%`;
+const formatMeasureName = d => {
+  const nameArr = d.split(" ");
+  return nameArr[2];
+};
 
 class HealthCenters extends SectionColumns {
 
   render() {
     const {healthCenterData} = this.props;
-    console.log("healthCenterData: ", healthCenterData);
-    const healthCenterLatestYearData = healthCenterData.data[0];
-    console.log("Penetration of Uninsured Population: ", healthCenterLatestYearData["Penetration of Uninsured Population"]);
+    const data = healthCenterData.source[0].measures.map(d => {
+      const result = healthCenterData.data.reduce((acc, currentValue) => {
+        if (acc === null && currentValue[d] !== null) {
+          return Object.assign({}, currentValue, {PenetrationType: d});
+        }
+        return acc;
+      }, null);
+      return result;
+    });
 
     return (
       <SectionColumns>
         <SectionTitle>Health Centers</SectionTitle>
         <article>
-          {healthCenterLatestYearData["Penetration of Total Population"] !== null && healthCenterLatestYearData["Penetration of Total Population"] !== undefined
-            ? <Stat
-              title={`Total Population visited health center in ${healthCenterLatestYearData.Year}`}
-              value={`${formatPercentage(healthCenterLatestYearData["Penetration of Total Population"])}`}
-            />
-            : null
+          {data.map(d => <Stat key={d.PenetrationType}
+            title={`${formatMeasureName(d.PenetrationType)} Population visited health center in ${d.Year}`}
+            value={`${formatPercentage(d[d.PenetrationType])}`}
+          />)
           }
-          {healthCenterLatestYearData["Penetration of Low-Income"] !== null && healthCenterLatestYearData["Penetration of Low-Income"] !== undefined
-            ? <Stat 
-              title={`Low-Income Population visited health center in ${healthCenterLatestYearData.Year}`}
-              value={`${formatPercentage(healthCenterLatestYearData["Penetration of Low-Income"])}`}
-            />
-            : null
-          }
-          {healthCenterLatestYearData["Penetration of Uninsured Population"] !== null && healthCenterLatestYearData["Penetration of Uninsured Population"] !== undefined
-            ? <Stat
-              title={`Uninsured Population visited health center in ${healthCenterLatestYearData.Year}`}
-              value={`${formatPercentage(healthCenterLatestYearData["Penetration of Uninsured Population"])}`}
-            />
-            : null
-          }
+          
           <BarChart config={{
             data: "/api/data?measures=%25%20Non-white,%25%20Hispanic,%25%20Black,%25%20Asian,%25%20American%20Indian%2FAlaska%20Native&Year=all",
             discrete: "y",
@@ -63,7 +58,6 @@ class HealthCenters extends SectionColumns {
             tooltipConfig: {tbody: [["Value", d => formatPercentage(d[d.RaceType])]]}
           }}
           dataFormat={resp => {
-            console.log("resp:", resp);
             const data = [];
             nest()
               .key(d => d.Year)
@@ -84,7 +78,6 @@ class HealthCenters extends SectionColumns {
                   data.push(result);
                 });
               });
-            console.log("data: ", data);
             return data;
           }}
           />
@@ -99,11 +92,11 @@ class HealthCenters extends SectionColumns {
           // time: "Year",
           tooltipConfig: {tbody: [["Value", d => formatAbbreviate(d["Health Centers"])]]},
           topojson: "/topojson/zipcodes.json",
-          topojsonFilter: d => {
-            // console.log("d: ", d);
-            console.log("topojsonFilter:");
-            return d.properties.GEOID10;
-          }
+          topojsonFilter: d => 
+            // console.log("topojsonFilter:");
+            true
+            // return d.properties.GEOID10.indexOf("26163") === 0;
+          
         }}
         // dataFormat={resp => {
         //   console.log("resp: ", resp);
@@ -120,7 +113,7 @@ HealthCenters.defaultProps = {
 };
 
 HealthCenters.need = [
-  fetchData("healthCenterData", "/api/data?measures=Penetration%20of%20Total%20Population,Penetration%20of%20Low-Income,Penetration%20of%20Uninsured%20Population&Zip%20Code=48101&Year=all")
+  fetchData("healthCenterData", "/api/data?measures=Penetration%20of%20Total%20Population,Penetration%20of%20Low-Income,Penetration%20of%20Uninsured%20Population&Zip%20Code=48111&Year=all")
 ];
 
 const mapStateToProps = state => ({

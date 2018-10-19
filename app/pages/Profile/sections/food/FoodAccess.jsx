@@ -41,10 +41,10 @@ class FoodAccess extends SectionColumns {
             value={formatAbbreviate(snapWicLatestData[1]["WIC-authorized stores"])}
           />
           <p>The total number of SNAP-authorized stores in {county} County in {snapLatestYear} were {snapLatestValue} and WIC-authorized stores in {snapWicLatestData[1]["ID Year"]} were {formatAbbreviate(snapWicLatestData[1]["WIC-authorized stores"])}.</p>
-          <p>The Treemap here shows the percentage of Fast-food restaurants, Full-service restaurants, Convinence stores, Grocery stores, Supercenters and Farmers market in {county} County.</p>
+          <p>The Treemap here shows the percentage of Fast-food restaurants, Full-service restaurants, Convinence stores, Grocery stores, Specialized food stores, Supercenters and Farmers market in the {county} County.</p>
         </article>
         <Treemap config={{
-          data: `/api/data?measures=Farmers%27%20markets,Grocery%20stores,Supercenters%20and%20club%20stores,Convenience%20stores,Fast-food%20restaurants,Full-service%20restaurants&County=${countyId}&Year=all`,
+          data: `/api/data?measures=Farmers%27%20markets,Grocery%20stores,Supercenters%20and%20club%20stores,Convenience%20stores,Fast-food%20restaurants,Full-service%20restaurants,Specialized%20food%20stores&County=${countyId}&Year=all`,
           groupBy: ["Group", "FoodServiceType"],
           height: 400,
           sum: d => d[d.FoodServiceType]

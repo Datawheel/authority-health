@@ -8,10 +8,10 @@ import {formatAbbreviate} from "d3plus-format";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Stat from "../../components/Stat";
-
 import rangeFormatter from "../../../../utils/rangeFormatter";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
+const formatAge = d => rangeFormatter(d) === "< 6" || rangeFormatter(d) === "6 - 11" ? `${rangeFormatter(d)} months` : `${rangeFormatter(d)} years`;
 
 class ChildCare extends SectionColumns {
 
@@ -28,7 +28,9 @@ class ChildCare extends SectionColumns {
         group.key >= responsibilityData.data[0].Year ? Object.assign(recentYearData, group) : {};
       });
 
-    const recentYearFilteredData = recentYearData.values.filter(d => d["ID Responsibility Length"] === 4);
+    const recentYearFilteredData = recentYearData.values.filter(d => d["ID Responsibility Length"] !== 5 && d["ID Responsibility Length"] !== 6);
+    recentYearFilteredData.sort((a, b) =>  b.share - a.share);
+    const topRecentYearData = recentYearFilteredData[0];
     const data = responsibilityData.data.filter(d => d["ID Responsibility Length"] !== 5 && d["ID Responsibility Length"] !== 6);
 
     return (
@@ -36,10 +38,11 @@ class ChildCare extends SectionColumns {
         <SectionTitle>Child Care</SectionTitle>
         <article>
           <Stat
-            title={`Grandparents responsible for their 5+ years grandchildren in ${recentYearFilteredData[0].Year}, `}
-            value={`${formatAbbreviate(recentYearFilteredData[0].Population)}`}
+            title={`Most common age of grandchildren and Grandparents responsible in ${recentYearFilteredData[0].Year} `} 
+            value={`${formatAge(topRecentYearData["Responsibility Length"])} ${formatPercentage(topRecentYearData.share)}`}
           />
-          <p>Short paragraph here</p>
+          <p>In {topRecentYearData.Year}, {formatPercentage(topRecentYearData.share)} of the grandparents were responsible for their grandchildren. The most common age group of grandchildren was {formatAge(topRecentYearData["Responsibility Length"])} for this location.</p>
+          <p>The BarChart here shows the breakdown by age of grandchildren and the percentage of grandparents responsible for their grandchildren.</p>
         </article>
 
         <BarChart config={{
@@ -49,18 +52,14 @@ class ChildCare extends SectionColumns {
           groupBy: "Responsibility Length",
           legend: false,
           x: d => d["Responsibility Length"],
-          y: "Population",
+          y: "share",
           time: "ID Year",
           xSort: (a, b) => a["ID Responsibility Length"] - b["ID Responsibility Length"],
           xConfig: {
             labelRotation: false,
-            tickFormat: d => {
-              if (rangeFormatter(d) === "< 6") return "< 6 months";
-              if (rangeFormatter(d) === "6 - 11") return "6 - 11 months";
-              return rangeFormatter(d);
-            }
+            tickFormat: d => formatAge(d)
           },
-          yConfig: {tickFormat: d => formatAbbreviate(d)},
+          yConfig: {tickFormat: d => formatPercentage(d)},
           shapeConfig: {label: false},
           tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
         }}

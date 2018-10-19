@@ -7,8 +7,9 @@ import "./index.css";
 
 import FoodStats from "./sections/food/FoodStats";
 import FoodAccess from "./sections/food/FoodAccess";
-import DrugUse from "./sections/health/DrugUse";
 import DemographicFoodAccess from "./sections/food/DemographicFoodAccess";
+import DrugUse from "./sections/health/DrugUse";
+import HealthCenters from "./sections/health/HealthCenters";
 import Coverage from "./sections/health/Coverage";
 import ChildCare from "./sections/demographics/ChildCare";
 
@@ -41,13 +42,15 @@ class Profile extends Component {
         <FoodStats />
         <FoodAccess />
         <DemographicFoodAccess />
-
+        
         <TopicTitle slug="health">Health</TopicTitle>
-        <Coverage />
         <DrugUse />
-
+        <HealthCenters />
+        <Coverage />
+        
         <TopicTitle slug="demographics">Demographics</TopicTitle>
         <ChildCare />
+        
       </div>
     );
   }
@@ -57,8 +60,9 @@ Profile.need = [
   FoodStats,
   FoodAccess,
   DemographicFoodAccess,
-  Coverage,
   DrugUse,
+  HealthCenters,
+  Coverage,
   ChildCare,
   fetchData("diabetes", "/api/data?measures=Diabetes%20Data%20Value&City=<id>&Year=latest"),
   fetchData("meta", "/api/search?id=<id>"),

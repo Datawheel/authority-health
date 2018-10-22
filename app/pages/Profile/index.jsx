@@ -69,7 +69,7 @@ Profile.need = [
   Immigrants,
   fetchData("diabetes", "/api/data?measures=Diabetes%20Data%20Value&City=<id>&Year=latest"),
   fetchData("meta", "/api/search?id=<id>"),
-  fetchData("population", "https://canon.datausa.io/api/data?measures=Population&Geography=<id>&year=latest")
+  fetchData("population", "https://fossil-lake.datausa.io/api/data?measures=Population&Geography=<id>&year=latest")
 ];
 
 const mapStateToProps = state => ({

@@ -1,6 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
-import {sum} from "d3-array";
+import {max, sum} from "d3-array";
 import {nest} from "d3-collection";
 import {Geomap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
@@ -14,86 +14,85 @@ const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
 class Immigrants extends SectionColumns {
 
-  constructor(props) {
-    super(props);
-    this.state = {dropdownValue: "Native"};
-  }
-
-  // Handler function for dropdown onChange event.
-  handleChange = event => this.setState({dropdownValue: event.target.value});
-
   render() {
 
-    const {dropdownValue} = this.state;
-    const {immigrantsNativityData} = this.props;
+    const {immigrantsData, immigrantsPovertyData} = this.props;
 
-    const recentYearData = {};
+    // Find the percentage of immigrants for each city and add it to each immigrants object in immigrantsData array.
     nest()
       .key(d => d.Year)
-      .entries(immigrantsNativityData.data)
+      .entries(immigrantsData)
       .forEach(group => {
-        const total = sum(group.values, d => d.Population);
-        group.values.forEach(d => d.share = d.Population / total * 100);
-        group.key >= immigrantsNativityData.data[0].Year ? Object.assign(recentYearData, group) : {};
+        nest()
+          .key(d => d["ID Place"])
+          .entries(group.values)
+          .forEach(place => {
+            const total = sum(place.values, d => d.Population);
+            place.values.forEach(d => {
+              if (d["ID Nativity"] === 1) d.share = d.Population / total * 100;
+            });
+          });
       });
 
-    const nativePopulationData = [];
-    const foreignBornPopulationData = [];
-    recentYearData.values.forEach(d => d["ID Nativity"] === 0 ? nativePopulationData.push(d) : foreignBornPopulationData.push(d));
+    // Find the top immigrant data for the recent year.
+    const recentImmigrantsYear = max(immigrantsData, d => d["ID Year"]);
+    const recentYearImmigrantsData = immigrantsData.filter(d => d["ID Year"] === recentImmigrantsYear);
+    const filteredImmigrantsData = recentYearImmigrantsData.filter(d => d["ID Nativity"] === 1);
+    filteredImmigrantsData.sort((a, b) => b.share - a.share);
+    const topImmigrantsData = filteredImmigrantsData[0];
 
-    nativePopulationData.sort((a, b) => b.Population - a.Population);
-    const topNativePopulation = nativePopulationData[0];
+    // Find the percentage of immigrants in poverty for each city and add it to each object in immigrantsPovertyData array.
+    nest()
+      .key(d => d.Year)
+      .entries(immigrantsPovertyData)
+      .forEach(group => {
+        nest()
+          .key(d => d["ID Place"])
+          .entries(group.values)
+          .forEach(place => {
+            const total = sum(place.values, d => d.Population);
+            place.values.forEach(d => {
+              d.share = d.Population / total * 100;
+            });
+          });
+      });
 
-    foreignBornPopulationData.sort((a, b) => b.Population - a.Population);
-    const topForeignBornPopulation = foreignBornPopulationData[0];
-
-    const nativityArr = ["Native", "Foreign Born"];
-
-    let topNativityYear = topNativePopulation.Year;
-    let topNativityPlace = topNativePopulation.Place;
-    let topNativityShare = topNativePopulation.share;
-
-    if (dropdownValue === nativityArr[0]) {
-      topNativityYear = topNativePopulation.Year;
-      topNativityPlace = topNativePopulation.Place;
-      topNativityShare = topNativePopulation.share;
-    }
-    else {
-      topNativityYear = topForeignBornPopulation.Year;
-      topNativityPlace = topForeignBornPopulation.Place;
-      topNativityShare = topForeignBornPopulation.share;
-    }
+    // Find the top immigrants in poverty data for the recent year.
+    const recentProvertyYear = max(immigrantsPovertyData, d => d["ID Year"]);
+    const recentYearPovertyData = immigrantsPovertyData.filter(d => d["ID Year"] === recentProvertyYear);
+    const filteredPovertyData = recentYearPovertyData.filter(d => d["ID Nativity"] === 1 && d["ID Poverty Status"] === 0);
+    filteredPovertyData.sort((a, b) => b.share - a.share);
+    const topPovertyData = filteredPovertyData[0];
 
     return (
       <SectionColumns>
         <SectionTitle>Immigrants</SectionTitle>
         <article>
-          {/* Create a dropdown for Native and Foreign Born options. */}
-          <select onChange={this.handleChange}>
-            {nativityArr.map((item, i) => <option key={i} value={item}>{item}</option>)}
-          </select>
-
           {/* Show top stats and a short paragraph about it for each Nativity. */}
           <Stat
-            title={`Top ${dropdownValue} Population in ${topNativityYear}`}
-            value={`${topNativityPlace} ${formatPopulation(topNativityShare)}`}
+            title={`Top Immigrants in ${topImmigrantsData.Year}`}
+            value={`${topImmigrantsData.Place} ${formatPopulation(topImmigrantsData.share)}`}
           />
-          <p>In {topNativityYear}, the highest {dropdownValue} population was {formatPopulation(topNativityShare)} in the {topNativityPlace} city</p>
+          <Stat
+            title={`Top Immigrants in Poverty in ${topPovertyData.Year}`}
+            value={`${topPovertyData.Place} ${formatPopulation(topPovertyData.share)}`}
+          />
+          <p>In {topImmigrantsData.Year}, the highest Immigrants population was {formatPopulation(topImmigrantsData.share)} in the {topImmigrantsData.Place} city. While the highest percentage of Immigrants in poverty was {formatPopulation(topPovertyData.share)} in the {topPovertyData.Place} city in {topPovertyData.Year}.</p>
+          <p>The Geomap here shows the cities with the percentage of Immigrants in each city.</p>
         </article>
 
-        {/* Create a Geomap based on the dropdown choice. */}
         <Geomap config={{
-          data: `/api/data?measures=Population&drilldowns=Nativity,Place&Year=all&Nativity=${dropdownValue === "Native" ? 0 : 1}`,
+          data: immigrantsData,
           groupBy: "ID Place",
-          colorScale: "Population",
+          colorScale: "share",
+          colorScaleConfig: {axisConfig: {tickFormat: d => formatPopulation(d)}},
           time: "Year",
           label: d => d.Place,
           height: 400,
-          tooltipConfig: {tbody: [["Value", d => formatAbbreviate(d.Population)]]},
+          tooltipConfig: {tbody: [["Value", d => formatPopulation(d.share)]]},
           topojson: "/topojson/place.json",
           topojsonFilter: d => places.includes(d.id)
         }}
-        dataFormat={resp => resp.data}
         />
       </SectionColumns>
     );
@@ -105,11 +104,13 @@ Immigrants.defaultProps = {
 };
 
 Immigrants.need = [
-  fetchData("immigrantsNativityData", "/api/data?measures=Population&drilldowns=Nativity,Place&Year=all")
+  fetchData("immigrantsData", "/api/data?measures=Population&drilldowns=Nativity,Place&Year=all", d => d.data),
+  fetchData("immigrantsPovertyData", "/api/data?measures=Population&drilldowns=Nativity,Poverty%20Status,Place&Year=all", d => d.data)
 ];
-  
+
 const mapStateToProps = state => ({
-  immigrantsNativityData: state.data.immigrantsNativityData
+  immigrantsData: state.data.immigrantsData,
+  immigrantsPovertyData: state.data.immigrantsPovertyData
 });
-    
+
 export default connect(mapStateToProps)(Immigrants);

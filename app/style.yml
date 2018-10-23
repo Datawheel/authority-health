@@ -1,9 +1,2 @@
-nav-height: 40px
-subnav-size: 85px
-200pxdark: "rgb(61, 71, 55)"
-
-red: "#ef6145"
-light: "rgb(101, 111, 95)"
-white: "#fafafa"
-black: "#1B191D"
-
+nav-height: 3.3rem # 66px
+home-nav-height: 5.4rem # 108px

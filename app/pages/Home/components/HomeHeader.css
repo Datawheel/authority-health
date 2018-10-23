@@ -1,0 +1,35 @@
+.home-search {
+  max-width: 32rem; /* 640px */
+
+  & .results {
+    /* sizing */
+    height: auto;
+    min-height: 30vh;
+    max-height: 20rem;
+    overflow-y: scroll;
+    /* positioning */
+    position: absolute;
+    top: 2rem; /* below input */
+    /* default state */
+    display: none;
+
+    /* active state */
+    &.active {
+      display: block;
+    }
+
+    /* individual result item */
+    & .result {
+      display: block;
+
+      /* interactions */
+      &:hover, &:focus,
+      &.highlighted {
+      }
+    }
+
+    /* empty state */
+    & .no-results {
+    }
+  }
+}

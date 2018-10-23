@@ -11,9 +11,24 @@ export default class App extends Component {
   }
 
   render() {
+    const {children} = this.props;
+
     return (
-      <div>
-        { this.props.children }
+      <div className="outer-container">
+        {/* nav component */}
+        <nav role="nav">
+          Nav
+        </nav>
+
+        {/* main content */}
+        <main className="main-container" role="main">
+          { children }
+        </main>
+
+        {/* footer */}
+        <footer role="contentinfo">
+          Footer
+        </footer>
       </div>
     );
   }

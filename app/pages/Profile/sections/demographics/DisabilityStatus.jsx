@@ -42,9 +42,7 @@ class DisabilityStatus extends SectionColumns {
               .entries(place.values)
               .forEach(ageType => {
                 const total = sum(ageType.values, d => d.Population);
-                ageType.values.forEach(d => {
-                  if (d["ID Disability Status"] === 0) d.share = d.Population / total * 100;
-                });
+                ageType.values.forEach(d => d.share = d.Population / total * 100);
               });
           });
         group.key >= disabilityStatus[0].Year ? Object.assign(recentYearDisabilityStatus, group) : {};
@@ -52,8 +50,9 @@ class DisabilityStatus extends SectionColumns {
     // Set data for Disability Status.
     let data = disabilityStatus.filter(d => d["ID Disability Status"] === 0);
     // Find top Disability Status Data for the most recent year.
-    recentYearDisabilityStatus.values.sort((a, b) => b.share - a.share);
-    let topData = recentYearDisabilityStatus.values[0];
+    const filteredRecentDisabilityStatus = recentYearDisabilityStatus.values.filter(d => d["ID Disability Status"] === 0);
+    filteredRecentDisabilityStatus.sort((a, b) => b.share - a.share);
+    let topData = filteredRecentDisabilityStatus[0];
 
     // Read and transform Health Insurance Status data into desired format.
     const recentYearHealthInsuranceStatus = {};

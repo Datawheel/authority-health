@@ -49,8 +49,8 @@ class DisabilityStatus extends SectionColumns {
           });
         group.key >= disabilityStatus[0].Year ? Object.assign(recentYearDisabilityStatus, group) : {};
       });
+    // Set data for Disability Status.
     let data = disabilityStatus.filter(d => d["ID Disability Status"] === 0);
-
     // Find top Disability Status Data for the most recent year.
     recentYearDisabilityStatus.values.sort((a, b) => b.share - a.share);
     let topData = recentYearDisabilityStatus.values[0];

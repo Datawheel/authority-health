@@ -49,7 +49,7 @@ grid system by James Ferrell
       @for $i from 1 to 11 {
         /* set width, accounting for gutter */
         &.g-$i {
-          width: calc( (100% + var(--gutter-lg))/(11 / $i) - var(--gutter-lg) );
+          width: calc( (100% + var(--gutter-lg))/(12 / $i) - var(--gutter-lg) );
         }
       }
     }

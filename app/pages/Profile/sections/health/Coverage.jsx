@@ -19,13 +19,13 @@ class Coverage extends SectionColumns {
     const recentYearCoverageData = {};
     nest()
       .key(d => d.Year)
-      .entries(coverageData.data)
+      .entries(coverageData)
       .forEach(group => {
         const total = sum(group.values, d => d.Population);
         group.values.forEach(d => d.share = d.Population / total * 100);
-        group.key >= coverageData.data[0].Year ? Object.assign(recentYearCoverageData, group) : {};
+        group.key >= coverageData[0].Year ? Object.assign(recentYearCoverageData, group) : {};
       });
-    const data = coverageData.data.filter(d => d["ID Health Insurance Coverage Status"] === 0);
+    const data = coverageData.filter(d => d["ID Health Insurance Coverage Status"] === 0);
 
     const filteredRecentYearData = recentYearCoverageData.values.filter(d => d["ID Health Insurance Coverage Status"] === 0);
     const femaleCoverageData = filteredRecentYearData.filter(d => d.Sex === "Female").sort((a, b) => b.Population - a.Population);
@@ -48,7 +48,7 @@ class Coverage extends SectionColumns {
             value={topFemaleAgeGroup}
           />
           <p>In {ageGroupYear}, the age groups most likely to have health care coverage in the {maleCoverageData[0].County} county are {topMaleAgeGroup} and {topFemaleAgeGroup} years, for men and women respectively.</p>
-          <p>The BarChart here shows the male and female age group percentage with Health Insurance Coverage.</p>
+          <p>The BarChart here shows the male and female age group stats with Health Insurance Coverage.</p>
         </article>
 
         <BarChart config={{
@@ -80,7 +80,7 @@ Coverage.defaultProps = {
 };
 
 Coverage.need = [
-  fetchData("coverageData", "/api/data?measures=Population&drilldowns=Health%20Insurance%20Coverage%20Status,Sex,Age&County=<id>&Year=all")
+  fetchData("coverageData", "/api/data?measures=Population&drilldowns=Health%20Insurance%20Coverage%20Status,Sex,Age&County=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

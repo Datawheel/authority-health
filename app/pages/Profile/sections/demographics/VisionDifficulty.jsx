@@ -15,25 +15,51 @@ const formatPopulation = d => `${formatAbbreviate(d)}%`;
 class VisionDifficulty extends SectionColumns {
 
   render() {
-    
     const {visionDifficulty} = this.props;
 
-    // console.log("data: ", data);
-    // const recentYearVisionDifficultyData = {};
+    const recentYearVisionDifficultyData = {};
+    nest()
+      .key(d => d.Year)
+      .entries(visionDifficulty)
+      .forEach(group => {
+        const total = sum(group.values, d => d.Population);
+        group.values.forEach(d => d.share = d.Population / total * 100);
+        group.key >= data[0].Year ? Object.assign(recentYearVisionDifficultyData, group) : {};
+      });
     // nest()
     //   .key(d => d.Year)
     //   .entries(visionDifficulty)
     //   .forEach(group => {
-    //     const total = sum(group.values, d => d.Population);
-    //     group.values.forEach(d => d.share = d.Population / total * 100);
-    //     group.key >= data[0].Year ? Object.assign(recentYearVisionDifficultyData, group) : {};
+    //     nest()
+    //       .key(d => d.Age)
+    //       .entries(group)
+    //       .forEach(ageGroup => {
+    //         nest()
+    //           .key(d => d.Sex)
+    //           .entries(ageGroup)
+    //           .forEach(gender => {
+    //             console.log("group: ", gender);
+    //             const total = sum(gender.values, d => d.Population);
+    //             gender.values.forEach(d => d.share = d.Population / total * 100);
+    //           });
+    //       });
+    //     group.key >= visionDifficulty[0].Year ? Object.assign(recentYearVisionDifficultyData, group) : {};
     //   });
-    // const data = visionDifficulty.filter(d => d["ID Vision Disability Status"] === 0);
+    console.log("visionDifficulty: ", visionDifficulty);
+    const data = visionDifficulty.filter(d => d["ID Vision Disability Status"] === 0);
+
+    const filteredRecentYearData = recentYearVisionDifficultyData.values.filter(d => d["ID Vision Disability Status"] === 0);
+    const femaleVisionDifficultyData = filteredRecentYearData.filter(d => d.Sex === "Female").sort((a, b) => b.Population - a.Population);
+    const topFemaleAgeGroup = rangeFormatter(femaleVisionDifficultyData[0].Age);
+
+    const maleVisionDifficultyCoverageData = filteredRecentYearData.filter(d => d.Sex === "Male").sort((a, b) => b.Population - a.Population);
+    const topMaleAgeGroup = rangeFormatter(maleVisionDifficultyCoverageData[0].Age);
+    const ageGroupYear = maleVisionDifficultyCoverageData[0].Year;
 
     return (
       <SectionColumns>
         <SectionTitle>Vision Difficulty</SectionTitle>
-        {/* <article>
+        <article>
           <Stat 
             title={`Male majority in ${ageGroupYear}`}
             value={topMaleAgeGroup}
@@ -42,11 +68,12 @@ class VisionDifficulty extends SectionColumns {
             title={`Female majority in ${ageGroupYear}`}
             value={topFemaleAgeGroup}
           />
-          <p>In {ageGroupYear}, the age groups most likely to have health care coverage in the {maleCoverageData[0].County} county are {topMaleAgeGroup} and {topFemaleAgeGroup}, for men and women respectively.</p>
+          <p>In {ageGroupYear}, the age groups most likely to have difficulty in seeing in the {maleVisionDifficultyCoverageData[0].County} county are {topMaleAgeGroup} and {topFemaleAgeGroup} years, for men and women respectively.</p>
+          <p>The BarChart here shows the male and female age group percentage with difficulty in seeing in the {maleVisionDifficultyCoverageData[0].County} county.</p>
         </article>
 
         <BarChart config={{
-          data: visionDifficulty,
+          data,
           discrete: "x",
           height: 400,
           stacked: true,
@@ -63,7 +90,7 @@ class VisionDifficulty extends SectionColumns {
           shapeConfig: {label: false},
           tooltipConfig: {tbody: [["Value", d => formatPopulation(d.share)]]}
         }}
-        /> */}
+        />
       </SectionColumns>
     );
   }

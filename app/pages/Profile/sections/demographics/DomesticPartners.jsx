@@ -16,7 +16,7 @@ class DomesticPartners extends SectionColumns {
   render() {
     const {domesticPartnersData} = this.props;
 
-    // Get the domestic partners data for latest year.
+    
     const recentDomesticPartnersData = {};
     nest()
       .key(d => d.Year)
@@ -28,6 +28,7 @@ class DomesticPartners extends SectionColumns {
       });
     const data = domesticPartnersData.filter(d => d["ID Sex of Partner"] !== 4);
 
+    // Get the top domestic partners data for most recent year.
     const topFilteredData = recentDomesticPartnersData.values.filter(d => d["ID Sex of Partner"] !== 4);
     topFilteredData.sort((a, b) => b["ID Sex of Partner"] - a["ID Sex of Partner"]);
     const topData = topFilteredData[0];
@@ -44,6 +45,8 @@ class DomesticPartners extends SectionColumns {
           <p>In {topData.Year}, the top Domestic Partners were {topData["Sex of Partner"]} with {formatPopulation(topData.share)} in the {topData.County} county.</p>
           <p>The Bar Chart here shows the types of domestic partners and corresponding percentage for each type. {}</p>
         </article>
+
+        {/* BarChart for Domestic Partner types. */}
         <BarChart config={{
           data,
           discrete: "x",

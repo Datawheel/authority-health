@@ -43,7 +43,7 @@ grid system by James Ferrell
     vertical-align: top; /* reset default */
 
     /* column width modifier classes, applied on medium screens only */
-    @add-mixin min-md {
+    @add-mixin min-sm {
       /* loop through and create .g-col modifier classes .g-2 to .g-12 */
       /* NOTE: .g-12 is unnecessary because all elements with .g-col will be 100% width by default */
       @for $i from 1 to 11 {

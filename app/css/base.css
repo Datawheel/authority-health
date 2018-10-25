@@ -80,6 +80,11 @@ inverted color scheme
     color: var(--white);
   }
 
+  /* when ur fonts too thicc */
+  & .title {
+    @add-mixin font-smoothing;
+  }
+
   /* default link style */
   p > a,
   .link {

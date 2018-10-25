@@ -15,7 +15,6 @@ class DomesticPartners extends SectionColumns {
 
   render() {
     const {domesticPartnersData} = this.props;
-
     
     const recentDomesticPartnersData = {};
     nest()

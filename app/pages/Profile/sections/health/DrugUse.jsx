@@ -41,12 +41,12 @@ class DrugUse extends SectionColumns {
     let year = topTractSmokingData["ID Year"];
     let topTractRate = topTractSmokingData[dropdownValue];
     
-    if (dropdownValue === drugTypes[0]) { // Assign all Smoking data here
+    if (dropdownValue === drugTypes[0]) { // Assign all Smoking data here.
       topTractNum = topTractSmokingData.Tract;
       year = topTractSmokingData["ID Year"];
       topTractRate = topTractSmokingData[dropdownValue];
     }
-    else { // Assign all Drinking data here
+    else { // Assign all Drinking data here.
       topTractNum = topTractDrinkingData.Tract;
       year = topTractDrinkingData["ID Year"];
       topTractRate = topTractDrinkingData[dropdownValue];
@@ -69,7 +69,7 @@ class DrugUse extends SectionColumns {
           {/* Draw a mini bar chart to show smoking status: former, current & never. */}
           {dropdownValue === drugTypes[0]
             ? <BarChart config={{
-              data: "/api/data?measures=Smoking%20Status%20Current%20Weighted%20Percent,Smoking%20Status%20Former%20Weighted%20Percent,Smoking%20Status%20Never%20Weighted%20Percent&Year=all",
+              data: "/api/data?measures=Smoking%20Status%20Current%20Weighted%20Percent,Smoking%20Status%20Former%20Weighted%20Percent,Smoking%20Status%20Never%20Weighted%20Percent&drilldowns=End%20Year",
               discrete: "y",
               height: 250,
               groupBy: "SmokingType",
@@ -80,7 +80,7 @@ class DrugUse extends SectionColumns {
               legend: false,
               y: "SmokingType",
               x: d => d[d.SmokingType],
-              time: "ID Start Year",
+              time: "ID End Year",
               xConfig: {
                 labelRotation: false,
                 tickFormat: d => formatPercentage(d)
@@ -90,14 +90,13 @@ class DrugUse extends SectionColumns {
               tooltipConfig: {tbody: [["Value", d => formatPercentage(d[d.SmokingType])]]}
             }}
             dataFormat={resp => {
-              const data = resp.source[0].measures.map(smokingType => {
-                const result = resp.data.reduce((acc, currentValue) => {
-                  if (acc === null && currentValue[smokingType] !== null) {
-                    return Object.assign({}, currentValue, {SmokingType: smokingType});
+              const data = [];
+              resp.data.forEach(d => {
+                resp.source[0].measures.forEach(smokingType => {
+                  if (d[smokingType] !== null) {
+                    data.push(Object.assign({}, d, {SmokingType: smokingType}));
                   }
-                  return acc;
-                }, null);
-                return result;
+                });
               });
               return data;
             }}

@@ -1,25 +1,28 @@
 @import './mixins';
 
 /* -----------------------------------
-base
+typography & theming
 ----------------------------------- */
 
-/* fonts */
+/* default */
 body {
+  color: var(--dark-3);
   font-family: var(--body-font);
   font-weight: 400;
   font-size: 100%; /* override blueprint */
-  color: var(--dark-3);
 }
 
+/* headings */
 h1, h2, h3, h4, h5, h6,
 .heading {
-  font-family: var(--heading-font);
-  font-weight: 700;
+  @add-mixin font-smoothing;
   color: var(--black);
+  font-family: var(--heading-font);
+  font-weight: 600;
+  letter-spacing: 0.025em;
 }
 
-/* default font sizing and line-height */
+/* font size & line height */
 .font-xxl { @add-mixin font-xxl; }
 h1, .font-xl  { @add-mixin font-xl;  }
 h2, .font-lg  { @add-mixin font-lg;  }
@@ -29,7 +32,6 @@ h5, .font-xs  { @add-mixin font-xs;  }
 
 /* default link style */
 p > a,
-td > a,
 .link {
   color: var(--brand-dark);
   cursor: pointer;
@@ -40,5 +42,47 @@ td > a,
   &:hover, &:focus {
     color: var(--brand);
     text-decoration: underline;
+  }
+}
+
+/* bold and stat title text */
+b, strong,
+.title {
+  font-family: var(--body-font);
+  font-weight: 700;
+}
+
+/* stat title text */
+.title {
+  @add-mixin font-uppercase;
+  color: var(--black);
+}
+
+/* stat label text */
+.label {
+  @add-mixin font-uppercase;
+  font-family: var(--body-font);
+  font-weight: 300;
+}
+
+
+/* -----------------------------------
+inverted color scheme
+----------------------------------- */
+
+.dark-theme {
+  background-color: var(--dark-3);
+  color: var(--light-1);
+
+  /* headings and stat titles */
+  & h1, & h2, & h3, & h4, & h5, & h6,
+  & .heading, & .title {
+    color: var(--white);
+  }
+
+  /* default link style */
+  p > a,
+  .link {
+    color: var(--brand-light);
   }
 }

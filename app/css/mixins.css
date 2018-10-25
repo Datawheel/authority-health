@@ -31,7 +31,7 @@ typography
   line-height: 1;
   /* scale up on bigger screens */
   @add-mixin min-sm {
-    font-size: 2.6rem; /* 52px */
+    font-size: 3.4rem; /* 68px */
   }
 }
 @define-mixin font-xl {
@@ -39,17 +39,13 @@ typography
   line-height: 1;
   /* scale up on bigger screens */
   @add-mixin min-sm {
-    font-size: 1.9rem; /* 38px */
+    font-size: 2.4rem; /* 48px */
     line-height: 1.25;
   }
 }
 @define-mixin font-lg {
   font-size: 1.2rem; /* 24px */
   line-height: 1.25;
-  /* scale up on bigger screens */
-  @add-mixin min-sm {
-    font-size: 1.4rem; /* 28px */
-  }
 }
 @define-mixin font-md {
   font-size: 1rem; /* 20px */
@@ -68,6 +64,12 @@ typography
 @define-mixin font-smoothing {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
+}
+
+/* uppercase */
+@define-mixin font-uppercase {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 

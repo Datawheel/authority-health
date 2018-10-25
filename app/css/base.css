@@ -1,0 +1,44 @@
+@import './mixins';
+
+/* -----------------------------------
+base
+----------------------------------- */
+
+/* fonts */
+body {
+  font-family: var(--body-font);
+  font-weight: 400;
+  font-size: 100%; /* override blueprint */
+  color: var(--dark-3);
+}
+
+h1, h2, h3, h4, h5, h6,
+.heading {
+  font-family: var(--heading-font);
+  font-weight: 700;
+  color: var(--black);
+}
+
+/* default font sizing and line-height */
+.font-xxl { @add-mixin font-xxl; }
+h1, .font-xl  { @add-mixin font-xl;  }
+h2, .font-lg  { @add-mixin font-lg;  }
+h3, .font-md  { @add-mixin font-md;  }
+h4, .font-sm  { @add-mixin font-sm;  }
+h5, .font-xs  { @add-mixin font-xs;  }
+
+/* default link style */
+p > a,
+td > a,
+.link {
+  color: var(--brand-dark);
+  cursor: pointer;
+  font-weight: 700;
+  transition: color 0.2s;
+
+  /* interactions */
+  &:hover, &:focus {
+    color: var(--brand);
+    text-decoration: underline;
+  }
+}

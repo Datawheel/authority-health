@@ -16,21 +16,22 @@ class Coverage extends SectionColumns {
   render() {
     const {coverageData} = this.props;
 
-    const data = coverageData.data.filter(d => d["ID Health Insurance Coverage Status"] === 0);
     const recentYearCoverageData = {};
     nest()
       .key(d => d.Year)
-      .entries(data)
+      .entries(coverageData.data)
       .forEach(group => {
         const total = sum(group.values, d => d.Population);
         group.values.forEach(d => d.share = d.Population / total * 100);
         group.key >= coverageData.data[0].Year ? Object.assign(recentYearCoverageData, group) : {};
       });
+    const data = coverageData.data.filter(d => d["ID Health Insurance Coverage Status"] === 0);
 
-    const femaleCoverageData = recentYearCoverageData.values.filter(d => d.Sex === "Female").sort((a, b) => b.Population - a.Population);
+    const filteredRecentYearData = recentYearCoverageData.values.filter(d => d["ID Health Insurance Coverage Status"] === 0);
+    const femaleCoverageData = filteredRecentYearData.filter(d => d.Sex === "Female").sort((a, b) => b.Population - a.Population);
     const topFemaleAgeGroup = rangeFormatter(femaleCoverageData[0].Age);
 
-    const maleCoverageData = recentYearCoverageData.values.filter(d => d.Sex === "Male").sort((a, b) => b.Population - a.Population);
+    const maleCoverageData = filteredRecentYearData.filter(d => d.Sex === "Male").sort((a, b) => b.Population - a.Population);
     const topMaleAgeGroup = rangeFormatter(maleCoverageData[0].Age);
     const ageGroupYear = maleCoverageData[0].Year;
 
@@ -46,7 +47,8 @@ class Coverage extends SectionColumns {
             title={`Female majority in ${ageGroupYear}`}
             value={topFemaleAgeGroup}
           />
-          <p>In {ageGroupYear}, the age groups most likely to have health care coverage in the {maleCoverageData[0].County} county are {topMaleAgeGroup} and {topFemaleAgeGroup}, for men and women respectively.</p>
+          <p>In {ageGroupYear}, the age groups most likely to have health care coverage in the {maleCoverageData[0].County} county are {topMaleAgeGroup} and {topFemaleAgeGroup} years, for men and women respectively.</p>
+          <p>The BarChart here shows the male and female age group percentage with Health Insurance Coverage.</p>
         </article>
 
         <BarChart config={{
@@ -65,7 +67,7 @@ class Coverage extends SectionColumns {
           },
           yConfig: {tickFormat: d => formatPopulation(d)},
           shapeConfig: {label: false},
-          tooltipConfig: {tbody: [["Value", d => formatAbbreviate(d.Population)]]}
+          tooltipConfig: {tbody: [["Value", d => formatPopulation(d.share)]]}
         }}
         />
       </SectionColumns>

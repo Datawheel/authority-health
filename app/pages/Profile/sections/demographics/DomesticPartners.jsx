@@ -41,6 +41,8 @@ class DomesticPartners extends SectionColumns {
             title={`Top Domestic Partner in ${topData.Year}`}
             value={`${topData["Sex of Partner"]} ${formatPopulation(topData.share)}`}
           />
+          <p>In {topData.Year}, the top Domestic Partners were {topData["Sex of Partner"]} with {formatPopulation(topData.share)} in the {topData.County} county.</p>
+          <p>The Bar Chart here shows the types of domestic partners and corresponding percentage for each type. {}</p>
         </article>
         <BarChart config={{
           data,

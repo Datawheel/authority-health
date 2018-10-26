@@ -26,26 +26,6 @@ class VisionDifficulty extends SectionColumns {
         group.values.forEach(d => d.share = d.Population / total * 100);
         group.key >= visionDifficulty[0].Year ? Object.assign(recentYearVisionDifficultyData, group) : {};
       });
-    // nest()
-    //   .key(d => d.Year)
-    //   .entries(visionDifficulty)
-    //   .forEach(group => {
-    //     nest()
-    //       .key(d => d.Age)
-    //       .entries(group)
-    //       .forEach(ageGroup => {
-    //         nest()
-    //           .key(d => d.Sex)
-    //           .entries(ageGroup)
-    //           .forEach(gender => {
-    //             console.log("group: ", gender);
-    //             const total = sum(gender.values, d => d.Population);
-    //             gender.values.forEach(d => d.share = d.Population / total * 100);
-    //           });
-    //       });
-    //     group.key >= visionDifficulty[0].Year ? Object.assign(recentYearVisionDifficultyData, group) : {};
-    //   });
-    // console.log("visionDifficulty: ", visionDifficulty);
     const data = visionDifficulty.filter(d => d["ID Vision Disability Status"] === 0);
 
     const filteredRecentYearData = recentYearVisionDifficultyData.values.filter(d => d["ID Vision Disability Status"] === 0);

@@ -2,15 +2,21 @@
 
 .main-nav {
   /* positioning */
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1;
+
+  /* fixed height and positioning on bigger screens */
+  @add-mixin min-xs {
+    position: fixed;
+  }
 }
 
 .main-nav-inner {
   @add-mixin centered-container;
+  height: var(--home-nav-height);
   display: flex;
   align-items: center; /* vertically center */
   justify-content: space-between; /* envenly space children horizontally */

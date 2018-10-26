@@ -20,9 +20,9 @@ export default class App extends Component {
         <MainNav />
 
         {/* main content */}
-        {/*<main className="main-container" role="main">
+        <main className="main-container" role="main">
           { children }
-        </main>*/}
+        </main>
 
         {/* footer */}
         {/*<footer role="contentinfo">

@@ -1,3 +1,26 @@
+@import "../../../css/mixins.css";
+
+.home-header {
+  @add-mixin centered-container;
+  padding-top: var(--home-nav-height);
+  padding-bottom: var(--home-nav-height);
+  min-height: 75vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  /* limit intro text width */
+  & .home-header-intro {
+    max-width: 28rem;
+  }
+
+  /* take up remaining space and center */
+  & .home-header-map {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
 .home-search {
   max-width: 32rem; /* 640px */
 

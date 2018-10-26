@@ -16,7 +16,7 @@ export default class Home extends Component {
         <HomeHeader />
 
         {/* profiles component */}
-        <ProfileTileList />
+        {/*<ProfileTileList />*/}
 
         {/* maps component */}
         {/* articles component */}

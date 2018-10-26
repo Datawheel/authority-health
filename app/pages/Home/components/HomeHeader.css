@@ -52,7 +52,7 @@
   /* space out intro text */
   & .home-header-intro-text {
     margin-top: 1em;
-    margin-bottom: 1.5em;
+    margin-bottom: 1em;
   }
 
   /* horizontally space out link from paragraph text */
@@ -95,23 +95,56 @@
 
 /* search */
 .home-search {
-  max-width: 32rem; /* 640px */
+  width: 100%;
+  text-shadow: none; /* override above */
+
+  & .results {
+    margin: 0;
+  }
+
+  @add-mixin min-sm {
+    max-width: 18rem; /* 360px */
+  }
+
+  & .pt-icon {
+    line-height: 1rem;
+    padding: 0.5rem 0.25rem;
+  }
+
+  & .pt-input {
+    height: 2rem;
+    padding-left: 1.75rem !important; /* override blueprint */
+    background-color: var(--light-1);
+    border-color: var(--light-1);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 0.04em 0.5em color(var(--black) a(0.25));
+
+    &:hover, &:focus {
+      background-color: var(--white);
+    }
+  }
 
   & .results {
     /* sizing */
     height: auto;
-    min-height: 30vh;
-    max-height: 20rem;
+    max-height: 10rem;
     overflow-y: scroll;
     /* positioning */
     position: absolute;
-    top: 2rem; /* below input */
+    top: 1.95rem; /* below input */
+    z-index: -1;
+    /* theming */
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+    box-shadow: 0 0.04em 0.5em color(var(--black) a(0.25));
     /* default state */
     display: none;
 
     /* active state */
     &.active {
       display: block;
+      width: 100%;
+      padding: 1.25rem 1.75rem;
+      background: var(--light-3);
     }
 
     /* individual result item */
@@ -126,6 +159,8 @@
 
     /* empty state */
     & .no-results {
+      color: var(--black);
+      margin-bottom: 0;
     }
   }
 }

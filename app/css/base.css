@@ -62,7 +62,7 @@ b, strong,
 .label {
   @add-mixin font-uppercase;
   font-family: var(--body-font);
-  font-weight: 300;
+  font-weight: 400;
 }
 
 

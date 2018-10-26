@@ -19,9 +19,12 @@ export default class Home extends Component {
                 <span className="u-visually-hidden"> about data in Wayne County, Michigan</span>
               </Link>
             </p>
+
+            <label className="label font-sm" htmlFor="home-search">Search places</label>
             <Search
+              id="home-search"
               className="home-search"
-              placeholder="ex. Woodhaven, Romulus, Wayne"
+              placeholder="i.e., Woodhaven, Romulus, Wayne&hellip;"
               primary={true}
               resultLink={ d => `/profile/${d.geoid}` }
               resultRender={d =>

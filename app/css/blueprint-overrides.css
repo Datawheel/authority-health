@@ -1,0 +1,26 @@
+@import './mixins';
+
+/* -----------------------------------
+tabs
+----------------------------------- */
+
+.pt-tab {
+  @add-mixin font-uppercase;
+  @add-mixin font-xs;
+  color: var(--light-1) !important;
+  font-weight: 700;
+  padding: 0.25em 0;
+  cursor: default; /* buttons aren't links */
+
+  /* interactions */
+  &:hover, &:focus,
+  &[aria-selected="true"] {
+    color: var(--brand) !important;
+  }
+}
+
+/* underline */
+.pt-tab-indicator {
+  background-color: var(--brand-dark) !important;
+  height: 2px !important;
+}

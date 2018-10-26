@@ -7,11 +7,6 @@
   left: 0;
   right: 0;
   z-index: 20;
-
-  /* fixed height and positioning on bigger screens */
-  @add-mixin min-xs {
-    position: fixed;
-  }
 }
 
 .main-nav-inner {

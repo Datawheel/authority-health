@@ -22,6 +22,22 @@
   }
 }
 
+/* intro block typography */
+.home-header-intro {
+  text-shadow: 0 0.04em 0.5em color(var(--black) a(0.5));
+
+
+  & .home-header-intro-text {
+    margin-top: 1em;
+    margin-bottom: 1.5em;
+  }
+
+  /* space out from paragraph text */
+  & .home-header-intro-link {
+    margin-left: 0.75em;
+  }
+}
+
 /* hero image */
 .home-header-background {
   @add-mixin absolute-expand;

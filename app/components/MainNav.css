@@ -4,33 +4,28 @@
   /* positioning */
   position: absolute;
   top: 0;
-  left: 0;
-  right: 0;
+  /* account for inner element padding */
+  left: calc(0 - var(--gutter-xs));
+  right: calc(0 - var(--gutter-xs));
+  /* keep in front */
   z-index: 20;
 }
 
 .main-nav-inner {
   @add-mixin centered-container;
+  /* sizing */
   height: var(--home-nav-height);
+  /* layout */
   display: flex;
   align-items: center; /* vertically center */
   justify-content: space-between; /* envenly space children horizontally */
-  /* allow elements to break on small screens */
-  flex-wrap: wrap;
-}
-
-.main-nav-logo-link {
-  right: calc(var(--gutter-xs) + 8px);
-}
-
-.main-nav-list {
-  @add-mixin min-sm {
-    left: var(--gutter-xs);
-  }
+  flex-wrap: wrap; /* allow elements to break on small screens */
 }
 
 .main-nav-logo-link {
   padding: var(--gutter-xs);
+  /* offset swoosh */
+  right: 8px;
 }
 
 .main-nav-item {

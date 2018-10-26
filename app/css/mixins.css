@@ -136,7 +136,7 @@ layout
 
 @define-mixin centered-container {
   max-width: 60rem; /* 1200px */
-  padding: var(--gutter-md);
+  padding: var(--gutter-lg);
   margin-left: auto;
   margin-right: auto;
 }
@@ -195,16 +195,16 @@ nav link
 
 /* nav link */
 @define-mixin nav-link {
+  @add-mixin font-uppercase;
   /* positioning */
   display: inline-block;
   /* typography */
-  color: var(--brand);
-  font-weight: 700;
-  text-transform: uppercase;
+  color: var(--light-1);
+  font-weight: 400;
 
   /* interactions */
   &:hover, &:focus {
-    color: var(--black);
+    color: var(--white);
   }
 }
 

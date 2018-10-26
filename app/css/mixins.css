@@ -134,6 +134,13 @@ layout
   margin-right: calc(-50vw + 50%);
 }
 
+@define-mixin centered-container {
+  max-width: 60rem; /* 1200px */
+  padding: var(--gutter-md);
+  margin-left: auto;
+  margin-right: auto;
+}
+
 
 /* -----------------------------------
 resets

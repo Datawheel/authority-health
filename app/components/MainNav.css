@@ -1,0 +1,28 @@
+@import "../css/mixins.css";
+
+.main-nav {
+  /* positioning */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.main-nav-inner {
+  @add-mixin centered-container;
+  display: flex;
+  justify-content: space-between;
+}
+
+.main-nav-item {
+  display: inline-block;
+
+  & + .main-nav-item {
+    margin-left: var(--gutter-md);
+  }
+}
+
+.main-nav-link {
+  @add-mixin nav-link;
+}

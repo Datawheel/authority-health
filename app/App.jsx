@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
+import MainNav from "components/MainNav";
 import "./App.css";
 
 export default class App extends Component {
@@ -15,20 +16,18 @@ export default class App extends Component {
 
     return (
       <div className="outer-container">
-        {/* nav component */}
-        <nav role="nav">
-          Nav
-        </nav>
+
+        <MainNav />
 
         {/* main content */}
-        <main className="main-container" role="main">
+        {/*<main className="main-container" role="main">
           { children }
-        </main>
+        </main>*/}
 
         {/* footer */}
-        <footer role="contentinfo">
+        {/*<footer role="contentinfo">
           Footer
-        </footer>
+        </footer>*/}
       </div>
     );
   }

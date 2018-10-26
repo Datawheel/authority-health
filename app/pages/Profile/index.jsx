@@ -15,8 +15,7 @@ import ChildCare from "./sections/demographics/ChildCare";
 import Immigrants from "./sections/demographics/Immigrants";
 import DomesticPartners from "./sections/demographics/DomesticPartners";
 import DisabilityStatus from "./sections/demographics/DisabilityStatus";
-import VisionDifficulty from "./sections/demographics/VisionDifficulty";
-import HearingDifficulty from "./sections/demographics/HearingDifficulty";
+import HearingAndVisionDifficulty from "./sections/demographics/HearingAndVisionDifficulty";
 
 class Profile extends Component {
 
@@ -58,8 +57,7 @@ class Profile extends Component {
         <Immigrants />
         <DomesticPartners />
         <DisabilityStatus />
-        <VisionDifficulty />
-        <HearingDifficulty />
+        <HearingAndVisionDifficulty />
         
       </div>
     );
@@ -77,8 +75,7 @@ Profile.need = [
   Immigrants,
   DomesticPartners,
   DisabilityStatus,
-  VisionDifficulty,
-  HearingDifficulty,
+  HearingAndVisionDifficulty,
   fetchData("diabetes", "/api/data?measures=Diabetes%20Data%20Value&City=<id>&Year=latest"),
   fetchData("meta", "/api/search?id=<id>"),
   fetchData("population", "https://fossil-lake.datausa.io/api/data?measures=Population&Geography=<id>&year=latest")

@@ -12,17 +12,31 @@
 .main-nav-inner {
   @add-mixin centered-container;
   display: flex;
-  justify-content: space-between;
+  align-items: center; /* vertically center */
+  justify-content: space-between; /* envenly space children horizontally */
+  /* allow elements to break on small screens */
+  flex-wrap: wrap;
+}
+
+.main-nav-logo-link {
+  right: calc(var(--gutter-xs) + 8px);
+}
+
+.main-nav-list {
+  @add-mixin min-sm {
+    left: var(--gutter-xs);
+  }
+}
+
+.main-nav-logo-link {
+  padding: var(--gutter-xs);
 }
 
 .main-nav-item {
   display: inline-block;
-
-  & + .main-nav-item {
-    margin-left: var(--gutter-md);
-  }
 }
 
 .main-nav-link {
   @add-mixin nav-link;
+  padding: var(--gutter-xs);
 }

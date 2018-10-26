@@ -9,8 +9,8 @@ export default class MainNav extends Component {
     return (
       <nav className="main-nav" role="nav">
         <div className="main-nav-inner">
-          <Link to="/">
-            <img src="/images/authority-health-logo.png" srcSet="/images/authority-health-logo.svg 1x" alt=""/>
+          <Link className="main-nav-logo-link" to="/">
+            <img className="main-nav-logo-img" src="/images/authority-health-logo.png" srcSet="/images/authority-health-logo.svg 1x" alt=""/>
             <span className="u-visually-hidden">AuthorityHealth</span>
           </Link>
 

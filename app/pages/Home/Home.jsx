@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import HomeHeader from "./components/HomeHeader";
 import ProfileTileList from "../../components/ProfileTileList";
+import MapCardList from "../../components/MapCardList";
 import "./Home.css";
 
 export default class Home extends Component {
@@ -13,7 +14,7 @@ export default class Home extends Component {
       <div className="home dark-theme">
         <HomeHeader />
         <ProfileTileList />
-        {/* TODO: maps component */}
+        <MapCardList />
         {/* TODO: articles component */}
       </div>
     );

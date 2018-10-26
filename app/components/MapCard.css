@@ -1,0 +1,60 @@
+@import "../css/mixins.css";
+
+.map-card {
+  /* theming */
+  background-color: var(--light-1);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 2px 1em color(var(--black) a(0.5));
+  text-align: left; /* override .g-columns */
+
+  & .map-card-icon {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 3.6rem;
+    background-color: var(--brand-dark);
+    border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+
+    /* transitions */
+    & .map-card-icon-img {
+      transition: 0.2s ease-out transform;
+    }
+  }
+
+  /* caption */
+  & .map-card-caption {
+    display: block;
+    padding-left: 3.6rem;
+
+    /* override dark theme */
+    & .map-card-title,
+    & .map-card-subtitle {
+      color: var(--dark-3);
+      display: block;
+    }
+
+    /* transitions */
+    & .map-card-title {
+      transition: 0.2s ease-out color;
+    }
+  }
+
+  /* the link */
+  & .cover-link {
+    @add-mixin absolute-expand;
+    z-index: 1;
+
+    /* interactions */
+    &:hover, &:focus {
+      & + .map-card-icon .map-card-icon-img {
+        transform: scale(1.1);
+      }
+      & ~ .map-card-caption .map-card-title {
+        color: var(--brand-dark);
+      }
+    }
+  }
+}

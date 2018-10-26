@@ -1,0 +1,22 @@
+@import "../css/mixins.css";
+
+.profile-tile-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  margin-bottom: 0.75em;
+
+  /* space out elements */
+  & > *:not(:last-child) {
+    margin-right: var(--gutter-md);
+  }
+}
+
+/* profile links on right */
+.profile-tile-link {
+  margin-left: auto;
+
+  & .profile-tile-link-icon {
+    margin-left: 0.5em;
+  }
+}

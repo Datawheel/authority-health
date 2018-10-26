@@ -96,6 +96,7 @@
 /* search */
 .home-search {
   width: 100%;
+  margin-top: 0.25em;
   text-shadow: none; /* override above */
 
   & .results {
@@ -107,12 +108,12 @@
   }
 
   & .pt-icon {
-    line-height: 1rem;
+    line-height: 1.25rem;
     padding: 0.5rem 0.25rem;
   }
 
   & .pt-input {
-    height: 2rem;
+    height: 2.25rem;
     padding-left: 1.75rem !important; /* override blueprint */
     background-color: var(--light-1);
     border-color: var(--light-1);

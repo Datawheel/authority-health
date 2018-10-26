@@ -11,9 +11,8 @@
   overflow: hidden;
   /* theming */
   color: var(--white);
-  border: 1px solid var(--white);
-  /* transitions */
-  transition: border 0.3s ease-out;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 0.1rem 1rem color(var(--black) a(0.5));
 
   /* overlay */
   &:after {

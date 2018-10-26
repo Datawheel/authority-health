@@ -70,3 +70,10 @@ grid system by James Ferrell
     box-shadow: inset 0 0 0 var(--gutter-sm) color(blue a(0.1));
   }
 }
+
+/* -----------------------------------
+sections
+----------------------------------- */
+.section-container {
+  @add-mixin centered-container;
+}

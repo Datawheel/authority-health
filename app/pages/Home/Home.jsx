@@ -11,16 +11,10 @@ export default class Home extends Component {
 
     return (
       <div className="home dark-theme">
-
-        {/* home header component */}
         <HomeHeader />
-
-        {/* profiles component */}
-        {/*<ProfileTileList />*/}
-
-        {/* maps component */}
-        {/* articles component */}
-
+        <ProfileTileList />
+        {/* TODO: maps component */}
+        {/* TODO: articles component */}
       </div>
     );
   }

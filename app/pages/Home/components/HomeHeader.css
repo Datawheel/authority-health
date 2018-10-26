@@ -143,7 +143,7 @@
     &.active {
       display: block;
       width: 100%;
-      padding: 1.25rem 1.75rem;
+      padding: 0.55rem 0;
       background: var(--light-3);
     }
 
@@ -151,9 +151,20 @@
     & .result {
       display: block;
 
+      & .result-link {
+        display: block;
+        padding: 0.5em 1.75rem;
+        /* theming */
+        color: var(--black);
+      }
+
       /* interactions */
       &:hover, &:focus,
       &.highlighted {
+        & .result-link {
+          background-color: var(--dark-3);
+          color: var(--brand);
+        }
       }
     }
 

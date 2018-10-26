@@ -28,7 +28,7 @@ export default class Home extends Component {
               primary={true}
               resultLink={ d => `/profile/${d.geoid}` }
               resultRender={d =>
-                <a className="result-container" href = {`/profile/${d.geoid}`}>
+                <a className="result-link" href={`/profile/${d.geoid}`}>
                   { d.name }
                 </a>}
                 url="/api/search/"

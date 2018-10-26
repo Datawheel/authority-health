@@ -132,7 +132,7 @@
     overflow-y: scroll;
     /* positioning */
     position: absolute;
-    top: 1.95rem; /* below input */
+    top: 2.2rem; /* below input */
     z-index: -1;
     /* theming */
     border-radius: 0 0 var(--radius-sm) var(--radius-sm);
@@ -173,6 +173,7 @@
     & .no-results {
       color: var(--black);
       margin-bottom: 0;
+      padding: 1em 1.75rem;
     }
   }
 }

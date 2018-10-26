@@ -28,10 +28,10 @@ class Coverage extends SectionColumns {
     const data = coverageData.filter(d => d["ID Health Insurance Coverage Status"] === 0);
 
     const filteredRecentYearData = recentYearCoverageData.values.filter(d => d["ID Health Insurance Coverage Status"] === 0);
-    const femaleCoverageData = filteredRecentYearData.filter(d => d.Sex === "Female").sort((a, b) => b.Population - a.Population);
+    const femaleCoverageData = filteredRecentYearData.filter(d => d.Sex === "Female").sort((a, b) => b.share - a.share);
     const topFemaleAgeGroup = rangeFormatter(femaleCoverageData[0].Age);
 
-    const maleCoverageData = filteredRecentYearData.filter(d => d.Sex === "Male").sort((a, b) => b.Population - a.Population);
+    const maleCoverageData = filteredRecentYearData.filter(d => d.Sex === "Male").sort((a, b) => b.share - a.share);
     const topMaleAgeGroup = rangeFormatter(maleCoverageData[0].Age);
     const ageGroupYear = maleCoverageData[0].Year;
 

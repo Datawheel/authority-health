@@ -8,29 +8,35 @@ export default class Home extends Component {
   render() {
     return (
       <div className="home-header header" role="banner">
+        <div className="home-header-inner">
+          {/* intro text & search */}
+          <div className="home-header-intro">
+            <h1 className="home-header-headline">Get to know  Wayne County</h1>
+            <p className="home-header-intro-text">View our challenges, embrace our strengths, and engage with our opportunities. <Link to="/about">learn more</Link></p>
+            <Search
+              className="home-search"
+              placeholder="ex. Woodhaven, Romulus, Wayne"
+              primary={true}
+              resultLink={ d => `/profile/${d.geoid}` }
+              resultRender={d =>
+                <a className="result-container" href = {`/profile/${d.geoid}`}>
+                  { d.name }
+                </a>}
+                url="/api/search/"
+            />
+          </div>
 
-        {/* intro text & search */}
-        <div className="home-header-intro">
-          <h1 className="home-header-headline">Get to know  Wayne County</h1>
-          <p className="home-header-intro-text">View our challenges, embrace our strengths, and engage with our opportunities. <Link to="/about">learn more</Link></p>
-          <Search
-            className="home-search"
-            placeholder="ex. Woodhaven, Romulus, Wayne"
-            primary={true}
-            resultLink={ d => `/profile/${d.geoid}` }
-            resultRender={d =>
-              <a className="result-container" href = {`/profile/${d.geoid}`}>
-                { d.name }
-              </a>}
-              url="/api/search/"
-          />
+          {/* map */}
+          {/* TODO: add other map image */}
+          <div className="home-header-map">
+            <img src="/images/wayne-county-map/wayne-map.svg" alt=""/>
+          </div>
         </div>
 
-        {/* map */}
-        <div className="home-header-map">
-          <img src="/images/wayne-county-map/wayne-map.svg" alt=""/>
+        {/* bg image */}
+        <div className="home-header-background">
+          <img className="home-header-background-img" src="/images/profiles/places/detroit.jpg" alt=""/>
         </div>
-
       </div>
     );
   }

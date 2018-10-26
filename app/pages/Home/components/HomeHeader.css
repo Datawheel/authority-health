@@ -1,6 +1,6 @@
 @import "../../../css/mixins.css";
 
-.home-header {
+.home-header-inner {
   @add-mixin centered-container;
   padding-top: var(--home-nav-height);
   padding-bottom: var(--home-nav-height);
@@ -8,6 +8,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  z-index: 1;
 
   /* limit intro text width */
   & .home-header-intro {
@@ -18,6 +19,35 @@
   & .home-header-map {
     margin-left: auto;
     margin-right: auto;
+  }
+}
+
+/* hero image */
+.home-header-background {
+  @add-mixin absolute-expand;
+  z-index: 0;
+
+  &:after {
+    @add-mixin absolute-expand;
+    content: '';
+    display: block;
+    background-image:
+      linear-gradient(
+        -180deg,
+        color(var(--dark-3) a(0)) 50%,
+        var(--dark-3) 100%),
+      linear-gradient(
+        -180deg,
+        color(var(--black) a(0.5)) 0%,
+        color(var(--black) a(0.25)) 93%,
+        color(var(--black) a(0.5)) 100%);
+  }
+
+  /* cover-style background image */
+  & .home-header-background-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 }
 

@@ -71,6 +71,7 @@ inverted color scheme
 ----------------------------------- */
 
 .dark-theme {
+  @add-mixin font-smoothing;
   background-color: var(--dark-3);
   color: var(--light-1);
 
@@ -80,14 +81,13 @@ inverted color scheme
     color: var(--white);
   }
 
-  /* when ur fonts too thicc */
-  & .title {
-    @add-mixin font-smoothing;
-  }
-
   /* default link style */
   & p > a,
   & .link {
-    color: var(--brand-light);
+    color: var(--brand);
+
+    &:hover, &:focus {
+      color: var(--brand-light);
+    }
   }
 }

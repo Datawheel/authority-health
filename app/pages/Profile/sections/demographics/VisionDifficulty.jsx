@@ -24,7 +24,7 @@ class VisionDifficulty extends SectionColumns {
       .forEach(group => {
         const total = sum(group.values, d => d.Population);
         group.values.forEach(d => d.share = d.Population / total * 100);
-        group.key >= data[0].Year ? Object.assign(recentYearVisionDifficultyData, group) : {};
+        group.key >= visionDifficulty[0].Year ? Object.assign(recentYearVisionDifficultyData, group) : {};
       });
     // nest()
     //   .key(d => d.Year)
@@ -45,7 +45,7 @@ class VisionDifficulty extends SectionColumns {
     //       });
     //     group.key >= visionDifficulty[0].Year ? Object.assign(recentYearVisionDifficultyData, group) : {};
     //   });
-    console.log("visionDifficulty: ", visionDifficulty);
+    // console.log("visionDifficulty: ", visionDifficulty);
     const data = visionDifficulty.filter(d => d["ID Vision Disability Status"] === 0);
 
     const filteredRecentYearData = recentYearVisionDifficultyData.values.filter(d => d["ID Vision Disability Status"] === 0);

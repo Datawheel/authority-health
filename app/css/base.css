@@ -86,8 +86,8 @@ inverted color scheme
   }
 
   /* default link style */
-  p > a,
-  .link {
+  & p > a,
+  & .link {
     color: var(--brand-light);
   }
 }

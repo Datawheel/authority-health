@@ -16,9 +16,6 @@ class HearingAndVisionDifficulty extends SectionColumns {
 
   render() {
     const {hearingDifficulty, visionDifficulty} = this.props;
-    console.log("hearingDifficulty: ", hearingDifficulty);
-    console.log("visionDifficulty: ", visionDifficulty);
-
     const visionAndHearingData = [];
 
     const recentYearVisionDifficultyData = {};
@@ -113,7 +110,10 @@ class HearingAndVisionDifficulty extends SectionColumns {
             tickFormat: d => rangeFormatter(d)
           },
           yConfig: {tickFormat: d => formatPopulation(d)},
-          shapeConfig: {label: false},
+          shapeConfig: {
+            label: false,
+            opacity: d => d.Sex === "Female" ? 0.5 : 1
+          },
           tooltipConfig: {tbody: [["Value", d => formatPopulation(d.share)]]}
         }}
         />

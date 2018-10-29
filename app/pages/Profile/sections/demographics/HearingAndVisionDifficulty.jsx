@@ -70,7 +70,7 @@ class HearingAndVisionDifficulty extends SectionColumns {
 
     return (
       <SectionColumns>
-        <SectionTitle>Hearing Difficulty</SectionTitle>
+        <SectionTitle>Hearing Difficulty & Vision Difficulty</SectionTitle>
         <article>
           <p>Vision Difficulty:</p>
           <Stat 
@@ -100,6 +100,7 @@ class HearingAndVisionDifficulty extends SectionColumns {
           discrete: "x",
           height: 400,
           stacked: true,
+          label: d => d.disabilityType,
           groupBy: ["disabilityType", "Sex"],
           x: d => d.Age,
           y: "share",
@@ -123,7 +124,7 @@ class HearingAndVisionDifficulty extends SectionColumns {
 }
 
 HearingAndVisionDifficulty.defaultProps = {
-  slug: "hearing-difficulty"
+  slug: "hearing-and-vision-difficulty"
 };
 
 HearingAndVisionDifficulty.need = [

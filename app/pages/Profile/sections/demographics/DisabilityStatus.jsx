@@ -56,8 +56,10 @@ class DisabilityStatus extends SectionColumns {
           data: healthCoverageType,
           discrete: "x",
           height: 400,
-          groupBy: "Health Insurance coverage:type",
-          legend: false,
+          groupBy: ["Health Insurance coverage:type", "Disability Status"],
+          stacked: true,
+          legend: true,
+          label: d => d["Health Insurance coverage:type"],
           x: d => d.Age,
           y: "share",
           time: "ID Year",
@@ -68,7 +70,10 @@ class DisabilityStatus extends SectionColumns {
           },
           yConfig: {tickFormat: d => formatPopulation(d)},
           xSort: (a, b) => a["ID Age"] - b["ID Age"],
-          shapeConfig: {label: false},
+          shapeConfig: {
+            label: false,
+            opacity: d => d["Disability Status"] === "With ADisability" ? 1 : 0.5
+          },
           tooltipConfig: {tbody: [["Value", d => formatPopulation(d.share)]]}
         }}
         />
@@ -82,7 +87,7 @@ DisabilityStatus.defaultProps = {
 };
 
 DisabilityStatus.need = [
-  fetchData("healthCoverageType", "/api/data?measures=Population&drilldowns=Health%20Insurance%20coverage%3Astatus,Health%20Insurance%20coverage%3Atype,Age&County=<id>&Year=all", d => d.data)
+  fetchData("healthCoverageType", "/api/data?measures=Population&drilldowns=Health%20Insurance%20coverage%3Astatus,Health%20Insurance%20coverage%3Atype,Disability%20Status,Age&County=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

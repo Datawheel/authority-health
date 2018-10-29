@@ -100,7 +100,7 @@ class HearingAndVisionDifficulty extends SectionColumns {
           discrete: "x",
           height: 400,
           stacked: true,
-          label: d => d.disabilityType,
+          label: d => `${d.Sex} with ${d.disabilityType}`,
           groupBy: ["disabilityType", "Sex"],
           x: d => d.Age,
           y: "share",

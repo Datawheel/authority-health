@@ -40,11 +40,11 @@ class VisionDifficulty extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Vision Difficulty</SectionTitle>
         <article>
-          <Stat 
+          <Stat
             title={`Male majority in ${ageGroupYear}`}
             value={topMaleAgeGroup}
           />
-          <Stat 
+          <Stat
             title={`Female majority in ${ageGroupYear}`}
             value={topFemaleAgeGroup}
           />

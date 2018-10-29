@@ -41,14 +41,17 @@ class DisabilityStatus extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Disability Status</SectionTitle>
         <article>
-          {/* Create a dropdown list. */}
+          {/* Show stats for the top data. */}
           <Stat 
             title={`Majority age group in ${topRecentYearData.Year}`}
             value={`${rangeFormatter(topRecentYearData.Age)} ${formatPopulation(topRecentYearData.share)}`}
           />
+          {/* Write short paragraph describing stats and barchart. */}
           <p>In {topRecentYearData.Year}, the majority age group with disability was {rangeFormatter(topRecentYearData.Age)} years with {formatPopulation(topRecentYearData.share)} in the {topRecentYearData.County} county.</p>
           <p>The Bar Chart here shows the percentage of population with public, private and no health insurance in the {topRecentYearData.County} county.</p>
         </article>
+
+        {/* Show barchart for each age group type*/}
         <BarChart config={{
           data: healthCoverageType,
           discrete: "x",

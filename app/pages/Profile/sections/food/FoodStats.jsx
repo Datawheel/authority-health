@@ -1,6 +1,5 @@
 import React from "react";
 import {connect} from "react-redux";
-import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns} from "@datawheel/canon-core";
 
@@ -9,17 +8,17 @@ import Stat from "../../components/Stat";
 class FoodStats extends SectionColumns {
 
   render() {
-    const {childAdultInsecurityRate} = this.props;
+    const {insecurityRate} = this.props;
 
     return (
       <SectionColumns>
         <Stat
           title={"Child Insecurity"}
-          value={`${formatAbbreviate(childAdultInsecurityRate.data[0]["Child Food Insecurity Rate"])}%`}
+          value={`${insecurityRate[0]["Food Insecurity Rate"]}%`}
         />
         <Stat
           title={"Adult Insecurity"}
-          value={`${formatAbbreviate(childAdultInsecurityRate.data[0]["Adult Food Insecurity Rate"])}%`}
+          value={`${insecurityRate[1]["Food Insecurity Rate"] - insecurityRate[0]["Food Insecurity Rate"]}%`}
         />
       </SectionColumns>
     );
@@ -27,11 +26,11 @@ class FoodStats extends SectionColumns {
 }
 
 FoodStats.need = [
-  fetchData("childAdultInsecurityRate", "/api/data?measures=Adult%20Food%20Insecurity%20Rate,Child%20Food%20Insecurity%20Rate&County=<id>&Year=latest")
+  fetchData("insecurityRate", "/api/data?measures=Food%20Insecurity%20Rate&drilldowns=Category&County=<id>&Year=all", d => d.data)
 ];
   
 const mapStateToProps = state => ({
-  childAdultInsecurityRate: state.data.childAdultInsecurityRate
+  insecurityRate: state.data.insecurityRate
 });
   
 export default connect(mapStateToProps)(FoodStats);

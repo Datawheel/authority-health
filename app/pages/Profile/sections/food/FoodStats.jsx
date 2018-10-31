@@ -26,7 +26,7 @@ class FoodStats extends SectionColumns {
 }
 
 FoodStats.need = [
-  fetchData("insecurityRate", "/api/data?measures=Food%20Insecurity%20Rate&drilldowns=Category&County=<id>&Year=all", d => d.data)
+  fetchData("insecurityRate", "/api/data?measures=Food%20Insecurity%20Rate&drilldowns=Category&County=<id>&Year=latest", d => d.data)
 ];
   
 const mapStateToProps = state => ({

@@ -12,21 +12,30 @@ class FoodAccess extends SectionColumns {
   render() {
 
     const {snapWicData} = this.props;
-    const snapWicArr = snapWicData.source[0].measures;
+
+    // Get latest year SNAP and WIC authorized stores data
+    const snapWicArr = ["SNAP", "WIC"];
     const snapWicLatestData = snapWicArr.map(d => {
-      const result = snapWicData.data.reduce((acc, currentValue) => {
-        if (acc === null && currentValue[d] !== null) {
-          return Object.assign({}, currentValue, {FoodServiceType: d, Group: "Restaurants"});
+      const result = snapWicData.reduce((acc, currentValue) => {
+        if (acc === null && currentValue["Assistance Type"] !== null && currentValue["Assistance Type"] === d) {
+          return currentValue;
         }
         return acc;
       }, null);
       return result;
     });
 
+    // Get SNAP latest year data:
     const snapLatestYear = snapWicLatestData[0]["ID Year"];
-    const snapLatestValue = formatAbbreviate(snapWicLatestData[0]["SNAP-authorized stores"]);
-    const county = snapWicData.data[0].County;
-    const countyId = snapWicData.data[0]["ID County"];
+    const snapLatestYearValue = formatAbbreviate(snapWicLatestData[0]["Number of Stores"]);
+
+    // Get WIC latest year data:
+    const wicLatestYear = snapWicLatestData[1]["ID Year"];
+    const wicLatestYearValue = formatAbbreviate(snapWicLatestData[1]["Number of Stores"]);
+
+    // Get county information for current location
+    const county = snapWicData[0].County;
+    const countyId = snapWicData[0]["ID County"];
 
     return (
       <SectionColumns>
@@ -34,30 +43,33 @@ class FoodAccess extends SectionColumns {
         <article>
           <Stat 
             title={`SNAP-authorized stores in ${snapLatestYear}`}
-            value={snapLatestValue}
+            value={snapLatestYearValue}
           />
           <Stat
-            title={`WIC-authorized stores in ${snapWicLatestData[1]["ID Year"]}`}
-            value={formatAbbreviate(snapWicLatestData[1]["WIC-authorized stores"])}
+            title={`WIC-authorized stores in ${wicLatestYear}`}
+            value={wicLatestYearValue}
           />
-          <p>The total number of SNAP-authorized stores in {county} County in {snapLatestYear} were {snapLatestValue} and WIC-authorized stores in {snapWicLatestData[1]["ID Year"]} were {formatAbbreviate(snapWicLatestData[1]["WIC-authorized stores"])}.</p>
+          <p>The total number of SNAP-authorized stores in {county} County in {snapLatestYear} were {snapLatestYearValue} and WIC-authorized stores in {wicLatestYear} were {wicLatestYearValue}.</p>
           <p>The Treemap here shows the percentage of Fast-food restaurants, Full-service restaurants, Convinence stores, Grocery stores, Specialized food stores, Supercenters and Farmers market in the {county} County.</p>
         </article>
+
+        {/* Draw a Treemap to show types of stores and restaurants. */}
         <Treemap config={{
-          data: `/api/data?measures=Farmers%27%20markets,Grocery%20stores,Supercenters%20and%20club%20stores,Convenience%20stores,Fast-food%20restaurants,Full-service%20restaurants,Specialized%20food%20stores&County=${countyId}&Year=all`,
-          groupBy: ["Group", "FoodServiceType"],
+          data: `/api/data?measures=Number%20of%20Stores&drilldowns=Sub-category&County=${countyId}&Year=all`,
+          groupBy: ["Group", "Sub-category"],
           height: 400,
-          sum: d => d[d.FoodServiceType]
+          sum: d => d["Number of Stores"],
+          tooltipConfig: {tbody: [["Value", d => `${d["Number of Stores"]} in ${d.Year}`]]}
         }}
         dataFormat={resp => {
-          const storeTypes = [];
-          const restaurantTypes = [];
-          resp.source[0].measures.forEach(foodServiceType => foodServiceType.toLowerCase().includes("restaurant") ? restaurantTypes.push(foodServiceType) : storeTypes.push(foodServiceType));
+          // Find and return an array of objects for the latest year data for each store type and restaurant type.
+          const storeTypes = ["Farmers' markets", "Convenience stores", "Grocery stores", "Specialized food stores", "Supercenters and club stores"];
+          const restaurantTypes = ["Fast-food restaurants", "Full-service restaurants"];
           const data = [];
           storeTypes.map(storeType => {
             const result = resp.data.reduce((acc, currentValue) => {
-              if (acc === null && currentValue[storeType] !== null) {
-                return Object.assign({}, currentValue, {FoodServiceType: storeType, Group: "Stores"});
+              if (acc === null && currentValue["Sub-category"] !== null && currentValue["Sub-category"] === storeType) {
+                return Object.assign({}, currentValue, {Group: "Stores"});
               }
               return acc;
             }, null);
@@ -65,13 +77,14 @@ class FoodAccess extends SectionColumns {
           });
           restaurantTypes.map(restaurantType => {
             const result = resp.data.reduce((acc, currentValue) => {
-              if (acc === null && currentValue[restaurantType] !== null) {
-                return Object.assign({}, currentValue, {FoodServiceType: restaurantType, Group: "Restaurants"});
+              if (acc === null && currentValue["Sub-category"] !== null && currentValue["Sub-category"] === restaurantType) {
+                return Object.assign({}, currentValue, {Group: "Restaurants"});
               }
               return acc;
             }, null);
             data.push(result);
           });
+          console.log("data: ", data);
           return data;
         }}
         />
@@ -85,7 +98,7 @@ FoodAccess.defaultProps = {
 };
 
 FoodAccess.need = [
-  fetchData("snapWicData", "/api/data?measures=SNAP-authorized%20stores,WIC-authorized%20stores&County=<id>&Year=all")
+  fetchData("snapWicData", "/api/data?measures=Number%20of%20Stores&drilldowns=Assistance%20Type&County=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

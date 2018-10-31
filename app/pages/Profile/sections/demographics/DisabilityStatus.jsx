@@ -34,7 +34,11 @@ class DisabilityStatus extends SectionColumns {
         group.key >= healthCoverageType[0].Year ? Object.assign(recentYearHealthCoverageType, group) : {};
       });
 
-    const sortedRecentYearData = recentYearHealthCoverageType.values.sort((a, b) => b.share - a.share);
+    // Show barchart for only disabled population.
+    const filteredHealthCoverageType = healthCoverageType.filter(d => d["Disability Status"] !== "No Disability");
+
+    // Show top stat for disabled population.
+    const sortedRecentYearData = recentYearHealthCoverageType.values.filter(d => d["Disability Status"] !== "No Disability").sort((a, b) => b.share - a.share);
     const topRecentYearData = sortedRecentYearData[0];
 
     return (
@@ -43,23 +47,22 @@ class DisabilityStatus extends SectionColumns {
         <article>
           {/* Show stats for the top data. */}
           <Stat 
-            title={`Majority age group in ${topRecentYearData.Year}`}
+            title={`Majority age group in ${topRecentYearData.Year} with disability`}
             value={`${rangeFormatter(topRecentYearData.Age)} ${formatPopulation(topRecentYearData.share)}`}
           />
           {/* Write short paragraph describing stats and barchart. */}
           <p>In {topRecentYearData.Year}, the majority age group with disability was {rangeFormatter(topRecentYearData.Age)} years with {formatPopulation(topRecentYearData.share)} in the {topRecentYearData.County} county.</p>
-          <p>The Bar Chart here shows the percentage of population with public, private and no health insurance in the {topRecentYearData.County} county.</p>
+          <p>The Barchart here shows the percentage of disabled population with public, private and no health insurance in the {topRecentYearData.County} county.</p>
         </article>
 
         {/* Show barchart for each age group type*/}
         <BarChart config={{
-          data: healthCoverageType,
+          data: filteredHealthCoverageType,
           discrete: "x",
           height: 400,
-          groupBy: ["Health Insurance coverage:type", "Disability Status"],
-          stacked: true,
+          groupBy: ["Health Insurance coverage:type"],
           legend: false,
-          label: d => `${d["Disability Status"]} ${d["Health Insurance coverage:type"]}`,
+          label: d => `${d["Health Insurance coverage:type"]}`,
           x: d => d.Age,
           y: "share",
           time: "ID Year",

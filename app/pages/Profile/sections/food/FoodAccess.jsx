@@ -59,7 +59,7 @@ class FoodAccess extends SectionColumns {
           groupBy: ["Group", "Sub-category"],
           height: 400,
           sum: d => d["Number of Stores"],
-          tooltipConfig: {tbody: [["Value", d => `${d["Number of Stores"]} in ${d.Year}`]]}
+          tooltipConfig: {tbody: [["Count:", d => `${d["Number of Stores"]} in ${d.Year}`]]}
         }}
         dataFormat={resp => {
           // Find and return an array of objects for the latest year data for each store type and restaurant type.
@@ -84,7 +84,6 @@ class FoodAccess extends SectionColumns {
             }, null);
             data.push(result);
           });
-          console.log("data: ", data);
           return data;
         }}
         />

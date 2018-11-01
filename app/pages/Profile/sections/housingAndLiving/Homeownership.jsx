@@ -2,7 +2,7 @@ import React from "react";
 import {connect} from "react-redux";
 import {sum} from "d3-array";
 import {nest} from "d3-collection";
-import {BarChart, Geomap} from "d3plus-react";
+import {LinePlot, Geomap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
@@ -60,10 +60,10 @@ class Homeownership extends SectionColumns {
           />
           <p>The Geomap shows the Median housing units value for each tract in the Wayne county.</p>
           <p>The BarChart shows the Occupied housing units in the current location.</p>
-          <BarChart config={{
+          <LinePlot config={{
             data: filteredOccupancyData,
             discrete: "x",
-            height: 300,
+            height: 250,
             groupBy: "Occupancy Status",
             label: d => d.Year,
             x: "Year",

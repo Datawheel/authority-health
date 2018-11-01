@@ -10,7 +10,7 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Stat from "../../components/Stat";
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
-class VacantHousingUnits extends SectionColumns {
+class OwnedHouses extends SectionColumns {
 
   render() {
 
@@ -35,6 +35,7 @@ class VacantHousingUnits extends SectionColumns {
     recentYearOccupiedHouses.sort((a, b) => b.share - a.share);
     const topOccupancyData = recentYearOccupiedHouses[0];
 
+    // Find top Median Housing Units value for most recent year.
     const recentYearHousingValue = {};
     nest()
       .key(d => d.Year)
@@ -94,11 +95,11 @@ class VacantHousingUnits extends SectionColumns {
   }
 }
 
-VacantHousingUnits.defaultProps = {
+OwnedHouses.defaultProps = {
   slug: "owned-houses"
 };
 
-VacantHousingUnits.need = [
+OwnedHouses.need = [
   fetchData("occupancyData", "/api/data?measures=Population&drilldowns=Occupancy%20Status&County=<id>&Year=all", d => d.data),
   fetchData("medianHousingUnitsValue", "https://gila-cliff.datausa.io/api/data?measures=Property%20Value&Year=all&Geography=05000US26163:children", d => d.data)
 ];
@@ -108,4 +109,4 @@ const mapStateToProps = state => ({
   medianHousingUnitsValue: state.data.medianHousingUnitsValue
 });
 
-export default connect(mapStateToProps)(VacantHousingUnits);
+export default connect(mapStateToProps)(OwnedHouses);

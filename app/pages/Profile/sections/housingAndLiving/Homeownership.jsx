@@ -10,7 +10,7 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Stat from "../../components/Stat";
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
-class OwnedHouses extends SectionColumns {
+class Homeownership extends SectionColumns {
 
   render() {
 
@@ -48,7 +48,7 @@ class OwnedHouses extends SectionColumns {
 
     return (
       <SectionColumns>
-        <SectionTitle>Owned Houses</SectionTitle>
+        <SectionTitle>Homeownership</SectionTitle>
         <article>
           <Stat
             title={`Top median housing value in ${topMedianHousingUnitsValue.Year}`}
@@ -95,11 +95,11 @@ class OwnedHouses extends SectionColumns {
   }
 }
 
-OwnedHouses.defaultProps = {
-  slug: "owned-houses"
+Homeownership.defaultProps = {
+  slug: "homeownership"
 };
 
-OwnedHouses.need = [
+Homeownership.need = [
   fetchData("occupancyData", "/api/data?measures=Population&drilldowns=Occupancy%20Status&County=<id>&Year=all", d => d.data),
   fetchData("medianHousingUnitsValue", "https://gila-cliff.datausa.io/api/data?measures=Property%20Value&Year=all&Geography=05000US26163:children", d => d.data)
 ];
@@ -109,4 +109,4 @@ const mapStateToProps = state => ({
   medianHousingUnitsValue: state.data.medianHousingUnitsValue
 });
 
-export default connect(mapStateToProps)(OwnedHouses);
+export default connect(mapStateToProps)(Homeownership);

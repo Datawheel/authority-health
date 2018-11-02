@@ -14,7 +14,7 @@ class Homeownership extends SectionColumns {
 
   render() {
 
-    const {occupancyData, medianHousingUnitsValue} = this.props;
+    const {occupancyData, medianHousingUnitsValue, constructionDateData} = this.props;
 
     // Get the health center data for latest year.
     const recentYearOccupancyData = {};
@@ -58,8 +58,14 @@ class Homeownership extends SectionColumns {
             title={`Maximum occupied housing units in ${topOccupancyData.Year}`}
             value={`${topOccupancyData.County} county ${formatAbbreviate(topOccupancyData.share)}%`}
           />
+          <Stat
+            title={`Median house construction year in ${constructionDateData[0].Year}`}
+            value={`${constructionDateData[0].County} county ${constructionDateData[0]["Construction Date"]}`}
+          />
           <p>The Geomap shows the Median housing units value for each tract in the Wayne county.</p>
           <p>The BarChart shows the Occupied housing units in the current location.</p>
+
+          {/* Lineplot to show occupacy status over the years at current location */}
           <LinePlot config={{
             data: filteredOccupancyData,
             discrete: "x",
@@ -79,6 +85,8 @@ class Homeownership extends SectionColumns {
           }}
           />
         </article>
+
+        {/* Gepmap to show Property Values for all tracts in the Wayne County. */}
         <Geomap config={{
           data: medianHousingUnitsValue,
           groupBy: "ID Geography",
@@ -101,12 +109,14 @@ Homeownership.defaultProps = {
 
 Homeownership.need = [
   fetchData("occupancyData", "/api/data?measures=Population&drilldowns=Occupancy%20Status&County=<id>&Year=all", d => d.data),
-  fetchData("medianHousingUnitsValue", "https://gila-cliff.datausa.io/api/data?measures=Property%20Value&Year=all&Geography=05000US26163:children", d => d.data)
+  fetchData("medianHousingUnitsValue", "https://gila-cliff.datausa.io/api/data?measures=Property%20Value&Year=all&Geography=05000US26163:children", d => d.data),
+  fetchData("constructionDateData", "/api/data?measures=Construction%20Date&County=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   occupancyData: state.data.occupancyData,
-  medianHousingUnitsValue: state.data.medianHousingUnitsValue
+  medianHousingUnitsValue: state.data.medianHousingUnitsValue,
+  constructionDateData: state.data.constructionDateData
 });
 
 export default connect(mapStateToProps)(Homeownership);

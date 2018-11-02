@@ -55,18 +55,17 @@ class DisabilityStatus extends SectionColumns {
           <p>The Barchart here shows the percentage of disabled population with public, private and no health insurance in the {topRecentYearData.County} county.</p>
         </article>
 
-        {/* Show barchart for each age group type*/}
+        {/* Show barchart for each age group type with public, private and no health insurance coverage*/}
         <BarChart config={{
           data: filteredHealthCoverageType,
           discrete: "x",
           height: 400,
+          stacked: true,
           groupBy: ["Health Insurance coverage:type"],
-          legend: false,
           label: d => `${d["Health Insurance coverage:type"]}`,
           x: d => d.Age,
           y: "share",
           time: "ID Year",
-          groupPadding: 40,
           xConfig: {
             labelRotation: false,
             tickFormat: d => rangeFormatter(d)
@@ -74,8 +73,7 @@ class DisabilityStatus extends SectionColumns {
           yConfig: {tickFormat: d => formatPopulation(d)},
           xSort: (a, b) => a["ID Age"] - b["ID Age"],
           shapeConfig: {
-            label: false,
-            opacity: d => d["Disability Status"] === "With ADisability" ? 1 : 0.5
+            label: false
           },
           tooltipConfig: {tbody: [["Value", d => formatPopulation(d.share)]]}
         }}

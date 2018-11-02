@@ -5,9 +5,9 @@ import {fetchData, TopicTitle} from "@datawheel/canon-core";
 // import {formatAbbreviate} from "d3plus-format";
 import "./index.css";
 
-import FoodStats from "./sections/food/FoodStats";
-import FoodAccess from "./sections/food/FoodAccess";
-import DemographicFoodAccess from "./sections/food/DemographicFoodAccess";
+import FoodStats from "./sections/healthBehaviors/FoodStats";
+import FoodAccess from "./sections/healthBehaviors/FoodAccess";
+import DemographicFoodAccess from "./sections/healthBehaviors/DemographicFoodAccess";
 import DrugUse from "./sections/accessToCare/DrugUse";
 import HealthCenters from "./sections/accessToCare/HealthCenters";
 import Coverage from "./sections/accessToCare/Coverage";
@@ -44,7 +44,7 @@ class Profile extends Component {
           value={`${diabetes.data[0]["Diabetes Data Value"]}%`}
         /> */}
         
-        <TopicTitle slug="food">Food</TopicTitle>
+        <TopicTitle slug="health-behaviors">Health Behaviors</TopicTitle>
         <FoodStats />
         <FoodAccess />
         <DemographicFoodAccess />

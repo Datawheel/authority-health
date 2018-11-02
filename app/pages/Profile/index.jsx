@@ -11,11 +11,11 @@ import DemographicFoodAccess from "./sections/food/DemographicFoodAccess";
 import DrugUse from "./sections/health/DrugUse";
 import HealthCenters from "./sections/health/HealthCenters";
 import Coverage from "./sections/health/Coverage";
-import ChildCare from "./sections/demographics/ChildCare";
-import Immigrants from "./sections/demographics/Immigrants";
-import DomesticPartners from "./sections/demographics/DomesticPartners";
-import DisabilityStatus from "./sections/demographics/DisabilityStatus";
-import HearingAndVisionDifficulty from "./sections/demographics/HearingAndVisionDifficulty";
+import ChildCare from "./sections/specialPopulation/ChildCare";
+import Immigrants from "./sections/specialPopulation/Immigrants";
+import DomesticPartners from "./sections/specialPopulation/DomesticPartners";
+import DisabilityStatus from "./sections/specialPopulation/DisabilityStatus";
+import HearingAndVisionDifficulty from "./sections/specialPopulation/HearingAndVisionDifficulty";
 import Homeownership from "./sections/builtEnvironment/Homeownership";
 import HouseRentals from "./sections/builtEnvironment/HouseRentals";
 
@@ -54,7 +54,7 @@ class Profile extends Component {
         <HealthCenters />
         <Coverage />
         
-        <TopicTitle slug="demographics">Demographics</TopicTitle>
+        <TopicTitle slug="special-population">Special Population</TopicTitle>
         <ChildCare />
         <Immigrants />
         <DomesticPartners />

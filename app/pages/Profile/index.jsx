@@ -16,8 +16,8 @@ import Immigrants from "./sections/demographics/Immigrants";
 import DomesticPartners from "./sections/demographics/DomesticPartners";
 import DisabilityStatus from "./sections/demographics/DisabilityStatus";
 import HearingAndVisionDifficulty from "./sections/demographics/HearingAndVisionDifficulty";
-import Homeownership from "./sections/housingAndLiving/Homeownership";
-import HouseRentals from "./sections/housingAndLiving/HouseRentals";
+import Homeownership from "./sections/builtEnvironment/Homeownership";
+import HouseRentals from "./sections/builtEnvironment/HouseRentals";
 
 class Profile extends Component {
 
@@ -61,7 +61,7 @@ class Profile extends Component {
         <DisabilityStatus />
         <HearingAndVisionDifficulty />
 
-        <TopicTitle slug="housing-and-living">Housing and Living</TopicTitle>
+        <TopicTitle slug="built-environment">Built Environment</TopicTitle>
         <Homeownership />
         <HouseRentals />
         

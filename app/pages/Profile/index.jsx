@@ -8,9 +8,9 @@ import "./index.css";
 import FoodStats from "./sections/food/FoodStats";
 import FoodAccess from "./sections/food/FoodAccess";
 import DemographicFoodAccess from "./sections/food/DemographicFoodAccess";
-import DrugUse from "./sections/health/DrugUse";
-import HealthCenters from "./sections/health/HealthCenters";
-import Coverage from "./sections/health/Coverage";
+import DrugUse from "./sections/accessToCare/DrugUse";
+import HealthCenters from "./sections/accessToCare/HealthCenters";
+import Coverage from "./sections/accessToCare/Coverage";
 import ChildCare from "./sections/specialPopulation/ChildCare";
 import Immigrants from "./sections/specialPopulation/Immigrants";
 import DomesticPartners from "./sections/specialPopulation/DomesticPartners";
@@ -49,7 +49,7 @@ class Profile extends Component {
         <FoodAccess />
         <DemographicFoodAccess />
         
-        <TopicTitle slug="health">Health</TopicTitle>
+        <TopicTitle slug="access-to-care">Access to Care</TopicTitle>
         <DrugUse />
         <HealthCenters />
         <Coverage />

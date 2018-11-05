@@ -15,25 +15,21 @@ class Coverage extends SectionColumns {
 
   render() {
     const {coverageData} = this.props;
-    console.log("coverageData: ", coverageData);
 
     const recentYearCoverageData = {};
     nest()
       .key(d => d.Year)
       .entries(coverageData)
       .forEach(group => {
-        console.log("group: ", group);
         nest()
           .key(d => d["ID Age"])
           .entries(group.values)
           .forEach(ageGroup => {
-            console.log("ageGroup: ", ageGroup);
             const total = sum(ageGroup.values, d => d.Population);
             ageGroup.values.forEach(d => d.share = d.Population / total * 100);
           });
         group.key >= coverageData[0].Year ? Object.assign(recentYearCoverageData, group) : {};
       });
-    // const data = coverageData.filter(d => d["ID Health Insurance Coverage Status"] === 0);
 
     const filteredRecentYearData = recentYearCoverageData.values.filter(d => d["ID Health Insurance Coverage Status"] === 0);
     const femaleCoverageData = filteredRecentYearData.filter(d => d.Sex === "Female").sort((a, b) => b.share - a.share);

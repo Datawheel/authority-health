@@ -20,7 +20,7 @@ class MapCard extends Component {
           className="cover-link"
           to={item.url}
           title={item.name}
-          ariaLabelledBy={labelId}
+          aria-labelledby={labelId}
         />
         <div className="map-card-icon">
           <img className="map-card-icon-img" src={`images/icons/${item.icon}.png`} srcSet={`images/icons/${item.icon}.svg`} alt=""/>

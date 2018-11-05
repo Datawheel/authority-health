@@ -66,8 +66,14 @@ class DisabilityStatus extends SectionColumns {
           y: d => d.Age,
           x: "share",
           time: "ID Year",
-          yConfig: {tickFormat: d => rangeFormatter(d)},
-          xConfig: {tickFormat: d => formatPopulation(d)},
+          yConfig: {
+            tickFormat: d => rangeFormatter(d),
+            title: "Age group"
+          },
+          xConfig: {
+            tickFormat: d => formatPopulation(d),
+            title: "Share"
+          },
           ySort: (a, b) => a["ID Age"] - b["ID Age"],
           shapeConfig: {
             label: false

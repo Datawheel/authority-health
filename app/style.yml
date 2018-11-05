@@ -44,9 +44,9 @@ dark-3:  "#45555F"
 black:   "#24292F"
 
 # main color
-brand: "#E3C05D"
-brand-light: "#FFE7A6"
-brand-dark: "#C99C20"
+brand: "#70BADA"
+brand-light: "#B1E2F7"
+brand-dark: "#2F93BE"
 
 # extended palette
 # NOTE: curry == brand

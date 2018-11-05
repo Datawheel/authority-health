@@ -40,8 +40,8 @@ export default class Home extends Component {
             {/* Wayne county map */}
             {/* TODO: replace with d3plus map */}
             <img className="home-header-wayne-map"
-              src="/images/wayne-county-map/wayne-map.png"
-              srcSet="/images/wayne-county-map/wayne-map.png 1x, /images/wayne-county-map/wayne-map@2x.png 2x"
+              src="/images/wayne-county-map/wayne-map-pacific.png"
+              srcSet="/images/wayne-county-map/wayne-map-pacific.png 1x, /images/wayne-county-map/wayne-map-pacific@2x.png 2x"
               alt=""/>
             {/* zoomed out bg map */}
             <img className="home-header-michigan-map"

@@ -18,6 +18,7 @@ import DisabilityStatus from "./sections/specialPopulation/DisabilityStatus";
 import HearingAndVisionDifficulty from "./sections/specialPopulation/HearingAndVisionDifficulty";
 import Homeownership from "./sections/builtEnvironment/Homeownership";
 import HouseRentals from "./sections/builtEnvironment/HouseRentals";
+import Transportation from "./sections/builtEnvironment/Transportation";
 
 class Profile extends Component {
 
@@ -64,6 +65,7 @@ class Profile extends Component {
         <TopicTitle slug="built-environment">Built Environment</TopicTitle>
         <Homeownership />
         <HouseRentals />
+        <Transportation />
         
       </div>
     );
@@ -84,6 +86,7 @@ Profile.need = [
   HearingAndVisionDifficulty,
   Homeownership,
   HouseRentals,
+  Transportation,
   fetchData("diabetes", "/api/data?measures=Diabetes%20Data%20Value&City=<id>&Year=latest"),
   fetchData("meta", "/api/search?id=<id>"),
   fetchData("population", "https://fossil-lake.datausa.io/api/data?measures=Population&Geography=<id>&year=latest")

@@ -58,20 +58,17 @@ class DisabilityStatus extends SectionColumns {
         {/* Show barchart for each age group type with public, private and no health insurance coverage*/}
         <BarChart config={{
           data: filteredHealthCoverageType,
-          discrete: "x",
+          discrete: "y",
           height: 400,
           stacked: true,
           groupBy: ["Health Insurance coverage:type"],
           label: d => `${d["Health Insurance coverage:type"]}`,
-          x: d => d.Age,
-          y: "share",
+          y: d => d.Age,
+          x: "share",
           time: "ID Year",
-          xConfig: {
-            labelRotation: false,
-            tickFormat: d => rangeFormatter(d)
-          },
-          yConfig: {tickFormat: d => formatPopulation(d)},
-          xSort: (a, b) => a["ID Age"] - b["ID Age"],
+          yConfig: {tickFormat: d => rangeFormatter(d)},
+          xConfig: {tickFormat: d => formatPopulation(d)},
+          ySort: (a, b) => a["ID Age"] - b["ID Age"],
           shapeConfig: {
             label: false
           },

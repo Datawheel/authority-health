@@ -57,7 +57,7 @@ class HouseRentals extends SectionColumns {
           <LinePlot config={{
             data: rentAmountData,
             discrete: "x",
-            height: 250,
+            height: 175,
             groupBy: "ID County",
             label: d => d.Year,
             x: "Year",

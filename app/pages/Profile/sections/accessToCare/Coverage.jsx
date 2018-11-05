@@ -15,17 +15,25 @@ class Coverage extends SectionColumns {
 
   render() {
     const {coverageData} = this.props;
+    console.log("coverageData: ", coverageData);
 
     const recentYearCoverageData = {};
     nest()
       .key(d => d.Year)
       .entries(coverageData)
       .forEach(group => {
-        const total = sum(group.values, d => d.Population);
-        group.values.forEach(d => d.share = d.Population / total * 100);
+        console.log("group: ", group);
+        nest()
+          .key(d => d["ID Age"])
+          .entries(group.values)
+          .forEach(ageGroup => {
+            console.log("ageGroup: ", ageGroup);
+            const total = sum(ageGroup.values, d => d.Population);
+            ageGroup.values.forEach(d => d.share = d.Population / total * 100);
+          });
         group.key >= coverageData[0].Year ? Object.assign(recentYearCoverageData, group) : {};
       });
-    const data = coverageData.filter(d => d["ID Health Insurance Coverage Status"] === 0);
+    // const data = coverageData.filter(d => d["ID Health Insurance Coverage Status"] === 0);
 
     const filteredRecentYearData = recentYearCoverageData.values.filter(d => d["ID Health Insurance Coverage Status"] === 0);
     const femaleCoverageData = filteredRecentYearData.filter(d => d.Sex === "Female").sort((a, b) => b.share - a.share);
@@ -40,23 +48,24 @@ class Coverage extends SectionColumns {
         <SectionTitle>Coverage</SectionTitle>
         <article>
           <Stat 
-            title={`Male majority in ${ageGroupYear}`}
+            title={`Male majority with Coverage in ${ageGroupYear}`}
             value={topMaleAgeGroup}
           />
           <Stat 
-            title={`Female majority in ${ageGroupYear}`}
+            title={`Female majority with Coverage in ${ageGroupYear}`}
             value={topFemaleAgeGroup}
           />
           <p>In {ageGroupYear}, the age groups most likely to have health care coverage in the {maleCoverageData[0].County} county are {topMaleAgeGroup} and {topFemaleAgeGroup} years, for men and women respectively.</p>
-          <p>The BarChart here shows the male and female age group stats with Health Insurance Coverage.</p>
+          <p>The BarChart here shows the male and female age groups with and without Health Insurance Coverage.</p>
         </article>
 
         <BarChart config={{
-          data,
+          data: coverageData,
           discrete: "x",
           height: 400,
           stacked: true,
-          groupBy: "Sex",
+          label: d => `${d.Sex} ${d["Health Insurance Coverage Status"]}`,
+          groupBy: ["Health Insurance Coverage Status", "Sex"],
           x: d => d.Age,
           y: "share",
           time: "ID Year",
@@ -66,7 +75,9 @@ class Coverage extends SectionColumns {
             tickFormat: d => rangeFormatter(d)
           },
           yConfig: {tickFormat: d => formatPopulation(d)},
-          shapeConfig: {label: false},
+          shapeConfig: {
+            opacity: d => d.Sex === "Female" ? 0.5 : 1
+          },
           tooltipConfig: {tbody: [["Value", d => formatPopulation(d.share)]]}
         }}
         />

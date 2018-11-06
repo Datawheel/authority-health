@@ -22,10 +22,7 @@ class Crime extends SectionColumns {
 
   render() {
     const {dropdownValue} = this.state;
-    console.log("dropdownValue: ", dropdownValue);
     const {crimeData} = this.props;
-    console.log("crimeData: ", crimeData);
-
     const typesOfCrime = ["Violent crime", "Property crime"];
 
     // Find the percentage for each type of crime and add "share" property to each data point.

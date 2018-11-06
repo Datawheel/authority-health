@@ -19,6 +19,7 @@ class Transportation extends SectionColumns {
 
     const {commuteTimeData, numberOfVehiclesData, transportationMeans} = this.props;
 
+    // Get data for Number of vehicles.
     const recentYearNumberOfVehicles = {};
     nest()
       .key(d => d.Year)
@@ -31,7 +32,7 @@ class Transportation extends SectionColumns {
     recentYearNumberOfVehicles.values.sort((a, b) => b.share - a.share);
     const topRecentYearNumberOfVehicles = recentYearNumberOfVehicles.values[0];
 
-    // Find recent year commute time data.
+    // Get data for commute time.
     const recentYearCommuteTime = {};
     nest()
       .key(d => d.Year)
@@ -43,6 +44,19 @@ class Transportation extends SectionColumns {
       });
     recentYearCommuteTime.values.sort((a, b) => b.share - a.share);
     const topRecentYearCommuteTime = recentYearCommuteTime.values[0];
+
+    // Get data for Mode of transport.
+    const recentYearModeOfTransport = {};
+    nest()
+      .key(d => d.Year)
+      .entries(transportationMeans)
+      .forEach(group => {
+        const total = sum(group.values, d => d["Commute Means"]);
+        group.values.forEach(d => d.share = d["Commute Means"] / total * 100);
+        group.key >= transportationMeans[0].Year ? Object.assign(recentYearModeOfTransport, group) : {};
+      });
+    recentYearModeOfTransport.values.sort((a, b) => b.share - a.share);
+    const topRecentYearModeOfTransport = recentYearModeOfTransport.values[0];
 
     return (
       <SectionColumns>
@@ -56,7 +70,15 @@ class Transportation extends SectionColumns {
             title={`Top number of vehicles in ${topRecentYearNumberOfVehicles.Year}`}
             value={`${rangeFormatter(topRecentYearNumberOfVehicles["Vehicles Available"])} ${formatPercentage(topRecentYearNumberOfVehicles.share)}`}
           />
-          <p>The Barchart here shows the Number of vehicles in each household and the percentage of Male and Female that owns them.</p>
+          <Stat 
+            title={`Top means of transportation in ${topRecentYearModeOfTransport.Year}`}
+            value={`${topRecentYearModeOfTransport["Transportation Means"]} ${formatPercentage(topRecentYearModeOfTransport.share)}`}
+          />
+          <p>The Barchart for number of vehicles shows the Number of vehicles in each household and the percentage of Male and Female that owns them.</p>
+          <p>The Treemap shows the percentages of Modes of Transportation in the {topRecentYearModeOfTransport.County}.</p>
+          <p>The mini Barchart here shows the commute time for each time bucket in the {topRecentYearCommuteTime.County}.</p>
+
+          {/* Draw a Barchart for commute time. */}
           <BarChart config={{
             data: commuteTimeData,
             discrete: "x",
@@ -80,6 +102,7 @@ class Transportation extends SectionColumns {
           />
         </article>
 
+        {/* Draw a Barchart for Number of vehicles in each household. */}
         <BarChart config={{
           data: numberOfVehiclesData,
           discrete: "x",
@@ -103,6 +126,7 @@ class Transportation extends SectionColumns {
         }}
         />
 
+        {/* Draw a Treemap for Modes of tranportation. */}
         <Treemap config={{
           data: transportationMeans,
           height: 400,
@@ -111,33 +135,9 @@ class Transportation extends SectionColumns {
           groupBy: "Transportation Means",
           time: "ID Year",
           title: "Means of Transportation",
-          tooltipConfig: {tbody: [["Value", d => formatAbbreviate(d["Commute Means"])]]}
+          tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
         }}
         />
-
-        {/* <Barchart config={{
-          data: transportationMeans,
-          discrete: "x",
-          height: 300,
-          // stacked: true,
-          legend: false,
-          groupBy: "Transportation Means",
-          x: d => d["Transportation Means"],
-          y: "Commute Means",
-          time: "ID Year",
-          xSort: (a, b) => a["ID Transportation Means"] - b["ID Transportation Means"],
-          xConfig: {
-            labelRotation: false,
-            tickFormat: d => rangeFormatter(d),
-            title: "Means of transport"
-          },
-          yConfig: {tickFormat: d => formatPercentage(d)},
-          shapeConfig: {
-            label: false
-          },
-          tooltipConfig: {tbody: [["Value", d => formatPercentage(d["Commute Means"])]]}
-        }}
-        /> */}
       </SectionColumns>
     );
   }
@@ -158,5 +158,5 @@ const mapStateToProps = state => ({
   numberOfVehiclesData: state.data.numberOfVehiclesData,
   transportationMeans: state.data.transportationMeans
 });
-  
+
 export default connect(mapStateToProps)(Transportation);

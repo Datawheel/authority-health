@@ -61,7 +61,7 @@ class Coverage extends SectionColumns {
           height: 400,
           stacked: true,
           label: d => `${d.Sex} ${d["Health Insurance Coverage Status"]}`,
-          groupBy: ["Health Insurance Coverage Status", "Sex"],
+          groupBy: d => `${d["Health Insurance Coverage Status"]} ${d.Sex}`,
           x: d => d.Age,
           y: "share",
           time: "ID Year",

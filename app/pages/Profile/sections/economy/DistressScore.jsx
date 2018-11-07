@@ -5,7 +5,7 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-// import Stat from "../../components/Stat";
+import Stat from "../../components/Stat";
 import zipcodes from "../../../../utils/zipcodes";
 
 class DistressScore extends SectionColumns {
@@ -13,14 +13,23 @@ class DistressScore extends SectionColumns {
   render() {
 
     const {distressScoreData} = this.props;
-    console.log("distressScoreData: ", distressScoreData);
+
+    distressScoreData.sort((a, b) => b["Distress Score"] - a["Distress Score"]);
+    const topDistressScoreData = distressScoreData[0];
 
     return (
       <SectionColumns>
         <SectionTitle>Distress Score</SectionTitle>
         <article>
+          <Stat 
+            title={`Top Distress Score in ${topDistressScoreData.Year}`}
+            value={`${topDistressScoreData["Zip Code"]} ${formatAbbreviate(topDistressScoreData["Distress Score"])} Percentile`}
+          />
+          <p>The Geomap here shows the Distress Score percentile for each Zip code region in the Wayne County, MI.</p>
+          <p>The maximum Distress Score was observed in the zip code {topDistressScoreData["Zip Code"]} with {formatAbbreviate(topDistressScoreData["Distress Score"])} Percentile in the year {topDistressScoreData.Year}.</p>
         </article>
-        {/* Draw Geomap to show distress score for each zip code in the Wayne county */}
+
+        {/* Draw Geomap to show distress scores for each zip code in the Wayne county. */}
         <Geomap config={{
           data: distressScoreData,
           groupBy: "ID Zip Code",

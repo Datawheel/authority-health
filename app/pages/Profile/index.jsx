@@ -21,6 +21,7 @@ import HouseRentals from "./sections/builtEnvironment/HouseRentals";
 import Transportation from "./sections/builtEnvironment/Transportation";
 import Crime from "./sections/builtEnvironment/Crime";
 import DistressScore from "./sections/economy/DistressScore";
+import HouseholdIncomeFromPublicAssistance from "./sections/economy/HouseholdIncomeFromPublicAssistance";
 
 class Profile extends Component {
 
@@ -72,6 +73,7 @@ class Profile extends Component {
 
         <TopicTitle slug="economy">Economy</TopicTitle>
         <DistressScore />
+        <HouseholdIncomeFromPublicAssistance />
         
       </div>
     );
@@ -95,6 +97,7 @@ Profile.need = [
   Transportation,
   Crime,
   DistressScore,
+  HouseholdIncomeFromPublicAssistance,
   fetchData("diabetes", "/api/data?measures=Diabetes%20Data%20Value&City=<id>&Year=latest"),
   fetchData("meta", "/api/search?id=<id>"),
   fetchData("population", "https://fossil-lake.datausa.io/api/data?measures=Population&Geography=<id>&year=latest")

@@ -14,8 +14,11 @@ class WageDistribution extends SectionColumns {
   render() {
 
     const {wageDistributionData} = this.props;
+
+    // wageDistributionData has data for places all over in USA. Filter data for the places in the Wayne county.
     const wageDistributionInWayneCounty = wageDistributionData.filter(d => places.includes(d["ID Place"]));
 
+    // Find the top data for the most recent year.
     const recentYearWageDistribution = {};
     nest()
       .key(d => d.Year)
@@ -23,7 +26,6 @@ class WageDistribution extends SectionColumns {
       .forEach(group => {
         group.key >= wageDistributionInWayneCounty[0].Year ? Object.assign(recentYearWageDistribution, group) : {};
       });
-
     recentYearWageDistribution.values.sort((a, b) => b["Wage GINI"] - a["Wage GINI"]);
     const topWageDistribution = recentYearWageDistribution.values[0];
 
@@ -31,13 +33,16 @@ class WageDistribution extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Wage Distribution</SectionTitle>
         <article>
+          {/* Top stats and short paragraph about Wage distribution. */}
           <Stat
             title={`Top Wage Dsitribution in ${topWageDistribution.Year}`}
             value={`${topWageDistribution.Place} ${formatAbbreviate(topWageDistribution["Wage GINI"])}`}
           />
+          <p>The Geomap here shows the Wage distribution across the cities in the Wayne county.</p>
+          <p>In {topWageDistribution.Year}, {topWageDistribution.Place} had the top Wage Distribution of {formatAbbreviate(topWageDistribution["Wage GINI"])}.</p>
         </article>
 
-        {/* Draw Geomap to show distress scores for each zip code in the Wayne county. */}
+        {/* Draw Geomap to show wage distribution for each place in the Wayne county. */}
         <Geomap config={{
           data: wageDistributionInWayneCounty,
           groupBy: "ID Place",

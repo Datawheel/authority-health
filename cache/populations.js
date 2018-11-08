@@ -3,7 +3,7 @@ const axios = require("axios");
 
 module.exports = async function() {
 
-  const client = new Client("https://fossil-lake-api.datausa.io/");
+  const client = new Client("https://ironwood-api.datausa.io/");
 
   const levels = ["Zip", "Place", "Tract"];
   const popQueries = levels

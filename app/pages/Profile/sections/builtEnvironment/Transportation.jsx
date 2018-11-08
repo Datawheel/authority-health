@@ -148,9 +148,9 @@ Transportation.defaultProps = {
 };
 
 Transportation.need = [
-  fetchData("commuteTimeData", "https://gila-cliff.datausa.io/api/data?measures=Commute%20Time&drilldowns=Travel%20Time&County=<id>&Year=all", d => d.data),
-  fetchData("numberOfVehiclesData", "https://gila-cliff.datausa.io/api/data?measures=Commute%20Means%20by%20Gender&drilldowns=Vehicles%20Available,Sex&County=<id>&Year=all", d => d.data),
-  fetchData("transportationMeans", "https://gila-cliff.datausa.io/api/data?measures=Commute%20Means&drilldowns=Transportation%20Means&County=<id>&Year=all", d => d.data)
+  fetchData("commuteTimeData", "https://joshua-tree.datausa.io/api/data?measures=Commute%20Time&drilldowns=Travel%20Time&County=<id>&Year=all", d => d.data),
+  fetchData("numberOfVehiclesData", "https://joshua-tree.datausa.io/api/data?measures=Commute%20Means%20by%20Gender&drilldowns=Vehicles%20Available,Sex&County=<id>&Year=all", d => d.data),
+  fetchData("transportationMeans", "https://joshua-tree.datausa.io/api/data?measures=Commute%20Means&drilldowns=Transportation%20Means&County=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

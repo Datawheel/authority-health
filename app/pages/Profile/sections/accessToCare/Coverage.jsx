@@ -72,7 +72,8 @@ class Coverage extends SectionColumns {
           },
           yConfig: {tickFormat: d => formatPopulation(d)},
           shapeConfig: {
-            opacity: d => d.Sex === "Female" ? 0.5 : 1
+            opacity: d => d.Sex === "Female" ? 0.5 : 1,
+            label: false
           },
           tooltipConfig: {tbody: [["Value", d => formatPopulation(d.share)]]}
         }}

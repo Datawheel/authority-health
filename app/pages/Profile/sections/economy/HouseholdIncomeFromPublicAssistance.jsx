@@ -57,7 +57,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
 
     return (
       <SectionColumns>
-        <SectionTitle>Household-Income-From-Public-Assistance</SectionTitle>
+        <SectionTitle>Household Income From Public Assistance</SectionTitle>
         <article>
           <Stat 
             title={`Population ${topPublicAssistanceData["Public Assistance or Snap"]} in ${topPublicAssistanceData.Year}`}

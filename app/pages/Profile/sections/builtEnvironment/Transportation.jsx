@@ -78,49 +78,48 @@ class Transportation extends SectionColumns {
           <p>The Treemap shows the percentages of Modes of Transportation in the {topRecentYearModeOfTransport.County}.</p>
           <p>The mini Barchart here shows the commute time for each time bucket in the {topRecentYearCommuteTime.County}.</p>
 
-          {/* Draw a Barchart for commute time. */}
+          {/* Draw a Barchart for Number of vehicles in each household. */}
           <BarChart config={{
-            data: commuteTimeData,
+            data: numberOfVehiclesData,
             discrete: "x",
             height: 300,
-            legend: false,
-            groupBy: "Travel Time",
-            x: "Travel Time",
+            groupBy: "Sex",
+            x: d => d["Vehicles Available"],
             y: "share",
             time: "ID Year",
-            xSort: (a, b) => a["ID Travel Time"] - b["ID Travel Time"],
+            xSort: (a, b) => a["ID Vehicles Available"] - b["ID Vehicles Available"],
             xConfig: {
-              tickFormat: d => filterTimeBucket(d),
-              title: "Commute Time in minutes"
+              labelRotation: false,
+              tickFormat: d => rangeFormatter(d),
+              title: "Number of Vehicles"
             },
-            yConfig: {
-              tickFormat: d => formatPercentage(d),
-              title: "Commute time percentage"
+            yConfig: {tickFormat: d => formatPercentage(d)},
+            shapeConfig: {
+              label: false
             },
             tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
           }}
           />
         </article>
 
-        {/* Draw a Barchart for Number of vehicles in each household. */}
+        {/* Draw a Barchart for commute time. */}
         <BarChart config={{
-          data: numberOfVehiclesData,
+          data: commuteTimeData,
           discrete: "x",
           height: 400,
-          stacked: true,
-          groupBy: "Sex",
-          x: d => d["Vehicles Available"],
+          legend: false,
+          groupBy: "Travel Time",
+          x: "Travel Time",
           y: "share",
           time: "ID Year",
-          xSort: (a, b) => a["ID Vehicles Available"] - b["ID Vehicles Available"],
+          xSort: (a, b) => a["ID Travel Time"] - b["ID Travel Time"],
           xConfig: {
-            labelRotation: false,
-            tickFormat: d => rangeFormatter(d),
-            title: "Number of Vehicles"
+            tickFormat: d => filterTimeBucket(d),
+            title: "Commute Time in minutes"
           },
-          yConfig: {tickFormat: d => formatPercentage(d)},
-          shapeConfig: {
-            label: false
+          yConfig: {
+            tickFormat: d => formatPercentage(d),
+            title: "Commute time percentage"
           },
           tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
         }}

@@ -23,6 +23,7 @@ import Crime from "./sections/builtEnvironment/Crime";
 import DistressScore from "./sections/economy/DistressScore";
 import HouseholdIncomeFromPublicAssistance from "./sections/economy/HouseholdIncomeFromPublicAssistance";
 import WageDistribution from "./sections/economy/WageDistribution";
+import Poverty from "./sections/economy/Poverty";
 
 class Profile extends Component {
 
@@ -76,6 +77,7 @@ class Profile extends Component {
         <DistressScore />
         <HouseholdIncomeFromPublicAssistance />
         <WageDistribution />
+        <Poverty />
         
       </div>
     );
@@ -101,6 +103,7 @@ Profile.need = [
   DistressScore,
   HouseholdIncomeFromPublicAssistance,
   WageDistribution,
+  Poverty,
   fetchData("diabetes", "/api/data?measures=Diabetes%20Data%20Value&City=<id>&Year=latest"),
   fetchData("meta", "/api/search?id=<id>"),
   fetchData("population", "https://ironwood.datausa.io/api/data?measures=Population&Geography=<id>&year=latest")

@@ -1,0 +1,133 @@
+import React from "react";
+import {connect} from "react-redux";
+import {sum} from "d3-array";
+import {nest} from "d3-collection";
+import {BarChart} from "d3plus-react";
+import {formatAbbreviate} from "d3plus-format";
+
+import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
+
+import Stat from "../../components/Stat";
+import rangeFormatter from "../../../../utils/rangeFormatter";
+
+const formatPopulation = d => `${formatAbbreviate(d)}%`;
+
+class Poverty extends SectionColumns {
+
+  render() {
+
+    const {povertyByRace, povertyByAgeAndSex} = this.props;
+    console.log("povertyByRace: ", povertyByRace);
+
+    const filterOutTotalRaceData = povertyByRace.filter(d => d.Race !== "Total");
+    console.log("filterOutTotalRaceData: ", filterOutTotalRaceData);
+
+    // Get the health center data for latest year.
+    const recentYearPovertyByRaceData = {};
+    nest()
+      .key(d => d.Year)
+      .entries(filterOutTotalRaceData)
+      .forEach(group => {
+        const total = sum(group.values, d => d["Population in Poverty by Gender, Age, and Race"]);
+        group.values.forEach(d => d.share = d["Population in Poverty by Gender, Age, and Race"] / total * 100);
+        group.key >= filterOutTotalRaceData[0].Year ? Object.assign(recentYearPovertyByRaceData, group) : {};
+      });
+    const filterDataBelowPovertyByRace = filterOutTotalRaceData.filter(d => d["ID Poverty Status"] === 0);
+    console.log("filterDataBelowPovertyByRace: ", filterDataBelowPovertyByRace);
+
+    console.log("recentYearPovertyByRaceData: ", recentYearPovertyByRaceData);
+
+    const filterRecentYearPovertyByRace = recentYearPovertyByRaceData.values.filter(d => d["ID Poverty Status"] === 0).sort((a, b) => b.share - a.share);
+    const topPovertyByRace = filterRecentYearPovertyByRace[0];
+    console.log("filterRecentYearPovertyByRace: ", filterRecentYearPovertyByRace);
+
+    console.log("povertyByAgeAndSex: ", povertyByAgeAndSex);
+    const belowPovertyLevelByAgeAndSex = povertyByAgeAndSex.filter(d => d["ID Poverty Status"] === 0);
+    const recentYearPovertyByAgeAndSex = {};
+    nest()
+      .key(d => d.Year)
+      .entries(belowPovertyLevelByAgeAndSex)
+      .forEach(group => {
+        const total = sum(group.values, d => d["Population in Poverty by Gender, Age, and Race"]);
+        group.values.forEach(d => d.share = d["Population in Poverty by Gender, Age, and Race"] / total * 100);
+        group.key >= belowPovertyLevelByAgeAndSex[0].Year ? Object.assign(recentYearPovertyByAgeAndSex, group) : {};
+      });
+
+    return (
+      <SectionColumns>
+        <SectionTitle>Poverty</SectionTitle>
+        <article>
+          <Stat 
+            title={`Majority race below poverty in ${topPovertyByRace.Year}`}
+            value={`${topPovertyByRace.Race} ${formatPopulation(topPovertyByRace.share)}`}
+          />
+          <p>The mini barchart here shows the population below poverty level in the {topPovertyByRace.County}. In {topPovertyByRace.Year}, the majority race in poverty was {topPovertyByRace.Race} with {formatPopulation(topPovertyByRace.share)} of the total population in the {topPovertyByRace.County}.</p>
+
+          <BarChart config={{
+            data: filterDataBelowPovertyByRace,
+            discrete: "x",
+            height: 350,
+            groupBy: "Race",
+            legend: false,
+            x: "Race",
+            y: "share",
+            time: "ID Year",
+            xSort: (a, b) => a["ID Race"] - b["ID Race"],
+            xConfig: {
+              title: "Poverty by Race"
+            },
+            yConfig: {
+              tickFormat: d => formatPopulation(d),
+              title: "Population below poverty"
+            },
+            tooltipConfig: {tbody: [["Value", d => formatPopulation(d.share)]]}
+          }}
+          />
+        </article>
+
+        <BarChart config={{
+          data: belowPovertyLevelByAgeAndSex,
+          discrete: "x",
+          height: 400,
+          stacked: true,
+          groupBy: "Sex",
+          x: "Age",
+          y: "share",
+          time: "ID Year",
+          xSort: (a, b) => a["ID Age"] - b["ID Age"],
+          xConfig: {
+            labelRotation: false,
+            tickFormat: d => rangeFormatter(d),
+            title: "Age Buckets in years"
+          },
+          yConfig: {
+            tickFormat: d => formatPopulation(d),
+            title: "Population below poverty level"
+          },
+          shapeConfig: {
+            label: false
+          },
+          tooltipConfig: {tbody: [["Value", d => formatPopulation(d.share)]]}
+        }}
+        />
+      </SectionColumns>
+    );
+  }
+}
+
+Poverty.defaultProps = {
+  slug: "poverty"
+};
+
+Poverty.need = [
+  fetchData("povertyByRace", "https://joshua-tree.datausa.io/api/data?measures=Population%20in%20Poverty%20by%20Gender,%20Age,%20and%20Race&drilldowns=Poverty%20Status,Race&County=<id>&Year=all", d => d.data),
+  fetchData("povertyByAgeAndSex", "https://joshua-tree.datausa.io/api/data?measures=Population%20in%20Poverty%20by%20Gender,%20Age,%20and%20Race&drilldowns=Poverty%20Status,Age,Sex&County=<id>&Year=all", d => d.data)
+];
+
+const mapStateToProps = state => ({
+  povertyByRace: state.data.povertyByRace,
+  povertyByAgeAndSex: state.data.povertyByAgeAndSex
+});
+
+export default connect(mapStateToProps)(Poverty);
+

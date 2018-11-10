@@ -17,12 +17,10 @@ class Poverty extends SectionColumns {
   render() {
 
     const {povertyByRace, povertyByAgeAndSex, incomeToPovertyLevelRatio} = this.props;
-    console.log("povertyByRace: ", povertyByRace);
 
     const filterOutTotalRaceData = povertyByRace.filter(d => d.Race !== "Total");
-    console.log("filterOutTotalRaceData: ", filterOutTotalRaceData);
 
-    // Get the health center data for latest year.
+    // Get the Poverty by Race data.
     const recentYearPovertyByRaceData = {};
     nest()
       .key(d => d.Year)
@@ -33,15 +31,12 @@ class Poverty extends SectionColumns {
         group.key >= filterOutTotalRaceData[0].Year ? Object.assign(recentYearPovertyByRaceData, group) : {};
       });
     const filterDataBelowPovertyByRace = filterOutTotalRaceData.filter(d => d["ID Poverty Status"] === 0);
-    console.log("filterDataBelowPovertyByRace: ", filterDataBelowPovertyByRace);
 
-    console.log("recentYearPovertyByRaceData: ", recentYearPovertyByRaceData);
-
+    // Find top stats for Poverty by Race
     const filterRecentYearPovertyByRace = recentYearPovertyByRaceData.values.filter(d => d["ID Poverty Status"] === 0).sort((a, b) => b.share - a.share);
     const topPovertyByRace = filterRecentYearPovertyByRace[0];
-    console.log("filterRecentYearPovertyByRace: ", filterRecentYearPovertyByRace);
 
-    console.log("povertyByAgeAndSex: ", povertyByAgeAndSex);
+    // Get data for Poverty by Age and Sex.
     const belowPovertyLevelByAgeAndSex = povertyByAgeAndSex.filter(d => d["ID Poverty Status"] === 0);
     const recentYearPovertyByAgeAndSex = {};
     nest()
@@ -53,7 +48,7 @@ class Poverty extends SectionColumns {
         group.key >= belowPovertyLevelByAgeAndSex[0].Year ? Object.assign(recentYearPovertyByAgeAndSex, group) : {};
       });
     
-    // Find top stats for povetry by age and sex
+    // Find top stats for povetry by Age and Sex.
     const recentYearPovertyByAgeAndSexFiltered = recentYearPovertyByAgeAndSex.values.filter(d => d["ID Poverty Status"] === 0);
 
     // Find top male poverty data.
@@ -64,7 +59,7 @@ class Poverty extends SectionColumns {
     const femalePovertyData = recentYearPovertyByAgeAndSexFiltered.filter(d => d.Sex === "Female").sort((a, b) => b.share - a.share);
     const topFemalePovertyData = femalePovertyData[0];
 
-    // incomeToPovertyLevelRatio
+    // Get Income To Poverty Level Ratio
     console.log("incomeToPovertyLevelRatio: ", incomeToPovertyLevelRatio);
     const recentYearIncomeToPovertyLevelRatio = {};
     nest()
@@ -75,6 +70,10 @@ class Poverty extends SectionColumns {
         group.values.forEach(d => d.share = d.Population / total * 100);
         group.key >= incomeToPovertyLevelRatio[0].Year ? Object.assign(recentYearIncomeToPovertyLevelRatio, group) : {};
       });
+
+    // Find recent year top stats
+    recentYearIncomeToPovertyLevelRatio.values.sort((a, b) => b.share - a.share);
+    const topIncomeToPovertyLevelRatio = recentYearIncomeToPovertyLevelRatio.values[0];
 
     return (
       <SectionColumns>
@@ -91,6 +90,10 @@ class Poverty extends SectionColumns {
           <Stat 
             title={`Female poverty majority in ${topFemalePovertyData.Year}`}
             value={`${topFemalePovertyData.Age} ${formatPopulation(topFemalePovertyData.share)}`}
+          />
+          <Stat 
+            title={`Top Income To Poverty Level Ratio in ${topIncomeToPovertyLevelRatio.Year}`}
+            value={`${topIncomeToPovertyLevelRatio["Ratio of Income to Poverty Level"]} ${formatPopulation(topIncomeToPovertyLevelRatio.share)}`}
           />
           <p>The mini barchart here shows the population below poverty level in the {topPovertyByRace.County}. In {topPovertyByRace.Year}, the majority race in poverty was {topPovertyByRace.Race} with {formatPopulation(topPovertyByRace.share)} of the total population in the {topPovertyByRace.County}.</p>
 

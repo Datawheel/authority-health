@@ -52,6 +52,17 @@ class Poverty extends SectionColumns {
         group.values.forEach(d => d.share = d["Population in Poverty by Gender, Age, and Race"] / total * 100);
         group.key >= belowPovertyLevelByAgeAndSex[0].Year ? Object.assign(recentYearPovertyByAgeAndSex, group) : {};
       });
+    
+    // Find top stats for povetry by age and sex
+    const recentYearPovertyByAgeAndSexFiltered = recentYearPovertyByAgeAndSex.values.filter(d => d["ID Poverty Status"] === 0);
+
+    // Find top male poverty data.
+    const malePovertyData = recentYearPovertyByAgeAndSexFiltered.filter(d => d.Sex === "Male").sort((a, b) => b.share - a.share);
+    const topMalePovertyData = malePovertyData[0];
+
+    // Find top female poverty data.
+    const femalePovertyData = recentYearPovertyByAgeAndSexFiltered.filter(d => d.Sex === "Female").sort((a, b) => b.share - a.share);
+    const topFemalePovertyData = femalePovertyData[0];
 
     // incomeToPovertyLevelRatio
     console.log("incomeToPovertyLevelRatio: ", incomeToPovertyLevelRatio);
@@ -73,17 +84,26 @@ class Poverty extends SectionColumns {
             title={`Majority race below poverty in ${topPovertyByRace.Year}`}
             value={`${topPovertyByRace.Race} ${formatPopulation(topPovertyByRace.share)}`}
           />
+          <Stat 
+            title={`Male poverty majority in ${topMalePovertyData.Year}`}
+            value={`${topMalePovertyData.Age} ${formatPopulation(topMalePovertyData.share)}`}
+          />
+          <Stat 
+            title={`Female poverty majority in ${topFemalePovertyData.Year}`}
+            value={`${topFemalePovertyData.Age} ${formatPopulation(topFemalePovertyData.share)}`}
+          />
           <p>The mini barchart here shows the population below poverty level in the {topPovertyByRace.County}. In {topPovertyByRace.Year}, the majority race in poverty was {topPovertyByRace.Race} with {formatPopulation(topPovertyByRace.share)} of the total population in the {topPovertyByRace.County}.</p>
 
           <BarChart config={{
             data: filterDataBelowPovertyByRace,
             discrete: "y",
-            height: 350,
+            height: 300,
             groupBy: "Race",
             legend: false,
             y: "Race",
             x: "share",
             time: "ID Year",
+            label: d => d.Race,
             ySort: (a, b) => a["ID Race"] - b["ID Race"],
             yConfig: {
               ticks: [],

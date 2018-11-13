@@ -33,11 +33,11 @@ export default class ArticleList extends Component {
 
         <div className="profile-tile-header">
           <h2>News & insights</h2>
-          {/* explore map link */}
+          {/* article list page link */}
           {/* TODO: make it functional */}
           <Link className="profile-tile-link link font-xs u-uppercase">
-            Explore map data
-            <span className="profile-tile-link-icon pt-icon pt-icon-compass" />
+            All articles
+            <span className="profile-tile-link-icon pt-icon pt-icon-chevron-right" />
           </Link>
         </div>
 

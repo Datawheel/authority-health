@@ -14,22 +14,24 @@ const formatPopulation = d => `${formatAbbreviate(d)}%`;
 class EducationalAttainment extends SectionColumns {
 
   render() {
-
     const {educationalAttainmentData, highSchoolDropoutRate} = this.props;
-    // console.log("educationalAttainmentData: ", educationalAttainmentData);
 
     // Format data for publicAssistanceData.
-    const recentYeareducationalAttainment = {};
+    const recentYearEducationalAttainment = {};
     nest()
       .key(d => d.Year)
       .entries(educationalAttainmentData)
       .forEach(group => {
         const total = sum(group.values, d => d.Population);
         group.values.forEach(d => d.share = d.Population / total * 100);
-        group.key >= educationalAttainmentData[0].Year ? Object.assign(recentYeareducationalAttainment, group) : {};
+        group.key >= educationalAttainmentData[0].Year ? Object.assign(recentYearEducationalAttainment, group) : {};
       });
 
-    // console.log("highSchoolDropoutRate: ", highSchoolDropoutRate);
+    // Find top recent year Educational attainment stats
+    recentYearEducationalAttainment.values.sort((a, b) => b.share - a.share);
+    const topEducationalAttainment = recentYearEducationalAttainment.values[0]; 
+
+    // Find top High School DropoutRate for the recent year.
     highSchoolDropoutRate.sort((a, b) => b["High School Dropout Rate"] - a["High School Dropout Rate"]);
     const topDropoutRate = highSchoolDropoutRate[0];
 
@@ -37,18 +39,25 @@ class EducationalAttainment extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Educational Attainment</SectionTitle>
         <article>
-          {/* Top stats and short paragraph about High School Dropout rate. */}
+          {/* Top stats about top Educational Attainment. */}
+          <Stat
+            title={`Top Educational attainment in ${topEducationalAttainment.Year}`}
+            value={`${topEducationalAttainment["Educational Attainment"]} ${formatPopulation(topEducationalAttainment.share)}`}
+          />
+          {/* Top stats about High School Dropout Rate. */}
           <Stat
             title={`Top High School dropout rate in ${topDropoutRate.Year}`}
             value={`${topDropoutRate["Zip Code"]} ${formatPopulation(topDropoutRate["High School Dropout Rate"])}`}
           />
+          <p>In {topEducationalAttainment.Year}, the highest Education attentend was {topEducationalAttainment["Educational Attainment"]} with the share of {formatPopulation(topEducationalAttainment.share)}.</p>
+          <p>In {topDropoutRate.Year}, the top high school dropout rate was {formatPopulation(topDropoutRate["High School Dropout Rate"])} in the zip code region {topDropoutRate["Zip Code"]}.</p>
         </article>
 
+        {/* Draw a Barchart to show Educational Attainment for all types of education buckets. */}
         <BarChart config={{
           data: educationalAttainmentData,
           discrete: "x",
           height: 400,
-          // stacked: true,
           legend: false,
           label: d => `${d.Sex} - ${d["Educational Attainment"]}`,
           groupBy: "Sex",
@@ -56,10 +65,6 @@ class EducationalAttainment extends SectionColumns {
           y: "share",
           time: "ID Year",
           xSort: (a, b) => a["ID Educational Attainment"] - b["ID Educational Attainment"],
-          xConfig: {
-            // labelRotation: false
-            // tickFormat: d => rangeFormatter(d)
-          },
           yConfig: {tickFormat: d => formatPopulation(d)},
           shapeConfig: {
             label: false

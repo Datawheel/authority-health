@@ -1,13 +1,17 @@
 import React from "react";
 import {connect} from "react-redux";
+import {sum} from "d3-array";
 import {nest} from "d3-collection";
-import {Geomap} from "d3plus-react";
+import {BarChart} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Stat from "../../components/Stat";
 import places from "../../../../utils/places";
+import rangeFormatter from "../../../../utils/rangeFormatter";
+
+const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
 class WageDistribution extends SectionColumns {
 
@@ -15,18 +19,17 @@ class WageDistribution extends SectionColumns {
 
     const {wageDistributionData} = this.props;
 
-    // wageDistributionData has data for places all over in USA. Filter data for the places in the Wayne county.
-    const wageDistributionInWayneCounty = wageDistributionData.filter(d => places.includes(d["ID Place"]));
-
     // Find the top data for the most recent year.
     const recentYearWageDistribution = {};
     nest()
       .key(d => d.Year)
-      .entries(wageDistributionInWayneCounty)
+      .entries(wageDistributionData)
       .forEach(group => {
-        group.key >= wageDistributionInWayneCounty[0].Year ? Object.assign(recentYearWageDistribution, group) : {};
+        const total = sum(group.values, d => d["Household Income"]);
+        group.values.forEach(d => d.share = d["Household Income"] / total * 100);
+        group.key >= wageDistributionData[0].Year ? Object.assign(recentYearWageDistribution, group) : {};
       });
-    recentYearWageDistribution.values.sort((a, b) => b["Wage GINI"] - a["Wage GINI"]);
+    recentYearWageDistribution.values.sort((a, b) => b.share - a.share);
     const topWageDistribution = recentYearWageDistribution.values[0];
 
     return (
@@ -35,24 +38,33 @@ class WageDistribution extends SectionColumns {
         <article>
           {/* Top stats and short paragraph about Wage distribution. */}
           <Stat
-            title={`Top Wage Dsitribution in ${topWageDistribution.Year}`}
-            value={`${topWageDistribution.Place} ${formatAbbreviate(topWageDistribution["Wage GINI"])}`}
+            title={`Top Wage Dsitribution in ${topWageDistribution.Year} in ${topWageDistribution.County}`}
+            value={`${topWageDistribution["Household Income Bucket"]} ${formatPopulation(topWageDistribution.share)}`}
           />
-          <p>The Geomap here shows the Wage distribution across the cities in the Wayne county.</p>
-          <p>In {topWageDistribution.Year}, {topWageDistribution.Place} had the top Wage Distribution of {formatAbbreviate(topWageDistribution["Wage GINI"])}.</p>
+          <p>This Barchart shows the number of workers in various wage buckets in {topWageDistribution.County}.</p>
+          <p>In {topWageDistribution.Year}, {topWageDistribution.County} had the top Wage Distribution of {formatPopulation(topWageDistribution.share)}.</p>
         </article>
 
         {/* Draw Geomap to show wage distribution for each place in the Wayne county. */}
-        <Geomap config={{
-          data: wageDistributionInWayneCounty,
-          groupBy: "ID Place",
-          colorScale: "Wage GINI",
-          time: "Year",
-          label: d => d.Place,
+        <BarChart config={{
+          data: wageDistributionData,
+          discrete: "x",
           height: 400,
-          tooltipConfig: {tbody: [["Value", d => formatAbbreviate(d["Wage GINI"])]]},
-          topojson: "/topojson/place.json",
-          topojsonFilter: d => places.includes(d.id)
+          legend: false,
+          groupBy: "Household Income Bucket",
+          x: "Household Income Bucket",
+          y: "share",
+          time: "ID Year",
+          xSort: (a, b) => a["ID Household Income Bucket"] - b["ID Household Income Bucket"],
+          xConfig: {
+            labelRotation: false,
+            tickFormat: d => rangeFormatter(d)
+          },
+          yConfig: {tickFormat: d => formatPopulation(d)},
+          shapeConfig: {
+            label: false
+          },
+          tooltipConfig: {tbody: [["Value", d => formatPopulation(d.share)]]}
         }}
         />
       </SectionColumns>
@@ -65,7 +77,7 @@ WageDistribution.defaultProps = {
 };
 
 WageDistribution.need = [
-  fetchData("wageDistributionData", "https://joshua-tree.datausa.io/api/data?measures=Wage%20GINI&drilldowns=Place&Year=all", d => d.data)
+  fetchData("wageDistributionData", "https://gila-cliff.datausa.io/api/data?measures=Household%20Income&drilldowns=Household%20Income%20Bucket&County=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

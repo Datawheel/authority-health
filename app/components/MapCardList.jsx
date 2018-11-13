@@ -1,6 +1,6 @@
 import React, {Component} from "react";
-import MapCard from "./MapCard";
 import {Link} from "react-router";
+import MapCard from "./MapCard";
 import "./MapCardList.css";
 
 export default class MapCardList extends Component {

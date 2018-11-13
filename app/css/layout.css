@@ -29,8 +29,6 @@ grid system by James Ferrell
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  /* fallback; justifies inline-block children, but only for more than one row */
-  text-align: justify;
 
   /* column base class */
   & .g-col {

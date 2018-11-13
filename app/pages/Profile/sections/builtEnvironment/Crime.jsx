@@ -23,7 +23,6 @@ class Crime extends SectionColumns {
   render() {
     const {dropdownValue} = this.state;
     const {crimeData} = this.props;
-    const typesOfCrime = ["Violent crime", "Property crime"];
 
     // Find the percentage for each type of crime and add "share" property to each data point.
     nest()
@@ -60,41 +59,33 @@ class Crime extends SectionColumns {
     recentYearViolentCrime.values.sort((a, b) => b.share - a.share);
     const topRecentYearViolentCrime = recentYearViolentCrime.values[0];
 
-    const violentCrimeSelected = dropdownValue === "Violent crime";
-
     return (
       <SectionColumns>
         <SectionTitle>Crime</SectionTitle>
         <article>
-          {/* Create a dropdown for drug types. */}
-          <select onChange={this.handleChange}>
-            {typesOfCrime.map(item => <option key={item} value={item}>{item}</option>)}
-          </select>
 
           {/* Show a Stats and a short paragraph for each type of crime based on the dropdown value. */}
-          { violentCrimeSelected
-            ? <Stat 
-              title={`Top Violent Crime in ${topRecentYearViolentCrime.Year}`}
-              value={`${topRecentYearViolentCrime.Crime} ${formatPercentage(topRecentYearViolentCrime.share)}`}
-            />
-            : <Stat 
-              title={`Top Property Crime in ${topRecentYearPropertyCrime.Year}`}
-              value={`${topRecentYearPropertyCrime.Crime} ${formatPercentage(topRecentYearPropertyCrime.share)}`}
-            />
-          }
-          { violentCrimeSelected
-            ? <p>The Barchart here shows data for different types of Violent Crime. In {topRecentYearViolentCrime.Year}, {topRecentYearViolentCrime.Crime} had the highest rate Violent crime of ${formatPercentage(topRecentYearViolentCrime.share)} at the current location.</p>
-            : <p>The Barchart here shows data for different types of Property Crime. In {topRecentYearPropertyCrime.Year}, {topRecentYearPropertyCrime.Crime} had the highest rate Property crime of ${formatPercentage(topRecentYearPropertyCrime.share)} at the current location.</p>
-          }
+          <Stat 
+            title={`Top Violent Crime in ${topRecentYearViolentCrime.Year}`}
+            value={`${topRecentYearViolentCrime.Crime} ${formatPercentage(topRecentYearViolentCrime.share)}`}
+          />
+          <Stat 
+            title={`Top Property Crime in ${topRecentYearPropertyCrime.Year}`}
+            value={`${topRecentYearPropertyCrime.Crime} ${formatPercentage(topRecentYearPropertyCrime.share)}`}
+          />
+          <p>The Barchart here shows data for different types of Property and Violent Crimes.</p>
+          <p>In {topRecentYearViolentCrime.Year}, {topRecentYearViolentCrime.Crime} had the highest rate Violent crime of ${formatPercentage(topRecentYearViolentCrime.share)} at the current location.</p>
+          <p>In {topRecentYearPropertyCrime.Year}, {topRecentYearPropertyCrime.Crime} had the highest rate Property crime of ${formatPercentage(topRecentYearPropertyCrime.share)} at the current location.</p>
+          
         </article>
 
         {/* Draw a Barchart for each type of crime based on the dropdown value. */}
         <BarChart config={{
-          data: violentCrimeSelected ? violentCrime : propertyCrime,
+          data: crimeData,
           discrete: "x",
           height: 400,
           legend: false,
-          groupBy: "Crime",
+          groupBy: d => `${d["Type of Crime"]}: ${d.Crime}`,
           x: "Crime",
           y: "share",
           time: "ID Year",

@@ -17,7 +17,7 @@ class WageDistribution extends SectionColumns {
 
   render() {
 
-    const {wageDistributionData} = this.props;
+    const {wageDistributionData, wageGinidata} = this.props;
 
     // Find the top data for the most recent year.
     const recentYearWageDistribution = {};
@@ -32,6 +32,11 @@ class WageDistribution extends SectionColumns {
     recentYearWageDistribution.values.sort((a, b) => b.share - a.share);
     const topWageDistribution = recentYearWageDistribution.values[0];
 
+    // Find all places and wage GINI in Michigan state.
+    const wageGiniDataForMichigan = wageGinidata.filter(d => d["ID Place"].startsWith("16000US26"));
+    wageGiniDataForMichigan.sort((a, b) => b["Wage GINI"] - a["Wage GINI"]);
+    const topWageGini = wageGiniDataForMichigan[0];
+
     return (
       <SectionColumns>
         <SectionTitle>Wage Distribution</SectionTitle>
@@ -41,8 +46,13 @@ class WageDistribution extends SectionColumns {
             title={`Top Wage Dsitribution in ${topWageDistribution.Year} in ${topWageDistribution.County}`}
             value={`${topWageDistribution["Household Income Bucket"]} ${formatPopulation(topWageDistribution.share)}`}
           />
-          <p>This Barchart shows the number of workers in various wage buckets in {topWageDistribution.County}.</p>
-          <p>In {topWageDistribution.Year}, {topWageDistribution.County} had the top Wage Distribution of {formatPopulation(topWageDistribution.share)}.</p>
+          {/* Top stats and short paragraph about Wage Gini. */}
+          <Stat
+            title={`Top Wage GINI in ${topWageGini.Year}`}
+            value={`${topWageGini.Place} ${formatAbbreviate(topWageGini["Wage GINI"])}`}
+          />
+          <p>This Barchart shows the number of workers in various wage buckets in {topWageDistribution.County}. In {topWageDistribution.Year}, {topWageDistribution.County} had the top Wage Distribution of {topWageDistribution["Household Income Bucket"]} with {formatPopulation(topWageDistribution.share)}.</p>
+          <p>In {topWageGini.Year}, the highest income inequality in Michigan, was in {topWageGini.Place} with {formatAbbreviate(topWageGini["Wage GINI"])}</p>
         </article>
 
         {/* Draw Geomap to show wage distribution for each place in the Wayne county. */}
@@ -77,11 +87,13 @@ WageDistribution.defaultProps = {
 };
 
 WageDistribution.need = [
-  fetchData("wageDistributionData", "https://gila-cliff.datausa.io/api/data?measures=Household%20Income&drilldowns=Household%20Income%20Bucket&County=<id>&Year=all", d => d.data)
+  fetchData("wageDistributionData", "https://gila-cliff.datausa.io/api/data?measures=Household%20Income&drilldowns=Household%20Income%20Bucket&County=<id>&Year=all", d => d.data),
+  fetchData("wageGinidata", "https://gila-cliff.datausa.io/api/data?measures=Wage%20GINI&drilldowns=Place&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
-  wageDistributionData: state.data.wageDistributionData
+  wageDistributionData: state.data.wageDistributionData,
+  wageGinidata: state.data.wageGinidata
 });
 
 export default connect(mapStateToProps)(WageDistribution);

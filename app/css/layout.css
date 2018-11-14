@@ -69,9 +69,17 @@ grid system by James Ferrell
   }
 }
 
+
 /* -----------------------------------
-sections
+layout
 ----------------------------------- */
+
+/* prevent horizontal scrollbars */
+.outer-container {
+  overflow-x: hidden;
+}
+
+/* sections */
 .section-container {
   @add-mixin centered-container;
 }

@@ -27,11 +27,11 @@ class StudentPoverty extends SectionColumns {
         group.key >= levelOfSchoolData[0].Year ? Object.assign(recentYearLevelOfSchoolData, group) : {};
       });
 
-    // Filter out Not Enrolled In School data.
-    const filteredLevelOfSchoolData = levelOfSchoolData.filter(d => d["ID Level of School"] !== 7);
+    // Filter out Not Enrolled In School and above Poverty level data.
+    const filteredLevelOfSchoolData = levelOfSchoolData.filter(d => d["ID Level of School"] !== 7 && d["ID Poverty Status"] !== 1);
 
     // Find top recent year Level of School Data.
-    const filteredRecentYearLevelOfSchoolData = recentYearLevelOfSchoolData.values.filter(d => d["ID Level of School"] !== 7);
+    const filteredRecentYearLevelOfSchoolData = recentYearLevelOfSchoolData.values.filter(d => d["ID Level of School"] !== 7 && d["ID Poverty Status"] !== 1);
     filteredRecentYearLevelOfSchoolData.sort((a, b) => b.share - a.share);
     const topLevelOfSchoolData = filteredRecentYearLevelOfSchoolData[0];
 
@@ -75,7 +75,7 @@ StudentPoverty.defaultProps = {
 };
 
 StudentPoverty.need = [
-  fetchData("levelOfSchoolData", "/api/data?measures=Population&drilldowns=Level%20of%20School&County=<id>&Year=all", d => d.data)
+  fetchData("levelOfSchoolData", "/api/data?measures=Population&drilldowns=Level%20of%20School,Poverty%20Status&County=<id>&Year=all", d => d.data)
   // fetchData("highSchoolDropoutRate", "/api/data?measures=Total%20Population,High%20School%20Dropout%20Rate&drilldowns=Zip%20Code&Year=latest", d => d.data)
 ];
 

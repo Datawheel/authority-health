@@ -1,0 +1,39 @@
+/* -----------------------------------
+quality of life improvements
+----------------------------------- */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* usually necessary for responsive layouts */
+img, svg, textarea {
+  max-width: 100%;
+}
+
+/* border box default: http:/*www.paulirish.com/2012/box-sizing-border-box-ftw/ */
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+/* position:relative by default */
+/* enables top/right/bottom/left, z-index, and makes child elements with `position: absolute` behave */
+body * {
+  position: relative;
+}
+
+/* hide the spinner on inputs with a type of "number" */
+/* see https://stackoverflow.com/questions/3790935/can-i-hide-the-html5-number-input-s-spin-box */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none; /* `display: none` can cause crashes */
+  margin: 0; /* nuke the margin */
+}
+
+/* textareas can be resized, but only vertically */
+textarea {
+  resize: vertical;
+}

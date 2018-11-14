@@ -1,0 +1,42 @@
+@import "../css/mixins.css";
+
+.main-nav {
+  /* positioning */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* keep in front */
+  z-index: 20;
+}
+
+.main-nav-inner {
+  @add-mixin centered-container;
+  /* sizing */
+  height: var(--home-nav-height);
+  /* layout */
+  display: flex;
+  align-items: center; /* vertically center */
+  justify-content: space-between; /* envenly space children horizontally */
+  flex-wrap: wrap; /* allow elements to break on small screens */
+}
+
+.main-nav-logo-link {
+  padding: var(--gutter-xs);
+  /* offset swoosh */
+  right: 8px;
+  margin-left: calc(0 - var(--gutter-xs)); /* offset padding */
+}
+
+.main-nav-list {
+  margin-right: calc(0 - var(--gutter-xs)); /* offset padding */
+}
+
+.main-nav-item {
+  display: inline-block;
+}
+
+.main-nav-link {
+  @add-mixin nav-link;
+  padding: var(--gutter-xs);
+}

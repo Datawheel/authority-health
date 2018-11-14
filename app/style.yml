@@ -1,9 +1,85 @@
-nav-height: 40px
-subnav-size: 85px
-200pxdark: "rgb(61, 71, 55)"
+#############################
+# MEASUREMENTS
+#############################
 
-red: "#ef6145"
-light: "rgb(101, 111, 95)"
-white: "#fafafa"
-black: "#1B191D"
+# grid
+gutter-xxs: "0.25rem"
+gutter-xs:  "0.5rem"
+gutter-sm:  "0.75rem"
+gutter-md:  "1rem"
+gutter-lg:  "1.5rem"
+gutter-xl:  "2rem"
 
+# border radius
+radius-lg: "8px"
+radius-md: "4px"
+radius-sm: "2px"
+
+# miscellaneous measurements
+nav-height: 3.3rem # 66px
+home-nav-height: 5.4rem # 108px
+
+
+#############################
+# TYPOGRAPHY
+#############################
+
+heading-font: "'Playfair Display', Georgia, sans-serif"
+body-font: "'Lato', Geneva, Tahoma, sans-serif"
+
+
+#############################
+# COLORS
+#############################
+
+# grayscale
+white:   "#FFFFFF"
+light-1: "#EDEFF0"
+light-2: "#DCE0E2"
+light-3: "#CBD0D3"
+gray:    "#A8B1B6"
+dark-1:  "#869299"
+dark-2:  "#64747D"
+dark-3:  "#45555F"
+black:   "#24292F"
+
+# main color
+brand: "#70BADA"
+brand-light: "#B1E2F7"
+brand-dark: "#2F93BE"
+
+# extended palette
+# NOTE: curry == brand
+curry: "#E3C05D"
+curry-light: "#FFE7A6"
+curry-dark: "#C99C20"
+
+shamrock: "#84BD85"
+shamrock-light: "#CFE6CF"
+shamrock-dark: "#53A355"
+
+pacific: "#70BADA"
+pacific-light: "#B1E2F7"
+pacific-dark: "#2F93BE"
+
+majorelle: "#AD9FED"
+majorelle-light: "#DAD1FF"
+majorelle-dark: "#6F59D4"
+
+terra-cotta: "#DF6F6F"
+terra-cotta-light: "#FFD3D1"
+terra-cotta-dark: "#D45D59"
+
+# UI colors
+# NOTE: danger == terra-cotta, caution == curry, success == shamrock
+danger: "#DF6F6F"
+danger-light: "#FFD3D1"
+danger-dark: "#D45D59"
+
+caution: "#E3C05D"
+caution-light: "#FFE7A6"
+caution-dark: "#C99C20"
+
+success: "#84BD85"
+success-light: "#CFE6CF"
+success-dark: "#53A355"

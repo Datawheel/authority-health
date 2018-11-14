@@ -132,6 +132,7 @@ class Search extends Component {
     const {
       className,
       icon,
+      id,
       inactiveComponent: InactiveComponent,
       placeholder,
       resultRender,
@@ -140,20 +141,20 @@ class Search extends Component {
     const {active, results, userQuery} = this.state;
 
     return (
-      <div ref={comp => this.container = comp} className={ `pt-control-group ${className} ${ active ? "active" : "" }` }>
+      <div ref={comp => this.container = comp} className={ `search-container ${className} ${ active ? "active" : "" }` }>
         { InactiveComponent && <InactiveComponent active={ active } onClick={ this.onToggle.bind(this) } /> }
         <div className={ `pt-input-group pt-fill ${ active ? "active" : "" }` }>
           { icon && <span className="pt-icon pt-icon-search"></span> }
-          <input type="text" className="pt-input" ref={ input => this.input = input } onChange={ this.onChange.bind(this) } onFocus={ this.onFocus.bind(this) } placeholder={placeholder} />
+          <input id={id || "search"} type="text" className="pt-input" ref={ input => this.input = input } onChange={ this.onChange.bind(this) } onFocus={ this.onFocus.bind(this) } placeholder={placeholder} />
         </div>
         { searchEmpty || active && userQuery.length
-          ? <ul className={ active ? "results active" : "results" }>
+          ? <ul className={ active ? "results active font-sm" : "results font-sm" }>
             { results.map(result =>
               <li key={ result.id } className="result" onClick={this.onClick.bind(this, result)}>
                 { resultRender(result, this.props) }
               </li>
             )}
-            { !results.length && <li className="no-results">No Results Found</li> }
+            { !results.length && <p className="no-results">No Results Found</p> }
           </ul>
           : null }
       </div>

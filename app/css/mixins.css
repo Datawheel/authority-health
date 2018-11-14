@@ -1,0 +1,225 @@
+/* -----------------------------------
+breakpoints
+----------------------------------- */
+
+/* mobile first */
+@define-mixin min-xxl { @media (min-width: 1600px) { @mixin-content; } }
+@define-mixin min-xl  { @media (min-width: 1400px) { @mixin-content; } }
+@define-mixin min-lg  { @media (min-width: 1200px) { @mixin-content; } }
+@define-mixin min-md  { @media (min-width: 992px)  { @mixin-content; } }
+@define-mixin min-sm  { @media (min-width: 768px)  { @mixin-content; } }
+@define-mixin min-xs  { @media (min-width: 480px)  { @mixin-content; } }
+@define-mixin min-xxs { @media (min-width: 325px)  { @mixin-content; } }
+
+/* max-width first */
+@define-mixin max-xl  { @media (max-width: 1399px) { @mixin-content; } }
+@define-mixin max-lg  { @media (max-width: 1199px) { @mixin-content; } }
+@define-mixin max-md  { @media (max-width: 991px)  { @mixin-content; } }
+@define-mixin max-sm  { @media (max-width: 767px)  { @mixin-content; } }
+@define-mixin max-xs  { @media (max-width: 479px)  { @mixin-content; } }
+@define-mixin max-xxs { @media (max-width: 324px)  { @mixin-content; } }
+
+
+/* -----------------------------------
+typography
+----------------------------------- */
+
+/* type scaling */
+/* NOTE: using 20px as 1rem, because easy math */
+@define-mixin font-xxl {
+  font-size: 2rem; /* 40px */
+  line-height: 1;
+  /* scale up on bigger screens */
+  @add-mixin min-sm {
+    font-size: 3.4rem; /* 68px */
+  }
+}
+@define-mixin font-xl {
+  font-size: 1.4rem; /* 28px */
+  line-height: 1;
+  /* scale up on bigger screens */
+  @add-mixin min-sm {
+    font-size: 2.4rem; /* 48px */
+    line-height: 1.25;
+  }
+}
+@define-mixin font-lg {
+  font-size: 1.2rem; /* 24px */
+  line-height: 1.25;
+}
+@define-mixin font-md {
+  font-size: 1rem; /* 20px */
+  line-height: 1.5; /* 30px */
+}
+@define-mixin font-sm {
+  font-size: 0.7rem; /* 14px */
+  line-height: 1.42857; /* ~20px */
+}
+@define-mixin font-xs {
+  font-size: 0.6rem; /* 12px */
+  line-height: 1.666; /* 20px */
+}
+
+/* font smoothing */
+@define-mixin font-smoothing {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* uppercase */
+@define-mixin font-uppercase {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+
+/* -----------------------------------
+accessibility
+----------------------------------- */
+
+/* accessibly hidden text and elements */
+@define-mixin visually-hidden {
+  clip: rect(1px, 1px, 1px, 1px);
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+}
+
+/* reset visually-hidden properties */
+@define-mixin reset-visually-hidden {
+  clip: auto;
+  position: relative !important;
+  height: auto;
+  width: 100%;
+  overflow: auto;
+}
+
+
+/* -----------------------------------
+layout
+----------------------------------- */
+
+/* fill up all the space — make sure the parent has pos:rel */
+@define-mixin absolute-expand {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* center elements the dumb but sometimes useful way */
+@define-mixin absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+@define-mixin absolute-vertical-center {
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+}
+@define-mixin absolute-horizontal-center {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+/* break out of container and be full width */
+@define-mixin fullwidth-section {
+  margin-left: auto;
+  margin-right: auto;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+}
+
+@define-mixin centered-container {
+  max-width: 60rem; /* 1200px */
+  padding: var(--gutter-lg);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+/* -----------------------------------
+resets
+----------------------------------- */
+
+/* list reset */
+@define-mixin list-reset {
+  list-style-type: none; /* remove bullets */
+  padding-left: 0; /* thanks blueprint */
+  margin-top: 0; /* thanks blueprint */
+  margin-bottom: 0; /* thanks blueprint */
+}
+
+
+/* -----------------------------------
+button group
+----------------------------------- */
+
+/* button group; apply to pt-button, not parent */
+@define-mixin button-groupify {
+  margin: 0; /* smush buttons together */
+  min-width: 6em; /* for buttons with small text, this will work nicely */
+
+  & > .button,
+  & > .pt-button {
+    display: inline-block;
+    width: auto;
+  }
+
+  /* first button, but not if it's the only button */
+  &:first-child:not(:last-child)  {
+    border-radius: 20em 0 0 20em;
+    padding-right: 1.25em;
+  }
+  /* middle buttons */
+  & + .pt-button:not(:last-child) {
+    border-radius: 0;
+    margin-left: -1px; /* obscure 1px inset box shadow on previous button */
+  }
+  /* final button, but not if it's the only button */
+  &:last-child:not(:first-child)  {
+    border-radius: 0 20em 20em 0;
+    padding-left: 1.25em;
+    margin-left: -1px; /* obscure 1px inset box shadow on previous button */
+  }
+}
+
+
+/* -----------------------------------
+nav link
+----------------------------------- */
+
+/* nav link */
+@define-mixin nav-link {
+  @add-mixin font-uppercase;
+  /* positioning */
+  display: inline-block;
+  /* typography */
+  color: var(--light-1);
+  font-weight: 700;
+
+  /* interactions */
+  &:hover, &:focus {
+    color: var(--white);
+  }
+}
+
+
+/* -----------------------------------
+print stylesheet helpers
+----------------------------------- */
+
+/* display an html attr as a pseudo element */
+@define-mixin print-attr {
+  display: block; /* needed to make content display */
+  /* positioning */
+  position: relative;
+  /* theming */
+  font-size: 0.5em;
+  color: var(--brand); /* it's the link href, so give it the link color */
+  text-decoration: none; /* but it's small, so don't underline it */
+}

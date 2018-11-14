@@ -1,0 +1,65 @@
+@import "../css/mixins.css";
+
+.article-link {
+  border-top: 1px solid var(--dark-2);
+  /* required for fancy hover effect */
+  overflow: hidden;
+  transition: border-color 0.2s ease-out;
+
+  /* override default grid padding */
+  &.g-col {
+    padding: 0.625rem 0.5rem 0.5rem 0.5rem;
+  }
+
+  /* text content */
+  & .article-link-title,
+  & .article-link-meta {
+    z-index: 1; /* in front of :after element */
+    display: block;
+    /* transitions */
+    transform: translateX(-0.5rem); /* offset padding */
+    transition:
+      0.2s ease-out color,
+      0.2s ease-out transform;
+  }
+
+  /* reset default link style */
+  & .article-link-meta {
+    color: var(--brand);
+    line-height: 2;
+  }
+
+  /* fancy hover effect */
+  &:after {
+    content: '';
+    display: block;
+    @add-mixin absolute-expand;
+    /* transitions */
+    background-color: var(--dark-3);
+    transform: translateY(-100%);
+    transition:
+      0.2s ease-out background,
+      0.2s ease-out transform;
+  }
+
+  /* interactions */
+  &:hover, &:focus {
+    text-decoration: none;
+    border-top-color: var(--brand-dark);
+
+    /* fancy hover effect */
+    &:after {
+      background-color: var(--brand-dark);
+    }
+    &:after,
+    & .article-link-title,
+    & .article-link-meta {
+      transform: none;
+    }
+
+    /* reset default link styles */
+    & .article-link-meta {
+      color: var(--brand-light);
+    }
+  }
+}

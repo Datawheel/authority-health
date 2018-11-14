@@ -2,7 +2,7 @@ import React from "react";
 import {Route, IndexRoute, browserHistory} from "react-router";
 
 import App from "./App";
-import Home from "./pages/Home";
+import Home from "./pages/Home/Home";
 import Profile from "pages/Profile";
 import Visualize from "components/Visualize";
 

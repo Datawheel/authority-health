@@ -1,0 +1,85 @@
+@import './mixins';
+
+/* -----------------------------------
+scaling the document
+----------------------------------- */
+
+/* set font size on html element, then use REM units wherever possible */
+html {
+  font-size: 100%; /* 16px */
+  @add-mixin min-sm { font-size: 112.5%; } /* 18px */
+  @add-mixin min-md { font-size: 125%;   } /* 20px */
+  @add-mixin min-lg { font-size: 137.5%; } /* 22px */
+}
+
+
+/* -----------------------------------
+grid system by James Ferrell
+----------------------------------- */
+
+/* usage:
+  <div className="g-container">
+    <div classname="g-col g-4">spans 4 columns</div>
+    <div classname="g-col g-8">spans 8 columns</div>
+  </div>
+*/
+
+/* container required to make sure children are flexible */
+.g-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  /* column base class */
+  & .g-col {
+    /* background-color: lightgray; */
+    width: 100%;
+    margin-bottom: var(--gutter-lg);
+    padding: var(--gutter-sm);
+    /* fallback */
+    display: inline-block;
+    vertical-align: top; /* reset default */
+
+    /* column width modifier classes, applied on medium screens only */
+    @add-mixin min-sm {
+      /* loop through and create .g-col modifier classes .g-2 to .g-12 */
+      /* NOTE: .g-12 is unnecessary because all elements with .g-col will be 100% width by default */
+      @for $i from 1 to 11 {
+        /* set width, accounting for gutter */
+        &.g-$i {
+          width: calc( (100% + var(--gutter-lg))/(12 / $i) - var(--gutter-lg) );
+        }
+      }
+    }
+  }
+}
+
+/* debugging */
+/* NOTE: add .g-debug to any ancester */
+.g-debug {
+  /* container */
+  & .g-container {
+    outline: orange solid 2px;
+    box-shadow: inset 0 0 0 var(--gutter-sm) color(orange a(0.1));
+  }
+  /* individual columns */
+  & .g-col {
+    outline: blue solid 2px;
+    box-shadow: inset 0 0 0 var(--gutter-sm) color(blue a(0.1));
+  }
+}
+
+
+/* -----------------------------------
+layout
+----------------------------------- */
+
+/* prevent horizontal scrollbars */
+.outer-container {
+  overflow-x: hidden;
+}
+
+/* sections */
+.section-container {
+  @add-mixin centered-container;
+}

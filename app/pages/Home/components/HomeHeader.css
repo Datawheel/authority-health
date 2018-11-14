@@ -163,8 +163,8 @@
       &:hover, &:focus,
       &.highlighted {
         & .result-link {
-          background-color: var(--dark-3);
-          color: var(--brand);
+          background-color: var(--brand-dark);
+          color: var(--white);
         }
       }
     }

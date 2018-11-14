@@ -15,7 +15,7 @@ tabs
   /* interactions */
   &:hover, &:focus,
   &[aria-selected="true"] {
-    color: var(--brand) !important;
+    color: var(--brand-light) !important;
   }
 }
 

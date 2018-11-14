@@ -200,7 +200,7 @@ nav link
   display: inline-block;
   /* typography */
   color: var(--light-1);
-  font-weight: 400;
+  font-weight: 700;
 
   /* interactions */
   &:hover, &:focus {

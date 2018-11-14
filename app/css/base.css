@@ -84,10 +84,10 @@ inverted color scheme
   /* default link style */
   & p > a,
   & .link {
-    color: var(--brand);
+    color: var(--brand-light);
 
     &:hover, &:focus {
-      color: var(--brand-light);
+      color: var(--white);
     }
   }
 }

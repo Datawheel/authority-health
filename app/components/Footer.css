@@ -1,0 +1,83 @@
+@import "../css/mixins.css";
+
+/* increase padding on bigger screens */
+.footer {
+  @mixin min-md {
+    padding-top: 1rem;
+  }
+
+  /* increase specificity because reasons */
+  &.dark-theme {
+    background-color: var(--brand-dark);
+
+    & .footer-nav-link {
+      @add-mixin nav-link;
+      color: var(--brand-light);
+    }
+  }
+}
+
+/* horizontal links and logos, when there's space */
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.footer-nav,
+.footer-logo-list {
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+}
+
+/* column containing nav heading and link list */
+.footer-nav-inner {
+  display: inline-block;
+  vertical-align: top;
+  width: 8rem;
+  max-width: 100%;
+  margin-bottom: 1rem;
+  /* border: 1px solid green; */
+
+  /* space out adjacent nav columns */
+  &:not(:last-of-type) {
+    margin-right: 1.5rem;
+  }
+}
+
+/* logos */
+.footer-logo-list {
+  margin-top: 1rem; /* space out from main nav */
+
+  /* align logos right on bigger screens */
+  @add-mixin min-md {
+    margin-top: 0.25rem; /* reset */
+    text-align: right;
+  }
+
+  /* individual logo positioning */
+  & .footer-logo-item {
+    display: inline-block;
+    vertical-align: middle;
+
+    /* space out adjacent logos */
+    &:not(:last-of-type) {
+      margin-right: 2.5rem;
+    }
+  }
+
+  /* logo link interactions */
+  & .footer-logo-link {
+    opacity: 0.875;
+    transition: opacity 0.2s ease-out;
+
+    &:hover, &:focus {
+      opacity: 1;
+    }
+  }
+
+  /* scale down logos a bit on small screens */
+  & .footer-logo-img {
+    max-width: 40vw;
+    max-height: 12vw;
+  }
+}

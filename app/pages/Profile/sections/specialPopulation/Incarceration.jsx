@@ -3,55 +3,78 @@ import {sum} from "d3-array";
 import {nest} from "d3-collection";
 import {connect} from "react-redux";
 import {BarChart} from "d3plus-react";
-// import {formatAbbreviate} from "d3plus-format";
+import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-// import Stat from "../../components/Stat";
+import Stat from "../../components/Stat";
+
+const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
 class Incarceration extends SectionColumns {
 
   render() {
     const {incarcerationData} = this.props;
-    console.log("incarcerationData: ", incarcerationData);
 
-    // Format data for publicAssistanceData.
-    const recentYearEducationalAttainment = {};
+    // Format data for Incarceration data Barchart and stats.
+    const data = [];
+    incarcerationData.data.forEach(d => {
+      incarcerationData.source[0].measures.forEach(incarcerationType => {
+        if (d[incarcerationType] !== null) {
+          data.push(Object.assign({}, d, {IncarcerationType: incarcerationType}));
+        }
+      });
+    });
+
+    const recentYearIncarcerationData = {};
     nest()
       .key(d => d.Year)
-      .entries(incarcerationData)
+      .entries(data)
       .forEach(group => {
-        const total = sum(group.values, d => d.Population);
-        group.values.forEach(d => d.share = d.Population / total * 100);
-        group.key >= incarcerationData[0].Year ? Object.assign(recentYearEducationalAttainment, group) : {};
+        const total = sum(group.values, d => d[d.IncarcerationType]);
+        group.values.forEach(d => d.share = d[d.IncarcerationType] / total * 100);
+        group.key >= data[0].Year ? Object.assign(recentYearIncarcerationData, group) : {};
       });
 
-    // const filteredData = incarcerationData.filter(d => );
+    // Filter "Total" from the Incarceration data.
+    const filteredData = data.filter(d => d.IncarcerationType !== "Total");
+
+    // Find top recent year Incarceration data.
+    const filteredRecentYearData = recentYearIncarcerationData.values.filter(d => d.IncarcerationType !== "Total");
+    const sortedData = filteredRecentYearData.sort((a, b) => b.share - a.share);
+    const topIncarcerationData = sortedData[0];
 
     return (
       <SectionColumns>
         <SectionTitle>Incarceration</SectionTitle>
         <article>
-          {/* Draw a Barchart to show Educational Attainment for all types of education buckets. */}
-          {/* <BarChart config={{
-            data: incarcerationData,
-            discrete: "x",
-            height: 400,
-            legend: false,
-            // label: d => `${d.Sex} - ${d["Educational Attainment"]}`,
-            groupBy: "Sex",
-            x: "Educational Attainment",
-            y: "share",
-            time: "ID Year",
-            xSort: (a, b) => a["ID Educational Attainment"] - b["ID Educational Attainment"],
-            yConfig: {tickFormat: d => formatPopulation(d)},
-            shapeConfig: {
-              label: false
-            },
-            tooltipConfig: {tbody: [["Value", d => formatPopulation(d.share)]]}
-          }}
-          /> */}
+          <Stat 
+            title={`Top Incarceration value in ${topIncarcerationData.Year}`}
+            value={`${topIncarcerationData.IncarcerationType}: ${topIncarcerationData.Offense} ${formatPercentage(topIncarcerationData.share)}`}
+          />
+          <p>The Barchart here shows the types of Offenses for each Incarceration type.</p>
+          <p>In {topIncarcerationData.Year}, the top Incarceration type was {topIncarcerationData.IncarcerationType} for {topIncarcerationData.Offense} with the share of {formatPercentage(topIncarcerationData.share)}.</p>
         </article>
+
+        {/* Draw a Barchart to show Incarceration data. */}
+        <BarChart config={{
+          data: filteredData,
+          discrete: "x",
+          height: 400,
+          legend: false,
+          label: d => ` ${d.IncarcerationType}: ${d.Offense}`,
+          groupBy: "Offense",
+          x: "IncarcerationType",
+          y: "share",
+          time: "ID Year",
+          yConfig: {tickFormat: d => formatPercentage(d)},
+          xConfig: {labelRotation: false},
+          shapeConfig: {
+            label: false
+          },
+          tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
+        }}
+        />
       </SectionColumns>
     );
   }
@@ -62,7 +85,7 @@ Incarceration.defaultProps = {
 };
 
 Incarceration.need = [
-  fetchData("incarcerationData", "/api/data?measures=Total,Prison,Jail,Jail%2FProbation,Probation,Other&drilldowns=Offense&Year=all", d => d.data)
+  fetchData("incarcerationData", "/api/data?measures=Total,Prison,Jail,Jail%2FProbation,Probation,Other&drilldowns=Offense&Year=all")
 ];
 
 const mapStateToProps = state => ({

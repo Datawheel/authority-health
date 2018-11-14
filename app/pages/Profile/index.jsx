@@ -25,6 +25,7 @@ import HouseholdIncomeFromPublicAssistance from "./sections/economy/HouseholdInc
 import WageDistribution from "./sections/economy/WageDistribution";
 import Poverty from "./sections/economy/Poverty";
 import EducationalAttainment from "./sections/education/EducationalAttainment";
+import StudentPoverty from "./sections/education/StudentPoverty";
 
 class Profile extends Component {
 
@@ -79,7 +80,10 @@ class Profile extends Component {
         <HouseholdIncomeFromPublicAssistance />
         <WageDistribution />
         <Poverty />
+
+        <TopicTitle slug="economy">Education</TopicTitle>
         <EducationalAttainment />
+        <StudentPoverty />
         
       </div>
     );
@@ -107,6 +111,7 @@ Profile.need = [
   WageDistribution,
   Poverty,
   EducationalAttainment,
+  StudentPoverty,
   fetchData("diabetes", "/api/data?measures=Diabetes%20Data%20Value&City=<id>&Year=latest"),
   fetchData("meta", "/api/search?id=<id>"),
   fetchData("population", "https://ironwood.datausa.io/api/data?measures=Population&Geography=<id>&year=latest")

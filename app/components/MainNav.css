@@ -4,9 +4,8 @@
   /* positioning */
   position: absolute;
   top: 0;
-  /* account for inner element padding */
-  left: calc(0 - var(--gutter-xs));
-  right: calc(0 - var(--gutter-xs));
+  left: 0;
+  right: 0;
   /* keep in front */
   z-index: 20;
 }
@@ -26,6 +25,11 @@
   padding: var(--gutter-xs);
   /* offset swoosh */
   right: 8px;
+  margin-left: calc(0 - var(--gutter-xs)); /* offset padding */
+}
+
+.main-nav-list {
+  margin-right: calc(0 - var(--gutter-xs)); /* offset padding */
 }
 
 .main-nav-item {

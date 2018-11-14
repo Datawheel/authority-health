@@ -22,7 +22,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
     const {publicAssistanceData, householdSnapData} = this.props;
     console.log("householdSnapData: ", householdSnapData);
 
-    // Format data for publicAssistanceData.
+    // Format data for publicAssistanceData.x`
     const recentYearPublicAssistanceData = {};
     nest()
       .key(d => d.Year)
@@ -63,28 +63,6 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
             title={`Population ${topPublicAssistanceData["Public Assistance or Snap"]} in ${topPublicAssistanceData.Year}`}
             value={`${formatPercentage(topPublicAssistanceData.share)}`}
           />
-          {/* Draw a Barchart for Population With Cash and No Cash Public Assistance. */}
-          <BarChart config={{
-            data: publicAssistanceData,
-            discrete: "y",
-            height: 250,
-            legend: false,
-            label: d => formatName(d["Public Assistance or Snap"]),
-            groupBy: "Public Assistance or Snap",
-            x: "share",
-            y: "Public Assistance or Snap",
-            time: "ID Year",
-            xConfig: {
-              tickFormat: d => formatPercentage(d),
-              title: "Population with SNAP benefits"
-            },
-            yConfig: {
-              ticks: [],
-              title: "SNAP benefits w/ cash & no cash"
-            },
-            tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
-          }}
-          />
         </article>
         
         <BarChart config={{
@@ -101,12 +79,10 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
           xSort: (a, b) => a["ID Number of workers"] - b["ID Number of workers"],
           xConfig: {
             labelRotation: false
-            // tickFormat: d => rangeFormatter(d)
           },
           yConfig: {tickFormat: d => formatPercentage(d)},
           shapeConfig: {
             label: false
-            // opacity: d => d["ID Family type"] === 0 ? 0.5 : 1
           },
           tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
         }}

@@ -41,13 +41,13 @@ export default class Footer extends Component {
     const footerLogos = [
       {
         title: "Authority Health",
-        link: "http://www.authorityhealth.org/",
+        link: "http://authorityhealth.org/",
         src: "authority-health-logo",
         svg: true
       },
       {
         title: "Wayne County, Michigan",
-        link: "http://www.waynecounty.com/",
+        link: "http://waynecounty.com/",
         src: "wayne-county-seal",
         svg: false
       },
@@ -62,14 +62,14 @@ export default class Footer extends Component {
     // loop through arrays and create corresponding logos
     const footerLogoItems = footerLogos.map(footerLogo =>
       <li className="footer-logo-item" key={footerLogo.title}>
-        <Link className="footer-logo-link" to={footerLogo.link} target="_blank" rel="noopener noreferrer">
+        <a className="footer-logo-link" href={footerLogo.link} target="_blank" rel="noopener noreferrer">
           <img className="footer-logo-img" src={`/images/logos/${footerLogo.src}-pacific.png`} srcSet={
             footerLogo.svg
               ? `/images/logos/${footerLogo.src}-pacific.svg 1x`
               : `/images/logos/${footerLogo.src}-pacific.png 1x, /images/logos/${footerLogo.src}-pacific@2x.png 2x`
           } alt=""/>
           <span className="u-visually-hidden">{footerLogo.title}</span>
-        </Link>
+        </a>
       </li>
     );
 

@@ -15,6 +15,7 @@ import ChildCare from "./sections/specialPopulation/ChildCare";
 import Immigrants from "./sections/specialPopulation/Immigrants";
 import DomesticPartners from "./sections/specialPopulation/DomesticPartners";
 import DisabilityStatus from "./sections/specialPopulation/DisabilityStatus";
+import Incarceration from "./sections/specialPopulation/Incarceration";
 import HearingAndVisionDifficulty from "./sections/specialPopulation/HearingAndVisionDifficulty";
 import Homeownership from "./sections/builtEnvironment/Homeownership";
 import HouseRentals from "./sections/builtEnvironment/HouseRentals";
@@ -68,6 +69,7 @@ class Profile extends Component {
         <DomesticPartners />
         <DisabilityStatus />
         <HearingAndVisionDifficulty />
+        <Incarceration />
 
         <TopicTitle slug="built-environment">Built Environment</TopicTitle>
         <Homeownership />
@@ -112,6 +114,7 @@ Profile.need = [
   Poverty,
   EducationalAttainment,
   StudentPoverty,
+  Incarceration,
   fetchData("diabetes", "/api/data?measures=Diabetes%20Data%20Value&City=<id>&Year=latest"),
   fetchData("meta", "/api/search?id=<id>"),
   fetchData("population", "https://ironwood.datausa.io/api/data?measures=Population&Geography=<id>&year=latest")

@@ -16,7 +16,7 @@ class EducationalAttainment extends SectionColumns {
   render() {
     const {educationalAttainmentData, highSchoolDropoutRate} = this.props;
 
-    // Format data for publicAssistanceData.
+    // Format data for public Assistance data.
     const recentYearEducationalAttainment = {};
     nest()
       .key(d => d.Year)

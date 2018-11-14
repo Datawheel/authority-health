@@ -10,6 +10,10 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Stat from "../../components/Stat";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
+const formatLabel = d => {
+  const nameArr = d.split(" ");
+  return nameArr.reduce((acc, currValue, i) => i === 0 || i === 1 ? "" : acc.concat(`${currValue} `), " ");
+};
 
 class StudentPoverty extends SectionColumns {
 
@@ -53,11 +57,16 @@ class StudentPoverty extends SectionColumns {
           discrete: "x",
           height: 400,
           legend: false,
+          label: d => formatLabel(d["Level of School"]),
           groupBy: "Level of School",
           x: "Level of School",
           y: "share",
           time: "ID Year",
           xSort: (a, b) => a["ID Level of School"] - b["ID Level of School"],
+          xConfig: {
+            labelRotation: false,
+            tickFormat: d => formatLabel(d)
+          },
           yConfig: {tickFormat: d => formatPopulation(d)},
           shapeConfig: {
             label: false
@@ -76,7 +85,6 @@ StudentPoverty.defaultProps = {
 
 StudentPoverty.need = [
   fetchData("levelOfSchoolData", "/api/data?measures=Population&drilldowns=Level%20of%20School,Poverty%20Status&County=<id>&Year=all", d => d.data)
-  // fetchData("highSchoolDropoutRate", "/api/data?measures=Total%20Population,High%20School%20Dropout%20Rate&drilldowns=Zip%20Code&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({

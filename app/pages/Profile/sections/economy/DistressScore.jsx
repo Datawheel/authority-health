@@ -5,7 +5,7 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../components/Stat";
+import Stat from "../../../../components/Stat";
 import zipcodes from "../../../../utils/zipcodes";
 
 class DistressScore extends SectionColumns {

@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 
 import {fetchData, SectionColumns} from "@datawheel/canon-core";
 
-import Stat from "../../components/Stat";
+import Stat from "../../../../components/Stat";
 
 class FoodStats extends SectionColumns {
 

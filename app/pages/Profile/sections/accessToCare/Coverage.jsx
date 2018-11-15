@@ -7,7 +7,7 @@ import {formatAbbreviate} from "d3plus-format";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import rangeFormatter from "../../../../utils/rangeFormatter";
-import Stat from "../../components/Stat";
+import Stat from "../../../../components/Stat";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
@@ -43,11 +43,11 @@ class Coverage extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Coverage</SectionTitle>
         <article>
-          <Stat 
+          <Stat
             title={`Male majority with Coverage in ${ageGroupYear}`}
             value={topMaleAgeGroup}
           />
-          <Stat 
+          <Stat
             title={`Female majority with Coverage in ${ageGroupYear}`}
             value={topFemaleAgeGroup}
           />

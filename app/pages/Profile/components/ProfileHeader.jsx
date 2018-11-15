@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import Stat from "./Stat";
+import Stat from "../../../components/Stat";
 import "./ProfileHeader.css";
 
 export default class ProfileHeader extends Component {

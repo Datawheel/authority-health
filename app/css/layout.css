@@ -83,3 +83,70 @@ layout
 .section-container {
   @add-mixin centered-container;
 }
+
+/* canon overrides */
+/* NOTE: specificity increase needed to overwrite :/ */
+.profile {
+
+  /* make topic headers prominent */
+  & .topic-title {
+    /* sizing */
+    margin: 0;
+    padding-top: 5vh;
+    padding-bottom: 5vh;
+    /* theming */
+    background-color: var(--brand-dark);
+
+    /* typography */
+    & .anchor {
+      @add-mixin font-xl;
+      color: var(--white);
+      top: -0.125em; /* fudge baseline alignment */
+    }
+  }
+
+  & .section {
+    padding: 0;
+
+    /* increase specificity, again :( */
+    & .columns {
+
+      /* reset article & viz margin */
+      & > * {
+        margin: 0;
+      }
+
+      /* single column layout on smaller screens */
+      @add-mixin max-md {
+        display: block; /* stacked layout */
+
+        /* reset width */
+        & > * {
+          width: 100%;
+        }
+        /* space out text & viz */
+        & article + .viz {
+          margin-top: 1rem;
+        }
+      }
+
+      /* adjusted 2 column layout on bigger screens */
+      @add-mixin min-md {
+        /* resize text */
+        & article:not(:last-child) {
+          width: calc(25% + 5vw);
+        }
+        /* resize viz & space out from text */
+        & article + .viz {
+          margin-left: var(--gutter-xl);
+          width: calc(75% - 5vw);
+        }
+      }
+    }
+
+    /* reset section title margin */
+    & .section-title {
+      margin: 2em 0 0 0;
+    }
+  }
+}

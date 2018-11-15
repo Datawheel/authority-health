@@ -53,44 +53,72 @@ class Profile extends Component {
           }
         />
 
-        <TopicTitle slug="health-behaviors">Health Behaviors</TopicTitle>
-        <FoodStats />
-        <FoodAccess />
-        <DemographicFoodAccess />
-        <DrugUse />
+        <TopicTitle slug="health-behaviors">
+          <div className="section-container">Health Behaviors</div>
+        </TopicTitle>
+        <div className="section-container">
+          <FoodStats />
+          <FoodAccess />
+          <DemographicFoodAccess />
+          <DrugUse />
+        </div>
 
-        <TopicTitle slug="access-to-care">Access to Care</TopicTitle>
-        <HealthCenters />
-        <Coverage />
+        <TopicTitle slug="access-to-care">
+          <div className="section-container">Access to Care</div>
+        </TopicTitle>
+        <div className="section-container">
+          <HealthCenters />
+          <Coverage />
+        </div>
 
-        <TopicTitle slug="special-population">Special Population</TopicTitle>
-        <ChildCare />
-        <Immigrants />
-        <DomesticPartners />
-        <DisabilityStatus />
-        <HearingAndVisionDifficulty />
-        <Incarceration />
+        <TopicTitle slug="special-population">
+          <div className="section-container">Special Population</div>
+        </TopicTitle>
+        <div className="section-container">
+          <ChildCare />
+          <Immigrants />
+          <DomesticPartners />
+          <DisabilityStatus />
+          <HearingAndVisionDifficulty />
+          <Incarceration />
+        </div>
 
-        <TopicTitle slug="built-environment">Built Environment</TopicTitle>
-        <Homeownership />
-        <HouseRentals />
-        <Transportation />
-        <Crime />
+        <TopicTitle slug="built-environment">
+          <div className="section-container">Built Environment</div>
+        </TopicTitle>
+        <div className="section-container">
+          <Homeownership />
+          <HouseRentals />
+          <Transportation />
+          <Crime />
+        </div>
 
-        <TopicTitle slug="economy">Economy</TopicTitle>
-        <DistressScore />
-        <HouseholdIncomeFromPublicAssistance />
-        <WageDistribution />
-        <Poverty />
+        <TopicTitle slug="economy">
+          <div className="section-container">Economy</div>
+        </TopicTitle>
+        <div className="section-container">
+          <DistressScore />
+          <HouseholdIncomeFromPublicAssistance />
+          <WageDistribution />
+          <Poverty />
+        </div>
 
-        <TopicTitle slug="education">Education</TopicTitle>
-        <EducationalAttainment />
-        <StudentPoverty />
+        <TopicTitle slug="education">
+          <div className="section-container">Education</div>
+        </TopicTitle>
+        <div className="section-container">
+          <EducationalAttainment />
+          <StudentPoverty />
+        </div>
 
-        <TopicTitle slug="natural-enviornment">Natural Environment</TopicTitle>
-        <WaterQuality />
-        <AirQuality />
-        
+        <TopicTitle slug="natural-enviornment">
+          <div className="section-container">Natural Environment</div>
+        </TopicTitle>
+        <div className="section-container">
+          <WaterQuality />
+          <AirQuality />
+        </div>
+
       </div>
     );
   }
@@ -120,7 +148,6 @@ Profile.need = [
   StudentPoverty,
   Incarceration,
   WaterQuality,
-  AirQuality,
   fetchData("diabetes", "/api/data?measures=Diabetes%20Data%20Value&City=<id>&Year=latest"),
   fetchData("meta", "/api/search?id=<id>"),
   fetchData("population", "https://ironwood.datausa.io/api/data?measures=Population&Geography=<id>&year=latest")

@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {fetchData, TopicTitle} from "@datawheel/canon-core";
 // import Stat from "./components/Stat";
 // import {formatAbbreviate} from "d3plus-format";
-import "./index.css";
+import "./Profile.css";
 
 import FoodStats from "./sections/healthBehaviors/FoodStats";
 import FoodAccess from "./sections/healthBehaviors/FoodAccess";
@@ -53,17 +53,17 @@ class Profile extends Component {
           title="Diabetes Rate"
           value={`${diabetes.data[0]["Diabetes Data Value"]}%`}
         /> */}
-        
+
         <TopicTitle slug="health-behaviors">Health Behaviors</TopicTitle>
         <FoodStats />
         <FoodAccess />
         <DemographicFoodAccess />
         <DrugUse />
-        
+
         <TopicTitle slug="access-to-care">Access to Care</TopicTitle>
         <HealthCenters />
         <Coverage />
-        
+
         <TopicTitle slug="special-population">Special Population</TopicTitle>
         <ChildCare />
         <Immigrants />
@@ -90,7 +90,7 @@ class Profile extends Component {
 
         <TopicTitle slug="natural-enviornment">Natural Environment</TopicTitle>
         <WaterQuality />
-        
+
       </div>
     );
   }

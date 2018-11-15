@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {fetchData, TopicTitle} from "@datawheel/canon-core";
-// import Stat from "./components/Stat";
-// import {formatAbbreviate} from "d3plus-format";
+import {formatAbbreviate} from "d3plus-format";
+import ProfileHeader from "./components/ProfileHeader";
 import "./Profile.css";
 
 import FoodStats from "./sections/healthBehaviors/FoodStats";
@@ -37,22 +37,20 @@ class Profile extends Component {
 
   render() {
 
-    const {meta} = this.props;
+    const {diabetes, meta, population} = this.props;
     const location = meta.name;
-    // const {population} = this.props;
-    // const {diabetes} = this.props;
 
     return (
-      <div>
-        <h1> {location} </h1>
-        {/* <Stat
-          title="Population"
-          value={formatAbbreviate(population.data[0].Population)}
+      <div className="profile">
+        <ProfileHeader
+          title={ location }
+          population={ population.data[0] &&
+            formatAbbreviate(population.data[0].Population)
+          }
+          diabetes={ diabetes.data[0] &&
+            `${diabetes.data[0]["Diabetes Data Value"]}%`
+          }
         />
-        <Stat
-          title="Diabetes Rate"
-          value={`${diabetes.data[0]["Diabetes Data Value"]}%`}
-        /> */}
 
         <TopicTitle slug="health-behaviors">Health Behaviors</TopicTitle>
         <FoodStats />

@@ -89,12 +89,8 @@ class Profile extends Component {
 
         <TopicTitle slug="natural-enviornment">Natural Environment</TopicTitle>
         <WaterQuality />
-<<<<<<< HEAD:app/pages/Profile/index.jsx
         <AirQuality />
         
-=======
-
->>>>>>> f556afa2b01f45b4afe8e47fdc76dcc0eadc7092:app/pages/Profile/Profile.jsx
       </div>
     );
   }

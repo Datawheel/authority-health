@@ -1,0 +1,25 @@
+@import "../css/mixins.css";
+
+/* little label */
+.stat-label {
+  line-height: 1.25;
+  margin-bottom: 0.125rem;
+
+  /* year */
+  & .stat-label-year {
+    @add-mixin font-smoothing;
+    color: var(--dark-2);
+  }
+}
+
+/* big number */
+.stat-value {
+  text-transform: none; /* not always a number */
+  line-height: 1.125;
+  margin-bottom: 1rem;
+
+  /* secondary value */
+  & .stat-value-qualifier {
+    @add-mixin font-smoothing;
+  }
+}

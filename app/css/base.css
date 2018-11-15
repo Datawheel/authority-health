@@ -92,3 +92,18 @@ inverted color scheme
     }
   }
 }
+
+
+/* -----------------------------------
+additional theme colors
+----------------------------------- */
+@each $theme in
+  curry,
+  shamrock,
+  pacific,
+  majorelle,
+  terra-cotta {
+  .$(theme)-dark-color {
+    color: var(--$(theme)-dark);
+  }
+}

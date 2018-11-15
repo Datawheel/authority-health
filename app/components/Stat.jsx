@@ -5,13 +5,37 @@ export default class Stat extends Component {
 
   render() {
 
-    const {title, value} = this.props;
+    const {
+      qualifier,
+      theme,
+      title,
+      value,
+      year
+    } = this.props;
+
+    let themeClass;
+    if (theme) {
+      themeClass = `${theme}-dark-color`;
+    }
+    else {
+      themeClass = "majorelle-dark-color";
+    }
 
     return (
-      <div className="stat">
-        <div className="title">{ title }</div>
-        <div className="value">{ value }</div>
-      </div>
+      <dl className="stat">
+        <dt className="stat-label title font-xs">
+          { title }
+          { year &&
+            <span className="stat-label-year"> {year}</span>
+          }
+        </dt>
+        <dd className={`stat-value title ${ value.length > 30 ? "font-md" : "font-lg" } ${ themeClass }`}>
+          { value }
+          { qualifier &&
+            <span className="stat-value-qualifier font-sm"> ({qualifier})</span>
+          }
+        </dd>
+      </dl>
     );
   }
 }

@@ -28,7 +28,7 @@ import Poverty from "./sections/economy/Poverty";
 import EducationalAttainment from "./sections/education/EducationalAttainment";
 import StudentPoverty from "./sections/education/StudentPoverty";
 import WaterQuality from "./sections/naturalEnvironment/WaterQuality";
-import AirQuality from "./sections/naturalEnvironment/AirQuality";
+// import AirQuality from "./sections/naturalEnvironment/AirQuality";
 
 class Profile extends Component {
 
@@ -116,7 +116,7 @@ class Profile extends Component {
         </TopicTitle>
         <div className="section-container">
           <WaterQuality />
-          <AirQuality />
+          {/*<AirQuality />*/}
         </div>
 
       </div>

@@ -11,7 +11,7 @@ export default class HomeHeader extends Component {
         <div className="home-header-inner">
           {/* intro text & search */}
           <div className="home-header-intro">
-            <h1 className="home-header-headline font-xxl">Get to know  Wayne County</h1>
+            <h1 className="home-header-headline font-xxxl">Get to know  Wayne County</h1>
             <p className="home-header-intro-text font-lg">
               View our challenges, embrace our strengths, and engage with our opportunities.&thinsp;
               <Link className="home-header-intro-link font-sm u-uppercase" to="/about">

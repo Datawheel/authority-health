@@ -23,7 +23,8 @@ h1, h2, h3, h4, h5, h6,
 }
 
 /* font size & line height */
-.font-xxl { @add-mixin font-xxl; }
+.font-xxxl    { @add-mixin font-xxxl;}
+h1, .font-xxl { @add-mixin font-xxl; }
 h1, .font-xl  { @add-mixin font-xl;  }
 h2, .font-lg  { @add-mixin font-lg;  }
 h3, .font-md  { @add-mixin font-md;  }

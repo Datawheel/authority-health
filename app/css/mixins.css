@@ -26,7 +26,7 @@ typography
 
 /* type scaling */
 /* NOTE: using 20px as 1rem, because easy math */
-@define-mixin font-xxl {
+@define-mixin font-xxxl {
   font-size: 2rem; /* 40px */
   line-height: 1;
   /* scale up on bigger screens */
@@ -34,12 +34,21 @@ typography
     font-size: 3.4rem; /* 68px */
   }
 }
+@define-mixin font-xxl {
+  font-size: 1.6rem; /* 32px */
+  line-height: 1.25;
+  /* scale up on bigger screens */
+  @add-mixin min-sm {
+    font-size: 2.4rem; /* 48px */
+    line-height: 1.25;
+  }
+}
 @define-mixin font-xl {
   font-size: 1.4rem; /* 28px */
   line-height: 1;
   /* scale up on bigger screens */
   @add-mixin min-sm {
-    font-size: 2.4rem; /* 48px */
+    font-size: 1.6rem; /* 32px */
     line-height: 1.25;
   }
 }

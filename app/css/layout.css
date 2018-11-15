@@ -99,7 +99,7 @@ layout
 
     /* typography */
     & .anchor {
-      @add-mixin font-xl;
+      @add-mixin font-xxl;
       color: var(--white);
       top: -0.125em; /* fudge baseline alignment */
     }

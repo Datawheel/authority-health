@@ -66,18 +66,22 @@ class Immigrants extends SectionColumns {
 
     return (
       <SectionColumns>
-        <SectionTitle>Immigrants</SectionTitle>
+        <SectionTitle>Immigration</SectionTitle>
         <article>
           {/* Show top stats and a short paragraph about it for each Nativity. */}
           <Stat
-            title={`Top Immigrants in ${topImmigrantsData.Year}`}
-            value={`${topImmigrantsData.Place} ${formatPopulation(topImmigrantsData.share)}`}
+            title="Most Immigrants"
+            year={topImmigrantsData.Year}
+            value={topImmigrantsData.Place}
+            qualifier={formatPopulation(topImmigrantsData.share)}
           />
           <Stat
-            title={`Top Immigrants in Poverty in ${topPovertyData.Year}`}
-            value={`${topPovertyData.Place} ${formatPopulation(topPovertyData.share)}`}
+            title="Most Immigrants in Poverty"
+            year={topPovertyData.Year}
+            value={topPovertyData.Place}
+            qualifier={formatPopulation(topPovertyData.share)}
           />
-          <p>In {topImmigrantsData.Year}, the highest Immigrants population was {formatPopulation(topImmigrantsData.share)} in the {topImmigrantsData.Place} city. While the highest percentage of Immigrants in poverty was {formatPopulation(topPovertyData.share)} in the {topPovertyData.Place} city in {topPovertyData.Year}.</p>
+          <p>In {topImmigrantsData.Year}, the highest Immigrant population was {formatPopulation(topImmigrantsData.share)} in the {topImmigrantsData.Place} city. While the highest percentage of Immigrants in poverty was {formatPopulation(topPovertyData.share)} in the {topPovertyData.Place} city in {topPovertyData.Year}.</p>
           <p>The Geomap here shows the cities with the percentage of Immigrants in each city.</p>
         </article>
 

@@ -8,6 +8,8 @@
   /* year */
   & .stat-label-year {
     @add-mixin font-smoothing;
+    text-transform: none; /* not always a number */
+    letter-spacing: normal;
     color: var(--dark-2);
   }
 }
@@ -15,11 +17,13 @@
 /* big number */
 .stat-value {
   text-transform: none; /* not always a number */
+  letter-spacing: 0.025em;
   line-height: 1.125;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 
   /* secondary value */
   & .stat-value-qualifier {
     @add-mixin font-smoothing;
+    letter-spacing: normal;
   }
 }

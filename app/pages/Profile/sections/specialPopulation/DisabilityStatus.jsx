@@ -46,9 +46,11 @@ class DisabilityStatus extends SectionColumns {
         <SectionTitle>Disability Status</SectionTitle>
         <article>
           {/* Show stats for the top data. */}
-          <Stat 
-            title={`Majority age group in ${topRecentYearData.Year} with disability`}
-            value={`${rangeFormatter(topRecentYearData.Age)} ${formatPopulation(topRecentYearData.share)}`}
+          <Stat
+            title="Largest age group with a disibility"
+            year={topRecentYearData.Year}
+            value={rangeFormatter(topRecentYearData.Age)}
+            qualifier={formatPopulation(topRecentYearData.share)}
           />
           {/* Write short paragraph describing stats and barchart. */}
           <p>In {topRecentYearData.Year}, the majority age group with disability was {rangeFormatter(topRecentYearData.Age)} years with {formatPopulation(topRecentYearData.share)} in the {topRecentYearData.County} county.</p>

@@ -29,7 +29,7 @@ class EducationalAttainment extends SectionColumns {
 
     // Find top recent year Educational attainment stats
     recentYearEducationalAttainment.values.sort((a, b) => b.share - a.share);
-    const topEducationalAttainment = recentYearEducationalAttainment.values[0]; 
+    const topEducationalAttainment = recentYearEducationalAttainment.values[0];
 
     // Find top High School DropoutRate for the recent year.
     highSchoolDropoutRate.sort((a, b) => b["High School Dropout Rate"] - a["High School Dropout Rate"]);
@@ -41,15 +41,19 @@ class EducationalAttainment extends SectionColumns {
         <article>
           {/* Top stats about top Educational Attainment. */}
           <Stat
-            title={`Top Educational attainment in ${topEducationalAttainment.Year}`}
-            value={`${topEducationalAttainment["Educational Attainment"]} ${formatPopulation(topEducationalAttainment.share)}`}
+            title="Top Educational attainment"
+            year={topEducationalAttainment.Year}
+            value={topEducationalAttainment["Educational Attainment"]}
+            qualifier={formatPopulation(topEducationalAttainment.share)}
           />
           {/* Top stats about High School Dropout Rate. */}
           <Stat
-            title={`Top High School dropout rate in ${topDropoutRate.Year}`}
-            value={`${topDropoutRate["Zip Code"]} ${formatPopulation(topDropoutRate["High School Dropout Rate"])}`}
+            title="Top High School dropout rate"
+            year={topDropoutRate.Year}
+            value={topDropoutRate["Zip Code"]}
+            qualifier={formatPopulation(topDropoutRate["High School Dropout Rate"])}
           />
-          <p>In {topEducationalAttainment.Year}, the highest Education attentend was {topEducationalAttainment["Educational Attainment"]} with the share of {formatPopulation(topEducationalAttainment.share)}.</p>
+          <p>In {topEducationalAttainment.Year}, the highest Education attained was {topEducationalAttainment["Educational Attainment"]} with the share of {formatPopulation(topEducationalAttainment.share)}.</p>
           <p>In {topDropoutRate.Year}, the top high school dropout rate was {formatPopulation(topDropoutRate["High School Dropout Rate"])} in the zip code region {topDropoutRate["Zip Code"]}.</p>
         </article>
 

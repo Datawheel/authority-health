@@ -59,12 +59,13 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Household Income From Public Assistance</SectionTitle>
         <article>
-          <Stat 
-            title={`Population ${topPublicAssistanceData["Public Assistance or Snap"]} in ${topPublicAssistanceData.Year}`}
+          <Stat
+            title={`Population ${topPublicAssistanceData["Public Assistance or Snap"]}`}
+            year={topPublicAssistanceData.Year}
             value={`${formatPercentage(topPublicAssistanceData.share)}`}
           />
         </article>
-        
+
         <BarChart config={{
           data: filterSnapRecievedData,
           discrete: "x",

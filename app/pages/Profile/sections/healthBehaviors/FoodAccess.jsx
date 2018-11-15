@@ -41,12 +41,14 @@ class FoodAccess extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Food Access</SectionTitle>
         <article>
-          <Stat 
-            title={`SNAP-authorized stores in ${snapLatestYear}`}
+          <Stat
+            title="SNAP-authorized stores"
+            year={snapLatestYear}
             value={snapLatestYearValue}
           />
           <Stat
-            title={`WIC-authorized stores in ${wicLatestYear}`}
+            title="WIC-authorized stores"
+            year={wicLatestYear}
             value={wicLatestYearValue}
           />
           <p>The total number of SNAP-authorized stores in {county} County in {snapLatestYear} were {snapLatestYearValue} and WIC-authorized stores in {wicLatestYear} were {wicLatestYearValue}.</p>

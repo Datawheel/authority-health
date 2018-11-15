@@ -48,9 +48,11 @@ class Incarceration extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Incarceration</SectionTitle>
         <article>
-          <Stat 
-            title={`Top Incarceration value in ${topIncarcerationData.Year}`}
-            value={`${topIncarcerationData.IncarcerationType}: ${topIncarcerationData.Offense} ${formatPercentage(topIncarcerationData.share)}`}
+          <Stat
+            title="Top Incarceration value"
+            year={topIncarcerationData.Year}
+            value={`${topIncarcerationData.IncarcerationType}: ${topIncarcerationData.Offense}`}
+            qualifier={formatPercentage(topIncarcerationData.share)}
           />
           <p>The Barchart here shows the types of Offenses for each Incarceration type.</p>
           <p>In {topIncarcerationData.Year}, the top Incarceration type was {topIncarcerationData.IncarcerationType} for {topIncarcerationData.Offense} with the share of {formatPercentage(topIncarcerationData.share)}.</p>

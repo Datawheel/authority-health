@@ -44,11 +44,13 @@ class Coverage extends SectionColumns {
         <SectionTitle>Coverage</SectionTitle>
         <article>
           <Stat
-            title={`Male majority with Coverage in ${ageGroupYear}`}
+            title="Male majority with Coverage"
+            year={ageGroupYear}
             value={topMaleAgeGroup}
           />
           <Stat
-            title={`Female majority with Coverage in ${ageGroupYear}`}
+            title="Female majority with Coverage"
+            year={ageGroupYear}
             value={topFemaleAgeGroup}
           />
           <p>In {ageGroupYear}, the age groups most likely to have health care coverage in the {maleCoverageData[0].County} county are {topMaleAgeGroup} and {topFemaleAgeGroup} years, for men and women respectively.</p>

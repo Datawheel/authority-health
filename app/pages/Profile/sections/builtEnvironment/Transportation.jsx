@@ -62,17 +62,23 @@ class Transportation extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Transportation</SectionTitle>
         <article>
-          <Stat 
-            title={`Top commute time in ${topRecentYearCommuteTime.Year}`}
-            value={`${topRecentYearCommuteTime["Travel Time"]} ${formatPercentage(topRecentYearCommuteTime.share)}`}
+          <Stat
+            title="Longest commute time"
+            year={topRecentYearCommuteTime.Year}
+            value={topRecentYearCommuteTime["Travel Time"]}
+            qualifier={formatPercentage(topRecentYearCommuteTime.share)}
           />
-          <Stat 
-            title={`Top number of vehicles in ${topRecentYearNumberOfVehicles.Year}`}
-            value={`${rangeFormatter(topRecentYearNumberOfVehicles["Vehicles Available"])} ${formatPercentage(topRecentYearNumberOfVehicles.share)}`}
+          <Stat
+            title="Most reported number of vehicles"
+            year={topRecentYearNumberOfVehicles.Year}
+            value={rangeFormatter(topRecentYearNumberOfVehicles["Vehicles Available"])}
+            qualifier={formatPercentage(topRecentYearNumberOfVehicles.share)}
           />
-          <Stat 
-            title={`Top means of transportation in ${topRecentYearModeOfTransport.Year}`}
-            value={`${topRecentYearModeOfTransport["Transportation Means"]} ${formatPercentage(topRecentYearModeOfTransport.share)}`}
+          <Stat
+            title="Top means of transportation"
+            year={topRecentYearModeOfTransport.Year}
+            value={topRecentYearModeOfTransport["Transportation Means"]}
+            qualifier={formatPercentage(topRecentYearModeOfTransport.share)}
           />
           <p>The Barchart for number of vehicles shows the Number of vehicles in each household and the percentage of Male and Female that owns them.</p>
           <p>The Treemap shows the percentages of Modes of Transportation in the {topRecentYearModeOfTransport.County}.</p>

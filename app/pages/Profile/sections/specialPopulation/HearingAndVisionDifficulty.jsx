@@ -70,25 +70,35 @@ class HearingAndVisionDifficulty extends SectionColumns {
 
     return (
       <SectionColumns>
-        <SectionTitle>Hearing Difficulty & Vision Difficulty</SectionTitle>
+        <SectionTitle>Vision & auditory disabilities</SectionTitle>
         <article>
-          <p>Vision Difficulty:</p>
-          <Stat 
-            title={`Male majority in ${topMaleVisionDifficultyData.Year}`}
-            value={`${rangeFormatter(topMaleVisionDifficultyData.Age)} ${formatPopulation(topMaleVisionDifficultyData.share)}`}
-          />  
-          <Stat 
-            title={`Female majority in ${topFemaleVisionDifficultyData.Year}`}
-            value={`${rangeFormatter(topFemaleVisionDifficultyData.Age)} ${formatPopulation(topFemaleVisionDifficultyData.share)}`}
+
+          <h3>Vision Difficulty:</h3>
+          <Stat
+            title="Male majority"
+            year={topMaleVisionDifficultyData.Year}
+            value={rangeFormatter(topMaleVisionDifficultyData.Age)}
+            qualifier={formatPopulation(topMaleVisionDifficultyData.share)}
           />
-          <p>Hearing Difficulty:</p>
-          <Stat 
-            title={`Male majority  in ${topMaleHearingDifficultyData.Year}`}
-            value={`${rangeFormatter(topMaleHearingDifficultyData.Age)} ${formatPopulation(topMaleHearingDifficultyData.share)}`}
+          <Stat
+            title="Female majority"
+            year={topFemaleVisionDifficultyData.Year}
+            value={rangeFormatter(topFemaleVisionDifficultyData.Age)}
+            qualifier={formatPopulation(topFemaleVisionDifficultyData.share)}
           />
-          <Stat 
-            title={`Female majority in ${topFemaleHearingDifficultyData.Year}`}
-            value={`${rangeFormatter(topFemaleHearingDifficultyData.Age)} ${formatPopulation(topFemaleHearingDifficultyData.share)}`}
+
+          <h3>Hearing Difficulty:</h3>
+          <Stat
+            title="Male majority "
+            year={topMaleHearingDifficultyData.Year}
+            value={rangeFormatter(topMaleHearingDifficultyData.Age)}
+            qualifier={formatPopulation(topMaleHearingDifficultyData.share)}
+          />
+          <Stat
+            title="Female majority"
+            year={topFemaleHearingDifficultyData.Year}
+            value={rangeFormatter(topFemaleHearingDifficultyData.Age)}
+            qualifier={formatPopulation(topFemaleHearingDifficultyData.share)}
           />
           <p>In {topMaleVisionDifficultyData.Year}, the age groups most likely to have difficulty in seeing in the {topMaleVisionDifficultyData.County} county are {rangeFormatter(topMaleVisionDifficultyData.Age)} and {rangeFormatter(topFemaleVisionDifficultyData.Age)} years, for men and women respectively.</p>
           <p>In {topMaleHearingDifficultyData.Year}, the age groups most likely to have difficulty in hearing in the {topMaleHearingDifficultyData.County} county are {rangeFormatter(topMaleHearingDifficultyData.Age)} and {rangeFormatter(topFemaleHearingDifficultyData.Age)} years, for men and women respectively.</p>

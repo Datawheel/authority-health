@@ -65,18 +65,22 @@ class Crime extends SectionColumns {
         <article>
 
           {/* Show a Stats and a short paragraph for each type of crime based on the dropdown value. */}
-          <Stat 
-            title={`Top Violent Crime in ${topRecentYearViolentCrime.Year}`}
-            value={`${topRecentYearViolentCrime.Crime} ${formatPercentage(topRecentYearViolentCrime.share)}`}
+          <Stat
+            title="Top Violent Crime"
+            year={topRecentYearViolentCrime.Year}
+            value={topRecentYearViolentCrime.Crime}
+            qualifier={formatPercentage(topRecentYearViolentCrime.share)}
           />
-          <Stat 
-            title={`Top Property Crime in ${topRecentYearPropertyCrime.Year}`}
-            value={`${topRecentYearPropertyCrime.Crime} ${formatPercentage(topRecentYearPropertyCrime.share)}`}
+          <Stat
+            title="Top Property Crime"
+            year={topRecentYearPropertyCrime.Year}
+            value={topRecentYearPropertyCrime.Crime}
+            qualifier={formatPercentage(topRecentYearPropertyCrime.share)}
           />
           <p>The Barchart here shows data for different types of Property and Violent Crimes.</p>
           <p>In {topRecentYearViolentCrime.Year}, {topRecentYearViolentCrime.Crime} had the highest rate Violent crime of ${formatPercentage(topRecentYearViolentCrime.share)} at the current location.</p>
           <p>In {topRecentYearPropertyCrime.Year}, {topRecentYearPropertyCrime.Crime} had the highest rate Property crime of ${formatPercentage(topRecentYearPropertyCrime.share)} at the current location.</p>
-          
+
         </article>
 
         {/* Draw a Barchart for each type of crime based on the dropdown value. */}

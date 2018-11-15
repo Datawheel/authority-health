@@ -53,18 +53,24 @@ class HealthCenters extends SectionColumns {
         <article>
           {/* Show top stats for each penetration type */}
           <Stat
-            title={`${formatMeasureName("Penetration of Total Population")} Population visited health center in ${topTotalPopulationData.Year}`}
-            value={`${topTotalPopulationData["Zip Code"]} (${formatPercentage(topTotalPopulationData["Penetration of Total Population"])})`}
+            title={formatMeasureName("Penetration of Total Population")}
+            year={`visited health center in ${topTotalPopulationData.Year}`}
+            value={topTotalPopulationData["Zip Code"]}
+            qualifier={formatPercentage(topTotalPopulationData["Penetration of Total Population"])}
           />
           <Stat
-            title={`${formatMeasureName("Penetration of Low-Income")} Population visited health center in ${topLowIncomeData.Year}`}
-            value={`${topLowIncomeData["Zip Code"]} (${formatPercentage(topLowIncomeData["Penetration of Low-Income"])})`}
+            title={formatMeasureName("Penetration of Low-Income")}
+            year={`visited health center in ${topLowIncomeData.Year}`}
+            value={topLowIncomeData["Zip Code"]}
+            qualifier={formatPercentage(topLowIncomeData["Penetration of Low-Income"])}
           />
           <Stat
-            title={`${formatMeasureName("Penetration of Uninsured Population")} Population visited health center in ${topUninsuredPopulationData.Year}`}
-            value={`${topUninsuredPopulationData["Zip Code"]} (${formatPercentage(topUninsuredPopulationData["Penetration of Uninsured Population"])})`}
+            title={formatMeasureName("Penetration of Uninsured Population")}
+            year={`visited health center in ${topUninsuredPopulationData.Year}`}
+            value={topUninsuredPopulationData["Zip Code"]}
+            qualifier={formatPercentage(topUninsuredPopulationData["Penetration of Uninsured Population"])}
           />
-          
+
           {/* Draw a BarChart to show data for health center data by race */}
           <BarChart config={{
             data: "/api/data?measures=%25%20Non-white,%25%20Hispanic,%25%20Black,%25%20Asian,%25%20American%20Indian%2FAlaska%20Native&Year=all",
@@ -139,4 +145,3 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(HealthCenters);
-

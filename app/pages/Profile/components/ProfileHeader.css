@@ -1,0 +1,86 @@
+@import "../../../css/mixins.css";
+
+/* TODO: refactor duplicated home page styles into generic header styles */
+
+/* home header layout */
+.profile-header-inner {
+  /* positioning */
+  @add-mixin centered-container;
+  /* sizing */
+  padding-top: var(--home-nav-height);
+  padding-bottom: 4rem;
+  /* layout */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 1; /* allow bg to shuffle behind */
+
+  /* limit intro text width */
+  & .profile-header-intro {
+    max-width: 28rem;
+
+    & .profile-header-headline {
+      line-height: 1.125;
+    }
+  }
+
+  /* take up remaining space and center */
+  & .profile-header-map {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--gutter-xl);
+
+    & .profile-header-wayne-map {
+      border-radius: 50%;
+      box-shadow: 0 0.04em 0.5em color(var(--black) a(0.5));
+    }
+
+    /* position michigan bg map */
+    & .profile-header-michigan-map {
+      position: absolute;
+      top: -3.5rem;
+      left: -1.375rem;
+      z-index: -1;
+    }
+
+    @add-mixin max-xs {
+      display: none;
+    }
+  }
+}
+
+
+/* intro block typography */
+.profile-header-intro {
+  text-shadow: 0 0.04em 0.5em color(var(--black) a(0.5));
+}
+
+
+/* hero image */
+.profile-header-background {
+  @add-mixin absolute-expand;
+  z-index: 0;
+
+  &:after {
+    @add-mixin absolute-expand;
+    content: '';
+    display: block;
+    background-image:
+      linear-gradient(
+        -180deg,
+        color(var(--dark-3) a(0)) 50%,
+        var(--dark-3) 100%),
+      linear-gradient(
+        -180deg,
+        color(var(--black) a(0.5)) 0%,
+        color(var(--black) a(0.25)) 93%,
+        color(var(--black) a(0.5)) 100%);
+  }
+
+  /* cover-style background image */
+  & .profile-header-background-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}

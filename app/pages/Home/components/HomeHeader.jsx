@@ -3,7 +3,7 @@ import Search from "components/Search";
 import {Link} from "react-router";
 import "./HomeHeader.css";
 
-export default class Home extends Component {
+export default class HomeHeader extends Component {
 
   render() {
     return (

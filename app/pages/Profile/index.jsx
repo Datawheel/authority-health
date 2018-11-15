@@ -28,6 +28,7 @@ import Poverty from "./sections/economy/Poverty";
 import EducationalAttainment from "./sections/education/EducationalAttainment";
 import StudentPoverty from "./sections/education/StudentPoverty";
 import WaterQuality from "./sections/naturalEnvironment/WaterQuality";
+import AirQuality from "./sections/naturalEnvironment/AirQuality";
 
 class Profile extends Component {
 
@@ -90,6 +91,7 @@ class Profile extends Component {
 
         <TopicTitle slug="natural-enviornment">Natural Environment</TopicTitle>
         <WaterQuality />
+        <AirQuality />
         
       </div>
     );
@@ -120,6 +122,7 @@ Profile.need = [
   StudentPoverty,
   Incarceration,
   WaterQuality,
+  AirQuality,
   fetchData("diabetes", "/api/data?measures=Diabetes%20Data%20Value&City=<id>&Year=latest"),
   fetchData("meta", "/api/search?id=<id>"),
   fetchData("population", "https://ironwood.datausa.io/api/data?measures=Population&Geography=<id>&year=latest")

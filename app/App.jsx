@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import MainNav from "components/MainNav";
-import Footer from "components/Footer";
+import MainNav from "./components/MainNav";
+import Footer from "./components/Footer";
 import "./App.css";
 
 export default class App extends Component {

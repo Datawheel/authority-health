@@ -13,7 +13,7 @@ class AirQuality extends SectionColumns {
   render() {
 
     const {airPollutants} = this.props;
-    console.log("airPollutants: ", airPollutants);
+    // console.log("airPollutants: ", airPollutants);
 
     // Get the Poverty by Race data.
     const recentYearAirPollutants = {};
@@ -32,7 +32,7 @@ class AirQuality extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Air Quality</SectionTitle>
         <article>
-          {/* <Stat 
+          {/* <Stat
             title={`Top Air Poluutants in ${topRecentYearAirPollutants.Year}`}
             value={`${topRecentYearAirPollutants.Category} ${this.forceUpdate(topRecentYearAirPollutants["Number of Days"])}`}
           /> */}

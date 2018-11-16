@@ -154,12 +154,12 @@ layout
       @add-mixin min-md {
         /* resize text */
         & article:not(:last-child) {
-          width: 33.333%;
+          width: 37%;
         }
         /* resize viz & space out from text */
         & article + .viz {
           margin-left: var(--gutter-xl);
-          width: 66.666%;
+          width: 62%;
         }
       }
     }

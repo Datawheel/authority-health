@@ -63,6 +63,7 @@ class Incarceration extends SectionColumns {
           data: filteredData,
           discrete: "x",
           height: 400,
+          stacked: true,
           legend: false,
           label: d => ` ${d.IncarcerationType}: ${d.Offense}`,
           groupBy: "Offense",

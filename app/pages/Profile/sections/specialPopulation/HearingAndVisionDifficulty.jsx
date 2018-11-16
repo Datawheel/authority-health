@@ -79,6 +79,7 @@ class HearingAndVisionDifficulty extends SectionColumns {
             year={topMaleVisionDifficultyData.Year}
             value={rangeFormatter(topMaleVisionDifficultyData.Age)}
             qualifier={formatPopulation(topMaleVisionDifficultyData.share)}
+            theme="terra-cotta-dark"
           />
           <Stat
             title="Female majority"
@@ -93,6 +94,7 @@ class HearingAndVisionDifficulty extends SectionColumns {
             year={topMaleHearingDifficultyData.Year}
             value={rangeFormatter(topMaleHearingDifficultyData.Age)}
             qualifier={formatPopulation(topMaleHearingDifficultyData.share)}
+            theme="terra-cotta-dark"
           />
           <Stat
             title="Female majority"
@@ -123,8 +125,7 @@ class HearingAndVisionDifficulty extends SectionColumns {
           },
           yConfig: {tickFormat: d => formatPopulation(d)},
           shapeConfig: {
-            label: false,
-            opacity: d => d.Sex === "Female" ? 0.5 : 1
+            label: false
           },
           tooltipConfig: {tbody: [["Value", d => formatPopulation(d.share)]]}
         }}

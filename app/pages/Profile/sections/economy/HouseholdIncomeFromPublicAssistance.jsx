@@ -20,7 +20,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
   render() {
 
     const {publicAssistanceData, householdSnapData} = this.props;
-    console.log("householdSnapData: ", householdSnapData);
+    // console.log("householdSnapData: ", householdSnapData);
 
     // Format data for publicAssistanceData.x`
     const recentYearPublicAssistanceData = {};
@@ -49,7 +49,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
       });
 
     const filterSnapRecievedData = householdSnapData.filter(d => d["ID Snap Receipt"] === 0);
-    console.log("filterSnapRecievedData: ", filterSnapRecievedData);
+    // console.log("filterSnapRecievedData: ", filterSnapRecievedData);
 
     // Find top recent year data for publicAssistanceData
     // const filteredData = recentYearHouseholdSnapData.values.filter(d => d["ID Public Assistance or Snap"] === 0).sort((a, b) => b.share - a.share);

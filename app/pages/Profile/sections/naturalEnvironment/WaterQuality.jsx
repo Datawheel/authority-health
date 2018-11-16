@@ -19,9 +19,9 @@ class WaterQuality extends SectionColumns {
   render() {
 
     const {waterQualityData} = this.props;
-    console.log("waterQualityData: ", waterQualityData);
+    // console.log("waterQualityData: ", waterQualityData);
 
-    
+
 
     return (
       <SectionColumns>
@@ -30,7 +30,7 @@ class WaterQuality extends SectionColumns {
         </article>
 
         {/* Geomap to show Lead and Mercury level in water for all tracts in the Wayne County. */}
-        <Geomap config={{ 
+        <Geomap config={{
           data: waterQualityData.data,
           groupBy: "ID Tract",
           colorScale: d => formatData(d["Lead Level"]),
@@ -59,4 +59,3 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(WaterQuality);
-

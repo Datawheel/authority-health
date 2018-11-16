@@ -5,6 +5,48 @@ import styles from "style.yml";
   d3plus-react visualization rendered on the page.
 */
 
+// create array of category groupings to loop through
+const groupings = [
+  "Group",
+  "Age Group",
+  "Race Group",
+  "RaceType",
+  "SmokingType",
+  "Health Insurance coverage:type",
+  "Sex",
+  "Sex of Partner",
+  "Responsibility Length",
+  "Offense",
+  "Rent Amount"
+];
+
+// function to lookup & assign color scheme
+function colorLogic(d) {
+
+  // console.log("Rent Amount" + ":", d["Rent Amount"]);
+
+  // lookup grouping color schemes in style.yml
+  for (const grouping of groupings) {
+    if (d[grouping]) {
+      // console.log(grouping + ":", d[grouping]);
+      // styles[`color-${d[grouping]}`] ? console.log(styles[`color-${d[grouping]}`]) : null;
+      return styles[`color-${d[grouping]}`]
+        ? styles[`color-${d[grouping]}`]
+        : styles["majorelle-dark"];
+    }
+  }
+
+  // assign consistent year color to everything except for phenotypes and states
+  // if ((d["ID Year"] || d["ID Event Year"]) && !d["ID Phenotype"] && !d["ID State"]) {
+  //   return styles["majorelle-dark"];
+  // }
+
+  // if a visualization is totally purple, it probably doesn't yet have a color scheme assigned
+  // else {
+  return styles["majorelle-dark"];
+  // }
+}
+
 const typeface = "Lato, sans-serif";
 const defaultFontColor = styles["dark-3"];
 const headingFontColor = styles.black;
@@ -45,6 +87,7 @@ const axisConfig = {
 export default {
   height: 400,
   shapeConfig: {
+    fill: colorLogic,
     fontFamily: () => typeface,
     labelConfig: {
       fontFamily: () => typeface,
@@ -60,6 +103,7 @@ export default {
     },
     // line charts
     Line: {
+      stroke: colorLogic,
       curve: "catmullRom",
       strokeLinecap: "round",
       strokeWidth: 2

@@ -105,6 +105,7 @@ class DrugUse extends SectionColumns {
                   }
                 });
               });
+              // console.log(data);
               return data;
             }}
             /> : null }

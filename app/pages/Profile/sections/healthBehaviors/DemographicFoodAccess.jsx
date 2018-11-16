@@ -24,8 +24,8 @@ class DemographicFoodAccess extends SectionColumns {
     const {foodAccessByAge, foodAccessByRace} = this.props;
     const {dropdownValue} = this.state;
 
-    console.log("foodAccessByAge: ", foodAccessByAge);
-    console.log("foodAccessByRace: ", foodAccessByRace);
+    // console.log("foodAccessByAge: ", foodAccessByAge);
+    // console.log("foodAccessByRace: ", foodAccessByRace);
 
     // Create an array of each age and race type.
     // Make sure that the Children and Seniors data are always at the first 2 places in the array.
@@ -68,7 +68,9 @@ class DemographicFoodAccess extends SectionColumns {
             <label>
               Demographic
               <select onChange={this.handleChange}>
-                {raceAndAgeTypes.map((item, i) => <option key={i} value={item}>{item}</option>)}
+                <option value="Child">age</option>
+                <option value="Asian">ethnicity</option>
+                {/* {raceAndAgeTypes.map((item, i) => <option key={i} value={item}>{item}</option>)} */}
               </select>
             </label>
           </div>
@@ -92,8 +94,10 @@ class DemographicFoodAccess extends SectionColumns {
             groupBy: ageSelected ? "Age Group" : "Race Group",
             x: "Percent",
             y: ageSelected ? "Age Group" : "Race Group",
-            yConfig: {ticks: []},
             time: "Year",
+            shapeConfig: {
+              label: false
+            },
             // xSort: ageSelected ? (a, b) => a["ID Age Group"] - b["ID Age Group"] : (a, b) => a["ID Race Group"] - b["ID Race Group"],
             tooltipConfig: {tbody: [["Value", d => formatPercentage(d.Percent)]]}
           }}

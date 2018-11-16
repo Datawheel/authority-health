@@ -57,9 +57,15 @@ class DrugUse extends SectionColumns {
         <SectionTitle>Drug Use</SectionTitle>
         <article>
           {/* Create a dropdown for drug types. */}
-          <select onChange={this.handleChange}>
-            {drugTypes.map(item => <option key={item} value={item}>{formatName(item)}</option>)}
-          </select>
+          <div className="field-container">
+            <label>
+              Drug use category
+              <select onChange={this.handleChange}>
+                {drugTypes.map(item => <option key={item} value={item}>{formatName(item)}</option>)}
+              </select>
+            </label>
+          </div>
+
           <Stat
             title={"Tract with highest prevalence"}
             value={topTractNum}

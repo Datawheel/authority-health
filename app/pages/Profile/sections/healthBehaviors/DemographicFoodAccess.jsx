@@ -48,7 +48,7 @@ class DemographicFoodAccess extends SectionColumns {
     //   }, null);
     //   return result;
     // });
-    
+
     // const currentRaceAndAgeData = data.find(d => d.AgeRaceType === dropdownValue);
 
     // Separate data for age and race.
@@ -61,12 +61,17 @@ class DemographicFoodAccess extends SectionColumns {
 
     return (
       <SectionColumns>
-        <SectionTitle>Demographic Access</SectionTitle>
+        <SectionTitle>Access to food by demographic</SectionTitle>
         <article>
           {/* Create a dropdown for each age and race type using raceAndAgeTypes array. */}
-          <select onChange={this.handleChange}>
-            {raceAndAgeTypes.map((item, i) => <option key={i} value={item}>{item}</option>)}
-          </select>
+          <div className="field-container">
+            <label>
+              Demographic
+              <select onChange={this.handleChange}>
+                {raceAndAgeTypes.map((item, i) => <option key={i} value={item}>{item}</option>)}
+              </select>
+            </label>
+          </div>
           {/* <Stat
             title={`Food Access in ${currentRaceAndAgeData.County} County`}
             value={`${formatAbbreviate(currentRaceAndAgeData[dropdownValue])}%`}
@@ -127,5 +132,5 @@ const mapStateToProps = state => ({
   foodAccessByAge: state.data.foodAccessByAge,
   foodAccessByRace: state.data.foodAccessByRace
 });
-  
+
 export default connect(mapStateToProps)(DemographicFoodAccess);

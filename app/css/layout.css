@@ -145,12 +145,12 @@ layout
       @add-mixin min-md {
         /* resize text */
         & article:not(:last-child) {
-          width: calc(25% + 5vw);
+          width: calc(30% + 5vw);
         }
         /* resize viz & space out from text */
         & article + .viz {
           margin-left: var(--gutter-xl);
-          width: calc(75% - 5vw);
+          width: calc(70% - 5vw);
         }
       }
     }
@@ -229,5 +229,19 @@ layout
         margin-right: 3rem;
       }
     }
+  }
+}
+
+/* form fields */
+.field-container {
+  &:not(:last-child) {
+    margin-bottom: 0.75rem;
+  }
+
+  /* 100% width select */
+  & select {
+    display: block;
+    width: 100%;
+    margin-top: 0.25em;
   }
 }

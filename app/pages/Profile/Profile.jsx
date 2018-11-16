@@ -27,6 +27,7 @@ import WageDistribution from "./sections/economy/WageDistribution";
 import Poverty from "./sections/economy/Poverty";
 import EducationalAttainment from "./sections/education/EducationalAttainment";
 import StudentPoverty from "./sections/education/StudentPoverty";
+import ReadingAssessment from "./sections/education/ReadingAssessment";
 import WaterQuality from "./sections/naturalEnvironment/WaterQuality";
 import AirQuality from "./sections/naturalEnvironment/AirQuality";
 
@@ -43,7 +44,7 @@ class Profile extends Component {
 
     return (
       <div className="profile">
-        {/* <ProfileHeader
+        <ProfileHeader
           title={ location }
           population={ population.data[0] &&
             formatAbbreviate(population.data[0].Population)
@@ -51,7 +52,7 @@ class Profile extends Component {
           diabetes={ diabetes.data[0] &&
             `${diabetes.data[0]["Diabetes Data Value"]}%`
           }
-        /> */}
+        />
 
         <TopicTitle slug="health-behaviors">Health Behaviors</TopicTitle>
         <FoodStats />
@@ -86,11 +87,11 @@ class Profile extends Component {
         <TopicTitle slug="education">Education</TopicTitle>
         <EducationalAttainment />
         <StudentPoverty />
+        <ReadingAssessment />
 
         <TopicTitle slug="natural-enviornment">Natural Environment</TopicTitle>
         <WaterQuality />
         <AirQuality />
-        
       </div>
     );
   }
@@ -118,6 +119,7 @@ Profile.need = [
   Poverty,
   EducationalAttainment,
   StudentPoverty,
+  ReadingAssessment,
   Incarceration,
   WaterQuality,
   AirQuality,

@@ -55,7 +55,7 @@ class Crime extends SectionColumns {
         <SectionTitle>Crime</SectionTitle>
         <article>
 
-          {/* Show a Stats and a short paragraph for each type of crime based on the dropdown value. */}
+          {/* Show a Stats and a short paragraph for each type of crime. */}
           <Stat 
             title={`Top Violent Crime in ${topRecentYearViolentCrime.Year}`}
             value={`${topRecentYearViolentCrime.Crime} ${formatPercentage(topRecentYearViolentCrime.share)}`}
@@ -70,7 +70,7 @@ class Crime extends SectionColumns {
           
         </article>
 
-        {/* Draw a Barchart for each type of crime based on the dropdown value. */}
+        {/* Draw a Barchart for each type of crime. */}
         <BarChart config={{
           data: crimeData,
           discrete: "x",

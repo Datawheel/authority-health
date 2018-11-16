@@ -9,7 +9,17 @@ import Stat from "../../components/Stat";
 
 class ReadingAssessment extends SectionColumns {
 
+  constructor(props) {
+    super(props);
+    this.state = {dropdownValue: "Gender"};
+  }
+
+  // Handler function for dropdown onChange.
+  handleChange = event => this.setState({dropdownValue: event.target.value});
+
   render() {
+    const {dropdownValue} = this.state;
+    console.log("dropdownValue: ", dropdownValue);
 
     const {readingScoresByGender} = this.props;
     console.log("readingScoresByGender: ", readingScoresByGender);
@@ -37,10 +47,15 @@ class ReadingAssessment extends SectionColumns {
     // Find top female 8th grade data.
     const femaleEighthGradeReadingScores = femaleReadingScores.filter(d => d.Grade === "8");
 
+    const readingAssessmentChoices = ["Gender"];
+
     return (
       <SectionColumns>
         <SectionTitle>Reading Assessment</SectionTitle>
         <article>
+          <select onChange={this.handleChange}>
+            {readingAssessmentChoices.map((item, i) => <option key={i} value={item}>{item}</option>)}
+          </select>
           <Stat
             title={`Average 4th Grade Score in ${maleFourthGradeReadingScores[0].Year}`}
             value={`${maleFourthGradeReadingScores[0].Gender} ${maleFourthGradeReadingScores[0]["Average Reading Score"]}`}

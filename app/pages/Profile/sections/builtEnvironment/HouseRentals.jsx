@@ -53,7 +53,7 @@ class HouseRentals extends SectionColumns {
             value={`${rangeFormatter(topIncomeToPayMostRent["Household Income"])} ${formatPercentage(topIncomeToPayMostRent.share)}`}
           />
           <p>The Barchart here shows the Household Income buckets and the Percentage of rent paid based on the Household Income.</p>
-          {/* Create a LinePlot based on the dropdown choice. */}
+          {/* Create a LinePlot. */}
           <LinePlot config={{
             data: rentAmountData,
             discrete: "x",

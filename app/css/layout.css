@@ -123,8 +123,13 @@ layout
     & .columns {
 
       /* reset article & viz margin */
-      & > * {
+      & > *,
+      & article > .viz {
         margin: 0;
+      }
+
+      & .viz + .viz {
+        margin-left: 2rem;
       }
 
       /* single column layout on smaller screens */
@@ -138,6 +143,10 @@ layout
         /* space out text & viz */
         & article + .viz {
           margin-top: 1rem;
+        }
+        /* space out adjacent visualizations */
+        & .viz + .viz {
+          margin-left: 2rem;
         }
       }
 

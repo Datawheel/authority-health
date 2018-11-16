@@ -1,5 +1,14 @@
 @import "../css/mixins.css";
 
+/* stats lined up */
+.stat {
+  display: inline-block;
+
+  &:not(:last-of-type) {
+    margin-right: 2rem;
+  }
+}
+
 /* little label */
 .stat-label {
   line-height: 1.25;

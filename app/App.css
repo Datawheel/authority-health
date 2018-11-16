@@ -4,6 +4,7 @@
 @import 'css/base'; /* typography & colors */
 @import 'css/layout'; /* grid & macro layout */
 @import 'css/blueprint-overrides'; /* thanks blueprint */
+@import 'css/d3plus'; /* css does what js don't */
 @import 'css/utilities'; /* do one thing, and do it well */
 
 /* -----------------------------------

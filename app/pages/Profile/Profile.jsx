@@ -54,10 +54,14 @@ class Profile extends Component {
         />
 
         <TopicTitle slug="health-behaviors">
-          <div className="section-container">Health Behaviors</div>
+          <div className="section-container">
+            <div className="section-title-stat-container">
+              <span className="section-title-inner">Health Behaviors</span>
+              <FoodStats />
+            </div>
+          </div>
         </TopicTitle>
         <div className="section-container">
-          <FoodStats />
           <FoodAccess />
           <DemographicFoodAccess />
           <DrugUse />

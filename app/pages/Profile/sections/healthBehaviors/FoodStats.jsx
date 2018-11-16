@@ -11,16 +11,17 @@ class FoodStats extends SectionColumns {
     const {insecurityRate} = this.props;
 
     return (
-      <SectionColumns>
+      <div className="section-title-stat-inner">
         <Stat
           title={"Child Insecurity"}
           value={`${insecurityRate[0]["Food Insecurity Rate"]}%`}
+          theme="marjoelle-light"
         />
         <Stat
           title={"Adult Insecurity"}
           value={`${insecurityRate[1]["Food Insecurity Rate"] - insecurityRate[0]["Food Insecurity Rate"]}%`}
         />
-      </SectionColumns>
+      </div>
     );
   }
 }
@@ -28,9 +29,9 @@ class FoodStats extends SectionColumns {
 FoodStats.need = [
   fetchData("insecurityRate", "/api/data?measures=Food%20Insecurity%20Rate&drilldowns=Category&County=<id>&Year=latest", d => d.data)
 ];
-  
+
 const mapStateToProps = state => ({
   insecurityRate: state.data.insecurityRate
 });
-  
+
 export default connect(mapStateToProps)(FoodStats);

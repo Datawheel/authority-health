@@ -15,7 +15,7 @@ export default class Stat extends Component {
 
     let themeClass;
     if (theme) {
-      themeClass = `${theme}-dark-color`;
+      themeClass = `${theme}-color`;
     }
     else {
       themeClass = "majorelle-dark-color";

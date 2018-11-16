@@ -14,7 +14,9 @@ body {
 
 /* headings */
 h1, h2, h3, h4, h5, h6,
-.heading, .anchor {
+.heading,
+.anchor,
+.section-title > a.anchor {
   @add-mixin font-smoothing;
   color: var(--black);
   font-family: var(--heading-font);
@@ -106,4 +108,7 @@ additional theme colors
   .$(theme)-dark-color {
     color: var(--$(theme)-dark);
   }
+  /* .$(theme)-light-color {
+    color: var(--$(theme)-light);
+  } */
 }

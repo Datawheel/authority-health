@@ -84,6 +84,12 @@ layout
   @add-mixin centered-container;
 }
 
+/* alernating bg color */
+.section:nth-of-type(even):after {
+  @add-mixin fullwidth-pseudo;
+  background: var(--light-1);
+}
+
 /* canon overrides */
 /* NOTE: specificity increase needed to overwrite :/ */
 .profile {
@@ -106,7 +112,12 @@ layout
   }
 
   & .section {
-    padding: 0;
+    padding: 0 0 2rem 0;
+    /* border: 1px solid blue; */
+
+    /* offset .section-container padding */
+    &:first-child { margin-top: -1.5rem; }
+    &:last-child { margin-bottom: -1.5rem; }
 
     /* increase specificity, again :( */
     & .columns {
@@ -146,7 +157,62 @@ layout
 
     /* reset section title margin */
     & .section-title {
-      margin: 2em 0 0 0;
+      margin: 1em 0;
+
+      @add-mixin min-sm {
+        margin-top: 2em;
+      }
+
+      & .anchor {
+        @add-mixin font-xl;
+        margin-top: -2rem;
+        padding-top: 2rem;
+        transition: color 0.2s ease-out;
+
+        &:hover, &:focus {
+          color: var(--brand-dark);
+        }
+      }
+    }
+  }
+
+  /* stats next to seciton title */
+  & .section-title-stat-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    & .section-title-inner {
+      margin-right: 2rem;
+    }
+
+    /* center stats within leftover space */
+    & .section-title-stat-inner {
+      margin-left: auto;
+      margin-right: auto;
+      padding-top: 1rem;
+    }
+
+    /* side by side */
+    & .stat {
+      display: inline-block;
+      text-align: center;
+
+      /* theming */
+      & .stat-label {
+        color: var(--light-1);
+      }
+
+      /* bigger value */
+      & .stat-value {
+        @add-mixin font-xl;
+        color: var(--white);
+      }
+
+      /* space out adjacent stats */
+      &:not(:last-of-type) {
+        margin-right: 3rem;
+      }
     }
   }
 }

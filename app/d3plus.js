@@ -65,6 +65,23 @@ export default {
       strokeWidth: 2
     }
   },
+  // map color scale key
+  colorScaleConfig: {
+    // the key itself
+    rectConfig: {
+      height: 12,
+      strokeWidth: 0
+    },
+    axisConfig: {
+      // bar underneath the key
+      barConfig: {
+        stroke: "transparent",
+        strokeWidth: 0
+      },
+      // death to ticks
+      tickSize: 0
+    }
+  },
   // legend defaults
   legendConfig: {
     // labels are directly in the shape

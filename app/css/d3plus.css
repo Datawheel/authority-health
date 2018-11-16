@@ -39,22 +39,6 @@ timeline enhancements
 }
 
 /* -----------------------------------
-map color scale key
------------------------------------ */
-
-/* TODO: replace in d3plus.js config */
-.d3plus-ColorScale {
-  & .d3plus-Line-shape,
-  & .bar {
-    display: none;
-  }
-  & .d3plus-ColorScale-Rect .d3plus-Rect {
-    stroke: none;
-    height: 16px;
-  }
-}
-
-/* -----------------------------------
 map zoom controls
 ----------------------------------- */
 

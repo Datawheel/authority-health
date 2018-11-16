@@ -43,7 +43,7 @@ class Profile extends Component {
 
     return (
       <div className="profile">
-        <ProfileHeader
+        {/* <ProfileHeader
           title={ location }
           population={ population.data[0] &&
             formatAbbreviate(population.data[0].Population)
@@ -51,7 +51,7 @@ class Profile extends Component {
           diabetes={ diabetes.data[0] &&
             `${diabetes.data[0]["Diabetes Data Value"]}%`
           }
-        />
+        /> */}
 
         <TopicTitle slug="health-behaviors">Health Behaviors</TopicTitle>
         <FoodStats />

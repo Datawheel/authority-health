@@ -79,6 +79,7 @@ class AirQuality extends SectionColumns {
           height: 250,
           legend: false,
           groupBy: "ID County",
+          baseline: 0,
           label: d => d.Year,
           x: "Year",
           xConfig: {

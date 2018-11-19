@@ -11,7 +11,7 @@ class ReadingAssessment extends SectionColumns {
 
   constructor(props) {
     super(props);
-    this.state = {dropdownValue: "Parents Education"};
+    this.state = {dropdownValue: "Geography"};
   }
 
   // Handler function for dropdown onChange.
@@ -21,13 +21,15 @@ class ReadingAssessment extends SectionColumns {
     const {dropdownValue} = this.state;
     console.log("dropdownValue: ", dropdownValue);
 
-    const {readingScoresByGender, readingScoresByELL, readingScoresByDisability, readingScoresByParentsEducation} = this.props;
+    const {readingScoresByGender, readingScoresByELL, readingScoresByDisability, readingScoresByParentsEducation, readingScoresByNation, readingScoresByCity} = this.props;
     console.log("readingScoresByGender: ", readingScoresByGender);
     console.log("readingScoresByELL: ", readingScoresByELL);
     console.log("readingScoresByDisability: ", readingScoresByDisability);
     console.log("readingScoresByParentsEducation: ", readingScoresByParentsEducation);
+    console.log("readingScoresByNation: ", readingScoresByNation);
+    console.log("readingScoresByCity: ", readingScoresByCity);
 
-    const readingAssessmentChoices = ["Gender", "ELL", "Disability", "Parents Education"];
+    const readingAssessmentChoices = ["Geography", "Gender", "ELL", "Disability", "Parents Education"];
 
     // const drawVisualization = (vizData) => {
 
@@ -300,6 +302,100 @@ class ReadingAssessment extends SectionColumns {
         </SectionColumns>
       );
     }
+    else if (dropdownValue === "Geography") {
+
+      // Merge readingScoresByNation and readingScoresByCity arrays to readingScoresByGeography array.
+      const readingScoresByGeography = [];
+      readingScoresByNation.forEach(d => {
+        d.Geography = "Nation";
+        readingScoresByGeography.push(d);
+      });
+      readingScoresByCity.forEach(d => {
+        d.Geography = "City";
+        readingScoresByGeography.push(d);
+      });
+      console.log("readingScoresByGeography:", readingScoresByGeography);
+
+      // Get the recent year 4th and 8th grade data for reading scores by Nation.
+      const recentYearReadingScoresByNation = {};
+      nest()
+        .key(d => d.Year)
+        .entries(readingScoresByNation)
+        .forEach(group => {
+          group.key >= readingScoresByNation[0].Year ? Object.assign(recentYearReadingScoresByNation, group) : {};
+        });
+
+      // Find top National average for 4th Grade.
+      const nationalFourthGradeReadingScores = recentYearReadingScoresByNation.values.filter(d => d.Grade === "4");
+
+      // Find top National average for 8th Grade.
+      const nationalEighthGradeReadingScores = recentYearReadingScoresByNation.values.filter(d => d.Grade === "8");
+
+      // Get the recent year 4th and 8th grade data for reading scores by City.
+      const recentYearReadingScoresByCity = {};
+      nest()
+        .key(d => d.Year)
+        .entries(readingScoresByCity)
+        .forEach(group => {
+          group.key >= readingScoresByCity[0].Year ? Object.assign(recentYearReadingScoresByCity, group) : {};
+        });
+
+      // Find top National average for 4th Grade.
+      const fourthGradeReadingScoresbyCity = recentYearReadingScoresByCity.values.filter(d => d.Grade === "4");
+
+      // Find top National average for 8th Grade.
+      const eighthGradeReadingScoresbyCity = recentYearReadingScoresByCity.values.filter(d => d.Grade === "8");
+
+      return (
+        <SectionColumns>
+          <SectionTitle>Reading Assessment</SectionTitle>
+          <article>
+            <select onChange={this.handleChange}>
+              {readingAssessmentChoices.map((item, i) => <option key={i} value={item}>{item}</option>)}
+            </select>
+            <p>Average Score by Geography</p>
+            <Stat
+              title={`4th Grade Score in ${nationalFourthGradeReadingScores[0].Year}`}
+              value={`${nationalFourthGradeReadingScores[0].Nation} ${nationalFourthGradeReadingScores[0]["Average Reading Score"]}`}
+            />
+            <Stat
+              title={`8th Grade Score in ${nationalEighthGradeReadingScores[0].Year}`}
+              value={`${nationalEighthGradeReadingScores[0].Nation} ${nationalEighthGradeReadingScores[0]["Average Reading Score"]}`}
+            />
+            <Stat
+              title={`4th Grade Score in ${fourthGradeReadingScoresbyCity[0].Year}`}
+              value={`${fourthGradeReadingScoresbyCity[0].City} ${fourthGradeReadingScoresbyCity[0]["Average Reading Score"]}`}
+            />
+            <Stat
+              title={`8th Grade Score in ${eighthGradeReadingScoresbyCity[0].Year}`}
+              value={`${eighthGradeReadingScoresbyCity[0].City} ${eighthGradeReadingScoresbyCity[0]["Average Reading Score"]}`}
+            />
+          </article>
+  
+          {/* Lineplot to show the Reading assessment for different years in the Detroit City. */}
+          <LinePlot config={{
+            data: readingScoresByGeography,
+            discrete: "x",
+            height: 250,
+            groupBy: d => `${d.Grade} ${d.Geography}`,
+            label: d => `${d.Grade}th Grade ${d[d.Geography]}`,
+            x: "Year",
+            xConfig: {
+              title: "Year"
+            },
+            y: "Average Reading Score",
+            yConfig: {
+              title: "Average Reading Score"
+            },
+            shapeConfig: {
+              strokeDasharray: d => d.Geography === "Nation" ?  "4 1" : null 
+            },
+            tooltipConfig: {tbody: [["Score", d => d["Average Reading Score"]]]}
+          }}
+          />
+        </SectionColumns>
+      );
+    }
 
     return (
       <div>No dropdown selected</div>
@@ -317,14 +413,18 @@ ReadingAssessment.need = [
   fetchData("readingScoresByGender", "/api/data?measures=Average%20Reading%20Score&drilldowns=Grade,Gender,City&Year=all", d => d.data),
   fetchData("readingScoresByELL", "/api/data?measures=Average%20Reading%20Score&drilldowns=Grade,ELL,City&Year=all", d => d.data),
   fetchData("readingScoresByDisability", "/api/data?measures=Average%20Reading%20Score&drilldowns=Grade,Disability,City&Year=all", d => d.data),
-  fetchData("readingScoresByParentsEducation", "/api/data?measures=Average%20Reading%20Score&drilldowns=Grade,Parents%20Education,City&Year=all", d => d.data)
+  fetchData("readingScoresByParentsEducation", "/api/data?measures=Average%20Reading%20Score&drilldowns=Grade,Parents%20Education,City&Year=all", d => d.data),
+  fetchData("readingScoresByNation", "/api/data?measures=Average%20Reading%20Score&drilldowns=Grade,Nation&Year=all", d => d.data),
+  fetchData("readingScoresByCity", "/api/data?measures=Average%20Reading%20Score&drilldowns=Grade,City&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   readingScoresByGender: state.data.readingScoresByGender,
   readingScoresByELL: state.data.readingScoresByELL,
   readingScoresByDisability: state.data.readingScoresByDisability,
-  readingScoresByParentsEducation: state.data.readingScoresByParentsEducation
+  readingScoresByParentsEducation: state.data.readingScoresByParentsEducation,
+  readingScoresByNation: state.data.readingScoresByNation,
+  readingScoresByCity: state.data.readingScoresByCity
 });
   
 export default connect(mapStateToProps)(ReadingAssessment);

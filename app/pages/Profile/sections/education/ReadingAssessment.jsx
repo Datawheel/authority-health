@@ -1,7 +1,7 @@
 import React from "react";
 import {nest} from "d3-collection";
 import {connect} from "react-redux";
-import {LinePlot} from "d3plus-react";
+import {BarChart, LinePlot} from "d3plus-react";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -11,7 +11,7 @@ class ReadingAssessment extends SectionColumns {
 
   constructor(props) {
     super(props);
-    this.state = {dropdownValue: "Disability"};
+    this.state = {dropdownValue: "Parents Education"};
   }
 
   // Handler function for dropdown onChange.
@@ -21,12 +21,13 @@ class ReadingAssessment extends SectionColumns {
     const {dropdownValue} = this.state;
     console.log("dropdownValue: ", dropdownValue);
 
-    const {readingScoresByGender, readingScoresByELL, readingScoresByDisability} = this.props;
+    const {readingScoresByGender, readingScoresByELL, readingScoresByDisability, readingScoresByParentsEducation} = this.props;
     console.log("readingScoresByGender: ", readingScoresByGender);
     console.log("readingScoresByELL: ", readingScoresByELL);
     console.log("readingScoresByDisability: ", readingScoresByDisability);
+    console.log("readingScoresByParentsEducation: ", readingScoresByParentsEducation);
 
-    const readingAssessmentChoices = ["Gender", "ELL", "Disability"];
+    const readingAssessmentChoices = ["Gender", "ELL", "Disability", "Parents Education"];
 
     // const drawVisualization = (vizData) => {
 
@@ -63,20 +64,21 @@ class ReadingAssessment extends SectionColumns {
             <select onChange={this.handleChange}>
               {readingAssessmentChoices.map((item, i) => <option key={i} value={item}>{item}</option>)}
             </select>
+            <p>Average Score by Gender</p>
             <Stat
-              title={`Average 4th Grade Score in ${maleFourthGradeReadingScores[0].Year}`}
+              title={`4th Grade Score in ${maleFourthGradeReadingScores[0].Year}`}
               value={`${maleFourthGradeReadingScores[0].Gender} ${maleFourthGradeReadingScores[0]["Average Reading Score"]}`}
             />
             <Stat
-              title={`Average 8th Grade Score in ${maleEighthGradeReadingScores[0].Year}`}
+              title={`8th Grade Score in ${maleEighthGradeReadingScores[0].Year}`}
               value={`${maleEighthGradeReadingScores[0].Gender} ${maleEighthGradeReadingScores[0]["Average Reading Score"]}`}
             />
             <Stat
-              title={`Average 4th Grade Score in ${femaleFourthGradeReadingScores[0].Year}`}
+              title={`4th Grade Score in ${femaleFourthGradeReadingScores[0].Year}`}
               value={`${femaleFourthGradeReadingScores[0].Gender} ${femaleFourthGradeReadingScores[0]["Average Reading Score"]}`}
             />
             <Stat
-              title={`Average 8th Grade Score in ${femaleEighthGradeReadingScores[0].Year}`}
+              title={`8th Grade Score in ${femaleEighthGradeReadingScores[0].Year}`}
               value={`${femaleEighthGradeReadingScores[0].Gender} ${femaleEighthGradeReadingScores[0]["Average Reading Score"]}`}
             />
           </article>
@@ -134,21 +136,22 @@ class ReadingAssessment extends SectionColumns {
             <select onChange={this.handleChange}>
               {readingAssessmentChoices.map((item, i) => <option key={i} value={item}>{item}</option>)}
             </select>
+            <p>Average Score by ELL</p>
             <Stat
-              title={`Average 4th Grade Score in ${withELLFourthGradeReadingScores[0].Year}`}
-              value={`With ELL ${withELLFourthGradeReadingScores[0]["Average Reading Score"]}`}
+              title={`4th Grade Score With ELL in ${withELLFourthGradeReadingScores[0].Year}`}
+              value={`${withELLFourthGradeReadingScores[0]["Average Reading Score"]}`}
             />
             <Stat
-              title={`Average 8th Grade Score in ${withELLEighthGradeReadingScores[0].Year}`}
-              value={`With ELL ${withELLEighthGradeReadingScores[0]["Average Reading Score"]}`}
+              title={`8th Grade Score With ELL in ${withELLEighthGradeReadingScores[0].Year}`}
+              value={`${withELLEighthGradeReadingScores[0]["Average Reading Score"]}`}
             />
             <Stat
-              title={`Average 4th Grade Score in ${noELLFourthGradeReadingScores[0].Year}`}
-              value={`No ELL ${noELLFourthGradeReadingScores[0]["Average Reading Score"]}`}
+              title={`4th Grade Score with No ELL in ${noELLFourthGradeReadingScores[0].Year}`}
+              value={`${noELLFourthGradeReadingScores[0]["Average Reading Score"]}`}
             />
             <Stat
-              title={`Average 8th Grade Score in ${noELLEighthGradeReadingScores[0].Year}`}
-              value={`No ELL ${noELLEighthGradeReadingScores[0]["Average Reading Score"]}`}
+              title={`8th Grade Score with No ELL in ${noELLEighthGradeReadingScores[0].Year}`}
+              value={`${noELLEighthGradeReadingScores[0]["Average Reading Score"]}`}
             />
           </article>
     
@@ -204,21 +207,22 @@ class ReadingAssessment extends SectionColumns {
             <select onChange={this.handleChange}>
               {readingAssessmentChoices.map((item, i) => <option key={i} value={item}>{item}</option>)}
             </select>
+            <p>Average Score by Disability</p>
             <Stat
-              title={`Average 4th Grade Score in ${withDisabilityFourthGradeReadingScores[0].Year}`}
-              value={`With Disability ${withDisabilityFourthGradeReadingScores[0]["Average Reading Score"]}`}
+              title={`4th Grade Score With Disability in ${withDisabilityFourthGradeReadingScores[0].Year}`}
+              value={`${withDisabilityFourthGradeReadingScores[0]["Average Reading Score"]}`}
             />
             <Stat
-              title={`Average 8th Grade Score in ${withDisabilityEighthGradeReadingScores[0].Year}`}
-              value={`With Disability ${withDisabilityEighthGradeReadingScores[0]["Average Reading Score"]}`}
+              title={`8th Grade Score With Disability in ${withDisabilityEighthGradeReadingScores[0].Year}`}
+              value={`${withDisabilityEighthGradeReadingScores[0]["Average Reading Score"]}`}
             />
             <Stat
-              title={`Average 4th Grade Score in ${noDisabilityFourthGradeReadingScores[0].Year}`}
-              value={`No Disability ${noDisabilityFourthGradeReadingScores[0]["Average Reading Score"]}`}
+              title={`4th Grade Score with No Disability in ${noDisabilityFourthGradeReadingScores[0].Year}`}
+              value={`${noDisabilityFourthGradeReadingScores[0]["Average Reading Score"]}`}
             />
             <Stat
-              title={`Average 8th Grade Score in ${noDisabilityEighthGradeReadingScores[0].Year}`}
-              value={`No Disability ${noDisabilityEighthGradeReadingScores[0]["Average Reading Score"]}`}
+              title={`8th Grade Score with No Disability in ${noDisabilityEighthGradeReadingScores[0].Year}`}
+              value={`${noDisabilityEighthGradeReadingScores[0]["Average Reading Score"]}`}
             />
           </article>
     
@@ -243,8 +247,60 @@ class ReadingAssessment extends SectionColumns {
         </SectionColumns>
       );
     }
+    else if (dropdownValue === "Parents Education") {
+      // Get the recent year ELL scores for 4th and 8th grade.
+      const recentYearReadingScoresByParentsEdu = {};
+      nest()
+        .key(d => d.Year)
+        .entries(readingScoresByParentsEducation)
+        .forEach(group => {
+          group.key >= readingScoresByParentsEducation[0].Year ? Object.assign(recentYearReadingScoresByParentsEdu, group) : {};
+        });
 
+      // Find top reading score by Parent's Education for 8th Grade data.
+      const readingScoresForEighthGrade = recentYearReadingScoresByParentsEdu.values.filter(d => d.Grade === "8");
+      readingScoresForEighthGrade.sort((a, b) => b["Average Reading Score"] - a["Average Reading Score"]);
+      const topReadingScoreForEighthGrade = readingScoresForEighthGrade[0];
+
+      return (
+        <SectionColumns>
+          <SectionTitle>Reading Assessment</SectionTitle>
+          <article>
+            <select onChange={this.handleChange}>
+              {readingAssessmentChoices.map((item, i) => <option key={i} value={item}>{item}</option>)}
+            </select>
+            <p>Average Score by Parents Education</p>
+            <Stat
+              title={`8th Grade Score in ${topReadingScoreForEighthGrade.Year}`}
+              value={`${topReadingScoreForEighthGrade["Parents Education"]} ${topReadingScoreForEighthGrade["Average Reading Score"]}`}
+            />
+          </article>
     
+          {/* Lineplot to show the Reading assessment with and without disability for different years in the Detroit City. */}
+          <BarChart config={{
+            data: readingScoresByParentsEducation,
+            discrete: "x",
+            height: 250,
+            groupBy: d => `${d.Grade} ${d["Parents Education"]}`,
+            legend: false,
+            x: "Parents Education",
+            xConfig: {
+              labelRotation: false,
+              title: "Parents Education"
+            },
+            y: "Average Reading Score",
+            yConfig: {
+              title: "Average Reading Score"
+            },
+            shapeConfig: {label: false},
+            time: "Year",
+            tooltipConfig: {tbody: [["Score", d => d["Average Reading Score"]]]}
+          }}
+          />
+        </SectionColumns>
+      );
+    }
+
     return (
       <div>No dropdown selected</div>
     );
@@ -260,13 +316,15 @@ ReadingAssessment.defaultProps = {
 ReadingAssessment.need = [
   fetchData("readingScoresByGender", "/api/data?measures=Average%20Reading%20Score&drilldowns=Grade,Gender,City&Year=all", d => d.data),
   fetchData("readingScoresByELL", "/api/data?measures=Average%20Reading%20Score&drilldowns=Grade,ELL,City&Year=all", d => d.data),
-  fetchData("readingScoresByDisability", "/api/data?measures=Average%20Reading%20Score&drilldowns=Grade,Disability,City&Year=all", d => d.data)
+  fetchData("readingScoresByDisability", "/api/data?measures=Average%20Reading%20Score&drilldowns=Grade,Disability,City&Year=all", d => d.data),
+  fetchData("readingScoresByParentsEducation", "/api/data?measures=Average%20Reading%20Score&drilldowns=Grade,Parents%20Education,City&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   readingScoresByGender: state.data.readingScoresByGender,
   readingScoresByELL: state.data.readingScoresByELL,
-  readingScoresByDisability: state.data.readingScoresByDisability
+  readingScoresByDisability: state.data.readingScoresByDisability,
+  readingScoresByParentsEducation: state.data.readingScoresByParentsEducation
 });
   
 export default connect(mapStateToProps)(ReadingAssessment);

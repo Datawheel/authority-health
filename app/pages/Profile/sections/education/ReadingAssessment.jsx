@@ -17,9 +17,30 @@ class ReadingAssessment extends SectionColumns {
   // Handler function for dropdown onChange.
   handleChange = event => this.setState({dropdownValue: event.target.value});
 
+  getStatsForGender = (maleFourthGradeReadingScores, femaleFourthGradeReadingScores, maleEighthGradeReadingScores,
+    femaleEighthGradeReadingScores) => {
+    const stats = [];
+    stats.push(<Stat
+      title={`4th Grade Score in ${maleFourthGradeReadingScores.Year}`}
+      value={`${maleFourthGradeReadingScores.Gender} ${maleFourthGradeReadingScores["Average Reading Score"]}`}
+    />);
+    stats.push(<Stat
+      title={`4th Grade Score in ${femaleFourthGradeReadingScores.Year}`}
+      value={`${femaleFourthGradeReadingScores.Gender} ${femaleFourthGradeReadingScores["Average Reading Score"]}`}
+    />);
+    stats.push(<Stat
+      title={`8th Grade Score in ${maleEighthGradeReadingScores.Year}`}
+      value={`${maleEighthGradeReadingScores.Gender} ${maleEighthGradeReadingScores["Average Reading Score"]}`}
+    />);
+    stats.push(<Stat
+      title={`8th Grade Score in ${femaleEighthGradeReadingScores.Year}`}
+      value={`${femaleEighthGradeReadingScores.Gender} ${femaleEighthGradeReadingScores["Average Reading Score"]}`}
+    />);
+    return stats;
+  }
+
   render() {
     const {dropdownValue} = this.state;
-    console.log("dropdownValue: ", dropdownValue);
 
     const {readingScoresByGender, readingScoresByELL, readingScoresByDisability, readingScoresByParentsEducation, readingScoresByNation, readingScoresByCity} = this.props;
     console.log("readingScoresByGender: ", readingScoresByGender);
@@ -30,10 +51,6 @@ class ReadingAssessment extends SectionColumns {
     console.log("readingScoresByCity: ", readingScoresByCity);
 
     const readingAssessmentChoices = ["Geography", "Gender", "ELL", "Disability", "Parents Education"];
-
-    // const drawVisualization = (vizData) => {
-
-    // }
 
     if (dropdownValue === "Gender") {
       // Get the recent year male and female 4th and 8th grade data.
@@ -58,6 +75,8 @@ class ReadingAssessment extends SectionColumns {
 
       // Find top female 8th grade data.
       const femaleEighthGradeReadingScores = femaleReadingScores.filter(d => d.Grade === "8");
+      const stats = this.getStatsForGender(maleFourthGradeReadingScores[0], femaleFourthGradeReadingScores[0], 
+        maleEighthGradeReadingScores[0], femaleEighthGradeReadingScores[0]);
 
       return (
         <SectionColumns>
@@ -66,23 +85,8 @@ class ReadingAssessment extends SectionColumns {
             <select onChange={this.handleChange}>
               {readingAssessmentChoices.map((item, i) => <option key={i} value={item}>{item}</option>)}
             </select>
-            <p>Average Score by Gender</p>
-            <Stat
-              title={`4th Grade Score in ${maleFourthGradeReadingScores[0].Year}`}
-              value={`${maleFourthGradeReadingScores[0].Gender} ${maleFourthGradeReadingScores[0]["Average Reading Score"]}`}
-            />
-            <Stat
-              title={`8th Grade Score in ${maleEighthGradeReadingScores[0].Year}`}
-              value={`${maleEighthGradeReadingScores[0].Gender} ${maleEighthGradeReadingScores[0]["Average Reading Score"]}`}
-            />
-            <Stat
-              title={`4th Grade Score in ${femaleFourthGradeReadingScores[0].Year}`}
-              value={`${femaleFourthGradeReadingScores[0].Gender} ${femaleFourthGradeReadingScores[0]["Average Reading Score"]}`}
-            />
-            <Stat
-              title={`8th Grade Score in ${femaleEighthGradeReadingScores[0].Year}`}
-              value={`${femaleEighthGradeReadingScores[0].Gender} ${femaleEighthGradeReadingScores[0]["Average Reading Score"]}`}
-            />
+            <p>The Lineplot here shows the Average Reading Assessment Score by Gender in Detroit City, MI over the years.</p>
+            {stats}
           </article>
   
           {/* Lineplot to show the Reading assessment for different years in the Detroit City. */}
@@ -100,7 +104,6 @@ class ReadingAssessment extends SectionColumns {
             yConfig: {
               title: "Average Reading Score"
             },
-            // shapeConfig: {strokeDasharray: "4 1"},
             tooltipConfig: {tbody: [["Score", d => d["Average Reading Score"]]]}
           }}
           />
@@ -138,7 +141,7 @@ class ReadingAssessment extends SectionColumns {
             <select onChange={this.handleChange}>
               {readingAssessmentChoices.map((item, i) => <option key={i} value={item}>{item}</option>)}
             </select>
-            <p>Average Score by ELL</p>
+            <p>The Lineplot here shows the Average Reading Assessment Score by ELL in Detroit City, MI over the years.</p>
             <Stat
               title={`4th Grade Score With ELL in ${withELLFourthGradeReadingScores[0].Year}`}
               value={`${withELLFourthGradeReadingScores[0]["Average Reading Score"]}`}
@@ -209,7 +212,7 @@ class ReadingAssessment extends SectionColumns {
             <select onChange={this.handleChange}>
               {readingAssessmentChoices.map((item, i) => <option key={i} value={item}>{item}</option>)}
             </select>
-            <p>Average Score by Disability</p>
+            <p>The Lineplot here shows the Average Reading Assessment Score by Disability in Detroit City, MI over the years.</p>
             <Stat
               title={`4th Grade Score With Disability in ${withDisabilityFourthGradeReadingScores[0].Year}`}
               value={`${withDisabilityFourthGradeReadingScores[0]["Average Reading Score"]}`}
@@ -271,7 +274,7 @@ class ReadingAssessment extends SectionColumns {
             <select onChange={this.handleChange}>
               {readingAssessmentChoices.map((item, i) => <option key={i} value={item}>{item}</option>)}
             </select>
-            <p>Average Score by Parents Education</p>
+            <p>The Barchart here shows the Average Reading Assessment Score by Parents Education in Detroit City, MI over the years.</p>
             <Stat
               title={`8th Grade Score in ${topReadingScoreForEighthGrade.Year}`}
               value={`${topReadingScoreForEighthGrade["Parents Education"]} ${topReadingScoreForEighthGrade["Average Reading Score"]}`}
@@ -353,7 +356,7 @@ class ReadingAssessment extends SectionColumns {
             <select onChange={this.handleChange}>
               {readingAssessmentChoices.map((item, i) => <option key={i} value={item}>{item}</option>)}
             </select>
-            <p>Average Score by Geography</p>
+            <p>The Lineplot here shows the Average Reading Assessment Score in United States and Detroit City, MI over the years.</p>
             <Stat
               title={`4th Grade Score in ${nationalFourthGradeReadingScores[0].Year}`}
               value={`${nationalFourthGradeReadingScores[0].Nation} ${nationalFourthGradeReadingScores[0]["Average Reading Score"]}`}

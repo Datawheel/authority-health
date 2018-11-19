@@ -17,8 +17,8 @@ class ReadingAssessment extends SectionColumns {
   // Handler function for dropdown onChange.
   handleChange = event => this.setState({dropdownValue: event.target.value});
 
-  getStatsForGender = (maleFourthGradeReadingScores, femaleFourthGradeReadingScores, maleEighthGradeReadingScores,
-    femaleEighthGradeReadingScores) => {
+  getStatsForGender = (maleFourthGradeReadingScores, femaleFourthGradeReadingScores,
+    maleEighthGradeReadingScores, femaleEighthGradeReadingScores) => {
     const stats = [];
     stats.push(<Stat
       title={`4th Grade Score in ${maleFourthGradeReadingScores.Year}`}
@@ -35,6 +35,81 @@ class ReadingAssessment extends SectionColumns {
     stats.push(<Stat
       title={`8th Grade Score in ${femaleEighthGradeReadingScores.Year}`}
       value={`${femaleEighthGradeReadingScores.Gender} ${femaleEighthGradeReadingScores["Average Reading Score"]}`}
+    />);
+    return stats;
+  }
+
+  getStatsForELL = (withELLFourthGradeReadingScores, withELLEighthGradeReadingScores,
+    noELLFourthGradeReadingScores, noELLEighthGradeReadingScores) => {
+    const stats = [];
+    stats.push(<Stat
+      title={`4th Grade Score With ELL in ${withELLFourthGradeReadingScores.Year}`}
+      value={`${withELLFourthGradeReadingScores["Average Reading Score"]}`}
+    />);
+    stats.push(<Stat
+      title={`8th Grade Score With ELL in ${withELLEighthGradeReadingScores.Year}`}
+      value={`${withELLEighthGradeReadingScores["Average Reading Score"]}`}
+    />);
+    stats.push(<Stat
+      title={`4th Grade Score with No ELL in ${noELLFourthGradeReadingScores.Year}`}
+      value={`${noELLFourthGradeReadingScores["Average Reading Score"]}`}
+    />);
+    stats.push(<Stat
+      title={`8th Grade Score with No ELL in ${noELLEighthGradeReadingScores.Year}`}
+      value={`${noELLEighthGradeReadingScores["Average Reading Score"]}`}
+    />);
+    return stats;
+  };
+
+  getStatsForDisability = (withDisabilityFourthGradeReadingScores, withDisabilityEighthGradeReadingScores,
+    noDisabilityFourthGradeReadingScores, noDisabilityEighthGradeReadingScores) => {
+    const stats = [];
+    stats.push(<Stat
+      title={`4th Grade Score With Disability in ${withDisabilityFourthGradeReadingScores.Year}`}
+      value={`${withDisabilityFourthGradeReadingScores["Average Reading Score"]}`}
+    />);
+    stats.push(<Stat
+      title={`8th Grade Score With Disability in ${withDisabilityEighthGradeReadingScores.Year}`}
+      value={`${withDisabilityEighthGradeReadingScores["Average Reading Score"]}`}
+    />);
+    stats.push(<Stat
+      title={`4th Grade Score with No Disability in ${noDisabilityFourthGradeReadingScores.Year}`}
+      value={`${noDisabilityFourthGradeReadingScores["Average Reading Score"]}`}
+    />);
+    stats.push(<Stat
+      title={`8th Grade Score with No Disability in ${noDisabilityEighthGradeReadingScores.Year}`}
+      value={`${noDisabilityEighthGradeReadingScores["Average Reading Score"]}`}
+    />);
+    return stats;
+  }
+
+  getStatsByParentsEducation = topReadingScoreForEighthGrade => {
+    const stats = [];
+    stats.push(<Stat
+      title={`8th Grade Score in ${topReadingScoreForEighthGrade.Year}`}
+      value={`${topReadingScoreForEighthGrade["Parents Education"]} ${topReadingScoreForEighthGrade["Average Reading Score"]}`}
+    />);
+    return stats;
+  }
+
+  getStatsForGeography = (nationalFourthGradeReadingScores, nationalEighthGradeReadingScores,
+    fourthGradeReadingScoresbyCity, eighthGradeReadingScoresbyCity) => {
+    const stats = [];
+    stats.push(<Stat
+      title={`4th Grade Score in ${nationalFourthGradeReadingScores.Year}`}
+      value={`${nationalFourthGradeReadingScores.Nation} ${nationalFourthGradeReadingScores["Average Reading Score"]}`}
+    />);
+    stats.push(<Stat
+      title={`8th Grade Score in ${nationalEighthGradeReadingScores.Year}`}
+      value={`${nationalEighthGradeReadingScores.Nation} ${nationalEighthGradeReadingScores["Average Reading Score"]}`}
+    />);
+    stats.push(<Stat
+      title={`4th Grade Score in ${fourthGradeReadingScoresbyCity.Year}`}
+      value={`${fourthGradeReadingScoresbyCity.City} ${fourthGradeReadingScoresbyCity["Average Reading Score"]}`}
+    />);
+    stats.push(<Stat
+      title={`8th Grade Score in ${eighthGradeReadingScoresbyCity.Year}`}
+      value={`${eighthGradeReadingScoresbyCity.City} ${eighthGradeReadingScoresbyCity["Average Reading Score"]}`}
     />);
     return stats;
   }
@@ -75,6 +150,8 @@ class ReadingAssessment extends SectionColumns {
 
       // Find top female 8th grade data.
       const femaleEighthGradeReadingScores = femaleReadingScores.filter(d => d.Grade === "8");
+
+      // Get stats for Gender.
       const stats = this.getStatsForGender(maleFourthGradeReadingScores[0], femaleFourthGradeReadingScores[0], 
         maleEighthGradeReadingScores[0], femaleEighthGradeReadingScores[0]);
 
@@ -134,6 +211,10 @@ class ReadingAssessment extends SectionColumns {
       // Find top female 8th grade data.
       const noELLEighthGradeReadingScores = noELLReadingScores.filter(d => d.Grade === "8");
 
+      // Get stats for ELL.
+      const stats = this.getStatsForELL(withELLFourthGradeReadingScores[0], withELLEighthGradeReadingScores[0], 
+        noELLFourthGradeReadingScores[0], noELLEighthGradeReadingScores[0]);
+
       return (
         <SectionColumns>
           <SectionTitle>Reading Assessment</SectionTitle>
@@ -142,22 +223,7 @@ class ReadingAssessment extends SectionColumns {
               {readingAssessmentChoices.map((item, i) => <option key={i} value={item}>{item}</option>)}
             </select>
             <p>The Lineplot here shows the Average Reading Assessment Score by ELL in Detroit City, MI over the years.</p>
-            <Stat
-              title={`4th Grade Score With ELL in ${withELLFourthGradeReadingScores[0].Year}`}
-              value={`${withELLFourthGradeReadingScores[0]["Average Reading Score"]}`}
-            />
-            <Stat
-              title={`8th Grade Score With ELL in ${withELLEighthGradeReadingScores[0].Year}`}
-              value={`${withELLEighthGradeReadingScores[0]["Average Reading Score"]}`}
-            />
-            <Stat
-              title={`4th Grade Score with No ELL in ${noELLFourthGradeReadingScores[0].Year}`}
-              value={`${noELLFourthGradeReadingScores[0]["Average Reading Score"]}`}
-            />
-            <Stat
-              title={`8th Grade Score with No ELL in ${noELLEighthGradeReadingScores[0].Year}`}
-              value={`${noELLEighthGradeReadingScores[0]["Average Reading Score"]}`}
-            />
+            {stats}
           </article>
     
           {/* Lineplot to show the Reading assessment for different years in the Detroit City. */}
@@ -205,6 +271,10 @@ class ReadingAssessment extends SectionColumns {
       // Find top no Disability 8th grade data.
       const noDisabilityEighthGradeReadingScores = noDisabilityReadingScores.filter(d => d.Grade === "8");
 
+      // Get stats for Disability.
+      const stats = this.getStatsForDisability(withDisabilityFourthGradeReadingScores[0], withDisabilityEighthGradeReadingScores[0], 
+        noDisabilityFourthGradeReadingScores[0], noDisabilityEighthGradeReadingScores[0]);
+
       return (
         <SectionColumns>
           <SectionTitle>Reading Assessment</SectionTitle>
@@ -213,22 +283,7 @@ class ReadingAssessment extends SectionColumns {
               {readingAssessmentChoices.map((item, i) => <option key={i} value={item}>{item}</option>)}
             </select>
             <p>The Lineplot here shows the Average Reading Assessment Score by Disability in Detroit City, MI over the years.</p>
-            <Stat
-              title={`4th Grade Score With Disability in ${withDisabilityFourthGradeReadingScores[0].Year}`}
-              value={`${withDisabilityFourthGradeReadingScores[0]["Average Reading Score"]}`}
-            />
-            <Stat
-              title={`8th Grade Score With Disability in ${withDisabilityEighthGradeReadingScores[0].Year}`}
-              value={`${withDisabilityEighthGradeReadingScores[0]["Average Reading Score"]}`}
-            />
-            <Stat
-              title={`4th Grade Score with No Disability in ${noDisabilityFourthGradeReadingScores[0].Year}`}
-              value={`${noDisabilityFourthGradeReadingScores[0]["Average Reading Score"]}`}
-            />
-            <Stat
-              title={`8th Grade Score with No Disability in ${noDisabilityEighthGradeReadingScores[0].Year}`}
-              value={`${noDisabilityEighthGradeReadingScores[0]["Average Reading Score"]}`}
-            />
+            {stats}
           </article>
     
           {/* Lineplot to show the Reading assessment with and without disability for different years in the Detroit City. */}
@@ -267,6 +322,9 @@ class ReadingAssessment extends SectionColumns {
       readingScoresForEighthGrade.sort((a, b) => b["Average Reading Score"] - a["Average Reading Score"]);
       const topReadingScoreForEighthGrade = readingScoresForEighthGrade[0];
 
+      // Get stats for scores based on Parents Education.
+      const stats = this.getStatsByParentsEducation(topReadingScoreForEighthGrade);
+
       return (
         <SectionColumns>
           <SectionTitle>Reading Assessment</SectionTitle>
@@ -274,11 +332,8 @@ class ReadingAssessment extends SectionColumns {
             <select onChange={this.handleChange}>
               {readingAssessmentChoices.map((item, i) => <option key={i} value={item}>{item}</option>)}
             </select>
-            <p>The Barchart here shows the Average Reading Assessment Score by Parents Education in Detroit City, MI over the years.</p>
-            <Stat
-              title={`8th Grade Score in ${topReadingScoreForEighthGrade.Year}`}
-              value={`${topReadingScoreForEighthGrade["Parents Education"]} ${topReadingScoreForEighthGrade["Average Reading Score"]}`}
-            />
+            <p>The Barchart here shows the Average Reading Assessment Score based on Parents Education in Detroit City, MI over the years.</p>
+            {stats}
           </article>
     
           {/* Lineplot to show the Reading assessment with and without disability for different years in the Detroit City. */}
@@ -306,7 +361,6 @@ class ReadingAssessment extends SectionColumns {
       );
     }
     else if (dropdownValue === "Geography") {
-
       // Merge readingScoresByNation and readingScoresByCity arrays to readingScoresByGeography array.
       const readingScoresByGeography = [];
       readingScoresByNation.forEach(d => {
@@ -317,7 +371,6 @@ class ReadingAssessment extends SectionColumns {
         d.Geography = "City";
         readingScoresByGeography.push(d);
       });
-      console.log("readingScoresByGeography:", readingScoresByGeography);
 
       // Get the recent year 4th and 8th grade data for reading scores by Nation.
       const recentYearReadingScoresByNation = {};
@@ -349,6 +402,10 @@ class ReadingAssessment extends SectionColumns {
       // Find top National average for 8th Grade.
       const eighthGradeReadingScoresbyCity = recentYearReadingScoresByCity.values.filter(d => d.Grade === "8");
 
+      // Get stats for scores by Geography.
+      const stats = this.getStatsForGeography(nationalFourthGradeReadingScores[0], nationalEighthGradeReadingScores[0], 
+        fourthGradeReadingScoresbyCity[0], eighthGradeReadingScoresbyCity[0]);
+
       return (
         <SectionColumns>
           <SectionTitle>Reading Assessment</SectionTitle>
@@ -357,22 +414,7 @@ class ReadingAssessment extends SectionColumns {
               {readingAssessmentChoices.map((item, i) => <option key={i} value={item}>{item}</option>)}
             </select>
             <p>The Lineplot here shows the Average Reading Assessment Score in United States and Detroit City, MI over the years.</p>
-            <Stat
-              title={`4th Grade Score in ${nationalFourthGradeReadingScores[0].Year}`}
-              value={`${nationalFourthGradeReadingScores[0].Nation} ${nationalFourthGradeReadingScores[0]["Average Reading Score"]}`}
-            />
-            <Stat
-              title={`8th Grade Score in ${nationalEighthGradeReadingScores[0].Year}`}
-              value={`${nationalEighthGradeReadingScores[0].Nation} ${nationalEighthGradeReadingScores[0]["Average Reading Score"]}`}
-            />
-            <Stat
-              title={`4th Grade Score in ${fourthGradeReadingScoresbyCity[0].Year}`}
-              value={`${fourthGradeReadingScoresbyCity[0].City} ${fourthGradeReadingScoresbyCity[0]["Average Reading Score"]}`}
-            />
-            <Stat
-              title={`8th Grade Score in ${eighthGradeReadingScoresbyCity[0].Year}`}
-              value={`${eighthGradeReadingScoresbyCity[0].City} ${eighthGradeReadingScoresbyCity[0]["Average Reading Score"]}`}
-            />
+            {stats}
           </article>
   
           {/* Lineplot to show the Reading assessment for different years in the Detroit City. */}
@@ -399,11 +441,9 @@ class ReadingAssessment extends SectionColumns {
         </SectionColumns>
       );
     }
-
-    return (
-      <div>No dropdown selected</div>
-    );
-    
+    else {
+      return <div></div>;
+    }
   }
 }
 

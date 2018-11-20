@@ -86,7 +86,7 @@ EducationalAttainment.defaultProps = {
 };
 
 EducationalAttainment.need = [
-  fetchData("educationalAttainmentData", "/api/data?measures=Population&drilldowns=Educational%20Attainment,Sex&County=<id>&Year=all", d => d.data),
+  fetchData("educationalAttainmentData", "/api/data?measures=Population&drilldowns=Educational%20Attainment,Sex&Geography=<id>&Year=all", d => d.data),
   fetchData("highSchoolDropoutRate", "/api/data?measures=Total%20Population,High%20School%20Dropout%20Rate&drilldowns=Zip%20Code&Year=latest", d => d.data)
 ];
 

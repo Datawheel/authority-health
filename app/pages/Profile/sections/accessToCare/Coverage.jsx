@@ -89,7 +89,7 @@ Coverage.defaultProps = {
 };
 
 Coverage.need = [
-  fetchData("coverageData", "/api/data?measures=Population&drilldowns=Health%20Insurance%20Coverage%20Status,Sex,Age&County=<id>&Year=all", d => d.data)
+  fetchData("coverageData", "/api/data?measures=Population&drilldowns=Health%20Insurance%20Coverage%20Status,Sex,Age&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

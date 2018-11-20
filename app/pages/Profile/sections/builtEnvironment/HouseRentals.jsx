@@ -113,8 +113,8 @@ HouseRentals.defaultProps = {
 };
 
 HouseRentals.need = [
-  fetchData("rentAmountData", "/api/data?measures=Rent%20Amount&County=<id>&Year=all", d => d.data),
-  fetchData("utilitiesData", "/api/data?measures=Population&drilldowns=Inclusion%20of%20Utilities%20in%20Rent&County=<id>&Year=latest", d => d.data),
+  fetchData("rentAmountData", "/api/data?measures=Rent%20Amount&Geography=<id>&Year=all", d => d.data),
+  fetchData("utilitiesData", "/api/data?measures=Population&drilldowns=Inclusion%20of%20Utilities%20in%20Rent&Geography=<id>&Year=latest", d => d.data),
   fetchData("rentersByIncomePercentage", "https://joshua-tree.datausa.io/api/data?measures=Renters%20by%20Income%20Percentage&drilldowns=Household%20Income&Year=all&Geography=<id>", d => d.data)
 ];
 

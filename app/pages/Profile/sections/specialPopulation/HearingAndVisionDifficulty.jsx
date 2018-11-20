@@ -140,8 +140,8 @@ HearingAndVisionDifficulty.defaultProps = {
 };
 
 HearingAndVisionDifficulty.need = [
-  fetchData("hearingDifficulty", "/api/data?measures=Population&drilldowns=Hearing%20Disability%20Status,Age,Sex&County=<id>&Year=all", d => d.data),
-  fetchData("visionDifficulty", "/api/data?measures=Population&drilldowns=Vision%20Disability%20Status,Age,Sex&County=<id>&Year=all", d => d.data)
+  fetchData("hearingDifficulty", "/api/data?measures=Population&drilldowns=Hearing%20Disability%20Status,Age,Sex&Geography=<id>&Year=all", d => d.data),
+  fetchData("visionDifficulty", "/api/data?measures=Population&drilldowns=Vision%20Disability%20Status,Age,Sex&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

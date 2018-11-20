@@ -128,8 +128,8 @@ DemographicFoodAccess.defaultProps = {
 };
 
 DemographicFoodAccess.need = [
-  fetchData("foodAccessByAge", "/api/data?measures=Percent&drilldowns=Age%20Group&County=<id>&Year=all", d => d.data),
-  fetchData("foodAccessByRace", "/api/data?measures=Percent&drilldowns=Race%20Group&County=<id>&Year=all", d => d.data)
+  fetchData("foodAccessByAge", "/api/data?measures=Percent&drilldowns=Age%20Group&Geography=<id>&Year=all", d => d.data),
+  fetchData("foodAccessByRace", "/api/data?measures=Percent&drilldowns=Race%20Group&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

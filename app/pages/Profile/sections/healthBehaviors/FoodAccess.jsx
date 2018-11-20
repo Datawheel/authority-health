@@ -99,7 +99,7 @@ FoodAccess.defaultProps = {
 };
 
 FoodAccess.need = [
-  fetchData("snapWicData", "/api/data?measures=Number%20of%20Stores&drilldowns=Assistance%20Type&County=<id>&Year=all", d => d.data)
+  fetchData("snapWicData", "/api/data?measures=Number%20of%20Stores&drilldowns=Assistance%20Type&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

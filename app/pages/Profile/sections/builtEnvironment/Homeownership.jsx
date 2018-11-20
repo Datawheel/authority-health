@@ -109,7 +109,7 @@ Homeownership.defaultProps = {
 
 Homeownership.need = [
   fetchData("occupancyData", "/api/data?measures=Population&drilldowns=Occupancy%20Status&County=<id>&Year=all", d => d.data),
-  fetchData("medianHousingUnitsValue", "https://joshua-tree.datausa.io/api/data?measures=Property%20Value&Year=all&Geography=05000US26163:children", d => d.data),
+  fetchData("medianHousingUnitsValue", "https://katahdin.datausa.io/api/data?measures=Property%20Value&Year=all&Geography=05000US26163:children", d => d.data),
   fetchData("constructionDateData", "/api/data?measures=Construction%20Date&County=<id>&Year=all", d => d.data)
 ];
 

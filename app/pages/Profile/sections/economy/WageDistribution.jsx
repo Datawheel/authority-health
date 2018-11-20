@@ -86,8 +86,8 @@ WageDistribution.defaultProps = {
 };
 
 WageDistribution.need = [
-  fetchData("wageDistributionData", "https://gila-cliff.datausa.io/api/data?measures=Household%20Income&drilldowns=Household%20Income%20Bucket&County=<id>&Year=all", d => d.data),
-  fetchData("wageGinidata", "https://gila-cliff.datausa.io/api/data?measures=Wage%20GINI&drilldowns=Place&Year=latest", d => d.data)
+  fetchData("wageDistributionData", "https://katahdin.datausa.io/api/data?measures=Household%20Income&drilldowns=Household%20Income%20Bucket&County=<id>&Year=all", d => d.data),
+  fetchData("wageGinidata", "https://katahdin.datausa.io/api/data?measures=Wage%20GINI&drilldowns=Place&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
@@ -96,4 +96,3 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(WageDistribution);
-

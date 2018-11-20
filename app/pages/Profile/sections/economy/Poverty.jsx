@@ -176,9 +176,9 @@ Poverty.defaultProps = {
 };
 
 Poverty.need = [
-  fetchData("povertyByRace", "https://joshua-tree.datausa.io/api/data?measures=Population%20in%20Poverty%20by%20Gender,%20Age,%20and%20Race&drilldowns=Poverty%20Status,Race&County=<id>&Year=all", d => d.data),
-  fetchData("povertyByAgeAndSex", "https://joshua-tree.datausa.io/api/data?measures=Population%20in%20Poverty%20by%20Gender,%20Age,%20and%20Race&drilldowns=Poverty%20Status,Age,Sex&County=<id>&Year=all", d => d.data),
-  fetchData("incomeToPovertyLevelRatio", "http://localhost:3300/api/data?measures=Population&drilldowns=Ratio%20of%20Income%20to%20Poverty%20Level&County=<id>&Year=all", d => d.data)
+  fetchData("povertyByRace", "https://katahdin.datausa.io/api/data?measures=Population%20in%20Poverty%20by%20Gender,%20Age,%20and%20Race&drilldowns=Poverty%20Status,Race&County=<id>&Year=all", d => d.data),
+  fetchData("povertyByAgeAndSex", "https://katahdin.datausa.io/api/data?measures=Population%20in%20Poverty%20by%20Gender,%20Age,%20and%20Race&drilldowns=Poverty%20Status,Age,Sex&County=<id>&Year=all", d => d.data),
+  fetchData("incomeToPovertyLevelRatio", "/api/data?measures=Population&drilldowns=Ratio%20of%20Income%20to%20Poverty%20Level&County=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

@@ -1,7 +1,7 @@
 import React from "react";
 import {nest} from "d3-collection";
 import {connect} from "react-redux";
-import {BarChart, LinePlot} from "d3plus-react";
+import {LinePlot} from "d3plus-react";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -114,16 +114,56 @@ class ReadingAssessment extends SectionColumns {
     return stats;
   }
 
+  getDropdownComponents = readingAssessmentChoices => {
+    const dropdownComponents = [];
+    dropdownComponents.push(<select onChange={this.handleChange}>
+      {readingAssessmentChoices.map((item, i) => <option key={i} value={item}>{item}</option>)}
+    </select>);
+    return dropdownComponents;
+  }
+
+  getShortDescription = str => {
+    const paragraph = [];
+    paragraph.push(<p>The Lineplot here shows the Average Reading Assessment Score {str} in Detroit City, MI over the years.</p>);
+    return paragraph;
+  }
+
+  drawLinePlot = (readingScoresData, categoryName, xTitle) => {
+    console.log("readingScoresData: ", readingScoresData);
+    const lineplot = [];
+    lineplot.push(<LinePlot config={{
+      data: readingScoresData,
+      discrete: "x",
+      height: 400,
+      groupBy: d => `${d.Grade} ${d[categoryName]}`,
+      label: d => `${d.Grade}th Grade ${d[categoryName]}`,
+      x: "Year",
+      xConfig: {
+        title: xTitle
+      },
+      y: "Average Reading Score",
+      yConfig: {
+        title: "Average Reading Score"
+      },
+      tooltipConfig: {tbody: [["Score", d => d["Average Reading Score"]]]}
+    }}
+    />);
+
+    return lineplot;
+  }
+
   render() {
     const {dropdownValue} = this.state;
 
-    const {readingScoresByGender, readingScoresByELL, readingScoresByDisability, readingScoresByParentsEducation, readingScoresByNation, readingScoresByCity} = this.props;
-    console.log("readingScoresByGender: ", readingScoresByGender);
-    console.log("readingScoresByELL: ", readingScoresByELL);
-    console.log("readingScoresByDisability: ", readingScoresByDisability);
-    console.log("readingScoresByParentsEducation: ", readingScoresByParentsEducation);
-    console.log("readingScoresByNation: ", readingScoresByNation);
-    console.log("readingScoresByCity: ", readingScoresByCity);
+    const data = this.props[`readingScoresBy${dropdownValue}`];
+
+    const {readingScoresByDisability, readingScoresByParentsEducation, readingScoresByNation, readingScoresByCity} = this.props;
+    // console.log("readingScoresByGender: ", readingScoresByGender);
+    // console.log("readingScoresByELL: ", readingScoresByELL);
+    // console.log("readingScoresByDisability: ", readingScoresByDisability);
+    // console.log("readingScoresByParentsEducation: ", readingScoresByParentsEducation);
+    // console.log("readingScoresByNation: ", readingScoresByNation);
+    // console.log("readingScoresByCity: ", readingScoresByCity);
 
     const readingAssessmentChoices = ["Geography", "Gender", "ELL", "Disability", "Parents Education"];
 
@@ -132,9 +172,9 @@ class ReadingAssessment extends SectionColumns {
       const recentYearReadingScoresByGender = {};
       nest()
         .key(d => d.Year)
-        .entries(readingScoresByGender)
+        .entries(data)
         .forEach(group => {
-          group.key >= readingScoresByGender[0].Year ? Object.assign(recentYearReadingScoresByGender, group) : {};
+          group.key >= data[0].Year ? Object.assign(recentYearReadingScoresByGender, group) : {};
         });
 
       // Find top male 4th Grade data.
@@ -155,27 +195,31 @@ class ReadingAssessment extends SectionColumns {
       const stats = this.getStatsForGender(maleFourthGradeReadingScores[0], femaleFourthGradeReadingScores[0], 
         maleEighthGradeReadingScores[0], femaleEighthGradeReadingScores[0]);
 
+      const dropdownComponents = this.getDropdownComponents(readingAssessmentChoices);
+      const paragraph = this.getShortDescription("by Gender");
+      // const linePlot = this.drawLinePlot(data, "Gender", "Scores by Gender");
+
       return (
         <SectionColumns>
           <SectionTitle>Reading Assessment</SectionTitle>
           <article>
-            <select onChange={this.handleChange}>
-              {readingAssessmentChoices.map((item, i) => <option key={i} value={item}>{item}</option>)}
-            </select>
-            <p>The Lineplot here shows the Average Reading Assessment Score by Gender in Detroit City, MI over the years.</p>
+            {dropdownComponents}
+            {paragraph}
             {stats}
           </article>
   
           {/* Lineplot to show the Reading assessment for different years in the Detroit City. */}
+          {/* {linePlot} */}
+
           <LinePlot config={{
-            data: readingScoresByGender,
+            data,
             discrete: "x",
-            height: 250,
+            height: 400,
             groupBy: d => `${d.Grade} ${d.Gender}`,
             label: d => `${d.Grade}th Grade ${d.Gender}`,
             x: "Year",
             xConfig: {
-              title: "Year"
+              title: "Scores by Gender"
             },
             y: "Average Reading Score",
             yConfig: {
@@ -192,9 +236,9 @@ class ReadingAssessment extends SectionColumns {
       const recentYearReadingScoresByELL = {};
       nest()
         .key(d => d.Year)
-        .entries(readingScoresByELL)
+        .entries(data)
         .forEach(group => {
-          group.key >= readingScoresByELL[0].Year ? Object.assign(recentYearReadingScoresByELL, group) : {};
+          group.key >= data[0].Year ? Object.assign(recentYearReadingScoresByELL, group) : {};
         });
 
       // Find top with ELL 4th Grade data.
@@ -215,22 +259,24 @@ class ReadingAssessment extends SectionColumns {
       const stats = this.getStatsForELL(withELLFourthGradeReadingScores[0], withELLEighthGradeReadingScores[0], 
         noELLFourthGradeReadingScores[0], noELLEighthGradeReadingScores[0]);
 
+      const dropdownComponents = this.getDropdownComponents(readingAssessmentChoices);
+
+      const paragraph = this.getShortDescription("by ELL");
+
       return (
         <SectionColumns>
           <SectionTitle>Reading Assessment</SectionTitle>
           <article>
-            <select onChange={this.handleChange}>
-              {readingAssessmentChoices.map((item, i) => <option key={i} value={item}>{item}</option>)}
-            </select>
-            <p>The Lineplot here shows the Average Reading Assessment Score by ELL in Detroit City, MI over the years.</p>
+            {dropdownComponents}
+            {paragraph}
             {stats}
           </article>
     
           {/* Lineplot to show the Reading assessment for different years in the Detroit City. */}
           <LinePlot config={{
-            data: readingScoresByELL,
+            data,
             discrete: "x",
-            height: 250,
+            height: 400,
             groupBy: d => `${d.Grade} ${d.ELL}`,
             label: d => `${d.Grade}th Grade ${d.ELL === "Yes" ? "With ELL" : "No ELL"}`,
             x: "Year",
@@ -252,9 +298,9 @@ class ReadingAssessment extends SectionColumns {
       const recentYearReadingScoresByDisability = {};
       nest()
         .key(d => d.Year)
-        .entries(readingScoresByDisability)
+        .entries(data)
         .forEach(group => {
-          group.key >= readingScoresByDisability[0].Year ? Object.assign(recentYearReadingScoresByDisability, group) : {};
+          group.key >= data[0].Year ? Object.assign(recentYearReadingScoresByDisability, group) : {};
         });
 
       // Find top with Disability 4th Grade data.
@@ -275,22 +321,23 @@ class ReadingAssessment extends SectionColumns {
       const stats = this.getStatsForDisability(withDisabilityFourthGradeReadingScores[0], withDisabilityEighthGradeReadingScores[0], 
         noDisabilityFourthGradeReadingScores[0], noDisabilityEighthGradeReadingScores[0]);
 
+      const dropdownComponents = this.getDropdownComponents(readingAssessmentChoices);
+      const paragraph = this.getShortDescription("by ELL");
+
       return (
         <SectionColumns>
           <SectionTitle>Reading Assessment</SectionTitle>
           <article>
-            <select onChange={this.handleChange}>
-              {readingAssessmentChoices.map((item, i) => <option key={i} value={item}>{item}</option>)}
-            </select>
-            <p>The Lineplot here shows the Average Reading Assessment Score by Disability in Detroit City, MI over the years.</p>
+            {dropdownComponents}
+            {paragraph}
             {stats}
           </article>
     
           {/* Lineplot to show the Reading assessment with and without disability for different years in the Detroit City. */}
           <LinePlot config={{
-            data: readingScoresByDisability,
+            data,
             discrete: "x",
-            height: 250,
+            height: 400,
             groupBy: d => `${d.Grade} ${d.Disability}`,
             label: d => `${d.Grade}th Grade ${d.Disability === "Yes" ? "With Disability" : "No Disability"}`,
             x: "Year",
@@ -324,36 +371,34 @@ class ReadingAssessment extends SectionColumns {
 
       // Get stats for scores based on Parents Education.
       const stats = this.getStatsByParentsEducation(topReadingScoreForEighthGrade);
+      
+      const dropdownComponents = this.getDropdownComponents(readingAssessmentChoices);
+      const paragraph = this.getShortDescription("based on Parents Education");
 
       return (
         <SectionColumns>
           <SectionTitle>Reading Assessment</SectionTitle>
           <article>
-            <select onChange={this.handleChange}>
-              {readingAssessmentChoices.map((item, i) => <option key={i} value={item}>{item}</option>)}
-            </select>
-            <p>The Barchart here shows the Average Reading Assessment Score based on Parents Education in Detroit City, MI over the years.</p>
+            {dropdownComponents}
+            {paragraph}
             {stats}
           </article>
-    
-          {/* Lineplot to show the Reading assessment with and without disability for different years in the Detroit City. */}
-          <BarChart config={{
+
+          {/* Lineplot to show the Reading assessment for different years in the Detroit City based on Parents Education. */}
+          <LinePlot config={{
             data: readingScoresByParentsEducation,
             discrete: "x",
-            height: 250,
+            height: 400,
             groupBy: d => `${d.Grade} ${d["Parents Education"]}`,
-            legend: false,
-            x: "Parents Education",
+            label: d => `${d["Parents Education"]}`,
+            x: "Year",
             xConfig: {
-              labelRotation: false,
-              title: "Parents Education"
+              title: "Reading scores based on Parents Education"
             },
             y: "Average Reading Score",
             yConfig: {
               title: "Average Reading Score"
             },
-            shapeConfig: {label: false},
-            time: "Year",
             tooltipConfig: {tbody: [["Score", d => d["Average Reading Score"]]]}
           }}
           />
@@ -406,14 +451,15 @@ class ReadingAssessment extends SectionColumns {
       const stats = this.getStatsForGeography(nationalFourthGradeReadingScores[0], nationalEighthGradeReadingScores[0], 
         fourthGradeReadingScoresbyCity[0], eighthGradeReadingScoresbyCity[0]);
 
+      const dropdownComponents = this.getDropdownComponents(readingAssessmentChoices);
+      const paragraph = this.getShortDescription("in United States and");
+
       return (
         <SectionColumns>
           <SectionTitle>Reading Assessment</SectionTitle>
           <article>
-            <select onChange={this.handleChange}>
-              {readingAssessmentChoices.map((item, i) => <option key={i} value={item}>{item}</option>)}
-            </select>
-            <p>The Lineplot here shows the Average Reading Assessment Score in United States and Detroit City, MI over the years.</p>
+            {dropdownComponents}
+            {paragraph}
             {stats}
           </article>
   
@@ -421,7 +467,7 @@ class ReadingAssessment extends SectionColumns {
           <LinePlot config={{
             data: readingScoresByGeography,
             discrete: "x",
-            height: 250,
+            height: 400,
             groupBy: d => `${d.Grade} ${d.Geography}`,
             label: d => `${d.Grade}th Grade ${d[d.Geography]}`,
             x: "Year",

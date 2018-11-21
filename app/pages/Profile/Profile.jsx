@@ -9,6 +9,7 @@ import FoodStats from "./sections/healthBehaviors/FoodStats";
 import FoodAccess from "./sections/healthBehaviors/FoodAccess";
 import DemographicFoodAccess from "./sections/healthBehaviors/DemographicFoodAccess";
 import DrugUse from "./sections/healthBehaviors/DrugUse";
+import Dentists from "./sections/accessToCare/Dentists";
 import HealthCenters from "./sections/accessToCare/HealthCenters";
 import Coverage from "./sections/accessToCare/Coverage";
 import ChildCare from "./sections/specialPopulation/ChildCare";
@@ -62,6 +63,7 @@ class Profile extends Component {
 
         <TopicTitle slug="access-to-care">Access to Care</TopicTitle>
         <HealthCenters />
+        <Dentists />
         <Coverage />
 
         <TopicTitle slug="special-population">Special Population</TopicTitle>
@@ -103,6 +105,7 @@ Profile.need = [
   DemographicFoodAccess,
   DrugUse,
   HealthCenters,
+  Dentists,
   Coverage,
   ChildCare,
   Immigrants,

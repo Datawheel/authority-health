@@ -16,7 +16,7 @@ class Dentists extends SectionColumns {
 
   render() {
 
-    const {dentistsByAge} = this.props;
+    const {dentistsByAge, dentistsByGender} = this.props;
     console.log("dentistsByAge: ", dentistsByAge);
 
     const recentYearDentistsByAgeData = {};
@@ -32,6 +32,21 @@ class Dentists extends SectionColumns {
     recentYearDentistsByAgeData.values.sort((a, b) => b.share - a.share);
     const topDentistsAgeData = recentYearDentistsByAgeData.values[0];
 
+    // Get data for dentists by Gender.
+    console.log("dentistsByGender: ", dentistsByGender);
+    const recentYearDentistsByGender = {};
+    nest()
+      .key(d => d.Year)
+      .entries(dentistsByGender)
+      .forEach(group => {
+        const total = sum(group.values, d => d["Number of Dentists"]);
+        group.values.forEach(d => d.share = d["Number of Dentists"] / total * 100);
+        group.key >= dentistsByGender[0].Year ? Object.assign(recentYearDentistsByGender, group) : {};
+      });
+
+    recentYearDentistsByGender.values.sort((a, b) => b.share - a.share);
+    const topDentistsByGender = recentYearDentistsByGender.values[0];
+
     return (
       <SectionColumns>
         <SectionTitle>Dentists</SectionTitle>
@@ -40,8 +55,36 @@ class Dentists extends SectionColumns {
             title={`Majority Age group in ${topDentistsAgeData.Year}`}
             value={`${topDentistsAgeData["Age Group"]} ${formatPercentage(topDentistsAgeData.share)}`}
           />
-          <p>The Barchart here shows the number of dentists by Age Group in {topDentistsAgeData.County}.</p>
-          <p>In {topDentistsAgeData.Year}, the major dentists age group was {topDentistsAgeData["Age Group"]} with {formatPercentage(topDentistsAgeData.share)}.</p>
+          <Stat 
+            title={`Majority Gender in ${topDentistsByGender.Year}`}
+            value={`${topDentistsByGender.Sex} ${formatPercentage(topDentistsByGender.share)}`}
+          />
+          <p>The Barchart here shows the number of dentists by Age Group in {topDentistsAgeData.County} county, MI.</p>
+          <p>In {topDentistsAgeData.Year}, the major dentists age group was {topDentistsAgeData["Age Group"]} years with {formatPercentage(topDentistsAgeData.share)}.</p>
+          <p>In {topDentistsByGender.Year}, the major dentists gender group was {topDentistsAgeData.Sex} with {formatPercentage(topDentistsByGender.share)}.</p>
+
+          {/* Draw a BarChart to show data for health center data by race */}
+          <BarChart config={{
+            data: dentistsByGender,
+            discrete: "y",
+            height: 250,
+            legend: false,
+            groupBy: "Sex",
+            x: "share",
+            y: "Sex",
+            time: "ID Year",
+            xConfig: {
+              labelRotation: false,
+              title: "Percentage of Dentists",
+              tickFormat: d => formatPercentage(d)
+            },
+            yConfig: {
+              ticks: [],
+              title: "Gender"
+            },
+            tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
+          }}
+          />
         </article>
 
         {/* Draw a BarChart to show data for health center data by race */}
@@ -62,7 +105,8 @@ class Dentists extends SectionColumns {
           },
           yConfig: {
             ticks: [],
-            title: "Number of Dentists"
+            title: "Percentage of Dentists",
+            tickFormat: d => formatPercentage(d)
           },
           shapeConfig: {label: false},
           tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
@@ -78,11 +122,15 @@ Dentists.defaultProps = {
 };
 
 Dentists.need = [
-  fetchData("dentistsByAge", "/api/data?measures=Number%20of%20Dentists&drilldowns=Age%20Group&County=<id>&Year=all", d => d.data)
+  fetchData("dentistsByAge", "/api/data?measures=Number%20of%20Dentists&drilldowns=Age%20Group&County=<id>&Year=all", d => d.data),
+  fetchData("dentistsByGender", "/api/data?measures=Number%20of%20Dentists&drilldowns=Sex&County=<id>&Year=all", d => d.data),
+  fetchData("dentistsByWorkingHours", "/api/data?measures=Number%20of%20Dentists&drilldowns=Hours&County=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({
-  dentistsByAge: state.data.dentistsByAge
+  dentistsByAge: state.data.dentistsByAge,
+  dentistsByGender: state.data.dentistsByGender,
+  dentistsByWorkingHours: state.data.dentistsByWorkingHours
 });
 
 export default connect(mapStateToProps)(Dentists);

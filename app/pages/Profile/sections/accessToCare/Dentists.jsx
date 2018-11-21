@@ -2,7 +2,7 @@ import React from "react";
 import {connect} from "react-redux";
 import {sum} from "d3-array";
 import {nest} from "d3-collection";
-import {BarChart} from "d3plus-react";
+import {BarChart, LinePlot} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
@@ -16,7 +16,7 @@ class Dentists extends SectionColumns {
 
   render() {
 
-    const {dentistsByAge, dentistsByGender} = this.props;
+    const {dentistsByAge, dentistsByGender, dentistsByWorkingHours} = this.props;
     console.log("dentistsByAge: ", dentistsByAge);
 
     const recentYearDentistsByAgeData = {};
@@ -47,6 +47,22 @@ class Dentists extends SectionColumns {
     recentYearDentistsByGender.values.sort((a, b) => b.share - a.share);
     const topDentistsByGender = recentYearDentistsByGender.values[0];
 
+    // Get data for Dentists working hours.
+    console.log("dentistsByWorkingHours: ", dentistsByWorkingHours);
+    const recentYearDentistsByWorkingHours = {};
+    nest()
+      .key(d => d.Year)
+      .entries(dentistsByWorkingHours)
+      .forEach(group => {
+        const total = sum(group.values, d => d["Number of Dentists"]);
+        group.values.forEach(d => d.share = d["Number of Dentists"] / total * 100);
+        group.key >= dentistsByWorkingHours[0].Year ? Object.assign(recentYearDentistsByWorkingHours, group) : {};
+      });
+
+    recentYearDentistsByWorkingHours.values.sort((a, b) => b.share - a.share);
+    const topDentistsByHours = recentYearDentistsByWorkingHours.values[0];
+
+
     return (
       <SectionColumns>
         <SectionTitle>Dentists</SectionTitle>
@@ -59,6 +75,10 @@ class Dentists extends SectionColumns {
             title={`Majority Gender in ${topDentistsByGender.Year}`}
             value={`${topDentistsByGender.Sex} ${formatPercentage(topDentistsByGender.share)}`}
           />
+          <Stat 
+            title={`Majority Working hours dentists in ${topDentistsByHours.Year}`}
+            value={`${topDentistsByHours.Hours} ${formatPercentage(topDentistsByHours.share)}`}
+          />
           <p>The Barchart here shows the number of dentists by Age Group in {topDentistsAgeData.County} county, MI.</p>
           <p>In {topDentistsAgeData.Year}, the major dentists age group was {topDentistsAgeData["Age Group"]} years with {formatPercentage(topDentistsAgeData.share)}.</p>
           <p>In {topDentistsByGender.Year}, the major dentists gender group was {topDentistsAgeData.Sex} with {formatPercentage(topDentistsByGender.share)}.</p>
@@ -67,7 +87,7 @@ class Dentists extends SectionColumns {
           <BarChart config={{
             data: dentistsByGender,
             discrete: "y",
-            height: 250,
+            height: 200,
             legend: false,
             groupBy: "Sex",
             x: "share",
@@ -81,6 +101,27 @@ class Dentists extends SectionColumns {
             yConfig: {
               ticks: [],
               title: "Gender"
+            },
+            tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
+          }}
+          />
+
+          {/* Lineplot to show occupacy status over the years at current location */}
+          <LinePlot config={{
+            data: dentistsByWorkingHours,
+            discrete: "x",
+            height: 150,
+            groupBy: "Hours",
+            legend: false,
+            x: "Year",
+            xConfig: {
+              title: "Year",
+              labelRotation: false
+            },
+            y: "share",
+            yConfig: {
+              tickFormat: d => formatPercentage(d),
+              title: "% Dentists"
             },
             tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
           }}

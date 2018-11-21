@@ -40,6 +40,8 @@ class Dentists extends SectionColumns {
             title={`Majority Age group in ${topDentistsAgeData.Year}`}
             value={`${topDentistsAgeData["Age Group"]} ${formatPercentage(topDentistsAgeData.share)}`}
           />
+          <p>The Barchart here shows the number of dentists by Age Group in {topDentistsAgeData.County}.</p>
+          <p>In {topDentistsAgeData.Year}, the major dentists age group was {topDentistsAgeData["Age Group"]} with {formatPercentage(topDentistsAgeData.share)}.</p>
         </article>
 
         {/* Draw a BarChart to show data for health center data by race */}

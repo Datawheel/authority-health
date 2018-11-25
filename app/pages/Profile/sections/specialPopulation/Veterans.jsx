@@ -15,7 +15,7 @@ class Veterans extends SectionColumns {
 
   render() {
 
-    const {veteransEmploymentStatus, veteransPovertyStatus, veteransDisabilityStatus} = this.props;
+    const {veteransEmploymentStatus, veteransPovertyStatus, veteransDisabilityStatus, veteransCivilianStatus} = this.props;
     console.log("veteransEmploymentStatus: ", veteransEmploymentStatus);
 
     // Get data for Veteran's Employment status.
@@ -59,6 +59,20 @@ class Veterans extends SectionColumns {
     recentYearVeteransDisabilityStatus.values.sort((a, b) => b.share - a.share);
     const topDisabilityStatus = recentYearVeteransDisabilityStatus.values[0];
 
+    console.log("veteransCivilianStatus: ", veteransCivilianStatus);
+    // Get data for Veterans Civilian status.
+    const recentYearVeteransCivilianStatus = {};
+    nest()
+      .key(d => d.Year)
+      .entries(veteransCivilianStatus)
+      .forEach(group => {
+        const total = sum(group.values, d => d.Population);
+        group.values.forEach(d => d.share = d.Population / total * 100);
+        group.key >= veteransCivilianStatus[0].Year ? Object.assign(recentYearVeteransCivilianStatus, group) : {};
+      });
+    recentYearVeteransCivilianStatus.values.sort((a, b) => b.share - a.share);
+    const topCivilianStatus = recentYearVeteransCivilianStatus.values[0];
+
     return (
       <SectionColumns>
         <SectionTitle>Veterans</SectionTitle>
@@ -74,6 +88,10 @@ class Veterans extends SectionColumns {
           <Stat 
             title={`Majority Disability Status in ${topDisabilityStatus.Year}`}
             value={`${topDisabilityStatus["Disability Status"]} ${formatPercentage(topDisabilityStatus.share)}`}
+          />
+          <Stat 
+            title={`Majority Civilian Status in ${topCivilianStatus.Year}`}
+            value={`${topCivilianStatus["Civilian Status"]} ${formatPercentage(topCivilianStatus.share)}`}
           />
 
           <LinePlot config={{
@@ -117,6 +135,27 @@ class Veterans extends SectionColumns {
             tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
           }}
           />
+
+          <LinePlot config={{
+            data: veteransCivilianStatus,
+            discrete: "x",
+            height: 150,
+            groupBy: "Civilian Status",
+            legend: false,
+            baseline: 0,
+            x: "Year",
+            xConfig: {
+              title: "Year",
+              labelRotation: false
+            },
+            y: "share",
+            yConfig: {
+              tickFormat: d => formatPercentage(d),
+              title: "Civilian Status"
+            },
+            tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
+          }}
+          />
         </article>
 
         {/* Draw a BarChart to show data for Veterans by their Employement Status. */}
@@ -155,13 +194,15 @@ Veterans.defaultProps = {
 Veterans.need = [
   fetchData("veteransEmploymentStatus", "/api/data?measures=Population&drilldowns=Employment%20Status&County=<id>&Year=all", d => d.data),
   fetchData("veteransPovertyStatus", "/api/data?measures=Population&drilldowns=Poverty%20Status&County=<id>&Year=all", d => d.data),
-  fetchData("veteransDisabilityStatus", "/api/data?measures=Population&drilldowns=Disability%20Status&County=<id>&Year=all", d => d.data)
+  fetchData("veteransDisabilityStatus", "/api/data?measures=Population&drilldowns=Disability%20Status&County=<id>&Year=all", d => d.data),
+  fetchData("veteransCivilianStatus", "/api/data?measures=Population&drilldowns=Civilian%20Status&County=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   veteransEmploymentStatus: state.data.veteransEmploymentStatus,
   veteransPovertyStatus: state.data.veteransPovertyStatus,
-  veteransDisabilityStatus: state.data.veteransDisabilityStatus
+  veteransDisabilityStatus: state.data.veteransDisabilityStatus,
+  veteransCivilianStatus: state.data.veteransCivilianStatus
 });
 
 export default connect(mapStateToProps)(Veterans);

@@ -77,7 +77,7 @@ class TypesOfDentists extends SectionColumns {
         <SectionTitle>Types of Dentists</SectionTitle>
         <article>
           <Stat 
-            title={`Majority Active Dentist ${topTypeOfActiveDentist.Year}`}
+            title={`Majority Active Dentist in ${topTypeOfActiveDentist.Year}`}
             value={`${topTypeOfActiveDentist.Work} ${formatPercentage(topTypeOfActiveDentist.share)}`}
           />
           <Stat 

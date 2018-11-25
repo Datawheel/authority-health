@@ -17,6 +17,7 @@ import ChildCare from "./sections/specialPopulation/ChildCare";
 import Immigrants from "./sections/specialPopulation/Immigrants";
 import DomesticPartners from "./sections/specialPopulation/DomesticPartners";
 import DisabilityStatus from "./sections/specialPopulation/DisabilityStatus";
+import Homeless from "./sections/specialPopulation/Homeless";
 import Incarceration from "./sections/specialPopulation/Incarceration";
 import HearingAndVisionDifficulty from "./sections/specialPopulation/HearingAndVisionDifficulty";
 import Homeownership from "./sections/builtEnvironment/Homeownership";
@@ -74,6 +75,7 @@ class Profile extends Component {
         <DomesticPartners />
         <DisabilityStatus />
         <HearingAndVisionDifficulty />
+        <Homeless />
         <Incarceration />
 
         <TopicTitle slug="built-environment">Built Environment</TopicTitle>
@@ -115,6 +117,8 @@ Profile.need = [
   DomesticPartners,
   DisabilityStatus,
   HearingAndVisionDifficulty,
+  Incarceration,
+  Homeless,
   Homeownership,
   HouseRentals,
   Transportation,
@@ -126,7 +130,6 @@ Profile.need = [
   EducationalAttainment,
   StudentPoverty,
   ReadingAssessment,
-  Incarceration,
   WaterQuality,
   AirQuality,
   fetchData("diabetes", "/api/data?measures=Diabetes%20Data%20Value&City=<id>&Year=latest"),

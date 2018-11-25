@@ -14,6 +14,7 @@ import TypesOfDentists from "./sections/accessToCare/TypesOfDentists";
 import HealthCenters from "./sections/accessToCare/HealthCenters";
 import Coverage from "./sections/accessToCare/Coverage";
 import ChildCare from "./sections/specialPopulation/ChildCare";
+import Veterans from "./sections/specialPopulation/Veterans";
 import Immigrants from "./sections/specialPopulation/Immigrants";
 import DomesticPartners from "./sections/specialPopulation/DomesticPartners";
 import DisabilityStatus from "./sections/specialPopulation/DisabilityStatus";
@@ -76,6 +77,7 @@ class Profile extends Component {
         <DisabilityStatus />
         <HearingAndVisionDifficulty />
         <Homeless />
+        <Veterans />
         <Incarceration />
 
         <TopicTitle slug="built-environment">Built Environment</TopicTitle>
@@ -118,6 +120,7 @@ Profile.need = [
   DisabilityStatus,
   HearingAndVisionDifficulty,
   Incarceration,
+  Veterans,
   Homeless,
   Homeownership,
   HouseRentals,

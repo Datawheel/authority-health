@@ -63,9 +63,9 @@ class DisabilityStatus extends SectionColumns {
           stacked: true,
           groupBy: ["Health Insurance coverage:type"],
           label: d => `${d["Health Insurance coverage:type"]}`,
-          y: d => d.Age,
+          y: "Age",
           x: "share",
-          time: "ID Year",
+          time: "Year",
           yConfig: {
             tickFormat: d => rangeFormatter(d),
             title: "Age group"

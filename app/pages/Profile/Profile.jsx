@@ -21,10 +21,10 @@ import DisabilityStatus from "./sections/specialPopulation/DisabilityStatus";
 import Homeless from "./sections/specialPopulation/Homeless";
 import Incarceration from "./sections/specialPopulation/Incarceration";
 import HearingAndVisionDifficulty from "./sections/specialPopulation/HearingAndVisionDifficulty";
-import Homeownership from "./sections/builtEnvironment/Homeownership";
-import HouseRentals from "./sections/builtEnvironment/HouseRentals";
-import Transportation from "./sections/builtEnvironment/Transportation";
-import Crime from "./sections/builtEnvironment/Crime";
+import Homeownership from "./sections/builtSocialEnvironment/Homeownership";
+import HouseRentals from "./sections/builtSocialEnvironment/HouseRentals";
+import Transportation from "./sections/builtSocialEnvironment/Transportation";
+import Crime from "./sections/builtSocialEnvironment/Crime";
 import DistressScore from "./sections/economy/DistressScore";
 import HouseholdIncomeFromPublicAssistance from "./sections/economy/HouseholdIncomeFromPublicAssistance";
 import WageDistribution from "./sections/economy/WageDistribution";
@@ -82,7 +82,7 @@ class Profile extends Component {
         <Veterans />
         <Incarceration />
 
-        <TopicTitle slug="built-environment">Built Environment</TopicTitle>
+        <TopicTitle slug="built-social-environment">Built/Social Environment</TopicTitle>
         <Homeownership />
         <HouseRentals />
         <Transportation />

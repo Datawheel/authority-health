@@ -9,7 +9,7 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 // const formatName = name => name.split(",")[0];
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
-class DemographicFoodAccess extends SectionColumns {
+class StoreAccessByDemographic extends SectionColumns {
 
   constructor(props) {
     super(props);
@@ -61,7 +61,7 @@ class DemographicFoodAccess extends SectionColumns {
 
     return (
       <SectionColumns>
-        <SectionTitle>Demographic Access</SectionTitle>
+        <SectionTitle>Store Access by Demographic</SectionTitle>
         <article>
           {/* Create a dropdown for each age and race type using raceAndAgeTypes array. */}
           <select onChange={this.handleChange}>
@@ -114,11 +114,11 @@ class DemographicFoodAccess extends SectionColumns {
   }
 }
 
-DemographicFoodAccess.defaultProps = {
-  slug: "demographic-access"
+StoreAccessByDemographic.defaultProps = {
+  slug: "store-access-by-demographic"
 };
 
-DemographicFoodAccess.need = [
+StoreAccessByDemographic.need = [
   fetchData("foodAccessByAge", "/api/data?measures=Percent&drilldowns=Age%20Group&County=<id>&Year=all", d => d.data),
   fetchData("foodAccessByRace", "/api/data?measures=Percent&drilldowns=Race%20Group&County=<id>&Year=all", d => d.data)
 ];
@@ -128,4 +128,4 @@ const mapStateToProps = state => ({
   foodAccessByRace: state.data.foodAccessByRace
 });
   
-export default connect(mapStateToProps)(DemographicFoodAccess);
+export default connect(mapStateToProps)(StoreAccessByDemographic);

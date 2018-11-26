@@ -7,7 +7,7 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Stat from "../../components/Stat";
 
-class FoodAccess extends SectionColumns {
+class FoodAvailability extends SectionColumns {
 
   render() {
 
@@ -39,7 +39,7 @@ class FoodAccess extends SectionColumns {
 
     return (
       <SectionColumns>
-        <SectionTitle>Food Access</SectionTitle>
+        <SectionTitle>Food Availability</SectionTitle>
         <article>
           <Stat 
             title={`SNAP-authorized stores in ${snapLatestYear}`}
@@ -92,11 +92,11 @@ class FoodAccess extends SectionColumns {
   }
 }
 
-FoodAccess.defaultProps = {
-  slug: "food-access"
+FoodAvailability.defaultProps = {
+  slug: "food-availability"
 };
 
-FoodAccess.need = [
+FoodAvailability.need = [
   fetchData("snapWicData", "/api/data?measures=Number%20of%20Stores&drilldowns=Assistance%20Type&County=<id>&Year=all", d => d.data)
 ];
 
@@ -104,4 +104,4 @@ const mapStateToProps = state => ({
   snapWicData: state.data.snapWicData
 });
 
-export default connect(mapStateToProps)(FoodAccess);
+export default connect(mapStateToProps)(FoodAvailability);

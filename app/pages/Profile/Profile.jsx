@@ -5,9 +5,9 @@ import {formatAbbreviate} from "d3plus-format";
 import ProfileHeader from "./components/ProfileHeader";
 import "./Profile.css";
 
-import FoodStats from "./sections/healthBehaviors/FoodStats";
-import FoodAccess from "./sections/healthBehaviors/FoodAccess";
-import DemographicFoodAccess from "./sections/healthBehaviors/DemographicFoodAccess";
+import Insecurity from "./sections/foodAccess/Insecurity";
+import FoodAvailability from "./sections/foodAccess/FoodAvailability";
+import StoreAccessByDemographic from "./sections/foodAccess/StoreAccessByDemographic";
 import DrugUse from "./sections/healthBehaviors/DrugUse";
 import DentistsDemographic from "./sections/accessToCare/DentistsDemographic";
 import TypesOfDentists from "./sections/accessToCare/TypesOfDentists";
@@ -58,10 +58,12 @@ class Profile extends Component {
           }
         />
 
+        <TopicTitle slug="food-access">Food Access</TopicTitle>
+        <Insecurity />
+        <FoodAvailability />
+        <StoreAccessByDemographic />
+
         <TopicTitle slug="health-behaviors">Health Behaviors</TopicTitle>
-        <FoodStats />
-        <FoodAccess />
-        <DemographicFoodAccess />
         <DrugUse />
 
         <TopicTitle slug="access-to-care">Access to Care</TopicTitle>
@@ -106,9 +108,9 @@ class Profile extends Component {
 }
 
 Profile.need = [
-  FoodStats,
-  FoodAccess,
-  DemographicFoodAccess,
+  Insecurity,
+  FoodAvailability,
+  StoreAccessByDemographic,
   DrugUse,
   HealthCenters,
   DentistsDemographic,

@@ -9,6 +9,7 @@ import Insecurity from "./sections/foodAccess/Insecurity";
 import FoodAvailability from "./sections/foodAccess/FoodAvailability";
 import StoreAccessByDemographic from "./sections/foodAccess/StoreAccessByDemographic";
 import DrugUse from "./sections/healthBehaviors/DrugUse";
+import PhysicalActivity from "./sections/healthBehaviors/PhysicalActivity";
 import DentistsDemographic from "./sections/accessToCare/DentistsDemographic";
 import TypesOfDentists from "./sections/accessToCare/TypesOfDentists";
 import HealthCenters from "./sections/accessToCare/HealthCenters";
@@ -65,6 +66,7 @@ class Profile extends Component {
 
         <TopicTitle slug="health-behaviors">Health Behaviors</TopicTitle>
         <DrugUse />
+        <PhysicalActivity />
 
         <TopicTitle slug="access-to-care">Access to Care</TopicTitle>
         <HealthCenters />
@@ -79,12 +81,12 @@ class Profile extends Component {
         <DisabilityStatus />
         <HearingAndVisionDifficulty />
         <Homeless />
-        <Veterans />
+        {/* <Veterans /> */}
         <Incarceration />
 
         <TopicTitle slug="built-social-environment">Built/Social Environment</TopicTitle>
-        <Homeownership />
-        <HouseRentals />
+        {/* <Homeownership /> */}
+        {/* <HouseRentals /> */}
         <Transportation />
         <Crime />
 
@@ -112,6 +114,7 @@ Profile.need = [
   FoodAvailability,
   StoreAccessByDemographic,
   DrugUse,
+  PhysicalActivity,
   HealthCenters,
   DentistsDemographic,
   TypesOfDentists,
@@ -122,10 +125,10 @@ Profile.need = [
   DisabilityStatus,
   HearingAndVisionDifficulty,
   Incarceration,
-  Veterans,
+  // Veterans,
   Homeless,
-  Homeownership,
-  HouseRentals,
+  // Homeownership,
+  // HouseRentals,
   Transportation,
   Crime,
   DistressScore,

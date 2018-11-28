@@ -14,7 +14,7 @@ class StoreAccessByDemographic extends SectionColumns {
 
   constructor(props) {
     super(props);
-    this.state = {dropdownValue: "Child"};
+    this.state = {dropdownValue: "Children"};
   }
 
   // Handler function for dropdown onChange event.
@@ -25,8 +25,8 @@ class StoreAccessByDemographic extends SectionColumns {
     const {foodAccessByAge, foodAccessByRace} = this.props;
     const {dropdownValue} = this.state;
 
-    const raceAndAgeTypes = ["Child", "Seniors", "American Indian or Alaska Native", "Asian", "Black", "Hawaiian or Pacific Islander", "Hispanic ethnicity", "Multiracial", "White"];
-    const ageSelected = dropdownValue === "Child" || dropdownValue === "Seniors";
+    const raceAndAgeTypes = ["Children", "Seniors", "American Indian or Alaska Native", "Asian", "Black", "Hawaiian or Pacific Islander", "Hispanic ethnicity", "Multiracial", "White"];
+    const ageSelected = dropdownValue === "Children" || dropdownValue === "Seniors";
 
     // Get recent year data for food access by Age.
     const recentYearFoodAccessByAge = {};
@@ -95,7 +95,7 @@ class StoreAccessByDemographic extends SectionColumns {
 
         {/* Create a Geomap based on dropdown choice for all the counties in Michigan state. */}
         <Geomap config={{
-          data: ageSelected ? "/api/data?measures=Percent&drilldowns=Age%20Group,County&Year=all" : "/api/data?measures=Percent&drilldowns=Race%20Group,County&Year=all",
+          data: ageSelected ? `/api/data?measures=Percent&drilldowns=Age%20Group,County&Age%20Group=${dropdownValue}&Year=all` : `/api/data?measures=Percent&drilldowns=Race%20Group,County&Race%20Group=${dropdownValue}&Year=all`,
           groupBy: "ID County",
           colorScale: "Percent",
           label: d => d.County,

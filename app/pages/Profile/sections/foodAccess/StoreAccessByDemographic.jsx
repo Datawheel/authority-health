@@ -1,10 +1,11 @@
 import React from "react";
 import {connect} from "react-redux";
+import {nest} from "d3-collection";
 import {BarChart, Geomap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-// import Stat from "../../components/Stat";
+import Stat from "../../components/Stat";
 
 // const formatName = name => name.split(",")[0];
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
@@ -24,40 +25,30 @@ class StoreAccessByDemographic extends SectionColumns {
     const {foodAccessByAge, foodAccessByRace} = this.props;
     const {dropdownValue} = this.state;
 
-    console.log("foodAccessByAge: ", foodAccessByAge);
-    console.log("foodAccessByRace: ", foodAccessByRace);
-
-    // Create an array of each age and race type.
-    // Make sure that the Children and Seniors data are always at the first 2 places in the array.
-    // const ageTypes = [], raceTypes = [];
-    // foodAccessByTypes.source[0].measures.forEach(d => d.toLowerCase().includes("children") || d.toLowerCase().includes("seniors") ? ageTypes.push(d) : raceTypes.push(d));
-    // const raceAndAgeTypes = ageTypes.slice(0);
-    // raceTypes.forEach(d => raceAndAgeTypes.push(d));
-
     const raceAndAgeTypes = ["Child", "Seniors", "American Indian or Alaska Native", "Asian", "Black", "Hawaiian or Pacific Islander", "Hispanic ethnicity", "Multiracial", "White"];
     const ageSelected = dropdownValue === "Child" || dropdownValue === "Seniors";
 
-    // Create individual data object for each age and race type.
-    // Add AgeRaceType key in each object.
-    // const data = raceAndAgeTypes.map(d => {
-    //   const result = foodAccessByTypes.data.reduce((acc, currentValue) => {
-    //     if (acc === null && currentValue[d] !== null) {
-    //       return Object.assign({}, currentValue, {AgeRaceType: d});
-    //     }
-    //     return acc;
-    //   }, null);
-    //   return result;
-    // });
-    
-    // const currentRaceAndAgeData = data.find(d => d.AgeRaceType === dropdownValue);
+    // Get recent year data for food access by Age.
+    const recentYearFoodAccessByAge = {};
+    nest()
+      .key(d => d.Year)
+      .entries(foodAccessByAge)
+      .forEach(group => {
+        group.key >= foodAccessByAge[0].Year ? Object.assign(recentYearFoodAccessByAge, group) : {};
+      });
+    recentYearFoodAccessByAge.values.sort((a, b) => b.Percent - a.Percent);
+    const topFoodAccessByAge = recentYearFoodAccessByAge.values[0];
 
-    // Separate data for age and race.
-    // const ageData = [], raceData = [];
-    // data.forEach(d => d.AgeRaceType === raceAndAgeTypes[0] || d.AgeRaceType === raceAndAgeTypes[1] ? ageData.push(d) : raceData.push(d));
-
-    // Sort age and race data to get the object with largest age/race value.
-    // raceData.sort((a, b) =>  b[b.AgeRaceType] - a[a.AgeRaceType]);
-    // ageData.sort((a, b) =>  b[b.AgeRaceType] - a[a.AgeRaceType]);
+    // Get recent year data for food access by Race.
+    const recentYearFoodAccessByRace = {};
+    nest()
+      .key(d => d.Year)
+      .entries(foodAccessByRace)
+      .forEach(group => {
+        group.key >= foodAccessByRace[0].Year ? Object.assign(recentYearFoodAccessByRace, group) : {};
+      });
+    recentYearFoodAccessByRace.values.sort((a, b) => b.Percent - a.Percent);
+    const topFoodAccessByRace = recentYearFoodAccessByRace.values[0];
 
     return (
       <SectionColumns>
@@ -67,16 +58,24 @@ class StoreAccessByDemographic extends SectionColumns {
           <select onChange={this.handleChange}>
             {raceAndAgeTypes.map((item, i) => <option key={i} value={item}>{item}</option>)}
           </select>
-          {/* <Stat
-            title={`Food Access in ${currentRaceAndAgeData.County} County`}
-            value={`${formatAbbreviate(currentRaceAndAgeData[dropdownValue])}%`}
-          /> */}
+          {/* Show top stats for Age and Race groups based on the drilldown value. */}
+          { ageSelected
+            ? <Stat
+              title={`Top Food Access by Age in ${topFoodAccessByAge.Year}`}
+              value={`${topFoodAccessByAge["Age Group"]} ${formatPercentage(topFoodAccessByAge.Percent)}`}
+            />
+            : <Stat
+              title={`Top Food Access by Race in ${topFoodAccessByRace.Year}`}
+              value={`${topFoodAccessByRace["Race Group"]} ${formatPercentage(topFoodAccessByRace.Percent)}`}
+            />
+          }
+          {/* Write a paragraph for top stats based on the dropdown choice. */}
+          {ageSelected
+            ? <p> In {topFoodAccessByAge.County} County, {topFoodAccessByAge["Age Group"]} were the largest age group with {formatPercentage(topFoodAccessByAge.Percent)} in the year {topFoodAccessByAge.Year}.</p>
+            : <p> In {topFoodAccessByRace.County} County, {topFoodAccessByRace["Race Group"]} were the largest race group with {formatPercentage(topFoodAccessByRace.Percent)} in the year {topFoodAccessByRace.Year}.</p>
+          }
 
-          {/* Create a paragraph based on the dropdown choice. */}
-          {/* {ageSelected
-            ? <p> In {ageData[0].County} County {formatName(ageData[0].AgeRaceType)} were the largest age group with {formatAbbreviate(ageData[0][ageData[0].AgeRaceType])}% in the year {ageData[0]["ID Year"]}</p>
-            : <p> In {raceData[0].County} County {formatName(raceData[0].AgeRaceType)} were the largest race group with {formatAbbreviate(raceData[0][raceData[0].AgeRaceType])}% in the year {raceData[0]["ID Year"]}</p>
-          } */}
+          <p>The Geomap here shows the  </p>
 
           {/* Create a BarChart based on the dropdown choice. */}
           <BarChart config={{
@@ -89,13 +88,12 @@ class StoreAccessByDemographic extends SectionColumns {
             y: ageSelected ? "Age Group" : "Race Group",
             yConfig: {ticks: []},
             time: "Year",
-            // xSort: ageSelected ? (a, b) => a["ID Age Group"] - b["ID Age Group"] : (a, b) => a["ID Race Group"] - b["ID Race Group"],
             tooltipConfig: {tbody: [["Value", d => formatPercentage(d.Percent)]]}
           }}
           />
         </article>
 
-        {/* Create a Geomap based on the dropdown choice. */}
+        {/* Create a Geomap based on dropdown choice for all the counties in Michigan state. */}
         <Geomap config={{
           data: ageSelected ? "/api/data?measures=Percent&drilldowns=Age%20Group,County&Year=all" : "/api/data?measures=Percent&drilldowns=Race%20Group,County&Year=all",
           groupBy: "ID County",

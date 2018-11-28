@@ -60,7 +60,6 @@ class Poverty extends SectionColumns {
     const topFemalePovertyData = femalePovertyData[0];
 
     // Get Income To Poverty Level Ratio
-    console.log("incomeToPovertyLevelRatio: ", incomeToPovertyLevelRatio);
     const recentYearIncomeToPovertyLevelRatio = {};
     nest()
       .key(d => d.Year)

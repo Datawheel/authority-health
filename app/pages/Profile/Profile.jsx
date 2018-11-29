@@ -81,7 +81,7 @@ class Profile extends Component {
         <DisabilityStatus />
         <HearingAndVisionDifficulty />
         <Homeless />
-        {/* <Veterans /> */}
+        <Veterans />
         <Incarceration />
 
         <TopicTitle slug="built-social-environment">Built/Social Environment</TopicTitle>
@@ -125,7 +125,7 @@ Profile.need = [
   DisabilityStatus,
   HearingAndVisionDifficulty,
   Incarceration,
-  // Veterans,
+  Veterans,
   Homeless,
   // Homeownership,
   // HouseRentals,

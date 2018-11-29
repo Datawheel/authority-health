@@ -15,8 +15,7 @@ class Veterans extends SectionColumns {
 
   render() {
 
-    const {veteransEmploymentStatus, veteransPovertyStatus, veteransDisabilityStatus, veteransCivilianStatus} = this.props;
-    console.log("veteransEmploymentStatus: ", veteransEmploymentStatus);
+    const {veteransEmploymentStatus, veteransPovertyStatus, veteransDisabilityStatus, periodOfService} = this.props;
 
     // Get data for Veteran's Employment status.
     const recentYearVeteransByEmploymentStatus = {};
@@ -31,7 +30,6 @@ class Veterans extends SectionColumns {
     recentYearVeteransByEmploymentStatus.values.sort((a, b) => b.share - a.share);
     const topEmploymentStatus = recentYearVeteransByEmploymentStatus.values[0];
 
-    console.log("veteransPovertyStatus: ", veteransPovertyStatus);
     // Get data for Veterans Poverty status.
     const recentYearVeteransPovertyStatus = {};
     nest()
@@ -42,10 +40,9 @@ class Veterans extends SectionColumns {
         group.values.forEach(d => d.share = d.Population / total * 100);
         group.key >= veteransPovertyStatus[0].Year ? Object.assign(recentYearVeteransPovertyStatus, group) : {};
       });
-    recentYearVeteransPovertyStatus.values.sort((a, b) => b.share - a.share);
-    const topPovertyStatus = recentYearVeteransPovertyStatus.values[0];
+    // Get stats for Veterans in Poverty.
+    const recentYearVeteransInPoverty = recentYearVeteransPovertyStatus.values[0];
 
-    console.log("veteransDisabilityStatus: ", veteransDisabilityStatus);
     // Get data for Veterans Poverty status.
     const recentYearVeteransDisabilityStatus = {};
     nest()
@@ -56,22 +53,22 @@ class Veterans extends SectionColumns {
         group.values.forEach(d => d.share = d.Population / total * 100);
         group.key >= veteransDisabilityStatus[0].Year ? Object.assign(recentYearVeteransDisabilityStatus, group) : {};
       });
-    recentYearVeteransDisabilityStatus.values.sort((a, b) => b.share - a.share);
-    const topDisabilityStatus = recentYearVeteransDisabilityStatus.values[0];
+    // Get stats for Veterans With Disability.
+    const recentYearVeteransWithDisability = recentYearVeteransDisabilityStatus.values[1];
 
-    console.log("veteransCivilianStatus: ", veteransCivilianStatus);
-    // Get data for Veterans Civilian status.
-    const recentYearVeteransCivilianStatus = {};
+    // Get data for Veterns Period of Service.
+    console.log("periodOfService: ", periodOfService);
+    const recentYearPeriodOfService = {};
     nest()
       .key(d => d.Year)
-      .entries(veteransCivilianStatus)
+      .entries(periodOfService)
       .forEach(group => {
-        const total = sum(group.values, d => d.Population);
-        group.values.forEach(d => d.share = d.Population / total * 100);
-        group.key >= veteransCivilianStatus[0].Year ? Object.assign(recentYearVeteransCivilianStatus, group) : {};
+        const total = sum(group.values, d => d.Veterans);
+        group.values.forEach(d => d.share = d.Veterans / total * 100);
+        group.key >= veteransEmploymentStatus[0].Year ? Object.assign(recentYearPeriodOfService, group) : {};
       });
-    recentYearVeteransCivilianStatus.values.sort((a, b) => b.share - a.share);
-    const topCivilianStatus = recentYearVeteransCivilianStatus.values[0];
+    recentYearPeriodOfService.values.sort((a, b) => b.share - a.share);
+    const topPeriodOfService = recentYearPeriodOfService.values[0];
 
     return (
       <SectionColumns>
@@ -82,103 +79,57 @@ class Veterans extends SectionColumns {
             value={`${topEmploymentStatus["Employment Status"]} ${formatPercentage(topEmploymentStatus.share)}`}
           />
           <Stat 
-            title={`Majority Poverty Status in ${topPovertyStatus.Year}`}
-            value={`${topPovertyStatus["Poverty Status"]} ${formatPercentage(topPovertyStatus.share)}`}
+            title={`Veterans in Poverty in ${recentYearVeteransInPoverty.Year}`}
+            value={`${formatPercentage(recentYearVeteransInPoverty.share)}`}
           />
           <Stat 
-            title={`Majority Disability Status in ${topDisabilityStatus.Year}`}
-            value={`${topDisabilityStatus["Disability Status"]} ${formatPercentage(topDisabilityStatus.share)}`}
+            title={`Veterans With Disability in ${recentYearVeteransWithDisability.Year}`}
+            value={`${formatPercentage(recentYearVeteransWithDisability.share)}`}
           />
           <Stat 
-            title={`Majority Civilian Status in ${topCivilianStatus.Year}`}
-            value={`${topCivilianStatus["Civilian Status"]} ${formatPercentage(topCivilianStatus.share)}`}
+            title={`Top Period of Service in ${topPeriodOfService.Year}`}
+            value={`${topPeriodOfService["Period of Service"]} ${formatPercentage(topPeriodOfService.share)}`}
           />
 
-          <LinePlot config={{
-            data: veteransPovertyStatus,
+          {/* Draw a BarChart for Veterans Period of Service. */}
+          <BarChart config={{
+            data: periodOfService,
             discrete: "x",
-            height: 150,
-            groupBy: "Poverty Status",
+            height: 200,
+            groupBy: "Period of Service",
             legend: false,
-            baseline: 0,
-            x: "Year",
+            x: d => d["Period of Service"],
+            y: "share",
+            time: "ID Year",
+            xSort: (a, b) => a["ID Period of Service"] - b["ID Period of Service"],
             xConfig: {
-              title: "Year",
               labelRotation: false
             },
-            y: "share",
-            yConfig: {
-              tickFormat: d => formatPercentage(d),
-              title: "Poverty Status"
-            },
-            tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
-          }}
-          />
-
-          <LinePlot config={{
-            data: veteransDisabilityStatus,
-            discrete: "x",
-            height: 150,
-            groupBy: "Disability Status",
-            legend: false,
-            baseline: 0,
-            x: "Year",
-            xConfig: {
-              title: "Year",
-              labelRotation: false
-            },
-            y: "share",
-            yConfig: {
-              tickFormat: d => formatPercentage(d),
-              title: "Disability Status"
-            },
-            tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
-          }}
-          />
-
-          <LinePlot config={{
-            data: veteransCivilianStatus,
-            discrete: "x",
-            height: 150,
-            groupBy: "Civilian Status",
-            legend: false,
-            baseline: 0,
-            x: "Year",
-            xConfig: {
-              title: "Year",
-              labelRotation: false
-            },
-            y: "share",
-            yConfig: {
-              tickFormat: d => formatPercentage(d),
-              title: "Civilian Status"
-            },
+            yConfig: {tickFormat: d => formatPercentage(d)},
+            shapeConfig: {label: false},
             tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
           }}
           />
         </article>
 
-        {/* Draw a BarChart to show data for Veterans by their Employement Status. */}
-        <BarChart config={{
+        {/* Draw a LinePlot to show data for Veterans by their Employement Status. */}
+        <LinePlot config={{
           data: veteransEmploymentStatus,
           discrete: "x",
           height: 400,
-          legend: false,
           groupBy: "Employment Status",
-          x: "Employment Status",
-          y: "share",
-          time: "ID Year",
-          xSort: (a, b) => a["ID Employment Status"] - b["ID Employment Status"],
+          legend: false,
+          baseline: 0,
+          x: "Year",
           xConfig: {
-            labelRotation: false,
+            title: "Year",
+            labelRotation: false
+          },
+          y: "share",
+          yConfig: {
+            tickFormat: d => formatPercentage(d),
             title: "Employment Status"
           },
-          yConfig: {
-            ticks: [],
-            title: "Percentage of Veterans",
-            tickFormat: d => formatPercentage(d)
-          },
-          shapeConfig: {label: false},
           tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
         }}
         />
@@ -195,14 +146,14 @@ Veterans.need = [
   fetchData("veteransEmploymentStatus", "/api/data?measures=Population&drilldowns=Employment%20Status&County=<id>&Year=all", d => d.data),
   fetchData("veteransPovertyStatus", "/api/data?measures=Population&drilldowns=Poverty%20Status&County=<id>&Year=all", d => d.data),
   fetchData("veteransDisabilityStatus", "/api/data?measures=Population&drilldowns=Disability%20Status&County=<id>&Year=all", d => d.data),
-  fetchData("veteransCivilianStatus", "/api/data?measures=Population&drilldowns=Civilian%20Status&County=<id>&Year=all", d => d.data)
+  fetchData("periodOfService", "https://katahdin.datausa.io/api/data?measures=Veterans&drilldowns=Period%20of%20Service&County=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   veteransEmploymentStatus: state.data.veteransEmploymentStatus,
   veteransPovertyStatus: state.data.veteransPovertyStatus,
   veteransDisabilityStatus: state.data.veteransDisabilityStatus,
-  veteransCivilianStatus: state.data.veteransCivilianStatus
+  periodOfService: state.data.periodOfService
 });
 
 export default connect(mapStateToProps)(Veterans);

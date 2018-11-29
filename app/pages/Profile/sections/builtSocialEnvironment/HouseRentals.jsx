@@ -17,8 +17,8 @@ class HouseRentals extends SectionColumns {
   render() {
 
     const {rentAmountData, utilitiesData, rentersByIncomePercentage} = this.props;
-    const totalUtilitiesData = utilitiesData[0].Population + utilitiesData[1].Population;
-    const recentYearNoExtraUtilitiesPercentage = utilitiesData[1].Population / totalUtilitiesData * 100;
+    const totalUtilitiesData = utilitiesData[0]["Renter-Occupied Housing Units"] + utilitiesData[1]["Renter-Occupied Housing Units"];
+    const recentYearNoExtraUtilitiesPercentage = utilitiesData[1]["Renter-Occupied Housing Units"] / totalUtilitiesData * 100;
 
     const recentYearRentersByIncomePercentage = {};
     nest()
@@ -40,12 +40,12 @@ class HouseRentals extends SectionColumns {
           {/* Show recent Year Rent amount. */}
           <Stat
             title={`Median Rent Amount in ${rentAmountData[0].Year}`}
-            value={`${rentAmountData[0].County} $${formatAbbreviate(rentAmountData[0]["Rent Amount"])}`}
+            value={`${rentAmountData[0].County} County, MI $${formatAbbreviate(rentAmountData[0]["Rent Amount"])}`}
           />
           {/* Show stats for Renter-Occupied Housing Units with Extra Pay on Utilities for most recent year. */}
           <Stat
             title={`Rental Housing Units with Utilities Included in ${utilitiesData[0].Year}`}
-            value={`${utilitiesData[1].County} ${formatAbbreviate(recentYearNoExtraUtilitiesPercentage)}%`}
+            value={`${utilitiesData[1].County} County, MI ${formatAbbreviate(recentYearNoExtraUtilitiesPercentage)}%`}
           />
           {/* Show stats for Household Income to pay maximum Rent in most recent year. */}
           <Stat
@@ -108,7 +108,7 @@ HouseRentals.defaultProps = {
 
 HouseRentals.need = [
   fetchData("rentAmountData", "/api/data?measures=Rent%20Amount&County=<id>&Year=all", d => d.data),
-  fetchData("utilitiesData", "/api/data?measures=Population&drilldowns=Inclusion%20of%20Utilities%20in%20Rent&County=<id>&Year=latest", d => d.data),
+  fetchData("utilitiesData", "/api/data?measures=Renter-Occupied%20Housing%20Units&drilldowns=Inclusion%20of%20Utilities%20in%20Rent&County=<id>&Year=latest", d => d.data),
   fetchData("rentersByIncomePercentage", "https://katahdin.datausa.io/api/data?measures=Renters%20by%20Income%20Percentage&drilldowns=Household%20Income&Year=all&Geography=<id>", d => d.data)
 ];
 

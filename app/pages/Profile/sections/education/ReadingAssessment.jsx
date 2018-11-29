@@ -122,11 +122,7 @@ class ReadingAssessment extends SectionColumns {
     return dropdownComponents;
   }
 
-  getShortDescription = str => {
-    const paragraph = [];
-    paragraph.push(<p>The Lineplot here shows the Average Reading Assessment Score {str} in Detroit City, MI over the years.</p>);
-    return paragraph;
-  }
+  getShortDescription = str => <p>The Lineplot here shows the Average Reading Assessment Score {str} in Detroit City, MI over the years.</p>;
 
   drawLinePlot = (readingScoresData, categoryName, xTitle) => {
     console.log("readingScoresData: ", readingScoresData);
@@ -157,7 +153,7 @@ class ReadingAssessment extends SectionColumns {
 
     const data = this.props[`readingScoresBy${dropdownValue}`];
 
-    const {readingScoresByDisability, readingScoresByParentsEducation, readingScoresByNation, readingScoresByCity} = this.props;
+    const {readingScoresByParentsEducation, readingScoresByNation, readingScoresByCity} = this.props;
     // console.log("readingScoresByGender: ", readingScoresByGender);
     // console.log("readingScoresByELL: ", readingScoresByELL);
     // console.log("readingScoresByDisability: ", readingScoresByDisability);

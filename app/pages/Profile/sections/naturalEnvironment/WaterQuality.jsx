@@ -5,7 +5,7 @@ import {Geomap, LinePlot} from "d3plus-react";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../components/Stat";
+import Stat from "../../../../components/Stat";
 
 const formatData = d => {
   console.log("d: ", d);

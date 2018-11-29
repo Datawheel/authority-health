@@ -5,7 +5,7 @@ import {BarChart, Geomap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../components/Stat";
+import Stat from "../../../../components/Stat";
 
 // const formatName = name => name.split(",")[0];
 const formatPercentage = d => `${formatAbbreviate(d)}%`;

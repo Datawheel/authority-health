@@ -176,6 +176,7 @@ Profile.need = [
   StudentPoverty,
   ReadingAssessment,
   WaterQuality,
+  AirQuality,
   fetchData("diabetes", "/api/data?measures=Diabetes%20Data%20Value&City=<id>&Year=latest"),
   fetchData("meta", "/api/search?id=<id>"),
   fetchData("population", "https://katahdin.datausa.io/api/data?measures=Population&Geography=<id>&year=latest")

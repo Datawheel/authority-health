@@ -30,7 +30,6 @@ class TypesOfDentists extends SectionColumns {
 
     // Filter out Private Practice Dentists data since it holds maximun percentage. Data for it is shown in stats.
     const filteredActiveDentistsData = typesOfActiveDentists.filter(d => d.Work !== "Private Practice");
-    console.log("filteredActiveDentistsData: ", filteredActiveDentistsData);
 
     // Find recent year active dentists data for stats.
     recentYearTypesOfActiveDentists.values.sort((a, b) => b.share - a.share);
@@ -160,20 +159,6 @@ class TypesOfDentists extends SectionColumns {
           },
           shapeConfig: {label: false},
           tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
-        }}
-        />
-
-        {/* Draw a Treemap for Modes of tranportation. */}
-        <Treemap config={{
-          data: filteredActiveDentistsData,
-          height: 400,
-          sum: "Number of Dentists",
-          // sum: d => d.share,
-          legend: false,
-          groupBy: "Work",
-          time: "ID Year",
-          title: "Types of Active Dentists",
-          tooltipConfig: {tbody: [["Value", d => formatPercentage(d["Number of Dentists"])]]}
         }}
         />
       </SectionColumns>

@@ -75,13 +75,13 @@ class StoreAccessByDemographic extends SectionColumns {
             : <p> In {topFoodAccessByRace.County} County, {topFoodAccessByRace["Race Group"]} were the largest race group with {formatPercentage(topFoodAccessByRace.Percent)} in the year {topFoodAccessByRace.Year}.</p>
           }
 
-          <p>The Geomap here shows the  </p>
+          <p>The Geomap here shows the percentage of {dropdownValue} who have access to food stores.</p>
 
           {/* Create a BarChart based on the dropdown choice. */}
           <BarChart config={{
             data: ageSelected ? foodAccessByAge : foodAccessByRace,
             discrete: "y",
-            height: 300,
+            height: 200,
             legend: false,
             groupBy: ageSelected ? "Age Group" : "Race Group",
             x: "Percent",
@@ -101,7 +101,7 @@ class StoreAccessByDemographic extends SectionColumns {
           label: d => d.County,
           height: 400,
           time: "Year",
-          tooltipConfig: {tbody: [["Value", d => formatPercentage(d.Percent)]]},
+          tooltipConfig: {tbody: [[`${dropdownValue}`, d => formatPercentage(d.Percent)]]},
           topojson: "/topojson/county.json",
           topojsonFilter: d => d.id.startsWith("05000US26")
         }}

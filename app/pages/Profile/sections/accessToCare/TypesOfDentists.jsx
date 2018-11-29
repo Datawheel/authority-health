@@ -2,7 +2,7 @@ import React from "react";
 import {connect} from "react-redux";
 import {sum} from "d3-array";
 import {nest} from "d3-collection";
-import {BarChart} from "d3plus-react";
+import {BarChart, Treemap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
@@ -30,6 +30,7 @@ class TypesOfDentists extends SectionColumns {
 
     // Filter out Private Practice Dentists data since it holds maximun percentage. Data for it is shown in stats.
     const filteredActiveDentistsData = typesOfActiveDentists.filter(d => d.Work !== "Private Practice");
+    console.log("filteredActiveDentistsData: ", filteredActiveDentistsData);
 
     // Find recent year active dentists data for stats.
     recentYearTypesOfActiveDentists.values.sort((a, b) => b.share - a.share);
@@ -113,20 +114,21 @@ class TypesOfDentists extends SectionColumns {
           {/* Draw a BarChart to show data for Dentists by their Employement Status. */}
           <BarChart config={{
             data: filteredDentistsEmployementStatus,
-            discrete: "x",
+            discrete: "y",
             height: 200,
             legend: false,
             groupBy: "Status",
-            x: "Status",
-            y: "share",
+            y: "Status",
+            x: "share",
             time: "ID Year",
-            xSort: (a, b) => a["ID Status"] - b["ID Status"],
-            xConfig: {
+            ySort: (a, b) => a["ID Status"] - b["ID Status"],
+            yConfig: {
               labelRotation: false,
               title: "Employment Status"
             },
-            yConfig: {
+            xConfig: {
               ticks: [],
+              labelRotation: false,
               title: "Percentage of Dentists",
               tickFormat: d => formatPercentage(d)
             },
@@ -158,6 +160,20 @@ class TypesOfDentists extends SectionColumns {
           },
           shapeConfig: {label: false},
           tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
+        }}
+        />
+
+        {/* Draw a Treemap for Modes of tranportation. */}
+        <Treemap config={{
+          data: filteredActiveDentistsData,
+          height: 400,
+          sum: "Number of Dentists",
+          // sum: d => d.share,
+          legend: false,
+          groupBy: "Work",
+          time: "ID Year",
+          title: "Types of Active Dentists",
+          tooltipConfig: {tbody: [["Value", d => formatPercentage(d["Number of Dentists"])]]}
         }}
         />
       </SectionColumns>

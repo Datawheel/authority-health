@@ -61,19 +61,20 @@ class WaterQuality extends SectionColumns {
         </article>
 
         {/* Geomap to show Lead and Mercury level in water for all tracts in the Wayne County. */}
-        {/* <Geomap config={{ 
-          data: filteredData,
+        <Geomap config={{ 
+          data: waterQualityData.data,
           groupBy: "ID Tract",
-          colorScale: d => formatData(d["Lead Level"]),
+          // colorScale: d => formatData(d["Lead Level"]),
+          shapeConfig: {Path: {fill: d => d["Lead Level"] === "excessive" ? "red" : "transparent"}},
           height: 400,
           time: "Year",
           tooltipConfig: {tbody: [["Value", d => d["Lead Level"]]]},
-          topojson: "/topojson/tract.json",
-          topojsonFilter: d => d.id.startsWith("14000US26163")
+          topojson: "/topojson/tract.json"
+          // topojsonFilter: d => d.id.startsWith("14000US26163")
         }}
-        /> */}
+        />
 
-        <LinePlot config={{
+        {/* <LinePlot config={{
           data: filteredData,
           discrete: "x",
           height: 250,
@@ -90,7 +91,7 @@ class WaterQuality extends SectionColumns {
           },
           tooltipConfig: {tbody: [["Value", d => d["Lead Level"]]]}
         }}
-        />
+        /> */}
       </SectionColumns>
     );
   }

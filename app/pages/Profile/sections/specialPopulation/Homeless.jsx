@@ -86,35 +86,36 @@ class Homeless extends SectionColumns {
           {shelteredSelected
             ? <Stat 
               title={`Majority Sheltered Homeless Category in ${topShelteredHomelessTypes.Year}`}
-              value={`${topShelteredHomelessTypes["Sub-category"]} ${formatPercentage(topShelteredHomelessTypes.share)}`}
+              value={`${topShelteredHomelessTypes.Category} ${formatPercentage(topShelteredHomelessTypes.share)}`}
             />
             : <Stat 
               title={`Majority Unsheltered Homeless Category in ${topUnshelteredHomelessTypes.Year}`}
-              value={`${topUnshelteredHomelessTypes["Sub-category"]} ${formatPercentage(topUnshelteredHomelessTypes.share)}`}
+              value={`${topUnshelteredHomelessTypes.Category} ${formatPercentage(topUnshelteredHomelessTypes.share)}`}
             />}
           <Stat 
             title={`Majority Homeless Type in ${topHomelessTypes.Year}`}
-            value={`${topHomelessTypes.HomelessType} ${topHomelessTypes["Sub-category"]} ${formatPercentage(topHomelessTypes.share)}`}
+            value={`${topHomelessTypes.HomelessType} ${topHomelessTypes["Sub-group"]} ${formatPercentage(topHomelessTypes.share)}`}
           />
 
+          {/* Draw Barchart for Types of Homeless. */}
           <BarChart config={{
             data,
             discrete: "y",
             height: 250,
             stacked: true,
-            groupBy: d => `${d.HomelessType} ${d["Sub-category"]}`,
+            groupBy: d => `${d.HomelessType} ${d["Sub-group"]}`,
             legend: false,
             time: "Year",
             x: "share",
             xConfig: {
+              labelRotation: false,
               tickFormat: d => formatPercentage(d),
-              title: "Homeless Percentage"
+              title: "Homeless Population"
             },
             y: "HomelessType",
             yConfig: {
               ticks: [],
-              labelRotation: false,
-              title: "Homeless Types"
+              title: "Sheltered and Unsheltered Types"
             },
             tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
           }}
@@ -125,7 +126,7 @@ class Homeless extends SectionColumns {
           data: shelteredSelected ? typesOfShelteredHomeless : typesOfUnshelteredHomeless,
           discrete: "x",
           height: 400,
-          groupBy: "Sub-category",
+          groupBy: "Category",
           legend: false,
           x: "Year",
           xConfig: {
@@ -150,9 +151,9 @@ Homeless.defaultProps = {
 };
 
 Homeless.need = [
-  fetchData("typesOfShelteredHomeless", "/api/data?measures=Sheltered&drilldowns=Sub-category&County=<id>&Year=all", d => d.data),
-  fetchData("typesOfUnshelteredHomeless", "/api/data?measures=Unsheltered&drilldowns=Sub-category&County=<id>&Year=all", d => d.data),
-  fetchData("typesOfHomeless", "/api/data?measures=Sheltered,Unsheltered&drilldowns=Sub-category&County=<id>&Year=all", d => d.data)
+  fetchData("typesOfShelteredHomeless", "/api/data?measures=Sheltered&drilldowns=Category&County=<id>&Year=all", d => d.data),
+  fetchData("typesOfUnshelteredHomeless", "/api/data?measures=Unsheltered&drilldowns=Category&County=<id>&Year=all", d => d.data),
+  fetchData("typesOfHomeless", "/api/data?measures=Sheltered,Unsheltered&drilldowns=Sub-group&County=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

@@ -53,6 +53,27 @@
 /* intro block typography */
 .profile-header-intro {
   text-shadow: 0 0.04em 0.5em color(var(--black) a(0.5));
+
+  /* splash stats */
+  & .stat {
+    display: inline-block;
+    margin-top: 1rem;
+    margin-bottom: -1rem; /* offset */
+
+    /* scale up font sizes */
+    & .stat-label {
+      @add-mixin font-sm;
+      color: var(--light-1);
+    }
+    & .stat-value {
+      @add-mixin font-xl;
+    }
+
+    /* space out adjacent stats */
+    &:not(:last-of-type) {
+      margin-right: 2rem;
+    }
+  }
 }
 
 

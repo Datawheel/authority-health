@@ -7,7 +7,7 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../components/Stat";
+import Stat from "../../../../components/Stat";
 
 const formatName = d => {
   const nameArr = d.split(" ");
@@ -20,7 +20,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
   render() {
 
     const {publicAssistanceData, householdSnapData} = this.props;
-    console.log("householdSnapData: ", householdSnapData);
+    // console.log("householdSnapData: ", householdSnapData);
 
     // Format data for publicAssistanceData.x`
     const recentYearPublicAssistanceData = {};
@@ -49,7 +49,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
       });
 
     const filterSnapRecievedData = householdSnapData.filter(d => d["ID Snap Receipt"] === 0);
-    console.log("filterSnapRecievedData: ", filterSnapRecievedData);
+    // console.log("filterSnapRecievedData: ", filterSnapRecievedData);
 
     // Find top recent year data for publicAssistanceData
     // const filteredData = recentYearHouseholdSnapData.values.filter(d => d["ID Public Assistance or Snap"] === 0).sort((a, b) => b.share - a.share);
@@ -59,12 +59,13 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Household Income From Public Assistance</SectionTitle>
         <article>
-          <Stat 
-            title={`Population ${topPublicAssistanceData["Public Assistance or Snap"]} in ${topPublicAssistanceData.Year}`}
+          <Stat
+            title={`Population ${topPublicAssistanceData["Public Assistance or Snap"]}`}
+            year={topPublicAssistanceData.Year}
             value={`${formatPercentage(topPublicAssistanceData.share)}`}
           />
         </article>
-        
+
         <BarChart config={{
           data: filterSnapRecievedData,
           discrete: "x",
@@ -97,8 +98,8 @@ HouseholdIncomeFromPublicAssistance.defaultProps = {
 };
 
 HouseholdIncomeFromPublicAssistance.need = [
-  fetchData("publicAssistanceData", "/api/data?measures=Population&drilldowns=Public%20Assistance%20or%20Snap&County=<id>&Year=all", d => d.data),
-  fetchData("householdSnapData", "/api/data?measures=Population&drilldowns=Snap%20Receipt,Family%20type,Number%20of%20workers&County=<id>&Year=all", d => d.data)
+  fetchData("publicAssistanceData", "/api/data?measures=Population&drilldowns=Public%20Assistance%20or%20Snap&Geography=<id>&Year=all", d => d.data),
+  fetchData("householdSnapData", "/api/data?measures=Population&drilldowns=Snap%20Receipt,Family%20type,Number%20of%20workers&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

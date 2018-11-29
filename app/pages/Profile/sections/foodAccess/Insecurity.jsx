@@ -1,9 +1,9 @@
 import React from "react";
 import {connect} from "react-redux";
 
-import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
+import {fetchData, SectionColumns} from "@datawheel/canon-core";
 
-import Stat from "../../components/Stat";
+import Stat from "../../../../components/Stat";
 
 class Insecurity extends SectionColumns {
 
@@ -11,17 +11,17 @@ class Insecurity extends SectionColumns {
     const {insecurityRate} = this.props;
 
     return (
-      <SectionColumns>
-        <SectionTitle>Insecurity</SectionTitle>
+      <div className="section-title-stat-inner">
         <Stat
           title={"Child Insecurity"}
           value={`${insecurityRate[0]["Food Insecurity Rate"]}%`}
+          theme="marjoelle-light"
         />
         <Stat
           title={"Adult Insecurity"}
           value={`${insecurityRate[1]["Food Insecurity Rate"] - insecurityRate[0]["Food Insecurity Rate"]}%`}
         />
-      </SectionColumns>
+      </div>
     );
   }
 }
@@ -29,7 +29,7 @@ class Insecurity extends SectionColumns {
 Insecurity.need = [
   fetchData("insecurityRate", "/api/data?measures=Food%20Insecurity%20Rate&drilldowns=Category&County=<id>&Year=latest", d => d.data)
 ];
-  
+
 const mapStateToProps = state => ({
   insecurityRate: state.data.insecurityRate
 });

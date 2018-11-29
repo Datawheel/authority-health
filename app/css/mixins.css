@@ -26,7 +26,7 @@ typography
 
 /* type scaling */
 /* NOTE: using 20px as 1rem, because easy math */
-@define-mixin font-xxl {
+@define-mixin font-xxxl {
   font-size: 2rem; /* 40px */
   line-height: 1;
   /* scale up on bigger screens */
@@ -34,12 +34,21 @@ typography
     font-size: 3.4rem; /* 68px */
   }
 }
+@define-mixin font-xxl {
+  font-size: 1.6rem; /* 32px */
+  line-height: 1.25;
+  /* scale up on bigger screens */
+  @add-mixin min-sm {
+    font-size: 2.4rem; /* 48px */
+    line-height: 1.25;
+  }
+}
 @define-mixin font-xl {
   font-size: 1.4rem; /* 28px */
   line-height: 1;
   /* scale up on bigger screens */
   @add-mixin min-sm {
-    font-size: 2.4rem; /* 48px */
+    font-size: 1.6rem; /* 32px */
     line-height: 1.25;
   }
 }
@@ -132,6 +141,24 @@ layout
   margin-right: auto;
   margin-left: calc(-50vw + 50%);
   margin-right: calc(-50vw + 50%);
+}
+/* same, but apply it to a :before or :after */
+/* NOTE: remember to give it a background */
+@define-mixin fullwidth-pseudo {
+  /* pseudo stuff */
+  content: "";
+  display: block;
+  /* positioning & sizing */
+  position: absolute;
+  /* fill container height */
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  /* fill page width */
+  left: calc(-50vw + 50%);
+  right: calc(-50vw + 50%);
+  min-width: 100%;
+  z-index: -1; /* behind content */
 }
 
 @define-mixin centered-container {

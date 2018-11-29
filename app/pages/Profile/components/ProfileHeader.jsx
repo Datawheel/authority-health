@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import Stat from "./Stat";
+import Stat from "../../../components/Stat";
 import "./ProfileHeader.css";
 
 export default class ProfileHeader extends Component {
@@ -13,7 +13,7 @@ export default class ProfileHeader extends Component {
         <div className="profile-header-inner">
           {/* profile title & stats */}
           <div className="profile-header-intro">
-            <h1 className="profile-header-headline font-xl">
+            <h1 className="profile-header-headline font-xxl">
               {title ? title : "Error: missing meta prop in Profile.jsx"}
             </h1>
             {/* show splash stats if we got 'em */}

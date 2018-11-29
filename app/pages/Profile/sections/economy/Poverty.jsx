@@ -7,7 +7,7 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../components/Stat";
+import Stat from "../../../../components/Stat";
 import rangeFormatter from "../../../../utils/rangeFormatter";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
@@ -47,7 +47,7 @@ class Poverty extends SectionColumns {
         group.values.forEach(d => d.share = d["Population in Poverty by Gender, Age, and Race"] / total * 100);
         group.key >= belowPovertyLevelByAgeAndSex[0].Year ? Object.assign(recentYearPovertyByAgeAndSex, group) : {};
       });
-    
+
     // Find top stats for povetry by Age and Sex.
     const recentYearPovertyByAgeAndSexFiltered = recentYearPovertyByAgeAndSex.values.filter(d => d["ID Poverty Status"] === 0);
 
@@ -78,21 +78,29 @@ class Poverty extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Poverty</SectionTitle>
         <article>
-          <Stat 
-            title={`Majority race below poverty in ${topPovertyByRace.Year}`}
-            value={`${topPovertyByRace.Race} ${formatPopulation(topPovertyByRace.share)}`}
+          <Stat
+            title="Majority race below poverty"
+            year={topPovertyByRace.Year}
+            value={topPovertyByRace.Race}
+            qualifier={formatPopulation(topPovertyByRace.share)}
           />
-          <Stat 
-            title={`Male poverty majority in ${topMalePovertyData.Year}`}
-            value={`${topMalePovertyData.Age} ${formatPopulation(topMalePovertyData.share)}`}
+          <Stat
+            title="Male poverty majority"
+            year={topMalePovertyData.Year}
+            value={topMalePovertyData.Age}
+            qualifier={formatPopulation(topMalePovertyData.share)}
           />
-          <Stat 
-            title={`Female poverty majority in ${topFemalePovertyData.Year}`}
-            value={`${topFemalePovertyData.Age} ${formatPopulation(topFemalePovertyData.share)}`}
+          <Stat
+            title="Female poverty majority"
+            year={topFemalePovertyData.Year}
+            value={topFemalePovertyData.Age}
+            qualifier={formatPopulation(topFemalePovertyData.share)}
           />
-          <Stat 
-            title={`Top Income To Poverty Level Ratio in ${topIncomeToPovertyLevelRatio.Year}`}
-            value={`${topIncomeToPovertyLevelRatio["Ratio of Income to Poverty Level"]} ${formatPopulation(topIncomeToPovertyLevelRatio.share)}`}
+          <Stat
+            title="Top Income To Poverty Level Ratio"
+            year={topIncomeToPovertyLevelRatio.Year}
+            value={topIncomeToPovertyLevelRatio["Ratio of Income to Poverty Level"]}
+            qualifier={formatPopulation(topIncomeToPovertyLevelRatio.share)}
           />
           <p>The mini barchart here shows the population below poverty level in the {topPovertyByRace.County}. In {topPovertyByRace.Year}, the majority race in poverty was {topPovertyByRace.Race} with {formatPopulation(topPovertyByRace.share)} of the total population in the {topPovertyByRace.County}.</p>
 
@@ -187,4 +195,3 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(Poverty);
-

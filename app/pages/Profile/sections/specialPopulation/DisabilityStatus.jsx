@@ -7,7 +7,7 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../components/Stat";
+import Stat from "../../../../components/Stat";
 import rangeFormatter from "../../../../utils/rangeFormatter";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
@@ -46,9 +46,11 @@ class DisabilityStatus extends SectionColumns {
         <SectionTitle>Disability Status</SectionTitle>
         <article>
           {/* Show stats for the top data. */}
-          <Stat 
-            title={`Majority age group in ${topRecentYearData.Year} with disability`}
-            value={`${rangeFormatter(topRecentYearData.Age)} ${formatPopulation(topRecentYearData.share)}`}
+          <Stat
+            title="Largest age group with a disibility"
+            year={topRecentYearData.Year}
+            value={rangeFormatter(topRecentYearData.Age)}
+            qualifier={formatPopulation(topRecentYearData.share)}
           />
           {/* Write short paragraph describing stats and barchart. */}
           <p>In {topRecentYearData.Year}, the majority age group with disability was {rangeFormatter(topRecentYearData.Age)} years with {formatPopulation(topRecentYearData.share)} in the {topRecentYearData.County} county.</p>
@@ -91,7 +93,7 @@ DisabilityStatus.defaultProps = {
 };
 
 DisabilityStatus.need = [
-  fetchData("healthCoverageType", "/api/data?measures=Population&drilldowns=Health%20Insurance%20coverage%3Astatus,Health%20Insurance%20coverage%3Atype,Disability%20Status,Age&County=<id>&Year=all", d => d.data)
+  fetchData("healthCoverageType", "/api/data?measures=Population&drilldowns=Health%20Insurance%20coverage%3Astatus,Health%20Insurance%20coverage%3Atype,Disability%20Status,Age&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

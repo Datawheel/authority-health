@@ -7,7 +7,7 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../components/Stat";
+import Stat from "../../../../components/Stat";
 import rangeFormatter from "../../../../utils/rangeFormatter";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
@@ -44,8 +44,10 @@ class ChildCare extends SectionColumns {
         <article>
           {/* Display stats and write short description of the top data for the most recent year */}
           <Stat
-            title={`Most common age of grandchildren and Grandparents responsible in ${recentYearFilteredData[0].Year} `} 
-            value={`${formatAge(topRecentYearData["Responsibility Length"])} ${formatPercentage(topRecentYearData.share)}`}
+            title="Most common age of grandchildren and Grandparents responsible"
+            year={recentYearFilteredData[0].Year}
+            value={formatAge(topRecentYearData["Responsibility Length"])}
+            qualifier={formatPercentage(topRecentYearData.share)}
           />
           <p>In {topRecentYearData.Year}, {formatPercentage(topRecentYearData.share)} of the grandparents were responsible for their grandchildren. The most common age group of grandchildren was {formatAge(topRecentYearData["Responsibility Length"])} for this location.</p>
           <p>The Bar Chart here shows the breakdown by age of grandchildren and the percentage of grandparents responsible for their grandchildren.</p>
@@ -87,6 +89,5 @@ ChildCare.need = [
 const mapStateToProps = state => ({
   responsibilityData: state.data.responsibilityData
 });
-  
-export default connect(mapStateToProps)(ChildCare);
 
+export default connect(mapStateToProps)(ChildCare);

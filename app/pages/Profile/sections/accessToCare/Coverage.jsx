@@ -7,7 +7,7 @@ import {formatAbbreviate} from "d3plus-format";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import rangeFormatter from "../../../../utils/rangeFormatter";
-import Stat from "../../components/Stat";
+import Stat from "../../../../components/Stat";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
@@ -43,12 +43,14 @@ class Coverage extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Coverage</SectionTitle>
         <article>
-          <Stat 
-            title={`Male majority with Coverage in ${ageGroupYear}`}
+          <Stat
+            title="Male majority with Coverage"
+            year={ageGroupYear}
             value={topMaleAgeGroup}
           />
-          <Stat 
-            title={`Female majority with Coverage in ${ageGroupYear}`}
+          <Stat
+            title="Female majority with Coverage"
+            year={ageGroupYear}
             value={topFemaleAgeGroup}
           />
           <p>In {ageGroupYear}, the age groups most likely to have health care coverage in the {maleCoverageData[0].County} county are {topMaleAgeGroup} and {topFemaleAgeGroup} years, for men and women respectively.</p>
@@ -72,7 +74,6 @@ class Coverage extends SectionColumns {
           },
           yConfig: {tickFormat: d => formatPopulation(d)},
           shapeConfig: {
-            opacity: d => d.Sex === "Female" ? 0.5 : 1,
             label: false
           },
           tooltipConfig: {tbody: [["Value", d => formatPopulation(d.share)]]}
@@ -88,7 +89,7 @@ Coverage.defaultProps = {
 };
 
 Coverage.need = [
-  fetchData("coverageData", "/api/data?measures=Population&drilldowns=Health%20Insurance%20Coverage%20Status,Sex,Age&County=<id>&Year=all", d => d.data)
+  fetchData("coverageData", "/api/data?measures=Population&drilldowns=Health%20Insurance%20Coverage%20Status,Sex,Age&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

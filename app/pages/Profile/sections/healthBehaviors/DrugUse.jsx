@@ -5,7 +5,7 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../components/Stat";
+import Stat from "../../../../components/Stat";
 
 const formatName = name => {
   const nameArr = name.split(" ");
@@ -40,7 +40,7 @@ class DrugUse extends SectionColumns {
     let topTractNum = topTractSmokingData.Tract;
     let year = topTractSmokingData["ID Year"];
     let topTractRate = topTractSmokingData[dropdownValue];
-    
+
     if (dropdownValue === drugTypes[0]) { // Assign all Smoking data here.
       topTractNum = topTractSmokingData.Tract;
       year = topTractSmokingData["ID Year"];
@@ -57,12 +57,19 @@ class DrugUse extends SectionColumns {
         <SectionTitle>Drug Use</SectionTitle>
         <article>
           {/* Create a dropdown for drug types. */}
-          <select onChange={this.handleChange}>
-            {drugTypes.map(item => <option key={item} value={item}>{formatName(item)}</option>)}
-          </select>
+          <div className="field-container">
+            <label>
+              Drug use category
+              <select onChange={this.handleChange}>
+                {drugTypes.map(item => <option key={item} value={item}>{formatName(item)}</option>)}
+              </select>
+            </label>
+          </div>
+
           <Stat
             title={"Tract with highest prevalence"}
-            value={`${topTractNum} ${formatAbbreviate(topTractRate)}%`}
+            value={topTractNum}
+            qualifier={`${formatAbbreviate(topTractRate)}%`}
           />
           <p>{topTractNum} had the highest {formatName(dropdownValue.toLowerCase())} rate of {topTractRate}% in the year {year}</p>
 
@@ -98,6 +105,7 @@ class DrugUse extends SectionColumns {
                   }
                 });
               });
+              // console.log(data);
               return data;
             }}
             /> : null }
@@ -128,9 +136,9 @@ DrugUse.defaultProps = {
 DrugUse.need = [
   fetchData("allTractSmokingDrinkingData", "/api/data?measures=Current%20Smoking%20Data%20Value,Binge%20Drinking%20Data%20Value&drilldowns=Tract&Year=latest")
 ];
-  
+
 const mapStateToProps = state => ({
   allTractSmokingDrinkingData: state.data.allTractSmokingDrinkingData
 });
-  
+
 export default connect(mapStateToProps)(DrugUse);

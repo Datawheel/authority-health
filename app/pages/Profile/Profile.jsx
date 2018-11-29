@@ -59,51 +59,88 @@ class Profile extends Component {
           }
         />
 
-        <TopicTitle slug="food-access">Food Access</TopicTitle>
-        <Insecurity />
-        <FoodAvailability />
-        <StoreAccessByDemographic />
+        <TopicTitle slug="food-access">
+          <div className="section-container">
+            <div className="section-title-stat-container">
+              <span className="section-title-inner">Food Access</span>
+              <Insecurity />
+            </div>
+          </div>
+        </TopicTitle>
+        <div className="section-container">
+          <FoodAvailability />
+          <StoreAccessByDemographic />
+        </div>
+        
+        <TopicTitle slug="health-behaviors">
+          <div className="section-container">Health Behaviors</div>
+        </TopicTitle>
+        <div className="section-container">
+          <DrugUse />
+          <PhysicalActivity />
+        </div>
 
-        <TopicTitle slug="health-behaviors">Health Behaviors</TopicTitle>
-        <DrugUse />
-        <PhysicalActivity />
+        <TopicTitle slug="access-to-care">
+          <div className="section-container">Access to Care</div>
+        </TopicTitle>
+        <div className="section-container">
+          <HealthCenters />
+          <DentistsDemographic />
+          <TypesOfDentists />
+          <Coverage />
+        </div>
 
-        <TopicTitle slug="access-to-care">Access to Care</TopicTitle>
-        <HealthCenters />
-        <DentistsDemographic />
-        <TypesOfDentists />
-        <Coverage />
+        <TopicTitle slug="special-population">
+          <div className="section-container">Special Population</div>
+        </TopicTitle>
+        <div className="section-container">
+          <ChildCare />
+          <Immigrants />
+          <DomesticPartners />
+          <DisabilityStatus />
+          <HearingAndVisionDifficulty />
+          <Homeless />
+          <Veterans />
+          <Incarceration />
+        </div>
 
-        <TopicTitle slug="special-population">Special Population</TopicTitle>
-        <ChildCare />
-        <Immigrants />
-        <DomesticPartners />
-        <DisabilityStatus />
-        <HearingAndVisionDifficulty />
-        <Homeless />
-        <Veterans />
-        <Incarceration />
+        <TopicTitle slug="built-social-environment">
+          <div className="section-container">Built/Social Environment</div>
+        </TopicTitle>
+        <div className="section-container">
+          <Homeownership />
+          <HouseRentals />
+          <Transportation />
+          <Crime />
+        </div>
 
-        <TopicTitle slug="built-social-environment">Built/Social Environment</TopicTitle>
-        <Homeownership />
-        <HouseRentals />
-        <Transportation />
-        <Crime />
+        <TopicTitle slug="economy">
+          <div className="section-container">Economy</div>
+        </TopicTitle>
+        <div className="section-container">
+          <DistressScore />
+          <HouseholdIncomeFromPublicAssistance />
+          <WageDistribution />
+          <Poverty />
+        </div>
 
-        <TopicTitle slug="economy">Economy</TopicTitle>
-        <DistressScore />
-        <HouseholdIncomeFromPublicAssistance />
-        <WageDistribution />
-        <Poverty />
+        <TopicTitle slug="education">
+          <div className="section-container">Education</div>
+        </TopicTitle>
+        <div className="section-container">
+          <EducationalAttainment />
+          <StudentPoverty />
+          <ReadingAssessment />
+        </div>
 
-        <TopicTitle slug="education">Education</TopicTitle>
-        <EducationalAttainment />
-        <StudentPoverty />
-        <ReadingAssessment />
+        <TopicTitle slug="natural-enviornment">
+          <div className="section-container">Natural Environment</div>
+        </TopicTitle>
+        <div className="section-container">
+          <WaterQuality />
+          <AirQuality />
+        </div>
 
-        <TopicTitle slug="natural-enviornment">Natural Environment</TopicTitle>
-        <WaterQuality />
-        <AirQuality />
       </div>
     );
   }
@@ -139,7 +176,6 @@ Profile.need = [
   StudentPoverty,
   ReadingAssessment,
   WaterQuality,
-  AirQuality,
   fetchData("diabetes", "/api/data?measures=Diabetes%20Data%20Value&City=<id>&Year=latest"),
   fetchData("meta", "/api/search?id=<id>"),
   fetchData("population", "https://katahdin.datausa.io/api/data?measures=Population&Geography=<id>&year=latest")

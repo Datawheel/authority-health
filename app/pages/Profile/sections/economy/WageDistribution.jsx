@@ -7,7 +7,7 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../components/Stat";
+import Stat from "../../../../components/Stat";
 import rangeFormatter from "../../../../utils/rangeFormatter";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
@@ -42,13 +42,17 @@ class WageDistribution extends SectionColumns {
         <article>
           {/* Top stats and short paragraph about Wage distribution. */}
           <Stat
-            title={`Top Wage Dsitribution in ${topWageDistribution.Year} in ${topWageDistribution.County}`}
-            value={`${topWageDistribution["Household Income Bucket"]} ${formatPopulation(topWageDistribution.share)}`}
+            title={`Top Wage Dsitribution in ${topWageDistribution.County}`}
+            year={topWageDistribution.Year}
+            value={topWageDistribution["Household Income Bucket"]}
+            qualifier={formatPopulation(topWageDistribution.share)}
           />
           {/* Top stats and short paragraph about Wage Gini. */}
           <Stat
-            title={`Top Wage GINI in ${topWageGini.Year}`}
-            value={`${topWageGini.Place} ${formatAbbreviate(topWageGini["Wage GINI"])}`}
+            title="Top Wage GINI"
+            year={topWageGini.Year}
+            value={topWageGini.Place}
+            qualifier={formatAbbreviate(topWageGini["Wage GINI"])}
           />
           <p>This Barchart shows the number of workers in various wage buckets in {topWageDistribution.County}. In {topWageDistribution.Year}, {topWageDistribution.County} had the top Wage Distribution of {topWageDistribution["Household Income Bucket"]} with {formatPopulation(topWageDistribution.share)}.</p>
           <p>In {topWageGini.Year}, the highest income inequality in Michigan, was in {topWageGini.Place} with {formatAbbreviate(topWageGini["Wage GINI"])}</p>

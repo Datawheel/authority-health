@@ -7,7 +7,7 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../components/Stat";
+import Stat from "../../../../components/Stat";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
@@ -15,7 +15,7 @@ class DomesticPartners extends SectionColumns {
 
   render() {
     const {domesticPartnersData} = this.props;
-    
+
     const recentDomesticPartnersData = {};
     nest()
       .key(d => d.Year)
@@ -38,8 +38,10 @@ class DomesticPartners extends SectionColumns {
         <article>
           {/* Show top stats for each domestic partner type */}
           <Stat
-            title={`Top Domestic Partner in ${topData.Year}`}
-            value={`${topData["Sex of Partner"]} ${formatPopulation(topData.share)}`}
+            title="Top Domestic Partner"
+            year={topData.Year}
+            value={topData["Sex of Partner"]}
+            qualifier={formatPopulation(topData.share)}
           />
           <p>In {topData.Year}, the top Domestic Partners were {topData["Sex of Partner"]} with {formatPopulation(topData.share)} in the {topData.County} county.</p>
           <p>The Bar Chart here shows the types of domestic partners and corresponding percentage for each type. {}</p>
@@ -72,7 +74,7 @@ DomesticPartners.defaultProps = {
 };
 
 DomesticPartners.need = [
-  fetchData("domesticPartnersData", "/api/data?measures=Population&drilldowns=Sex%20of%20Partner&County=<id>&Year=all", d => d.data)
+  fetchData("domesticPartnersData", "/api/data?measures=Population&drilldowns=Sex%20of%20Partner&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

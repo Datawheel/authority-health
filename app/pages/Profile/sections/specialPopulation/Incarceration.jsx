@@ -7,7 +7,7 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../components/Stat";
+import Stat from "../../../../components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -48,9 +48,11 @@ class Incarceration extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Incarceration</SectionTitle>
         <article>
-          <Stat 
-            title={`Top Incarceration value in ${topIncarcerationData.Year}`}
-            value={`${topIncarcerationData.IncarcerationType}: ${topIncarcerationData.Offense} ${formatPercentage(topIncarcerationData.share)}`}
+          <Stat
+            title="Top Incarceration value"
+            year={topIncarcerationData.Year}
+            value={`${topIncarcerationData.IncarcerationType}: ${topIncarcerationData.Offense}`}
+            qualifier={formatPercentage(topIncarcerationData.share)}
           />
           <p>The Barchart here shows the types of Offenses for each Incarceration type.</p>
           <p>In {topIncarcerationData.Year}, the top Incarceration type was {topIncarcerationData.IncarcerationType} for {topIncarcerationData.Offense} with the share of {formatPercentage(topIncarcerationData.share)}.</p>
@@ -61,6 +63,7 @@ class Incarceration extends SectionColumns {
           data: filteredData,
           discrete: "x",
           height: 400,
+          stacked: true,
           legend: false,
           label: d => ` ${d.IncarcerationType}: ${d.Offense}`,
           groupBy: "Offense",

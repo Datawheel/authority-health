@@ -49,26 +49,39 @@ brand-light: "#B1E2F7"
 brand-dark: "#2F93BE"
 
 # extended palette
-# NOTE: curry == brand
 curry: "#E3C05D"
 curry-light: "#FFE7A6"
 curry-dark: "#C99C20"
+
+amber-dark: "#B5A604"
+
+olive-dark: "#8B9909"
 
 shamrock: "#84BD85"
 shamrock-light: "#CFE6CF"
 shamrock-dark: "#53A355"
 
+sea-green-dark: "#2AA8A8"
+
 pacific: "#70BADA"
 pacific-light: "#B1E2F7"
 pacific-dark: "#2F93BE"
+
+silver-lake-dark: "#5673CC"
 
 majorelle: "#AD9FED"
 majorelle-light: "#DAD1FF"
 majorelle-dark: "#6F59D4"
 
+levender-dark: "#8842A6"
+
+maroon-dark: "#A64281"
+
 terra-cotta: "#DF6F6F"
 terra-cotta-light: "#FFD3D1"
 terra-cotta-dark: "#D45D59"
+
+carrot-dark: "#CF7A1F"
 
 # UI colors
 # NOTE: danger == terra-cotta, caution == curry, success == shamrock
@@ -83,3 +96,57 @@ caution-dark: "#C99C20"
 success: "#84BD85"
 success-light: "#CFE6CF"
 success-dark: "#53A355"
+
+# Assigned color schemes for visualizations
+# Restaurant categories
+color-Restaurants: "#6F59D4"
+color-Stores: "#D45D59"
+
+# age
+color-Child: "#6F59D4"
+color-Seniors: "#D45D59"
+
+# gender
+color-Female: "#6F59D4"
+color-Male: "#D45D59"
+
+# domestic partners
+"color-Female Householder & Female Partner": "#8842A6"
+"color-Female Householder & Male Partner": "#6F59D4"
+"color-Male Householder & Female Partner": "#A64281"
+"color-Male Householder & Male Partner": "#D45D59"
+
+# ethnicity
+"color-American Indian or Alaska Native": "#6F59D4"
+"color-% American Indian/Alaska Native": "#6F59D4"
+"color-Asian": "#8842A6"
+"color-Black": "#A64281"
+"color-% Black": "#A64281"
+"color-Hispanic ethnicity": "#D45D59"
+"color-% Hispanic": "#D45D59"
+"color-White": "#CF7A1F"
+"color-% White": "#CF7A1F"
+"color-Hawaiian or Pacific Islander": "#C99C20"
+"color-Multiracial": "#B5A604"
+
+# smoking
+"color-Smoking Status Current Weighted Percent": "#D45D59"
+"color-Smoking Status Former Weighted Percent": "#C99C20"
+"color-Smoking Status Never Weighted Percent": "#53A355"
+
+# insurance
+"color-No Health Insurance Coverage": "#D45D59"
+"color-With Public Health Coverage": "#6F59D4"
+"color-With Private Health Insurance Coverage": "#5673CC"
+
+# ethnicity
+"color-Grandparent Responsible Less Than 6 Months": "#5673CC"
+"color-Grandparent Responsible 6 To 11 Months": "#6F59D4"
+"color-Grandparent Responsible 1 Or 2 Years": "#8842A6"
+"color-Grandparent Responsible 3 Or 4 Years": "#A64281"
+"color-Grandparent Responsible 5 Years Or More": "#D45D59"
+
+# incarceration
+"color-Assaultive Offenses": "#D45D59"
+"color-Drug Offenses": "#A64281"
+"Non-Assaultive Offenses": "#8842A6"

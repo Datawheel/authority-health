@@ -1,17 +1,44 @@
+const sequelize = require("sequelize");
+
 module.exports = function(app) {
 
-  const {populations} = app.settings.cache;
-  
-  app.get("/api/search", (req, res) => {
+  const {db} = app.settings;
 
-    const {q, id} = req.query;
+  app.get("/api/search", async(req, res) => {
 
-    let filteredPopulation = populations;
+    const where = {};
 
-    if (id) filteredPopulation = populations.find(obj => obj.geoid === id);
-    else if (q) filteredPopulation = populations.filter(obj => obj.name.toLowerCase().includes(q.toLowerCase()));
+    let {limit = "10"} = req.query;
+    limit = parseInt(limit, 10);
 
-    res.json(filteredPopulation).end();
+    const {id, q} = req.query;
+
+    if (q) {
+      where[sequelize.Op.or] = [
+        {display: {[sequelize.Op.iLike]: `%${q}%`}},
+        {keywords: {[sequelize.Op.overlap]: [q]}}
+      ];
+    }
+
+    if (id) where.id = id.includes(",") ? id.split(",") : id;
+
+    const rows = await db.search.findAll({
+      include: [{model: db.images}],
+      limit,
+      order: [["zvalue", "DESC"]],
+      where
+    });
+
+    const results = rows.map(d => ({
+      level: d.hierarchy.toLowerCase(),
+      geoid: d.id,
+      image: d.image,
+      keywords: d.keywords,
+      name: d.display,
+      slug: d.slug
+    }));
+
+    res.json(results);
 
   });
 

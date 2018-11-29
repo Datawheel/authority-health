@@ -7,7 +7,7 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../components/Stat";
+import Stat from "../../../../components/Stat";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 const formatLabel = d => {
@@ -49,8 +49,10 @@ class StudentPoverty extends SectionColumns {
         <article>
           {/* Top stats about Level Of School. */}
           <Stat
-            title={`Top Level School in ${topLevelOfSchoolData.Year}`}
-            value={`${topLevelOfSchoolData["Level of School"]} ${formatPopulation(topLevelOfSchoolData.share)}`}
+            title="Top Level Of School"
+            year={topLevelOfSchoolData.Year}
+            value={topLevelOfSchoolData["Level of School"]}
+            qualifier={formatPopulation(topLevelOfSchoolData.share)}
           />
           <Stat
             title={`Population Enrolled In School in ${topLevelOfSchoolData.Year}`}
@@ -93,7 +95,7 @@ StudentPoverty.defaultProps = {
 };
 
 StudentPoverty.need = [
-  fetchData("levelOfSchoolData", "/api/data?measures=Population&drilldowns=Level%20of%20School,Poverty%20Status&County=<id>&Year=all", d => d.data)
+  fetchData("levelOfSchoolData", "/api/data?measures=Population&drilldowns=Level%20of%20School,Poverty%20Status&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

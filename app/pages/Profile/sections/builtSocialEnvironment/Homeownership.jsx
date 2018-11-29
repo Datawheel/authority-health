@@ -7,7 +7,7 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../components/Stat";
+import Stat from "../../../../components/Stat";
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
 class Homeownership extends SectionColumns {
@@ -51,16 +51,22 @@ class Homeownership extends SectionColumns {
         <SectionTitle>Homeownership</SectionTitle>
         <article>
           <Stat
-            title={`Top median housing value in ${topMedianHousingUnitsValue.Year}`}
-            value={`${topMedianHousingUnitsValue.Geography} ${formatAbbreviate(topMedianHousingUnitsValue["Property Value"])}`}
+            title="Top median housing value"
+            year={topMedianHousingUnitsValue.Year}
+            value={topMedianHousingUnitsValue.Geography}
+            qualifier={formatAbbreviate(topMedianHousingUnitsValue["Property Value"])}
           />
           <Stat
-            title={`Maximum occupied housing units in ${topOccupancyData.Year}`}
-            value={`${topOccupancyData.County} county ${formatAbbreviate(topOccupancyData.share)}%`}
+            title="Maximum occupied housing units"
+            year={topOccupancyData.Year}
+            value={`${topOccupancyData.County} county`}
+            qualifier={`${formatAbbreviate(topOccupancyData.share)}%`}
           />
           <Stat
-            title={`Median house construction year in ${constructionDateData[0].Year}`}
-            value={`${constructionDateData[0].County} county ${constructionDateData[0]["Construction Date"]}`}
+            title="Median house construction year"
+            year={`AS OF ${  constructionDateData[0].Year}`}
+            value={constructionDateData[0]["Construction Date"]}
+            qualifier={`${constructionDateData[0].County} county`}
           />
           <p>The Geomap shows the Median housing units value for each tract in the Wayne county.</p>
           <p>The BarChart shows the Occupied housing units in the current location.</p>

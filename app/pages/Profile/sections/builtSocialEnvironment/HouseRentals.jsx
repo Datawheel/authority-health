@@ -7,7 +7,7 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../components/Stat";
+import Stat from "../../../../components/Stat";
 import rangeFormatter from "../../../../utils/rangeFormatter";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
@@ -39,18 +39,24 @@ class HouseRentals extends SectionColumns {
         <article>
           {/* Show recent Year Rent amount. */}
           <Stat
-            title={`Median Rent Amount in ${rentAmountData[0].Year}`}
-            value={`${rentAmountData[0].County} County, MI $${formatAbbreviate(rentAmountData[0]["Rent Amount"])}`}
+            title="Median Rent Amount"
+            year={rentAmountData[0].Year}
+            value={rentAmountData[0].County}
+            qualifier={`$${  formatAbbreviate(rentAmountData[0]["Rent Amount"])}`}
           />
           {/* Show stats for Renter-Occupied Housing Units with Extra Pay on Utilities for most recent year. */}
           <Stat
-            title={`Rental Housing Units with Utilities Included in ${utilitiesData[0].Year}`}
-            value={`${utilitiesData[1].County} County, MI ${formatAbbreviate(recentYearNoExtraUtilitiesPercentage)}%`}
+            title="Rental Housing Units with Utilities Included"
+            year={utilitiesData[0].Year}
+            value={utilitiesData[1].County}
+            qualifier={`${formatAbbreviate(recentYearNoExtraUtilitiesPercentage)  }%`}
           />
           {/* Show stats for Household Income to pay maximum Rent in most recent year. */}
           <Stat
-            title={`Household Income to pay maximum Rent in ${topIncomeToPayMostRent.Year}`}
-            value={`${rangeFormatter(topIncomeToPayMostRent["Household Income"])} ${formatPercentage(topIncomeToPayMostRent.share)}`}
+            title="Household Income to pay maximum Rent"
+            year={topIncomeToPayMostRent.Year}
+            value={rangeFormatter(topIncomeToPayMostRent["Household Income"])}
+            qualifier={formatPercentage(topIncomeToPayMostRent.share)}
           />
           <p>The Barchart here shows the Household Income buckets and the Percentage of rent paid based on the Household Income.</p>
           {/* Create a LinePlot. */}
@@ -117,5 +123,5 @@ const mapStateToProps = state => ({
   utilitiesData: state.data.utilitiesData,
   rentersByIncomePercentage: state.data.rentersByIncomePercentage
 });
-  
+
 export default connect(mapStateToProps)(HouseRentals);

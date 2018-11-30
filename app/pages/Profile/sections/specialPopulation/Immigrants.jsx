@@ -66,7 +66,7 @@ class Immigrants extends SectionColumns {
 
     return (
       <SectionColumns>
-        <SectionTitle>Immigration</SectionTitle>
+        <SectionTitle>Immigrats</SectionTitle>
         <article>
           {/* Show top stats and a short paragraph about it for each Nativity. */}
           <Stat

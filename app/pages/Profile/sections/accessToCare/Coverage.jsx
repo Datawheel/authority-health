@@ -9,7 +9,7 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import rangeFormatter from "../../../../utils/rangeFormatter";
 import Stat from "../../../../components/Stat";
 
-const formatPopulation = d => `${formatAbbreviate(d)}%`;
+const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
 class Coverage extends SectionColumns {
 
@@ -34,10 +34,12 @@ class Coverage extends SectionColumns {
     const filteredRecentYearData = recentYearCoverageData.values.filter(d => d["ID Health Insurance Coverage Status"] === 0);
     const femaleCoverageData = filteredRecentYearData.filter(d => d.Sex === "Female").sort((a, b) => b.share - a.share);
     const topFemaleAgeGroup = rangeFormatter(femaleCoverageData[0].Age);
+    const topFemaleShare = formatPercentage(femaleCoverageData[0].share);
 
     const maleCoverageData = filteredRecentYearData.filter(d => d.Sex === "Male").sort((a, b) => b.share - a.share);
     const topMaleAgeGroup = rangeFormatter(maleCoverageData[0].Age);
     const ageGroupYear = maleCoverageData[0].Year;
+    const topMaleShare = formatPercentage(maleCoverageData[0].share);
 
     return (
       <SectionColumns>
@@ -47,11 +49,13 @@ class Coverage extends SectionColumns {
             title="Male majority with Coverage"
             year={ageGroupYear}
             value={topMaleAgeGroup}
+            qualifier={topMaleShare}
           />
           <Stat
             title="Female majority with Coverage"
             year={ageGroupYear}
             value={topFemaleAgeGroup}
+            qualifier={topFemaleShare}
           />
           <p>In {ageGroupYear}, the age groups most likely to have health care coverage in the {maleCoverageData[0].County} county are {topMaleAgeGroup} and {topFemaleAgeGroup} years, for men and women respectively.</p>
           <p>The BarChart here shows the male and female age groups with and without Health Insurance Coverage.</p>
@@ -72,11 +76,11 @@ class Coverage extends SectionColumns {
             labelRotation: false,
             tickFormat: d => rangeFormatter(d)
           },
-          yConfig: {tickFormat: d => formatPopulation(d)},
+          yConfig: {tickFormat: d => formatPercentage(d)},
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Value", d => formatPopulation(d.share)]]}
+          tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
         }}
         />
       </SectionColumns>

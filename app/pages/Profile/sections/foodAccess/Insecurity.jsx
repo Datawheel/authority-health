@@ -5,7 +5,7 @@ import {fetchData, SectionColumns} from "@datawheel/canon-core";
 
 import Stat from "../../../../components/Stat";
 
-class FoodStats extends SectionColumns {
+class Insecurity extends SectionColumns {
 
   render() {
     const {insecurityRate} = this.props;
@@ -26,12 +26,12 @@ class FoodStats extends SectionColumns {
   }
 }
 
-FoodStats.need = [
-  fetchData("insecurityRate", "/api/data?measures=Food%20Insecurity%20Rate&drilldowns=Category&Geography=<id>&Year=latest", d => d.data)
+Insecurity.need = [
+  fetchData("insecurityRate", "/api/data?measures=Food%20Insecurity%20Rate&drilldowns=Category&County=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   insecurityRate: state.data.insecurityRate
 });
-
-export default connect(mapStateToProps)(FoodStats);
+  
+export default connect(mapStateToProps)(Insecurity);

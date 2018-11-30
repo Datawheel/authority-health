@@ -17,8 +17,8 @@ class HouseRentals extends SectionColumns {
   render() {
 
     const {rentAmountData, utilitiesData, rentersByIncomePercentage} = this.props;
-    const totalUtilitiesData = utilitiesData[0].Population + utilitiesData[1].Population;
-    const recentYearNoExtraUtilitiesPercentage = utilitiesData[1].Population / totalUtilitiesData * 100;
+    const totalUtilitiesData = utilitiesData[0]["Renter-Occupied Housing Units"] + utilitiesData[1]["Renter-Occupied Housing Units"];
+    const recentYearNoExtraUtilitiesPercentage = utilitiesData[1]["Renter-Occupied Housing Units"] / totalUtilitiesData * 100;
 
     const recentYearRentersByIncomePercentage = {};
     nest()
@@ -42,14 +42,14 @@ class HouseRentals extends SectionColumns {
             title="Median Rent Amount"
             year={rentAmountData[0].Year}
             value={rentAmountData[0].County}
-            qualifier={"$" + formatAbbreviate(rentAmountData[0]["Rent Amount"])}
+            qualifier={`$${  formatAbbreviate(rentAmountData[0]["Rent Amount"])}`}
           />
           {/* Show stats for Renter-Occupied Housing Units with Extra Pay on Utilities for most recent year. */}
           <Stat
             title="Rental Housing Units with Utilities Included"
             year={utilitiesData[0].Year}
             value={utilitiesData[1].County}
-            qualifier={formatAbbreviate(recentYearNoExtraUtilitiesPercentage) + "%"}
+            qualifier={`${formatAbbreviate(recentYearNoExtraUtilitiesPercentage)  }%`}
           />
           {/* Show stats for Household Income to pay maximum Rent in most recent year. */}
           <Stat
@@ -59,7 +59,7 @@ class HouseRentals extends SectionColumns {
             qualifier={formatPercentage(topIncomeToPayMostRent.share)}
           />
           <p>The Barchart here shows the Household Income buckets and the Percentage of rent paid based on the Household Income.</p>
-          {/* Create a LinePlot based on the dropdown choice. */}
+          {/* Create a LinePlot. */}
           <LinePlot config={{
             data: rentAmountData,
             discrete: "x",
@@ -113,9 +113,9 @@ HouseRentals.defaultProps = {
 };
 
 HouseRentals.need = [
-  fetchData("rentAmountData", "/api/data?measures=Rent%20Amount&Geography=<id>&Year=all", d => d.data),
-  fetchData("utilitiesData", "/api/data?measures=Population&drilldowns=Inclusion%20of%20Utilities%20in%20Rent&Geography=<id>&Year=latest", d => d.data),
-  fetchData("rentersByIncomePercentage", "https://joshua-tree.datausa.io/api/data?measures=Renters%20by%20Income%20Percentage&drilldowns=Household%20Income&Year=all&Geography=<id>", d => d.data)
+  fetchData("rentAmountData", "/api/data?measures=Rent%20Amount&County=<id>&Year=all", d => d.data),
+  fetchData("utilitiesData", "/api/data?measures=Renter-Occupied%20Housing%20Units&drilldowns=Inclusion%20of%20Utilities%20in%20Rent&County=<id>&Year=latest", d => d.data),
+  fetchData("rentersByIncomePercentage", "https://katahdin.datausa.io/api/data?measures=Renters%20by%20Income%20Percentage&drilldowns=Household%20Income&Year=all&Geography=<id>", d => d.data)
 ];
 
 const mapStateToProps = state => ({

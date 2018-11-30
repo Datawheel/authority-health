@@ -39,6 +39,10 @@ class StudentPoverty extends SectionColumns {
     filteredRecentYearLevelOfSchoolData.sort((a, b) => b.share - a.share);
     const topLevelOfSchoolData = filteredRecentYearLevelOfSchoolData[0];
 
+    // Find percentage of population that were enrolled in school for the most recent year.
+    const recentYearNotEnrolledInSchool = recentYearLevelOfSchoolData.values.filter(d => d["ID Level of School"] === 7);
+    const recentYearEnrolledInSchoolPercentage = 100 - recentYearNotEnrolledInSchool[0].share - recentYearNotEnrolledInSchool[1].share;
+
     return (
       <SectionColumns>
         <SectionTitle>Student Poverty</SectionTitle>
@@ -50,7 +54,12 @@ class StudentPoverty extends SectionColumns {
             value={topLevelOfSchoolData["Level of School"]}
             qualifier={formatPopulation(topLevelOfSchoolData.share)}
           />
+          <Stat
+            title={`Population Enrolled In School in ${topLevelOfSchoolData.Year}`}
+            value={`${formatPopulation(recentYearEnrolledInSchoolPercentage)}`}
+          />
           <p>In {topLevelOfSchoolData.Year}, students in poverty who attended most level of school in {topLevelOfSchoolData.County} County were {topLevelOfSchoolData["Level of School"]} with the share of {formatPopulation(topLevelOfSchoolData.share)}</p>
+          <p>In {topLevelOfSchoolData.Year}, {formatPopulation(recentYearEnrolledInSchoolPercentage)} of the total population had enrolled in school in the {topLevelOfSchoolData.County} county, MI.</p>
         </article>
 
         {/* Draw a Barchart to show Level Of School for students in poverty. */}

@@ -5,30 +5,37 @@ import {formatAbbreviate} from "d3plus-format";
 import ProfileHeader from "./components/ProfileHeader";
 import "./Profile.css";
 
-import FoodStats from "./sections/healthBehaviors/FoodStats";
-import FoodAccess from "./sections/healthBehaviors/FoodAccess";
-import DemographicFoodAccess from "./sections/healthBehaviors/DemographicFoodAccess";
+import Insecurity from "./sections/foodAccess/Insecurity";
+import FoodAvailability from "./sections/foodAccess/FoodAvailability";
+import StoreAccessByDemographic from "./sections/foodAccess/StoreAccessByDemographic";
 import DrugUse from "./sections/healthBehaviors/DrugUse";
+import PhysicalActivity from "./sections/healthBehaviors/PhysicalActivity";
+import HealthConditonChronicDiseases from "./sections/healthBehaviors/HealthConditonChronicDiseases";
+import DentistsDemographic from "./sections/accessToCare/DentistsDemographic";
+import TypesOfDentists from "./sections/accessToCare/TypesOfDentists";
 import HealthCenters from "./sections/accessToCare/HealthCenters";
 import Coverage from "./sections/accessToCare/Coverage";
 import ChildCare from "./sections/specialPopulation/ChildCare";
+import Veterans from "./sections/specialPopulation/Veterans";
 import Immigrants from "./sections/specialPopulation/Immigrants";
 import DomesticPartners from "./sections/specialPopulation/DomesticPartners";
 import DisabilityStatus from "./sections/specialPopulation/DisabilityStatus";
+import Homeless from "./sections/specialPopulation/Homeless";
 import Incarceration from "./sections/specialPopulation/Incarceration";
 import HearingAndVisionDifficulty from "./sections/specialPopulation/HearingAndVisionDifficulty";
-import Homeownership from "./sections/builtEnvironment/Homeownership";
-import HouseRentals from "./sections/builtEnvironment/HouseRentals";
-import Transportation from "./sections/builtEnvironment/Transportation";
-import Crime from "./sections/builtEnvironment/Crime";
+import Homeownership from "./sections/builtSocialEnvironment/Homeownership";
+import HouseRentals from "./sections/builtSocialEnvironment/HouseRentals";
+import Transportation from "./sections/builtSocialEnvironment/Transportation";
+import Crime from "./sections/builtSocialEnvironment/Crime";
 import DistressScore from "./sections/economy/DistressScore";
 import HouseholdIncomeFromPublicAssistance from "./sections/economy/HouseholdIncomeFromPublicAssistance";
 import WageDistribution from "./sections/economy/WageDistribution";
 import Poverty from "./sections/economy/Poverty";
 import EducationalAttainment from "./sections/education/EducationalAttainment";
 import StudentPoverty from "./sections/education/StudentPoverty";
+import ReadingAssessment from "./sections/education/ReadingAssessment";
 import WaterQuality from "./sections/naturalEnvironment/WaterQuality";
-// import AirQuality from "./sections/naturalEnvironment/AirQuality";
+import AirQuality from "./sections/naturalEnvironment/AirQuality";
 
 class Profile extends Component {
 
@@ -53,18 +60,26 @@ class Profile extends Component {
           }
         />
 
-        <TopicTitle slug="health-behaviors">
+        <TopicTitle slug="food-access">
           <div className="section-container">
             <div className="section-title-stat-container">
-              <span className="section-title-inner">Health Behaviors</span>
-              <FoodStats />
+              <span className="section-title-inner">Food Access</span>
+              <Insecurity />
             </div>
           </div>
         </TopicTitle>
         <div className="section-container">
-          <FoodAccess />
-          <DemographicFoodAccess />
+          <FoodAvailability />
+          <StoreAccessByDemographic />
+        </div>
+        
+        <TopicTitle slug="health-behaviors">
+          <div className="section-container">Health Behaviors</div>
+        </TopicTitle>
+        <div className="section-container">
+          <HealthConditonChronicDiseases />
           <DrugUse />
+          <PhysicalActivity />
         </div>
 
         <TopicTitle slug="access-to-care">
@@ -72,6 +87,8 @@ class Profile extends Component {
         </TopicTitle>
         <div className="section-container">
           <HealthCenters />
+          <DentistsDemographic />
+          <TypesOfDentists />
           <Coverage />
         </div>
 
@@ -84,11 +101,13 @@ class Profile extends Component {
           <DomesticPartners />
           <DisabilityStatus />
           <HearingAndVisionDifficulty />
+          <Homeless />
+          <Veterans />
           <Incarceration />
         </div>
 
-        <TopicTitle slug="built-environment">
-          <div className="section-container">Built Environment</div>
+        <TopicTitle slug="built-social-environment">
+          <div className="section-container">Built/Social Environment</div>
         </TopicTitle>
         <div className="section-container">
           <Homeownership />
@@ -113,6 +132,7 @@ class Profile extends Component {
         <div className="section-container">
           <EducationalAttainment />
           <StudentPoverty />
+          <ReadingAssessment />
         </div>
 
         <TopicTitle slug="natural-enviornment">
@@ -120,7 +140,7 @@ class Profile extends Component {
         </TopicTitle>
         <div className="section-container">
           <WaterQuality />
-          {/*<AirQuality />*/}
+          <AirQuality />
         </div>
 
       </div>
@@ -129,17 +149,24 @@ class Profile extends Component {
 }
 
 Profile.need = [
-  FoodStats,
-  FoodAccess,
-  DemographicFoodAccess,
+  Insecurity,
+  FoodAvailability,
+  StoreAccessByDemographic,
+  HealthConditonChronicDiseases,
   DrugUse,
+  PhysicalActivity,
   HealthCenters,
+  DentistsDemographic,
+  TypesOfDentists,
   Coverage,
   ChildCare,
   Immigrants,
   DomesticPartners,
   DisabilityStatus,
   HearingAndVisionDifficulty,
+  Incarceration,
+  Veterans,
+  Homeless,
   Homeownership,
   HouseRentals,
   Transportation,
@@ -150,11 +177,12 @@ Profile.need = [
   Poverty,
   EducationalAttainment,
   StudentPoverty,
-  Incarceration,
+  ReadingAssessment,
   WaterQuality,
+  AirQuality,
   fetchData("diabetes", "/api/data?measures=Diabetes%20Data%20Value&City=<id>&Year=latest"),
   fetchData("meta", "/api/search?id=<id>"),
-  fetchData("population", "https://ironwood.datausa.io/api/data?measures=Population&Geography=<id>&year=latest")
+  fetchData("population", "https://katahdin.datausa.io/api/data?measures=Population&Geography=<id>&year=latest")
 ];
 
 const mapStateToProps = state => ({

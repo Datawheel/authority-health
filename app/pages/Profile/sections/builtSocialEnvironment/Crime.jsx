@@ -12,16 +12,7 @@ const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
 class Crime extends SectionColumns {
 
-  constructor(props) {
-    super(props);
-    this.state = {dropdownValue: "Violent crime"};
-  }
-
-  // Handler function for dropdown onChange.
-  handleChange = event => this.setState({dropdownValue: event.target.value});
-
   render() {
-    const {dropdownValue} = this.state;
     const {crimeData} = this.props;
 
     // Find the percentage for each type of crime and add "share" property to each data point.
@@ -83,7 +74,7 @@ class Crime extends SectionColumns {
 
         </article>
 
-        {/* Draw a Barchart for each type of crime based on the dropdown value. */}
+        {/* Draw a Barchart for each type of crime. */}
         <BarChart config={{
           data: crimeData,
           discrete: "x",
@@ -95,7 +86,7 @@ class Crime extends SectionColumns {
           time: "ID Year",
           xConfig: {
             labelRotation: false,
-            title: `Types of ${dropdownValue}`
+            title: "Types of Crimes"
           },
           yConfig: {
             tickFormat: d => formatPercentage(d),

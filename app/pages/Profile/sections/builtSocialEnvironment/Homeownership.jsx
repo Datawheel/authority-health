@@ -22,8 +22,8 @@ class Homeownership extends SectionColumns {
       .key(d => d.Year)
       .entries(occupancyData)
       .forEach(group => {
-        const total = sum(group.values, d => d.Population);
-        group.values.forEach(d => d.share = d.Population / total * 100);
+        const total = sum(group.values, d => d["Housing Units"]);
+        group.values.forEach(d => d.share = d["Housing Units"] / total * 100);
         group.key >= occupancyData[0].Year ? Object.assign(recentYearOccupancyData, group) : {};
       });
 
@@ -75,7 +75,7 @@ class Homeownership extends SectionColumns {
           <LinePlot config={{
             data: filteredOccupancyData,
             discrete: "x",
-            height: 250,
+            height: 200,
             groupBy: "Occupancy Status",
             label: d => d.Year,
             x: "Year",
@@ -114,9 +114,9 @@ Homeownership.defaultProps = {
 };
 
 Homeownership.need = [
-  fetchData("occupancyData", "/api/data?measures=Population&drilldowns=Occupancy%20Status&Geography=<id>&Year=all", d => d.data),
-  fetchData("medianHousingUnitsValue", "https://joshua-tree.datausa.io/api/data?measures=Property%20Value&Year=all&Geography=05000US26163:children", d => d.data),
-  fetchData("constructionDateData", "/api/data?measures=Construction%20Date&Geography=<id>&Year=all", d => d.data)
+  fetchData("occupancyData", "/api/data?measures=Housing%20Units&drilldowns=Occupancy%20Status&County=<id>&Year=all", d => d.data),
+  fetchData("medianHousingUnitsValue", "https://katahdin.datausa.io/api/data?measures=Property%20Value&Year=all&Geography=05000US26163:children", d => d.data),
+  fetchData("constructionDateData", "/api/data?measures=Construction%20Date&County=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

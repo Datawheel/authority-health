@@ -27,8 +27,8 @@ class Veterans extends SectionColumns {
         group.values.forEach(d => d.share = d.Population / total * 100);
         group.key >= veteransEmploymentStatus[0].Year ? Object.assign(recentYearVeteransByEmploymentStatus, group) : {};
       });
-    recentYearVeteransByEmploymentStatus.values.sort((a, b) => b.share - a.share);
-    const topEmploymentStatus = recentYearVeteransByEmploymentStatus.values[0];
+    const recentYearUnemployedVeterans = recentYearVeteransByEmploymentStatus.values.filter(d => d["Employment Status"] === "Unemployed");
+    const topEmploymentStatus = recentYearUnemployedVeterans[0];
 
     // Get data for Veterans Poverty status.
     const recentYearVeteransPovertyStatus = {};
@@ -57,7 +57,6 @@ class Veterans extends SectionColumns {
     const recentYearVeteransWithDisability = recentYearVeteransDisabilityStatus.values[1];
 
     // Get data for Veterns Period of Service.
-    console.log("periodOfService: ", periodOfService);
     const recentYearPeriodOfService = {};
     nest()
       .key(d => d.Year)
@@ -75,61 +74,43 @@ class Veterans extends SectionColumns {
         <SectionTitle>Veterans</SectionTitle>
         <article>
           <Stat 
-            title={`Majority Employment Status in ${topEmploymentStatus.Year}`}
-            value={`${topEmploymentStatus["Employment Status"]} ${formatPercentage(topEmploymentStatus.share)}`}
+            title={`Unemployed Veterans in ${topEmploymentStatus.Year}`}
+            value={`${formatPercentage(topEmploymentStatus.share)}`}
           />
           <Stat 
             title={`Veterans in Poverty in ${recentYearVeteransInPoverty.Year}`}
             value={`${formatPercentage(recentYearVeteransInPoverty.share)}`}
           />
-          <Stat 
+          <Stat
             title={`Veterans With Disability in ${recentYearVeteransWithDisability.Year}`}
             value={`${formatPercentage(recentYearVeteransWithDisability.share)}`}
           />
-          <Stat 
+          <Stat
             title={`Top Period of Service in ${topPeriodOfService.Year}`}
             value={`${topPeriodOfService["Period of Service"]} ${formatPercentage(topPeriodOfService.share)}`}
           />
-
-          {/* Draw a BarChart for Veterans Period of Service. */}
-          <BarChart config={{
-            data: periodOfService,
-            discrete: "x",
-            height: 200,
-            groupBy: "Period of Service",
-            legend: false,
-            x: d => d["Period of Service"],
-            y: "share",
-            time: "ID Year",
-            xSort: (a, b) => a["ID Period of Service"] - b["ID Period of Service"],
-            xConfig: {
-              labelRotation: false
-            },
-            yConfig: {tickFormat: d => formatPercentage(d)},
-            shapeConfig: {label: false},
-            tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
-          }}
-          />
         </article>
 
-        {/* Draw a LinePlot to show data for Veterans by their Employement Status. */}
-        <LinePlot config={{
-          data: veteransEmploymentStatus,
+        {/* Draw a BarChart for Veterans Period of Service. */}
+        <BarChart config={{
+          data: periodOfService,
           discrete: "x",
           height: 400,
-          groupBy: "Employment Status",
+          groupBy: "Period of Service",
           legend: false,
-          baseline: 0,
-          x: "Year",
-          xConfig: {
-            title: "Year",
-            labelRotation: false
-          },
+          x: d => d["Period of Service"],
           y: "share",
+          time: "ID Year",
+          xSort: (a, b) => a["ID Period of Service"] - b["ID Period of Service"],
+          xConfig: {
+            labelRotation: false,
+            title: "Period of Service"
+          },
           yConfig: {
             tickFormat: d => formatPercentage(d),
-            title: "Employment Status"
+            title: "Share"
           },
+          shapeConfig: {label: false},
           tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
         }}
         />

@@ -54,7 +54,7 @@ class EducationalAttainment extends SectionColumns {
             qualifier={formatPopulation(topDropoutRate["High School Dropout Rate"])}
           />
           <p>In {topEducationalAttainment.Year}, the highest Education attained was {topEducationalAttainment["Educational Attainment"]} with the share of {formatPopulation(topEducationalAttainment.share)}.</p>
-          <p>In {topDropoutRate.Year}, the top high school dropout rate was {formatPopulation(topDropoutRate["High School Dropout Rate"])} in the zip code region {topDropoutRate["Zip Code"]}.</p>
+          <p>In {topDropoutRate.Year}, the top high school dropout rate was {formatPopulation(topDropoutRate["High School Dropout Rate"])} in the zip code {topDropoutRate["Zip Code"]}.</p>
         </article>
 
         {/* Draw a Barchart to show Educational Attainment for all types of education buckets. */}

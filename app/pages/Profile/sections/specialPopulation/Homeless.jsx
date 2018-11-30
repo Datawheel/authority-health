@@ -79,7 +79,7 @@ class Homeless extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Homeless</SectionTitle>
         <article>
-          {/* Create a dropdown for each age and race type using raceAndAgeTypes array. */}
+          {/* Create a dropdown for sheltered and unsheltered choices. */}
           <select onChange={this.handleChange}>
             {dropdownList.map((item, i) => <option key={i} value={item}>{item}</option>)}
           </select>

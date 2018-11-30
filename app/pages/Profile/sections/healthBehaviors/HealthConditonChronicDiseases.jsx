@@ -13,7 +13,7 @@ class HealthConditonChronicDiseases extends SectionColumns {
 
   constructor(props) {
     super(props);
-    this.state = {dropdownValue: "Arthritis"};
+    this.state = {dropdownValue: "Arthritis Data Value"};
   }
 
   // Handler function for dropdown onChange event.
@@ -21,25 +21,30 @@ class HealthConditonChronicDiseases extends SectionColumns {
 
   render() {
 
-    const {arthritisData} = this.props;
-    console.log("arthritisData: ", arthritisData);
+    const {healthConditionData} = this.props;
+
     const {dropdownValue} = this.state;
+    const dropdownList = healthConditionData.source[0].measures;
 
     return (
       <SectionColumns>
         <SectionTitle>Health Conditon/Chronic Diseases</SectionTitle>
         <article>
+          {/* Create a dropdown for different types of health conditions. */}
+          <select onChange={this.handleChange}>
+            {dropdownList.map((item, i) => <option key={i} value={item}>{item}</option>)}
+          </select>
         </article>
 
-        {/* Gepmap to show Property Values for all tracts in the Wayne County. */}
+        {/* Geomap to show Property Values for all tracts in the Wayne County. */}
         <Geomap config={{
-          data: arthritisData,
+          data: healthConditionData.data,
           groupBy: "ID Tract",
-          colorScale: "Arthritis Data Value",
+          colorScale: dropdownValue,
           label: d => d.Tract,
           height: 400,
           time: "Year",
-          tooltipConfig: {tbody: [["Value", d => `${formatPercentage(d["Arthritis Data Value"])}`]]},
+          tooltipConfig: {tbody: [["Value", d => `${formatPercentage(d[dropdownValue])}`]]},
           topojson: "/topojson/tract.json",
           topojsonFilter: d => d.id.startsWith("14000US26163")
         }}
@@ -54,11 +59,13 @@ HealthConditonChronicDiseases.defaultProps = {
 };
 
 HealthConditonChronicDiseases.need = [
-  fetchData("arthritisData", "/api/data?measures=Arthritis%20Data%20Value,Population%20Count&drilldowns=Tract&Year=all", d => d.data)
+  fetchData("healthConditionData", "/api/data?measures=Arthritis%20Data%20Value,COPD%20Data%20Value,Chronic%20Kidney%20Disease%20Data%20Value,Coronary%20Heart%20Disease%20Data%20Value,Current%20Asthma%20Data%20Value,High%20Blood%20Pressure%20Data%20Value,High%20Cholesterol%20Data%20Value,Mental%20Health%20Data%20Value,Stroke%20Data%20Value,Taking%20BP%20Medication%20Data%20Value,Teeth%20Loss%20Data%20Value,Sleep%20less%20than%207%20hours%20Data%20Value&drilldowns=Tract&Year=all"),
+  fetchData("healthConditionWeightedData", "/api/data?measures=Cardiovascular%20Disease%20Yes%20Weighted%20Percent&drilldowns=End%20Year,Zip%20Region")
 ];
 
 const mapStateToProps = state => ({
-  arthritisData: state.data.arthritisData
+  healthConditionData: state.data.healthConditionData,
+  healthConditionWeightedData: state.data.healthConditionWeightedData
 });
 
 export default connect(mapStateToProps)(HealthConditonChronicDiseases);

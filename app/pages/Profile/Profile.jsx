@@ -10,6 +10,7 @@ import FoodAvailability from "./sections/foodAccess/FoodAvailability";
 import StoreAccessByDemographic from "./sections/foodAccess/StoreAccessByDemographic";
 import DrugUse from "./sections/healthBehaviors/DrugUse";
 import PhysicalActivity from "./sections/healthBehaviors/PhysicalActivity";
+import HealthConditonChronicDiseases from "./sections/healthBehaviors/HealthConditonChronicDiseases";
 import DentistsDemographic from "./sections/accessToCare/DentistsDemographic";
 import TypesOfDentists from "./sections/accessToCare/TypesOfDentists";
 import HealthCenters from "./sections/accessToCare/HealthCenters";
@@ -76,6 +77,7 @@ class Profile extends Component {
           <div className="section-container">Health Behaviors</div>
         </TopicTitle>
         <div className="section-container">
+          <HealthConditonChronicDiseases />
           <DrugUse />
           <PhysicalActivity />
         </div>
@@ -150,6 +152,7 @@ Profile.need = [
   Insecurity,
   FoodAvailability,
   StoreAccessByDemographic,
+  HealthConditonChronicDiseases,
   DrugUse,
   PhysicalActivity,
   HealthCenters,

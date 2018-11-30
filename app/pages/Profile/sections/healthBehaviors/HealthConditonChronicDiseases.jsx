@@ -5,7 +5,7 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-// import Stat from "../../components/Stat";
+import Stat from "../../../../components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -26,6 +26,8 @@ class HealthConditonChronicDiseases extends SectionColumns {
     const {dropdownValue} = this.state;
     const dropdownList = healthConditionData.source[0].measures;
 
+    const topDropdownValueTract = healthConditionData.data.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
+
     return (
       <SectionColumns>
         <SectionTitle>Health Conditon/Chronic Diseases</SectionTitle>
@@ -34,6 +36,13 @@ class HealthConditonChronicDiseases extends SectionColumns {
           <select onChange={this.handleChange}>
             {dropdownList.map((item, i) => <option key={i} value={item}>{item}</option>)}
           </select>
+
+          <Stat
+            title={`Majority ${dropdownValue} in ${topDropdownValueTract.Year}`}
+            value={`${topDropdownValueTract.Tract} ${formatPercentage(topDropdownValueTract[dropdownValue])}`}
+          />
+
+          <p>In {topDropdownValueTract.Year}, top {dropdownValue} was {formatPercentage(topDropdownValueTract[dropdownValue])} in {topDropdownValueTract.Tract}.</p>
         </article>
 
         {/* Geomap to show Property Values for all tracts in the Wayne County. */}

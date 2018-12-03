@@ -12,6 +12,7 @@ import DrugUse from "./sections/healthBehaviors/DrugUse";
 import PhysicalActivity from "./sections/healthBehaviors/PhysicalActivity";
 import HealthConditonChronicDiseases from "./sections/healthBehaviors/HealthConditonChronicDiseases";
 import PreventiveCare from "./sections/healthBehaviors/PreventiveCare";
+import ObesityAndDiabetes from "./sections/healthBehaviors/ObesityAndDiabetes";
 import DentistsDemographic from "./sections/accessToCare/DentistsDemographic";
 import TypesOfDentists from "./sections/accessToCare/TypesOfDentists";
 import HealthCenters from "./sections/accessToCare/HealthCenters";
@@ -80,6 +81,7 @@ class Profile extends Component {
         <div className="section-container">
           <HealthConditonChronicDiseases />
           <PreventiveCare />
+          <ObesityAndDiabetes />
           <DrugUse />
           <PhysicalActivity />
         </div>
@@ -156,6 +158,7 @@ Profile.need = [
   StoreAccessByDemographic,
   HealthConditonChronicDiseases,
   PreventiveCare,
+  ObesityAndDiabetes,
   DrugUse,
   PhysicalActivity,
   HealthCenters,

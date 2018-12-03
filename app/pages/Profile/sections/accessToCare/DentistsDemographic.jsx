@@ -16,7 +16,6 @@ class DentistsDemographic extends SectionColumns {
 
   render() {
     const {dentistsByAge, dentistsByGender} = this.props;
-    // console.log("dentistsByAge: ", dentistsByAge);
 
     const recentYearDentistsByAgeData = {};
     nest()
@@ -32,7 +31,6 @@ class DentistsDemographic extends SectionColumns {
     const topDentistsAgeData = recentYearDentistsByAgeData.values[0];
 
     // Get data for dentists by Gender.
-    // console.log("dentistsByGender: ", dentistsByGender);
     const recentYearDentistsByGender = {};
     nest()
       .key(d => d.Year)

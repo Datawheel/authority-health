@@ -42,10 +42,11 @@ class HealthConditonChronicDiseases extends SectionColumns {
             value={`${topDropdownValueTract.Tract} ${formatPercentage(topDropdownValueTract[dropdownValue])}`}
           />
 
+          <p>The Geomap here shows {dropdownValue} for Tracts in the Wayne county, MI.</p>
           <p>In {topDropdownValueTract.Year}, top {dropdownValue} was {formatPercentage(topDropdownValueTract[dropdownValue])} in {topDropdownValueTract.Tract}.</p>
         </article>
 
-        {/* Geomap to show Property Values for all tracts in the Wayne County. */}
+        {/* Geomap to show health condition data for selected dropdown value for all tracts in the Wayne County. */}
         <Geomap config={{
           data: healthConditionData.data,
           groupBy: "ID Tract",

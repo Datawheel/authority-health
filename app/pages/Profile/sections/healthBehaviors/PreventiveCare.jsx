@@ -22,7 +22,6 @@ class PreventiveCare extends SectionColumns {
   render() {
 
     const {preventiveCareData} = this.props;
-    console.log("preventiveCareData: ", preventiveCareData);
 
     const {dropdownValue} = this.state;
     const dropdownList = preventiveCareData.source[0].measures;

@@ -38,7 +38,7 @@ class PhysicalActivity extends SectionColumns {
         <article>
           {/* Create a dropdown list for Physical Health and Physical Activity options. */}
           <select onChange={this.handleChange}>
-            {dropdownList.map((item, i) => <option key={i} value={item}>{formatDropdownChoiceName(item)}</option>)}
+            {dropdownList.map(item => <option key={item} value={item}>{formatDropdownChoiceName(item)}</option>)}
           </select>
 
           <Stat

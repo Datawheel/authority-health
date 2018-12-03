@@ -36,7 +36,7 @@ class ObesityAndDiabetes extends SectionColumns {
         <article>
           {/* Create a dropdown for different types of health conditions. */}
           <select onChange={this.handleChange}>
-            {dropdownList.map((item, i) => <option key={i} value={item}>{item}</option>)}
+            {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
           </select>
 
           <Stat

@@ -56,7 +56,7 @@ class StoreAccessByDemographic extends SectionColumns {
         <article>
           {/* Create a dropdown for each age and race type using raceAndAgeTypes array. */}
           <select onChange={this.handleChange}>
-            {raceAndAgeTypes.map((item, i) => <option key={i} value={item}>{item}</option>)}
+            {raceAndAgeTypes.map(item => <option key={item} value={item}>{item}</option>)}
           </select>
           {/* Show top stats for Age and Race groups based on the drilldown value. */}
           { ageSelected

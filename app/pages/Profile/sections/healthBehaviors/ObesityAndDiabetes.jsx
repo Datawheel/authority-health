@@ -5,7 +5,7 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-// import Stat from "../../../../components/Stat";
+import Stat from "../../../../components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -27,7 +27,7 @@ class ObesityAndDiabetes extends SectionColumns {
     const {dropdownValue} = this.state;
     const dropdownList = obesityDataValue.source[0].measures;
 
-    // const topDropdownValueTract = healthConditionData.data.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
+    const topDropdownValueTract = obesityDataValue.data.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
 
     return (
       <SectionColumns>
@@ -37,6 +37,14 @@ class ObesityAndDiabetes extends SectionColumns {
           <select onChange={this.handleChange}>
             {dropdownList.map((item, i) => <option key={i} value={item}>{item}</option>)}
           </select>
+
+          <Stat
+            title={`Majority ${dropdownValue} in ${topDropdownValueTract.Year}`}
+            value={`${topDropdownValueTract.Tract} ${formatPercentage(topDropdownValueTract[dropdownValue])}`}
+          />
+
+          <p>The Geomap here shows {dropdownValue} for Tracts in the Wayne county, MI.</p>
+          <p>In {topDropdownValueTract.Year}, top {dropdownValue} was {formatPercentage(topDropdownValueTract[dropdownValue])} in {topDropdownValueTract.Tract}.</p>
           
         </article>
 

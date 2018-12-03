@@ -1,6 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
-import {Geomap} from "d3plus-react";
+import {BarChart, Geomap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
@@ -21,13 +21,14 @@ class ObesityAndDiabetes extends SectionColumns {
 
   render() {
 
-    const {obesityDataValue} = this.props;
-    console.log("obesityDataValue: ", obesityDataValue);
+    const {obesityAndDibetesDataValue, obesityPrevalenceBySex} = this.props;
+    console.log("obesityAndDibetesDataValue: ", obesityAndDibetesDataValue);
+    console.log("obesityPrevalenceBySex: ", obesityPrevalenceBySex);
 
     const {dropdownValue} = this.state;
-    const dropdownList = obesityDataValue.source[0].measures;
+    const dropdownList = obesityAndDibetesDataValue.source[0].measures;
 
-    const topDropdownValueTract = obesityDataValue.data.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
+    const topDropdownValueTract = obesityAndDibetesDataValue.data.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
 
     return (
       <SectionColumns>
@@ -46,11 +47,32 @@ class ObesityAndDiabetes extends SectionColumns {
           <p>The Geomap here shows {dropdownValue} for Tracts in the Wayne county, MI.</p>
           <p>In {topDropdownValueTract.Year}, top {dropdownValue} was {formatPercentage(topDropdownValueTract[dropdownValue])} in {topDropdownValueTract.Tract}.</p>
           
+          {/* Draw a BarChart to show data for Obesity Rate by Sex. */}
+          <BarChart config={{
+            data: obesityPrevalenceBySex,
+            discrete: "y",
+            height: 250,
+            legend: false,
+            groupBy: "Sex",
+            label: d => d.Sex,
+            x: "Adj Percent",
+            y: "Sex",
+            time: "ID Year",
+            xConfig: {
+              tickFormat: d => formatPercentage(d),
+              title: "Obesity Rate"
+            },
+            yConfig: {
+              ticks: []
+            },
+            tooltipConfig: {tbody: [["Value", d => formatPercentage(d["Adj Percent"])]]}
+          }}
+          />
         </article>
 
-        {/* Geomap to show health condition data for selected dropdown value for all tracts in the Wayne County. */}
+        {/* Geomap to show Obesity and Diabetes data based on the dropdown value for all tracts in the Wayne County. */}
         <Geomap config={{
-          data: obesityDataValue.data,
+          data: obesityAndDibetesDataValue.data,
           groupBy: "ID Tract",
           colorScale: dropdownValue,
           label: d => d.Tract,
@@ -71,11 +93,13 @@ ObesityAndDiabetes.defaultProps = {
 };
 
 ObesityAndDiabetes.need = [
-  fetchData("obesityDataValue", "/api/data?measures=Obesity%20Data%20Value&drilldowns=Tract&Year=all")
+  fetchData("obesityAndDibetesDataValue", "/api/data?measures=Obesity%20Data%20Value,Diabetes%20Data%20Value&drilldowns=Tract&Year=all"),
+  fetchData("obesityPrevalenceBySex", "/api/data?measures=Adj%20Percent&drilldowns=Sex&County=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({
-  obesityDataValue: state.data.obesityDataValue
+  obesityAndDibetesDataValue: state.data.obesityAndDibetesDataValue,
+  obesityPrevalenceBySex: state.data.obesityPrevalenceBySex
 });
 
 export default connect(mapStateToProps)(ObesityAndDiabetes);

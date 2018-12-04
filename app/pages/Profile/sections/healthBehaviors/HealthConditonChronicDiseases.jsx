@@ -30,6 +30,15 @@ class HealthConditonChronicDiseases extends SectionColumns {
     healthConditionWeightedData.source[0].measures.forEach(d => {
       dropdownList.push(d);
     });
+    
+    // Check if the selected dropdown values are from the healthConditionWeightedData.
+    const isHealthConditionWeightedValueSelected = dropdownValue === "Cardiovascular Disease Yes Weighted Percent" ||
+    dropdownValue === "Ever Depressive Yes Weighted Percent" ||
+    dropdownValue === "Ever Heart Attack Yes Weighted Percent" ||
+    dropdownValue === "Heart Disease Yes Weighted Percent" ||
+    dropdownValue === "HIV Tested Yes Weighted Percent" ||
+    dropdownValue === "Poor Mental Health 14 Or More Days Weighted Percent" ||
+    dropdownValue === "Gen Health Fair Or Poor Weighted Percent";
 
     // Get top stats for the most recent year data for the selected dropdown value.
     const topDropdownValueTract = healthConditionData.data.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
@@ -42,15 +51,6 @@ class HealthConditonChronicDiseases extends SectionColumns {
         group.key >= healthConditionWeightedData.data[0]["End Year"] ? Object.assign(recentYearWeightedData, group) : {};
       });
     const topDropdownWeightedData = recentYearWeightedData.values[0];
-
-    // Check if the selected dropdown values are from the healthConditionWeightedData.
-    const isHealthConditionWeightedValueSelected = dropdownValue === "Cardiovascular Disease Yes Weighted Percent" ||
-    dropdownValue === "Ever Depressive Yes Weighted Percent" ||
-    dropdownValue === "Ever Heart Attack Yes Weighted Percent" ||
-    dropdownValue === "Heart Disease Yes Weighted Percent" ||
-    dropdownValue === "HIV Tested Yes Weighted Percent" ||
-    dropdownValue === "Poor Mental Health 14 Or More Days Weighted Percent" ||
-    dropdownValue === "Gen Health Fair Or Poor Weighted Percent";
 
     return (
       <SectionColumns>

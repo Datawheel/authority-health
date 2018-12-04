@@ -103,7 +103,7 @@ class Profile extends Component {
           <ChildCare />
           <Immigrants />
           <DomesticPartners />
-          {/* <DisabilityStatus /> */}
+          <DisabilityStatus />
           <HearingAndVisionDifficulty />
           <Homeless />
           <Veterans />
@@ -168,7 +168,7 @@ Profile.need = [
   ChildCare,
   Immigrants,
   DomesticPartners,
-  // DisabilityStatus,
+  DisabilityStatus,
   HearingAndVisionDifficulty,
   Incarceration,
   Veterans,

@@ -9,6 +9,7 @@ import Insecurity from "./sections/foodAccess/Insecurity";
 import FoodAvailability from "./sections/foodAccess/FoodAvailability";
 import StoreAccessByDemographic from "./sections/foodAccess/StoreAccessByDemographic";
 import DrugUse from "./sections/healthBehaviors/DrugUse";
+import Cancer from "./sections/healthBehaviors/Cancer";
 import PhysicalActivity from "./sections/healthBehaviors/PhysicalActivity";
 import HealthConditonChronicDiseases from "./sections/healthBehaviors/HealthConditonChronicDiseases";
 import PreventiveCare from "./sections/healthBehaviors/PreventiveCare";
@@ -82,6 +83,7 @@ class Profile extends Component {
           <HealthConditonChronicDiseases />
           <PreventiveCare />
           <ObesityAndDiabetes />
+          <Cancer />
           <DrugUse />
           <PhysicalActivity />
         </div>
@@ -146,7 +148,6 @@ class Profile extends Component {
           <WaterQuality />
           <AirQuality />
         </div>
-
       </div>
     );
   }
@@ -159,6 +160,7 @@ Profile.need = [
   HealthConditonChronicDiseases,
   PreventiveCare,
   ObesityAndDiabetes,
+  Cancer,
   DrugUse,
   PhysicalActivity,
   HealthCenters,

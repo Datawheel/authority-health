@@ -1,5 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
+import {nest} from "d3-collection";
 import {BarChart, Geomap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
@@ -9,7 +10,7 @@ import Stat from "../../../../components/Stat";
 
 const formatName = name => {
   const nameArr = name.split(" ");
-  return `${nameArr[0]} ${nameArr[1]}`;
+  return `${nameArr[0]} ${nameArr[1]} ${nameArr[2]}`;
 };
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -26,8 +27,25 @@ class DrugUse extends SectionColumns {
   render() {
     const {dropdownValue} = this.state;
 
-    const {allTractSmokingDrinkingData} = this.props;
-    const drugTypes = allTractSmokingDrinkingData.source[0].measures;
+    const {allTractSmokingDrinkingData, secondHandSmokeAndMonthlyAlcohol} = this.props;
+
+    // Include all the measures from allTractSmokingDrinkingData and secondHandSmokeAndMonthlyAlcohol in the dropdown list.
+    const drugTypes = allTractSmokingDrinkingData.source[0].measures.slice();
+    secondHandSmokeAndMonthlyAlcohol.source[0].measures.forEach(d => {
+      drugTypes.push(d);
+    });
+
+    const isSecondHandSmokeOrMonthlyAlcoholSelected = dropdownValue === "Secondhand Smoke Exposure Yes Weighted Percent" || dropdownValue === "Monthly Alcohol Consumption Some Weighted Percent";
+    
+    // Find recent year top data for the selceted dropdown value.
+    const recentYearSecondHandSmokeAndMonthlyAlcoholData = {};
+    nest()
+      .key(d => d["End Year"])
+      .entries(secondHandSmokeAndMonthlyAlcohol.data)
+      .forEach(group => {
+        group.key >= secondHandSmokeAndMonthlyAlcohol.data[0]["End Year"] ? Object.assign(recentYearSecondHandSmokeAndMonthlyAlcoholData, group) : {};
+      });
+    const topSecondHandSmokeAndMonthlyAlcoholData = recentYearSecondHandSmokeAndMonthlyAlcoholData.values[0];
 
     const allTractSmokingData = allTractSmokingDrinkingData.data.slice(0);
     allTractSmokingData.sort((a, b) => b[dropdownValue] - a[dropdownValue]);
@@ -66,12 +84,22 @@ class DrugUse extends SectionColumns {
             </label>
           </div>
 
-          <Stat
-            title={"Tract with highest prevalence"}
-            value={topTractNum}
-            qualifier={`${formatAbbreviate(topTractRate)}%`}
-          />
-          <p>{topTractNum} had the highest {formatName(dropdownValue.toLowerCase())} rate of {topTractRate}% in the year {year}</p>
+          {isSecondHandSmokeOrMonthlyAlcoholSelected
+            ? <Stat
+              title={"County with highest prevalence"}
+              value={topSecondHandSmokeAndMonthlyAlcoholData.County}
+              qualifier={`${formatAbbreviate(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue])}%`}
+            />
+            : <Stat
+              title={"Tract with highest prevalence"}
+              value={topTractNum}
+              qualifier={`${formatAbbreviate(topTractRate)}%`}
+            />
+          }
+          {isSecondHandSmokeOrMonthlyAlcoholSelected
+            ? <p>{topSecondHandSmokeAndMonthlyAlcoholData.County} had the highest {formatName(dropdownValue.toLowerCase())} rate of {formatAbbreviate(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue])}% in the year {year}.</p>
+            : <p>{topTractNum} had the highest {formatName(dropdownValue.toLowerCase())} rate of {topTractRate}% in the year {year}.</p>
+          }
 
           {/* Draw a mini bar chart to show smoking status: former, current & never. */}
           {dropdownValue === drugTypes[0]
@@ -105,25 +133,39 @@ class DrugUse extends SectionColumns {
                   }
                 });
               });
-              // console.log(data);
               return data;
             }}
             /> : null }
         </article>
 
         {/* Create a Geomap based on the dropdown choice. */}
-        <Geomap config={{
-          data: `/api/data?measures=${dropdownValue.replace(/\s/g, "%20")}&drilldowns=Tract&Year=latest`,
-          groupBy: "ID Tract",
-          colorScale: dropdownValue,
-          label: d => d.Tract,
-          height: 400,
-          tooltipConfig: {tbody: [["Value", d => formatAbbreviate(d[dropdownValue])]]},
-          topojson: "/topojson/tract.json",
-          topojsonFilter: d => d.id.startsWith("14000US26163")
-        }}
-        dataFormat={resp => resp.data}
-        />
+        {isSecondHandSmokeOrMonthlyAlcoholSelected
+          ? <Geomap config={{
+            data: secondHandSmokeAndMonthlyAlcohol.data,
+            groupBy: "ID County",
+            colorScale: dropdownValue,
+            label: d => d.County,
+            height: 400,
+            time: "End Year",
+            tooltipConfig: {tbody: [["Value", d => `${formatPercentage(d[dropdownValue])}`]]},
+            topojson: "/topojson/county.json",
+            topojsonFilter: d => d.id.startsWith("05000US26")
+          }}
+          />
+          : <Geomap config={{
+            data: `/api/data?measures=${dropdownValue.replace(/\s/g, "%20")}&drilldowns=Tract&Year=latest`,
+            groupBy: "ID Tract",
+            colorScale: dropdownValue,
+            label: d => d.Tract,
+            height: 400,
+            time: "Year",
+            tooltipConfig: {tbody: [["Value", d => formatAbbreviate(d[dropdownValue])]]},
+            topojson: "/topojson/tract.json",
+            topojsonFilter: d => d.id.startsWith("14000US26163")
+          }}
+          dataFormat={resp => resp.data}
+          />
+        }
       </SectionColumns>
     );
   }
@@ -134,11 +176,13 @@ DrugUse.defaultProps = {
 };
 
 DrugUse.need = [
-  fetchData("allTractSmokingDrinkingData", "/api/data?measures=Current%20Smoking%20Data%20Value,Binge%20Drinking%20Data%20Value&drilldowns=Tract&Year=latest")
+  fetchData("allTractSmokingDrinkingData", "/api/data?measures=Current%20Smoking%20Data%20Value,Binge%20Drinking%20Data%20Value&drilldowns=Tract&Year=latest"),
+  fetchData("secondHandSmokeAndMonthlyAlcohol", "/api/data?measures=Secondhand%20Smoke%20Exposure%20Yes%20Weighted%20Percent,Monthly%20Alcohol%20Consumption%20Some%20Weighted%20Percent&drilldowns=End%20Year,County")
 ];
 
 const mapStateToProps = state => ({
-  allTractSmokingDrinkingData: state.data.allTractSmokingDrinkingData
+  allTractSmokingDrinkingData: state.data.allTractSmokingDrinkingData,
+  secondHandSmokeAndMonthlyAlcohol: state.data.secondHandSmokeAndMonthlyAlcohol
 });
 
 export default connect(mapStateToProps)(DrugUse);

@@ -24,7 +24,7 @@ class HealthConditonChronicDiseases extends SectionColumns {
 
     const {healthConditionData, healthConditionWeightedData} = this.props;
 
-    // include all the measures from healthConditionData and healthConditionWeightedData.
+    // Include all the measures from healthConditionData and healthConditionWeightedData in the dropdown list.
     const {dropdownValue} = this.state;
     const dropdownList = healthConditionData.source[0].measures.slice();
     healthConditionWeightedData.source[0].measures.forEach(d => {
@@ -73,7 +73,7 @@ class HealthConditonChronicDiseases extends SectionColumns {
             />
           }
 
-          {/* Write short paragraphs explaining the Geomap and top stats for the dropdown value selected */}
+          {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           { isHealthConditionWeightedValueSelected
             ? <p>The Geomap here shows {dropdownValue} for Counties in the Michigan State.</p>
             : <p>The Geomap here shows {dropdownValue} for Tracts in the Wayne County, MI.</p>

@@ -1,5 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
+import {nest} from "d3-collection";
 import {Geomap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
@@ -22,8 +23,8 @@ class PreventiveCare extends SectionColumns {
   render() {
 
     const {preventiveCareData, preventiveCareWeightedData} = this.props;
-    console.log("preventiveCareWeightedData: ", preventiveCareWeightedData);
 
+    // Include all the measures from preventiveCareData and preventiveCareWeightedData in the dropdown list.
     const {dropdownValue} = this.state;
     const dropdownList = preventiveCareData.source[0].measures.slice();
     preventiveCareWeightedData.source[0].measures.forEach(d => {
@@ -36,6 +37,16 @@ class PreventiveCare extends SectionColumns {
     dropdownValue === "Had Routine Checkup Last Year Yes Weighted Percent" ||
     dropdownValue === "FOBT or Endoscopy Yes Weighted Percent";
 
+    // Find recent year top data for the selceted dropdown value.
+    const recentYearWeightedData = {};
+    nest()
+      .key(d => d["End Year"])
+      .entries(preventiveCareWeightedData.data)
+      .forEach(group => {
+        group.key >= preventiveCareWeightedData.data[0]["End Year"] ? Object.assign(recentYearWeightedData, group) : {};
+      });
+    const topDropdownWeightedData = recentYearWeightedData.values[0];
+
     const topDropdownValueTract = preventiveCareData.data.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
 
     return (
@@ -47,13 +58,27 @@ class PreventiveCare extends SectionColumns {
             {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
           </select>
 
-          <Stat
-            title={`Majority ${dropdownValue} in ${topDropdownValueTract.Year}`}
-            value={`${topDropdownValueTract.Tract} ${formatPercentage(topDropdownValueTract[dropdownValue])}`}
-          />
+          {/* Show top stats for the dropdown selected. */}
+          {isPreventativeCareWeightedValueSelected
+            ? <Stat
+              title={`Majority ${dropdownValue} in ${topDropdownWeightedData.Year}`}
+              value={`${topDropdownWeightedData.County} ${formatPercentage(topDropdownWeightedData[dropdownValue])}`}
+            />
+            : <Stat
+              title={`Majority ${dropdownValue} in ${topDropdownValueTract.Year}`}
+              value={`${topDropdownValueTract.Tract} ${formatPercentage(topDropdownValueTract[dropdownValue])}`}
+            />
+          }
 
-          <p>The Geomap here shows {dropdownValue} for Tracts in the Wayne county, MI.</p>
-          <p>In {topDropdownValueTract.Year}, top {dropdownValue} was {formatPercentage(topDropdownValueTract[dropdownValue])} in {topDropdownValueTract.Tract}.</p>
+          {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
+          {isPreventativeCareWeightedValueSelected 
+            ? <p>The Geomap here shows {dropdownValue} for Counties in Michigan.</p>
+            : <p>The Geomap here shows {dropdownValue} for Tracts in the Wayne county, MI.</p>
+          }
+          {isPreventativeCareWeightedValueSelected 
+            ? <p>In {topDropdownValueTract.Year}, top {dropdownValue} was {formatPercentage(topDropdownWeightedData[dropdownValue])} in the {topDropdownWeightedData.County}, MI.</p>
+            : <p>In {topDropdownValueTract.Year}, top {dropdownValue} was {formatPercentage(topDropdownValueTract[dropdownValue])} in {topDropdownValueTract.Tract}.</p>
+          }
         </article>
 
         {/* Geomap to show Preventive care data for selected dropdown Value. */}

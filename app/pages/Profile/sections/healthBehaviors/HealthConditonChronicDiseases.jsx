@@ -84,7 +84,7 @@ class HealthConditonChronicDiseases extends SectionColumns {
           }
         </article>
 
-        {/* Geomap to show health condition data for selected dropdown value for all tracts in the Wayne County. */}
+        {/* Geomap to show health condition data for selected dropdown value. */}
         {isHealthConditionWeightedValueSelected 
           ? <Geomap config={{
             data: healthConditionWeightedData.data,
@@ -97,7 +97,7 @@ class HealthConditonChronicDiseases extends SectionColumns {
             topojson: "/topojson/county.json",
             topojsonFilter: d => d.id.startsWith("05000US26")
           }}
-          /> 
+          />
           : <Geomap config={{
             data: healthConditionData.data,
             groupBy: "ID Tract",

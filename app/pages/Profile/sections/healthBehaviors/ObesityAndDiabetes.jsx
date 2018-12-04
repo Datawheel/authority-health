@@ -21,12 +21,14 @@ class ObesityAndDiabetes extends SectionColumns {
 
   render() {
 
-    const {obesityAndDibetesDataValue, obesityPrevalenceBySex} = this.props;
-    console.log("obesityAndDibetesDataValue: ", obesityAndDibetesDataValue);
-    console.log("obesityPrevalenceBySex: ", obesityPrevalenceBySex);
+    const {obesityAndDibetesDataValue, obesityPrevalenceBySex, BMIWeightedData} = this.props;
+    console.log("BMIWeightedData: ", BMIWeightedData);
 
     const {dropdownValue} = this.state;
-    const dropdownList = obesityAndDibetesDataValue.source[0].measures;
+    const dropdownList = obesityAndDibetesDataValue.source[0].measures.slice();
+    BMIWeightedData.source[0].measures.forEach(d => {
+      dropdownList.push(d);
+    });
 
     const topDropdownValueTract = obesityAndDibetesDataValue.data.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
 
@@ -94,12 +96,14 @@ ObesityAndDiabetes.defaultProps = {
 
 ObesityAndDiabetes.need = [
   fetchData("obesityAndDibetesDataValue", "/api/data?measures=Obesity%20Data%20Value,Diabetes%20Data%20Value&drilldowns=Tract&Year=all"),
-  fetchData("obesityPrevalenceBySex", "/api/data?measures=Adj%20Percent&drilldowns=Sex&County=<id>&Year=all", d => d.data)
+  fetchData("obesityPrevalenceBySex", "/api/data?measures=Adj%20Percent&drilldowns=Sex&County=<id>&Year=all", d => d.data),
+  fetchData("BMIWeightedData", "/api/data?measures=BMI%20Healthy%20Weight%20Weighted%20Percent,BMI%20Obese%20Weighted%20Percent,BMI%20Overweight%20Weighted%20Percent,BMI%20Underweight%20Weighted%20Percent&drilldowns=End%20Year,County")
 ];
 
 const mapStateToProps = state => ({
   obesityAndDibetesDataValue: state.data.obesityAndDibetesDataValue,
-  obesityPrevalenceBySex: state.data.obesityPrevalenceBySex
+  obesityPrevalenceBySex: state.data.obesityPrevalenceBySex,
+  BMIWeightedData: state.data.BMIWeightedData
 });
 
 export default connect(mapStateToProps)(ObesityAndDiabetes);

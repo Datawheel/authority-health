@@ -63,7 +63,7 @@ class ObesityAndDiabetes extends SectionColumns {
     const topDiabetesMaleData = recentYearDiabetesPrevalenceBySexData.values.filter(d => d.Sex === "Male")[0];
     const topDiabetesFemaleData = recentYearDiabetesPrevalenceBySexData.values.filter(d => d.Sex === "Female")[0];
 
-    // Find recent year top data for diabetesPrevalenceBySex.
+    // Find recent year top data for obesityPrevalenceBySex.
     const recentYearObesityPrevalenceBySexData = {};
     nest()
       .key(d => d["End Year"])

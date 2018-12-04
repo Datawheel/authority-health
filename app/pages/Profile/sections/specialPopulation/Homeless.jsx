@@ -28,7 +28,6 @@ class Homeless extends SectionColumns {
     const dropdownList = ["Sheltered", "Unsheltered"];
     const shelteredSelected = dropdownValue === "Sheltered";
 
-    console.log("typesOfShelteredHomeless: ", typesOfShelteredHomeless);
     const recentYearTypesOfShelteredHomeless = {};
     nest()
       .key(d => d.Year)
@@ -41,7 +40,6 @@ class Homeless extends SectionColumns {
     recentYearTypesOfShelteredHomeless.values.sort((a, b) => b.share - a.share);
     const topShelteredHomelessTypes = recentYearTypesOfShelteredHomeless.values[0];
 
-    console.log("typesOfUnshelteredHomeless: ", typesOfUnshelteredHomeless);
     const recentYearTypesOfUnshelteredHomeless = {};
     nest()
       .key(d => d.Year)

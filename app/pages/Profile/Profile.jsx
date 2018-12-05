@@ -10,7 +10,7 @@ import FoodAvailability from "./sections/foodAccess/FoodAvailability";
 import StoreAccessByDemographic from "./sections/foodAccess/StoreAccessByDemographic";
 import DrugUse from "./sections/healthBehaviors/DrugUse";
 import Cancer from "./sections/healthBehaviors/Cancer";
-import PhysicalActivity from "./sections/healthBehaviors/PhysicalActivity";
+import PhysicalInactivity from "./sections/healthBehaviors/PhysicalInactivity";
 import HealthConditonChronicDiseases from "./sections/healthBehaviors/HealthConditonChronicDiseases";
 import PreventiveCare from "./sections/healthBehaviors/PreventiveCare";
 import ObesityAndDiabetes from "./sections/healthBehaviors/ObesityAndDiabetes";
@@ -85,7 +85,7 @@ class Profile extends Component {
           <ObesityAndDiabetes />
           <Cancer />
           <DrugUse />
-          <PhysicalActivity />
+          <PhysicalInactivity />
         </div>
 
         <TopicTitle slug="access-to-care">
@@ -162,7 +162,7 @@ Profile.need = [
   ObesityAndDiabetes,
   Cancer,
   DrugUse,
-  PhysicalActivity,
+  PhysicalInactivity,
   HealthCenters,
   DentistsDemographic,
   TypesOfDentists,

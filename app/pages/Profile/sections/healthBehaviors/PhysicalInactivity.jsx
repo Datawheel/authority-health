@@ -14,7 +14,7 @@ const formatDropdownChoiceName = d => {
   return `${wordsList[0]} ${wordsList[1]}`;
 };
 
-class PhysicalActivity extends SectionColumns {
+class PhysicalInactivity extends SectionColumns {
 
   constructor(props) {
     super(props);
@@ -132,11 +132,11 @@ class PhysicalActivity extends SectionColumns {
   }
 }
 
-PhysicalActivity.defaultProps = {
+PhysicalInactivity.defaultProps = {
   slug: "physical-health-and-inactivity"
 };
 
-PhysicalActivity.need = [
+PhysicalInactivity.need = [
   fetchData("physicalInActivity", "/api/data?measures=Physical%20Health%20Data%20Value,Physical%20Inactivity%20Data%20Value&drilldowns=Tract&Year=all", d => d.data),
   fetchData("physicalInactivityPrevalenceBySex", "/api/data?measures=Adj%20Percent&drilldowns=Sex&County=<id>&Year=all", d => d.data)
 ];
@@ -146,4 +146,4 @@ const mapStateToProps = state => ({
   physicalInactivityPrevalenceBySex: state.data.physicalInactivityPrevalenceBySex
 });
 
-export default connect(mapStateToProps)(PhysicalActivity);
+export default connect(mapStateToProps)(PhysicalInactivity);

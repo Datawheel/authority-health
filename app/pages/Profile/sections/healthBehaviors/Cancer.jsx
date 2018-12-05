@@ -23,18 +23,29 @@ class Cancer extends SectionColumns {
   
   render() {
 
-    const {cancerOccuranceRate, cancerByGender} = this.props;
+    const {cancerOccuranceRate, cancerByGender, cancerByRaceAndEthnicity} = this.props;
     console.log("cancerOccuranceRate: ", cancerOccuranceRate);
     console.log("cancerByGender: ", cancerByGender);
+    console.log("cancerByRaceAndEthnicity: ", cancerByRaceAndEthnicity);
 
     const recentYearCancerByGender = {};
     nest()
       .key(d => d.Year)
-      .entries(cancerByGender.data)
+      .entries(cancerByGender)
       .forEach(group => {
         const total = sum(group.values, d => d.Count);
         group.values.forEach(d => d.share = d.Count / total * 100);
-        group.key >= cancerByGender.data[0].Year ? Object.assign(recentYearCancerByGender, group) : {};
+        group.key >= cancerByGender[0].Year ? Object.assign(recentYearCancerByGender, group) : {};
+      });
+
+    const recentYearCancerByRaceAndEthnicity = {};
+    nest()
+      .key(d => d.Year)
+      .entries(cancerByRaceAndEthnicity)
+      .forEach(group => {
+        const total = sum(group.values, d => d.Count);
+        group.values.forEach(d => d.share = d.Count / total * 100);
+        group.key >= cancerByGender[0].Year ? Object.assign(recentYearCancerByRaceAndEthnicity, group) : {};
       });
 
     return (
@@ -42,9 +53,9 @@ class Cancer extends SectionColumns {
         <SectionTitle>Cancer</SectionTitle>
         <article>
 
-          {/* Draw a BarChart to show data for health center data by race */}
+          {/* Draw a BarChart to show Cancer by Sex for selected cancer type. */}
           <BarChart config={{
-            data: cancerByGender.data,
+            data: cancerByGender,
             discrete: "y",
             height: 250,
             legend: false,
@@ -53,16 +64,43 @@ class Cancer extends SectionColumns {
             label: d => d.Sex === "M" ? "Male" : "Female",
             x: "share",
             y: "Cancer Site",
-            time: "ID Year",
-            xConfig: {tickFormat: d => formatPercentage(d)},
-            yConfig: {ticks: []},
+            time: "Year",
+            xConfig: {
+              tickFormat: d => formatPercentage(d),
+              labelRotation: false
+            },
+            yConfig: {
+              tickFormat: d => d,
+              labelRotation: false
+            },
+            tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
+          }}
+          />
+          
+          {/* Draw a BarChart to show Cancer by Race and Ethnicity for selected cancer type. */}
+          <BarChart config={{
+            data: cancerByRaceAndEthnicity,
+            discrete: "y",
+            height: 250,
+            legend: false,
+            groupBy: ["Cancer Site", "Ethnicity", "Race"],
+            stacked: true,
+            label: d => `${d.Ethnicity} ${d.Race}`,
+            x: "share",
+            y: "Cancer Site",
+            time: "Year",
+            xConfig: {
+              tickFormat: d => formatPercentage(d),
+              labelRotation: false
+            },
+            yConfig: {tickFormat: d => d},
             tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
           }}
           />
         </article>
 
         <LinePlot config={{
-          data: cancerOccuranceRate.data,
+          data: cancerOccuranceRate,
           discrete: "x",
           height: 400,
           groupBy: "Cancer Site",
@@ -95,12 +133,14 @@ Cancer.defaultProps = {
 
 Cancer.need = [
   fetchData("cancerOccuranceRate", "/api/data?measures=Age-Adjusted%20Rate,Age-Adjusted%20Rate%20Lower%2095%20Percent%20Confidence%20Interval,Age-Adjusted%20Rate%20Upper%2095%20Percent%20Confidence%20Interval&drilldowns=MSA&Year=all&Cancer%20Site=Brain", d => d.data),
-  fetchData("cancerByGender", "/api/data?measures=Count&drilldowns=MSA,Sex&Year=all&Cancer%20Site=Brain", d => d.data)
+  fetchData("cancerByGender", "/api/data?measures=Count&drilldowns=MSA,Sex&Year=all&Cancer%20Site=Brain", d => d.data),
+  fetchData("cancerByRaceAndEthnicity", "/api/data?measures=Count&drilldowns=MSA,Race,Ethnicity&Year=all&Cancer%20Site=Brain", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   cancerOccuranceRate: state.data.cancerOccuranceRate,
-  cancerByGender: state.data.cancerByGender
+  cancerByGender: state.data.cancerByGender,
+  cancerByRaceAndEthnicity: state.data.cancerByRaceAndEthnicity
 });
 
 export default connect(mapStateToProps)(Cancer);

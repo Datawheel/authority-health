@@ -42,13 +42,13 @@ class WaterQuality extends SectionColumns {
 
 
     const filteredData = waterQualityData.data.filter(d => d["ID Tract"].startsWith("14000US26163"));
-    console.log("filteredData: ", filteredData);
+    // console.log("filteredData: ", filteredData);
 
     const excessiveLeadData = filteredData.filter(d => d["Lead Level"] === "excessive");
-    console.log("excessiveLeadData: ", excessiveLeadData);
+    // console.log("excessiveLeadData: ", excessiveLeadData);
 
     const excessiveMercuryData = filteredData.filter(d => d["Mercury Level"] === "excessive");
-    console.log("excessiveMercuryData: ", excessiveMercuryData);
+    // console.log("excessiveMercuryData: ", excessiveMercuryData);
 
     const leadStats = getLeadStats(excessiveLeadData);
     const mercuryStats = getMercuryStats(excessiveMercuryData);

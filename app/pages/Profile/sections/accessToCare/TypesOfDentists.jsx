@@ -128,7 +128,6 @@ class TypesOfDentists extends SectionColumns {
             xConfig: {
               ticks: [],
               labelRotation: false,
-              title: "Percentage of Dentists",
               tickFormat: d => formatPercentage(d)
             },
             shapeConfig: {label: false},
@@ -154,7 +153,6 @@ class TypesOfDentists extends SectionColumns {
           },
           yConfig: {
             ticks: [],
-            title: "Percentage of Dentists",
             tickFormat: d => formatPercentage(d)
           },
           shapeConfig: {label: false},

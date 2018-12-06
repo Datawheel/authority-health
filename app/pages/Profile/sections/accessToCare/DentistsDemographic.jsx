@@ -52,7 +52,7 @@ class DentistsDemographic extends SectionColumns {
             title={`Majority Age group in ${topDentistsAgeData.Year}`}
             value={`${topDentistsAgeData["Age Group"]} ${formatPercentage(topDentistsAgeData.share)}`}
           />
-          <Stat 
+          <Stat
             title={`Majority Gender in ${topDentistsByGender.Year}`}
             value={`${topDentistsByGender.Sex} ${formatPercentage(topDentistsByGender.share)}`}
           />

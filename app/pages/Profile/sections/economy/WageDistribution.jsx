@@ -42,7 +42,7 @@ class WageDistribution extends SectionColumns {
         <article>
           {/* Top stats and short paragraph about Wage distribution. */}
           <Stat
-            title={`Top Wage Dsitribution in ${topWageDistribution.County}`}
+            title={`Top Wage Dsitribution in ${topWageDistribution.Geography}`}
             year={topWageDistribution.Year}
             value={topWageDistribution["Household Income Bucket"]}
             qualifier={formatPopulation(topWageDistribution.share)}
@@ -54,8 +54,8 @@ class WageDistribution extends SectionColumns {
             value={topWageGini.Place}
             qualifier={formatAbbreviate(topWageGini["Wage GINI"])}
           />
-          <p>This Barchart shows the number of workers in various wage buckets in {topWageDistribution.County}. In {topWageDistribution.Year}, {topWageDistribution.County} had the top Wage Distribution of {topWageDistribution["Household Income Bucket"]} with {formatPopulation(topWageDistribution.share)}.</p>
-          <p>In {topWageGini.Year}, the highest income inequality in Michigan, was in {topWageGini.Place} with {formatAbbreviate(topWageGini["Wage GINI"])}</p>
+          <p>This Barchart shows the number of workers in various wage buckets in {topWageDistribution.Geography}. In {topWageDistribution.Year}, {topWageDistribution.Geography} had the top Wage Distribution of {topWageDistribution["Household Income Bucket"]} with {formatPopulation(topWageDistribution.share)} share.</p>
+          <p>In {topWageGini.Year}, the highest income inequality in Michigan, was in {topWageGini.Place} with {formatAbbreviate(topWageGini["Wage GINI"])}.</p>
         </article>
 
         {/* Draw Geomap to show wage distribution for each place in the Wayne county. */}
@@ -90,7 +90,7 @@ WageDistribution.defaultProps = {
 };
 
 WageDistribution.need = [
-  fetchData("wageDistributionData", "https://katahdin.datausa.io/api/data?measures=Household%20Income&drilldowns=Household%20Income%20Bucket&County=<id>&Year=all", d => d.data),
+  fetchData("wageDistributionData", "https://katahdin.datausa.io/api/data?measures=Household%20Income&drilldowns=Household%20Income%20Bucket&Geography=<id>&Year=all", d => d.data),
   fetchData("wageGinidata", "https://katahdin.datausa.io/api/data?measures=Wage%20GINI&drilldowns=Place&Year=latest", d => d.data)
 ];
 

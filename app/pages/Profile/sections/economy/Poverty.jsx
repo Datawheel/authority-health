@@ -102,7 +102,7 @@ class Poverty extends SectionColumns {
             value={topIncomeToPovertyLevelRatio["Ratio of Income to Poverty Level"]}
             qualifier={formatPopulation(topIncomeToPovertyLevelRatio.share)}
           />
-          <p>The mini barchart here shows the population below poverty level in the {topPovertyByRace.County}. In {topPovertyByRace.Year}, the majority race in poverty was {topPovertyByRace.Race} with {formatPopulation(topPovertyByRace.share)} of the total population in the {topPovertyByRace.County}.</p>
+          <p>The mini barchart here shows the population below poverty level in the {topPovertyByRace.Geography}. In {topPovertyByRace.Year}, the majority race in poverty was {topPovertyByRace.Race} with {formatPopulation(topPovertyByRace.share)} of the total population in the {topPovertyByRace.Geography}.</p>
 
           <BarChart config={{
             data: filterDataBelowPovertyByRace,
@@ -183,9 +183,9 @@ Poverty.defaultProps = {
 };
 
 Poverty.need = [
-  fetchData("povertyByRace", "https://katahdin.datausa.io/api/data?measures=Population%20in%20Poverty%20by%20Gender,%20Age,%20and%20Race&drilldowns=Poverty%20Status,Race&County=<id>&Year=all", d => d.data),
-  fetchData("povertyByAgeAndSex", "https://katahdin.datausa.io/api/data?measures=Population%20in%20Poverty%20by%20Gender,%20Age,%20and%20Race&drilldowns=Poverty%20Status,Age,Sex&County=<id>&Year=all", d => d.data),
-  fetchData("incomeToPovertyLevelRatio", "/api/data?measures=Population&drilldowns=Ratio%20of%20Income%20to%20Poverty%20Level&County=<id>&Year=all", d => d.data)
+  fetchData("povertyByRace", "https://katahdin.datausa.io/api/data?measures=Population%20in%20Poverty%20by%20Gender,%20Age,%20and%20Race&drilldowns=Poverty%20Status,Race&Geography=<id>&Year=all", d => d.data),
+  fetchData("povertyByAgeAndSex", "https://katahdin.datausa.io/api/data?measures=Population%20in%20Poverty%20by%20Gender,%20Age,%20and%20Race&drilldowns=Poverty%20Status,Age,Sex&Geography=<id>&Year=all", d => d.data),
+  fetchData("incomeToPovertyLevelRatio", "/api/data?measures=Population&drilldowns=Ratio%20of%20Income%20to%20Poverty%20Level&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

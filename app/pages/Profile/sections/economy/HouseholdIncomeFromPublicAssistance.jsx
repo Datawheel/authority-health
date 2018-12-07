@@ -9,10 +9,6 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Stat from "../../../../components/Stat";
 
-const formatName = d => {
-  const nameArr = d.split(" ");
-  return `${nameArr[0]} ${nameArr[1]}`;
-};
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
 class HouseholdIncomeFromPublicAssistance extends SectionColumns {
@@ -20,9 +16,8 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
   render() {
 
     const {publicAssistanceData, householdSnapData} = this.props;
-    // console.log("householdSnapData: ", householdSnapData);
 
-    // Format data for publicAssistanceData.x`
+    // Format data for publicAssistanceData
     const recentYearPublicAssistanceData = {};
     nest()
       .key(d => d.Year)
@@ -49,7 +44,6 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
       });
 
     const filterSnapRecievedData = householdSnapData.filter(d => d["ID Snap Receipt"] === 0);
-    // console.log("filterSnapRecievedData: ", filterSnapRecievedData);
 
     // Find top recent year data for publicAssistanceData
     // const filteredData = recentYearHouseholdSnapData.values.filter(d => d["ID Public Assistance or Snap"] === 0).sort((a, b) => b.share - a.share);

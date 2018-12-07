@@ -41,14 +41,14 @@ class HouseRentals extends SectionColumns {
           <Stat
             title="Median Rent Amount"
             year={rentAmountData[0].Year}
-            value={rentAmountData[0].County}
+            value={rentAmountData[0].Geography}
             qualifier={`$${  formatAbbreviate(rentAmountData[0]["Rent Amount"])}`}
           />
           {/* Show stats for Renter-Occupied Housing Units with Extra Pay on Utilities for most recent year. */}
           <Stat
             title="Rental Housing Units with Utilities Included"
             year={utilitiesData[0].Year}
-            value={utilitiesData[1].County}
+            value={utilitiesData[1].Geography}
             qualifier={`${formatAbbreviate(recentYearNoExtraUtilitiesPercentage)  }%`}
           />
           {/* Show stats for Household Income to pay maximum Rent in most recent year. */}
@@ -64,7 +64,7 @@ class HouseRentals extends SectionColumns {
             data: rentAmountData,
             discrete: "x",
             height: 175,
-            groupBy: "ID County",
+            groupBy: "ID Geography",
             label: d => d.Year,
             x: "Year",
             xConfig: {
@@ -78,7 +78,7 @@ class HouseRentals extends SectionColumns {
             tooltipConfig: {tbody: [["Value", d => `$${formatAbbreviate(d["Rent Amount"])}`]]}
           }}
           />
-          <p>The LinePlot above shows the Median Rental amount for different years in the {rentAmountData[0].County} County.</p>
+          <p>The LinePlot above shows the Median Rental amount for different years in {rentAmountData[0].Geography}.</p>
         </article>
 
         <BarChart config={{
@@ -113,8 +113,8 @@ HouseRentals.defaultProps = {
 };
 
 HouseRentals.need = [
-  fetchData("rentAmountData", "/api/data?measures=Rent%20Amount&County=<id>&Year=all", d => d.data),
-  fetchData("utilitiesData", "/api/data?measures=Renter-Occupied%20Housing%20Units&drilldowns=Inclusion%20of%20Utilities%20in%20Rent&County=<id>&Year=latest", d => d.data),
+  fetchData("rentAmountData", "/api/data?measures=Rent%20Amount&Geography=<id>&Year=all", d => d.data),
+  fetchData("utilitiesData", "/api/data?measures=Renter-Occupied%20Housing%20Units&drilldowns=Inclusion%20of%20Utilities%20in%20Rent&Geography=<id>&Year=latest", d => d.data),
   fetchData("rentersByIncomePercentage", "https://katahdin.datausa.io/api/data?measures=Renters%20by%20Income%20Percentage&drilldowns=Household%20Income&Year=all&Geography=<id>", d => d.data)
 ];
 

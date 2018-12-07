@@ -59,17 +59,17 @@ class Homeownership extends SectionColumns {
           <Stat
             title="Maximum occupied housing units"
             year={topOccupancyData.Year}
-            value={`${topOccupancyData.County} county`}
+            value={`${topOccupancyData.Geography}`}
             qualifier={`${formatAbbreviate(topOccupancyData.share)}%`}
           />
           <Stat
             title="Median house construction year"
-            year={`AS OF ${  constructionDateData[0].Year}`}
-            value={constructionDateData[0]["Construction Date"]}
-            qualifier={`${constructionDateData[0].County} county`}
+            year={`AS OF ${constructionDateData[0].Year}`}
+            value={`${constructionDateData[0].Geography}`}
+            qualifier={constructionDateData[0]["Construction Date"]}
           />
           <p>The Geomap shows the Median housing units value for each tract in the Wayne county.</p>
-          <p>The BarChart shows the Occupied housing units in the current location.</p>
+          <p>The LinePlot shows the Occupied housing units in the {topOccupancyData.Geography} county.</p>
 
           {/* Lineplot to show occupacy status over the years at current location */}
           <LinePlot config={{
@@ -114,9 +114,9 @@ Homeownership.defaultProps = {
 };
 
 Homeownership.need = [
-  fetchData("occupancyData", "/api/data?measures=Housing%20Units&drilldowns=Occupancy%20Status&County=<id>&Year=all", d => d.data),
+  fetchData("occupancyData", "/api/data?measures=Housing%20Units&drilldowns=Occupancy%20Status&Geography=<id>&Year=all", d => d.data),
   fetchData("medianHousingUnitsValue", "https://katahdin.datausa.io/api/data?measures=Property%20Value&Year=all&Geography=05000US26163:children", d => d.data),
-  fetchData("constructionDateData", "/api/data?measures=Construction%20Date&County=<id>&Year=all", d => d.data)
+  fetchData("constructionDateData", "/api/data?measures=Construction%20Date&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

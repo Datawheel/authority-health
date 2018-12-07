@@ -81,8 +81,8 @@ class Transportation extends SectionColumns {
             qualifier={formatPercentage(topRecentYearModeOfTransport.share)}
           />
           <p>The Barchart for number of vehicles shows the Number of vehicles in each household and the percentage of Male and Female that owns them.</p>
-          <p>The Treemap shows the percentages of Modes of Transportation in the {topRecentYearModeOfTransport.County}.</p>
-          <p>The mini Barchart here shows the commute time for each time bucket in the {topRecentYearCommuteTime.County}.</p>
+          <p>The Treemap shows the percentages of Modes of Transportation in {topRecentYearModeOfTransport.Geography}.</p>
+          <p>The mini Barchart here shows the commute time for each time bucket in {topRecentYearCommuteTime.Geography}.</p>
 
           {/* Draw a Barchart for Number of vehicles in each household. */}
           <BarChart config={{
@@ -153,9 +153,9 @@ Transportation.defaultProps = {
 };
 
 Transportation.need = [
-  fetchData("commuteTimeData", "https://katahdin.datausa.io/api/data?measures=Commute%20Time&drilldowns=Travel%20Time&County=<id>&Year=all", d => d.data),
-  fetchData("numberOfVehiclesData", "https://katahdin.datausa.io/api/data?measures=Commute%20Means%20by%20Gender&drilldowns=Vehicles%20Available,Sex&County=<id>&Year=all", d => d.data),
-  fetchData("transportationMeans", "https://katahdin.datausa.io/api/data?measures=Commute%20Means&drilldowns=Transportation%20Means&County=<id>&Year=all", d => d.data)
+  fetchData("commuteTimeData", "https://katahdin.datausa.io/api/data?measures=Commute%20Time&drilldowns=Travel%20Time&Geography=<id>&Year=all", d => d.data),
+  fetchData("numberOfVehiclesData", "https://katahdin.datausa.io/api/data?measures=Commute%20Means%20by%20Gender&drilldowns=Vehicles%20Available,Sex&Geography=<id>&Year=all", d => d.data),
+  fetchData("transportationMeans", "https://katahdin.datausa.io/api/data?measures=Commute%20Means&drilldowns=Transportation%20Means&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

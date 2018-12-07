@@ -23,23 +23,17 @@ class Cancer extends SectionColumns {
   
   render() {
 
-    const {cancerOccuranceRate, cancerByGender, cancerByRaceAndEthnicity, getSortedCancerTypes} = this.props;
+    const {cancerOccuranceRate, cancerByGender, cancerByRaceAndEthnicity, sortedCancerTypes} = this.props;
 
     const {dropdownValue} = this.state;
-    // const dropdownList = ["Acute Lymphocytic Leukemia", "Acute Myeloid Leukemia", "Aleukemic, Subleukemic and NOS", "All Invasive Cancer Sites Combined", "Anus, Anal Canal and Anorectum", "Appendix", "Ascending Colon", "Bones and Joints", "Brain", "Brain and Other Nervous System", "Cecum", "Cervix Uteri", "Chronic Lymphocytic Leukemia", "Chronic Myeloid Leukemia", "Colon and Rectum", "Colon excluding Rectum", "Corpus Uteri", "Descending Colon", "Digestive System", "Endocrine System", "Esophagus", "Eye and Orbit", "Female Breast", "Female Breast, In Situ", "Female Genital System", "Floor of Mouth", "Gallbladder", "Gum and Other Mouth", "Hepatic Flexure", "Hodgkin - Nodal", "Hodgkin Lymphoma", "Hypopharynx", "Intrahepatic Bile Duct", "Kaposi Sarcoma", "Kidney and Renal Pelvis", "Larynx", "Leukemias", "Lip", "Liver"];
+    const dropdownList = sortedCancerTypes;
 
-    // Filter data based on the dropdown Value.
+    // Filter all types of Cancer data based on the dropdown Value.
     const filteredOccuranceRateData = cancerOccuranceRate.filter(d => d["Cancer Site"] === dropdownValue);
     const filteredGenderData = cancerByGender.filter(d => d["Cancer Site"] === dropdownValue);
     const filteredRaceAndEthnicityData = cancerByRaceAndEthnicity.filter(d => d["Cancer Site"] === dropdownValue);
 
-    console.log("filteredGenderData: ", filteredGenderData);
-    const dropdownList = [];
-    nest()
-      .key(d => d["Cancer Site"])
-      .entries(getSortedCancerTypes)
-      .forEach(group => dropdownList.push(group.key));
-
+    // Get recent year cancer data for each Gender.
     const recentYearCancerByGender = {};
     nest()
       .key(d => d.Year)
@@ -52,6 +46,7 @@ class Cancer extends SectionColumns {
     const topFemaleCancerData = recentYearCancerByGender.values[0];
     const topMaleCancerData = recentYearCancerByGender.values[1];
 
+    // Get recent year cancer data by Race and Ethnicity.
     const recentYearCancerByRaceAndEthnicity = {};
     nest()
       .key(d => d.Year)
@@ -72,6 +67,7 @@ class Cancer extends SectionColumns {
           <select onChange={this.handleChange}>
             {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
           </select>
+          {/* Show current dropdown top stats. */}
           <Stat
             title={`Top Female ${dropdownValue} in ${topFemaleCancerData.Year}`}
             value={`${formatPercentage(topFemaleCancerData.share)}`}
@@ -85,7 +81,7 @@ class Cancer extends SectionColumns {
             value={`${topCancerByRaceAndEthnicity.Ethnicity} ${topCancerByRaceAndEthnicity.Race} ${formatPercentage(topCancerByRaceAndEthnicity.share)}`}
           />
 
-          {/* Draw a BarChart to show Cancer by Sex for selected cancer type. */}
+          {/* Draw a mini BarChart to show Cancer by Sex for selected cancer type. */}
           <BarChart config={{
             data: filteredGenderData,
             discrete: "y",
@@ -108,7 +104,7 @@ class Cancer extends SectionColumns {
           }}
           />
           
-          {/* Draw a BarChart to show Cancer by Race and Ethnicity for selected cancer type. */}
+          {/* Draw a mini BarChart to show Cancer by Race and Ethnicity for selected cancer type. */}
           <BarChart config={{
             data: filteredRaceAndEthnicityData,
             discrete: "y",
@@ -130,6 +126,8 @@ class Cancer extends SectionColumns {
           />
         </article>
         
+
+        {/* Draw a LinePlot to show age adjusted data for the selected cancer type. */}
         <LinePlot config={{
           data: filteredOccuranceRateData,
           discrete: "x",
@@ -166,14 +164,18 @@ Cancer.need = [
   fetchData("cancerOccuranceRate", "/api/data?measures=Age-Adjusted%20Rate,Age-Adjusted%20Rate%20Lower%2095%20Percent%20Confidence%20Interval,Age-Adjusted%20Rate%20Upper%2095%20Percent%20Confidence%20Interval&drilldowns=Cancer%20Site&Year=all", d => d.data),
   fetchData("cancerByGender", "/api/data?measures=Count&drilldowns=Cancer%20Site,Sex&Year=all", d => d.data),
   fetchData("cancerByRaceAndEthnicity", "/api/data?measures=Count&drilldowns=Cancer%20Site,Race,Ethnicity&Year=all", d => d.data),
-  fetchData("getSortedCancerTypes", "/api/data?measures=Count&drilldowns=Cancer%20Site&Year=all&order=Count&sort=desc", d => d.data)
+  fetchData("sortedCancerTypes", "/api/data?measures=Count&drilldowns=Cancer%20Site&Year=all&order=Count&sort=desc", d => {
+    const dropdownList = [];
+    nest().key(d => d["Cancer Site"]).entries(d.data).forEach(group => dropdownList.push(group.key));
+    return dropdownList;
+  })
 ];
 
 const mapStateToProps = state => ({
   cancerOccuranceRate: state.data.cancerOccuranceRate,
   cancerByGender: state.data.cancerByGender,
   cancerByRaceAndEthnicity: state.data.cancerByRaceAndEthnicity,
-  getSortedCancerTypes: state.data.getSortedCancerTypes
+  sortedCancerTypes: state.data.sortedCancerTypes
 });
 
 export default connect(mapStateToProps)(Cancer);

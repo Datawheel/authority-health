@@ -55,7 +55,7 @@ class WageDistribution extends SectionColumns {
             qualifier={formatAbbreviate(topWageGini["Wage GINI"])}
           />
           <p>This Barchart shows the number of workers in various wage buckets in {topWageDistribution.Geography}. In {topWageDistribution.Year}, {topWageDistribution.Geography} had the top Wage Distribution of {topWageDistribution["Household Income Bucket"]} with {formatPopulation(topWageDistribution.share)} share.</p>
-          <p>In {topWageGini.Year}, the highest income inequality in Michigan, was in {topWageGini.Place} with {formatAbbreviate(topWageGini["Wage GINI"])}.</p>
+          <p>In {topWageGini.Year}, the highest income inequality in Michigan, was in {topWageGini.Place} with Gini Index of {formatAbbreviate(topWageGini["Wage GINI"])}.</p>
         </article>
 
         {/* Draw Geomap to show wage distribution for each place in the Wayne county. */}

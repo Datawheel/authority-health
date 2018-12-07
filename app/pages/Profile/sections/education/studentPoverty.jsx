@@ -58,8 +58,8 @@ class StudentPoverty extends SectionColumns {
             title={`Population Enrolled In School in ${topLevelOfSchoolData.Year}`}
             value={`${formatPopulation(recentYearEnrolledInSchoolPercentage)}`}
           />
-          <p>In {topLevelOfSchoolData.Year}, students in poverty who attended most level of school in {topLevelOfSchoolData.County} County were {topLevelOfSchoolData["Level of School"]} with the share of {formatPopulation(topLevelOfSchoolData.share)}</p>
-          <p>In {topLevelOfSchoolData.Year}, {formatPopulation(recentYearEnrolledInSchoolPercentage)} of the total population had enrolled in school in the {topLevelOfSchoolData.County} county, MI.</p>
+          <p>In {topLevelOfSchoolData.Year}, students in poverty who attended most level of school in {topLevelOfSchoolData.Geography} County were {topLevelOfSchoolData["Level of School"]} with the share of {formatPopulation(topLevelOfSchoolData.share)}</p>
+          <p>In {topLevelOfSchoolData.Year}, {formatPopulation(recentYearEnrolledInSchoolPercentage)} of the total population had enrolled in school in the {topLevelOfSchoolData.Geography} county, MI.</p>
         </article>
 
         {/* Draw a Barchart to show Level Of School for students in poverty. */}

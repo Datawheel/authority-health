@@ -107,7 +107,6 @@ class HealthCenters extends SectionColumns {
                   data.push(result);
                 });
               });
-            // console.log(data);
             return data;
           }}
           />

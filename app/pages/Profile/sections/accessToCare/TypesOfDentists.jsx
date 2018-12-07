@@ -106,7 +106,7 @@ class TypesOfDentists extends SectionColumns {
             value={`${formatPercentage(recentYearOtherSpecialtyDentists.share)}`}
           />
           
-          {/* <p>The Barchart here shows the number of dentists by Age Group in {topDentistsAgeData.County} county, MI.</p>
+          {/* <p>The Barchart here shows the number of dentists by Age Group in the {topDentistsAgeData.Geography} county, MI.</p>
           <p>In {topDentistsAgeData.Year}, the major dentists age group was {topDentistsAgeData["Age Group"]} years with {formatPercentage(topDentistsAgeData.share)}.</p>
           <p>In {topDentistsByGender.Year}, the major dentists gender group was {topDentistsAgeData.Sex} with {formatPercentage(topDentistsByGender.share)}.</p> */}
 
@@ -169,10 +169,10 @@ TypesOfDentists.defaultProps = {
 };
 
 TypesOfDentists.need = [
-  fetchData("dentistsByWorkingHours", "/api/data?measures=Number%20of%20Dentists&drilldowns=Hours&County=<id>&Year=all", d => d.data),
-  fetchData("dentistsByEmploymentStatus", "/api/data?measures=Number%20of%20Dentists&drilldowns=Status&County=<id>&Year=all", d => d.data),
-  fetchData("dentistsBySpecialty", "/api/data?measures=Number%20of%20Dentists&drilldowns=Specialty&County=<id>&Year=all", d => d.data),
-  fetchData("typesOfActiveDentists", "/api/data?measures=Number%20of%20Dentists&drilldowns=Work&Status=Active&County=<id>&Year=all", d => d.data)
+  fetchData("dentistsByWorkingHours", "/api/data?measures=Number%20of%20Dentists&drilldowns=Hours&Geography=<id>&Year=all", d => d.data),
+  fetchData("dentistsByEmploymentStatus", "/api/data?measures=Number%20of%20Dentists&drilldowns=Status&Geography=<id>&Year=all", d => d.data),
+  fetchData("dentistsBySpecialty", "/api/data?measures=Number%20of%20Dentists&drilldowns=Specialty&Geography=<id>&Year=all", d => d.data),
+  fetchData("typesOfActiveDentists", "/api/data?measures=Number%20of%20Dentists&drilldowns=Work&Status=Active&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

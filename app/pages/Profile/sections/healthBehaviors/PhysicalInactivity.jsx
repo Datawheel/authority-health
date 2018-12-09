@@ -90,25 +90,25 @@ class PhysicalInactivity extends SectionColumns {
           {physicalInactivitySelected
             ? <Stat
               title={`Majority Male with ${formatDropdownChoiceName(dropdownValue)} in ${topPhysicalInactivityMaleData.Year}`}
-              value={`${topPhysicalInactivityMaleData.County} ${formatPercentage(topPhysicalInactivityMaleData["Adj Percent"])}`}
+              value={`${topPhysicalInactivityMaleData.Geography} ${formatPercentage(topPhysicalInactivityMaleData["Adj Percent"])}`}
             />
             : null
           }
           {physicalInactivitySelected
             ? <Stat
               title={`Majority Female with ${formatDropdownChoiceName(dropdownValue)} in ${topPhysicalInactivityFemaleData.Year}`}
-              value={`${topPhysicalInactivityFemaleData.County} ${formatPercentage(topPhysicalInactivityFemaleData["Adj Percent"])}`}
+              value={`${topPhysicalInactivityFemaleData.Geography} ${formatPercentage(topPhysicalInactivityFemaleData["Adj Percent"])}`}
             />
             : null
           }
 
           {/* Write short paragraphs explaining Barchart and top stats for the Physical Inactivity data. */}
           {physicalInactivitySelected
-            ? <p>The Barchart here shows the {formatDropdownChoiceName(dropdownValue)} data for male and female in the {topPhysicalInactivityFemaleData.County}.</p>
+            ? <p>The Barchart here shows the {formatDropdownChoiceName(dropdownValue)} data for male and female in the {topPhysicalInactivityFemaleData.Geography}.</p>
             : null
           }
           {physicalInactivitySelected
-            ? <p>In {topPhysicalInactivityFemaleData.Year}, top {formatDropdownChoiceName(dropdownValue)} rate for Male and Female were {formatPercentage(topPhysicalInactivityMaleData["Adj Percent"])} and {formatPercentage(topPhysicalInactivityFemaleData["Adj Percent"])} respectively in the {topPhysicalInactivityFemaleData.County}, MI.</p>
+            ? <p>In {topPhysicalInactivityFemaleData.Year}, top {formatDropdownChoiceName(dropdownValue)} rate for Male and Female were {formatPercentage(topPhysicalInactivityMaleData["Adj Percent"])} and {formatPercentage(topPhysicalInactivityFemaleData["Adj Percent"])} respectively in the {topPhysicalInactivityFemaleData.Geography}, MI.</p>
             : null
           }
         </article>
@@ -138,7 +138,7 @@ PhysicalInactivity.defaultProps = {
 
 PhysicalInactivity.need = [
   fetchData("physicalInActivity", "/api/data?measures=Physical%20Health%20Data%20Value,Physical%20Inactivity%20Data%20Value&drilldowns=Tract&Year=all", d => d.data),
-  fetchData("physicalInactivityPrevalenceBySex", "/api/data?measures=Adj%20Percent&drilldowns=Sex&County=<id>&Year=all", d => d.data)
+  fetchData("physicalInactivityPrevalenceBySex", "/api/data?measures=Adj%20Percent&drilldowns=Sex&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

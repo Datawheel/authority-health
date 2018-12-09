@@ -2,7 +2,7 @@ import React from "react";
 import {connect} from "react-redux";
 import {sum} from "d3-array";
 import {nest} from "d3-collection";
-import {BarChart, LinePlot} from "d3plus-react";
+import {BarChart} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
@@ -124,10 +124,10 @@ Veterans.defaultProps = {
 };
 
 Veterans.need = [
-  fetchData("veteransEmploymentStatus", "/api/data?measures=Population&drilldowns=Employment%20Status&County=<id>&Year=all", d => d.data),
-  fetchData("veteransPovertyStatus", "/api/data?measures=Population&drilldowns=Poverty%20Status&County=<id>&Year=all", d => d.data),
-  fetchData("veteransDisabilityStatus", "/api/data?measures=Population&drilldowns=Disability%20Status&County=<id>&Year=all", d => d.data),
-  fetchData("periodOfService", "https://katahdin.datausa.io/api/data?measures=Veterans&drilldowns=Period%20of%20Service&County=<id>&Year=all", d => d.data)
+  fetchData("veteransEmploymentStatus", "/api/data?measures=Population&drilldowns=Employment%20Status&Geography=<id>&Year=all", d => d.data),
+  fetchData("veteransPovertyStatus", "/api/data?measures=Population&drilldowns=Poverty%20Status&Geography=<id>&Year=all", d => d.data),
+  fetchData("veteransDisabilityStatus", "/api/data?measures=Population&drilldowns=Disability%20Status&Geography=<id>&Year=all", d => d.data),
+  fetchData("periodOfService", "https://katahdin.datausa.io/api/data?measures=Veterans&drilldowns=Period%20of%20Service&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

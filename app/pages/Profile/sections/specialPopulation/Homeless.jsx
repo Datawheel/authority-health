@@ -149,9 +149,9 @@ Homeless.defaultProps = {
 };
 
 Homeless.need = [
-  fetchData("typesOfShelteredHomeless", "/api/data?measures=Sheltered&drilldowns=Category&County=<id>&Year=all", d => d.data),
-  fetchData("typesOfUnshelteredHomeless", "/api/data?measures=Unsheltered&drilldowns=Category&County=<id>&Year=all", d => d.data),
-  fetchData("typesOfHomeless", "/api/data?measures=Sheltered,Unsheltered&drilldowns=Sub-group&County=<id>&Year=all", d => d.data)
+  fetchData("typesOfShelteredHomeless", "/api/data?measures=Sheltered&drilldowns=Category&Geography=<id>&Year=all", d => d.data),
+  fetchData("typesOfUnshelteredHomeless", "/api/data?measures=Unsheltered&drilldowns=Category&Geography=<id>&Year=all", d => d.data),
+  fetchData("typesOfHomeless", "/api/data?measures=Sheltered,Unsheltered&drilldowns=Sub-group&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

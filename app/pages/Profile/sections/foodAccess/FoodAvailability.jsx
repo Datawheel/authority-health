@@ -34,8 +34,8 @@ class FoodAvailability extends SectionColumns {
     const wicLatestYearValue = formatAbbreviate(snapWicLatestData[1]["Number of Stores"]);
 
     // Get county information for current location
-    const county = snapWicData[0].County;
-    const countyId = snapWicData[0]["ID County"];
+    const county = snapWicData[0].Geography;
+    const countyId = snapWicData[0]["ID Geography"];
 
     return (
       <SectionColumns>
@@ -99,7 +99,7 @@ FoodAvailability.defaultProps = {
 };
 
 FoodAvailability.need = [
-  fetchData("snapWicData", "/api/data?measures=Number%20of%20Stores&drilldowns=Assistance%20Type&County=<id>&Year=all", d => d.data)
+  fetchData("snapWicData", "/api/data?measures=Number%20of%20Stores&drilldowns=Assistance%20Type&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

@@ -71,8 +71,8 @@ class StoreAccessByDemographic extends SectionColumns {
           }
           {/* Write a paragraph for top stats based on the dropdown choice. */}
           {ageSelected
-            ? <p> In {topFoodAccessByAge.County} County, {topFoodAccessByAge["Age Group"]} were the largest age group with {formatPercentage(topFoodAccessByAge.Percent)} in the year {topFoodAccessByAge.Year}.</p>
-            : <p> In {topFoodAccessByRace.County} County, {topFoodAccessByRace["Race Group"]} were the largest race group with {formatPercentage(topFoodAccessByRace.Percent)} in the year {topFoodAccessByRace.Year}.</p>
+            ? <p> In {topFoodAccessByAge.Geography} County, {topFoodAccessByAge["Age Group"]} were the largest age group with {formatPercentage(topFoodAccessByAge.Percent)} in the year {topFoodAccessByAge.Year}.</p>
+            : <p> In {topFoodAccessByRace.Geography} County, {topFoodAccessByRace["Race Group"]} were the largest race group with {formatPercentage(topFoodAccessByRace.Percent)} in the year {topFoodAccessByRace.Year}.</p>
           }
 
           <p>The Geomap here shows the percentage of {dropdownValue} who have access to food stores.</p>
@@ -93,7 +93,7 @@ class StoreAccessByDemographic extends SectionColumns {
           />
         </article>
 
-        {/* Create a Geomap based on dropdown choice for all the counties in Michigan state. */}
+        {/* Create a Geomap based on dropdown choice for all the counties in Michigan. */}
         <Geomap config={{
           data: ageSelected ? `/api/data?measures=Percent&drilldowns=Age%20Group,County&Age%20Group=${dropdownValue}&Year=all` : `/api/data?measures=Percent&drilldowns=Race%20Group,County&Race%20Group=${dropdownValue}&Year=all`,
           groupBy: "ID County",
@@ -117,8 +117,8 @@ StoreAccessByDemographic.defaultProps = {
 };
 
 StoreAccessByDemographic.need = [
-  fetchData("foodAccessByAge", "/api/data?measures=Percent&drilldowns=Age%20Group&County=<id>&Year=all", d => d.data),
-  fetchData("foodAccessByRace", "/api/data?measures=Percent&drilldowns=Race%20Group&County=<id>&Year=all", d => d.data)
+  fetchData("foodAccessByAge", "/api/data?measures=Percent&drilldowns=Age%20Group&Geography=<id>&Year=all", d => d.data),
+  fetchData("foodAccessByRace", "/api/data?measures=Percent&drilldowns=Race%20Group&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

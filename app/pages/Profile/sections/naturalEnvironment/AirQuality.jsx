@@ -46,7 +46,7 @@ class AirQuality extends SectionColumns {
           />
           <Stat
             title={`Median Air Quality Index in ${recentYearAirQualityStats.values[0].Year}`}
-            value={`${recentYearAirQualityStats.values[0].County} ${recentYearAirQualityStats.values[0]["Median AQI"]}`}
+            value={`${recentYearAirQualityStats.values[0].Geography} ${recentYearAirQualityStats.values[0]["Median AQI"]}`}
           />
 
           <BarChart config={{
@@ -78,7 +78,7 @@ class AirQuality extends SectionColumns {
           discrete: "x",
           height: 250,
           legend: false,
-          groupBy: "ID County",
+          groupBy: "ID Geography",
           baseline: 0,
           label: d => d.Year,
           x: "Year",
@@ -102,8 +102,8 @@ AirQuality.defaultProps = {
 };
 
 AirQuality.need = [
-  fetchData("airPollutants", "/api/data?measures=Number%20of%20Days&drilldowns=Category&County=<id>&Year=all", d => d.data),
-  fetchData("airQualityStats", "/api/data?measures=Median%20AQI&County=<id>&Year=all", d => d.data)
+  fetchData("airPollutants", "/api/data?measures=Number%20of%20Days&drilldowns=Category&Geography=<id>&Year=all", d => d.data),
+  fetchData("airQualityStats", "/api/data?measures=Median%20AQI&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

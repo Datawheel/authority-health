@@ -91,7 +91,7 @@ class ObesityAndDiabetes extends SectionColumns {
           {isBMIWeightedDataValueSelected
             ? <Stat
               title={`Majority ${dropdownValue} in ${topDropdownWeightedData.Year}`}
-              value={`${topDropdownWeightedData.County} ${formatPercentage(topDropdownWeightedData[dropdownValue])}`}
+              value={`${topDropdownWeightedData.Geography} ${formatPercentage(topDropdownWeightedData[dropdownValue])}`}
             />
             : <Stat
               title={`Majority ${dropdownValue} in ${topDropdownValueTract.Year}`}
@@ -105,7 +105,7 @@ class ObesityAndDiabetes extends SectionColumns {
             : <p>The Geomap here shows {dropdownValue} for Tracts in the Wayne county, MI.</p>
           }
           {isBMIWeightedDataValueSelected 
-            ? <p>In {topDropdownValueTract.Year}, top {dropdownValue} was {formatPercentage(topDropdownWeightedData[dropdownValue])} in the {topDropdownWeightedData.County}, MI.</p>
+            ? <p>In {topDropdownValueTract.Year}, top {dropdownValue} was {formatPercentage(topDropdownWeightedData[dropdownValue])} in the {topDropdownWeightedData.Geography}, MI.</p>
             : <p>In {topDropdownValueTract.Year}, top {dropdownValue} was {formatPercentage(topDropdownValueTract[dropdownValue])} in {topDropdownValueTract.Tract}.</p>
           }
           
@@ -134,16 +134,16 @@ class ObesityAndDiabetes extends SectionColumns {
           {/* Show top stats for the Male and Female Diabetes/Obesity data. */}
           <Stat
             title={`Majority Male with ${healthCondition} in ${topMaleData.Year}`}
-            value={`${topMaleData.County} ${formatPercentage(topMaleData["Adj Percent"])}`}
+            value={`${topMaleData.Geography} ${formatPercentage(topMaleData["Adj Percent"])}`}
           />
           <Stat
             title={`Majority Female with ${healthCondition} in ${topFemaleData.Year}`}
-            value={`${topFemaleData.County} ${formatPercentage(topFemaleData["Adj Percent"])}`}
+            value={`${topFemaleData.Geography} ${formatPercentage(topFemaleData["Adj Percent"])}`}
           />
 
           {/* Write short paragraphs explaining Barchart and top stats for the Diabetes/Obesity data. */}
-          <p>The Barchart here shows the {healthCondition} data for male and female in the {topFemaleData.County}.</p>
-          <p>In {topMaleData.Year}, top {healthCondition} rate for Male and Female were {formatPercentage(topMaleData["Adj Percent"])} and {formatPercentage(topFemaleData["Adj Percent"])} respectively in the {topMaleData.County}, MI.</p>
+          <p>The Barchart here shows the {healthCondition} data for male and female in the {topFemaleData.Geography}.</p>
+          <p>In {topMaleData.Year}, top {healthCondition} rate for Male and Female were {formatPercentage(topMaleData["Adj Percent"])} and {formatPercentage(topFemaleData["Adj Percent"])} respectively in the {topMaleData.Geography}, MI.</p>
           
         </article>
 
@@ -186,8 +186,8 @@ ObesityAndDiabetes.defaultProps = {
 ObesityAndDiabetes.need = [
   fetchData("obesityAndDibetesDataValue", "/api/data?measures=Obesity%20Data%20Value,Diabetes%20Data%20Value&drilldowns=Tract&Year=all"),
   fetchData("BMIWeightedData", "/api/data?measures=BMI%20Healthy%20Weight%20Weighted%20Percent,BMI%20Obese%20Weighted%20Percent,BMI%20Overweight%20Weighted%20Percent,BMI%20Underweight%20Weighted%20Percent&drilldowns=End%20Year,County"),
-  fetchData("obesityPrevalenceBySex", "/api/data?measures=Adj%20Percent&drilldowns=Sex&County=<id>&Year=all", d => d.data),
-  fetchData("diabetesPrevalenceBySex", "/api/data?measures=Adj%20Percent&drilldowns=Sex&County=<id>&Year=all", d => d.data)
+  fetchData("obesityPrevalenceBySex", "/api/data?measures=Adj%20Percent&drilldowns=Sex&Geography=<id>&Year=all", d => d.data),
+  fetchData("diabetesPrevalenceBySex", "/api/data?measures=Adj%20Percent&drilldowns=Sex&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

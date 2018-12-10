@@ -5,9 +5,11 @@ import {nest} from "d3-collection";
 import {BarChart, LinePlot} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
-import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
+import {Classes, Button, MenuItem} from "@blueprintjs/core";
+import {MultiSelect} from "@blueprintjs/labs";
+import "@blueprintjs/labs/dist/blueprint-labs.css";
 
-import Stat from "../../../../components/Stat";
+import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -15,75 +17,80 @@ class Cancer extends SectionColumns {
 
   constructor(props) {
     super(props);
-    this.state = {dropdownValue: "All Invasive Cancer Sites Combined"};
+    this.state = {
+      selectedItems: [],
+      item: {index: "1. ", title: "All Invasive Cancer Sites Combined"}
+    };
   }
-
-  // Handler function for dropdown onChange event.
-  handleChange = event => this.setState({dropdownValue: event.target.value});
   
   render() {
 
-    const {cancerOccuranceRate, cancerByGender, cancerByRaceAndEthnicity, sortedCancerTypes} = this.props;
+    const {sortedCancerTypes} = this.props;
 
-    const {dropdownValue} = this.state;
-    const dropdownList = sortedCancerTypes;
+    const items = sortedCancerTypes.map((d, i) => Object.assign({}, {index: `${i + 1}. `, title: d}));
 
-    // Filter all types of Cancer data based on the dropdown Value.
-    const filteredOccuranceRateData = cancerOccuranceRate.filter(d => d["Cancer Site"] === dropdownValue);
-    const filteredGenderData = cancerByGender.filter(d => d["Cancer Site"] === dropdownValue);
-    const filteredRaceAndEthnicityData = cancerByRaceAndEthnicity.filter(d => d["Cancer Site"] === dropdownValue);
+    const isItemSelected = item => this.state.selectedItems.findIndex(d => d.index === item.index) > -1;
 
-    // Get recent year cancer data for each Gender.
-    const recentYearCancerByGender = {};
-    nest()
-      .key(d => d.Year)
-      .entries(filteredGenderData)
-      .forEach(group => {
-        const total = sum(group.values, d => d.Count);
-        group.values.forEach(d => d.share = d.Count / total * 100);
-        group.key >= filteredGenderData[0].Year ? Object.assign(recentYearCancerByGender, group) : {};
-      });
-    const topFemaleCancerData = recentYearCancerByGender.values[0];
-    const topMaleCancerData = recentYearCancerByGender.values[1];
+    const renderItem = ({handleClick, isActive, item}) => 
+      <MenuItem
+        className={isActive ? Classes.ACTIVE : ""}
+        iconName={isItemSelected(item) ? "tick" : "blank"}
+        label={""}
+        key={item.index}
+        onClick={handleClick}
+        text={`${item.index} ${item.title}`}
+      />;
 
-    // Get recent year cancer data by Race and Ethnicity.
-    const recentYearCancerByRaceAndEthnicity = {};
-    nest()
-      .key(d => d.Year)
-      .entries(filteredRaceAndEthnicityData)
-      .forEach(group => {
-        const total = sum(group.values, d => d.Count);
-        group.values.forEach(d => d.share = d.Count / total * 100);
-        group.key >= filteredRaceAndEthnicityData[0].Year ? Object.assign(recentYearCancerByRaceAndEthnicity, group) : {};
-      });
-    recentYearCancerByRaceAndEthnicity.values.sort((a, b) => b.share - a.share);
-    const topCancerByRaceAndEthnicity = recentYearCancerByRaceAndEthnicity.values[0];
+    const filterItem = (query, item) => `${item.title.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
 
+    const getSelectedItemIndex = item => this.state.selectedItems.findIndex(d => d.index === item.index);
+
+    const selectItem = item => {
+      const newSelectedItems = [...this.state.selectedItems, item];
+      this.setState({selectedItems: newSelectedItems});
+    };
+
+    const deselectItem = item => {
+      const itemIndex = getSelectedItemIndex(item);
+      const newSelectedItems = this.state.selectedItems.filter((d, i) => i !== itemIndex);
+      this.setState({selectedItems: newSelectedItems});
+    };
+    
+    const handleItemSelect = item => getSelectedItemIndex(item) < 0 ? selectItem(item) : deselectItem(item);
+    
+    const deleteTag = (d, index) => {
+      const selectedItems = this.state.selectedItems.filter((item, i) => i !== index);
+      this.setState({selectedItems});
+    };
+    
+    const renderTag = item => <span>{item.title}</span>;
+
+    let dropdownSelected = "";
+    this.state.selectedItems.forEach((d, i) => dropdownSelected += i === this.state.selectedItems.length - 1 ? `${d.title}` : `${d.title},`);
+    console.log("dropdownSelected: ", dropdownSelected);
+
+    const buttonText = `${this.state.item.index} ${this.state.item.title}`;
     return (
       <SectionColumns>
         <SectionTitle>Cancer</SectionTitle>
         <article>
-          {/* Create a dropdown for sheltered and unsheltered choices. */}
-          <select onChange={this.handleChange}>
-            {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
-          </select>
-          {/* Show current dropdown top stats. */}
-          <Stat
-            title={`Top Female ${dropdownValue} in ${topFemaleCancerData.Year}`}
-            value={`${formatPercentage(topFemaleCancerData.share)}`}
-          />
-          <Stat
-            title={`Top Male ${dropdownValue} in ${topMaleCancerData.Year}`}
-            value={`${formatPercentage(topMaleCancerData.share)}`}
-          />
-          <Stat
-            title={`Top Race & Ethnicity Cancer in ${topCancerByRaceAndEthnicity.Year}`}
-            value={`${topCancerByRaceAndEthnicity.Ethnicity} ${topCancerByRaceAndEthnicity.Race} ${formatPercentage(topCancerByRaceAndEthnicity.share)}`}
-          />
+          <MultiSelect
+            items={items}
+            itemPredicate={filterItem}
+            itemRenderer={renderItem}
+            noResults={<MenuItem disabled text="No results." />}
+            onItemSelect={handleItemSelect}
+            tagInputProps={{onRemove: deleteTag, placeholder: "Add a cancer type", inputProps: {placeholder: "Add a cancer type"}}}
+            tagRenderer={renderTag}
+            selectedItems={this.state.selectedItems}
+            resetOnClose={true}
+            resetOnSelect={true}>
+            <Button text={buttonText} rightIcon="caret-down" />
+          </MultiSelect>
 
           {/* Draw a mini BarChart to show Cancer by Sex for selected cancer type. */}
           <BarChart config={{
-            data: filteredGenderData,
+            data: `/api/data?measures=Count&drilldowns=Sex&Cancer%20Site=${dropdownSelected}&Year=all`,
             discrete: "y",
             height: 250,
             legend: false,
@@ -102,11 +109,26 @@ class Cancer extends SectionColumns {
             },
             tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
           }}
+          dataFormat={resp => {
+            nest()
+              .key(d => d["Cancer Site"])
+              .entries(resp.data)
+              .forEach(cancerType => {
+                nest()
+                  .key(d => d.Year)
+                  .entries(cancerType.values)
+                  .forEach(group => {
+                    const total = sum(group.values, d => d.Count);
+                    group.values.forEach(d => d.share = d.Count / total * 100);
+                  });
+              });
+            return resp.data;
+          }}
           />
           
           {/* Draw a mini BarChart to show Cancer by Race and Ethnicity for selected cancer type. */}
           <BarChart config={{
-            data: filteredRaceAndEthnicityData,
+            data: `/api/data?measures=Count&drilldowns=Race,Ethnicity&Cancer%20Site=${dropdownSelected}&Year=all`,
             discrete: "y",
             height: 250,
             legend: false,
@@ -123,13 +145,27 @@ class Cancer extends SectionColumns {
             yConfig: {tickFormat: d => d},
             tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
           }}
+          dataFormat={resp => {
+            nest()
+              .key(d => d["Cancer Site"])
+              .entries(resp.data)
+              .forEach(cancerType => {
+                nest()
+                  .key(d => d.Year)
+                  .entries(cancerType.values)
+                  .forEach(group => {
+                    const total = sum(group.values, d => d.Count);
+                    group.values.forEach(d => d.share = d.Count / total * 100);
+                  });
+              });
+            return resp.data;
+          }}
           />
         </article>
         
-
-        {/* Draw a LinePlot to show age adjusted data for the selected cancer type. */}
+        {/* Draw a LinePlot to show age adjusted data for the selected cancer types. */}
         <LinePlot config={{
-          data: filteredOccuranceRateData,
+          data: `/api/data?measures=Age-Adjusted%20Rate,Age-Adjusted%20Rate%20Lower%2095%20Percent%20Confidence%20Interval,Age-Adjusted%20Rate%20Upper%2095%20Percent%20Confidence%20Interval&Cancer%20Site=${dropdownSelected}&Year=all`,
           discrete: "x",
           height: 400,
           groupBy: "Cancer Site",
@@ -150,6 +186,7 @@ class Cancer extends SectionColumns {
           },
           tooltipConfig: {tbody: [["Value", d => formatPercentage(d["Age-Adjusted Rate"])]]}
         }}
+        dataFormat={resp => resp.data}
         />
       </SectionColumns>
     );
@@ -161,20 +198,14 @@ Cancer.defaultProps = {
 };
 
 Cancer.need = [
-  fetchData("cancerOccuranceRate", "/api/data?measures=Age-Adjusted%20Rate,Age-Adjusted%20Rate%20Lower%2095%20Percent%20Confidence%20Interval,Age-Adjusted%20Rate%20Upper%2095%20Percent%20Confidence%20Interval&drilldowns=Cancer%20Site&Year=all", d => d.data),
-  fetchData("cancerByGender", "/api/data?measures=Count&drilldowns=Cancer%20Site,Sex&Year=all", d => d.data),
-  fetchData("cancerByRaceAndEthnicity", "/api/data?measures=Count&drilldowns=Cancer%20Site,Race,Ethnicity&Year=all", d => d.data),
   fetchData("sortedCancerTypes", "/api/data?measures=Count&drilldowns=Cancer%20Site&Year=all&order=Count&sort=desc", d => {
-    const dropdownList = [];
-    nest().key(d => d["Cancer Site"]).entries(d.data).forEach(group => dropdownList.push(group.key));
-    return dropdownList;
+    const cancerList = [];
+    nest().key(d => d["Cancer Site"]).entries(d.data).forEach(group => cancerList.push(group.key));
+    return cancerList;
   })
 ];
 
 const mapStateToProps = state => ({
-  cancerOccuranceRate: state.data.cancerOccuranceRate,
-  cancerByGender: state.data.cancerByGender,
-  cancerByRaceAndEthnicity: state.data.cancerByRaceAndEthnicity,
   sortedCancerTypes: state.data.sortedCancerTypes
 });
 

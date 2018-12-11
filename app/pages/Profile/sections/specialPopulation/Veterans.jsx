@@ -74,20 +74,28 @@ class Veterans extends SectionColumns {
         <SectionTitle>Veterans</SectionTitle>
         <article>
           <Stat 
-            title={`Unemployed Veterans in ${topEmploymentStatus.Year}`}
-            value={`${formatPercentage(topEmploymentStatus.share)}`}
+            title={"Unemployed Veterans"}
+            year={topEmploymentStatus.Year}
+            value={""}
+            qualifier={formatPercentage(topEmploymentStatus.share)}
           />
           <Stat 
-            title={`Veterans in Poverty in ${recentYearVeteransInPoverty.Year}`}
-            value={`${formatPercentage(recentYearVeteransInPoverty.share)}`}
+            title={"Veterans in Poverty"}
+            year={recentYearVeteransInPoverty.Year}
+            value={""}
+            qualifier={formatPercentage(recentYearVeteransInPoverty.share)}
           />
           <Stat
-            title={`Veterans With Disability in ${recentYearVeteransWithDisability.Year}`}
-            value={`${formatPercentage(recentYearVeteransWithDisability.share)}`}
+            title={"Veterans With Disability"}
+            year={recentYearVeteransWithDisability.Year}
+            value={""}
+            qualifier={formatPercentage(recentYearVeteransWithDisability.share)}
           />
           <Stat
-            title={`Top Period of Service in ${topPeriodOfService.Year}`}
-            value={`${topPeriodOfService["Period of Service"]} ${formatPercentage(topPeriodOfService.share)}`}
+            title={"Top Period of Service"}
+            year={topPeriodOfService.Year}
+            value={topPeriodOfService["Period of Service"]}
+            qualifier={formatPercentage(topPeriodOfService.share)}
           />
         </article>
 

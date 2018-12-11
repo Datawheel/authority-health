@@ -83,16 +83,22 @@ class Homeless extends SectionColumns {
           </select>
           {shelteredSelected
             ? <Stat 
-              title={`Majority Sheltered Homeless Category in ${topShelteredHomelessTypes.Year}`}
-              value={`${topShelteredHomelessTypes.Category} ${formatPercentage(topShelteredHomelessTypes.share)}`}
+              title={"Majority Sheltered Homeless Category"}
+              year={topShelteredHomelessTypes.Year}
+              value={topShelteredHomelessTypes.Category}
+              qualifier={formatPercentage(topShelteredHomelessTypes.share)}
             />
             : <Stat 
-              title={`Majority Unsheltered Homeless Category in ${topUnshelteredHomelessTypes.Year}`}
-              value={`${topUnshelteredHomelessTypes.Category} ${formatPercentage(topUnshelteredHomelessTypes.share)}`}
+              title={"Majority Unsheltered Homeless Category"}
+              year={topUnshelteredHomelessTypes.Year}
+              value={topUnshelteredHomelessTypes.Category}
+              qualifier={formatPercentage(topUnshelteredHomelessTypes.share)}
             />}
           <Stat 
-            title={`Majority Homeless Type in ${topHomelessTypes.Year}`}
-            value={`${topHomelessTypes.HomelessType} ${topHomelessTypes["Sub-group"]} ${formatPercentage(topHomelessTypes.share)}`}
+            title={"Majority Homeless Type"}
+            year={topHomelessTypes.Year}
+            value={`${topHomelessTypes.HomelessType} ${topHomelessTypes["Sub-group"]}`}
+            qualifier={formatPercentage(topHomelessTypes.share)}
           />
 
           {/* Draw Barchart for Types of Homeless. */}

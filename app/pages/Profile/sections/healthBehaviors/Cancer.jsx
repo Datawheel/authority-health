@@ -18,17 +18,21 @@ class Cancer extends SectionColumns {
   constructor(props) {
     super(props);
     this.state = {
-      selectedItems: [{index: "2. ", title: "Digestive System"}]
+      selectedItems: [{index: 0, title: "All Invasive Cancer Sites Combined"},
+        {index: 1, title: "Digestive System"},
+        {index: 2, title: "Male Genital System"}]
     };
   }
   
   render() {
 
     const {sortedCancerTypes} = this.props;
+    // console.log("sortedCancerTypes: ", sortedCancerTypes);
+    const selectedItems = this.state.selectedItems;
 
-    const items = sortedCancerTypes.map((d, i) => Object.assign({}, {index: `${i + 1}. `, title: d}));
+    const items = sortedCancerTypes.map((d, i) => Object.assign({}, {index: i, title: d}));
 
-    const isItemSelected = item => this.state.selectedItems.findIndex(d => d.index === item.index) > -1;
+    const isItemSelected = item => selectedItems.findIndex(d => d.index === item.index) > -1;    
 
     const renderItem = ({handleClick, isActive, item}) => 
       <MenuItem
@@ -37,21 +41,22 @@ class Cancer extends SectionColumns {
         label={""}
         key={item.index}
         onClick={handleClick}
-        text={`${item.index} ${item.title}`}
+        text={`${item.title}`}
       />;
 
     const filterItem = (query, item) => `${item.title.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
 
-    const getSelectedItemIndex = item => this.state.selectedItems.findIndex(d => d.index === item.index);
+    const getSelectedItemIndex = item => selectedItems.findIndex(d => d.index === item.index);
 
     const selectItem = item => {
-      const newSelectedItems = [...this.state.selectedItems, item];
+      if (selectedItems.length === 5) return;
+      const newSelectedItems = [...selectedItems, item];
       this.setState({selectedItems: newSelectedItems});
     };
 
     const deselectItem = item => {
       const itemIndex = getSelectedItemIndex(item);
-      const newSelectedItems = this.state.selectedItems.filter((d, i) => i !== itemIndex);
+      const newSelectedItems = selectedItems.filter((d, i) => i !== itemIndex);
       this.setState({selectedItems: newSelectedItems});
     };
     
@@ -65,7 +70,7 @@ class Cancer extends SectionColumns {
     const renderTag = item => <span>{item.title}</span>;
 
     let dropdownSelected = "";
-    this.state.selectedItems.forEach((d, i) => dropdownSelected += i === this.state.selectedItems.length - 1 ? `${d.title}` : `${d.title},`);
+    selectedItems.forEach((d, i) => dropdownSelected += i === selectedItems.length - 1 ? `${d.title}` : `${d.title},`);
 
     return (
       <SectionColumns>
@@ -79,12 +84,13 @@ class Cancer extends SectionColumns {
             onItemSelect={handleItemSelect}
             tagInputProps={{onRemove: deleteTag, placeholder: "Add a cancer type", inputProps: {placeholder: "Add a cancer type"}}}
             tagRenderer={renderTag}
-            selectedItems={this.state.selectedItems}
+            selectedItems={selectedItems}
             resetOnClose={true}
             resetOnSelect={true}>
             <Button rightIcon="caret-down" />
           </MultiSelect>
 
+          <h3>Gender</h3>
           {/* Draw a mini BarChart to show Cancer by Sex for selected cancer type. */}
           <BarChart config={{
             data: `/api/data?measures=Count&drilldowns=Sex&Cancer%20Site=${dropdownSelected}&Year=all`,
@@ -123,13 +129,14 @@ class Cancer extends SectionColumns {
           }}
           />
           
+          <h3>Race & Ethnicity</h3>
           {/* Draw a mini BarChart to show Cancer by Race and Ethnicity for selected cancer type. */}
           <BarChart config={{
             data: `/api/data?measures=Count&drilldowns=Race,Ethnicity&Cancer%20Site=${dropdownSelected}&Year=all`,
             discrete: "y",
             height: 250,
             legend: false,
-            groupBy: ["Cancer Site", "Ethnicity", "Race"],
+            groupBy: ["Cancer Site", d => `${d.Ethnicity} ${d.Race}`],
             stacked: true,
             label: d => `${d.Ethnicity} ${d.Race}`,
             x: "share",
@@ -160,6 +167,7 @@ class Cancer extends SectionColumns {
           />
         </article>
         
+        <h3>Occurance</h3>
         {/* Draw a LinePlot to show age adjusted data for the selected cancer types. */}
         <LinePlot config={{
           data: `/api/data?measures=Age-Adjusted%20Rate,Age-Adjusted%20Rate%20Lower%2095%20Percent%20Confidence%20Interval,Age-Adjusted%20Rate%20Upper%2095%20Percent%20Confidence%20Interval&Cancer%20Site=${dropdownSelected}&Year=all`,

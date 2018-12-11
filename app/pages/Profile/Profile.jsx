@@ -71,6 +71,7 @@ class Profile extends Component {
             </div>
           </div>
         </TopicTitle>
+
         <div className="section-container">
           <FoodAvailability />
           <StoreAccessByDemographic />

@@ -48,12 +48,16 @@ class DentistsDemographic extends SectionColumns {
         <SectionTitle>Dentists Demographic</SectionTitle>
         <article>
           <Stat 
-            title={`Majority Age group in ${topDentistsAgeData.Year}`}
-            value={`${topDentistsAgeData["Age Group"]} ${formatPercentage(topDentistsAgeData.share)}`}
+            title={"Majority Age Group"}
+            year={topDentistsAgeData.Year}
+            value={`${topDentistsAgeData["Age Group"]}`}
+            qualifier={formatPercentage(topDentistsAgeData.share)}
           />
           <Stat
-            title={`Majority Gender in ${topDentistsByGender.Year}`}
-            value={`${topDentistsByGender.Sex} ${formatPercentage(topDentistsByGender.share)}`}
+            title={"Majority Gender"}
+            year={topDentistsByGender.Year}
+            value={`${topDentistsByGender.Sex}`}
+            qualifier={formatPercentage(topDentistsByGender.share)}
           />
 
           <p>The Barchart here shows the number of dentists by Age Group in the {topDentistsAgeData.Geography} county, MI.</p>

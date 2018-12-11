@@ -82,33 +82,44 @@ class TypesOfDentists extends SectionColumns {
         <SectionTitle>Types of Dentists</SectionTitle>
         <article>
           <Stat 
-            title={`Majority Active Dentist in ${topTypeOfActiveDentist.Year}`}
-            value={`${topTypeOfActiveDentist.Work} ${formatPercentage(topTypeOfActiveDentist.share)}`}
+            title={"Majority Active Dentist"}
+            year={topTypeOfActiveDentist.Year}
+            value={topTypeOfActiveDentist.Work}
+            qualifier={formatPercentage(topTypeOfActiveDentist.share)}
           />
           <Stat 
-            title={`Majority dentists Employment status in ${topDentistsByEmploymentStatus.Year}`}
-            value={`${topDentistsByEmploymentStatus.Status} ${formatPercentage(topDentistsByEmploymentStatus.share)}`}
+            title={"Majority dentists Employment status"}
+            year={topDentistsByEmploymentStatus.Year}
+            value={topDentistsByEmploymentStatus.Status}
+            qualifier={formatPercentage(topDentistsByEmploymentStatus.share)}
           />
           <Stat 
-            title={`Full-time Dentists in ${recentYearFullTimeDentists.Year}`}
-            value={`${formatPercentage(recentYearFullTimeDentists.share)}`}
+            title={"Full-time Dentists"}
+            year={recentYearFullTimeDentists.Year}
+            value={""}
+            qualifier={formatPercentage(recentYearFullTimeDentists.share)}
           />
           <Stat 
-            title={`Part-time Dentists in ${recentYearPartTimeDentists.Year}`}
-            value={`${formatPercentage(recentYearPartTimeDentists.share)}`}
+            title={"Part-time Dentists"}
+            year={recentYearPartTimeDentists.Year}
+            value={""}
+            qualifier={formatPercentage(recentYearPartTimeDentists.share)}
           />
           <Stat 
-            title={`GP and Pediatric Dentists in ${recentYearGpPediatricDentists.Year}`}
-            value={`${formatPercentage(recentYearGpPediatricDentists.share)}`}
+            title={"GP and Pediatric Dentists"}
+            year={recentYearGpPediatricDentists.Year}
+            value={""}
+            qualifier={formatPercentage(recentYearGpPediatricDentists.share)}
           />
           <Stat 
-            title={`Other Specialty Dentists in ${recentYearOtherSpecialtyDentists.Year}`}
-            value={`${formatPercentage(recentYearOtherSpecialtyDentists.share)}`}
+            title={"Other Specialty Dentists"}
+            year={recentYearOtherSpecialtyDentists.Year}
+            value={""}
+            qualifier={formatPercentage(recentYearOtherSpecialtyDentists.share)}
           />
           
-          {/* <p>The Barchart here shows the number of dentists by Age Group in the {topDentistsAgeData.Geography} county, MI.</p>
-          <p>In {topDentistsAgeData.Year}, the major dentists age group was {topDentistsAgeData["Age Group"]} years with {formatPercentage(topDentistsAgeData.share)}.</p>
-          <p>In {topDentistsByGender.Year}, the major dentists gender group was {topDentistsAgeData.Sex} with {formatPercentage(topDentistsByGender.share)}.</p> */}
+          <p>The Barchart on right shows the Types of Active Dentists in {topTypeOfActiveDentist.Geography} county, MI.</p>
+          <p>The mini Barchart below shows the Dentists Employmemt Status in {topDentistsByEmploymentStatus.Geography} county, MI.</p>
 
           {/* Draw a BarChart to show data for Dentists by their Employement Status. */}
           <BarChart config={{

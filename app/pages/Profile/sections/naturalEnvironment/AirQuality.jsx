@@ -118,7 +118,6 @@ class AirQuality extends SectionColumns {
           tooltipConfig: {tbody: [["Value", d => d["Median AQI"]]]}
         }}
         />
-
       </SectionColumns>
     );
   }

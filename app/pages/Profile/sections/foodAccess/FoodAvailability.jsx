@@ -44,12 +44,14 @@ class FoodAvailability extends SectionColumns {
           <Stat
             title="SNAP-authorized stores"
             year={snapLatestYear}
-            value={snapLatestYearValue}
+            value={""}
+            qualifier={snapLatestYearValue}
           />
           <Stat
             title="WIC-authorized stores"
             year={wicLatestYear}
-            value={wicLatestYearValue}
+            value={""}
+            qualifier={wicLatestYearValue}
           />
           <p>The total number of SNAP-authorized stores in {county} County in {snapLatestYear} were {snapLatestYearValue} and WIC-authorized stores in {wicLatestYear} were {wicLatestYearValue}.</p>
           <p>The Treemap here shows the percentage of Fast-food restaurants, Full-service restaurants, Convinence stores, Grocery stores, Specialized food stores, Supercenters and Farmers market in the {county} County.</p>

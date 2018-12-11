@@ -55,8 +55,10 @@ class StudentPoverty extends SectionColumns {
             qualifier={formatPopulation(topLevelOfSchoolData.share)}
           />
           <Stat
-            title={`Population Enrolled In School in ${topLevelOfSchoolData.Year}`}
-            value={`${formatPopulation(recentYearEnrolledInSchoolPercentage)}`}
+            title={"Population Enrolled In School"}
+            year={topLevelOfSchoolData.Year}
+            value={""}
+            qualifier={formatPopulation(recentYearEnrolledInSchoolPercentage)}
           />
           <p>In {topLevelOfSchoolData.Year}, students in poverty who attended most level of school in {topLevelOfSchoolData.Geography} County were {topLevelOfSchoolData["Level of School"]} with the share of {formatPopulation(topLevelOfSchoolData.share)}</p>
           <p>In {topLevelOfSchoolData.Year}, {formatPopulation(recentYearEnrolledInSchoolPercentage)} of the total population had enrolled in school in the {topLevelOfSchoolData.Geography} county, MI.</p>

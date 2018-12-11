@@ -61,12 +61,16 @@ class StoreAccessByDemographic extends SectionColumns {
           {/* Show top stats for Age and Race groups based on the drilldown value. */}
           { ageSelected
             ? <Stat
-              title={`Top Food Access by Age in ${topFoodAccessByAge.Year}`}
-              value={`${topFoodAccessByAge["Age Group"]} ${formatPercentage(topFoodAccessByAge.Percent)}`}
+              title={"Top Food Access by Age"}
+              year={topFoodAccessByAge.Year}
+              value={topFoodAccessByAge["Age Group"]}
+              qualifier={formatPercentage(topFoodAccessByAge.Percent)}
             />
             : <Stat
-              title={`Top Food Access by Race in ${topFoodAccessByRace.Year}`}
-              value={`${topFoodAccessByRace["Race Group"]} ${formatPercentage(topFoodAccessByRace.Percent)}`}
+              title={"Top Food Access by Race"}
+              year={topFoodAccessByRace.Year}
+              value={topFoodAccessByRace["Race Group"]}
+              qualifier={formatPercentage(topFoodAccessByRace.Percent)}
             />
           }
           {/* Write a paragraph for top stats based on the dropdown choice. */}

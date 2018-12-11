@@ -9,17 +9,21 @@ class Insecurity extends SectionColumns {
 
   render() {
     const {insecurityRate} = this.props;
+    console.log("insecurityRate: ", insecurityRate);
 
     return (
       <div className="section-title-stat-inner">
         <Stat
           title={"Child Insecurity"}
+          year={insecurityRate[0].Year}
           value={`${insecurityRate[0]["Food Insecurity Rate"]}%`}
           theme="marjoelle-light"
         />
         <Stat
           title={"Adult Insecurity"}
+          year={insecurityRate[1].Year}
           value={`${insecurityRate[1]["Food Insecurity Rate"] - insecurityRate[0]["Food Insecurity Rate"]}%`}
+          theme="marjoelle-light"
         />
       </div>
     );

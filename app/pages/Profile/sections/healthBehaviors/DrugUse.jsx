@@ -88,12 +88,14 @@ class DrugUse extends SectionColumns {
             ? <Stat
               title={"County with highest prevalence"}
               value={topSecondHandSmokeAndMonthlyAlcoholData.County}
-              qualifier={`${formatAbbreviate(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue])}%`}
+              year={topSecondHandSmokeAndMonthlyAlcoholData.Year}
+              qualifier={formatPercentage(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue])}
             />
             : <Stat
               title={"Tract with highest prevalence"}
+              year={allTractSmokingDrinkingData.Year}
               value={topTractNum}
-              qualifier={`${formatAbbreviate(topTractRate)}%`}
+              qualifier={formatPercentage(topTractRate)}
             />
           }
           {isSecondHandSmokeOrMonthlyAlcoholSelected

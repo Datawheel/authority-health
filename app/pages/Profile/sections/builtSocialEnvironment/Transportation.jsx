@@ -80,9 +80,9 @@ class Transportation extends SectionColumns {
             value={topRecentYearModeOfTransport["Transportation Means"]}
             qualifier={formatPercentage(topRecentYearModeOfTransport.share)}
           />
-          <p>The Barchart for number of vehicles shows the Number of vehicles in each household and the percentage of Male and Female that owns them.</p>
-          <p>The Treemap shows the percentages of Modes of Transportation in {topRecentYearModeOfTransport.Geography}.</p>
-          <p>The mini Barchart here shows the commute time for each time bucket in {topRecentYearCommuteTime.Geography}.</p>
+          <p>The Barchart on the right shows the commute time for Male and Female in the {topRecentYearCommuteTime.Geography}.</p>
+          <p>The Treemap shows the percentages of Modes of Transportation in the {topRecentYearModeOfTransport.Geography}.</p>
+          <p>The Barchart below shows the Number of vehicles in each household and the percentage of Male and Female that owns them.</p>
 
           {/* Draw a Barchart for Number of vehicles in each household. */}
           <BarChart config={{

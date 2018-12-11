@@ -21,20 +21,28 @@ class ReadingAssessment extends SectionColumns {
     maleEighthGradeReadingScores, femaleEighthGradeReadingScores) => {
     const stats = [];
     stats.push(<Stat
-      title={`4th Grade Score in ${maleFourthGradeReadingScores.Year}`}
-      value={`${maleFourthGradeReadingScores.Gender} ${maleFourthGradeReadingScores["Average Reading Score"]}`}
+      title={"4th Grade Score"}
+      year={maleFourthGradeReadingScores.Year}
+      value={maleFourthGradeReadingScores.Gender}
+      qualifier={maleFourthGradeReadingScores["Average Reading Score"]}
     />);
     stats.push(<Stat
-      title={`4th Grade Score in ${femaleFourthGradeReadingScores.Year}`}
-      value={`${femaleFourthGradeReadingScores.Gender} ${femaleFourthGradeReadingScores["Average Reading Score"]}`}
+      title={"4th Grade Score"}
+      year={femaleFourthGradeReadingScores.Year}
+      value={femaleFourthGradeReadingScores.Gender}
+      qualifier={femaleFourthGradeReadingScores["Average Reading Score"]}
     />);
     stats.push(<Stat
-      title={`8th Grade Score in ${maleEighthGradeReadingScores.Year}`}
-      value={`${maleEighthGradeReadingScores.Gender} ${maleEighthGradeReadingScores["Average Reading Score"]}`}
+      title={"8th Grade Score"}
+      year={maleEighthGradeReadingScores.Year}
+      value={maleEighthGradeReadingScores.Gender}
+      qualifier={maleEighthGradeReadingScores["Average Reading Score"]}
     />);
     stats.push(<Stat
-      title={`8th Grade Score in ${femaleEighthGradeReadingScores.Year}`}
-      value={`${femaleEighthGradeReadingScores.Gender} ${femaleEighthGradeReadingScores["Average Reading Score"]}`}
+      title={"8th Grade Score"}
+      year={femaleEighthGradeReadingScores.Year}
+      value={femaleEighthGradeReadingScores.Gender}
+      qualifier={femaleEighthGradeReadingScores["Average Reading Score"]}
     />);
     return stats;
   }
@@ -43,20 +51,24 @@ class ReadingAssessment extends SectionColumns {
     noELLFourthGradeReadingScores, noELLEighthGradeReadingScores) => {
     const stats = [];
     stats.push(<Stat
-      title={`4th Grade Score With ELL in ${withELLFourthGradeReadingScores.Year}`}
-      value={`${withELLFourthGradeReadingScores["Average Reading Score"]}`}
+      title={"4th Grade Score With ELL"}
+      year={withELLFourthGradeReadingScores.Year}
+      value={withELLFourthGradeReadingScores["Average Reading Score"]}
     />);
     stats.push(<Stat
-      title={`8th Grade Score With ELL in ${withELLEighthGradeReadingScores.Year}`}
-      value={`${withELLEighthGradeReadingScores["Average Reading Score"]}`}
+      title={"8th Grade Score With ELL"}
+      year={withELLEighthGradeReadingScores.Year}
+      value={withELLEighthGradeReadingScores["Average Reading Score"]}
     />);
     stats.push(<Stat
-      title={`4th Grade Score with No ELL in ${noELLFourthGradeReadingScores.Year}`}
-      value={`${noELLFourthGradeReadingScores["Average Reading Score"]}`}
+      title={"4th Grade Score with No ELL"}
+      year={noELLFourthGradeReadingScores.Year}
+      value={noELLFourthGradeReadingScores["Average Reading Score"]}
     />);
     stats.push(<Stat
-      title={`8th Grade Score with No ELL in ${noELLEighthGradeReadingScores.Year}`}
-      value={`${noELLEighthGradeReadingScores["Average Reading Score"]}`}
+      title={"8th Grade Score with No ELL"}
+      year={noELLEighthGradeReadingScores.Year}
+      value={noELLEighthGradeReadingScores["Average Reading Score"]}
     />);
     return stats;
   };
@@ -65,20 +77,24 @@ class ReadingAssessment extends SectionColumns {
     noDisabilityFourthGradeReadingScores, noDisabilityEighthGradeReadingScores) => {
     const stats = [];
     stats.push(<Stat
-      title={`4th Grade Score With Disability in ${withDisabilityFourthGradeReadingScores.Year}`}
-      value={`${withDisabilityFourthGradeReadingScores["Average Reading Score"]}`}
+      title={"4th Grade Score With Disability"}
+      year={withDisabilityFourthGradeReadingScores.Year}
+      value={withDisabilityFourthGradeReadingScores["Average Reading Score"]}
     />);
     stats.push(<Stat
-      title={`8th Grade Score With Disability in ${withDisabilityEighthGradeReadingScores.Year}`}
-      value={`${withDisabilityEighthGradeReadingScores["Average Reading Score"]}`}
+      title={"8th Grade Score With Disability"}
+      year={withDisabilityEighthGradeReadingScores.Year}
+      value={withDisabilityEighthGradeReadingScores["Average Reading Score"]}
     />);
     stats.push(<Stat
-      title={`4th Grade Score with No Disability in ${noDisabilityFourthGradeReadingScores.Year}`}
-      value={`${noDisabilityFourthGradeReadingScores["Average Reading Score"]}`}
+      title={"4th Grade Score with No Disability"}
+      year={noDisabilityFourthGradeReadingScores.Year}
+      value={noDisabilityFourthGradeReadingScores["Average Reading Score"]}
     />);
     stats.push(<Stat
-      title={`8th Grade Score with No Disability in ${noDisabilityEighthGradeReadingScores.Year}`}
-      value={`${noDisabilityEighthGradeReadingScores["Average Reading Score"]}`}
+      title={"8th Grade Score with No Disability"}
+      year={noDisabilityEighthGradeReadingScores.Year}
+      value={noDisabilityEighthGradeReadingScores["Average Reading Score"]}
     />);
     return stats;
   }
@@ -86,8 +102,10 @@ class ReadingAssessment extends SectionColumns {
   getStatsByParentsEducation = topReadingScoreForEighthGrade => {
     const stats = [];
     stats.push(<Stat
-      title={`8th Grade Score in ${topReadingScoreForEighthGrade.Year}`}
-      value={`${topReadingScoreForEighthGrade["Parents Education"]} ${topReadingScoreForEighthGrade["Average Reading Score"]}`}
+      title={"8th Grade Score"}
+      year={topReadingScoreForEighthGrade.Year}
+      value={topReadingScoreForEighthGrade["Parents Education"]}
+      qualifier={topReadingScoreForEighthGrade["Average Reading Score"]}
     />);
     return stats;
   }
@@ -96,20 +114,28 @@ class ReadingAssessment extends SectionColumns {
     fourthGradeReadingScoresbyCity, eighthGradeReadingScoresbyCity) => {
     const stats = [];
     stats.push(<Stat
-      title={`4th Grade Score in ${nationalFourthGradeReadingScores.Year}`}
-      value={`${nationalFourthGradeReadingScores.Nation} ${nationalFourthGradeReadingScores["Average Reading Score"]}`}
+      title={"4th Grade Score"}
+      year={nationalFourthGradeReadingScores.Year}
+      value={nationalFourthGradeReadingScores.Nation}
+      qualifier={nationalFourthGradeReadingScores["Average Reading Score"]}
     />);
     stats.push(<Stat
-      title={`8th Grade Score in ${nationalEighthGradeReadingScores.Year}`}
-      value={`${nationalEighthGradeReadingScores.Nation} ${nationalEighthGradeReadingScores["Average Reading Score"]}`}
+      title={"8th Grade Score"}
+      year={nationalEighthGradeReadingScores.Year}
+      value={nationalEighthGradeReadingScores.Nation}
+      qualifier={nationalEighthGradeReadingScores["Average Reading Score"]}
     />);
     stats.push(<Stat
-      title={`4th Grade Score in ${fourthGradeReadingScoresbyCity.Year}`}
-      value={`${fourthGradeReadingScoresbyCity.City} ${fourthGradeReadingScoresbyCity["Average Reading Score"]}`}
+      title={"4th Grade Score"}
+      year={fourthGradeReadingScoresbyCity.Year}
+      value={fourthGradeReadingScoresbyCity.City}
+      qualifier={fourthGradeReadingScoresbyCity["Average Reading Score"]}
     />);
     stats.push(<Stat
-      title={`8th Grade Score in ${eighthGradeReadingScoresbyCity.Year}`}
-      value={`${eighthGradeReadingScoresbyCity.City} ${eighthGradeReadingScoresbyCity["Average Reading Score"]}`}
+      title={"8th Grade Score in $"}
+      year={eighthGradeReadingScoresbyCity.Year}
+      value={eighthGradeReadingScoresbyCity.City}
+      qualifier={eighthGradeReadingScoresbyCity["Average Reading Score"]}
     />);
     return stats;
   }

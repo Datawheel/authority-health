@@ -18,8 +18,7 @@ class Cancer extends SectionColumns {
   constructor(props) {
     super(props);
     this.state = {
-      selectedItems: [],
-      item: {index: "1. ", title: "All Invasive Cancer Sites Combined"}
+      selectedItems: [{index: "2. ", title: "Digestive System"}]
     };
   }
   
@@ -67,9 +66,7 @@ class Cancer extends SectionColumns {
 
     let dropdownSelected = "";
     this.state.selectedItems.forEach((d, i) => dropdownSelected += i === this.state.selectedItems.length - 1 ? `${d.title}` : `${d.title},`);
-    console.log("dropdownSelected: ", dropdownSelected);
 
-    const buttonText = `${this.state.item.index} ${this.state.item.title}`;
     return (
       <SectionColumns>
         <SectionTitle>Cancer</SectionTitle>
@@ -85,7 +82,7 @@ class Cancer extends SectionColumns {
             selectedItems={this.state.selectedItems}
             resetOnClose={true}
             resetOnSelect={true}>
-            <Button text={buttonText} rightIcon="caret-down" />
+            <Button rightIcon="caret-down" />
           </MultiSelect>
 
           {/* Draw a mini BarChart to show Cancer by Sex for selected cancer type. */}

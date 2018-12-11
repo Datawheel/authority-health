@@ -64,12 +64,16 @@ class HealthConditonChronicDiseases extends SectionColumns {
           {/* Show top stats for the dropdown selected. */}
           { isHealthConditionWeightedValueSelected
             ? <Stat
-              title={`Majority ${dropdownValue} in ${topDropdownWeightedData["End Year"]}`}
-              value={`${topDropdownWeightedData.County} ${formatPercentage(topDropdownWeightedData[dropdownValue])}`}
+              title={`Majority ${dropdownValue}`}
+              year={topDropdownWeightedData["End Year"]}
+              value={topDropdownWeightedData.County}
+              qualifier={formatPercentage(topDropdownWeightedData[dropdownValue])}
             />
             : <Stat
-              title={`Majority ${dropdownValue} in ${topDropdownValueTract.Year}`}
-              value={`${topDropdownValueTract.Tract} ${formatPercentage(topDropdownValueTract[dropdownValue])}`}
+              title={`Majority ${dropdownValue}`}
+              year={topDropdownValueTract.Year}
+              value={topDropdownValueTract.Tract}
+              qualifier={formatPercentage(topDropdownValueTract[dropdownValue])}
             />
           }
 

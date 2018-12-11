@@ -56,8 +56,10 @@ class PhysicalInactivity extends SectionColumns {
           </select>
 
           <Stat
-            title={`Top ${dropdownValue} in ${topRecentYearData.Year}`}
-            value={`${topRecentYearData.Tract} ${formatPercentage(topRecentYearData[dropdownValue])}`}
+            title={`Top ${dropdownValue}`}
+            year={topRecentYearData.Year}
+            value={topRecentYearData.Tract}
+            qualifier={formatPercentage(topRecentYearData[dropdownValue])}
           />
           <p>The Geomap here shows the {dropdownValue} for Tracts in Wayne County, MI.</p>
 
@@ -89,15 +91,19 @@ class PhysicalInactivity extends SectionColumns {
           {/* Show top stats for the Male and Female Physical Inactivity data. */}
           {physicalInactivitySelected
             ? <Stat
-              title={`Majority Male with ${formatDropdownChoiceName(dropdownValue)} in ${topPhysicalInactivityMaleData.Year}`}
-              value={`${topPhysicalInactivityMaleData.Geography} ${formatPercentage(topPhysicalInactivityMaleData["Adj Percent"])}`}
+              title={`Majority Male with ${formatDropdownChoiceName(dropdownValue)}`}
+              year={topPhysicalInactivityMaleData.Year}
+              value={topPhysicalInactivityMaleData.Geography}
+              qualifier={formatPercentage(topPhysicalInactivityMaleData["Adj Percent"])}
             />
             : null
           }
           {physicalInactivitySelected
             ? <Stat
-              title={`Majority Female with ${formatDropdownChoiceName(dropdownValue)} in ${topPhysicalInactivityFemaleData.Year}`}
-              value={`${topPhysicalInactivityFemaleData.Geography} ${formatPercentage(topPhysicalInactivityFemaleData["Adj Percent"])}`}
+              title={`Majority Female with ${formatDropdownChoiceName(dropdownValue)}`}
+              year={topPhysicalInactivityFemaleData.Year}
+              value={topPhysicalInactivityFemaleData.Geography}
+              qualifier={formatPercentage(topPhysicalInactivityFemaleData["Adj Percent"])}
             />
             : null
           }

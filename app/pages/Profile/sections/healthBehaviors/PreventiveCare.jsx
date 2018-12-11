@@ -61,12 +61,16 @@ class PreventiveCare extends SectionColumns {
           {/* Show top stats for the dropdown selected. */}
           {isPreventativeCareWeightedValueSelected
             ? <Stat
-              title={`Majority ${dropdownValue} in ${topDropdownWeightedData.Year}`}
-              value={`${topDropdownWeightedData.County} ${formatPercentage(topDropdownWeightedData[dropdownValue])}`}
+              title={`Majority ${dropdownValue}`}
+              year={topDropdownWeightedData.Year}
+              value={topDropdownWeightedData.County}
+              qualifier={formatPercentage(topDropdownWeightedData[dropdownValue])}
             />
             : <Stat
-              title={`Majority ${dropdownValue} in ${topDropdownValueTract.Year}`}
-              value={`${topDropdownValueTract.Tract} ${formatPercentage(topDropdownValueTract[dropdownValue])}`}
+              title={`Majority ${dropdownValue}`}
+              year={topDropdownValueTract.Year}
+              value={topDropdownValueTract.Tract}
+              qualifier={formatPercentage(topDropdownValueTract[dropdownValue])}
             />
           }
 

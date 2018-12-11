@@ -18,7 +18,8 @@ const formatData = d => {
 const getLeadStats = excessiveLeadData => {
   const stats = [];
   excessiveLeadData.forEach(d => stats.push(<Stat
-    title={`Excessive Lead in ${d.Year}`}
+    title={"Excessive Lead"}
+    year={d.Year}
     value={`${d.Tract}`}
   />));
   return stats;
@@ -27,7 +28,8 @@ const getLeadStats = excessiveLeadData => {
 const getMercuryStats = excessiveMercuryData => {
   const stats = [];
   excessiveMercuryData.forEach(d => stats.push(<Stat
-    title={`Excessive Mercury in ${d.Year}`}
+    title={"Excessive Mercury"}
+    year={d.Year}
     value={`${d.Tract}`}
   />));
   return stats;

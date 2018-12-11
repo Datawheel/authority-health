@@ -52,16 +52,22 @@ class AirQuality extends SectionColumns {
         <SectionTitle>Air Quality</SectionTitle>
         <article>
           <Stat
-            title={`Top Air quality days in ${topRecentYearAirQualityDays.Year}`}
-            value={`${topRecentYearAirQualityDays.Category} ${formatAbbreviate(topRecentYearAirQualityDays["Number of Days"])} Days`}
+            title={"Top Air quality days"}
+            year={topRecentYearAirQualityDays.Year}
+            value={topRecentYearAirQualityDays.Category}
+            qualifier={`${formatAbbreviate(topRecentYearAirQualityDays["Number of Days"])} Days`}
           />
           <Stat
-            title={`Median Air Quality Index in ${recentYearAirQualityMedianAQIs.values[0].Year}`}
-            value={`${recentYearAirQualityMedianAQIs.values[0].Geography} ${recentYearAirQualityMedianAQIs.values[0]["Median AQI"]}`}
+            title={"Median Air Quality Index"}
+            year={recentYearAirQualityMedianAQIs.values[0].Year}
+            value={recentYearAirQualityMedianAQIs.values[0].Geography}
+            qualifier={recentYearAirQualityMedianAQIs.values[0]["Median AQI"]}
           />
           <Stat
-            title={`Top Air Pollutants in ${topRecentYearAirPollutant.Year} in ${topRecentYearAirPollutant.Geography}`}
-            value={`${topRecentYearAirPollutant.Pollutant} ${topRecentYearAirPollutant["Number of Days"]} days`}
+            title={`Top Air Pollutants in ${topRecentYearAirPollutant.Year}`}
+            year={topRecentYearAirPollutant.Geography}
+            value={topRecentYearAirPollutant.Pollutant}
+            qualifier={`${topRecentYearAirPollutant["Number of Days"]} days`}
           />
 
           {/* Barchart to show Air quality days for current location. */}

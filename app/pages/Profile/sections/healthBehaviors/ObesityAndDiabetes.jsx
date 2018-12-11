@@ -90,12 +90,16 @@ class ObesityAndDiabetes extends SectionColumns {
           {/* Show top stats for the dropdown selected. */}
           {isBMIWeightedDataValueSelected
             ? <Stat
-              title={`Majority ${dropdownValue} in ${topDropdownWeightedData.Year}`}
-              value={`${topDropdownWeightedData.Geography} ${formatPercentage(topDropdownWeightedData[dropdownValue])}`}
+              title={`Majority ${dropdownValue}`}
+              year={topDropdownWeightedData.Year}
+              value={topDropdownWeightedData.Geography}
+              qualifier={formatPercentage(topDropdownWeightedData[dropdownValue])}
             />
             : <Stat
-              title={`Majority ${dropdownValue} in ${topDropdownValueTract.Year}`}
-              value={`${topDropdownValueTract.Tract} ${formatPercentage(topDropdownValueTract[dropdownValue])}`}
+              title={`Majority ${dropdownValue}`}
+              year={topDropdownValueTract.Year}
+              value={topDropdownValueTract.Tract}
+              qualifier={formatPercentage(topDropdownValueTract[dropdownValue])}
             />
           }
 

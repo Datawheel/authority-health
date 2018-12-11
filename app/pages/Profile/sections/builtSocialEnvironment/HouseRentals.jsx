@@ -42,7 +42,7 @@ class HouseRentals extends SectionColumns {
             title="Median Rent Amount"
             year={rentAmountData[0].Year}
             value={rentAmountData[0].Geography}
-            qualifier={`$${  formatAbbreviate(rentAmountData[0]["Rent Amount"])}`}
+            qualifier={`$${formatAbbreviate(rentAmountData[0]["Rent Amount"])}`}
           />
           {/* Show stats for Renter-Occupied Housing Units with Extra Pay on Utilities for most recent year. */}
           <Stat
@@ -58,7 +58,7 @@ class HouseRentals extends SectionColumns {
             value={rangeFormatter(topIncomeToPayMostRent["Household Income"])}
             qualifier={formatPercentage(topIncomeToPayMostRent.share)}
           />
-          <p>The Barchart here shows the Household Income buckets and the Percentage of rent paid based on the Household Income.</p>
+          <p>The Barchart on the right shows the Household Income buckets and the percentage of rent paid based on the Household Income.</p>
           {/* Create a LinePlot. */}
           <LinePlot config={{
             data: rentAmountData,
@@ -73,7 +73,7 @@ class HouseRentals extends SectionColumns {
             y: "Rent Amount",
             yConfig: {
               tickFormat: d => `$${formatAbbreviate(d)}`,
-              title: "Rent amount"
+              title: "Rent Amount"
             },
             tooltipConfig: {tbody: [["Value", d => `$${formatAbbreviate(d["Rent Amount"])}`]]}
           }}

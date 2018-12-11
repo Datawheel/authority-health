@@ -9,7 +9,6 @@ class Insecurity extends SectionColumns {
 
   render() {
     const {insecurityRate} = this.props;
-    console.log("insecurityRate: ", insecurityRate);
 
     return (
       <div className="section-title-stat-inner">

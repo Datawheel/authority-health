@@ -61,13 +61,13 @@ class PreventiveCare extends SectionColumns {
           {/* Show top stats for the dropdown selected. */}
           {isPreventativeCareWeightedValueSelected
             ? <Stat
-              title={`Majority ${dropdownValue}`}
+              title={"Location with highest share"}
               year={topDropdownWeightedData.Year}
               value={topDropdownWeightedData.County}
               qualifier={formatPercentage(topDropdownWeightedData[dropdownValue])}
             />
             : <Stat
-              title={`Majority ${dropdownValue}`}
+              title={"Location with highest share"}
               year={topDropdownValueTract.Year}
               value={topDropdownValueTract.Tract}
               qualifier={formatPercentage(topDropdownValueTract[dropdownValue])}
@@ -76,12 +76,12 @@ class PreventiveCare extends SectionColumns {
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           {isPreventativeCareWeightedValueSelected 
-            ? <p>The Geomap here shows {dropdownValue} for Counties in Michigan.</p>
-            : <p>The Geomap here shows {dropdownValue} for Tracts in the Wayne county, MI.</p>
+            ? <p>In {topDropdownWeightedData["End Year"]}, {topDropdownWeightedData.County} had the highest share of {dropdownValue} ({formatPercentage(topDropdownWeightedData[dropdownValue])}) out of all the counties in Michigan.</p>
+            : <p>In {topDropdownValueTract.Year}, {topDropdownValueTract.Tract} had the highest share of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownValueTract[dropdownValue])}) out of all the tracts in Wayne county.</p>
           }
           {isPreventativeCareWeightedValueSelected 
-            ? <p>In {topDropdownValueTract.Year}, top {dropdownValue} was {formatPercentage(topDropdownWeightedData[dropdownValue])} in the {topDropdownWeightedData.County}, MI.</p>
-            : <p>In {topDropdownValueTract.Year}, top {dropdownValue} was {formatPercentage(topDropdownValueTract[dropdownValue])} in {topDropdownValueTract.Tract}.</p>
+            ? <p>The map here shows the {dropdownValue.toLowerCase()} for all counties in Michigan.</p>
+            : <p>The map here shows the {dropdownValue.toLowerCase()} for all tracts in Wayne County, MI.</p>
           }
         </article>
 
@@ -91,10 +91,13 @@ class PreventiveCare extends SectionColumns {
             data: preventiveCareWeightedData.data,
             groupBy: "ID County",
             colorScale: dropdownValue,
+            colorScaleConfig: {
+              axisConfig: {tickFormat: d => formatPercentage(d)}
+            },
             label: d => d.County,
             height: 400,
             time: "End Year",
-            tooltipConfig: {tbody: [["Value", d => `${formatPercentage(d[dropdownValue])}`]]},
+            tooltipConfig: {tbody: [["Preventive Care:", `${dropdownValue}`], ["Share:", d => `${formatPercentage(d[dropdownValue])}`]]},
             topojson: "/topojson/county.json",
             topojsonFilter: d => d.id.startsWith("05000US26")
           }}
@@ -103,10 +106,13 @@ class PreventiveCare extends SectionColumns {
             data: preventiveCareData.data,
             groupBy: "ID Tract",
             colorScale: dropdownValue,
+            colorScaleConfig: {
+              axisConfig: {tickFormat: d => formatPercentage(d)}
+            },
             label: d => d.Tract,
             height: 400,
             time: "Year",
-            tooltipConfig: {tbody: [["Value", d => `${formatPercentage(d[dropdownValue])}`]]},
+            tooltipConfig: {tbody: [["Preventive Care:", `${dropdownValue}`], ["Share:", d => `${formatPercentage(d[dropdownValue])}`]]},
             topojson: "/topojson/tract.json",
             topojsonFilter: d => d.id.startsWith("14000US26163")
           }}

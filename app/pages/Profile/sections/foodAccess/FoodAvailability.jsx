@@ -1,6 +1,7 @@
 import React from "react";
 import {connect} from "react-redux";
 import {Treemap} from "d3plus-react";
+import {titleCase} from "d3plus-text";
 import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
@@ -26,12 +27,12 @@ class FoodAvailability extends SectionColumns {
     });
 
     // Get SNAP latest year data:
-    const snapLatestYear = snapWicLatestData[0]["ID Year"];
-    const snapLatestYearValue = formatAbbreviate(snapWicLatestData[0]["Number of Stores"]);
+    const snapLatestYear = snapWicLatestData[0].Year;
+    const snapLatestYearValue = snapWicLatestData[0]["Number of Stores"];
 
     // Get WIC latest year data:
-    const wicLatestYear = snapWicLatestData[1]["ID Year"];
-    const wicLatestYearValue = formatAbbreviate(snapWicLatestData[1]["Number of Stores"]);
+    const wicLatestYear = snapWicLatestData[1].Year;
+    const wicLatestYearValue = snapWicLatestData[1]["Number of Stores"];
 
     // Get county information for current location
     const county = snapWicData[0].Geography;
@@ -44,23 +45,22 @@ class FoodAvailability extends SectionColumns {
           <Stat
             title="SNAP-authorized stores"
             year={snapLatestYear}
-            value={""}
-            qualifier={snapLatestYearValue}
+            value={snapLatestYearValue}
           />
           <Stat
             title="WIC-authorized stores"
             year={wicLatestYear}
-            value={""}
-            qualifier={wicLatestYearValue}
+            value={wicLatestYearValue}
           />
-          <p>The total number of SNAP-authorized stores in {county} County in {snapLatestYear} were {snapLatestYearValue} and WIC-authorized stores in {wicLatestYear} were {wicLatestYearValue}.</p>
-          <p>The Treemap here shows the percentage of Fast-food restaurants, Full-service restaurants, Convinence stores, Grocery stores, Specialized food stores, Supercenters and Farmers market in the {county} County.</p>
+          <p>The total number of SNAP-authorized stores in {county} County in {snapLatestYear} was {snapLatestYearValue} and there were {wicLatestYearValue} WIC-authorized stores in {wicLatestYear}.</p>
+          <p>The chart here shows the share of fast-food restaurants, full-service restaurants, convinence stores, grocery stores, specialized food stores, supercenters and farmers market in the {county} County.</p>
         </article>
 
         {/* Draw a Treemap to show types of stores and restaurants. */}
         <Treemap config={{
           data: `/api/data?measures=Number%20of%20Stores&drilldowns=Sub-category&County=${countyId}&Year=all`,
           groupBy: ["Group", "Sub-category"],
+          // label: d => `${titleCase(d.Group)} d: ${console.log(d)}`,
           height: 400,
           sum: d => d["Number of Stores"],
           tooltipConfig: {tbody: [["Count:", d => `${d["Number of Stores"]} in ${d.Year}`]]}
@@ -88,6 +88,7 @@ class FoodAvailability extends SectionColumns {
             }, null);
             data.push(result);
           });
+          console.log("data:", data);
           return data;
         }}
         />

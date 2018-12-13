@@ -124,7 +124,9 @@ export default {
       },
       // death to ticks
       tickSize: 0
-    }
+    },
+    // scale type
+    scale: "jenks"
   },
   // legend defaults
   legendConfig: {

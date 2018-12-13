@@ -40,6 +40,8 @@ class ObesityAndDiabetes extends SectionColumns {
     // Check if the selected dropdown value is Diabetes to change the mini BarChart accordingly.
     const isDiabetesSelected = dropdownValue === "Diabetes Data Value";
 
+    const isHealthyWeightSelected = dropdownValue === "BMI Healthy Weight Weighted Percent";
+
     // Find recent year top data for the selceted dropdown value.
     const recentYearWeightedData = {};
     nest()
@@ -76,41 +78,80 @@ class ObesityAndDiabetes extends SectionColumns {
 
     const topMaleData = isDiabetesSelected ? topDiabetesMaleData : topObesityMaleData;
     const topFemaleData = isDiabetesSelected ? topDiabetesFemaleData : topObesityFemaleData;
-    const healthCondition = isDiabetesSelected ? "Diabetes" : "Obesity";
 
     return (
       <SectionColumns>
         <SectionTitle>Obesity and Diabetes</SectionTitle>
         <article>
           {/* Create a dropdown for different types of health conditions. */}
-          <select onChange={this.handleChange}>
-            {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
-          </select>
+          <div className="pt-select">
+            <select onChange={this.handleChange}>
+              {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
+            </select>
+          </div>
 
           {/* Show top stats for the dropdown selected. */}
           {isBMIWeightedDataValueSelected
-            ? <Stat
-              title={`Majority ${dropdownValue}`}
-              year={topDropdownWeightedData.Year}
-              value={topDropdownWeightedData.Geography}
-              qualifier={formatPercentage(topDropdownWeightedData[dropdownValue])}
-            />
+            ? [isHealthyWeightSelected
+              ? <Stat
+                title={"Location with highest share"}
+                year={topDropdownWeightedData.Year}
+                value={topDropdownWeightedData.County}
+                qualifier={formatPercentage(topDropdownWeightedData[dropdownValue])}
+              />
+              : <Stat
+                title={"Location with highest prevalence"}
+                year={topDropdownWeightedData.Year}
+                value={topDropdownWeightedData.County}
+                qualifier={formatPercentage(topDropdownWeightedData[dropdownValue])}
+              />]
             : <Stat
-              title={`Majority ${dropdownValue}`}
+              title={"Location with highest prevalence"}
               year={topDropdownValueTract.Year}
               value={topDropdownValueTract.Tract}
               qualifier={formatPercentage(topDropdownValueTract[dropdownValue])}
             />
           }
 
+          {/* Show top stats for the Male and Female Diabetes/Obesity data. */}
+          {isHealthyWeightSelected
+            ? <div>
+              <Stat
+                title={"Male Share"}
+                year={topMaleData.Year}
+                value={formatPercentage(topMaleData["Adj Percent"])}
+              />
+              <Stat
+                title={"Female Share"}
+                year={topFemaleData.Year}
+                value={formatPercentage(topFemaleData["Adj Percent"])}
+              />
+            </div>
+            : <div>
+              <Stat
+                title={"Male prevalence"}
+                year={topMaleData.Year}
+                value={formatPercentage(topMaleData["Adj Percent"])}
+              />
+              <Stat
+                title={"Female prevalence"}
+                year={topFemaleData.Year}
+                value={formatPercentage(topFemaleData["Adj Percent"])}
+              />
+            </div>}
+
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           {isBMIWeightedDataValueSelected 
-            ? <p>The Geomap here shows {dropdownValue} for Counties in Michigan.</p>
-            : <p>The Geomap here shows {dropdownValue} for Tracts in the Wayne county, MI.</p>
+            ? <p>In {topDropdownWeightedData["End Year"]}, {topDropdownWeightedData.County} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownWeightedData[dropdownValue])}) out of all the counties in Michigan.</p>
+            : <p>In {topDropdownValueTract.Year}, {topDropdownValueTract.Tract} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownValueTract[dropdownValue])}) out of all the tracts in Wayne county.</p>
           }
-          {isBMIWeightedDataValueSelected 
-            ? <p>In {topDropdownValueTract.Year}, top {dropdownValue} was {formatPercentage(topDropdownWeightedData[dropdownValue])} in the {topDropdownWeightedData.Geography}, MI.</p>
-            : <p>In {topDropdownValueTract.Year}, top {dropdownValue} was {formatPercentage(topDropdownValueTract[dropdownValue])} in {topDropdownValueTract.Tract}.</p>
+
+          {/* Write short paragraphs explaining Barchart and top stats for the Diabetes/Obesity data. */}
+          <p>In {topMaleData.Year}, rates for male and female residents of {topMaleData.Geography} were {formatPercentage(topMaleData["Adj Percent"])} and {formatPercentage(topFemaleData["Adj Percent"])} respectively.</p>
+          
+          {isBMIWeightedDataValueSelected
+            ? <p>The map here shows the {dropdownValue.toLowerCase()} for all counties in Michigan.</p>
+            : <p>The map here shows the {dropdownValue.toLowerCase()} for all tracts in Wayne County, MI.</p>
           }
           
           {/* Draw a BarChart to show data for Obesity Rate by Sex. */}
@@ -131,24 +172,9 @@ class ObesityAndDiabetes extends SectionColumns {
             yConfig: {
               ticks: []
             },
-            tooltipConfig: {tbody: [["Value", d => formatPercentage(d["Adj Percent"])]]}
+            tooltipConfig: isHealthyWeightSelected ? {tbody: [["Condition:", `${dropdownValue}`], ["Share", d => formatPercentage(d["Adj Percent"])]]} : {tbody: [["Condition:", `${dropdownValue}`], ["Prevalence", d => formatPercentage(d["Adj Percent"])]]}
           }}
           />
-
-          {/* Show top stats for the Male and Female Diabetes/Obesity data. */}
-          <Stat
-            title={`Majority Male with ${healthCondition} in ${topMaleData.Year}`}
-            value={`${topMaleData.Geography} ${formatPercentage(topMaleData["Adj Percent"])}`}
-          />
-          <Stat
-            title={`Majority Female with ${healthCondition} in ${topFemaleData.Year}`}
-            value={`${topFemaleData.Geography} ${formatPercentage(topFemaleData["Adj Percent"])}`}
-          />
-
-          {/* Write short paragraphs explaining Barchart and top stats for the Diabetes/Obesity data. */}
-          <p>The Barchart here shows the {healthCondition} data for male and female in the {topFemaleData.Geography}.</p>
-          <p>In {topMaleData.Year}, top {healthCondition} rate for Male and Female were {formatPercentage(topMaleData["Adj Percent"])} and {formatPercentage(topFemaleData["Adj Percent"])} respectively in the {topMaleData.Geography}, MI.</p>
-          
         </article>
 
         {/* Geomap to show Obesity and Diabetes data based on the dropdown value. */}
@@ -157,10 +183,13 @@ class ObesityAndDiabetes extends SectionColumns {
             data: BMIWeightedData.data,
             groupBy: "ID County",
             colorScale: dropdownValue,
+            colorScaleConfig: {
+              axisConfig: {tickFormat: d => formatPercentage(d)}
+            },
             label: d => d.County,
             height: 400,
             time: "End Year",
-            tooltipConfig: {tbody: [["Value", d => `${formatPercentage(d[dropdownValue])}`]]},
+            tooltipConfig: isHealthyWeightSelected ? {tbody: [["Condition:", `${dropdownValue}`], ["Share", d => `${formatPercentage(d[dropdownValue])}`]]} : {tbody: [["Condition:", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue])}`]]},
             topojson: "/topojson/county.json",
             topojsonFilter: d => d.id.startsWith("05000US26")
           }}
@@ -169,10 +198,13 @@ class ObesityAndDiabetes extends SectionColumns {
             data: obesityAndDibetesDataValue.data,
             groupBy: "ID Tract",
             colorScale: dropdownValue,
+            colorScaleConfig: {
+              axisConfig: {tickFormat: d => formatPercentage(d)}
+            },
             label: d => d.Tract,
             height: 400,
             time: "Year",
-            tooltipConfig: {tbody: [["Value", d => `${formatPercentage(d[dropdownValue])}`]]},
+            tooltipConfig: {tbody: [["Condition:", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue])}`]]},
             topojson: "/topojson/tract.json",
             topojsonFilter: d => d.id.startsWith("14000US26163")
           }}

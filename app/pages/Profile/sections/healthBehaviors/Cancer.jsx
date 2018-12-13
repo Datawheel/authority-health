@@ -27,7 +27,6 @@ class Cancer extends SectionColumns {
   render() {
 
     const {sortedCancerTypes} = this.props;
-    // console.log("sortedCancerTypes: ", sortedCancerTypes);
     const selectedItems = this.state.selectedItems;
 
     const items = sortedCancerTypes.map((d, i) => Object.assign({}, {index: i, title: d}));

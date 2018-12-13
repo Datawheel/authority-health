@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {nest} from "d3-collection";
 import {BarChart, Geomap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
+import {titleCase} from "d3plus-text";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Stat from "../../../../components/Stat";
@@ -55,31 +56,33 @@ class StoreAccessByDemographic extends SectionColumns {
         <SectionTitle>Store Access by Demographic</SectionTitle>
         <article>
           {/* Create a dropdown for each age and race type using raceAndAgeTypes array. */}
-          <select onChange={this.handleChange}>
-            {raceAndAgeTypes.map(item => <option key={item} value={item}>{item}</option>)}
-          </select>
+          <div className="pt-select">
+            <select onChange={this.handleChange}>
+              {raceAndAgeTypes.map(item => <option key={item} value={item}>{item}</option>)}
+            </select>
+          </div>
           {/* Show top stats for Age and Race groups based on the drilldown value. */}
           { ageSelected
             ? <Stat
-              title={"Top Food Access by Age"}
+              title={"Most at risk demographic"}
               year={topFoodAccessByAge.Year}
               value={topFoodAccessByAge["Age Group"]}
-              qualifier={formatPercentage(topFoodAccessByAge.Percent)}
+              qualifier={`${formatPercentage(topFoodAccessByAge.Percent)} Low Access`}
             />
             : <Stat
               title={"Top Food Access by Race"}
               year={topFoodAccessByRace.Year}
               value={topFoodAccessByRace["Race Group"]}
-              qualifier={formatPercentage(topFoodAccessByRace.Percent)}
+              qualifier={`${formatPercentage(topFoodAccessByRace.Percent)} Low Access`}
             />
           }
           {/* Write a paragraph for top stats based on the dropdown choice. */}
           {ageSelected
-            ? <p> In {topFoodAccessByAge.Geography} County, {topFoodAccessByAge["Age Group"]} were the largest age group with {formatPercentage(topFoodAccessByAge.Percent)} in the year {topFoodAccessByAge.Year}.</p>
-            : <p> In {topFoodAccessByRace.Geography} County, {topFoodAccessByRace["Race Group"]} were the largest race group with {formatPercentage(topFoodAccessByRace.Percent)} in the year {topFoodAccessByRace.Year}.</p>
+            ? <p> In {topFoodAccessByAge.Geography} County, {topFoodAccessByAge["Age Group"]} are the largest age group with low access to food stores ({formatPercentage(topFoodAccessByAge.Percent)} in {topFoodAccessByAge.Year}).</p>
+            : <p> In {topFoodAccessByRace.Geography} County, {topFoodAccessByRace["Race Group"]} are the largest race group with low access to food stores ({formatPercentage(topFoodAccessByRace.Percent)} in {topFoodAccessByRace.Year}).</p>
           }
 
-          <p>The Geomap here shows the percentage of {dropdownValue} who have access to food stores.</p>
+          <p>The following map shows the low access rate for {dropdownValue.toLowerCase()} with low access to food stores across all counties in Michigan.</p>
 
           {/* Create a BarChart based on the dropdown choice. */}
           <BarChart config={{
@@ -90,9 +93,13 @@ class StoreAccessByDemographic extends SectionColumns {
             groupBy: ageSelected ? "Age Group" : "Race Group",
             x: "Percent",
             y: ageSelected ? "Age Group" : "Race Group",
+            xConfig: {
+              title: "Low Access To Food Stores",
+              tickFormat: d => formatPercentage(d)
+            },
             yConfig: {ticks: []},
             time: "Year",
-            tooltipConfig: {tbody: [["Value", d => formatPercentage(d.Percent)]]}
+            tooltipConfig: {tbody: [["Demographic", d => `${d["Age Group"]}`], ["Low-Access Rate", d => formatPercentage(d.Percent)]]}
           }}
           />
         </article>
@@ -102,10 +109,13 @@ class StoreAccessByDemographic extends SectionColumns {
           data: ageSelected ? `/api/data?measures=Percent&drilldowns=Age%20Group,County&Age%20Group=${dropdownValue}&Year=all` : `/api/data?measures=Percent&drilldowns=Race%20Group,County&Race%20Group=${dropdownValue}&Year=all`,
           groupBy: "ID County",
           colorScale: "Percent",
+          colorScaleConfig: {
+            axisConfig: {tickFormat: d => formatPercentage(d)}
+          },
           label: d => d.County,
           height: 400,
           time: "Year",
-          tooltipConfig: {tbody: [[`${dropdownValue}`, d => formatPercentage(d.Percent)]]},
+          tooltipConfig: {tbody: [["Demographic", `${dropdownValue}`], ["Low-Access Rate", d => formatPercentage(d.Percent)]]},
           topojson: "/topojson/county.json",
           topojsonFilter: d => d.id.startsWith("05000US26")
         }}
@@ -129,5 +139,5 @@ const mapStateToProps = state => ({
   foodAccessByAge: state.data.foodAccessByAge,
   foodAccessByRace: state.data.foodAccessByRace
 });
-  
+
 export default connect(mapStateToProps)(StoreAccessByDemographic);

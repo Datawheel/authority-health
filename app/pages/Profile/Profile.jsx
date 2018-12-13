@@ -8,7 +8,7 @@ import "./Profile.css";
 import Insecurity from "./sections/foodAccess/Insecurity";
 import FoodAvailability from "./sections/foodAccess/FoodAvailability";
 import StoreAccessByDemographic from "./sections/foodAccess/StoreAccessByDemographic";
-import DrugUse from "./sections/healthBehaviors/DrugUse";
+import RiskyBehaviors from "./sections/healthBehaviors/RiskyBehaviors";
 import Cancer from "./sections/healthBehaviors/Cancer";
 import PhysicalInactivity from "./sections/healthBehaviors/PhysicalInactivity";
 import HealthConditonChronicDiseases from "./sections/healthBehaviors/HealthConditonChronicDiseases";
@@ -85,7 +85,7 @@ class Profile extends Component {
           <PreventiveCare />
           <ObesityAndDiabetes />
           <Cancer />
-          <DrugUse />
+          <RiskyBehaviors />
           <PhysicalInactivity />
         </div>
 
@@ -162,7 +162,7 @@ Profile.need = [
   PreventiveCare,
   ObesityAndDiabetes,
   Cancer,
-  DrugUse,
+  RiskyBehaviors,
   PhysicalInactivity,
   HealthCenters,
   DentistsDemographic,

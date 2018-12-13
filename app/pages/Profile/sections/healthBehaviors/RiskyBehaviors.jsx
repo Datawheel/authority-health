@@ -1,7 +1,7 @@
 import React from "react";
 import {connect} from "react-redux";
 import {nest} from "d3-collection";
-import {BarChart, Geomap, Treemap} from "d3plus-react";
+import {Geomap, Treemap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
@@ -14,7 +14,7 @@ const formatName = name => {
 };
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
-class DrugUse extends SectionColumns {
+class RiskyBehaviors extends SectionColumns {
 
   constructor(props) {
     super(props);
@@ -72,7 +72,7 @@ class DrugUse extends SectionColumns {
 
     return (
       <SectionColumns>
-        <SectionTitle>Drug Use</SectionTitle>
+        <SectionTitle>Risky Behaviors</SectionTitle>
         <article>
           {/* Create a dropdown for drug types. */}
           <div className="field-container">
@@ -182,11 +182,11 @@ class DrugUse extends SectionColumns {
   }
 }
 
-DrugUse.defaultProps = {
-  slug: "drug-use"
+RiskyBehaviors.defaultProps = {
+  slug: "risky-behaviors"
 };
 
-DrugUse.need = [
+RiskyBehaviors.need = [
   fetchData("allTractSmokingDrinkingData", "/api/data?measures=Current%20Smoking%20Data%20Value,Binge%20Drinking%20Data%20Value&drilldowns=Tract&Year=latest"),
   fetchData("secondHandSmokeAndMonthlyAlcohol", "/api/data?measures=Secondhand%20Smoke%20Exposure%20Yes%20Weighted%20Percent,Monthly%20Alcohol%20Consumption%20Some%20Weighted%20Percent&drilldowns=End%20Year,County")
 ];
@@ -196,4 +196,4 @@ const mapStateToProps = state => ({
   secondHandSmokeAndMonthlyAlcohol: state.data.secondHandSmokeAndMonthlyAlcohol
 });
 
-export default connect(mapStateToProps)(DrugUse);
+export default connect(mapStateToProps)(RiskyBehaviors);

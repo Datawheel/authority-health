@@ -64,13 +64,13 @@ class HealthConditonChronicDiseases extends SectionColumns {
           {/* Show top stats for the dropdown selected. */}
           { isHealthConditionWeightedValueSelected
             ? <Stat
-              title={`Majority ${dropdownValue}`}
+              title={"Location with highest prevalence"}
               year={topDropdownWeightedData["End Year"]}
               value={topDropdownWeightedData.County}
               qualifier={formatPercentage(topDropdownWeightedData[dropdownValue])}
             />
             : <Stat
-              title={`Majority ${dropdownValue}`}
+              title={"Location with highest prevalence"}
               year={topDropdownValueTract.Year}
               value={topDropdownValueTract.Tract}
               qualifier={formatPercentage(topDropdownValueTract[dropdownValue])}
@@ -79,12 +79,12 @@ class HealthConditonChronicDiseases extends SectionColumns {
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           { isHealthConditionWeightedValueSelected
-            ? <p>The Geomap here shows {dropdownValue} for Counties in the Michigan State.</p>
-            : <p>The Geomap here shows {dropdownValue} for Tracts in the Wayne County, MI.</p>
+            ? <p>In {topDropdownWeightedData["End Year"]}, {topDropdownWeightedData.County} County had the highest prevalence of {dropdownValue} ({formatPercentage(topDropdownWeightedData[dropdownValue])}) out of all the counties in Michigan.</p>
+            : <p>In {topDropdownValueTract.Year}, {topDropdownValueTract.Tract} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownValueTract[dropdownValue])}) out of all the tracts in the Wayne county.</p>
           }
           { isHealthConditionWeightedValueSelected
-            ? <p>In {topDropdownWeightedData["End Year"]}, top {dropdownValue} was {formatPercentage(topDropdownWeightedData[dropdownValue])} in {topDropdownWeightedData.County} County, MI.</p>
-            : <p>In {topDropdownValueTract.Year}, top {dropdownValue} was {formatPercentage(topDropdownValueTract[dropdownValue])} in {topDropdownValueTract.Tract}.</p>
+            ? <p>The map here shows the {dropdownValue.toLowerCase()} for all counties in Michigan.</p>
+            : <p>The map here shows the {dropdownValue.toLowerCase()} for all tracts in the Wayne County, MI.</p>
           }
         </article>
 
@@ -94,10 +94,13 @@ class HealthConditonChronicDiseases extends SectionColumns {
             data: healthConditionWeightedData.data,
             groupBy: "ID County",
             colorScale: dropdownValue,
+            colorScaleConfig: {
+              axisConfig: {tickFormat: d => formatPercentage(d)}
+            },
             label: d => d.County,
             height: 400,
             time: "End Year",
-            tooltipConfig: {tbody: [["Value", d => `${formatPercentage(d[dropdownValue])}`]]},
+            tooltipConfig: {tbody: [["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue])}`]]},
             topojson: "/topojson/county.json",
             topojsonFilter: d => d.id.startsWith("05000US26")
           }}
@@ -106,10 +109,13 @@ class HealthConditonChronicDiseases extends SectionColumns {
             data: healthConditionData.data,
             groupBy: "ID Tract",
             colorScale: dropdownValue,
+            colorScaleConfig: {
+              axisConfig: {tickFormat: d => formatPercentage(d)}
+            },
             label: d => d.Tract,
             height: 400,
             time: "Year",
-            tooltipConfig: {tbody: [["Value", d => `${formatPercentage(d[dropdownValue])}`]]},
+            tooltipConfig: {tbody: [["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue])}`]]},
             topojson: "/topojson/tract.json",
             topojsonFilter: d => d.id.startsWith("14000US26163")
           }}

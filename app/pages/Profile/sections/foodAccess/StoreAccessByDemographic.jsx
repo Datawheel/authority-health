@@ -78,8 +78,8 @@ class StoreAccessByDemographic extends SectionColumns {
           }
           {/* Write a paragraph for top stats based on the dropdown choice. */}
           {ageSelected
-            ? <p> In {topFoodAccessByAge.Geography} County, {topFoodAccessByAge["Age Group"]} are the largest age group with low access to food stores ({formatPercentage(topFoodAccessByAge.Percent)} in {topFoodAccessByAge.Year}).</p>
-            : <p> In {topFoodAccessByRace.Geography} County, {topFoodAccessByRace["Race Group"]} are the largest race group with low access to food stores ({formatPercentage(topFoodAccessByRace.Percent)} in {topFoodAccessByRace.Year}).</p>
+            ? <p> In {topFoodAccessByAge.Geography} county, {topFoodAccessByAge["Age Group"]} are the largest age group with low access to food stores ({formatPercentage(topFoodAccessByAge.Percent)} in {topFoodAccessByAge.Year}).</p>
+            : <p> In {topFoodAccessByRace.Geography} county, {topFoodAccessByRace["Race Group"]} are the largest race group with low access to food stores ({formatPercentage(topFoodAccessByRace.Percent)} in {topFoodAccessByRace.Year}).</p>
           }
 
           <p>The following map shows the low access rate for {dropdownValue.toLowerCase()} with low access to food stores across all counties in Michigan.</p>

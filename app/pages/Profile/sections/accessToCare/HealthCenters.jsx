@@ -81,7 +81,7 @@ class HealthCenters extends SectionColumns {
             label: d => formatName(d.RaceType),
             x: d => d[d.RaceType],
             y: "RaceType",
-            time: "ID Year",
+            time: "ID Year", 
             xConfig: {tickFormat: d => formatPercentage(d)},
             yConfig: {ticks: []},
             tooltipConfig: {tbody: [["Value", d => formatPercentage(d[d.RaceType])]]}
@@ -117,6 +117,9 @@ class HealthCenters extends SectionColumns {
           data: "/api/data?measures=Health%20Centers&drilldowns=Zip%20Code&Year=all",
           groupBy: "ID Zip Code",
           colorScale: "Health Centers",
+          colorScaleConfig: {
+            axisConfig: {tickFormat: d => d}
+          },
           label: d => d["Zip Code"],
           height: 400,
           time: "Year",

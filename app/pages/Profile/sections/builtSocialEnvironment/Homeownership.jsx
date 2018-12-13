@@ -9,6 +9,7 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Stat from "../../../../components/Stat";
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
+const formatPropertyValue = d => `$${formatAbbreviate(d)}`;
 
 class Homeownership extends SectionColumns {
 
@@ -97,6 +98,9 @@ class Homeownership extends SectionColumns {
           data: medianHousingUnitsValue,
           groupBy: "ID Geography",
           colorScale: "Property Value",
+          colorScaleConfig: {
+            axisConfig: {tickFormat: d => formatPropertyValue(d)}
+          },
           height: 400,
           time: "Year",
           tooltipConfig: {tbody: [["Value", d => `$${formatAbbreviate(d["Property Value"])}`]]},

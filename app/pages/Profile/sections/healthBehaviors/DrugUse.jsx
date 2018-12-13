@@ -1,7 +1,7 @@
 import React from "react";
 import {connect} from "react-redux";
 import {nest} from "d3-collection";
-import {BarChart, Geomap} from "d3plus-react";
+import {BarChart, Geomap, Treemap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
@@ -56,17 +56,17 @@ class DrugUse extends SectionColumns {
     const topTractDrinkingData = allTractDrinkingData[0];
 
     let topTractNum = topTractSmokingData.Tract;
-    let year = topTractSmokingData["ID Year"];
+    let year = topTractSmokingData.Year;
     let topTractRate = topTractSmokingData[dropdownValue];
 
     if (dropdownValue === drugTypes[0]) { // Assign all Smoking data here.
       topTractNum = topTractSmokingData.Tract;
-      year = topTractSmokingData["ID Year"];
+      year = topTractSmokingData.Year;
       topTractRate = topTractSmokingData[dropdownValue];
     }
     else { // Assign all Drinking data here.
       topTractNum = topTractDrinkingData.Tract;
-      year = topTractDrinkingData["ID Year"];
+      year = topTractDrinkingData.Year;
       topTractRate = topTractDrinkingData[dropdownValue];
     }
 
@@ -77,10 +77,11 @@ class DrugUse extends SectionColumns {
           {/* Create a dropdown for drug types. */}
           <div className="field-container">
             <label>
-              Drug use category
-              <select onChange={this.handleChange}>
-                {drugTypes.map(item => <option key={item} value={item}>{formatName(item)}</option>)}
-              </select>
+              <div className="pt-select">
+                <select onChange={this.handleChange}>
+                  {drugTypes.map(item => <option key={item} value={item}>{formatName(item)}</option>)}
+                </select>
+              </div>
             </label>
           </div>
 
@@ -88,56 +89,58 @@ class DrugUse extends SectionColumns {
             ? <Stat
               title={"County with highest prevalence"}
               value={topSecondHandSmokeAndMonthlyAlcoholData.County}
-              year={topSecondHandSmokeAndMonthlyAlcoholData.Year}
+              year={topSecondHandSmokeAndMonthlyAlcoholData["End Year"]}
               qualifier={formatPercentage(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue])}
             />
             : <Stat
               title={"Tract with highest prevalence"}
-              year={allTractSmokingDrinkingData.Year}
+              year={year}
               value={topTractNum}
               qualifier={formatPercentage(topTractRate)}
             />
           }
           {isSecondHandSmokeOrMonthlyAlcoholSelected
-            ? <p>{topSecondHandSmokeAndMonthlyAlcoholData.County} had the highest {formatName(dropdownValue.toLowerCase())} rate of {formatAbbreviate(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue])}% in the year {year}.</p>
-            : <p>{topTractNum} had the highest {formatName(dropdownValue.toLowerCase())} rate of {topTractRate}% in the year {year}.</p>
+            ? <div>
+              <p>In {topSecondHandSmokeAndMonthlyAlcoholData["End Year"]}, {topSecondHandSmokeAndMonthlyAlcoholData.County} had the highest prevalence of {formatName(dropdownValue.toLowerCase())} ({formatAbbreviate(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue])}%).</p>
+              <p>The map here shows the {formatName(dropdownValue.toLowerCase())} for Wayne county.</p>
+            </div>
+            : <div>
+              <p>In {year}, {topTractNum} had the highest prevalence of {formatName(dropdownValue.toLowerCase())} ({topTractRate}%) out of all Tracts in Wayne county.</p>
+              <p>The map here shows the {formatName(dropdownValue.toLowerCase())} for all tracts in Wayne county.</p>
+            </div>
           }
 
-          {/* Draw a mini bar chart to show smoking status: former, current & never. */}
+          {/* Draw a Treemap to show smoking status: former, current & never. */}
           {dropdownValue === drugTypes[0]
-            ? <BarChart config={{
-              data: "/api/data?measures=Smoking%20Status%20Current%20Weighted%20Percent,Smoking%20Status%20Former%20Weighted%20Percent,Smoking%20Status%20Never%20Weighted%20Percent&drilldowns=End%20Year",
-              discrete: "y",
-              height: 250,
-              groupBy: "SmokingType",
-              label: d => {
-                const wordsArr = d.SmokingType.split(" ");
-                return `${wordsArr[0]} ${wordsArr[1]}: ${wordsArr[2]}`;
-              },
-              legend: false,
-              y: "SmokingType",
-              x: d => d[d.SmokingType],
-              time: "ID End Year",
-              xConfig: {
-                labelRotation: false,
-                tickFormat: d => formatPercentage(d)
-              },
-              yConfig: {ticks: []},
-              shapeConfig: {label: false},
-              tooltipConfig: {tbody: [["Value", d => formatPercentage(d[d.SmokingType])]]}
-            }}
-            dataFormat={resp => {
-              const data = [];
-              resp.data.forEach(d => {
-                resp.source[0].measures.forEach(smokingType => {
-                  if (d[smokingType] !== null) {
-                    data.push(Object.assign({}, d, {SmokingType: smokingType}));
-                  }
+            ? <div>
+              <p>The chart here shows the former, current and never smoking status in Wayne county.</p>
+              <Treemap config={{
+                data: "/api/data?measures=Smoking%20Status%20Current%20Weighted%20Percent,Smoking%20Status%20Former%20Weighted%20Percent,Smoking%20Status%20Never%20Weighted%20Percent&drilldowns=End%20Year",
+                height: 250,
+                sum: d => d[d.SmokingType],
+                legend: false,
+                groupBy: "SmokingType",
+                label: d => {
+                  const wordsArr = d.SmokingType.split(" ");
+                  return `${wordsArr[2]}`;
+                },
+                time: "End Year",
+                title: "Smoking Status",
+                tooltipConfig: {tbody: [["Prevalence", d => formatPercentage(d[d.SmokingType] * 100)]]}
+              }}
+              dataFormat={resp => {
+                const data = [];
+                resp.data.forEach(d => {
+                  resp.source[0].measures.forEach(smokingType => {
+                    if (d[smokingType] !== null) {
+                      data.push(Object.assign({}, d, {SmokingType: smokingType}));
+                    }
+                  });
                 });
-              });
-              return data;
-            }}
-            /> : null }
+                return data;
+              }}
+              />
+            </div> : null }
         </article>
 
         {/* Create a Geomap based on the dropdown choice. */}
@@ -146,10 +149,13 @@ class DrugUse extends SectionColumns {
             data: secondHandSmokeAndMonthlyAlcohol.data,
             groupBy: "ID County",
             colorScale: dropdownValue,
+            colorScaleConfig: {
+              axisConfig: {tickFormat: d => formatPercentage(d)}
+            },
             label: d => d.County,
             height: 400,
             time: "End Year",
-            tooltipConfig: {tbody: [["Value", d => `${formatPercentage(d[dropdownValue])}`]]},
+            tooltipConfig: {tbody: [["Risky Behavior: ", `${formatName(dropdownValue)}`], ["Prevalence", d => formatPercentage(d[dropdownValue])]]},
             topojson: "/topojson/county.json",
             topojsonFilter: d => d.id.startsWith("05000US26")
           }}
@@ -158,10 +164,13 @@ class DrugUse extends SectionColumns {
             data: `/api/data?measures=${dropdownValue.replace(/\s/g, "%20")}&drilldowns=Tract&Year=latest`,
             groupBy: "ID Tract",
             colorScale: dropdownValue,
+            colorScaleConfig: {
+              axisConfig: {tickFormat: d => formatPercentage(d)}
+            },
             label: d => d.Tract,
             height: 400,
             time: "Year",
-            tooltipConfig: {tbody: [["Value", d => formatAbbreviate(d[dropdownValue])]]},
+            tooltipConfig: {tbody: [["Risky Behavior: ", `${formatName(dropdownValue)}`], ["Prevalence", d => formatPercentage(d[dropdownValue])]]},
             topojson: "/topojson/tract.json",
             topojsonFilter: d => d.id.startsWith("14000US26163")
           }}

@@ -1,12 +1,14 @@
 import React from "react";
 import {connect} from "react-redux";
+import {format} from "d3-format";
 import {Treemap} from "d3plus-react";
 import {titleCase} from "d3plus-text";
-import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Stat from "../../../../components/Stat";
+
+const commas = format(",d");
 
 class FoodAvailability extends SectionColumns {
 
@@ -45,14 +47,14 @@ class FoodAvailability extends SectionColumns {
           <Stat
             title="SNAP-authorized stores"
             year={snapLatestYear}
-            value={snapLatestYearValue}
+            value={commas(snapLatestYearValue)}
           />
           <Stat
             title="WIC-authorized stores"
             year={wicLatestYear}
             value={wicLatestYearValue}
           />
-          <p>The total number of SNAP-authorized stores in {county} County in {snapLatestYear} was {snapLatestYearValue} and there were {wicLatestYearValue} WIC-authorized stores in {wicLatestYear}.</p>
+          <p>The average monthly number of SNAP-authorized stores in {county} County in {snapLatestYear} was {commas(snapLatestYearValue)} and there were {commas(wicLatestYearValue)} WIC-authorized stores in {wicLatestYear}.</p>
           <p>The chart here shows the share of fast-food restaurants, full-service restaurants, convinence stores, grocery stores, specialized food stores, supercenters and farmers market in the {county} County.</p>
         </article>
 
@@ -60,7 +62,7 @@ class FoodAvailability extends SectionColumns {
         <Treemap config={{
           data: `/api/data?measures=Number%20of%20Stores&drilldowns=Sub-category&County=${countyId}&Year=all`,
           groupBy: ["Group", "Sub-category"],
-          // label: d => `${titleCase(d.Group)} d: ${console.log(d)}`,
+          label: d => d["Sub-category"] instanceof Array ? titleCase(d.Group) : titleCase(d["Sub-category"]),
           height: 400,
           sum: d => d["Number of Stores"],
           tooltipConfig: {tbody: [["Count:", d => `${d["Number of Stores"]} in ${d.Year}`]]}
@@ -88,7 +90,6 @@ class FoodAvailability extends SectionColumns {
             }, null);
             data.push(result);
           });
-          console.log("data:", data);
           return data;
         }}
         />

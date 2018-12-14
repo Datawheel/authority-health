@@ -38,8 +38,8 @@ class Transportation extends SectionColumns {
       .key(d => d.Year)
       .entries(commuteTimeData)
       .forEach(group => {
-        const total = sum(group.values, d => d["Commute Time"]);
-        group.values.forEach(d => d.share = d["Commute Time"] / total * 100);
+        const total = sum(group.values, d => d["Commuter Population"]);
+        group.values.forEach(d => d.share = d["Commuter Population"] / total * 100);
         group.key >= commuteTimeData[0].Year ? Object.assign(recentYearCommuteTime, group) : {};
       });
     recentYearCommuteTime.values.sort((a, b) => b.share - a.share);
@@ -89,7 +89,7 @@ class Transportation extends SectionColumns {
             data: numberOfVehiclesData,
             discrete: "x",
             height: 300,
-            groupBy: "Sex",
+            groupBy: "Gender",
             x: d => d["Vehicles Available"],
             y: "share",
             time: "ID Year",
@@ -153,8 +153,8 @@ Transportation.defaultProps = {
 };
 
 Transportation.need = [
-  fetchData("commuteTimeData", "https://mammoth.datausa.io/api/data?measures=Commute%20Time&drilldowns=Travel%20Time&Geography=<id>&Year=all", d => d.data),
-  fetchData("numberOfVehiclesData", "https://mammoth.datausa.io/api/data?measures=Commute%20Means%20by%20Gender&drilldowns=Vehicles%20Available,Sex&Geography=<id>&Year=all", d => d.data),
+  fetchData("commuteTimeData", "https://mammoth.datausa.io/api/data?measures=Commuter%20Population&drilldowns=Travel%20Time&Geography=<id>&Year=all", d => d.data),
+  fetchData("numberOfVehiclesData", "https://mammoth.datausa.io/api/data?measures=Commute%20Means%20by%20Gender&drilldowns=Vehicles%20Available,Gender&Geography=<id>&Year=all", d => d.data),
   fetchData("transportationMeans", "https://mammoth.datausa.io/api/data?measures=Commute%20Means&drilldowns=Transportation%20Means&Geography=<id>&Year=all", d => d.data)
 ];
 

@@ -16,7 +16,7 @@ class Poverty extends SectionColumns {
 
   render() {
 
-    const {povertyByRace, povertyByAgeAndSex, incomeToPovertyLevelRatio} = this.props;
+    const {povertyByRace, povertyByAgeAndGender, incomeToPovertyLevelRatio} = this.props;
 
     const filterOutTotalRaceData = povertyByRace.filter(d => d.Race !== "Total");
 
@@ -26,8 +26,8 @@ class Poverty extends SectionColumns {
       .key(d => d.Year)
       .entries(filterOutTotalRaceData)
       .forEach(group => {
-        const total = sum(group.values, d => d["Population in Poverty by Gender, Age, and Race"]);
-        group.values.forEach(d => d.share = d["Population in Poverty by Gender, Age, and Race"] / total * 100);
+        const total = sum(group.values, d => d["Poverty Population"]);
+        group.values.forEach(d => d.share = d["Poverty Population"] / total * 100);
         group.key >= filterOutTotalRaceData[0].Year ? Object.assign(recentYearPovertyByRaceData, group) : {};
       });
     const filterDataBelowPovertyByRace = filterOutTotalRaceData.filter(d => d["ID Poverty Status"] === 0);
@@ -36,27 +36,27 @@ class Poverty extends SectionColumns {
     const filterRecentYearPovertyByRace = recentYearPovertyByRaceData.values.filter(d => d["ID Poverty Status"] === 0).sort((a, b) => b.share - a.share);
     const topPovertyByRace = filterRecentYearPovertyByRace[0];
 
-    // Get data for Poverty by Age and Sex.
-    const belowPovertyLevelByAgeAndSex = povertyByAgeAndSex.filter(d => d["ID Poverty Status"] === 0);
-    const recentYearPovertyByAgeAndSex = {};
+    // Get data for Poverty by Age and Gender.
+    const belowPovertyLevelByAgeAndGender = povertyByAgeAndGender.filter(d => d["ID Poverty Status"] === 0);
+    const recentYearPovertyByAgeAndGender = {};
     nest()
       .key(d => d.Year)
-      .entries(belowPovertyLevelByAgeAndSex)
+      .entries(belowPovertyLevelByAgeAndGender)
       .forEach(group => {
-        const total = sum(group.values, d => d["Population in Poverty by Gender, Age, and Race"]);
-        group.values.forEach(d => d.share = d["Population in Poverty by Gender, Age, and Race"] / total * 100);
-        group.key >= belowPovertyLevelByAgeAndSex[0].Year ? Object.assign(recentYearPovertyByAgeAndSex, group) : {};
+        const total = sum(group.values, d => d["Poverty Population"]);
+        group.values.forEach(d => d.share = d["Poverty Population"] / total * 100);
+        group.key >= belowPovertyLevelByAgeAndGender[0].Year ? Object.assign(recentYearPovertyByAgeAndGender, group) : {};
       });
 
-    // Find top stats for povetry by Age and Sex.
-    const recentYearPovertyByAgeAndSexFiltered = recentYearPovertyByAgeAndSex.values.filter(d => d["ID Poverty Status"] === 0);
+    // Find top stats for povetry by Age and Gender.
+    const recentYearPovertyByAgeAndGenderFiltered = recentYearPovertyByAgeAndGender.values.filter(d => d["ID Poverty Status"] === 0);
 
     // Find top male poverty data.
-    const malePovertyData = recentYearPovertyByAgeAndSexFiltered.filter(d => d.Sex === "Male").sort((a, b) => b.share - a.share);
+    const malePovertyData = recentYearPovertyByAgeAndGenderFiltered.filter(d => d.Gender === "Male").sort((a, b) => b.share - a.share);
     const topMalePovertyData = malePovertyData[0];
 
     // Find top female poverty data.
-    const femalePovertyData = recentYearPovertyByAgeAndSexFiltered.filter(d => d.Sex === "Female").sort((a, b) => b.share - a.share);
+    const femalePovertyData = recentYearPovertyByAgeAndGenderFiltered.filter(d => d.Gender === "Female").sort((a, b) => b.share - a.share);
     const topFemalePovertyData = femalePovertyData[0];
 
     // Get Income To Poverty Level Ratio
@@ -129,10 +129,10 @@ class Poverty extends SectionColumns {
         </article>
 
         <BarChart config={{
-          data: belowPovertyLevelByAgeAndSex,
+          data: belowPovertyLevelByAgeAndGender,
           discrete: "x",
           height: 400,
-          groupBy: "Sex",
+          groupBy: "Gender",
           x: "Age",
           y: "share",
           time: "ID Year",
@@ -183,14 +183,14 @@ Poverty.defaultProps = {
 };
 
 Poverty.need = [
-  fetchData("povertyByRace", "https://mammoth.datausa.io/api/data?measures=Population%20in%20Poverty%20by%20Gender,%20Age,%20and%20Race&drilldowns=Poverty%20Status,Race&Geography=<id>&Year=all", d => d.data),
-  fetchData("povertyByAgeAndSex", "https://mammoth.datausa.io/api/data?measures=Population%20in%20Poverty%20by%20Gender,%20Age,%20and%20Race&drilldowns=Poverty%20Status,Age,Sex&Geography=<id>&Year=all", d => d.data),
+  fetchData("povertyByRace", "https://mammoth.datausa.io/api/data?measures=Poverty%20Population&drilldowns=Poverty%20Status,Race&Geography=<id>&Year=all", d => d.data),
+  fetchData("povertyByAgeAndGender", "https://mammoth.datausa.io/api/data?measures=Poverty%20Population&drilldowns=Poverty%20Status,Age,Gender&Geography=<id>&Year=all", d => d.data),
   fetchData("incomeToPovertyLevelRatio", "/api/data?measures=Population&drilldowns=Ratio%20of%20Income%20to%20Poverty%20Level&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   povertyByRace: state.data.povertyByRace,
-  povertyByAgeAndSex: state.data.povertyByAgeAndSex,
+  povertyByAgeAndGender: state.data.povertyByAgeAndGender,
   incomeToPovertyLevelRatio: state.data.incomeToPovertyLevelRatio
 });
 

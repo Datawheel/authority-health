@@ -9,16 +9,14 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Stat from "../../../../components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
-const formatDropdownChoiceName = d => {
-  const wordsList = d.split(" ");
-  return `${wordsList[0]} ${wordsList[1]}`;
-};
+
+const formatDropdownChoiceName = d => d === "Physical Health Data Value" ? "Physical Bad Health" : "Physical Inactivity";
 
 class PhysicalInactivity extends SectionColumns {
 
   constructor(props) {
     super(props);
-    this.state = {dropdownValue: "Physical Health Data Value"};
+    this.state = {dropdownValue: "Physical Inactivity Data Value"};
   }
 
   // Handler function for dropdown onChange event.
@@ -28,7 +26,7 @@ class PhysicalInactivity extends SectionColumns {
 
     const {physicalInActivity, physicalInactivityPrevalenceBySex} = this.props;
     const {dropdownValue} = this.state;
-    const dropdownList = ["Physical Health Data Value", "Physical Inactivity Data Value"];
+    const dropdownList = ["Physical Inactivity Data Value", "Physical Health Data Value"];
 
     const physicalInactivitySelected = dropdownValue === "Physical Inactivity Data Value";
 
@@ -56,12 +54,34 @@ class PhysicalInactivity extends SectionColumns {
           </select>
 
           <Stat
-            title={`Top ${dropdownValue}`}
+            title={"Location with highest prevalence"}
             year={topRecentYearData.Year}
             value={topRecentYearData.Tract}
             qualifier={formatPercentage(topRecentYearData[dropdownValue])}
           />
-          <p>The Geomap here shows the {dropdownValue} for Tracts in Wayne County, MI.</p>
+
+          {/* Show top stats for the Male and Female Physical Inactivity data. */}
+          {/* And write short paragraphs explaining Barchart and top stats for the Physical Inactivity data. */}
+          {physicalInactivitySelected
+            ? <div>
+              <Stat
+                title={"Male Prevalence"}
+                year={topPhysicalInactivityMaleData.Year}
+                value={formatPercentage(topPhysicalInactivityMaleData["Adj Percent"])}
+              />
+              <Stat
+                title={"Female Prevalence"}
+                year={topPhysicalInactivityFemaleData.Year}
+                value={formatPercentage(topPhysicalInactivityFemaleData["Adj Percent"])}
+              />
+              <p>In {topRecentYearData.Year}, {topRecentYearData.Tract} had the highest prevalence of {formatDropdownChoiceName(dropdownValue).toLowerCase()} ({formatPercentage(topRecentYearData[dropdownValue])}) out of all tracts in Wayne county.</p>
+              <p>In {topPhysicalInactivityFemaleData.Year}, {formatDropdownChoiceName(dropdownValue).toLowerCase()} rates for male and female residents of Wayne county were {formatPercentage(topPhysicalInactivityMaleData["Adj Percent"])} and {formatPercentage(topPhysicalInactivityFemaleData["Adj Percent"])} respectively in the {topPhysicalInactivityFemaleData.Geography}, MI.</p>
+              <p>The Barchart here shows the {formatDropdownChoiceName(dropdownValue)} data for male and female in {topPhysicalInactivityFemaleData.Geography}.</p>
+            </div>
+            : <p>In {topRecentYearData.Year}, {topRecentYearData.Tract} had the highest prevalence of {formatDropdownChoiceName(dropdownValue).toLowerCase()} ({formatPercentage(topRecentYearData[dropdownValue])}) out of all tracts in Wayne county.</p>
+          }
+
+          <p>The following map shows the {formatDropdownChoiceName(dropdownValue)} for all tracts in Wayne county, MI.</p>
 
           {/* Draw a BarChart to show data for Physical Inactivity by Sex. */}
           {physicalInactivitySelected
@@ -82,39 +102,9 @@ class PhysicalInactivity extends SectionColumns {
               yConfig: {
                 ticks: []
               },
-              tooltipConfig: {tbody: [["Value", d => formatPercentage(d["Adj Percent"])]]}
+              tooltipConfig: {tbody: [["Condition:", `${formatDropdownChoiceName(dropdownValue)}`], ["Prevalence", d => formatPercentage(d["Adj Percent"])]]}
             }}
             />
-            : null
-          }
-
-          {/* Show top stats for the Male and Female Physical Inactivity data. */}
-          {physicalInactivitySelected
-            ? <Stat
-              title={`Majority Male with ${formatDropdownChoiceName(dropdownValue)}`}
-              year={topPhysicalInactivityMaleData.Year}
-              value={topPhysicalInactivityMaleData.Geography}
-              qualifier={formatPercentage(topPhysicalInactivityMaleData["Adj Percent"])}
-            />
-            : null
-          }
-          {physicalInactivitySelected
-            ? <Stat
-              title={`Majority Female with ${formatDropdownChoiceName(dropdownValue)}`}
-              year={topPhysicalInactivityFemaleData.Year}
-              value={topPhysicalInactivityFemaleData.Geography}
-              qualifier={formatPercentage(topPhysicalInactivityFemaleData["Adj Percent"])}
-            />
-            : null
-          }
-
-          {/* Write short paragraphs explaining Barchart and top stats for the Physical Inactivity data. */}
-          {physicalInactivitySelected
-            ? <p>The Barchart here shows the {formatDropdownChoiceName(dropdownValue)} data for male and female in the {topPhysicalInactivityFemaleData.Geography}.</p>
-            : null
-          }
-          {physicalInactivitySelected
-            ? <p>In {topPhysicalInactivityFemaleData.Year}, top {formatDropdownChoiceName(dropdownValue)} rate for Male and Female were {formatPercentage(topPhysicalInactivityMaleData["Adj Percent"])} and {formatPercentage(topPhysicalInactivityFemaleData["Adj Percent"])} respectively in the {topPhysicalInactivityFemaleData.Geography}, MI.</p>
             : null
           }
         </article>
@@ -126,9 +116,12 @@ class PhysicalInactivity extends SectionColumns {
           dropdownValue, // This attribute is added so that the Geomap re-renders and updates when the dropdown value changes.
           label: d => d.Tract,
           colorScale: d => d[dropdownValue],
+          colorScaleConfig: {
+            axisConfig: {tickFormat: d => formatPercentage(d)}
+          },
           height: 400,
           time: "Year",
-          tooltipConfig: {tbody: [["Value", d => `${formatPercentage(d[dropdownValue])}`]]},
+          tooltipConfig: {tbody: [["Condition:", `${formatDropdownChoiceName(dropdownValue)}`], ["Prevalence:", d => `${formatPercentage(d[dropdownValue])}`]]},
           topojson: "/topojson/tract.json",
           topojsonFilter: d => d.id.startsWith("14000US26163")
         }}

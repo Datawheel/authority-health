@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Icon} from "@blueprintjs/core";
-import {fetchData, TopicTitle} from "@datawheel/canon-core";
+import {fetchData, SectionColumns, SectionTitle, TopicTitle} from "@datawheel/canon-core";
 import {formatAbbreviate} from "d3plus-format";
 
 import Stat from "components/Stat";
@@ -61,8 +61,20 @@ class Profile extends Component {
         />
 
         <div className="section-container">
-          <Stat title="Population" value={ formatAbbreviate(population.data[0].Population) } />
-          (Overview Section in Progress)
+          <SectionColumns>
+            <SectionTitle>Introduction</SectionTitle>
+            <article>
+              (Introduction Text in Progress)
+            </article>
+          </SectionColumns>
+          <SectionColumns>
+            <SectionTitle>Demographics</SectionTitle>
+            <article>
+              <Stat title="Population" value={ formatAbbreviate(population.data[0].Population) } />
+              <br />
+              (Demographics Section in Progress)
+            </article>
+          </SectionColumns>
         </div>
 
         <TopicTitle slug="food-access">

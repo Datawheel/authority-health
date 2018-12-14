@@ -2,7 +2,7 @@ import React from "react";
 import {connect} from "react-redux";
 import {sum} from "d3-array";
 import {nest} from "d3-collection";
-import {BarChart, LinePlot} from "d3plus-react";
+import {BarChart, Treemap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
@@ -43,7 +43,6 @@ class DentistsDemographic extends SectionColumns {
     recentYearDentistsByGender.values.sort((a, b) => b.share - a.share);
     const topDentistsByGender = recentYearDentistsByGender.values[0];
 
-    console.log("topDentistsAgeData: ", topDentistsAgeData);
     return (
       <SectionColumns>
         <SectionTitle>Dentist Demographics</SectionTitle>
@@ -61,27 +60,18 @@ class DentistsDemographic extends SectionColumns {
             qualifier={formatPercentage(topDentistsByGender.share)}
           />
 
-          <p>In {topDentistsAgeData.Year}, the most common age group of Dentists in was {topDentistsAgeData["Age Group"]} years with {formatPercentage(topDentistsAgeData.share)}.</p>
-          <p>In {topDentistsByGender.Year}, the major dentists gender group was {topDentistsAgeData.Sex} with {formatPercentage(topDentistsByGender.share)}.</p>
+          <p>In {topDentistsAgeData.Year}, the most common age group of dentists in {topDentistsAgeData.Geography} county was {topDentistsAgeData["Age Group"]} years ({formatPercentage(topDentistsAgeData.share)}) and most common gender group was {topDentistsByGender.Sex} ({formatPercentage(topDentistsByGender.share)}).</p>
           <p>The Barchart here shows the number of dentists by Age Group in the {topDentistsAgeData.Geography} county, MI.</p>
 
-          <LinePlot config={{
+          {/* Draw a Treemap for Dentists by Gender. */}
+          <Treemap config={{
             data: dentistsByGender,
-            discrete: "x",
-            height: 140,
-            groupBy: "Sex",
+            height: 200,
+            sum: d => d["Number of Dentists"],
             legend: false,
-            x: "Year",
-            xConfig: {
-              title: "Year",
-              labelRotation: false
-            },
-            y: "share",
-            yConfig: {
-              tickFormat: d => formatPercentage(d),
-              title: "Dentists by Gender"
-            },
-            tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
+            groupBy: "Sex",
+            time: "Year",
+            tooltipConfig: {tbody: [["Share", d => formatPercentage(d.share)]]}
           }}
           />
         </article>
@@ -95,7 +85,7 @@ class DentistsDemographic extends SectionColumns {
           groupBy: "Age Group",
           x: "Age Group",
           y: "share",
-          time: "ID Year",
+          time: "Year",
           xSort: (a, b) => a["ID Age Group"] - b["ID Age Group"],
           xConfig: {
             tickFormat: d => rangeFormatter(d) === "None" ? "Unknown Age" : rangeFormatter(d),
@@ -104,11 +94,11 @@ class DentistsDemographic extends SectionColumns {
           },
           yConfig: {
             ticks: [],
-            title: "Percentage of Dentists",
+            title: "Share",
             tickFormat: d => formatPercentage(d)
           },
           shapeConfig: {label: false},
-          tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Age", d => d["Age Group"]], ["Share", d => formatPercentage(d.share)]]}
         }}
         />
       </SectionColumns>

@@ -3,7 +3,6 @@ import {connect} from "react-redux";
 import {nest} from "d3-collection";
 import {BarChart, Geomap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
-import {titleCase} from "d3plus-text";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Stat from "../../../../components/Stat";

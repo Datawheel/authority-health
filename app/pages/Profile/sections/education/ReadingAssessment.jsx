@@ -142,9 +142,9 @@ class ReadingAssessment extends SectionColumns {
 
   getDropdownComponents = readingAssessmentChoices => {
     const dropdownComponents = [];
-    dropdownComponents.push(<select onChange={this.handleChange}>
+    dropdownComponents.push(<div className="pt-select"><select onChange={this.handleChange}>
       {readingAssessmentChoices.map(item => <option key={item} value={item}>{item}</option>)}
-    </select>);
+    </select></div>);
     return dropdownComponents;
   }
 

@@ -43,26 +43,27 @@ class DentistsDemographic extends SectionColumns {
     recentYearDentistsByGender.values.sort((a, b) => b.share - a.share);
     const topDentistsByGender = recentYearDentistsByGender.values[0];
 
+    console.log("topDentistsAgeData: ", topDentistsAgeData);
     return (
       <SectionColumns>
-        <SectionTitle>Dentists Demographic</SectionTitle>
+        <SectionTitle>Dentist Demographics</SectionTitle>
         <article>
           <Stat 
-            title={"Majority Age Group"}
+            title={"Common Age Group"}
             year={topDentistsAgeData.Year}
             value={`${topDentistsAgeData["Age Group"]}`}
             qualifier={formatPercentage(topDentistsAgeData.share)}
           />
           <Stat
-            title={"Majority Gender"}
+            title={"Common Gender"}
             year={topDentistsByGender.Year}
             value={`${topDentistsByGender.Sex}`}
             qualifier={formatPercentage(topDentistsByGender.share)}
           />
 
-          <p>The Barchart here shows the number of dentists by Age Group in the {topDentistsAgeData.Geography} county, MI.</p>
-          <p>In {topDentistsAgeData.Year}, the major dentists age group was {topDentistsAgeData["Age Group"]} years with {formatPercentage(topDentistsAgeData.share)}.</p>
+          <p>In {topDentistsAgeData.Year}, the most common age group of Dentists in was {topDentistsAgeData["Age Group"]} years with {formatPercentage(topDentistsAgeData.share)}.</p>
           <p>In {topDentistsByGender.Year}, the major dentists gender group was {topDentistsAgeData.Sex} with {formatPercentage(topDentistsByGender.share)}.</p>
+          <p>The Barchart here shows the number of dentists by Age Group in the {topDentistsAgeData.Geography} county, MI.</p>
 
           <LinePlot config={{
             data: dentistsByGender,

@@ -165,7 +165,7 @@ class Profile extends Component {
           <ReadingAssessment />
         </div>
 
-        <TopicTitle slug="natural-enviornment">
+        <TopicTitle slug="natural-environment">
           <div className="section-container">
             <Icon iconName="tree" />
             Natural Environment

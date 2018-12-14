@@ -228,7 +228,7 @@ Profile.need = [
   WaterQuality,
   AirQuality,
   fetchData("meta", "/api/search?id=<id>", resp => resp[0]),
-  fetchData("population", "https://katahdin.datausa.io/api/data?measures=Population&Geography=<id>&year=latest")
+  fetchData("population", "https://mammoth.datausa.io/api/data?measures=Population&Geography=<id>&year=latest")
 ];
 
 const mapStateToProps = state => ({

@@ -25,7 +25,7 @@
   "dependencies": {
     "@blueprintjs/labs": "^0.14.4",
     "@datawheel/canon-core": "^0.16.19",
-    "@datawheel/canon-logiclayer": "^0.1.9",
+    "@datawheel/canon-logiclayer": "^0.3.6",
     "@datawheel/canon-vizbuilder": "^0.1.19",
     "mondrian-rest-client": "^1.0.4",
     "prop-types": "^15.6.2",

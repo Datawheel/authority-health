@@ -77,7 +77,7 @@ class RiskyBehaviors extends SectionColumns {
           {/* Create a dropdown for drug types. */}
           <div className="field-container">
             <label>
-              <div className="pt-select">
+              <div className="pt-select pt-fill">
                 <select onChange={this.handleChange}>
                   {drugTypes.map(item => <option key={item} value={item}>{formatName(item)}</option>)}
                 </select>

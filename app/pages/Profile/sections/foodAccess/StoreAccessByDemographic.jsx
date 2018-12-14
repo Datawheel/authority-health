@@ -55,7 +55,7 @@ class StoreAccessByDemographic extends SectionColumns {
         <SectionTitle>Store Access by Demographic</SectionTitle>
         <article>
           {/* Create a dropdown for each age and race type using raceAndAgeTypes array. */}
-          <div className="pt-select">
+          <div className="pt-select pt-fill">
             <select onChange={this.handleChange}>
               {raceAndAgeTypes.map(item => <option key={item} value={item}>{item}</option>)}
             </select>

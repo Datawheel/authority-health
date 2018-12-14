@@ -54,7 +54,7 @@ class PreventiveCare extends SectionColumns {
         <SectionTitle>Preventive Care</SectionTitle>
         <article>
           {/* Create a dropdown for different types of preventive care. */}
-          <div className="pt-select">
+          <div className="pt-select pt-fill">
             <select onChange={this.handleChange}>
               {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
             </select>

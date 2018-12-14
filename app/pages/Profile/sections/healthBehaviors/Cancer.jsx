@@ -18,18 +18,22 @@ class Cancer extends SectionColumns {
   constructor(props) {
     super(props);
     this.state = {
-      selectedItems: [{index: 0, title: "All Invasive Cancer Sites Combined"},
-        {index: 1, title: "Digestive System"},
-        {index: 2, title: "Male Genital System"}]
+      selectedItems: [
+        {index: 0, title: "Digestive System"},
+        {index: 1, title: "Male Genital System"},
+        {index: 2, title: "Prostate"}
+      ]
     };
   }
   
   render() {
 
-    const {sortedCancerTypes} = this.props;
+    const {sortedCancerTypes, occuranceByGender, occuranceByRaceAndEthnicity} = this.props;
     const selectedItems = this.state.selectedItems;
+    const topOccuranceByRaceAndEthnicity = occuranceByRaceAndEthnicity.sort((a, b) => b["Age-Adjusted Rate"] - a["Age-Adjusted Rate"])[0];
 
-    const items = sortedCancerTypes.map((d, i) => Object.assign({}, {index: i, title: d}));
+    const filteredCancerTypes = sortedCancerTypes.filter(d => d !== "All Invasive Cancer Sites Combined");
+    const items = filteredCancerTypes.map((d, i) => Object.assign({}, {index: i, title: d}));
 
     const isItemSelected = item => selectedItems.findIndex(d => d.index === item.index) > -1;    
 
@@ -73,7 +77,7 @@ class Cancer extends SectionColumns {
 
     return (
       <SectionColumns>
-        <SectionTitle>Cancer</SectionTitle>
+        <SectionTitle>Cancer Prevalence by Demographic</SectionTitle>
         <article>
           <MultiSelect
             items={items}
@@ -89,10 +93,12 @@ class Cancer extends SectionColumns {
             <Button rightIcon="caret-down" />
           </MultiSelect>
 
-          <h3>Gender</h3>
+          <h3>By Gender</h3>
+          <p>In {occuranceByGender[0].Year}, the overall prevalence of cancer in {occuranceByGender[0].MSA} for men and women was {formatAbbreviate(occuranceByGender[1]["Age-Adjusted Rate"])} and {formatAbbreviate(occuranceByGender[0]["Age-Adjusted Rate"])} per 100,000 people, respectively.</p>
+          <p>The following chart shows the gender breakdowns for the selected cancer sites.</p>
           {/* Draw a mini BarChart to show Cancer by Sex for selected cancer type. */}
           <BarChart config={{
-            data: `/api/data?measures=Count&drilldowns=Sex&Cancer%20Site=${dropdownSelected}&Year=all`,
+            data: `/api/data?measures=Count,Age-Adjusted%20Rate&drilldowns=Sex&Cancer%20Site=${dropdownSelected}&Year=all`,
             discrete: "y",
             height: 250,
             legend: false,
@@ -109,7 +115,7 @@ class Cancer extends SectionColumns {
             yConfig: {
               tickFormat: d => d
             },
-            tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Occurance per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Rate"])], ["Share", d => formatPercentage(d.share)]]}
           }}
           dataFormat={resp => {
             nest()
@@ -128,10 +134,12 @@ class Cancer extends SectionColumns {
           }}
           />
           
-          <h3>Race & Ethnicity</h3>
+          <h3>By Race & Ethnicity</h3>
+          <p>In {topOccuranceByRaceAndEthnicity.Year}, the race/ethnicity group in {topOccuranceByRaceAndEthnicity.MSA} with the highest overall cancer rate was {topOccuranceByRaceAndEthnicity.Race} {topOccuranceByRaceAndEthnicity.Ethnicity} ({formatAbbreviate(topOccuranceByRaceAndEthnicity["Age-Adjusted Rate"])} per 100,000 people).</p>
+          <p>The following chart shows the race and Ethnicity breakdowns for the selected cancer sites.</p>
           {/* Draw a mini BarChart to show Cancer by Race and Ethnicity for selected cancer type. */}
           <BarChart config={{
-            data: `/api/data?measures=Count&drilldowns=Race,Ethnicity&Cancer%20Site=${dropdownSelected}&Year=all`,
+            data: `/api/data?measures=Count,Age-Adjusted%20Rate&drilldowns=Race,Ethnicity&Cancer%20Site=${dropdownSelected}&Year=all`,
             discrete: "y",
             height: 250,
             legend: false,
@@ -146,7 +154,7 @@ class Cancer extends SectionColumns {
               labelRotation: false
             },
             yConfig: {tickFormat: d => d},
-            tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Occurance per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Rate"])], ["Share", d => formatPercentage(d.share)]]}
           }}
           dataFormat={resp => {
             nest()
@@ -166,39 +174,41 @@ class Cancer extends SectionColumns {
           />
         </article>
         
-        <h3>Occurance</h3>
-        {/* Draw a LinePlot to show age adjusted data for the selected cancer types. */}
-        <LinePlot config={{
-          data: `/api/data?measures=Age-Adjusted%20Rate,Age-Adjusted%20Rate%20Lower%2095%20Percent%20Confidence%20Interval,Age-Adjusted%20Rate%20Upper%2095%20Percent%20Confidence%20Interval&Cancer%20Site=${dropdownSelected}&Year=all`,
-          discrete: "x",
-          height: 400,
-          groupBy: "Cancer Site",
-          legend: false,
-          x: "Year",
-          y: "Age-Adjusted Rate",
-          xConfig: {
-            title: "Year",
-            labelRotation: false
-          },
-          yConfig: {
-            tickFormat: d => formatPercentage(d),
-            title: "Occurance"
-          },
-          confidence: [d => d["Age-Adjusted Rate Lower 95 Percent Confidence Interval"], d => d["Age-Adjusted Rate Upper 95 Percent Confidence Interval"]],
-          confidenceConfig: {
-            fillOpacity: 0.2
-          },
-          tooltipConfig: {tbody: [["Value", d => formatPercentage(d["Age-Adjusted Rate"])]]}
-        }}
-        dataFormat={resp => resp.data}
-        />
+        <div>
+          <h3>Overall Occurance</h3>
+          <p>The following chart shows the occurance rate per 100,000 people for the selected cancer sites.</p>
+          {/* Draw a LinePlot to show age adjusted data for the selected cancer types. */}
+          <LinePlot config={{
+            data: `/api/data?measures=Age-Adjusted%20Rate,Age-Adjusted%20Rate%20Lower%2095%20Percent%20Confidence%20Interval,Age-Adjusted%20Rate%20Upper%2095%20Percent%20Confidence%20Interval&Cancer%20Site=${dropdownSelected}&Year=all`,
+            discrete: "x",
+            height: 400,
+            groupBy: "Cancer Site",
+            legend: false,
+            x: "Year",
+            y: "Age-Adjusted Rate",
+            xConfig: {
+              labelRotation: false
+            },
+            yConfig: {
+              tickFormat: d => d,
+              title: "Occurance per 100,000 People"
+            },
+            confidence: [d => d["Age-Adjusted Rate Lower 95 Percent Confidence Interval"], d => d["Age-Adjusted Rate Upper 95 Percent Confidence Interval"]],
+            confidenceConfig: {
+              fillOpacity: 0.2
+            },
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Occurance per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Rate"])]]}
+          }}
+          dataFormat={resp => resp.data}
+          />
+        </div>
       </SectionColumns>
     );
   }
 }
 
 Cancer.defaultProps = {
-  slug: "cancer"
+  slug: "cancer-prevalence-by-demographic"
 };
 
 Cancer.need = [
@@ -206,11 +216,15 @@ Cancer.need = [
     const cancerList = [];
     nest().key(d => d["Cancer Site"]).entries(d.data).forEach(group => cancerList.push(group.key));
     return cancerList;
-  })
+  }),
+  fetchData("occuranceByGender", "/api/data?measures=Age-Adjusted%20Rate&drilldowns=Sex,MSA&Year=latest", d => d.data),
+  fetchData("occuranceByRaceAndEthnicity", "/api/data?measures=Age-Adjusted%20Rate&drilldowns=Race,Ethnicity,MSA&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
-  sortedCancerTypes: state.data.sortedCancerTypes
+  sortedCancerTypes: state.data.sortedCancerTypes,
+  occuranceByGender: state.data.occuranceByGender,
+  occuranceByRaceAndEthnicity: state.data.occuranceByRaceAndEthnicity
 });
 
 export default connect(mapStateToProps)(Cancer);

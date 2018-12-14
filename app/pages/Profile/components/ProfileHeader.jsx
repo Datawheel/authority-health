@@ -1,12 +1,11 @@
 import React, {Component} from "react";
-import Stat from "../../../components/Stat";
 import "./ProfileHeader.css";
 
 export default class ProfileHeader extends Component {
 
   render() {
 
-    const { diabetes, population, title } = this.props;
+    const {title} = this.props;
 
     return (
       <div className="profile-header header dark-theme" role="banner">
@@ -16,13 +15,6 @@ export default class ProfileHeader extends Component {
             <h1 className="profile-header-headline font-xxl">
               {title ? title : "Error: missing meta prop in Profile.jsx"}
             </h1>
-            {/* show splash stats if we got 'em */}
-            {population &&
-              <Stat title="Population" value={ population } />
-            }
-            {diabetes &&
-              <Stat title="Diabetes Rate" value={ diabetes } />
-            }
           </div>
 
           {/* map */}

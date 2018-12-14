@@ -1,45 +1,58 @@
 import React, {Component} from "react";
-import Stat from "../../../components/Stat";
+import {Icon} from "@blueprintjs/core";
+import {AnchorLink} from "@datawheel/canon-core";
 import "./ProfileHeader.css";
 
 export default class ProfileHeader extends Component {
 
   render() {
 
-    const { diabetes, population, title } = this.props;
+    const {title} = this.props;
 
     return (
       <div className="profile-header header dark-theme" role="banner">
-        <div className="profile-header-inner">
-          {/* profile title & stats */}
-          <div className="profile-header-intro">
-            <h1 className="profile-header-headline font-xxl">
-              {title ? title : "Error: missing meta prop in Profile.jsx"}
-            </h1>
-            {/* show splash stats if we got 'em */}
-            {population &&
-              <Stat title="Population" value={ population } />
-            }
-            {diabetes &&
-              <Stat title="Diabetes Rate" value={ diabetes } />
-            }
-          </div>
 
-          {/* map */}
-          {/* NOTE: copied in from home page for now */}
-          {/* TODO: replace with d3plus map */}
-          <div className="profile-header-map">
-            {/* Wayne county map */}
-            <img className="profile-header-wayne-map"
-              src="/images/wayne-county-map/wayne-map-pacific.png"
-              srcSet="/images/wayne-county-map/wayne-map-pacific.png 1x, /images/wayne-county-map/wayne-map-pacific@2x.png 2x"
-              alt=""/>
-            {/* zoomed out bg map */}
-            <img className="profile-header-michigan-map"
-              src="/images/wayne-county-map/michigan-map.png"
-              srcSet="/images/wayne-county-map/michigan-map.svg 1x"
-              alt=""/>
+        {/* profile title */}
+        <div className="profile-header-inner">
+          <div className="profile-header-intro">
+            <h1 className="profile-header-headline font-xxl">{ title }</h1>
           </div>
+        </div>
+
+        {/* profile section anchor links */}
+        <div className="profile-header-sections">
+          <AnchorLink to="food-access" className="section-header-anchor">
+            <Icon iconName="shop" />
+            Food Access
+          </AnchorLink>
+          <AnchorLink to="health-behaviors" className="section-header-anchor">
+            <Icon iconName="pulse" />
+            Health Behaviors
+          </AnchorLink>
+          <AnchorLink to="access-to-care" className="section-header-anchor">
+            <Icon iconName="office" />
+            Access to Care
+          </AnchorLink>
+          <AnchorLink to="special-population" className="section-header-anchor">
+            <Icon iconName="people" />
+            Special Population
+          </AnchorLink>
+          <AnchorLink to="built-social-environment" className="section-header-anchor">
+            <Icon iconName="home" />
+            Built/Social Environment
+          </AnchorLink>
+          <AnchorLink to="economy" className="section-header-anchor">
+            <Icon iconName="bank-account" />
+            Economy
+          </AnchorLink>
+          <AnchorLink to="education" className="section-header-anchor">
+            <Icon iconName="lightbulb" />
+            Education
+          </AnchorLink>
+          <AnchorLink to="natural-environment" className="section-header-anchor">
+            <Icon iconName="tree" />
+            Natural Environment
+          </AnchorLink>
         </div>
 
         {/* bg image */}

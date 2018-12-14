@@ -108,6 +108,14 @@ layout
       @add-mixin font-xxl;
       color: var(--white);
       top: -0.125em; /* fudge baseline alignment */
+
+      /* icons */
+      & .pt-icon-standard {
+        font-size: 32px;
+        margin: 20px 10px 0 0;
+        opacity: 0.5;
+        vertical-align: top;
+      }
     }
   }
 
@@ -226,6 +234,11 @@ layout
       /* theming */
       & .stat-label {
         color: var(--light-1);
+      }
+
+      & .stat-label-year {
+        color: var(--light-1);
+        opacity: 0.7;
       }
 
       /* bigger value */

@@ -73,13 +73,13 @@ class Veterans extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Veterans</SectionTitle>
         <article>
-          <Stat 
+          <Stat
             title={"Unemployed Veterans"}
             year={topEmploymentStatus.Year}
             value={""}
             qualifier={formatPercentage(topEmploymentStatus.share)}
           />
-          <Stat 
+          <Stat
             title={"Veterans in Poverty"}
             year={recentYearVeteransInPoverty.Year}
             value={""}
@@ -135,7 +135,7 @@ Veterans.need = [
   fetchData("veteransEmploymentStatus", "/api/data?measures=Population&drilldowns=Employment%20Status&Geography=<id>&Year=all", d => d.data),
   fetchData("veteransPovertyStatus", "/api/data?measures=Population&drilldowns=Poverty%20Status&Geography=<id>&Year=all", d => d.data),
   fetchData("veteransDisabilityStatus", "/api/data?measures=Population&drilldowns=Disability%20Status&Geography=<id>&Year=all", d => d.data),
-  fetchData("periodOfService", "https://katahdin.datausa.io/api/data?measures=Veterans&drilldowns=Period%20of%20Service&Geography=<id>&Year=all", d => d.data)
+  fetchData("periodOfService", "https://mammoth.datausa.io/api/data?measures=Veterans&drilldowns=Period%20of%20Service&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

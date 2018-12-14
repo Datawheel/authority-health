@@ -1,7 +1,10 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {fetchData, TopicTitle} from "@datawheel/canon-core";
+import {Icon} from "@blueprintjs/core";
+import {fetchData, SectionColumns, SectionTitle, TopicTitle} from "@datawheel/canon-core";
 import {formatAbbreviate} from "d3plus-format";
+
+import Stat from "components/Stat";
 import ProfileHeader from "./components/ProfileHeader";
 import "./Profile.css";
 
@@ -48,25 +51,39 @@ class Profile extends Component {
 
   render() {
 
-    const {diabetes, meta, population} = this.props;
-    const location = meta.name;
+    const {population} = this.props;
+    const {name} = this.props.meta;
 
     return (
       <div className="profile">
         <ProfileHeader
-          title={ location }
-          population={ population.data[0] &&
-            formatAbbreviate(population.data[0].Population)
-          }
-          diabetes={ diabetes.data[0] &&
-            `${diabetes.data[0]["Diabetes Data Value"]}%`
-          }
+          title={ name }
         />
+
+        <div className="section-container">
+          <SectionColumns>
+            <SectionTitle>Introduction</SectionTitle>
+            <article>
+              (Introduction Text in Progress)
+            </article>
+          </SectionColumns>
+          <SectionColumns>
+            <SectionTitle>Demographics</SectionTitle>
+            <article>
+              <Stat title="Population" value={ formatAbbreviate(population.data[0].Population) } />
+              <br />
+              (Demographics Section in Progress)
+            </article>
+          </SectionColumns>
+        </div>
 
         <TopicTitle slug="food-access">
           <div className="section-container">
             <div className="section-title-stat-container">
-              <span className="section-title-inner">Food Access</span>
+              <span className="section-title-inner">
+                <Icon iconName="shop" />
+                Food Access
+              </span>
               <Insecurity />
             </div>
           </div>
@@ -76,9 +93,12 @@ class Profile extends Component {
           <FoodAvailability />
           <StoreAccessByDemographic />
         </div>
-        
+
         <TopicTitle slug="health-behaviors">
-          <div className="section-container">Health Behaviors</div>
+          <div className="section-container">
+            <Icon iconName="pulse" />
+            Health Behaviors
+          </div>
         </TopicTitle>
         <div className="section-container">
           <HealthConditonChronicDiseases />
@@ -90,7 +110,10 @@ class Profile extends Component {
         </div>
 
         <TopicTitle slug="access-to-care">
-          <div className="section-container">Access to Care</div>
+          <div className="section-container">
+            <Icon iconName="office" />
+            Access to Care
+          </div>
         </TopicTitle>
         <div className="section-container">
           <HealthCenters />
@@ -100,7 +123,10 @@ class Profile extends Component {
         </div>
 
         <TopicTitle slug="special-population">
-          <div className="section-container">Special Population</div>
+          <div className="section-container">
+            <Icon iconName="people" />
+            Special Population
+          </div>
         </TopicTitle>
         <div className="section-container">
           <ChildCare />
@@ -114,7 +140,10 @@ class Profile extends Component {
         </div>
 
         <TopicTitle slug="built-social-environment">
-          <div className="section-container">Built/Social Environment</div>
+          <div className="section-container">
+            <Icon iconName="home" />
+            Built/Social Environment
+          </div>
         </TopicTitle>
         <div className="section-container">
           <Homeownership />
@@ -124,7 +153,10 @@ class Profile extends Component {
         </div>
 
         <TopicTitle slug="economy">
-          <div className="section-container">Economy</div>
+          <div className="section-container">
+            <Icon iconName="bank-account" />
+            Economy
+          </div>
         </TopicTitle>
         <div className="section-container">
           <DistressScore />
@@ -134,7 +166,10 @@ class Profile extends Component {
         </div>
 
         <TopicTitle slug="education">
-          <div className="section-container">Education</div>
+          <div className="section-container">
+            <Icon iconName="lightbulb" />
+            Education
+          </div>
         </TopicTitle>
         <div className="section-container">
           <EducationalAttainment />
@@ -142,8 +177,11 @@ class Profile extends Component {
           <ReadingAssessment />
         </div>
 
-        <TopicTitle slug="natural-enviornment">
-          <div className="section-container">Natural Environment</div>
+        <TopicTitle slug="natural-environment">
+          <div className="section-container">
+            <Icon iconName="tree" />
+            Natural Environment
+          </div>
         </TopicTitle>
         <div className="section-container">
           <WaterQuality />
@@ -189,9 +227,8 @@ Profile.need = [
   ReadingAssessment,
   WaterQuality,
   AirQuality,
-  fetchData("diabetes", "/api/data?measures=Diabetes%20Data%20Value&City=<id>&Year=latest"),
-  fetchData("meta", "/api/search?id=<id>"),
-  fetchData("population", "https://katahdin.datausa.io/api/data?measures=Population&Geography=<id>&year=latest")
+  fetchData("meta", "/api/search?id=<id>", resp => resp[0]),
+  fetchData("population", "https://mammoth.datausa.io/api/data?measures=Population&Geography=<id>&year=latest")
 ];
 
 const mapStateToProps = state => ({

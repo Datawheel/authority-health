@@ -93,7 +93,7 @@ DisabilityStatus.defaultProps = {
 };
 
 DisabilityStatus.need = [
-  fetchData("healthCoverageType", "/api/data?measures=Population&drilldowns=Health%20Insurance%20coverage%3Astatus,Health%20Insurance%20coverage%3Atype,Disability%20Status,Age&Geography=<id>&Year=all", d => d.data)
+  fetchData("healthCoverageType", "/api/data?measures=Population&drilldowns=Health Insurance coverage:status,Health Insurance coverage:type,Disability Status,Age&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

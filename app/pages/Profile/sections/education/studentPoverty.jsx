@@ -97,7 +97,7 @@ StudentPoverty.defaultProps = {
 };
 
 StudentPoverty.need = [
-  fetchData("levelOfSchoolData", "/api/data?measures=Population&drilldowns=Level%20of%20School,Poverty%20Status&Geography=<id>&Year=all", d => d.data)
+  fetchData("levelOfSchoolData", "/api/data?measures=Population&drilldowns=Level of School,Poverty Status&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

@@ -134,9 +134,9 @@ AirQuality.defaultProps = {
 };
 
 AirQuality.need = [
-  fetchData("airQualityDays", "/api/data?measures=Number%20of%20Days&drilldowns=Category&Geography=<id>&Year=all", d => d.data),
-  fetchData("airQualityMedianAQIs", "/api/data?measures=Median%20AQI&Geography=<id>&Year=all", d => d.data),
-  fetchData("airPollutants", "/api/data?measures=Number%20of%20Days&drilldowns=Pollutant&Geography=<id>&Year=all", d => d.data)
+  fetchData("airQualityDays", "/api/data?measures=Number of Days&drilldowns=Category&Geography=<id>&Year=all", d => d.data),
+  fetchData("airQualityMedianAQIs", "/api/data?measures=Median AQI&Geography=<id>&Year=all", d => d.data),
+  fetchData("airPollutants", "/api/data?measures=Number of Days&drilldowns=Pollutant&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

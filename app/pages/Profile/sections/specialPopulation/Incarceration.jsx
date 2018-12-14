@@ -88,7 +88,7 @@ Incarceration.defaultProps = {
 };
 
 Incarceration.need = [
-  fetchData("incarcerationData", "/api/data?measures=Total,Prison,Jail,Jail%2FProbation,Probation,Other&drilldowns=Offense&Year=all")
+  fetchData("incarcerationData", "/api/data?measures=Total,Prison,Jail,Jail/Probation,Probation,Other&drilldowns=Offense&Year=all")
 ];
 
 const mapStateToProps = state => ({

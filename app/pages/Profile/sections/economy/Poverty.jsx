@@ -183,9 +183,9 @@ Poverty.defaultProps = {
 };
 
 Poverty.need = [
-  fetchData("povertyByRace", "https://mammoth.datausa.io/api/data?measures=Poverty%20Population&drilldowns=Poverty%20Status,Race&Geography=<id>&Year=all", d => d.data),
-  fetchData("povertyByAgeAndGender", "https://mammoth.datausa.io/api/data?measures=Poverty%20Population&drilldowns=Poverty%20Status,Age,Gender&Geography=<id>&Year=all", d => d.data),
-  fetchData("incomeToPovertyLevelRatio", "/api/data?measures=Population&drilldowns=Ratio%20of%20Income%20to%20Poverty%20Level&Geography=<id>&Year=all", d => d.data)
+  fetchData("povertyByRace", "https://mammoth.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Race&Geography=<id>&Year=all", d => d.data),
+  fetchData("povertyByAgeAndGender", "https://mammoth.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Age,Gender&Geography=<id>&Year=all", d => d.data),
+  fetchData("incomeToPovertyLevelRatio", "/api/data?measures=Population&drilldowns=Ratio of Income to Poverty Level&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

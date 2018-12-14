@@ -105,7 +105,7 @@ WaterQuality.defaultProps = {
 };
 
 WaterQuality.need = [
-  fetchData("waterQualityData", "/api/data?measures=Lead%20Level,Mercury%20Level&drilldowns=Tract&Year=all")
+  fetchData("waterQualityData", "/api/data?measures=Lead Level,Mercury Level&drilldowns=Tract&Year=all")
 ];
 
 const mapStateToProps = state => ({

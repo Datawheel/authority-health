@@ -109,7 +109,7 @@ Crime.defaultProps = {
 };
 
 Crime.need = [
-  fetchData("crimeData", "/api/data?measures=Number%20of%20Crimes&drilldowns=Type%20of%20Crime,Crime&Year=all", d => d.data)
+  fetchData("crimeData", "/api/data?measures=Number of Crimes&drilldowns=Type of Crime,Crime&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

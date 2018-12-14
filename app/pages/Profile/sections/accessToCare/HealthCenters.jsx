@@ -73,7 +73,7 @@ class HealthCenters extends SectionColumns {
 
           {/* Draw a BarChart to show data for health center data by race */}
           <BarChart config={{
-            data: "/api/data?measures=%25%20Non-white,%25%20Hispanic,%25%20Black,%25%20Asian,%25%20American%20Indian%2FAlaska%20Native&Year=all",
+            data: "/api/data?measures=%25 Non-white,%25 Hispanic,%25 Black,%25 Asian,%25 American Indian%2FAlaska Native&Year=all",
             discrete: "y",
             height: 250,
             legend: false,
@@ -81,7 +81,7 @@ class HealthCenters extends SectionColumns {
             label: d => formatName(d.RaceType),
             x: d => d[d.RaceType],
             y: "RaceType",
-            time: "ID Year", 
+            time: "ID Year",
             xConfig: {tickFormat: d => formatPercentage(d)},
             yConfig: {ticks: []},
             tooltipConfig: {tbody: [["Value", d => formatPercentage(d[d.RaceType])]]}
@@ -114,7 +114,7 @@ class HealthCenters extends SectionColumns {
 
         {/* Draw Geomap to show health center count for each zip code in the Wayne county */}
         <Geomap config={{
-          data: "/api/data?measures=Health%20Centers&drilldowns=Zip%20Code&Year=all",
+          data: "/api/data?measures=Health Centers&drilldowns=Zip Code&Year=all",
           groupBy: "ID Zip Code",
           colorScale: "Health Centers",
           colorScaleConfig: {
@@ -140,7 +140,7 @@ HealthCenters.defaultProps = {
 };
 
 HealthCenters.need = [
-  fetchData("healthCenterData", "/api/data?measures=Penetration%20of%20Total%20Population,Penetration%20of%20Low-Income,Penetration%20of%20Uninsured%20Population&drilldowns=Zip%20Code&Year=all")
+  fetchData("healthCenterData", "/api/data?measures=Penetration of Total Population,Penetration of Low-Income,Penetration of Uninsured Population&drilldowns=Zip Code&Year=all")
 ];
 
 const mapStateToProps = state => ({

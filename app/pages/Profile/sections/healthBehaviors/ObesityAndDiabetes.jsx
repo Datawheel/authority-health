@@ -141,19 +141,19 @@ class ObesityAndDiabetes extends SectionColumns {
             </div>}
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
-          {isBMIWeightedDataValueSelected 
+          {isBMIWeightedDataValueSelected
             ? <p>In {topDropdownWeightedData["End Year"]}, {topDropdownWeightedData.County} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownWeightedData[dropdownValue])}) out of all the counties in Michigan.</p>
             : <p>In {topDropdownValueTract.Year}, {topDropdownValueTract.Tract} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownValueTract[dropdownValue])}) out of all the tracts in Wayne county.</p>
           }
 
           {/* Write short paragraphs explaining Barchart and top stats for the Diabetes/Obesity data. */}
           <p>In {topMaleData.Year}, rates for male and female residents of {topMaleData.Geography} were {formatPercentage(topMaleData["Adj Percent"])} and {formatPercentage(topFemaleData["Adj Percent"])} respectively.</p>
-          
+
           {isBMIWeightedDataValueSelected
             ? <p>The map here shows the {dropdownValue.toLowerCase()} for all counties in Michigan.</p>
             : <p>The map here shows the {dropdownValue.toLowerCase()} for all tracts in Wayne County, MI.</p>
           }
-          
+
           {/* Draw a BarChart to show data for Obesity Rate by Sex. */}
           <BarChart config={{
             data: isDiabetesSelected ? diabetesPrevalenceBySex : obesityPrevalenceBySex,
@@ -220,10 +220,10 @@ ObesityAndDiabetes.defaultProps = {
 };
 
 ObesityAndDiabetes.need = [
-  fetchData("obesityAndDibetesDataValue", "/api/data?measures=Obesity%20Data%20Value,Diabetes%20Data%20Value&drilldowns=Tract&Year=all"),
-  fetchData("BMIWeightedData", "/api/data?measures=BMI%20Healthy%20Weight%20Weighted%20Percent,BMI%20Obese%20Weighted%20Percent,BMI%20Overweight%20Weighted%20Percent,BMI%20Underweight%20Weighted%20Percent&drilldowns=End%20Year,County"),
-  fetchData("obesityPrevalenceBySex", "/api/data?measures=Adj%20Percent&drilldowns=Sex&Geography=<id>&Year=all", d => d.data),
-  fetchData("diabetesPrevalenceBySex", "/api/data?measures=Adj%20Percent&drilldowns=Sex&Geography=<id>&Year=all", d => d.data)
+  fetchData("obesityAndDibetesDataValue", "/api/data?measures=Obesity Data Value,Diabetes Data Value&drilldowns=Tract&Year=all"),
+  fetchData("BMIWeightedData", "/api/data?measures=BMI Healthy Weight Weighted Percent,BMI Obese Weighted Percent,BMI Overweight Weighted Percent,BMI Underweight Weighted Percent&drilldowns=End Year,County"),
+  fetchData("obesityPrevalenceBySex", "/api/data?measures=Adj Percent&drilldowns=Sex&Geography=<id>&Year=all", d => d.data),
+  fetchData("diabetesPrevalenceBySex", "/api/data?measures=Adj Percent&drilldowns=Sex&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

@@ -90,8 +90,8 @@ WageDistribution.defaultProps = {
 };
 
 WageDistribution.need = [
-  fetchData("wageDistributionData", "https://mammoth.datausa.io/api/data?measures=Household%20Income&drilldowns=Household%20Income%20Bucket&Geography=<id>&Year=all", d => d.data),
-  fetchData("wageGinidata", "https://mammoth.datausa.io/api/data?measures=Wage%20GINI&drilldowns=Place&Year=latest", d => d.data)
+  fetchData("wageDistributionData", "https://mammoth.datausa.io/api/data?measures=Household Income&drilldowns=Household Income Bucket&Geography=<id>&Year=all", d => d.data),
+  fetchData("wageGinidata", "https://mammoth.datausa.io/api/data?measures=Wage GINI&drilldowns=Place&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({

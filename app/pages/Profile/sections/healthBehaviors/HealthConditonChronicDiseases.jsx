@@ -30,7 +30,7 @@ class HealthConditonChronicDiseases extends SectionColumns {
     healthConditionWeightedData.source[0].measures.forEach(d => {
       dropdownList.push(d);
     });
-    
+
     // Check if the selected dropdown values are from the healthConditionWeightedData.
     const isHealthConditionWeightedValueSelected = dropdownValue === "Cardiovascular Disease Yes Weighted Percent" ||
     dropdownValue === "Ever Depressive Yes Weighted Percent" ||
@@ -91,7 +91,7 @@ class HealthConditonChronicDiseases extends SectionColumns {
         </article>
 
         {/* Geomap to show health condition data for selected dropdown value. */}
-        {isHealthConditionWeightedValueSelected 
+        {isHealthConditionWeightedValueSelected
           ? <Geomap config={{
             data: healthConditionWeightedData.data,
             groupBy: "ID County",
@@ -132,8 +132,8 @@ HealthConditonChronicDiseases.defaultProps = {
 };
 
 HealthConditonChronicDiseases.need = [
-  fetchData("healthConditionData", "/api/data?measures=Arthritis%20Data%20Value,COPD%20Data%20Value,Chronic%20Kidney%20Disease%20Data%20Value,Coronary%20Heart%20Disease%20Data%20Value,Current%20Asthma%20Data%20Value,High%20Blood%20Pressure%20Data%20Value,High%20Cholesterol%20Data%20Value,Mental%20Health%20Data%20Value,Stroke%20Data%20Value,Taking%20BP%20Medication%20Data%20Value,Teeth%20Loss%20Data%20Value,Sleep%20less%20than%207%20hours%20Data%20Value&drilldowns=Tract&Year=all"),
-  fetchData("healthConditionWeightedData", "/api/data?measures=Cardiovascular%20Disease%20Yes%20Weighted%20Percent,Ever%20Depressive%20Yes%20Weighted%20Percent,Ever%20Heart%20Attack%20Yes%20Weighted%20Percent,Heart%20Disease%20Yes%20Weighted%20Percent,HIV%20Tested%20Yes%20Weighted%20Percent,Poor%20Mental%20Health%2014%20Or%20More%20Days%20Weighted%20Percent,Gen%20Health%20Fair%20Or%20Poor%20Weighted%20Percent&drilldowns=End%20Year,County")
+  fetchData("healthConditionData", "/api/data?measures=Arthritis Data Value,COPD Data Value,Chronic Kidney Disease Data Value,Coronary Heart Disease Data Value,Current Asthma Data Value,High Blood Pressure Data Value,High Cholesterol Data Value,Mental Health Data Value,Stroke Data Value,Taking BP Medication Data Value,Teeth Loss Data Value,Sleep less than 7 hours Data Value&drilldowns=Tract&Year=all"),
+  fetchData("healthConditionWeightedData", "/api/data?measures=Cardiovascular Disease Yes Weighted Percent,Ever Depressive Yes Weighted Percent,Ever Heart Attack Yes Weighted Percent,Heart Disease Yes Weighted Percent,HIV Tested Yes Weighted Percent,Poor Mental Health 14 Or More Days Weighted Percent,Gen Health Fair Or Poor Weighted Percent&drilldowns=End Year,County")
 ];
 
 const mapStateToProps = state => ({

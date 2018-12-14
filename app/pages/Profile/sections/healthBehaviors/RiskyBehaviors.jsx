@@ -36,7 +36,7 @@ class RiskyBehaviors extends SectionColumns {
     });
 
     const isSecondHandSmokeOrMonthlyAlcoholSelected = dropdownValue === "Secondhand Smoke Exposure Yes Weighted Percent" || dropdownValue === "Monthly Alcohol Consumption Some Weighted Percent";
-    
+
     // Find recent year top data for the selceted dropdown value.
     const recentYearSecondHandSmokeAndMonthlyAlcoholData = {};
     nest()
@@ -115,7 +115,7 @@ class RiskyBehaviors extends SectionColumns {
             ? <div>
               <p>The chart here shows the former, current and never smoking status in Wayne county.</p>
               <Treemap config={{
-                data: "/api/data?measures=Smoking%20Status%20Current%20Weighted%20Percent,Smoking%20Status%20Former%20Weighted%20Percent,Smoking%20Status%20Never%20Weighted%20Percent&drilldowns=End%20Year",
+                data: "/api/data?measures=Smoking Status Current Weighted Percent,Smoking Status Former Weighted Percent,Smoking Status Never Weighted Percent&drilldowns=End Year",
                 height: 250,
                 sum: d => d[d.SmokingType],
                 legend: false,
@@ -161,7 +161,7 @@ class RiskyBehaviors extends SectionColumns {
           }}
           />
           : <Geomap config={{
-            data: `/api/data?measures=${dropdownValue.replace(/\s/g, "%20")}&drilldowns=Tract&Year=latest`,
+            data: `/api/data?measures=${dropdownValue.replace(/\s/g, " ")}&drilldowns=Tract&Year=latest`,
             groupBy: "ID Tract",
             colorScale: dropdownValue,
             colorScaleConfig: {
@@ -187,8 +187,8 @@ RiskyBehaviors.defaultProps = {
 };
 
 RiskyBehaviors.need = [
-  fetchData("allTractSmokingDrinkingData", "/api/data?measures=Current%20Smoking%20Data%20Value,Binge%20Drinking%20Data%20Value&drilldowns=Tract&Year=latest"),
-  fetchData("secondHandSmokeAndMonthlyAlcohol", "/api/data?measures=Secondhand%20Smoke%20Exposure%20Yes%20Weighted%20Percent,Monthly%20Alcohol%20Consumption%20Some%20Weighted%20Percent&drilldowns=End%20Year,County")
+  fetchData("allTractSmokingDrinkingData", "/api/data?measures=Current Smoking Data Value,Binge Drinking Data Value&drilldowns=Tract&Year=latest"),
+  fetchData("secondHandSmokeAndMonthlyAlcohol", "/api/data?measures=Secondhand Smoke Exposure Yes Weighted Percent,Monthly Alcohol Consumption Some Weighted Percent&drilldowns=End Year,County")
 ];
 
 const mapStateToProps = state => ({

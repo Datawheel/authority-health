@@ -77,18 +77,18 @@ class PreventiveCare extends SectionColumns {
           }
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
-          {isPreventativeCareWeightedValueSelected 
+          {isPreventativeCareWeightedValueSelected
             ? <p>In {topDropdownWeightedData["End Year"]}, {topDropdownWeightedData.County} had the highest share of {dropdownValue} ({formatPercentage(topDropdownWeightedData[dropdownValue])}) out of all the counties in Michigan.</p>
             : <p>In {topDropdownValueTract.Year}, {topDropdownValueTract.Tract} had the highest share of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownValueTract[dropdownValue])}) out of all the tracts in Wayne county.</p>
           }
-          {isPreventativeCareWeightedValueSelected 
+          {isPreventativeCareWeightedValueSelected
             ? <p>The map here shows the {dropdownValue.toLowerCase()} for all counties in Michigan.</p>
             : <p>The map here shows the {dropdownValue.toLowerCase()} for all tracts in Wayne County, MI.</p>
           }
         </article>
 
         {/* Geomap to show Preventive care data for selected dropdown Value. */}
-        {isPreventativeCareWeightedValueSelected 
+        {isPreventativeCareWeightedValueSelected
           ? <Geomap config={{
             data: preventiveCareWeightedData.data,
             groupBy: "ID County",
@@ -129,8 +129,8 @@ PreventiveCare.defaultProps = {
 };
 
 PreventiveCare.need = [
-  fetchData("preventiveCareData", "/api/data?measures=Annual%20Checkup%20Data%20Value,Core%20preventive%20services%20for%20older%20men%20Data%20Value,Core%20preventive%20services%20for%20older%20women%20Data%20Value,Dental%20Visit%20Data%20Value,Colorectal%20Cancer%20Screening%20Data%20Value,Pap%20Smear%20Test%20Data%20Value,Mammography%20Data%20Value,Cholesterol%20Screening%20Data%20Value&drilldowns=Tract&Year=all"),
-  fetchData("preventiveCareWeightedData", "/api/data?measures=Had%20Flu%20Vaccine%20Yes%20Weighted%20Percent,Had%20Pneumonia%20Vaccine%20Yes%20Weighted%20Percent,Had%20Routine%20Checkup%20Last%20Year%20Yes%20Weighted%20Percent,FOBT%20or%20Endoscopy%20Yes%20Weighted%20Percent&drilldowns=End%20Year,County")
+  fetchData("preventiveCareData", "/api/data?measures=Annual Checkup Data Value,Core preventive services for older men Data Value,Core preventive services for older women Data Value,Dental Visit Data Value,Colorectal Cancer Screening Data Value,Pap Smear Test Data Value,Mammography Data Value,Cholesterol Screening Data Value&drilldowns=Tract&Year=all"),
+  fetchData("preventiveCareWeightedData", "/api/data?measures=Had Flu Vaccine Yes Weighted Percent,Had Pneumonia Vaccine Yes Weighted Percent,Had Routine Checkup Last Year Yes Weighted Percent,FOBT or Endoscopy Yes Weighted Percent&drilldowns=End Year,County")
 ];
 
 const mapStateToProps = state => ({

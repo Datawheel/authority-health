@@ -25,7 +25,7 @@ class Cancer extends SectionColumns {
       ]
     };
   }
-  
+
   render() {
 
     const {sortedCancerTypes, occuranceByGender, occuranceByRaceAndEthnicity} = this.props;
@@ -35,9 +35,9 @@ class Cancer extends SectionColumns {
     const filteredCancerTypes = sortedCancerTypes.filter(d => d !== "All Invasive Cancer Sites Combined");
     const items = filteredCancerTypes.map((d, i) => Object.assign({}, {index: i, title: d}));
 
-    const isItemSelected = item => selectedItems.findIndex(d => d.index === item.index) > -1;    
+    const isItemSelected = item => selectedItems.findIndex(d => d.index === item.index) > -1;
 
-    const renderItem = ({handleClick, isActive, item}) => 
+    const renderItem = ({handleClick, isActive, item}) =>
       <MenuItem
         className={isActive ? Classes.ACTIVE : ""}
         iconName={isItemSelected(item) ? "tick" : "blank"}
@@ -62,14 +62,14 @@ class Cancer extends SectionColumns {
       const newSelectedItems = selectedItems.filter((d, i) => i !== itemIndex);
       this.setState({selectedItems: newSelectedItems});
     };
-    
+
     const handleItemSelect = item => getSelectedItemIndex(item) < 0 ? selectItem(item) : deselectItem(item);
-    
+
     const deleteTag = (d, index) => {
       const selectedItems = this.state.selectedItems.filter((item, i) => i !== index);
       this.setState({selectedItems});
     };
-    
+
     const renderTag = item => <span>{item.title}</span>;
 
     let dropdownSelected = "";
@@ -98,7 +98,7 @@ class Cancer extends SectionColumns {
           <p>The following chart shows the gender breakdowns for the selected cancer sites.</p>
           {/* Draw a mini BarChart to show Cancer by Sex for selected cancer type. */}
           <BarChart config={{
-            data: `/api/data?measures=Count,Age-Adjusted%20Rate&drilldowns=Sex&Cancer%20Site=${dropdownSelected}&Year=all`,
+            data: `/api/data?measures=Count,Age-Adjusted Rate&drilldowns=Sex&Cancer Site=${dropdownSelected}&Year=all`,
             discrete: "y",
             height: 250,
             legend: false,
@@ -133,13 +133,13 @@ class Cancer extends SectionColumns {
             return resp.data;
           }}
           />
-          
+
           <h3>By Race & Ethnicity</h3>
           <p>In {topOccuranceByRaceAndEthnicity.Year}, the race/ethnicity group in {topOccuranceByRaceAndEthnicity.MSA} with the highest overall cancer rate was {topOccuranceByRaceAndEthnicity.Race} {topOccuranceByRaceAndEthnicity.Ethnicity} ({formatAbbreviate(topOccuranceByRaceAndEthnicity["Age-Adjusted Rate"])} per 100,000 people).</p>
           <p>The following chart shows the race and Ethnicity breakdowns for the selected cancer sites.</p>
           {/* Draw a mini BarChart to show Cancer by Race and Ethnicity for selected cancer type. */}
           <BarChart config={{
-            data: `/api/data?measures=Count,Age-Adjusted%20Rate&drilldowns=Race,Ethnicity&Cancer%20Site=${dropdownSelected}&Year=all`,
+            data: `/api/data?measures=Count,Age-Adjusted Rate&drilldowns=Race,Ethnicity&Cancer Site=${dropdownSelected}&Year=all`,
             discrete: "y",
             height: 250,
             legend: false,
@@ -173,13 +173,13 @@ class Cancer extends SectionColumns {
           }}
           />
         </article>
-        
+
         <div>
           <h3>Overall Occurance</h3>
           <p>The following chart shows the occurance rate per 100,000 people for the selected cancer sites.</p>
           {/* Draw a LinePlot to show age adjusted data for the selected cancer types. */}
           <LinePlot config={{
-            data: `/api/data?measures=Age-Adjusted%20Rate,Age-Adjusted%20Rate%20Lower%2095%20Percent%20Confidence%20Interval,Age-Adjusted%20Rate%20Upper%2095%20Percent%20Confidence%20Interval&Cancer%20Site=${dropdownSelected}&Year=all`,
+            data: `/api/data?measures=Age-Adjusted Rate,Age-Adjusted Rate Lower 95 Percent Confidence Interval,Age-Adjusted Rate Upper 95 Percent Confidence Interval&Cancer Site=${dropdownSelected}&Year=all`,
             discrete: "x",
             height: 400,
             groupBy: "Cancer Site",
@@ -212,13 +212,13 @@ Cancer.defaultProps = {
 };
 
 Cancer.need = [
-  fetchData("sortedCancerTypes", "/api/data?measures=Count&drilldowns=Cancer%20Site&Year=all&order=Count&sort=desc", d => {
+  fetchData("sortedCancerTypes", "/api/data?measures=Count&drilldowns=Cancer Site&Year=all&order=Count&sort=desc", d => {
     const cancerList = [];
     nest().key(d => d["Cancer Site"]).entries(d.data).forEach(group => cancerList.push(group.key));
     return cancerList;
   }),
-  fetchData("occuranceByGender", "/api/data?measures=Age-Adjusted%20Rate&drilldowns=Sex,MSA&Year=latest", d => d.data),
-  fetchData("occuranceByRaceAndEthnicity", "/api/data?measures=Age-Adjusted%20Rate&drilldowns=Race,Ethnicity,MSA&Year=latest", d => d.data)
+  fetchData("occuranceByGender", "/api/data?measures=Age-Adjusted Rate&drilldowns=Sex,MSA&Year=latest", d => d.data),
+  fetchData("occuranceByRaceAndEthnicity", "/api/data?measures=Age-Adjusted Rate&drilldowns=Race,Ethnicity,MSA&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({

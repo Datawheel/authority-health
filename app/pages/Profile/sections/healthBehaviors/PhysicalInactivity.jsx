@@ -138,8 +138,8 @@ PhysicalInactivity.defaultProps = {
 };
 
 PhysicalInactivity.need = [
-  fetchData("physicalInActivity", "/api/data?measures=Physical%20Health%20Data%20Value,Physical%20Inactivity%20Data%20Value&drilldowns=Tract&Year=all", d => d.data),
-  fetchData("physicalInactivityPrevalenceBySex", "/api/data?measures=Adj%20Percent&drilldowns=Sex&Geography=<id>&Year=all", d => d.data)
+  fetchData("physicalInActivity", "/api/data?measures=Physical Health Data Value,Physical Inactivity Data Value&drilldowns=Tract&Year=all", d => d.data),
+  fetchData("physicalInactivityPrevalenceBySex", "/api/data?measures=Adj Percent&drilldowns=Sex&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

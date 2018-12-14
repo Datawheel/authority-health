@@ -81,43 +81,43 @@ class TypesOfDentists extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Types of Dentists</SectionTitle>
         <article>
-          <Stat 
+          <Stat
             title={"Majority Active Dentist"}
             year={topTypeOfActiveDentist.Year}
             value={topTypeOfActiveDentist.Work}
             qualifier={formatPercentage(topTypeOfActiveDentist.share)}
           />
-          <Stat 
+          <Stat
             title={"Majority dentists Employment status"}
             year={topDentistsByEmploymentStatus.Year}
             value={topDentistsByEmploymentStatus.Status}
             qualifier={formatPercentage(topDentistsByEmploymentStatus.share)}
           />
-          <Stat 
+          <Stat
             title={"Full-time Dentists"}
             year={recentYearFullTimeDentists.Year}
             value={""}
             qualifier={formatPercentage(recentYearFullTimeDentists.share)}
           />
-          <Stat 
+          <Stat
             title={"Part-time Dentists"}
             year={recentYearPartTimeDentists.Year}
             value={""}
             qualifier={formatPercentage(recentYearPartTimeDentists.share)}
           />
-          <Stat 
+          <Stat
             title={"GP and Pediatric Dentists"}
             year={recentYearGpPediatricDentists.Year}
             value={""}
             qualifier={formatPercentage(recentYearGpPediatricDentists.share)}
           />
-          <Stat 
+          <Stat
             title={"Other Specialty Dentists"}
             year={recentYearOtherSpecialtyDentists.Year}
             value={""}
             qualifier={formatPercentage(recentYearOtherSpecialtyDentists.share)}
           />
-          
+
           <p>The Barchart on right shows the Types of Active Dentists in {topTypeOfActiveDentist.Geography} county, MI.</p>
           <p>The mini Barchart below shows the Dentists Employmemt Status in {topDentistsByEmploymentStatus.Geography} county, MI.</p>
 
@@ -146,7 +146,7 @@ class TypesOfDentists extends SectionColumns {
           }}
           />
         </article>
-        
+
         {/* Draw a BarChart to show data for Types of Active Dentists */}
         <BarChart config={{
           data: filteredActiveDentistsData,
@@ -180,10 +180,10 @@ TypesOfDentists.defaultProps = {
 };
 
 TypesOfDentists.need = [
-  fetchData("dentistsByWorkingHours", "/api/data?measures=Number%20of%20Dentists&drilldowns=Hours&Geography=<id>&Year=all", d => d.data),
-  fetchData("dentistsByEmploymentStatus", "/api/data?measures=Number%20of%20Dentists&drilldowns=Status&Geography=<id>&Year=all", d => d.data),
-  fetchData("dentistsBySpecialty", "/api/data?measures=Number%20of%20Dentists&drilldowns=Specialty&Geography=<id>&Year=all", d => d.data),
-  fetchData("typesOfActiveDentists", "/api/data?measures=Number%20of%20Dentists&drilldowns=Work&Status=Active&Geography=<id>&Year=all", d => d.data)
+  fetchData("dentistsByWorkingHours", "/api/data?measures=Number of Dentists&drilldowns=Hours&Geography=<id>&Year=all", d => d.data),
+  fetchData("dentistsByEmploymentStatus", "/api/data?measures=Number of Dentists&drilldowns=Status&Geography=<id>&Year=all", d => d.data),
+  fetchData("dentistsBySpecialty", "/api/data?measures=Number of Dentists&drilldowns=Specialty&Geography=<id>&Year=all", d => d.data),
+  fetchData("typesOfActiveDentists", "/api/data?measures=Number of Dentists&drilldowns=Work&Status=Active&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

@@ -48,7 +48,7 @@ class DentistsDemographic extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Dentist Demographics</SectionTitle>
         <article>
-          <Stat 
+          <Stat
             title={"Common Age Group"}
             year={topDentistsAgeData.Year}
             value={`${topDentistsAgeData["Age Group"]}`}
@@ -121,8 +121,8 @@ DentistsDemographic.defaultProps = {
 };
 
 DentistsDemographic.need = [
-  fetchData("dentistsByAge", "/api/data?measures=Number%20of%20Dentists&drilldowns=Age%20Group&Geography=<id>&Year=all", d => d.data),
-  fetchData("dentistsByGender", "/api/data?measures=Number%20of%20Dentists&drilldowns=Sex&Geography=<id>&Year=all", d => d.data)
+  fetchData("dentistsByAge", "/api/data?measures=Number of Dentists&drilldowns=Age Group&Geography=<id>&Year=all", d => d.data),
+  fetchData("dentistsByGender", "/api/data?measures=Number of Dentists&drilldowns=Sex&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

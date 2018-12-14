@@ -84,7 +84,7 @@ class ObesityAndDiabetes extends SectionColumns {
         <SectionTitle>Obesity and Diabetes</SectionTitle>
         <article>
           {/* Create a dropdown for different types of health conditions. */}
-          <div className="pt-select">
+          <div className="pt-select pt-fill">
             <select onChange={this.handleChange}>
               {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
             </select>

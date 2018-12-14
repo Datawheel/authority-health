@@ -198,6 +198,10 @@ layout
       font-family: inherit;
       color: inherit;
 
+      & .pt-select {
+        margin-bottom: 10px;
+      }
+
       & p {
         @add-mixin font-sm;
         margin-bottom: 0.75em; /* override blueprint */

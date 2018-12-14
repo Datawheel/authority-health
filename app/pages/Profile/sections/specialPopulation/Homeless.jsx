@@ -51,7 +51,7 @@ class Homeless extends SectionColumns {
       });
     recentYearTypesOfUnshelteredHomeless.values.sort((a, b) => b.share - a.share);
     const topUnshelteredHomelessTypes = recentYearTypesOfUnshelteredHomeless.values[0];
-    
+
     // Get data for Homeless types - Sheltered and Unsheltered with their sub-categories.
     const data = [];
     typesOfHomeless.forEach(d => {
@@ -78,25 +78,25 @@ class Homeless extends SectionColumns {
         <SectionTitle>Homeless</SectionTitle>
         <article>
           {/* Create a dropdown for sheltered and unsheltered choices. */}
-          <div className="pt-select">
+          <div className="pt-select pt-fill">
             <select onChange={this.handleChange}>
               {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
             </select>
           </div>
           {shelteredSelected
-            ? <Stat 
+            ? <Stat
               title={"Majority Sheltered Homeless Category"}
               year={topShelteredHomelessTypes.Year}
               value={topShelteredHomelessTypes.Category}
               qualifier={formatPercentage(topShelteredHomelessTypes.share)}
             />
-            : <Stat 
+            : <Stat
               title={"Majority Unsheltered Homeless Category"}
               year={topUnshelteredHomelessTypes.Year}
               value={topUnshelteredHomelessTypes.Category}
               qualifier={formatPercentage(topUnshelteredHomelessTypes.share)}
             />}
-          <Stat 
+          <Stat
             title={"Majority Homeless Type"}
             year={topHomelessTypes.Year}
             value={`${topHomelessTypes.HomelessType} ${topHomelessTypes["Sub-group"]}`}

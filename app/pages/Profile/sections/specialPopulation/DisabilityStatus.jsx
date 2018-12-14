@@ -53,8 +53,8 @@ class DisabilityStatus extends SectionColumns {
             qualifier={formatPopulation(topRecentYearData.share)}
           />
           {/* Write short paragraph describing stats and barchart. */}
-          <p>In {topRecentYearData.Year}, the majority age group with disability was {rangeFormatter(topRecentYearData.Age)} years with {formatPopulation(topRecentYearData.share)} in the {topRecentYearData.Geography} county.</p>
-          <p>The Barchart here shows the percentage of disabled population with public, private and no health insurance in the {topRecentYearData.Geography} county.</p>
+          <p>In {topRecentYearData.Year}, the majority age group with disability was {rangeFormatter(topRecentYearData.Age)} years with {formatPopulation(topRecentYearData.share)} in the {topRecentYearData.Geography} County.</p>
+          <p>The Barchart here shows the percentage of disabled population with public, private and no health insurance in the {topRecentYearData.Geography} County.</p>
         </article>
 
         {/* Show barchart for each age group type with public, private and no health insurance coverage*/}

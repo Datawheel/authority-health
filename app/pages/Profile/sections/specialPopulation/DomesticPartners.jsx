@@ -43,7 +43,7 @@ class DomesticPartners extends SectionColumns {
             value={topData["Sex of Partner"]}
             qualifier={formatPopulation(topData.share)}
           />
-          <p>In {topData.Year}, the top Domestic Partners were {topData["Sex of Partner"]} with {formatPopulation(topData.share)} in the {topData.Geography} county.</p>
+          <p>In {topData.Year}, the top Domestic Partners were {topData["Sex of Partner"]} with {formatPopulation(topData.share)} in the {topData.Geography} County.</p>
           <p>The Bar Chart here shows the types of domestic partners and corresponding percentage for each type. {}</p>
         </article>
 

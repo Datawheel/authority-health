@@ -96,30 +96,26 @@ class TypesOfDentists extends SectionColumns {
           <Stat
             title={"Full-time Dentists"}
             year={recentYearFullTimeDentists.Year}
-            value={""}
-            qualifier={formatPercentage(recentYearFullTimeDentists.share)}
+            value={formatPercentage(recentYearFullTimeDentists.share)}
           />
           <Stat
             title={"Part-time Dentists"}
             year={recentYearPartTimeDentists.Year}
-            value={""}
-            qualifier={formatPercentage(recentYearPartTimeDentists.share)}
+            value={formatPercentage(recentYearPartTimeDentists.share)}
           />
           <Stat
             title={"GP and Pediatric Dentists"}
             year={recentYearGpPediatricDentists.Year}
-            value={""}
-            qualifier={formatPercentage(recentYearGpPediatricDentists.share)}
+            value={formatPercentage(recentYearGpPediatricDentists.share)}
           />
           <Stat
             title={"Other Specialty Dentists"}
             year={recentYearOtherSpecialtyDentists.Year}
-            value={""}
-            qualifier={formatPercentage(recentYearOtherSpecialtyDentists.share)}
+            value={formatPercentage(recentYearOtherSpecialtyDentists.share)}
           />
 
-          <p>The Barchart on right shows the Types of Active Dentists in {topTypeOfActiveDentist.Geography} county, MI.</p>
-          <p>The mini Barchart below shows the Dentists Employmemt Status in {topDentistsByEmploymentStatus.Geography} county, MI.</p>
+          <p>The barchart on the right shows the types of active dentists in {topTypeOfActiveDentist.Geography} County, MI.</p>
+          <p>The barchart below shows the dentists employment status in {topDentistsByEmploymentStatus.Geography} County, MI.</p>
 
           {/* Draw a BarChart to show data for Dentists by their Employement Status. */}
           <BarChart config={{

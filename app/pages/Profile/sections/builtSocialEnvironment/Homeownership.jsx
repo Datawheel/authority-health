@@ -69,8 +69,8 @@ class Homeownership extends SectionColumns {
             value={`${constructionDateData[0].Geography}`}
             qualifier={constructionDateData[0]["Construction Date"]}
           />
-          <p>The Geomap shows the Median housing units value for each tract in the Wayne county.</p>
-          <p>The LinePlot shows the Occupied housing units in the {topOccupancyData.Geography} county.</p>
+          <p>The Geomap shows the Median housing units value for each tract in the Wayne County.</p>
+          <p>The LinePlot shows the Occupied housing units in the {topOccupancyData.Geography} County.</p>
 
           {/* Lineplot to show occupacy status over the years at current location */}
           <LinePlot config={{

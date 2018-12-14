@@ -102,18 +102,18 @@ class RiskyBehaviors extends SectionColumns {
           {isSecondHandSmokeOrMonthlyAlcoholSelected
             ? <div>
               <p>In {topSecondHandSmokeAndMonthlyAlcoholData["End Year"]}, {topSecondHandSmokeAndMonthlyAlcoholData.County} had the highest prevalence of {formatName(dropdownValue.toLowerCase())} ({formatAbbreviate(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue])}%).</p>
-              <p>The map here shows the {formatName(dropdownValue.toLowerCase())} for Wayne county.</p>
+              <p>The map here shows the {formatName(dropdownValue.toLowerCase())} for Wayne County.</p>
             </div>
             : <div>
-              <p>In {year}, {topTractNum} had the highest prevalence of {formatName(dropdownValue.toLowerCase())} ({topTractRate}%) out of all Tracts in Wayne county.</p>
-              <p>The map here shows the {formatName(dropdownValue.toLowerCase())} for all tracts in Wayne county.</p>
+              <p>In {year}, {topTractNum} had the highest prevalence of {formatName(dropdownValue.toLowerCase())} ({topTractRate}%) out of all Tracts in Wayne County.</p>
+              <p>The map here shows the {formatName(dropdownValue.toLowerCase())} for all tracts in Wayne County.</p>
             </div>
           }
 
           {/* Draw a Treemap to show smoking status: former, current & never. */}
           {dropdownValue === drugTypes[0]
             ? <div>
-              <p>The chart here shows the former, current and never smoking status in Wayne county.</p>
+              <p>The chart here shows the former, current and never smoking status in Wayne County.</p>
               <Treemap config={{
                 data: "/api/data?measures=Smoking Status Current Weighted Percent,Smoking Status Former Weighted Percent,Smoking Status Never Weighted Percent&drilldowns=End Year",
                 height: 250,

@@ -76,14 +76,14 @@ class PhysicalInactivity extends SectionColumns {
                 year={topPhysicalInactivityFemaleData.Year}
                 value={formatPercentage(topPhysicalInactivityFemaleData["Adj Percent"])}
               />
-              <p>In {topRecentYearData.Year}, {topRecentYearData.Tract} had the highest prevalence of {formatDropdownChoiceName(dropdownValue).toLowerCase()} ({formatPercentage(topRecentYearData[dropdownValue])}) out of all tracts in Wayne county.</p>
-              <p>In {topPhysicalInactivityFemaleData.Year}, {formatDropdownChoiceName(dropdownValue).toLowerCase()} rates for male and female residents of Wayne county were {formatPercentage(topPhysicalInactivityMaleData["Adj Percent"])} and {formatPercentage(topPhysicalInactivityFemaleData["Adj Percent"])} respectively in the {topPhysicalInactivityFemaleData.Geography}, MI.</p>
-              <p>The Barchart here shows the {formatDropdownChoiceName(dropdownValue)} data for male and female in {topPhysicalInactivityFemaleData.Geography}.</p>
+              <p>In {topRecentYearData.Year}, {topRecentYearData.Tract} had the highest prevalence of {formatDropdownChoiceName(dropdownValue).toLowerCase()} ({formatPercentage(topRecentYearData[dropdownValue])}) out of all tracts in Wayne County.</p>
+              <p>In {topPhysicalInactivityFemaleData.Year}, {formatDropdownChoiceName(dropdownValue).toLowerCase()} rates for male and female residents of Wayne County were {formatPercentage(topPhysicalInactivityMaleData["Adj Percent"])} and {formatPercentage(topPhysicalInactivityFemaleData["Adj Percent"])} respectively in the {topPhysicalInactivityFemaleData.Geography}, MI.</p>
+              <p>The barchart here shows the {formatDropdownChoiceName(dropdownValue).toLowerCase()} data for male and female in {topPhysicalInactivityFemaleData.Geography}.</p>
             </div>
-            : <p>In {topRecentYearData.Year}, {topRecentYearData.Tract} had the highest prevalence of {formatDropdownChoiceName(dropdownValue).toLowerCase()} ({formatPercentage(topRecentYearData[dropdownValue])}) out of all tracts in Wayne county.</p>
+            : <p>In {topRecentYearData.Year}, {topRecentYearData.Tract} had the highest prevalence of {formatDropdownChoiceName(dropdownValue).toLowerCase()} ({formatPercentage(topRecentYearData[dropdownValue])}) out of all tracts in Wayne County.</p>
           }
 
-          <p>The following map shows the {formatDropdownChoiceName(dropdownValue)} for all tracts in Wayne county, MI.</p>
+          <p>The following map shows the {formatDropdownChoiceName(dropdownValue)} for all tracts in Wayne County, MI.</p>
 
           {/* Draw a BarChart to show data for Physical Inactivity by Sex. */}
           {physicalInactivitySelected

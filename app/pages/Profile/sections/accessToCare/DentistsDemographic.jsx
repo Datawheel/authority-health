@@ -60,8 +60,9 @@ class DentistsDemographic extends SectionColumns {
             qualifier={formatPercentage(topDentistsByGender.share)}
           />
 
-          <p>In {topDentistsAgeData.Year}, the most common age group of dentists in {topDentistsAgeData.Geography} county was {topDentistsAgeData["Age Group"]} years ({formatPercentage(topDentistsAgeData.share)}) and most common gender group was {topDentistsByGender.Sex} ({formatPercentage(topDentistsByGender.share)}).</p>
-          <p>The Barchart here shows the number of dentists by Age Group in the {topDentistsAgeData.Geography} county, MI.</p>
+          <p>In {topDentistsAgeData.Year}, the most common age group of dentists in {topDentistsAgeData.Geography} County was {topDentistsAgeData["Age Group"]} years ({formatPercentage(topDentistsAgeData.share)}) and most common gender group was {topDentistsByGender.Sex} ({formatPercentage(topDentistsByGender.share)}).</p>
+          <p>The barchart here shows dentists age group share in {topDentistsAgeData.Geography} County.</p>
+          <p>The following barchart shows dentists gender share in {topDentistsByGender.Geography} County.</p>
 
           {/* Draw a Treemap for Dentists by Gender. */}
           <Treemap config={{

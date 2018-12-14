@@ -58,7 +58,7 @@ class Coverage extends SectionColumns {
             qualifier={topFemaleShare}
           />
           <p>In {ageGroupYear}, the age groups most likely to have health care coverage in {maleCoverageData[0].Geography} are {topMaleAgeGroup} and {topFemaleAgeGroup} years, for men and women respectively.</p>
-          <p>The BarChart here shows the male and female age groups with and without Health Insurance Coverage.</p>
+          <p>The barchart here shows the male and female age groups with and without Health Insurance Coverage.</p>
         </article>
 
         <BarChart config={{

@@ -42,7 +42,7 @@ class WageDistribution extends SectionColumns {
         <article>
           {/* Top stats and short paragraph about Wage distribution. */}
           <Stat
-            title={`Top Wage Dsitribution in ${topWageDistribution.Geography}`}
+            title={`Top Wage Distribution in ${topWageDistribution.Geography}`}
             year={topWageDistribution.Year}
             value={topWageDistribution["Household Income Bucket"]}
             qualifier={formatPopulation(topWageDistribution.share)}

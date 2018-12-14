@@ -74,7 +74,7 @@ DomesticPartners.defaultProps = {
 };
 
 DomesticPartners.need = [
-  fetchData("domesticPartnersData", "/api/data?measures=Population&drilldowns=Sex%20of%20Partner&Geography=<id>&Year=all", d => d.data)
+  fetchData("domesticPartnersData", "/api/data?measures=Population&drilldowns=Sex of Partner&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

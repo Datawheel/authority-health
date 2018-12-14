@@ -53,7 +53,7 @@ DistressScore.defaultProps = {
 };
 
 DistressScore.need = [
-  fetchData("distressScoreData", "/api/data?measures=Distress%20Score&drilldowns=Zip%20Code&Year=all", d => d.data)
+  fetchData("distressScoreData", "/api/data?measures=Distress Score&drilldowns=Zip Code&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

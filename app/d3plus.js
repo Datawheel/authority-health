@@ -148,19 +148,25 @@ export default {
   // timeline defaults
   timelineConfig: {
     brushing: false,
+    buttonHeight: 20,
+    buttonPadding: 10,
     // handle
     handleConfig: {
-      width: 9,
-      fill: styles["brand-dark"]
+      fill: styles["brand-dark"],
+      width: 5
     },
     // main horizontal bar line
     barConfig: {
       stroke: styles["dark-1"],
       opacity: 0.75
     },
+    selectionConfig: {
+      "fill": styles["brand-light"],
+      "fill-opacity": 0.25
+    },
     shapeConfig: {
       // ticks and/or button bg
-      fill: styles["dark-1"],
+      fill: styles["light-3"],
       stroke: "none",
       // label and/or button text
       labelConfig: {

@@ -30,11 +30,11 @@ class Insecurity extends SectionColumns {
 }
 
 Insecurity.need = [
-  fetchData("insecurityRate", "/api/data?measures=Food%20Insecurity%20Rate&drilldowns=Category&Geography=<id>&Year=latest", d => d.data)
+  fetchData("insecurityRate", "/api/data?measures=Food Insecurity Rate&drilldowns=Category&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   insecurityRate: state.data.insecurityRate
 });
-  
+
 export default connect(mapStateToProps)(Insecurity);

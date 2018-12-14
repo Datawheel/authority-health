@@ -109,7 +109,7 @@ Immigrants.defaultProps = {
 
 Immigrants.need = [
   fetchData("immigrantsData", "/api/data?measures=Population&drilldowns=Nativity,Place&Year=all", d => d.data),
-  fetchData("immigrantsPovertyData", "/api/data?measures=Population&drilldowns=Nativity,Poverty%20Status,Place&Year=all", d => d.data)
+  fetchData("immigrantsPovertyData", "/api/data?measures=Population&drilldowns=Nativity,Poverty Status,Place&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

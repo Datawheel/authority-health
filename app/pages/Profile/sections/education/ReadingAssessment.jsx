@@ -214,7 +214,7 @@ class ReadingAssessment extends SectionColumns {
       const femaleEighthGradeReadingScores = femaleReadingScores.filter(d => d.Grade === "8");
 
       // Get stats for Gender.
-      const stats = this.getStatsForGender(maleFourthGradeReadingScores[0], femaleFourthGradeReadingScores[0], 
+      const stats = this.getStatsForGender(maleFourthGradeReadingScores[0], femaleFourthGradeReadingScores[0],
         maleEighthGradeReadingScores[0], femaleEighthGradeReadingScores[0]);
 
       const dropdownComponents = this.getDropdownComponents(readingAssessmentChoices);
@@ -229,7 +229,7 @@ class ReadingAssessment extends SectionColumns {
             {paragraph}
             {stats}
           </article>
-  
+
           {/* Lineplot to show the Reading assessment for different years in the Detroit City. */}
           {/* {linePlot} */}
 
@@ -278,7 +278,7 @@ class ReadingAssessment extends SectionColumns {
       const noELLEighthGradeReadingScores = noELLReadingScores.filter(d => d.Grade === "8");
 
       // Get stats for ELL.
-      const stats = this.getStatsForELL(withELLFourthGradeReadingScores[0], withELLEighthGradeReadingScores[0], 
+      const stats = this.getStatsForELL(withELLFourthGradeReadingScores[0], withELLEighthGradeReadingScores[0],
         noELLFourthGradeReadingScores[0], noELLEighthGradeReadingScores[0]);
 
       const dropdownComponents = this.getDropdownComponents(readingAssessmentChoices);
@@ -293,7 +293,7 @@ class ReadingAssessment extends SectionColumns {
             {paragraph}
             {stats}
           </article>
-    
+
           {/* Lineplot to show the Reading assessment for different years in the Detroit City. */}
           <LinePlot config={{
             data,
@@ -340,7 +340,7 @@ class ReadingAssessment extends SectionColumns {
       const noDisabilityEighthGradeReadingScores = noDisabilityReadingScores.filter(d => d.Grade === "8");
 
       // Get stats for Disability.
-      const stats = this.getStatsForDisability(withDisabilityFourthGradeReadingScores[0], withDisabilityEighthGradeReadingScores[0], 
+      const stats = this.getStatsForDisability(withDisabilityFourthGradeReadingScores[0], withDisabilityEighthGradeReadingScores[0],
         noDisabilityFourthGradeReadingScores[0], noDisabilityEighthGradeReadingScores[0]);
 
       const dropdownComponents = this.getDropdownComponents(readingAssessmentChoices);
@@ -354,7 +354,7 @@ class ReadingAssessment extends SectionColumns {
             {paragraph}
             {stats}
           </article>
-    
+
           {/* Lineplot to show the Reading assessment with and without disability for different years in the Detroit City. */}
           <LinePlot config={{
             data,
@@ -393,7 +393,7 @@ class ReadingAssessment extends SectionColumns {
 
       // Get stats for scores based on Parents Education.
       const stats = this.getStatsByParentsEducation(topReadingScoreForEighthGrade);
-      
+
       const dropdownComponents = this.getDropdownComponents(readingAssessmentChoices);
       const paragraph = this.getShortDescription("based on Parents Education");
 
@@ -470,7 +470,7 @@ class ReadingAssessment extends SectionColumns {
       const eighthGradeReadingScoresbyCity = recentYearReadingScoresByCity.values.filter(d => d.Grade === "8");
 
       // Get stats for scores by Geography.
-      const stats = this.getStatsForGeography(nationalFourthGradeReadingScores[0], nationalEighthGradeReadingScores[0], 
+      const stats = this.getStatsForGeography(nationalFourthGradeReadingScores[0], nationalEighthGradeReadingScores[0],
         fourthGradeReadingScoresbyCity[0], eighthGradeReadingScoresbyCity[0]);
 
       const dropdownComponents = this.getDropdownComponents(readingAssessmentChoices);
@@ -484,7 +484,7 @@ class ReadingAssessment extends SectionColumns {
             {paragraph}
             {stats}
           </article>
-  
+
           {/* Lineplot to show the Reading assessment for different years in the Detroit City. */}
           <LinePlot config={{
             data: readingScoresByGeography,
@@ -501,7 +501,7 @@ class ReadingAssessment extends SectionColumns {
               title: "Average Reading Score"
             },
             shapeConfig: {
-              strokeDasharray: d => d.Geography === "Nation" ?  "4 1" : null 
+              strokeDasharray: d => d.Geography === "Nation" ?  "4 1" : null
             },
             tooltipConfig: {tbody: [["Score", d => d["Average Reading Score"]]]}
           }}
@@ -521,12 +521,12 @@ ReadingAssessment.defaultProps = {
 
 
 ReadingAssessment.need = [
-  fetchData("readingScoresByGender", "/api/data?measures=Average%20Reading%20Score&drilldowns=Grade,Gender,City&Year=all", d => d.data),
-  fetchData("readingScoresByELL", "/api/data?measures=Average%20Reading%20Score&drilldowns=Grade,ELL,City&Year=all", d => d.data),
-  fetchData("readingScoresByDisability", "/api/data?measures=Average%20Reading%20Score&drilldowns=Grade,Disability,City&Year=all", d => d.data),
-  fetchData("readingScoresByParentsEducation", "/api/data?measures=Average%20Reading%20Score&drilldowns=Grade,Parents%20Education,City&Year=all", d => d.data),
-  fetchData("readingScoresByNation", "/api/data?measures=Average%20Reading%20Score&drilldowns=Grade,Nation&Year=all", d => d.data),
-  fetchData("readingScoresByCity", "/api/data?measures=Average%20Reading%20Score&drilldowns=Grade,City&Year=all", d => d.data)
+  fetchData("readingScoresByGender", "/api/data?measures=Average Reading Score&drilldowns=Grade,Gender,City&Year=all", d => d.data),
+  fetchData("readingScoresByELL", "/api/data?measures=Average Reading Score&drilldowns=Grade,ELL,City&Year=all", d => d.data),
+  fetchData("readingScoresByDisability", "/api/data?measures=Average Reading Score&drilldowns=Grade,Disability,City&Year=all", d => d.data),
+  fetchData("readingScoresByParentsEducation", "/api/data?measures=Average Reading Score&drilldowns=Grade,Parents Education,City&Year=all", d => d.data),
+  fetchData("readingScoresByNation", "/api/data?measures=Average Reading Score&drilldowns=Grade,Nation&Year=all", d => d.data),
+  fetchData("readingScoresByCity", "/api/data?measures=Average Reading Score&drilldowns=Grade,City&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({
@@ -537,5 +537,5 @@ const mapStateToProps = state => ({
   readingScoresByNation: state.data.readingScoresByNation,
   readingScoresByCity: state.data.readingScoresByCity
 });
-  
+
 export default connect(mapStateToProps)(ReadingAssessment);

@@ -113,9 +113,9 @@ HouseRentals.defaultProps = {
 };
 
 HouseRentals.need = [
-  fetchData("rentAmountData", "/api/data?measures=Rent%20Amount&Geography=<id>&Year=all", d => d.data),
-  fetchData("utilitiesData", "/api/data?measures=Renter-Occupied%20Housing%20Units&drilldowns=Inclusion%20of%20Utilities%20in%20Rent&Geography=<id>&Year=latest", d => d.data),
-  fetchData("rentersByIncomePercentage", "https://mammoth.datausa.io/api/data?measures=Renters%20by%20Income%20Percentage&drilldowns=Household%20Income&Year=all&Geography=<id>", d => d.data)
+  fetchData("rentAmountData", "/api/data?measures=Rent Amount&Geography=<id>&Year=all", d => d.data),
+  fetchData("utilitiesData", "/api/data?measures=Renter-Occupied Housing Units&drilldowns=Inclusion of Utilities in Rent&Geography=<id>&Year=latest", d => d.data),
+  fetchData("rentersByIncomePercentage", "https://mammoth.datausa.io/api/data?measures=Renters by Income Percentage&drilldowns=Household Income&Year=all&Geography=<id>", d => d.data)
 ];
 
 const mapStateToProps = state => ({

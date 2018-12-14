@@ -118,9 +118,9 @@ Homeownership.defaultProps = {
 };
 
 Homeownership.need = [
-  fetchData("occupancyData", "/api/data?measures=Housing%20Units&drilldowns=Occupancy%20Status&Geography=<id>&Year=all", d => d.data),
-  fetchData("medianHousingUnitsValue", "https://mammoth.datausa.io/api/data?measures=Property%20Value&Year=all&Geography=05000US26163:children", d => d.data),
-  fetchData("constructionDateData", "/api/data?measures=Construction%20Date&Geography=<id>&Year=all", d => d.data)
+  fetchData("occupancyData", "/api/data?measures=Housing Units&drilldowns=Occupancy Status&Geography=<id>&Year=all", d => d.data),
+  fetchData("medianHousingUnitsValue", "https://mammoth.datausa.io/api/data?measures=Property Value&Year=all&Geography=05000US26163:children", d => d.data),
+  fetchData("constructionDateData", "/api/data?measures=Construction Date&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

@@ -105,7 +105,7 @@ class StoreAccessByDemographic extends SectionColumns {
 
         {/* Create a Geomap based on dropdown choice for all the counties in Michigan. */}
         <Geomap config={{
-          data: ageSelected ? `/api/data?measures=Percent&drilldowns=Age%20Group,County&Age%20Group=${dropdownValue}&Year=all` : `/api/data?measures=Percent&drilldowns=Race%20Group,County&Race%20Group=${dropdownValue}&Year=all`,
+          data: ageSelected ? `/api/data?measures=Percent&drilldowns=Age Group,County&Age Group=${dropdownValue}&Year=all` : `/api/data?measures=Percent&drilldowns=Race Group,County&Race Group=${dropdownValue}&Year=all`,
           groupBy: "ID County",
           colorScale: "Percent",
           colorScaleConfig: {
@@ -130,8 +130,8 @@ StoreAccessByDemographic.defaultProps = {
 };
 
 StoreAccessByDemographic.need = [
-  fetchData("foodAccessByAge", "/api/data?measures=Percent&drilldowns=Age%20Group&Geography=<id>&Year=all", d => d.data),
-  fetchData("foodAccessByRace", "/api/data?measures=Percent&drilldowns=Race%20Group&Geography=<id>&Year=all", d => d.data)
+  fetchData("foodAccessByAge", "/api/data?measures=Percent&drilldowns=Age Group&Geography=<id>&Year=all", d => d.data),
+  fetchData("foodAccessByRace", "/api/data?measures=Percent&drilldowns=Race Group&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

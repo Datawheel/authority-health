@@ -60,7 +60,7 @@ class FoodAvailability extends SectionColumns {
 
         {/* Draw a Treemap to show types of stores and restaurants. */}
         <Treemap config={{
-          data: `/api/data?measures=Number%20of%20Stores&drilldowns=Sub-category&County=${countyId}&Year=all`,
+          data: `/api/data?measures=Number of Stores&drilldowns=Sub-category&County=${countyId}&Year=all`,
           groupBy: ["Group", "Sub-category"],
           label: d => d["Sub-category"] instanceof Array ? titleCase(d.Group) : titleCase(d["Sub-category"]),
           height: 400,
@@ -103,7 +103,7 @@ FoodAvailability.defaultProps = {
 };
 
 FoodAvailability.need = [
-  fetchData("snapWicData", "/api/data?measures=Number%20of%20Stores&drilldowns=Assistance%20Type&Geography=<id>&Year=all", d => d.data)
+  fetchData("snapWicData", "/api/data?measures=Number of Stores&drilldowns=Assistance Type&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

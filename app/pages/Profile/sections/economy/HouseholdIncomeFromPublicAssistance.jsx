@@ -92,8 +92,8 @@ HouseholdIncomeFromPublicAssistance.defaultProps = {
 };
 
 HouseholdIncomeFromPublicAssistance.need = [
-  fetchData("publicAssistanceData", "/api/data?measures=Population&drilldowns=Public%20Assistance%20or%20Snap&Geography=<id>&Year=all", d => d.data),
-  fetchData("householdSnapData", "/api/data?measures=Population&drilldowns=Snap%20Receipt,Family%20type,Number%20of%20workers&Geography=<id>&Year=all", d => d.data)
+  fetchData("publicAssistanceData", "/api/data?measures=Population&drilldowns=Public Assistance or Snap&Geography=<id>&Year=all", d => d.data),
+  fetchData("householdSnapData", "/api/data?measures=Population&drilldowns=Snap Receipt,Family type,Number of workers&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

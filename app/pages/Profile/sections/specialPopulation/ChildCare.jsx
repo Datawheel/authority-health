@@ -83,7 +83,7 @@ ChildCare.defaultProps = {
 };
 
 ChildCare.need = [
-  fetchData("responsibilityData", "/api/data?measures=Population&drilldowns=Responsibility%20Length&Year=all")
+  fetchData("responsibilityData", "/api/data?measures=Population&drilldowns=Responsibility Length&Year=all")
 ];
 
 const mapStateToProps = state => ({

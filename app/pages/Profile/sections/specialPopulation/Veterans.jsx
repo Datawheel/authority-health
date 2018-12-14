@@ -132,10 +132,10 @@ Veterans.defaultProps = {
 };
 
 Veterans.need = [
-  fetchData("veteransEmploymentStatus", "/api/data?measures=Population&drilldowns=Employment%20Status&Geography=<id>&Year=all", d => d.data),
-  fetchData("veteransPovertyStatus", "/api/data?measures=Population&drilldowns=Poverty%20Status&Geography=<id>&Year=all", d => d.data),
-  fetchData("veteransDisabilityStatus", "/api/data?measures=Population&drilldowns=Disability%20Status&Geography=<id>&Year=all", d => d.data),
-  fetchData("periodOfService", "https://mammoth.datausa.io/api/data?measures=Veterans&drilldowns=Period%20of%20Service&Geography=<id>&Year=all", d => d.data)
+  fetchData("veteransEmploymentStatus", "/api/data?measures=Population&drilldowns=Employment Status&Geography=<id>&Year=all", d => d.data),
+  fetchData("veteransPovertyStatus", "/api/data?measures=Population&drilldowns=Poverty Status&Geography=<id>&Year=all", d => d.data),
+  fetchData("veteransDisabilityStatus", "/api/data?measures=Population&drilldowns=Disability Status&Geography=<id>&Year=all", d => d.data),
+  fetchData("periodOfService", "https://mammoth.datausa.io/api/data?measures=Veterans&drilldowns=Period of Service&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

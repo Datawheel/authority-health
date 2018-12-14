@@ -78,9 +78,11 @@ class Homeless extends SectionColumns {
         <SectionTitle>Homeless</SectionTitle>
         <article>
           {/* Create a dropdown for sheltered and unsheltered choices. */}
-          <select onChange={this.handleChange}>
-            {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
-          </select>
+          <div className="pt-select">
+            <select onChange={this.handleChange}>
+              {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
+            </select>
+          </div>
           {shelteredSelected
             ? <Stat 
               title={"Majority Sheltered Homeless Category"}

@@ -49,9 +49,11 @@ class PhysicalInactivity extends SectionColumns {
         <SectionTitle>Physical Health and Inactivity</SectionTitle>
         <article>
           {/* Create a dropdown list for Physical Health and Physical Inactivity options. */}
-          <select onChange={this.handleChange}>
-            {dropdownList.map(item => <option key={item} value={item}>{formatDropdownChoiceName(item)}</option>)}
-          </select>
+          <div className="pt-select">
+            <select onChange={this.handleChange}>
+              {dropdownList.map(item => <option key={item} value={item}>{formatDropdownChoiceName(item)}</option>)}
+            </select>
+          </div>
 
           <Stat
             title={"Location with highest prevalence"}

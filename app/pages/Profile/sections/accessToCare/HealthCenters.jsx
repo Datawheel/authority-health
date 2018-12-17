@@ -14,6 +14,8 @@ const formatName = d => {
   return nameArr.reduce((acc, currValue, i) => i === 0 ? "" : acc.concat(currValue), "").trim();
 };
 
+const formatRaceNames = d => d.split(" ").slice(1).join();
+
 const formatPercentage = d => `${formatAbbreviate(d * 100)}%`;
 const formatMeasureName = d => {
   if (d === "Health Centers") return d;
@@ -33,11 +35,10 @@ class HealthCenters extends SectionColumns {
 
   render() {
     const {healthCenterData, raceAndEthnicityData} = this.props;
-    console.log("healthCenterData: ", healthCenterData);
     const {dropdownValue} = this.state;
     const dropdownList = healthCenterData.source[0].measures;
 
-    // Get the health center data for latest year.
+    // Get the current dropdown value data for latest year.
     const recentYearHealthCenterData = {};
     nest()
       .key(d => d.Year)
@@ -47,7 +48,9 @@ class HealthCenters extends SectionColumns {
       });
     const topRecentYearDropdownValueData = recentYearHealthCenterData.values.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
 
-    console.log("raceAndEthnicityData: ", raceAndEthnicityData);
+    // Get most recent year data for race and ethnicity.
+    // Add RaceType property to raceAndEthnicityData so that each race type can have individual object.
+    const recentYearRaceAndEthnicityData = {};
     const data = [];
     nest()
       .key(d => d.Year)
@@ -56,6 +59,7 @@ class HealthCenters extends SectionColumns {
         raceAndEthnicityData.source[0].measures.map(d => {
           const result = group.values.reduce((acc, currentValue) => {
             if (acc === null && currentValue[d] !== null) {
+              // Non-white race population is the sum of all the race population minus White population.
               if (d === "% Non-white") {
                 d = "% White";
                 currentValue[d] = 1 - currentValue["% Non-white"];
@@ -67,7 +71,20 @@ class HealthCenters extends SectionColumns {
           }, null);
           data.push(result);
         });
+        group.key >= raceAndEthnicityData.data[0].Year ? Object.assign(recentYearRaceAndEthnicityData, group) : {};
       });
+
+    nest()
+      .key(d => d.Year)
+      .entries(data)
+      .forEach(group => {
+        group.key >= data[0].Year ? Object.assign(recentYearRaceAndEthnicityData, group) : {};
+      });
+
+    recentYearRaceAndEthnicityData.values.sort((a, b) => b[b.RaceType] - a[a.RaceType]);
+    const topMostRaceData = recentYearRaceAndEthnicityData.values[0];
+    const topSecondRaceData = recentYearRaceAndEthnicityData.values[1];
+    const topThirdRaceData = recentYearRaceAndEthnicityData.values[2];
 
     const isHealthCentersSelected = dropdownValue === "Health Centers";
 
@@ -91,7 +108,7 @@ class HealthCenters extends SectionColumns {
                 qualifier={`${topRecentYearDropdownValueData[dropdownValue]} Health Centers`}
               />
               <p>In {topRecentYearDropdownValueData.Year}, the zip code in Wayne County with the most {dropdownValue} was {topRecentYearDropdownValueData["Zip Code"]} ({topRecentYearDropdownValueData[dropdownValue]} health centers).</p>
-              <p>The following map shows the total number of health centers for all zip codes in Wayne County, MI. </p>
+              <p> The following map shows the total number of health centers for all zip codes in Wayne County, MI.</p>
             </div>
             : <div>
               <Stat
@@ -101,11 +118,12 @@ class HealthCenters extends SectionColumns {
                 qualifier={formatPercentage(topRecentYearDropdownValueData[dropdownValue])}
               />
               <p>In {topRecentYearDropdownValueData.Year}, the zip code in Wayne County with the most {formatMeasureName(dropdownValue).toLowerCase()} visiting health centers was {topRecentYearDropdownValueData["Zip Code"]} ({formatPercentage(topRecentYearDropdownValueData[dropdownValue])}).</p>
-              <p>The following map shows the share of {formatMeasureName(dropdownValue).toLowerCase()} visiting health centers for all zip codes in Wayne County, MI. </p>
+              <p> The following map shows the share of {formatMeasureName(dropdownValue).toLowerCase()} visiting health centers for all zip codes in Wayne County, MI.</p>
             </div>
           }
 
-          <p>The barchart shows the race and ethnicity share visited health center.</p>
+          <p>{formatRaceNames(topMostRaceData.RaceType)} Residents of Wayne County visit health centers more than any other race/ethnicity group ({formatPercentage(topMostRaceData[topMostRaceData.RaceType])}). This is followed by {formatRaceNames(topSecondRaceData.RaceType)} residents ({formatPercentage(topSecondRaceData[topSecondRaceData.RaceType])}) and then {formatRaceNames(topThirdRaceData.RaceType)} residents ({formatPercentage(topThirdRaceData[topThirdRaceData.RaceType])}).</p>
+          <p> The following barchart shows the breakdown across all race/ethnicity groups in Wayne County.</p>
           
           {/* Draw a BarChart to show data for health center data by race */}
           <BarChart config={{

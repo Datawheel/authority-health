@@ -21,7 +21,7 @@ import DentistsDemographic from "./sections/accessToCare/DentistsDemographic";
 import DentistsWorkStatus from "./sections/accessToCare/DentistsWorkStatus";
 import HealthCenters from "./sections/accessToCare/HealthCenters";
 import Coverage from "./sections/accessToCare/Coverage";
-import ChildCare from "./sections/specialPopulation/ChildCare";
+import GrandparentCaregivers from "./sections/specialPopulation/GrandparentCaregivers";
 import Veterans from "./sections/specialPopulation/Veterans";
 import Immigrants from "./sections/specialPopulation/Immigrants";
 import DomesticPartners from "./sections/specialPopulation/DomesticPartners";
@@ -129,7 +129,7 @@ class Profile extends Component {
           </div>
         </TopicTitle>
         <div className="section-container">
-          <ChildCare />
+          <GrandparentCaregivers />
           <Immigrants />
           <DomesticPartners />
           <DisabilityStatus />
@@ -206,7 +206,7 @@ Profile.need = [
   DentistsDemographic,
   DentistsWorkStatus,
   Coverage,
-  ChildCare,
+  GrandparentCaregivers,
   Immigrants,
   DomesticPartners,
   DisabilityStatus,

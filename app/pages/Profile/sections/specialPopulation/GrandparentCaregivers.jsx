@@ -13,7 +13,7 @@ import rangeFormatter from "../../../../utils/rangeFormatter";
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 const formatAge = d => rangeFormatter(d) === "< 6" || rangeFormatter(d) === "6 - 11" ? `${rangeFormatter(d)} months` : `${rangeFormatter(d)} years`;
 
-class ChildCare extends SectionColumns {
+class GrandparentCaregivers extends SectionColumns {
 
   render() {
 
@@ -78,11 +78,11 @@ class ChildCare extends SectionColumns {
   }
 }
 
-ChildCare.defaultProps = {
+GrandparentCaregivers.defaultProps = {
   slug: "child-care"
 };
 
-ChildCare.need = [
+GrandparentCaregivers.need = [
   fetchData("responsibilityData", "/api/data?measures=Population&drilldowns=Responsibility Length&Year=all")
 ];
 
@@ -90,4 +90,4 @@ const mapStateToProps = state => ({
   responsibilityData: state.data.responsibilityData
 });
 
-export default connect(mapStateToProps)(ChildCare);
+export default connect(mapStateToProps)(GrandparentCaregivers);

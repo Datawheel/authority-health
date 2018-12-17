@@ -103,7 +103,7 @@ class DentistsWorkStatus extends SectionColumns {
 
           <p>{formatPercentage(topTypeOfActiveDentist.share)} of dentists in {topTypeOfActiveDentist.Geography} County operate out of a private practice and {formatPercentage(recentYearFullTimeDentists.share)} of dentists work full-time.</p>
           <p>In {recentYearGpPediatricDentists.Year}, {formatPercentage(recentYearGpPediatricDentists.share)} of all dentists in {recentYearGpPediatricDentists.Geography} County work in either pediatrics or general practice, with only {formatPercentage(recentYearOtherSpecialtyDentists.share)} practicing a speciality dental field.</p>
-          <p>The following barchart shows the breakdown of dentists who do not work in a private practice.</p>
+          <p>The following chart shows the breakdown of dentists who do not work in a private practice.</p>
         </article>
 
         {/* Draw a BarChart to show data for Types of Active Dentists */}
@@ -126,7 +126,7 @@ class DentistsWorkStatus extends SectionColumns {
             tickFormat: d => formatPercentage(d)
           },
           shapeConfig: {label: false},
-          tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Share", d => formatPercentage(d.share)]]}
         }}
         />
       </SectionColumns>

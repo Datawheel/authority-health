@@ -46,28 +46,27 @@ class Coverage extends SectionColumns {
         <SectionTitle>Coverage</SectionTitle>
         <article>
           <Stat
-            title="Male majority with Coverage"
+            title="Most covered male group"
             year={ageGroupYear}
             value={topMaleAgeGroup}
             qualifier={topMaleShare}
           />
           <Stat
-            title="Female majority with Coverage"
+            title="Most covered female group"
             year={ageGroupYear}
             value={topFemaleAgeGroup}
             qualifier={topFemaleShare}
           />
-          <p>In {ageGroupYear}, the age groups most likely to have health care coverage in {maleCoverageData[0].Geography} are {topMaleAgeGroup} and {topFemaleAgeGroup} years, for men and women respectively.</p>
-          <p>The barchart here shows the male and female age groups with and without Health Insurance Coverage.</p>
+          <p>In {ageGroupYear}, the age groups most likely to have health care coverage in {maleCoverageData[0].Geography} County are {topMaleAgeGroup} and {topFemaleAgeGroup} years, for men and women respectively.</p>
+          <p>The following chart shows the male and female age groups with health insurance coverage.</p>
         </article>
 
         <BarChart config={{
-          data: coverageData,
+          data: filteredRecentYearData,
           discrete: "x",
           height: 400,
-          stacked: true,
           label: d => `${d.Sex} ${d["Health Insurance Coverage Status"]}`,
-          groupBy: d => `${d["Health Insurance Coverage Status"]} ${d.Sex}`,
+          groupBy: ["Health Insurance Coverage Status", "Sex"],
           x: d => d.Age,
           y: "share",
           time: "ID Year",
@@ -80,7 +79,7 @@ class Coverage extends SectionColumns {
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Share", d => formatPercentage(d.share)]]}
         }}
         />
       </SectionColumns>

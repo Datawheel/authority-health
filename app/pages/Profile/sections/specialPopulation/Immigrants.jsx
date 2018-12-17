@@ -14,9 +14,20 @@ const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
 class Immigrants extends SectionColumns {
 
+  constructor(props) {
+    super(props);
+    this.state = {dropdownValue: "Total Immigrants"};
+  }
+
+  // Handler function for dropdown onChange event.
+  handleChange = event => this.setState({dropdownValue: event.target.value});
+
   render() {
 
     const {immigrantsData, immigrantsPovertyData} = this.props;
+    const {dropdownValue} = this.state;
+    const dropdownList = ["Total Immigrants", "Immigrants in Poverty"];
+    const totalImmigrantsSelected = dropdownValue === "Total Immigrants";
 
     // Find the percentage of immigrants for each city and add it to each immigrants object in immigrantsData array.
     nest()
@@ -52,7 +63,7 @@ class Immigrants extends SectionColumns {
           .forEach(place => {
             const total = sum(place.values, d => d.Population);
             place.values.forEach(d => {
-              d.share = d.Population / total * 100;
+              if (d["ID Poverty Status"] === 0) d.share = d.Population / total * 100;
             });
           });
       });
@@ -68,32 +79,47 @@ class Immigrants extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Immigrants</SectionTitle>
         <article>
+          {/* Create a dropdown for total immigrants and immigrants in poverty choices. */}
+          <div className="pt-select pt-fill">
+            <select onChange={this.handleChange}>
+              {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
+            </select>
+          </div>
+
           {/* Show top stats and a short paragraph about it for each Nativity. */}
-          <Stat
-            title="Most Immigrants"
-            year={topImmigrantsData.Year}
-            value={topImmigrantsData.Place}
-            qualifier={formatPopulation(topImmigrantsData.share)}
-          />
-          <Stat
-            title="Most Immigrants in Poverty"
-            year={topPovertyData.Year}
-            value={topPovertyData.Place}
-            qualifier={formatPopulation(topPovertyData.share)}
-          />
-          <p>In {topImmigrantsData.Year}, the highest Immigrant population was {formatPopulation(topImmigrantsData.share)} in the {topImmigrantsData.Place} city. While the highest percentage of Immigrants in poverty was {formatPopulation(topPovertyData.share)} in the {topPovertyData.Place} city in {topPovertyData.Year}.</p>
-          <p>The Geomap here shows the cities with the percentage of Immigrants in each city.</p>
+          {totalImmigrantsSelected
+            ? <div>
+              <Stat
+                title="Most Immigrants"
+                year={topImmigrantsData.Year}
+                value={topImmigrantsData.Place}
+                qualifier={formatPopulation(topImmigrantsData.share)}
+              />
+              <p>In {topImmigrantsData.Year}, the city with the highest Immigrant population was {topImmigrantsData.Place} ({formatPopulation(topImmigrantsData.share)}) compared to {topPovertyData.Place}, which has the most immigrants in poverty ({formatPopulation(topPovertyData.share)}).</p>
+              <p>The map here shows the cities by their percentage of immigrants.</p>
+            </div>
+            : <div>
+              <Stat
+                title="Most Immigrants in Poverty"
+                year={topPovertyData.Year}
+                value={topPovertyData.Place}
+                qualifier={formatPopulation(topPovertyData.share)}
+              />
+              <p>In {topImmigrantsData.Year}, the city with the highest Immigrant population was {topImmigrantsData.Place} ({formatPopulation(topImmigrantsData.share)}) compared to {topPovertyData.Place}, which has the most immigrants in poverty ({formatPopulation(topPovertyData.share)}).</p>
+              <p>The map here shows the cities by their percentage of immigrants in poverty.</p>
+            </div>
+          }
         </article>
 
         <Geomap config={{
-          data: immigrantsData,
+          data: totalImmigrantsSelected ? filteredImmigrantsData : filteredPovertyData,
           groupBy: "ID Place",
           colorScale: "share",
           colorScaleConfig: {axisConfig: {tickFormat: d => formatPopulation(d)}},
           time: "Year",
           label: d => d.Place,
           height: 400,
-          tooltipConfig: {tbody: [["Value", d => formatPopulation(d.share)]]},
+          tooltipConfig: {tbody: [["Type", dropdownValue], ["Share", d => formatPopulation(d.share)]]},
           topojson: "/topojson/place.json",
           topojsonFilter: d => places.includes(d.id)
         }}

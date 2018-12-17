@@ -15,7 +15,7 @@ class DentistsWorkStatus extends SectionColumns {
 
   render() {
 
-    const {dentistsByWorkingHours, dentistsByEmploymentStatus, dentistsBySpecialty, typesOfActiveDentists} = this.props;
+    const {dentistsByWorkingHours, dentistsBySpecialty, typesOfActiveDentists} = this.props;
 
     // Get data for Types of Active Dentists.
     const recentYearTypesOfActiveDentists = {};
@@ -34,22 +34,6 @@ class DentistsWorkStatus extends SectionColumns {
     // Find recent year active dentists data for stats.
     recentYearTypesOfActiveDentists.values.sort((a, b) => b.share - a.share);
     const topTypeOfActiveDentist = recentYearTypesOfActiveDentists.values[0];
-
-    // Get data for dentists by their Employment Status.
-    const recentYearDentistsByEmploymentStatus = {};
-    nest()
-      .key(d => d.Year)
-      .entries(dentistsByEmploymentStatus)
-      .forEach(group => {
-        const total = sum(group.values, d => d["Number of Dentists"]);
-        group.values.forEach(d => d.share = d["Number of Dentists"] / total * 100);
-        group.key >= dentistsByEmploymentStatus[0].Year ? Object.assign(recentYearDentistsByEmploymentStatus, group) : {};
-      });
-    const filteredDentistsEmployementStatus = dentistsByEmploymentStatus.filter(d => d.Status !== "Active" && d.Status !== "Unknown");
-
-    const filteredRecentYearEmployementStatus = recentYearDentistsByEmploymentStatus.values.filter(d => d.Status !== "Active");
-    filteredRecentYearEmployementStatus.sort((a, b) => b.share - a.share);
-    const topDentistsByEmploymentStatus = filteredRecentYearEmployementStatus[0];
 
     // Get data for Dentists by their Specialty.
     const recentYearDentistsBySpeciality = {};
@@ -140,14 +124,12 @@ DentistsWorkStatus.defaultProps = {
 
 DentistsWorkStatus.need = [
   fetchData("dentistsByWorkingHours", "/api/data?measures=Number of Dentists&drilldowns=Hours&Geography=<id>&Year=all", d => d.data),
-  fetchData("dentistsByEmploymentStatus", "/api/data?measures=Number of Dentists&drilldowns=Status&Geography=<id>&Year=all", d => d.data),
   fetchData("dentistsBySpecialty", "/api/data?measures=Number of Dentists&drilldowns=Specialty&Geography=<id>&Year=all", d => d.data),
   fetchData("typesOfActiveDentists", "/api/data?measures=Number of Dentists&drilldowns=Work&Status=Active&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   dentistsByWorkingHours: state.data.dentistsByWorkingHours,
-  dentistsByEmploymentStatus: state.data.dentistsByEmploymentStatus,
   dentistsBySpecialty: state.data.dentistsBySpecialty,
   typesOfActiveDentists: state.data.typesOfActiveDentists
 });

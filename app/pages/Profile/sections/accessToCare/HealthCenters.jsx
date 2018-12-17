@@ -108,7 +108,7 @@ class HealthCenters extends SectionColumns {
                 qualifier={`${topRecentYearDropdownValueData[dropdownValue]} Health Centers`}
               />
               <p>In {topRecentYearDropdownValueData.Year}, the zip code in Wayne County with the most {dropdownValue} was {topRecentYearDropdownValueData["Zip Code"]} ({topRecentYearDropdownValueData[dropdownValue]} health centers).</p>
-              <p> The following map shows the total number of health centers for all zip codes in Wayne County, MI.</p>
+              <p>The following map shows the total number of health centers for all zip codes in Wayne County, MI.</p>
             </div>
             : <div>
               <Stat
@@ -118,7 +118,7 @@ class HealthCenters extends SectionColumns {
                 qualifier={formatPercentage(topRecentYearDropdownValueData[dropdownValue])}
               />
               <p>In {topRecentYearDropdownValueData.Year}, the zip code in Wayne County with the most {formatMeasureName(dropdownValue).toLowerCase()} visiting health centers was {topRecentYearDropdownValueData["Zip Code"]} ({formatPercentage(topRecentYearDropdownValueData[dropdownValue])}).</p>
-              <p> The following map shows the share of {formatMeasureName(dropdownValue).toLowerCase()} visiting health centers for all zip codes in Wayne County, MI.</p>
+              <p>The following map shows the share of {formatMeasureName(dropdownValue).toLowerCase()} visiting health centers for all zip codes in Wayne County, MI.</p>
             </div>
           }
 

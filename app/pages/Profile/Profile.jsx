@@ -18,7 +18,7 @@ import HealthConditonChronicDiseases from "./sections/healthBehaviors/HealthCond
 import PreventiveCare from "./sections/healthBehaviors/PreventiveCare";
 import ObesityAndDiabetes from "./sections/healthBehaviors/ObesityAndDiabetes";
 import DentistsDemographic from "./sections/accessToCare/DentistsDemographic";
-import TypesOfDentists from "./sections/accessToCare/TypesOfDentists";
+import DentistsWorkStatus from "./sections/accessToCare/DentistsWorkStatus";
 import HealthCenters from "./sections/accessToCare/HealthCenters";
 import Coverage from "./sections/accessToCare/Coverage";
 import ChildCare from "./sections/specialPopulation/ChildCare";
@@ -118,7 +118,7 @@ class Profile extends Component {
         <div className="section-container">
           <HealthCenters />
           <DentistsDemographic />
-          <TypesOfDentists />
+          <DentistsWorkStatus />
           <Coverage />
         </div>
 
@@ -204,7 +204,7 @@ Profile.need = [
   PhysicalInactivity,
   HealthCenters,
   DentistsDemographic,
-  TypesOfDentists,
+  DentistsWorkStatus,
   Coverage,
   ChildCare,
   Immigrants,

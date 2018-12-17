@@ -10,6 +10,7 @@ import {MultiSelect} from "@blueprintjs/labs";
 import "@blueprintjs/labs/dist/blueprint-labs.css";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
+import growthCalculator from "../../../../utils/growthCalculator";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -28,10 +29,17 @@ class Cancer extends SectionColumns {
 
   render() {
 
-    const {sortedCancerTypes, occuranceByGender, occuranceByRaceAndEthnicity} = this.props;
+    const {sortedCancerTypes, occuranceByGender, occuranceByRaceAndEthnicity, occuranceRate} = this.props;
     const selectedItems = this.state.selectedItems;
+
     const topOccuranceByRaceAndEthnicity = occuranceByRaceAndEthnicity.sort((a, b) => b["Age-Adjusted Rate"] - a["Age-Adjusted Rate"])[0];
 
+    // Get top 2 recent year OccuranceRate data and find percent growth rate over last year.
+    const mostRecentYearOccuranceRate = occuranceRate[0];
+    const secondMostRecentYearOccuranceRate = occuranceRate[1];
+    const growthRate = growthCalculator(mostRecentYearOccuranceRate["Age-Adjusted Rate"], secondMostRecentYearOccuranceRate["Age-Adjusted Rate"]);
+
+    // Get data to pass to the Multiselect component.
     const filteredCancerTypes = sortedCancerTypes.filter(d => d !== "All Invasive Cancer Sites Combined");
     const items = filteredCancerTypes.map((d, i) => Object.assign({}, {index: i, title: d}));
 
@@ -41,7 +49,6 @@ class Cancer extends SectionColumns {
       <MenuItem
         className={isActive ? Classes.ACTIVE : ""}
         iconName={isItemSelected(item) ? "tick" : "blank"}
-        label={""}
         key={item.index}
         onClick={handleClick}
         text={`${item.title}`}
@@ -176,6 +183,7 @@ class Cancer extends SectionColumns {
 
         <div>
           <h3>Overall Occurance</h3>
+          <p>In {mostRecentYearOccuranceRate.Year}, the cancer rate in {mostRecentYearOccuranceRate.MSA} was {formatPercentage(mostRecentYearOccuranceRate["Age-Adjusted Rate"])}. This represents a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "growth"} from the previous year ({formatPercentage(secondMostRecentYearOccuranceRate["Age-Adjusted Rate"])}).</p>
           <p>The following chart shows the occurance rate per 100,000 people for the selected cancer sites.</p>
           {/* Draw a LinePlot to show age adjusted data for the selected cancer types. */}
           <LinePlot config={{
@@ -218,13 +226,15 @@ Cancer.need = [
     return cancerList;
   }),
   fetchData("occuranceByGender", "/api/data?measures=Age-Adjusted Rate&drilldowns=Sex,MSA&Year=latest", d => d.data),
-  fetchData("occuranceByRaceAndEthnicity", "/api/data?measures=Age-Adjusted Rate&drilldowns=Race,Ethnicity,MSA&Year=latest", d => d.data)
+  fetchData("occuranceByRaceAndEthnicity", "/api/data?measures=Age-Adjusted Rate&drilldowns=Race,Ethnicity,MSA&Year=latest", d => d.data),
+  fetchData("occuranceRate", "/api/data?measures=Age-Adjusted Rate&drilldowns=MSA&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   sortedCancerTypes: state.data.sortedCancerTypes,
   occuranceByGender: state.data.occuranceByGender,
-  occuranceByRaceAndEthnicity: state.data.occuranceByRaceAndEthnicity
+  occuranceByRaceAndEthnicity: state.data.occuranceByRaceAndEthnicity,
+  occuranceRate: state.data.occuranceRate
 });
 
 export default connect(mapStateToProps)(Cancer);

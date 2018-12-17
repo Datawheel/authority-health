@@ -32,6 +32,7 @@ class GrandparentCaregivers extends SectionColumns {
 
     // Find the top data for the most recent year
     const recentYearFilteredData = recentYearData.values.filter(d => d["ID Responsibility Length"] !== 5 && d["ID Responsibility Length"] !== 6);
+    const overallGrandparentsResponsible = recentYearFilteredData.reduce((acc, currValue) => acc + currValue.share, 0);
     recentYearFilteredData.sort((a, b) =>  b.share - a.share);
     const topRecentYearData = recentYearFilteredData[0];
 
@@ -40,17 +41,17 @@ class GrandparentCaregivers extends SectionColumns {
 
     return (
       <SectionColumns>
-        <SectionTitle>Child Care</SectionTitle>
+        <SectionTitle>Grandparent Caregivers</SectionTitle>
         <article>
           {/* Display stats and write short description of the top data for the most recent year */}
           <Stat
-            title="Most common age of grandchildren and Grandparents responsible"
+            title="Most common age group"
             year={recentYearFilteredData[0].Year}
             value={formatAge(topRecentYearData["Responsibility Length"])}
             qualifier={formatPercentage(topRecentYearData.share)}
           />
-          <p>In {topRecentYearData.Year}, {formatPercentage(topRecentYearData.share)} of the grandparents were responsible for their grandchildren. The most common age group of grandchildren was {formatAge(topRecentYearData["Responsibility Length"])} for this location.</p>
-          <p>The Bar Chart here shows the breakdown by age of grandchildren and the percentage of grandparents responsible for their grandchildren.</p>
+          <p>In {topRecentYearData.Year}, {formatPercentage(overallGrandparentsResponsible)} of grandparents in {topRecentYearData.Geography} County were the primary care givers to their grandchildren. The most common age group of grandchildren is {formatAge(topRecentYearData["Responsibility Length"])}.</p>
+          <p>The chart here shows the breakdown by age of grandchildren and the percentage of grandparents responsible for them.</p>
         </article>
 
         {/* Draw a BarChart */}
@@ -70,7 +71,7 @@ class GrandparentCaregivers extends SectionColumns {
           },
           yConfig: {tickFormat: d => formatPercentage(d)},
           shapeConfig: {label: false},
-          tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Share", d => formatPercentage(d.share)]]}
         }}
         />
       </SectionColumns>
@@ -79,11 +80,11 @@ class GrandparentCaregivers extends SectionColumns {
 }
 
 GrandparentCaregivers.defaultProps = {
-  slug: "child-care"
+  slug: "grandparent-caregivers"
 };
 
 GrandparentCaregivers.need = [
-  fetchData("responsibilityData", "/api/data?measures=Population&drilldowns=Responsibility Length&Year=all")
+  fetchData("responsibilityData", "/api/data?measures=Population&drilldowns=Responsibility Length&Geography=<id>&Year=all")
 ];
 
 const mapStateToProps = state => ({

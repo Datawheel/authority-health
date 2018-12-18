@@ -28,7 +28,7 @@ import DomesticPartners from "./sections/specialPopulation/DomesticPartners";
 import DisabilityStatus from "./sections/specialPopulation/DisabilityStatus";
 import Homeless from "./sections/specialPopulation/Homeless";
 import Incarceration from "./sections/specialPopulation/Incarceration";
-import HearingAndVisionDifficulty from "./sections/specialPopulation/HearingAndVisionDifficulty";
+import HearingAndAuditoryDisabilities from "./sections/specialPopulation/HearingAndAuditoryDisabilities";
 import Homeownership from "./sections/builtSocialEnvironment/Homeownership";
 import HouseRentals from "./sections/builtSocialEnvironment/HouseRentals";
 import Transportation from "./sections/builtSocialEnvironment/Transportation";
@@ -133,7 +133,7 @@ class Profile extends Component {
           <Immigrants />
           <DomesticPartners />
           <DisabilityStatus />
-          <HearingAndVisionDifficulty />
+          <HearingAndAuditoryDisabilities />
           <Homeless />
           <Veterans />
           <Incarceration />
@@ -210,7 +210,7 @@ Profile.need = [
   Immigrants,
   DomesticPartners,
   DisabilityStatus,
-  HearingAndVisionDifficulty,
+  HearingAndAuditoryDisabilities,
   Incarceration,
   Veterans,
   Homeless,

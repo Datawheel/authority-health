@@ -12,7 +12,7 @@ import Stat from "../../../../components/Stat";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
-class HearingAndVisionDifficulty extends SectionColumns {
+class HearingAndAuditoryDisabilities extends SectionColumns {
 
   render() {
     const {hearingDifficulty, visionDifficulty} = this.props;
@@ -70,7 +70,7 @@ class HearingAndVisionDifficulty extends SectionColumns {
 
     return (
       <SectionColumns>
-        <SectionTitle>Vision & auditory disabilities</SectionTitle>
+        <SectionTitle>Vision & Auditory Disabilities</SectionTitle>
         <article>
 
           <h3>Vision Difficulty</h3>
@@ -113,7 +113,8 @@ class HearingAndVisionDifficulty extends SectionColumns {
           discrete: "x",
           height: 400,
           stacked: true,
-          label: d => `${d.Sex} with ${d.disabilityType}`,
+          // label: d => `${d.Sex} with ${d.disabilityType}`,
+          label: d => d.disabilityType instanceof Array ? d.Sex : d.disabilityType,
           groupBy: ["disabilityType", "Sex"],
           x: d => d.Age,
           y: "share",
@@ -135,11 +136,11 @@ class HearingAndVisionDifficulty extends SectionColumns {
   }
 }
 
-HearingAndVisionDifficulty.defaultProps = {
-  slug: "hearing-and-vision-difficulty"
+HearingAndAuditoryDisabilities.defaultProps = {
+  slug: "hearing-and-auditory-disabilities"
 };
 
-HearingAndVisionDifficulty.need = [
+HearingAndAuditoryDisabilities.need = [
   fetchData("hearingDifficulty", "/api/data?measures=Population&drilldowns=Hearing Disability Status,Age,Sex&Geography=<id>&Year=all", d => d.data),
   fetchData("visionDifficulty", "/api/data?measures=Population&drilldowns=Vision Disability Status,Age,Sex&Geography=<id>&Year=all", d => d.data)
 ];
@@ -149,4 +150,4 @@ const mapStateToProps = state => ({
   visionDifficulty: state.data.visionDifficulty
 });
 
-export default connect(mapStateToProps)(HearingAndVisionDifficulty);
+export default connect(mapStateToProps)(HearingAndAuditoryDisabilities);

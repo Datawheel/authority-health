@@ -101,7 +101,7 @@ class Cancer extends SectionColumns {
           </MultiSelect>
 
           <h3>By Gender</h3>
-          <p>In {occuranceByGender[0].Year}, the overall prevalence of cancer in {occuranceByGender[0].MSA} for men and women was {formatAbbreviate(occuranceByGender[1]["Age-Adjusted Rate"])} and {formatAbbreviate(occuranceByGender[0]["Age-Adjusted Rate"])} per 100,000 people, respectively.</p>
+          <p>In {occuranceByGender[0].Year}, the overall prevalence of cancer in the {occuranceByGender[0].MSA} for men and women was {formatAbbreviate(occuranceByGender[1]["Age-Adjusted Rate"])} and {formatAbbreviate(occuranceByGender[0]["Age-Adjusted Rate"])} per 100,000 people, respectively.</p>
           <p>The following chart shows the gender breakdowns for the selected cancer sites.</p>
           {/* Draw a mini BarChart to show Cancer by Sex for selected cancer type. */}
           <BarChart config={{
@@ -142,7 +142,7 @@ class Cancer extends SectionColumns {
           />
 
           <h3>By Race & Ethnicity</h3>
-          <p>In {topOccuranceByRaceAndEthnicity.Year}, the race/ethnicity group in {topOccuranceByRaceAndEthnicity.MSA} with the highest overall cancer rate was {topOccuranceByRaceAndEthnicity.Race} {topOccuranceByRaceAndEthnicity.Ethnicity} ({formatAbbreviate(topOccuranceByRaceAndEthnicity["Age-Adjusted Rate"])} per 100,000 people).</p>
+          <p>In {topOccuranceByRaceAndEthnicity.Year}, the race/ethnicity group in the {topOccuranceByRaceAndEthnicity.MSA} with the highest overall cancer rate was {topOccuranceByRaceAndEthnicity.Race} {topOccuranceByRaceAndEthnicity.Ethnicity} ({formatAbbreviate(topOccuranceByRaceAndEthnicity["Age-Adjusted Rate"])} per 100,000 people).</p>
           <p>The following chart shows the race and Ethnicity breakdowns for the selected cancer sites.</p>
           {/* Draw a mini BarChart to show Cancer by Race and Ethnicity for selected cancer type. */}
           <BarChart config={{
@@ -183,7 +183,7 @@ class Cancer extends SectionColumns {
 
         <div>
           <h3>Overall Occurance</h3>
-          <p>In {mostRecentYearOccuranceRate.Year}, the cancer rate in {mostRecentYearOccuranceRate.MSA} was {formatPercentage(mostRecentYearOccuranceRate["Age-Adjusted Rate"])}. This represents a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "growth"} from the previous year ({formatPercentage(secondMostRecentYearOccuranceRate["Age-Adjusted Rate"])}).</p>
+          <p>In {mostRecentYearOccuranceRate.Year}, the cancer rate in the {mostRecentYearOccuranceRate.MSA} was {formatPercentage(mostRecentYearOccuranceRate["Age-Adjusted Rate"])}. This represents a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "growth"} from the previous year ({formatPercentage(secondMostRecentYearOccuranceRate["Age-Adjusted Rate"])}).</p>
           <p>The following chart shows the occurance rate per 100,000 people for the selected cancer sites.</p>
           {/* Draw a LinePlot to show age adjusted data for the selected cancer types. */}
           <LinePlot config={{

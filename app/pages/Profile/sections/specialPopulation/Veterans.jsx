@@ -66,6 +66,7 @@ class Veterans extends SectionColumns {
         group.values.forEach(d => d.share = d.Veterans / total * 100);
         group.key >= veteransEmploymentStatus[0].Year ? Object.assign(recentYearPeriodOfService, group) : {};
       });
+    const filteredPeriodOfService = periodOfService.filter(d => d["Period of Service"] !== "Other");
     recentYearPeriodOfService.values.sort((a, b) => b.share - a.share);
     const topPeriodOfService = recentYearPeriodOfService.values[0];
 
@@ -74,34 +75,35 @@ class Veterans extends SectionColumns {
         <SectionTitle>Veterans</SectionTitle>
         <article>
           <Stat
-            title={"Unemployed Veterans"}
+            title={"Unemployed"}
             year={topEmploymentStatus.Year}
-            value={""}
-            qualifier={formatPercentage(topEmploymentStatus.share)}
+            value={formatPercentage(topEmploymentStatus.share)}
           />
           <Stat
-            title={"Veterans in Poverty"}
+            title={"Impoverished"}
             year={recentYearVeteransInPoverty.Year}
-            value={""}
-            qualifier={formatPercentage(recentYearVeteransInPoverty.share)}
+            value={formatPercentage(recentYearVeteransInPoverty.share)}
           />
           <Stat
-            title={"Veterans With Disability"}
+            title={"Disabled"}
             year={recentYearVeteransWithDisability.Year}
-            value={""}
-            qualifier={formatPercentage(recentYearVeteransWithDisability.share)}
+            value={formatPercentage(recentYearVeteransWithDisability.share)}
           />
           <Stat
-            title={"Top Period of Service"}
+            title={"Most common period of service"}
             year={topPeriodOfService.Year}
             value={topPeriodOfService["Period of Service"]}
             qualifier={formatPercentage(topPeriodOfService.share)}
           />
+
+          <p>In {topPeriodOfService.Year}, the most common period of service by {topPeriodOfService.Geography} veterans was served in {topPeriodOfService["Period of Service"]} ({formatPercentage(topPeriodOfService.share)}).</p>
+          <p>The unemployed veterans population was {formatPercentage(topEmploymentStatus.share)}, while the impoverished population was {formatPercentage(recentYearVeteransInPoverty.share)} and the disabled veterans population was {formatPercentage(recentYearVeteransWithDisability.share)}</p>
+          <p>The chart here shows the period of service by veterans.</p>
         </article>
 
         {/* Draw a BarChart for Veterans Period of Service. */}
         <BarChart config={{
-          data: periodOfService,
+          data: filteredPeriodOfService,
           discrete: "x",
           height: 400,
           groupBy: "Period of Service",
@@ -119,7 +121,7 @@ class Veterans extends SectionColumns {
             title: "Share"
           },
           shapeConfig: {label: false},
-          tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Share", d => formatPercentage(d.share)]]}
         }}
         />
       </SectionColumns>

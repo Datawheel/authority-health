@@ -11,6 +11,7 @@ import rangeFormatter from "../../../../utils/rangeFormatter";
 import Stat from "../../../../components/Stat";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
+const formatDisabilityName = d => d === "visionDifficulty" ? "Vision Difficulty" : "Hearing Difficulty";
 
 class HearingAndAuditoryDisabilities extends SectionColumns {
 
@@ -112,8 +113,7 @@ class HearingAndAuditoryDisabilities extends SectionColumns {
           discrete: "x",
           height: 400,
           stacked: true,
-          // label: d => `${d.Sex} with ${d.disabilityType}`,
-          label: d => d.disabilityType instanceof Array ? d.Sex : d.disabilityType,
+          label: d => d.disabilityType instanceof Array ? d.Sex : formatDisabilityName(d.disabilityType),
           groupBy: ["disabilityType", "Sex"],
           x: d => d.Age,
           y: "share",
@@ -121,13 +121,14 @@ class HearingAndAuditoryDisabilities extends SectionColumns {
           xSort: (a, b) => a["ID Age"] - b["ID Age"],
           xConfig: {
             labelRotation: false,
-            tickFormat: d => rangeFormatter(d)
+            tickFormat: d => rangeFormatter(d),
+            title: "Age distribution"
           },
           yConfig: {tickFormat: d => formatPopulation(d)},
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Value", d => formatPopulation(d.share)]]}
+          tooltipConfig: {tbody: [["Gender", d => d.Sex], ["Share", d => formatPopulation(d.share)]]}
         }}
         />
       </SectionColumns>

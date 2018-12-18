@@ -103,9 +103,8 @@ class HearingAndAuditoryDisabilities extends SectionColumns {
             qualifier={formatPopulation(topFemaleHearingDifficultyData.share)}
           />
 
-          <p>In {topMaleVisionDifficultyData.Year}, the age groups most likely to have difficulty in seeing in the {topMaleVisionDifficultyData.Geography} County are {rangeFormatter(topMaleVisionDifficultyData.Age)} and {rangeFormatter(topFemaleVisionDifficultyData.Age)} years, for men and women respectively.</p>
-          <p>In {topMaleHearingDifficultyData.Year}, the age groups most likely to have difficulty in hearing in the {topMaleHearingDifficultyData.Geography} County are {rangeFormatter(topMaleHearingDifficultyData.Age)} and {rangeFormatter(topFemaleHearingDifficultyData.Age)} years, for men and women respectively.</p>
-          <p>The BarChart here shows the male and female age group percentage with difficulty in hearing and seeing in the current location.</p>
+          <p>In {topMaleVisionDifficultyData.Year}, the age groups most likely to have difficulty in seeing in {topMaleVisionDifficultyData.Geography} County are {rangeFormatter(topMaleVisionDifficultyData.Age)} years and {rangeFormatter(topFemaleVisionDifficultyData.Age)} years for men and women respectively. In comparison, the age groups most likely to have difficulty in hearing are {rangeFormatter(topMaleHearingDifficultyData.Age)} years and {rangeFormatter(topFemaleHearingDifficultyData.Age)} years for men and women respectively.</p>
+          <p>The chart here shows the share of each male and female age group with difficulty in hearing and seeing in {topMaleVisionDifficultyData.Geography} County.</p>
         </article>
 
         <BarChart config={{

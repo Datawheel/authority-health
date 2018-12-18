@@ -104,7 +104,7 @@ class PhysicalInactivity extends SectionColumns {
               yConfig: {
                 ticks: []
               },
-              tooltipConfig: {tbody: [["Condition:", `${formatDropdownChoiceName(dropdownValue)}`], ["Prevalence", d => formatPercentage(d["Adj Percent"])]]}
+              tooltipConfig: {tbody: [["Condition", `${formatDropdownChoiceName(dropdownValue)}`], ["Prevalence", d => formatPercentage(d["Adj Percent"])]]}
             }}
             />
             : null
@@ -123,7 +123,7 @@ class PhysicalInactivity extends SectionColumns {
           },
           height: 400,
           time: "Year",
-          tooltipConfig: {tbody: [["Condition:", `${formatDropdownChoiceName(dropdownValue)}`], ["Prevalence:", d => `${formatPercentage(d[dropdownValue])}`]]},
+          tooltipConfig: {tbody: [["Condition", `${formatDropdownChoiceName(dropdownValue)}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue])}`]]},
           topojson: "/topojson/tract.json",
           topojsonFilter: d => d.id.startsWith("14000US26163")
         }}

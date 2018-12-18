@@ -141,7 +141,7 @@ class HealthCenters extends SectionColumns {
               labelRotation: false
             },
             yConfig: {ticks: []},
-            tooltipConfig: {tbody: [["Share:", d => formatPercentage(d[d.RaceType])]]}
+            tooltipConfig: {tbody: [["Share", d => formatPercentage(d[d.RaceType])]]}
           }}
           />
         </article>
@@ -157,7 +157,7 @@ class HealthCenters extends SectionColumns {
           label: d => d["Zip Code"],
           height: 400,
           time: "Year",
-          tooltipConfig: isHealthCentersSelected ? {tbody: [["Year", d => d.Year], ["Health Centers:", d => d[dropdownValue]]]} : {tbody: [["Year", d => d.Year], ["Usage:", formatMeasureName(dropdownValue)], ["Share:", d => formatPercentage(d[dropdownValue])]]},
+          tooltipConfig: isHealthCentersSelected ? {tbody: [["Year", d => d.Year], ["Health Centers", d => d[dropdownValue]]]} : {tbody: [["Year", d => d.Year], ["Visitor", formatMeasureName(dropdownValue)], ["Share", d => formatPercentage(d[dropdownValue])]]},
           topojson: "/topojson/zipcodes.json",
           topojsonFilter: d => zipcodes.includes(d.properties.ZCTA5CE10),
           topojsonId: d => d.properties.ZCTA5CE10

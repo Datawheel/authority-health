@@ -65,15 +65,16 @@ class Coverage extends SectionColumns {
           data: filteredRecentYearData,
           discrete: "x",
           height: 400,
-          label: d => `${d.Sex} ${d["Health Insurance Coverage Status"]}`,
-          groupBy: ["Health Insurance Coverage Status", "Sex"],
+          label: d => `${d.Sex}`,
+          groupBy: "Sex",
           x: d => d.Age,
           y: "share",
           time: "ID Year",
           xSort: (a, b) => a["ID Age"] - b["ID Age"],
           xConfig: {
             labelRotation: false,
-            tickFormat: d => rangeFormatter(d)
+            tickFormat: d => rangeFormatter(d),
+            title: "Population with Coverage"
           },
           yConfig: {tickFormat: d => formatPercentage(d)},
           shapeConfig: {

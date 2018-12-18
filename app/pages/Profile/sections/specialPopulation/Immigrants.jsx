@@ -119,7 +119,7 @@ class Immigrants extends SectionColumns {
           time: "Year",
           label: d => d.Place,
           height: 400,
-          tooltipConfig: {tbody: [["Type", dropdownValue], ["Share", d => formatPopulation(d.share)]]},
+          tooltipConfig: {tbody: [["Population", dropdownValue], ["Share", d => formatPopulation(d.share)]]},
           topojson: "/topojson/place.json",
           topojsonFilter: d => places.includes(d.id)
         }}

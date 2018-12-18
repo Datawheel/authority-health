@@ -10,27 +10,25 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Stat from "../../../../components/Stat";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
+const formatPartnerLabel = d => d.replace("&", "w/");
 
 class DomesticPartners extends SectionColumns {
 
   render() {
     const {domesticPartnersData} = this.props;
+    const filteredDomesticPartnersData = domesticPartnersData.filter(d => d["ID Sex of Partner"] !== 4);
 
     const recentDomesticPartnersData = {};
     nest()
       .key(d => d.Year)
-      .entries(domesticPartnersData)
+      .entries(filteredDomesticPartnersData)
       .forEach(group => {
         const total = sum(group.values, d => d.Population);
         group.values.forEach(d => d.share = d.Population / total * 100);
-        group.key >= domesticPartnersData[0].Year ? Object.assign(recentDomesticPartnersData, group) : {};
+        group.key >= filteredDomesticPartnersData[0].Year ? Object.assign(recentDomesticPartnersData, group) : {};
       });
-    const data = domesticPartnersData.filter(d => d["ID Sex of Partner"] !== 4);
-
-    // Get the top domestic partners data for most recent year.
-    const topFilteredData = recentDomesticPartnersData.values.filter(d => d["ID Sex of Partner"] !== 4);
-    topFilteredData.sort((a, b) => b["ID Sex of Partner"] - a["ID Sex of Partner"]);
-    const topData = topFilteredData[0];
+    recentDomesticPartnersData.values.sort((a, b) => b.share - a.share);
+    const topData = recentDomesticPartnersData.values[0];
 
     return (
       <SectionColumns>
@@ -38,26 +36,31 @@ class DomesticPartners extends SectionColumns {
         <article>
           {/* Show top stats for each domestic partner type */}
           <Stat
-            title="Top Domestic Partner"
+            title="Most common Partnership"
             year={topData.Year}
-            value={topData["Sex of Partner"]}
+            value={formatPartnerLabel(topData["Sex of Partner"])}
             qualifier={formatPopulation(topData.share)}
           />
-          <p>In {topData.Year}, the top Domestic Partners were {topData["Sex of Partner"]} with {formatPopulation(topData.share)} in the {topData.Geography} County.</p>
-          <p>The Bar Chart here shows the types of domestic partners and corresponding percentage for each type. {}</p>
+          <p>In {topData.Year}, most common domestic partnership in {topData.Geography} County was {formatPartnerLabel(topData["Sex of Partner"]).toLowerCase()} ({formatPopulation(topData.share)}).</p>
+          <p>The chart here shows the types of domestic partners w/ corresponding share for each type. {}</p>
         </article>
 
         {/* BarChart for Domestic Partner types. */}
         <BarChart config={{
-          data,
+          data: filteredDomesticPartnersData,
           discrete: "x",
           height: 400,
           groupBy: "Sex of Partner",
+          label: d => formatPartnerLabel(d["Sex of Partner"]),
           legend: false,
-          x: d => d["Sex of Partner"],
+          x: "Sex of Partner",
           y: "share",
           time: "ID Year",
-          xConfig: {labelRotation: false},
+          xConfig: {
+            labelRotation: false,
+            tickFormat: d => formatPartnerLabel(d),
+            title: "Types of Domestic Partners"
+          },
           yConfig: {tickFormat: d => formatPopulation(d)},
           xSort: (a, b) => a["ID Sex of Partner"] - b["ID Sex of Partner"],
           shapeConfig: {label: false},

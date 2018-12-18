@@ -42,7 +42,7 @@ class DomesticPartners extends SectionColumns {
             qualifier={formatPopulation(topData.share)}
           />
           <p>In {topData.Year}, most common domestic partnership in {topData.Geography} County was {formatPartnerLabel(topData["Sex of Partner"]).toLowerCase()} ({formatPopulation(topData.share)}).</p>
-          <p>The chart here shows the types of domestic partners w/ corresponding share for each type. {}</p>
+          <p>The chart here shows the types of domestic partners and the corresponding share for each type.</p>
         </article>
 
         {/* BarChart for Domestic Partner types. */}

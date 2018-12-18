@@ -2,7 +2,7 @@ import React from "react";
 import {connect} from "react-redux";
 import {sum} from "d3-array";
 import {nest} from "d3-collection";
-import {BarChart, LinePlot} from "d3plus-react";
+import {LinePlot} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
@@ -23,7 +23,8 @@ class Homeless extends SectionColumns {
 
   render() {
 
-    const {typesOfShelteredHomeless, typesOfUnshelteredHomeless, typesOfHomeless} = this.props;
+    const {typesOfShelteredHomeless, typesOfUnshelteredHomeless, typesOfHomeless, totalHomelessData, population} = this.props;
+
     const {dropdownValue} = this.state;
     const dropdownList = ["Sheltered", "Unsheltered"];
     const shelteredSelected = dropdownValue === "Sheltered";
@@ -51,7 +52,7 @@ class Homeless extends SectionColumns {
       });
     recentYearTypesOfUnshelteredHomeless.values.sort((a, b) => b.share - a.share);
     const topUnshelteredHomelessTypes = recentYearTypesOfUnshelteredHomeless.values[0];
-
+    
     // Get data for Homeless types - Sheltered and Unsheltered with their sub-categories.
     const data = [];
     typesOfHomeless.forEach(d => {
@@ -70,8 +71,9 @@ class Homeless extends SectionColumns {
         group.values.forEach(d => d.share = d[d.HomelessType] / total * 100);
         group.key >= data[0].Year ? Object.assign(recentYearTypesOfHomeless, group) : {};
       });
-    recentYearTypesOfHomeless.values.sort((a, b) => b.share - a.share);
-    const topHomelessTypes = recentYearTypesOfHomeless.values[0];
+    const shelteredData = data.filter(d => d.HomelessType === "Sheltered");
+    
+    const totalHomelessPopulation = (totalHomelessData[0].Sheltered + totalHomelessData[0].Unsheltered) / population.data[0].Population * 100;
 
     return (
       <SectionColumns>
@@ -83,47 +85,51 @@ class Homeless extends SectionColumns {
               {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
             </select>
           </div>
+
           {shelteredSelected
             ? <Stat
-              title={"Majority Sheltered Homeless Category"}
+              title={"Most common Sheltered demographic"}
               year={topShelteredHomelessTypes.Year}
               value={topShelteredHomelessTypes.Category}
               qualifier={formatPercentage(topShelteredHomelessTypes.share)}
             />
             : <Stat
-              title={"Majority Unsheltered Homeless Category"}
+              title={"Most common Unsheltered demographic"}
               year={topUnshelteredHomelessTypes.Year}
               value={topUnshelteredHomelessTypes.Category}
               qualifier={formatPercentage(topUnshelteredHomelessTypes.share)}
             />}
           <Stat
-            title={"Majority Homeless Type"}
-            year={topHomelessTypes.Year}
-            value={`${topHomelessTypes.HomelessType} ${topHomelessTypes["Sub-group"]}`}
-            qualifier={formatPercentage(topHomelessTypes.share)}
+            title={"Homeless rate"}
+            year={totalHomelessData[0].Year}
+            value={formatPercentage(totalHomelessPopulation)}
           />
 
-          {/* Draw Barchart for Types of Homeless. */}
-          <BarChart config={{
-            data,
-            discrete: "y",
-            height: 250,
-            stacked: true,
-            groupBy: d => `${d.HomelessType} ${d["Sub-group"]}`,
+          {shelteredSelected
+            ? <p>In {totalHomelessData[0].Year}, {formatPercentage(totalHomelessPopulation)} of the population in {totalHomelessData[0].Geography} was homeless. The most common demographic of {dropdownValue.toLowerCase()} individuals is {topShelteredHomelessTypes.Category.toLowerCase()} ({formatPercentage(topShelteredHomelessTypes.share)}).</p>
+            : <p>In {totalHomelessData[0].Year}, {formatPercentage(totalHomelessPopulation)} of the population in {totalHomelessData[0].Geography} was homeless. The most common demographic of {dropdownValue.toLowerCase()} individuals is {topUnshelteredHomelessTypes.Category.toLowerCase()} ({formatPercentage(topUnshelteredHomelessTypes.share)}).</p>
+          }
+
+          <p>The chart on the right shows different categories of homeless population and the corresponding share for each category.</p>
+          <p>The following chart shows types of sheltered homeless population and the corresponding share for each type.</p>
+
+          {/* Draw a lineplot for sheltered homeless population. */}
+          <LinePlot config={{
+            data: shelteredData,
+            discrete: "x",
+            height: 200,
+            groupBy: "Sub-group",
             legend: false,
-            time: "Year",
-            x: "share",
+            x: "Year",
             xConfig: {
-              labelRotation: false,
-              tickFormat: d => formatPercentage(d),
-              title: "Homeless Population"
+              labelRotation: false
             },
-            y: "HomelessType",
+            y: "share",
             yConfig: {
-              ticks: [],
-              title: "Sheltered and Unsheltered Types"
+              tickFormat: d => formatPercentage(d),
+              title: "Sheltered Population"
             },
-            tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
+            tooltipConfig: {tbody: [["Share", d => formatPercentage(d.share)]]}
           }}
           />
         </article>
@@ -144,7 +150,7 @@ class Homeless extends SectionColumns {
             tickFormat: d => formatPercentage(d),
             title: "Homeless Categories"
           },
-          tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Share", d => formatPercentage(d.share)]]}
         }}
         />
       </SectionColumns>
@@ -159,13 +165,17 @@ Homeless.defaultProps = {
 Homeless.need = [
   fetchData("typesOfShelteredHomeless", "/api/data?measures=Sheltered&drilldowns=Category&Geography=<id>&Year=all", d => d.data),
   fetchData("typesOfUnshelteredHomeless", "/api/data?measures=Unsheltered&drilldowns=Category&Geography=<id>&Year=all", d => d.data),
-  fetchData("typesOfHomeless", "/api/data?measures=Sheltered,Unsheltered&drilldowns=Sub-group&Geography=<id>&Year=all", d => d.data)
+  fetchData("typesOfHomeless", "/api/data?measures=Sheltered,Unsheltered&drilldowns=Sub-group&Geography=<id>&Year=all", d => d.data),
+  fetchData("totalHomelessData", "/api/data?measures=Sheltered,Unsheltered&drilldowns=Group&Geography=<id>&Year=latest", d => d.data),
+  fetchData("population", "https://mammoth.datausa.io/api/data?measures=Population&Geography=<id>&year=latest")
 ];
 
 const mapStateToProps = state => ({
   typesOfShelteredHomeless: state.data.typesOfShelteredHomeless,
   typesOfUnshelteredHomeless: state.data.typesOfUnshelteredHomeless,
-  typesOfHomeless: state.data.typesOfHomeless
+  typesOfHomeless: state.data.typesOfHomeless,
+  totalHomelessData: state.data.totalHomelessData,
+  population: state.data.population
 });
 
 export default connect(mapStateToProps)(Homeless);

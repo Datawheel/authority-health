@@ -30,7 +30,7 @@ import Homeless from "./sections/specialPopulation/Homeless";
 import Incarceration from "./sections/specialPopulation/Incarceration";
 import HearingAndAuditoryDisabilities from "./sections/specialPopulation/HearingAndAuditoryDisabilities";
 import Homeownership from "./sections/builtSocialEnvironment/Homeownership";
-import HouseRentals from "./sections/builtSocialEnvironment/HouseRentals";
+import Rentals from "./sections/builtSocialEnvironment/Rentals";
 import Transportation from "./sections/builtSocialEnvironment/Transportation";
 import Crime from "./sections/builtSocialEnvironment/Crime";
 import DistressScore from "./sections/economy/DistressScore";
@@ -147,7 +147,7 @@ class Profile extends Component {
         </TopicTitle>
         <div className="section-container">
           <Homeownership />
-          <HouseRentals />
+          <Rentals />
           <Transportation />
           <Crime />
         </div>
@@ -215,7 +215,7 @@ Profile.need = [
   Veterans,
   Homeless,
   Homeownership,
-  HouseRentals,
+  Rentals,
   Transportation,
   Crime,
   DistressScore,

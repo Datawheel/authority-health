@@ -9,6 +9,7 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Stat from "../../../../components/Stat";
 import rangeFormatter from "../../../../utils/rangeFormatter";
+import growthCalculator from "../../../../utils/growthCalculator";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -33,32 +34,29 @@ class HouseRentals extends SectionColumns {
     let topIncomeToPayMostRent = recentYearRentersByIncomePercentage.values.sort((a, b) => b.share - a.share);
     topIncomeToPayMostRent = topIncomeToPayMostRent[0];
 
+    const growthRate = growthCalculator(rentAmountData[0]["Rent Amount"], rentAmountData[1]["Rent Amount"]);
+
     return (
       <SectionColumns>
-        <SectionTitle>House Rentals</SectionTitle>
+        <SectionTitle>Rentals</SectionTitle>
         <article>
           {/* Show recent Year Rent amount. */}
           <Stat
-            title="Median Rent Amount"
+            title="Median Rent"
             year={rentAmountData[0].Year}
-            value={rentAmountData[0].Geography}
-            qualifier={`$${formatAbbreviate(rentAmountData[0]["Rent Amount"])}`}
+            value={`$${formatAbbreviate(rentAmountData[0]["Rent Amount"])}/month`}
           />
           {/* Show stats for Renter-Occupied Housing Units with Extra Pay on Utilities for most recent year. */}
           <Stat
-            title="Rental Housing Units with Utilities Included"
+            title="Units with utilities included"
             year={utilitiesData[0].Year}
-            value={utilitiesData[1].Geography}
-            qualifier={`${formatAbbreviate(recentYearNoExtraUtilitiesPercentage)  }%`}
+            value={`${formatPercentage(recentYearNoExtraUtilitiesPercentage)}`}
           />
-          {/* Show stats for Household Income to pay maximum Rent in most recent year. */}
-          <Stat
-            title="Household Income to pay maximum Rent"
-            year={topIncomeToPayMostRent.Year}
-            value={rangeFormatter(topIncomeToPayMostRent["Household Income"])}
-            qualifier={formatPercentage(topIncomeToPayMostRent.share)}
-          />
-          <p>The Barchart on the right shows the Household Income buckets and the percentage of rent paid based on the Household Income.</p>
+
+          <p>In {rentAmountData[0].Year}, the median price for a rental unit in {rentAmountData[0].Geography} County was ${formatAbbreviate(rentAmountData[0]["Rent Amount"])}/month. This is a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "increase"} from the previous year (${formatAbbreviate(rentAmountData[1]["Rent Amount"])}/month).</p>
+          <p>{formatPercentage(recentYearNoExtraUtilitiesPercentage)} of the rental properties in {utilitiesData[0].Geography} County include utilities with the price of rent.</p>
+          <p>The average income bracket for renters in {topIncomeToPayMostRent.Geography} is {rangeFormatter(topIncomeToPayMostRent["Household Income"])} and the following bar chart shows the renter distribution across all income levels.</p>
+          
           {/* Create a LinePlot. */}
           <LinePlot config={{
             data: rentAmountData,
@@ -67,18 +65,14 @@ class HouseRentals extends SectionColumns {
             groupBy: "ID Geography",
             label: d => d.Year,
             x: "Year",
-            xConfig: {
-              title: "Year"
-            },
             y: "Rent Amount",
             yConfig: {
               tickFormat: d => `$${formatAbbreviate(d)}`,
-              title: "Rent Amount"
+              title: "Rent Per Month"
             },
-            tooltipConfig: {tbody: [["Value", d => `$${formatAbbreviate(d["Rent Amount"])}`]]}
+            tooltipConfig: {tbody: [["Share", d => `$${formatAbbreviate(d["Rent Amount"])}`]]}
           }}
           />
-          <p>The LinePlot above shows the Median Rental amount for different years in {rentAmountData[0].Geography}.</p>
         </article>
 
         <BarChart config={{
@@ -98,9 +92,9 @@ class HouseRentals extends SectionColumns {
           },
           yConfig: {
             tickFormat: d => formatPercentage(d),
-            title: "Renters by Income Percentage"},
+            title: "Share of Renters"},
           shapeConfig: {label: false},
-          tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Share", d => formatPercentage(d.share)]]}
         }}
         />
       </SectionColumns>
@@ -109,7 +103,7 @@ class HouseRentals extends SectionColumns {
 }
 
 HouseRentals.defaultProps = {
-  slug: "house-rentals"
+  slug: "rentals"
 };
 
 HouseRentals.need = [

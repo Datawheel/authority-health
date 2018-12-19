@@ -1,23 +1,24 @@
 import React from "react";
 import {connect} from "react-redux";
+import {format} from "d3-format";
 import {sum} from "d3-array";
 import {nest} from "d3-collection";
-import {LinePlot, Geomap} from "d3plus-react";
+import {Geomap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Stat from "../../../../components/Stat";
-const formatPopulation = d => `${formatAbbreviate(d)}%`;
 const formatPropertyValue = d => `$${formatAbbreviate(d)}`;
+const commas = format(",d");
 
 class Homeownership extends SectionColumns {
 
   render() {
 
-    const {occupancyData, medianHousingUnitsValue, constructionDateData} = this.props;
+    const {occupancyData, medianHousingUnitsValueForTracts, medianHousingUnitsValueForProfile, constructionDateData} = this.props;
 
-    // Get the health center data for latest year.
+    // Get occupancy data data for latest year.
     const recentYearOccupancyData = {};
     nest()
       .key(d => d.Year)
@@ -27,75 +28,43 @@ class Homeownership extends SectionColumns {
         group.values.forEach(d => d.share = d["Housing Units"] / total * 100);
         group.key >= occupancyData[0].Year ? Object.assign(recentYearOccupancyData, group) : {};
       });
-
-    // Filter occupancyData to remove vacant houses data.
-    const filteredOccupancyData = occupancyData.filter(d => d["ID Occupancy Status"] === 0);
-
     // Find top Occupancy data for most recent year.
     const recentYearOccupiedHouses = recentYearOccupancyData.values.filter(d => d["ID Occupancy Status"] === 0);
     recentYearOccupiedHouses.sort((a, b) => b.share - a.share);
     const topOccupancyData = recentYearOccupiedHouses[0];
 
     // Find top Median Housing Units value for most recent year.
-    const recentYearHousingValue = {};
+    const recentYearHousingValueForProfile = {};
     nest()
       .key(d => d.Year)
-      .entries(medianHousingUnitsValue)
+      .entries(medianHousingUnitsValueForProfile)
       .forEach(group => {
-        group.key >= medianHousingUnitsValue[0].Year ? Object.assign(recentYearHousingValue, group) : {};
+        group.key >= medianHousingUnitsValueForProfile[0].Year ? Object.assign(recentYearHousingValueForProfile, group) : {};
       });
-    recentYearHousingValue.values.sort((a, b) => b["Property Value"] - a["Property Value"]);
-    const topMedianHousingUnitsValue = recentYearHousingValue.values[0];
+    recentYearHousingValueForProfile.values.sort((a, b) => b["Property Value"] - a["Property Value"]);
+    const topMedianHousingUnitsValueForProfile = recentYearHousingValueForProfile.values[0];
 
     return (
       <SectionColumns>
         <SectionTitle>Homeownership</SectionTitle>
         <article>
           <Stat
-            title="Top median housing value"
-            year={topMedianHousingUnitsValue.Year}
-            value={topMedianHousingUnitsValue.Geography}
-            qualifier={formatAbbreviate(topMedianHousingUnitsValue["Property Value"])}
+            title="Median property value"
+            year={topMedianHousingUnitsValueForProfile.Year}
+            value={`$${commas(topMedianHousingUnitsValueForProfile["Property Value"])}`}
           />
           <Stat
-            title="Maximum occupied housing units"
-            year={topOccupancyData.Year}
-            value={`${topOccupancyData.Geography}`}
-            qualifier={`${formatAbbreviate(topOccupancyData.share)}%`}
-          />
-          <Stat
-            title="Median house construction year"
+            title="Median construction year"
             year={`AS OF ${constructionDateData[0].Year}`}
-            value={`${constructionDateData[0].Geography}`}
-            qualifier={constructionDateData[0]["Construction Date"]}
+            value={constructionDateData[0]["Construction Date"]}
           />
-          <p>The Geomap shows the Median housing units value for each tract in the Wayne County.</p>
-          <p>The LinePlot shows the Occupied housing units in the {topOccupancyData.Geography} County.</p>
-
-          {/* Lineplot to show occupacy status over the years at current location */}
-          <LinePlot config={{
-            data: filteredOccupancyData,
-            discrete: "x",
-            height: 200,
-            groupBy: "Occupancy Status",
-            label: d => d.Year,
-            x: "Year",
-            xConfig: {
-              title: "Year"
-            },
-            y: "share",
-            yConfig: {
-              tickFormat: d => formatPopulation(d),
-              title: "Occupied houses"
-            },
-            tooltipConfig: {tbody: [["Value", d => formatPopulation(d.share)]]}
-          }}
-          />
+          <p>The median property value in {topMedianHousingUnitsValueForProfile.Geography}, as of {topMedianHousingUnitsValueForProfile.Year}, is ${commas(topMedianHousingUnitsValueForProfile["Property Value"])}. {formatAbbreviate(topOccupancyData.share)}% of households in {topOccupancyData.Geography} County were occupied in {topOccupancyData.Year}.</p>
+          <p>The following map shows the median property value for each tract in Wayne County.</p>
         </article>
 
-        {/* Gepmap to show Property Values for all tracts in the Wayne County. */}
+        {/* Geomap to show Property Values for all tracts in the Wayne County. */}
         <Geomap config={{
-          data: medianHousingUnitsValue,
+          data: medianHousingUnitsValueForTracts,
           groupBy: "ID Geography",
           colorScale: "Property Value",
           colorScaleConfig: {
@@ -103,7 +72,7 @@ class Homeownership extends SectionColumns {
           },
           height: 400,
           time: "Year",
-          tooltipConfig: {tbody: [["Value", d => `$${formatAbbreviate(d["Property Value"])}`]]},
+          tooltipConfig: {tbody: [["Share", d => `$${formatAbbreviate(d["Property Value"])}`]]},
           topojson: "/topojson/tract.json",
           topojsonFilter: d => d.id.startsWith("14000US26163")
         }}
@@ -119,13 +88,15 @@ Homeownership.defaultProps = {
 
 Homeownership.need = [
   fetchData("occupancyData", "/api/data?measures=Housing Units&drilldowns=Occupancy Status&Geography=<id>&Year=all", d => d.data),
-  fetchData("medianHousingUnitsValue", "https://mammoth.datausa.io/api/data?measures=Property Value&Year=all&Geography=05000US26163:children", d => d.data),
+  fetchData("medianHousingUnitsValueForTracts", "https://mammoth.datausa.io/api/data?measures=Property Value&Year=all&Geography=05000US26163:children", d => d.data),
+  fetchData("medianHousingUnitsValueForProfile", "https://mammoth.datausa.io/api/data?measures=Property Value&Year=all&Geography=<id>", d => d.data),
   fetchData("constructionDateData", "/api/data?measures=Construction Date&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   occupancyData: state.data.occupancyData,
-  medianHousingUnitsValue: state.data.medianHousingUnitsValue,
+  medianHousingUnitsValueForTracts: state.data.medianHousingUnitsValueForTracts,
+  medianHousingUnitsValueForProfile: state.data.medianHousingUnitsValueForProfile,
   constructionDateData: state.data.constructionDateData
 });
 

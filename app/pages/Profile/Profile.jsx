@@ -32,7 +32,7 @@ import HearingAndAuditoryDisabilities from "./sections/specialPopulation/Hearing
 import Homeownership from "./sections/builtSocialEnvironment/Homeownership";
 import Rentals from "./sections/builtSocialEnvironment/Rentals";
 import Transportation from "./sections/builtSocialEnvironment/Transportation";
-import Crime from "./sections/builtSocialEnvironment/Crime";
+import ViolentAndPropertyCrimes from "./sections/builtSocialEnvironment/ViolentAndPropertyCrimes";
 import DistressScore from "./sections/economy/DistressScore";
 import HouseholdIncomeFromPublicAssistance from "./sections/economy/HouseholdIncomeFromPublicAssistance";
 import WageDistribution from "./sections/economy/WageDistribution";
@@ -149,7 +149,7 @@ class Profile extends Component {
           <Homeownership />
           <Rentals />
           <Transportation />
-          <Crime />
+          <ViolentAndPropertyCrimes />
         </div>
 
         <TopicTitle slug="economy">
@@ -217,7 +217,7 @@ Profile.need = [
   Homeownership,
   Rentals,
   Transportation,
-  Crime,
+  ViolentAndPropertyCrimes,
   DistressScore,
   HouseholdIncomeFromPublicAssistance,
   WageDistribution,

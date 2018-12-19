@@ -14,6 +14,7 @@ const groupings = [
   "SmokingType",
   "Health Insurance coverage:type",
   "Sex",
+  "Gender",
   "Sex of Partner",
   "Responsibility Length",
   "Offense",

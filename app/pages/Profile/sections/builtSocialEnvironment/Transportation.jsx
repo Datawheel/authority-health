@@ -31,6 +31,7 @@ class Transportation extends SectionColumns {
       });
     recentYearNumberOfVehicles.values.sort((a, b) => b.share - a.share);
     const topRecentYearNumberOfVehicles = recentYearNumberOfVehicles.values[0];
+    const topAverageVehiclesPerHousehold = recentYearNumberOfVehicles.values[0].share + recentYearNumberOfVehicles.values[1].share;
 
     // Get data for commute time.
     const recentYearCommuteTime = {};
@@ -63,26 +64,25 @@ class Transportation extends SectionColumns {
         <SectionTitle>Transportation</SectionTitle>
         <article>
           <Stat
-            title="Longest commute time"
+            title="Most common commute"
             year={topRecentYearCommuteTime.Year}
             value={topRecentYearCommuteTime["Travel Time"]}
             qualifier={formatPercentage(topRecentYearCommuteTime.share)}
           />
           <Stat
-            title="Most reported number of vehicles"
-            year={topRecentYearNumberOfVehicles.Year}
-            value={rangeFormatter(topRecentYearNumberOfVehicles["Vehicles Available"])}
-            qualifier={formatPercentage(topRecentYearNumberOfVehicles.share)}
-          />
-          <Stat
-            title="Top means of transportation"
+            title="Most common means of transportation"
             year={topRecentYearModeOfTransport.Year}
             value={topRecentYearModeOfTransport["Transportation Means"]}
             qualifier={formatPercentage(topRecentYearModeOfTransport.share)}
           />
-          <p>The Barchart on the right shows the commute time for Male and Female in the {topRecentYearCommuteTime.Geography}.</p>
-          <p>The Treemap shows the percentages of Modes of Transportation in the {topRecentYearModeOfTransport.Geography}.</p>
-          <p>The Barchart below shows the Number of vehicles in each household and the percentage of Male and Female that owns them.</p>
+          <Stat
+            title="Average vehicles per household"
+            year={topRecentYearNumberOfVehicles.Year}
+            value={rangeFormatter(topRecentYearNumberOfVehicles["Vehicles Available"])}
+            qualifier={formatPercentage(topAverageVehiclesPerHousehold)}
+          />
+          <p>As of {topRecentYearCommuteTime.Year}, most of the workforce living in {topRecentYearCommuteTime.Geography} has a {topRecentYearCommuteTime["Travel Time"].toLowerCase()} commute ({formatPercentage(topRecentYearCommuteTime.share)}). The majority of commuters {topRecentYearModeOfTransport["Transportation Means"].toLowerCase()} to work ({formatPercentage(topRecentYearModeOfTransport.share)}).</p>
+          <p>The following charts show the distribution of commute times, access to cars by gender, and share of commute means.</p>
 
           {/* Draw a Barchart for Number of vehicles in each household. */}
           <BarChart config={{
@@ -99,11 +99,14 @@ class Transportation extends SectionColumns {
               tickFormat: d => rangeFormatter(d),
               title: "Number of Vehicles"
             },
-            yConfig: {tickFormat: d => formatPercentage(d)},
+            yConfig: {
+              tickFormat: d => formatPercentage(d),
+              title: "Share"
+            },
             shapeConfig: {
               label: false
             },
-            tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
+            tooltipConfig: {tbody: [["Share", d => formatPercentage(d.share)]]}
           }}
           />
         </article>
@@ -121,13 +124,13 @@ class Transportation extends SectionColumns {
           xSort: (a, b) => a["ID Travel Time"] - b["ID Travel Time"],
           xConfig: {
             tickFormat: d => filterTimeBucket(d),
-            title: "Commute Time in minutes"
+            title: "Commute Time in Minutes"
           },
           yConfig: {
             tickFormat: d => formatPercentage(d),
-            title: "Commute time percentage"
+            title: "Share"
           },
-          tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Share", d => formatPercentage(d.share)]]}
         }}
         />
 
@@ -140,7 +143,7 @@ class Transportation extends SectionColumns {
           groupBy: "Transportation Means",
           time: "ID Year",
           title: "Means of Transportation",
-          tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Share", d => formatPercentage(d.share)]]}
         }}
         />
       </SectionColumns>

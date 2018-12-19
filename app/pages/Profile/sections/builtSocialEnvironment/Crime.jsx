@@ -4,6 +4,7 @@ import {sum} from "d3-array";
 import {nest} from "d3-collection";
 import {BarChart} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
+import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -52,25 +53,24 @@ class Crime extends SectionColumns {
 
     return (
       <SectionColumns>
-        <SectionTitle>Crime</SectionTitle>
+        <SectionTitle>Violent and Property Crimes</SectionTitle>
         <article>
 
-          {/* Show a Stats and a short paragraph for each type of crime based on the dropdown value. */}
+          {/* Show stats and short paragraph for each type of crime based on the dropdown value. */}
           <Stat
             title="Top Violent Crime"
             year={topRecentYearViolentCrime.Year}
-            value={topRecentYearViolentCrime.Crime}
+            value={titleCase(topRecentYearViolentCrime.Crime)}
             qualifier={formatPercentage(topRecentYearViolentCrime.share)}
           />
           <Stat
             title="Top Property Crime"
             year={topRecentYearPropertyCrime.Year}
-            value={topRecentYearPropertyCrime.Crime}
+            value={titleCase(topRecentYearPropertyCrime.Crime)}
             qualifier={formatPercentage(topRecentYearPropertyCrime.share)}
           />
-          <p>The Barchart here shows data for different types of Property and Violent Crimes.</p>
-          <p>In {topRecentYearViolentCrime.Year}, {topRecentYearViolentCrime.Crime} had the highest rate Violent crime of ${formatPercentage(topRecentYearViolentCrime.share)} at the current location.</p>
-          <p>In {topRecentYearPropertyCrime.Year}, {topRecentYearPropertyCrime.Crime} had the highest rate Property crime of ${formatPercentage(topRecentYearPropertyCrime.share)} at the current location.</p>
+          <p>In {topRecentYearViolentCrime.Year}, the most common violent crime in {topRecentYearViolentCrime.Geography} County was {topRecentYearViolentCrime.Crime.toLowerCase()} ({formatPercentage(topRecentYearViolentCrime.share)}), and the most common property crime was {topRecentYearPropertyCrime.Crime.toLowerCase()} ({formatPercentage(topRecentYearPropertyCrime.share)}).</p>
+          <p>The following chart shows the distribution for the different types of property and violent crimes.</p>
 
         </article>
 
@@ -85,8 +85,8 @@ class Crime extends SectionColumns {
           y: "share",
           time: "ID Year",
           xConfig: {
-            labelRotation: false,
-            title: "Types of Crimes"
+            tickFormat: d => titleCase(d),
+            labelRotation: false
           },
           yConfig: {
             tickFormat: d => formatPercentage(d),
@@ -96,7 +96,7 @@ class Crime extends SectionColumns {
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Share", d => formatPercentage(d.share)]]}
         }}
         />
       </SectionColumns>
@@ -105,7 +105,7 @@ class Crime extends SectionColumns {
 }
 
 Crime.defaultProps = {
-  slug: "crime"
+  slug: "violent-and-property-crimes"
 };
 
 Crime.need = [

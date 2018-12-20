@@ -17,6 +17,7 @@ const formatName = d => {
 const formatRaceNames = d => d.split(" ").slice(1).join();
 
 const formatPercentage = d => `${formatAbbreviate(d * 100)}%`;
+
 const formatMeasureName = d => {
   if (d === "Health Centers") return d;
   const nameArr = d.split(" ");

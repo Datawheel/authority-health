@@ -11,8 +11,12 @@ import Stat from "../../../../components/Stat";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 const formatLabel = d => {
-  const nameArr = d.split(" ");
-  return nameArr.reduce((acc, currValue, i) => i === 0 || i === 1 ? "" : acc.concat(`${currValue} `), " ");
+  const newStr = d.replace("Enrolled In ", "");
+  if (newStr.includes("To Grade")) return newStr.replace("To Grade", "-");
+  if (newStr === "Nursery School, Preschool") return "Preschool";
+  if (newStr === "College Undergraduate Years") return "Undergraduate";
+  if (newStr === "Graduate Or Professional School") return "Graduate";
+  return newStr;
 };
 
 class StudentPoverty extends SectionColumns {
@@ -49,19 +53,18 @@ class StudentPoverty extends SectionColumns {
         <article>
           {/* Top stats about Level Of School. */}
           <Stat
-            title="Top Level Of School"
+            title="Most impoverished level"
             year={topLevelOfSchoolData.Year}
             value={topLevelOfSchoolData["Level of School"]}
             qualifier={formatPopulation(topLevelOfSchoolData.share)}
           />
           <Stat
-            title={"Population Enrolled In School"}
+            title={"Enrolled Population"}
             year={topLevelOfSchoolData.Year}
-            value={""}
-            qualifier={formatPopulation(recentYearEnrolledInSchoolPercentage)}
+            value={formatPopulation(recentYearEnrolledInSchoolPercentage)}
           />
-          <p>In {topLevelOfSchoolData.Year}, students in poverty who attended most level of school in {topLevelOfSchoolData.Geography} County were {topLevelOfSchoolData["Level of School"]} with the share of {formatPopulation(topLevelOfSchoolData.share)}</p>
-          <p>In {topLevelOfSchoolData.Year}, {formatPopulation(recentYearEnrolledInSchoolPercentage)} of the total population had enrolled in school in the {topLevelOfSchoolData.Geography} county, MI.</p>
+          <p>In {topLevelOfSchoolData.Year}, the most common education level of students in {topLevelOfSchoolData.Geography} County living in poverty were {topLevelOfSchoolData["Level of School"].toLowerCase()} ({formatPopulation(topLevelOfSchoolData.share)}) and {formatPopulation(recentYearEnrolledInSchoolPercentage)} of the total population was enrolled in school in {topLevelOfSchoolData.Geography} County.</p>
+          <p>The following chart shows the level of school and the share of population in poverty that were enrolled in school.</p>
         </article>
 
         {/* Draw a Barchart to show Level Of School for students in poverty. */}
@@ -80,11 +83,14 @@ class StudentPoverty extends SectionColumns {
             labelRotation: false,
             tickFormat: d => formatLabel(d)
           },
-          yConfig: {tickFormat: d => formatPopulation(d)},
+          yConfig: {
+            tickFormat: d => formatPopulation(d),
+            title: "Share"
+          },
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Value", d => formatPopulation(d.share)]]}
+          tooltipConfig: {tbody: [["Share", d => formatPopulation(d.share)]]}
         }}
         />
       </SectionColumns>

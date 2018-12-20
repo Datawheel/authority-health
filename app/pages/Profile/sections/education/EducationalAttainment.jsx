@@ -11,10 +11,21 @@ import Stat from "../../../../components/Stat";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
+const formatLabels = d => {
+  if (d === "No Schooling Completed") return "No Schooling";
+  if (d === "12th Grade, No Diploma") return "12th Grade";
+  if (d === "High School Graduate (includes Equivalency)") return "High School";
+  if (d === "Some College, Less Than 1 Year") return "Some College, < 1 Year";
+  if (d === "Some College, 1 Or More Years, No Degree") return "Some College, > 1 Year";
+  if (d === "Professional School Degree") return "Professional Degree";
+  return d;
+};
+
 class EducationalAttainment extends SectionColumns {
 
   render() {
-    const {educationalAttainmentData, highSchoolDropoutRate} = this.props;
+
+    const {educationalAttainmentData} = this.props;
 
     // Format data for public Assistance data.
     const recentYearEducationalAttainment = {};
@@ -31,30 +42,19 @@ class EducationalAttainment extends SectionColumns {
     recentYearEducationalAttainment.values.sort((a, b) => b.share - a.share);
     const topEducationalAttainment = recentYearEducationalAttainment.values[0];
 
-    // Find top High School DropoutRate for the recent year.
-    highSchoolDropoutRate.sort((a, b) => b["High School Dropout Rate"] - a["High School Dropout Rate"]);
-    const topDropoutRate = highSchoolDropoutRate[0];
-
     return (
       <SectionColumns>
         <SectionTitle>Educational Attainment</SectionTitle>
         <article>
-          {/* Top stats about top Educational Attainment. */}
+          {/* Stats about top Educational Attainment. */}
           <Stat
-            title="Top Educational attainment"
+            title="Most common education level"
             year={topEducationalAttainment.Year}
             value={topEducationalAttainment["Educational Attainment"]}
             qualifier={formatPopulation(topEducationalAttainment.share)}
           />
-          {/* Top stats about High School Dropout Rate. */}
-          <Stat
-            title="Top High School dropout rate"
-            year={topDropoutRate.Year}
-            value={topDropoutRate["Zip Code"]}
-            qualifier={formatPopulation(topDropoutRate["High School Dropout Rate"])}
-          />
-          <p>In {topEducationalAttainment.Year}, the highest Education attained was {topEducationalAttainment["Educational Attainment"]} with the share of {formatPopulation(topEducationalAttainment.share)}.</p>
-          <p>In {topDropoutRate.Year}, the top high school dropout rate was {formatPopulation(topDropoutRate["High School Dropout Rate"])} in the zip code {topDropoutRate["Zip Code"]}.</p>
+          <p>In {topEducationalAttainment.Year}, the most common education level attained in {topEducationalAttainment.Geography} County was {topEducationalAttainment["Educational Attainment"].toLowerCase()} with a share of {formatPopulation(topEducationalAttainment.share)}.</p>
+          <p>The following chart shows the education attainment for male and female in {topEducationalAttainment.Geography} County.</p>
         </article>
 
         {/* Draw a Barchart to show Educational Attainment for all types of education buckets. */}
@@ -62,18 +62,19 @@ class EducationalAttainment extends SectionColumns {
           data: educationalAttainmentData,
           discrete: "x",
           height: 400,
-          legend: false,
-          label: d => `${d.Sex} - ${d["Educational Attainment"]}`,
+          legend: true,
+          label: d => `${d.Sex}`,
           groupBy: "Sex",
           x: "Educational Attainment",
           y: "share",
           time: "ID Year",
           xSort: (a, b) => a["ID Educational Attainment"] - b["ID Educational Attainment"],
+          xConfig: {tickFormat: d => formatLabels(d)},
           yConfig: {tickFormat: d => formatPopulation(d)},
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Value", d => formatPopulation(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)]]}
         }}
         />
       </SectionColumns>

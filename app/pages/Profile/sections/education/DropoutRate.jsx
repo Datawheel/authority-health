@@ -15,7 +15,6 @@ class DropoutRate extends SectionColumns {
   render() {
 
     const {highSchoolDropoutRate} =  this.props;
-    console.log("highSchoolDropoutRate: ", highSchoolDropoutRate);
 
     // Find top High School DropoutRate for the recent year.
     highSchoolDropoutRate.sort((a, b) => b["High School Dropout Rate"] - a["High School Dropout Rate"]);
@@ -36,7 +35,7 @@ class DropoutRate extends SectionColumns {
           <p>The following map shows the dropout rate for zip codes in Wayne County.</p>
         </article>
 
-        {/* Draw Geomap to show health center count for each zip code in the Wayne county */}
+        {/* Draw Geomap to show dropout rate for each zip code in the Wayne county */}
         <Geomap config={{
           data: highSchoolDropoutRate,
           groupBy: "Zip Code",

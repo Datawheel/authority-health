@@ -14,48 +14,81 @@ const formatPercentage = d => `${formatAbbreviate(d)}%`;
 class Incarceration extends SectionColumns {
 
   render() {
-    const {incarcerationData} = this.props;
+    const {incarcerationData, allOffenceData, allPunishmentData} = this.props;
 
     // Format data for Incarceration data Barchart and stats.
     const data = [];
     incarcerationData.data.forEach(d => {
-      incarcerationData.source[0].measures.forEach(incarcerationType => {
-        if (d[incarcerationType] !== null) {
-          data.push(Object.assign({}, d, {IncarcerationType: incarcerationType}));
+      incarcerationData.source[0].measures.forEach(punishment => {
+        if (d[punishment] !== null) {
+          data.push(Object.assign({}, d, {Punishment: punishment}));
         }
       });
     });
 
+    // Filter "Total" from the Incarceration data.
+    const filteredData = data.filter(d => d.Punishment !== "Total");
     const recentYearIncarcerationData = {};
     nest()
       .key(d => d.Year)
-      .entries(data)
+      .entries(filteredData)
       .forEach(group => {
-        const total = sum(group.values, d => d[d.IncarcerationType]);
-        group.values.forEach(d => d.share = d[d.IncarcerationType] / total * 100);
+        const total = sum(group.values, d => d[d.Punishment]);
+        group.values.forEach(d => d.share = d[d.Punishment] / total * 100);
         group.key >= data[0].Year ? Object.assign(recentYearIncarcerationData, group) : {};
       });
-
-    // Filter "Total" from the Incarceration data.
-    const filteredData = data.filter(d => d.IncarcerationType !== "Total");
-
     // Find top recent year Incarceration data.
-    const filteredRecentYearData = recentYearIncarcerationData.values.filter(d => d.IncarcerationType !== "Total");
+    const filteredRecentYearData = recentYearIncarcerationData.values;
     const sortedData = filteredRecentYearData.sort((a, b) => b.share - a.share);
     const topIncarcerationData = sortedData[0];
+
+    // Find top most offence for recent year.
+    nest()
+      .key(d => d.Year)
+      .entries(allOffenceData)
+      .forEach(group => {
+        const total = sum(group.values, d => d.Total);
+        group.values.forEach(d => d.share = d.Total / total * 100);
+      });
+    allOffenceData.sort((a, b) => b.share - a.share);
+    const topOffenceData = allOffenceData[0];
+
+    // Find top most Punishment data.
+    const punishmentdata = [];
+    allPunishmentData.data.forEach(d => {
+      allPunishmentData.source[0].measures.forEach(punishment => {
+        if (d[punishment] !== null) {
+          punishmentdata.push(Object.assign({}, d, {Punishment: punishment}));
+        }
+      });
+    });
+    nest()
+      .key(d => d.Punishment)
+      .entries(punishmentdata)
+      .forEach(group => {
+        group.values.forEach(d => d.share = d[d.Punishment] / d.Total * 100);
+      });
+    const filteredPunishmetData = punishmentdata.filter(d => d.Punishment !== "Total");
+    const topPunishmentData = filteredPunishmetData.sort((a, b) => b.share - a.share)[0];
 
     return (
       <SectionColumns>
         <SectionTitle>Incarceration</SectionTitle>
         <article>
           <Stat
-            title="Top Incarceration value"
-            year={topIncarcerationData.Year}
-            value={`${topIncarcerationData.IncarcerationType}: ${topIncarcerationData.Offense}`}
-            qualifier={formatPercentage(topIncarcerationData.share)}
+            title="Most common crime"
+            year={topOffenceData.Year}
+            value={`${topOffenceData.Offense}`}
+            qualifier={formatPercentage(topOffenceData.share)}
           />
-          <p>The Barchart here shows the types of Offenses for each Incarceration type.</p>
-          <p>In {topIncarcerationData.Year}, the top Incarceration type was {topIncarcerationData.IncarcerationType} for {topIncarcerationData.Offense} with the share of {formatPercentage(topIncarcerationData.share)}.</p>
+          <Stat
+            title="Most common punishment"
+            year={topPunishmentData.Year}
+            value={`${topPunishmentData.Punishment}`}
+            qualifier={formatPercentage(topPunishmentData.share)}
+          />
+          <p>In {topIncarcerationData.Year}, the most common crime in {topIncarcerationData.Geography} County was {topOffenceData.Offense.toLowerCase()} ({formatPercentage(topOffenceData.share)}) and the most common punishment was {topPunishmentData.Punishment.toLowerCase()} ({formatPercentage(topPunishmentData.share)}).</p>
+          <p>The chart here shows the types of offenses for each incarceration type.</p>
         </article>
 
         {/* Draw a Barchart to show Incarceration data. */}
@@ -64,10 +97,9 @@ class Incarceration extends SectionColumns {
           discrete: "x",
           height: 400,
           stacked: true,
-          legend: false,
-          label: d => ` ${d.IncarcerationType}: ${d.Offense}`,
+          label: d => `${d.Offense}`,
           groupBy: "Offense",
-          x: "IncarcerationType",
+          x: "Punishment",
           y: "share",
           time: "ID Year",
           yConfig: {tickFormat: d => formatPercentage(d)},
@@ -75,7 +107,7 @@ class Incarceration extends SectionColumns {
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Share", d => formatPercentage(d.share)]]}
         }}
         />
       </SectionColumns>
@@ -88,11 +120,15 @@ Incarceration.defaultProps = {
 };
 
 Incarceration.need = [
-  fetchData("incarcerationData", "/api/data?measures=Total,Prison,Jail,Jail/Probation,Probation,Other&drilldowns=Offense&Year=all")
+  fetchData("incarcerationData", "/api/data?measures=Total,Prison,Jail,Jail/Probation,Probation,Other&drilldowns=Offense&Geography=<id>&Year=all"),
+  fetchData("allOffenceData", "/api/data?measures=Total&drilldowns=Offense&Geography=<id>&Year=latest", d => d.data),
+  fetchData("allPunishmentData", "/api/data?measures=Total,Prison,Jail,Jail/Probation,Probation,Other&Geography=<id>&Year=latest")
 ];
 
 const mapStateToProps = state => ({
-  incarcerationData: state.data.incarcerationData
+  incarcerationData: state.data.incarcerationData,
+  allOffenceData: state.data.allOffenceData,
+  allPunishmentData: state.data.allPunishmentData
 });
 
 export default connect(mapStateToProps)(Incarceration);

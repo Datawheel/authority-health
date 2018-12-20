@@ -27,8 +27,8 @@ class DistressScore extends SectionColumns {
             value={topDistressScoreData["Zip Code"]}
             qualifier={`${formatAbbreviate(topDistressScoreData["Distress Score"])} percentile`}
           />
-          <p>The Geomap here shows the Distress Score percentile for each Zip code in the Wayne County, MI.</p>
-          <p>The maximum Distress Score was observed in the zip code {topDistressScoreData["Zip Code"]} with {formatAbbreviate(topDistressScoreData["Distress Score"])} percentile in the year {topDistressScoreData.Year}.</p>
+          <p>The maximum distress score was observed in the zip code {topDistressScoreData["Zip Code"]} with {formatAbbreviate(topDistressScoreData["Distress Score"])} percentile in the year {topDistressScoreData.Year}.</p>
+          <p>The following map shows the distress score percentile for each zip code in Wayne County, MI.</p>
         </article>
 
         {/* Draw Geomap to show distress scores for each zip code in the Wayne county. */}
@@ -37,7 +37,7 @@ class DistressScore extends SectionColumns {
           groupBy: "ID Zip Code",
           colorScale: "Distress Score",
           height: 400,
-          tooltipConfig: {tbody: [["Value", d => formatAbbreviate(d["Distress Score"])]]},
+          tooltipConfig: {tbody: [["Share", d => formatAbbreviate(d["Distress Score"])]]},
           topojson: "/topojson/zipcodes.json",
           topojsonFilter: d => zipcodes.includes(d.properties.ZCTA5CE10),
           topojsonId: d => d.properties.ZCTA5CE10

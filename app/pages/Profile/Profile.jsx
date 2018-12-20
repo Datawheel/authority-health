@@ -38,6 +38,7 @@ import HouseholdIncomeFromPublicAssistance from "./sections/economy/HouseholdInc
 import WageDistribution from "./sections/economy/WageDistribution";
 import Poverty from "./sections/economy/Poverty";
 import EducationalAttainment from "./sections/education/EducationalAttainment";
+import DropoutRate from "./sections/education/DropoutRate";
 import StudentPoverty from "./sections/education/StudentPoverty";
 import ReadingAssessment from "./sections/education/ReadingAssessment";
 import WaterQuality from "./sections/naturalEnvironment/WaterQuality";
@@ -173,6 +174,7 @@ class Profile extends Component {
         </TopicTitle>
         <div className="section-container">
           <EducationalAttainment />
+          <DropoutRate />
           <StudentPoverty />
           <ReadingAssessment />
         </div>
@@ -223,6 +225,7 @@ Profile.need = [
   WageDistribution,
   Poverty,
   EducationalAttainment,
+  DropoutRate,
   StudentPoverty,
   ReadingAssessment,
   WaterQuality,

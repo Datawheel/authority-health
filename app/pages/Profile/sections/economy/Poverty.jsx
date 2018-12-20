@@ -59,50 +59,30 @@ class Poverty extends SectionColumns {
     const femalePovertyData = recentYearPovertyByAgeAndGenderFiltered.filter(d => d.Gender === "Female").sort((a, b) => b.share - a.share);
     const topFemalePovertyData = femalePovertyData[0];
 
-    // Get Income To Poverty Level Ratio
-    const recentYearIncomeToPovertyLevelRatio = {};
-    nest()
-      .key(d => d.Year)
-      .entries(incomeToPovertyLevelRatio)
-      .forEach(group => {
-        const total = sum(group.values, d => d.Population);
-        group.values.forEach(d => d.share = d.Population / total * 100);
-        group.key >= incomeToPovertyLevelRatio[0].Year ? Object.assign(recentYearIncomeToPovertyLevelRatio, group) : {};
-      });
-
-    // Find recent year top stats
-    recentYearIncomeToPovertyLevelRatio.values.sort((a, b) => b.share - a.share);
-    const topIncomeToPovertyLevelRatio = recentYearIncomeToPovertyLevelRatio.values[0];
-
     return (
       <SectionColumns>
         <SectionTitle>Poverty</SectionTitle>
         <article>
           <Stat
-            title="Majority race below poverty"
+            title="Most common race"
             year={topPovertyByRace.Year}
             value={topPovertyByRace.Race}
             qualifier={formatPopulation(topPovertyByRace.share)}
           />
           <Stat
-            title="Male poverty majority"
+            title="Most common male age"
             year={topMalePovertyData.Year}
             value={topMalePovertyData.Age}
             qualifier={formatPopulation(topMalePovertyData.share)}
           />
           <Stat
-            title="Female poverty majority"
+            title="Most common female age"
             year={topFemalePovertyData.Year}
             value={topFemalePovertyData.Age}
             qualifier={formatPopulation(topFemalePovertyData.share)}
           />
-          <Stat
-            title="Top Income To Poverty Level Ratio"
-            year={topIncomeToPovertyLevelRatio.Year}
-            value={topIncomeToPovertyLevelRatio["Ratio of Income to Poverty Level"]}
-            qualifier={formatPopulation(topIncomeToPovertyLevelRatio.share)}
-          />
-          <p>The mini barchart here shows the population below poverty level in the {topPovertyByRace.Geography}. In {topPovertyByRace.Year}, the majority race in poverty was {topPovertyByRace.Race} with {formatPopulation(topPovertyByRace.share)} of the total population in the {topPovertyByRace.Geography}.</p>
+          <p>In {topPovertyByRace.Year}, most common male age in poverty was {topMalePovertyData.Age.toLowerCase()} ({formatPopulation(topMalePovertyData.share)}) while most common female age was {topFemalePovertyData.Age.toLowerCase()} ({formatPopulation(topFemalePovertyData.share)}) in {topFemalePovertyData.Geography}. The chart on the right shows male and female age distribution in poverty.</p>
+          <p>In {topPovertyByRace.Year}, the majority race in poverty was {topPovertyByRace.Race} ({formatPopulation(topPovertyByRace.share)}) of the total population in {topPovertyByRace.Geography}. The following chart shows the population in poverty by race.</p>
 
           <BarChart config={{
             data: filterDataBelowPovertyByRace,
@@ -116,14 +96,13 @@ class Poverty extends SectionColumns {
             label: d => d.Race,
             ySort: (a, b) => a["ID Race"] - b["ID Race"],
             yConfig: {
-              ticks: [],
-              title: "Poverty by Race"
+              ticks: []
             },
             xConfig: {
               tickFormat: d => formatPopulation(d),
-              title: "Population below poverty"
+              title: "Population Below Poverty"
             },
-            tooltipConfig: {tbody: [["Value", d => formatPopulation(d.share)]]}
+            tooltipConfig: {tbody: [["Share", d => formatPopulation(d.share)]]}
           }}
           />
         </article>
@@ -139,38 +118,16 @@ class Poverty extends SectionColumns {
           xSort: (a, b) => a["ID Age"] - b["ID Age"],
           xConfig: {
             labelRotation: false,
-            tickFormat: d => rangeFormatter(d),
-            title: "Age Buckets in years"
+            tickFormat: d => rangeFormatter(d)
           },
           yConfig: {
             tickFormat: d => formatPopulation(d),
-            title: "Population below poverty level"
+            title: "Population Below Poverty Level"
           },
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Value", d => formatPopulation(d.share)]]}
-        }}
-        />
-        <BarChart config={{
-          data: incomeToPovertyLevelRatio,
-          discrete: "x",
-          height: 400,
-          groupBy: "Ratio of Income to Poverty Level",
-          legend: false,
-          x: "Ratio of Income to Poverty Level",
-          y: "share",
-          time: "ID Year",
-          label: false,
-          xSort: (a, b) => a["ID Ratio of Income to Poverty Level"] - b["ID Ratio of Income to Poverty Level"],
-          xConfig: {
-            title: "Income to Poverty Level ratio"
-          },
-          yConfig: {
-            tickFormat: d => formatPopulation(d),
-            title: "Population"
-          },
-          tooltipConfig: {tbody: [["Value", d => formatPopulation(d.share)]]}
+          tooltipConfig: {tbody: [["Age", d => d.Age], ["Share", d => formatPopulation(d.share)]]}
         }}
         />
       </SectionColumns>

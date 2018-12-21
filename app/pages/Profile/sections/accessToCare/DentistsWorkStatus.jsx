@@ -110,7 +110,7 @@ class DentistsWorkStatus extends SectionColumns {
             tickFormat: d => formatPercentage(d)
           },
           shapeConfig: {label: false},
-          tooltipConfig: {tbody: [["Share", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]}
         }}
         />
       </SectionColumns>

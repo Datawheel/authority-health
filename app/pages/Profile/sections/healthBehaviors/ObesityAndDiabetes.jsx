@@ -172,7 +172,7 @@ class ObesityAndDiabetes extends SectionColumns {
             yConfig: {
               ticks: []
             },
-            tooltipConfig: isHealthyWeightSelected ? {tbody: [["Condition", `${dropdownValue}`], ["Share", d => formatPercentage(d["Adj Percent"])]]} : {tbody: [["Condition", `${dropdownValue}`], ["Prevalence", d => formatPercentage(d["Adj Percent"])]]}
+            tooltipConfig: isHealthyWeightSelected ? {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Share", d => formatPercentage(d["Adj Percent"])]]} : {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Prevalence", d => formatPercentage(d["Adj Percent"])]]}
           }}
           />
         </article>
@@ -189,7 +189,7 @@ class ObesityAndDiabetes extends SectionColumns {
             label: d => d.County,
             height: 400,
             time: "End Year",
-            tooltipConfig: isHealthyWeightSelected ? {tbody: [["Condition", `${dropdownValue}`], ["Share", d => `${formatPercentage(d[dropdownValue])}`]]} : {tbody: [["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue])}`]]},
+            tooltipConfig: isHealthyWeightSelected ? {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Share", d => `${formatPercentage(d[dropdownValue])}`]]} : {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue])}`]]},
             topojson: "/topojson/county.json",
             topojsonFilter: d => d.id.startsWith("05000US26")
           }}
@@ -204,7 +204,7 @@ class ObesityAndDiabetes extends SectionColumns {
             label: d => d.Tract,
             height: 400,
             time: "Year",
-            tooltipConfig: {tbody: [["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue])}`]]},
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue])}`]]},
             topojson: "/topojson/tract.json",
             topojsonFilter: d => d.id.startsWith("14000US26163")
           }}

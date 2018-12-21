@@ -1,10 +1,13 @@
 import React from "react";
 import {nest} from "d3-collection";
+import {sum} from "d3-array";
 import {connect} from "react-redux";
-import {BarChart, LinePlot, Treemap} from "d3plus-react";
+import {LinePlot} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
+
+const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
 import Stat from "../../../../components/Stat";
 
@@ -13,6 +16,7 @@ class AirQuality extends SectionColumns {
   render() {
 
     const {airQualityDays, airQualityMedianAQIs, airPollutants} = this.props;
+    console.log("airQualityDays: ", airQualityDays);
 
     // Get the air polutants data.
     const recentYearAirQualityDays = {};
@@ -24,7 +28,10 @@ class AirQuality extends SectionColumns {
       });
 
     // Find top recent year air polutants data:
-    recentYearAirQualityDays.values.sort((a, b) => b["Number of Days"] - a["Number of Days"]);
+    const totalNumberOfDays = sum(recentYearAirQualityDays.values, d => d["Number of Days"]);
+    recentYearAirQualityDays.values.forEach(d => d.share = d["Number of Days"] / totalNumberOfDays * 100);
+    console.log("recentYearAirQualityDays: ", recentYearAirQualityDays);
+    recentYearAirQualityDays.values.sort((a, b) => b.share - a.share);
     const topRecentYearAirQualityDays = recentYearAirQualityDays.values[0];
 
     // Get the air quality median AQI data.
@@ -46,84 +53,83 @@ class AirQuality extends SectionColumns {
       });
     recentYearAirPollutantsData.values.sort((a, b) => b["Number of Days"] - a["Number of Days"]);
     const topRecentYearAirPollutant = recentYearAirPollutantsData.values[0];
+    console.log("airPollutants: ", airPollutants);
 
     return (
       <SectionColumns>
         <SectionTitle>Air Quality</SectionTitle>
         <article>
           <Stat
-            title={"Top Air quality days"}
+            title={"Days with good quality"}
             year={topRecentYearAirQualityDays.Year}
-            value={topRecentYearAirQualityDays.Category}
-            qualifier={`${formatAbbreviate(topRecentYearAirQualityDays["Number of Days"])} Days`}
+            value={formatPercentage(topRecentYearAirQualityDays.share)}
+            qualifier={`${formatAbbreviate(topRecentYearAirQualityDays["Number of Days"])} of 90 days measured`}
           />
           <Stat
             title={"Median Air Quality Index"}
             year={recentYearAirQualityMedianAQIs.values[0].Year}
-            value={recentYearAirQualityMedianAQIs.values[0].Geography}
-            qualifier={recentYearAirQualityMedianAQIs.values[0]["Median AQI"]}
+            value={recentYearAirQualityMedianAQIs.values[0]["Median AQI"]}
           />
           <Stat
-            title={`Top Air Pollutants in ${topRecentYearAirPollutant.Year}`}
-            year={topRecentYearAirPollutant.Geography}
+            title={"Most common air pollutant"}
+            year={topRecentYearAirPollutant.Year}
             value={topRecentYearAirPollutant.Pollutant}
             qualifier={`${topRecentYearAirPollutant["Number of Days"]} days`}
           />
 
-          {/* Barchart to show Air quality days for current location. */}
-          <BarChart config={{
-            data: airQualityDays,
-            discrete: "y",
+          {/* Lineplot to show air pollutants over the years. */}
+          <LinePlot config={{
+            data: airPollutants,
+            discrete: "x",
             height: 200,
-            groupBy: "Category",
             legend: false,
-            x: "Number of Days",
-            y: "Category",
-            time: "ID Year",
-            label: false,
-            ySort: (a, b) => a["Number of Days"] - b["Number of Days"],
-            xConfig: {
-              tickFormat: d => formatAbbreviate(d),
-              labelRotation: false,
-              title: "Number of days"
+            groupBy: "Pollutant",
+            x: "Year",
+            y: "Number of Days",
+            yConfig: {
+              title: "Air Pollutants"
             },
-            tooltipConfig: {tbody: [["Number of Days: ", d => formatAbbreviate(d["Number of Days"])]]}
+            tooltipConfig: {tbody: [["Number of Days", d => d["Number of Days"]]]}
           }}
           />
 
-          {/* Draw a Treemap for Air Pollutants. */}
-          <Treemap config={{
-            data: airPollutants,
+          {/* Lineplot to show Median AQI stats over the years in the Waye county. */}
+          <LinePlot config={{
+            data: airQualityMedianAQIs,
+            discrete: "x",
             height: 200,
-            sum: d => d["Number of Days"],
             legend: false,
-            groupBy: "Pollutant",
-            time: "Year",
-            title: "Air Pollutants",
-            tooltipConfig: {tbody: [["", d => `${d["Number of Days"]} days`]]}
+            groupBy: "ID Geography",
+            label: d => d.Year,
+            x: "Year",
+            xConfig: {
+              title: "Year"
+            },
+            y: "Median AQI",
+            yConfig: {
+              title: "Median AQI"
+            },
+            tooltipConfig: {tbody: [["Value", d => d["Median AQI"]]]}
           }}
           />
         </article>
 
-        {/* Lineplot to show Median AQI stats over the years in the Waye county. */}
+        {/* Lineplot to show air pollutants over the years. */}
         <LinePlot config={{
-          data: airQualityMedianAQIs,
+          data: airQualityDays,
           discrete: "x",
           height: 400,
           legend: false,
-          groupBy: "ID Geography",
-          label: d => d.Year,
+          groupBy: "Category",
           x: "Year",
-          xConfig: {
-            title: "Year"
-          },
-          y: "Median AQI",
+          y: "Number of Days",
           yConfig: {
-            title: "Median AQI"
+            title: "Air Quality"
           },
-          tooltipConfig: {tbody: [["Value", d => d["Median AQI"]]]}
+          tooltipConfig: {tbody: [["Number of Days", d => d["Number of Days"]]]}
         }}
         />
+
       </SectionColumns>
     );
   }

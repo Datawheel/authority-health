@@ -4,6 +4,7 @@ import {sum} from "d3-array";
 import {connect} from "react-redux";
 import {LinePlot} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
+import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -16,7 +17,6 @@ class AirQuality extends SectionColumns {
   render() {
 
     const {airQualityDays, airQualityMedianAQIs, airPollutants} = this.props;
-    console.log("airQualityDays: ", airQualityDays);
 
     // Get the air polutants data.
     const recentYearAirQualityDays = {};
@@ -30,7 +30,6 @@ class AirQuality extends SectionColumns {
     // Find top recent year air polutants data:
     const totalNumberOfDays = sum(recentYearAirQualityDays.values, d => d["Number of Days"]);
     recentYearAirQualityDays.values.forEach(d => d.share = d["Number of Days"] / totalNumberOfDays * 100);
-    console.log("recentYearAirQualityDays: ", recentYearAirQualityDays);
     recentYearAirQualityDays.values.sort((a, b) => b.share - a.share);
     const topRecentYearAirQualityDays = recentYearAirQualityDays.values[0];
 
@@ -53,8 +52,7 @@ class AirQuality extends SectionColumns {
       });
     recentYearAirPollutantsData.values.sort((a, b) => b["Number of Days"] - a["Number of Days"]);
     const topRecentYearAirPollutant = recentYearAirPollutantsData.values[0];
-    console.log("airPollutants: ", airPollutants);
-
+    
     return (
       <SectionColumns>
         <SectionTitle>Air Quality</SectionTitle>
@@ -63,12 +61,7 @@ class AirQuality extends SectionColumns {
             title={"Days with good quality"}
             year={topRecentYearAirQualityDays.Year}
             value={formatPercentage(topRecentYearAirQualityDays.share)}
-            qualifier={`${formatAbbreviate(topRecentYearAirQualityDays["Number of Days"])} of 90 days measured`}
-          />
-          <Stat
-            title={"Median Air Quality Index"}
-            year={recentYearAirQualityMedianAQIs.values[0].Year}
-            value={recentYearAirQualityMedianAQIs.values[0]["Median AQI"]}
+            qualifier={`${topRecentYearAirQualityDays["Number of Days"]} of 90 days measured`}
           />
           <Stat
             title={"Most common air pollutant"}
@@ -76,6 +69,14 @@ class AirQuality extends SectionColumns {
             value={topRecentYearAirPollutant.Pollutant}
             qualifier={`${topRecentYearAirPollutant["Number of Days"]} days`}
           />
+          <Stat
+            title={"Median Air Quality Index"}
+            year={recentYearAirQualityMedianAQIs.values[0].Year}
+            value={recentYearAirQualityMedianAQIs.values[0]["Median AQI"]}
+          />
+
+          <p>{topRecentYearAirQualityDays["Number of Days"]} of 90 days measured were good quality air in {topRecentYearAirQualityDays.Year}. The most common air pollutants was {topRecentYearAirPollutant.Pollutant} ({topRecentYearAirPollutant.Year}) and the median AQI was {recentYearAirQualityMedianAQIs.values[0]["Median AQI"]} in {recentYearAirQualityMedianAQIs.values[0].Geography}.</p>
+          <p>The following charts show the distribution of air quality days, air pollutants and median AQI.</p>
 
           {/* Lineplot to show air pollutants over the years. */}
           <LinePlot config={{
@@ -89,7 +90,7 @@ class AirQuality extends SectionColumns {
             yConfig: {
               title: "Air Pollutants"
             },
-            tooltipConfig: {tbody: [["Number of Days", d => d["Number of Days"]]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Number of Days", d => d["Number of Days"]]]}
           }}
           />
 
@@ -99,8 +100,7 @@ class AirQuality extends SectionColumns {
             discrete: "x",
             height: 200,
             legend: false,
-            groupBy: "ID Geography",
-            label: d => d.Year,
+            groupBy: "Geography",
             x: "Year",
             xConfig: {
               title: "Year"
@@ -109,7 +109,7 @@ class AirQuality extends SectionColumns {
             yConfig: {
               title: "Median AQI"
             },
-            tooltipConfig: {tbody: [["Value", d => d["Median AQI"]]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Median AQI", d => d["Median AQI"]]]}
           }}
           />
         </article>
@@ -120,13 +120,14 @@ class AirQuality extends SectionColumns {
           discrete: "x",
           height: 400,
           legend: false,
+          label: d => titleCase(d.Category),
           groupBy: "Category",
           x: "Year",
           y: "Number of Days",
           yConfig: {
-            title: "Air Quality"
+            title: "Testing Days"
           },
-          tooltipConfig: {tbody: [["Number of Days", d => d["Number of Days"]]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year],  ["Number of Days", d => d["Number of Days"]]]}
         }}
         />
 

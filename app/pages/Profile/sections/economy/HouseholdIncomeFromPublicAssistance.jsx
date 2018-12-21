@@ -32,7 +32,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
     const filteredData = recentYearPublicAssistanceData.values.filter(d => d["ID Public Assistance or Snap"] === 0).sort((a, b) => b.share - a.share);
     const topPublicAssistanceData = filteredData[0];
 
-    // Format data for publicAssistanceData.
+    // Find share for eacd data in householdSnapData.
     const recentYearHouseholdSnapData = {};
     nest()
       .key(d => d.Year)
@@ -42,12 +42,15 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
         group.values.forEach(d => d.share = d.Population / total * 100);
         group.key >= householdSnapData[0].Year ? Object.assign(recentYearHouseholdSnapData, group) : {};
       });
-
     const filterSnapRecievedData = householdSnapData.filter(d => d["ID Snap Receipt"] === 0);
 
-    // Find top recent year data for publicAssistanceData
-    // const filteredData = recentYearHouseholdSnapData.values.filter(d => d["ID Public Assistance or Snap"] === 0).sort((a, b) => b.share - a.share);
-    // const topPublicAssistanceData = filteredData[0];
+    // Get top stats for householdSnapData.
+    const filteredTopRecentYearHouseholdSnapData = recentYearHouseholdSnapData.values.filter(d => d["ID Snap Receipt"] === 0);
+    const topRecentYearHouseholdSnapData = filteredTopRecentYearHouseholdSnapData.sort((a, b) => b.share - a.share)[0];
+    let totalTopHouseoldShare = 0;
+    filteredTopRecentYearHouseholdSnapData.forEach(d => {
+      if (d["Number of workers"] === topRecentYearHouseholdSnapData["Number of workers"]) totalTopHouseoldShare += d.share;
+    });
 
     return (
       <SectionColumns>
@@ -58,6 +61,15 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
             year={topPublicAssistanceData.Year}
             value={`${formatPercentage(topPublicAssistanceData.share)}`}
           />
+          <Stat
+            title={"most common number of workers per household"}
+            year={topRecentYearHouseholdSnapData.Year}
+            value={topRecentYearHouseholdSnapData["Number of workers"]}
+            qualifier={formatPercentage(totalTopHouseoldShare)}
+          />
+
+          <p>In {topPublicAssistanceData.Year}, {formatPercentage(topPublicAssistanceData.share)} of all population in {topPublicAssistanceData.Geography} County got public assistance or food stamps in cash. The most common number of workers per household  on public assistance is {topRecentYearHouseholdSnapData["Number of workers"].toLowerCase()} ({formatPercentage(totalTopHouseoldShare)}).</p>
+          <p>The following chart shows the number of workers per household on public assistance.</p>
         </article>
 
         <BarChart config={{
@@ -72,14 +84,15 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
           y: "share",
           time: "ID Year",
           xSort: (a, b) => a["ID Number of workers"] - b["ID Number of workers"],
-          xConfig: {
-            labelRotation: false
+          xConfig: {labelRotation: false},
+          yConfig: {
+            tickFormat: d => formatPercentage(d),
+            title: "Share"
           },
-          yConfig: {tickFormat: d => formatPercentage(d)},
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Value", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Share", d => formatPercentage(d.share)]]}
         }}
         />
       </SectionColumns>

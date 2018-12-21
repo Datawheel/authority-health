@@ -49,7 +49,7 @@ class WageDistribution extends SectionColumns {
           groupBy: "Household Income Bucket",
           x: "Household Income Bucket",
           y: "share",
-          time: "ID Year",
+          time: "Year",
           xSort: (a, b) => a["ID Household Income Bucket"] - b["ID Household Income Bucket"],
           xConfig: {
             labelRotation: false,
@@ -62,7 +62,7 @@ class WageDistribution extends SectionColumns {
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Share", d => formatPopulation(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)]]}
         }}
         />
       </SectionColumns>

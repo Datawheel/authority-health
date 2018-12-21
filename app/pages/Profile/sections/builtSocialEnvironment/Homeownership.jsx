@@ -72,7 +72,7 @@ class Homeownership extends SectionColumns {
           },
           height: 400,
           time: "Year",
-          tooltipConfig: {tbody: [["Share", d => `$${formatAbbreviate(d["Property Value"])}`]]},
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => `$${formatAbbreviate(d["Property Value"])}`]]},
           topojson: "/topojson/tract.json",
           topojsonFilter: d => d.id.startsWith("14000US26163")
         }}

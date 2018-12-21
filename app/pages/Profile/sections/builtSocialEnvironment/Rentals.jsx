@@ -70,7 +70,7 @@ class HouseRentals extends SectionColumns {
               tickFormat: d => `$${formatAbbreviate(d)}`,
               title: "Rent Per Month"
             },
-            tooltipConfig: {tbody: [["Share", d => `$${formatAbbreviate(d["Rent Amount"])}`]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => `$${formatAbbreviate(d["Rent Amount"])}`]]}
           }}
           />
         </article>
@@ -94,7 +94,7 @@ class HouseRentals extends SectionColumns {
             tickFormat: d => formatPercentage(d),
             title: "Share of Renters"},
           shapeConfig: {label: false},
-          tooltipConfig: {tbody: [["Share", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]}
         }}
         />
       </SectionColumns>

@@ -83,7 +83,7 @@ class Crime extends SectionColumns {
           groupBy: d => `${d["Type of Crime"]}: ${d.Crime}`,
           x: "Crime",
           y: "share",
-          time: "ID Year",
+          time: "Year",
           xConfig: {
             tickFormat: d => titleCase(d),
             labelRotation: false
@@ -96,7 +96,7 @@ class Crime extends SectionColumns {
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Share", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]}
         }}
         />
       </SectionColumns>

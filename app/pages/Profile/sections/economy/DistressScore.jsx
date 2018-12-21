@@ -37,7 +37,8 @@ class DistressScore extends SectionColumns {
           groupBy: "ID Zip Code",
           colorScale: "Distress Score",
           height: 400,
-          tooltipConfig: {tbody: [["Share", d => formatAbbreviate(d["Distress Score"])]]},
+          time: "Year",
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatAbbreviate(d["Distress Score"])]]},
           topojson: "/topojson/zipcodes.json",
           topojsonFilter: d => zipcodes.includes(d.properties.ZCTA5CE10),
           topojsonId: d => d.properties.ZCTA5CE10

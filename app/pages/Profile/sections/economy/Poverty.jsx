@@ -16,7 +16,7 @@ class Poverty extends SectionColumns {
 
   render() {
 
-    const {povertyByRace, povertyByAgeAndGender, incomeToPovertyLevelRatio} = this.props;
+    const {povertyByRace, povertyByAgeAndGender} = this.props;
 
     const filterOutTotalRaceData = povertyByRace.filter(d => d.Race !== "Total");
 
@@ -92,7 +92,7 @@ class Poverty extends SectionColumns {
             legend: false,
             y: "Race",
             x: "share",
-            time: "ID Year",
+            time: "Year",
             label: d => d.Race,
             ySort: (a, b) => a["ID Race"] - b["ID Race"],
             yConfig: {
@@ -102,7 +102,7 @@ class Poverty extends SectionColumns {
               tickFormat: d => formatPopulation(d),
               title: "Population Below Poverty"
             },
-            tooltipConfig: {tbody: [["Share", d => formatPopulation(d.share)]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)]]}
           }}
           />
         </article>
@@ -114,7 +114,7 @@ class Poverty extends SectionColumns {
           groupBy: "Gender",
           x: "Age",
           y: "share",
-          time: "ID Year",
+          time: "Year",
           xSort: (a, b) => a["ID Age"] - b["ID Age"],
           xConfig: {
             labelRotation: false,
@@ -127,7 +127,7 @@ class Poverty extends SectionColumns {
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Age", d => d.Age], ["Share", d => formatPopulation(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Share", d => formatPopulation(d.share)]]}
         }}
         />
       </SectionColumns>

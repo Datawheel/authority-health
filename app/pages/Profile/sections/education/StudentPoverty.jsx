@@ -77,7 +77,7 @@ class StudentPoverty extends SectionColumns {
           groupBy: "Level of School",
           x: "Level of School",
           y: "share",
-          time: "ID Year",
+          time: "Year",
           xSort: (a, b) => a["ID Level of School"] - b["ID Level of School"],
           xConfig: {
             labelRotation: false,
@@ -90,7 +90,7 @@ class StudentPoverty extends SectionColumns {
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Share", d => formatPopulation(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)]]}
         }}
         />
       </SectionColumns>

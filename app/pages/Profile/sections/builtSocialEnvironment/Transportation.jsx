@@ -92,7 +92,7 @@ class Transportation extends SectionColumns {
             groupBy: "Gender",
             x: d => d["Vehicles Available"],
             y: "share",
-            time: "ID Year",
+            time: "Year",
             xSort: (a, b) => a["ID Vehicles Available"] - b["ID Vehicles Available"],
             xConfig: {
               labelRotation: false,
@@ -106,7 +106,7 @@ class Transportation extends SectionColumns {
             shapeConfig: {
               label: false
             },
-            tooltipConfig: {tbody: [["Share", d => formatPercentage(d.share)]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]}
           }}
           />
         </article>
@@ -120,7 +120,7 @@ class Transportation extends SectionColumns {
           groupBy: "Travel Time",
           x: "Travel Time",
           y: "share",
-          time: "ID Year",
+          time: "Year",
           xSort: (a, b) => a["ID Travel Time"] - b["ID Travel Time"],
           xConfig: {
             tickFormat: d => filterTimeBucket(d),
@@ -130,7 +130,7 @@ class Transportation extends SectionColumns {
             tickFormat: d => formatPercentage(d),
             title: "Share"
           },
-          tooltipConfig: {tbody: [["Share", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]}
         }}
         />
 
@@ -141,9 +141,9 @@ class Transportation extends SectionColumns {
           sum: d => d["Commute Means"],
           legend: false,
           groupBy: "Transportation Means",
-          time: "ID Year",
+          time: "Year",
           title: "Means of Transportation",
-          tooltipConfig: {tbody: [["Share", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]}
         }}
         />
       </SectionColumns>

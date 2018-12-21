@@ -157,7 +157,7 @@ class ReadingAssessment extends SectionColumns {
       yConfig: {
         title: `Average Reading Score ${xTitle}`
       },
-      tooltipConfig: {tbody: [["Score", d => d["Average Reading Score"]]]}
+      tooltipConfig: {tbody: [["Year", d => d.Year], ["Score", d => d["Average Reading Score"]]]}
     }}
     />);
 
@@ -230,7 +230,7 @@ class ReadingAssessment extends SectionColumns {
               title: "Average Reading Score by Gender",
               domain: [0, 300]
             },
-            tooltipConfig: {tbody: [["Score", d => d["Average Reading Score"]]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Score", d => d["Average Reading Score"]]]}
           }}
           />
         </SectionColumns>
@@ -291,7 +291,7 @@ class ReadingAssessment extends SectionColumns {
               title: "Average Reading Score",
               domain: [0, 300]
             },
-            tooltipConfig: {tbody: [["Score", d => d["Average Reading Score"]]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Score", d => d["Average Reading Score"]]]}
           }}
           />
         </SectionColumns>
@@ -351,7 +351,7 @@ class ReadingAssessment extends SectionColumns {
               title: "Average Reading Score",
               domain: [0, 300]
             },
-            tooltipConfig: {tbody: [["Score", d => d["Average Reading Score"]]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Score", d => d["Average Reading Score"]]]}
           }}
           />
         </SectionColumns>
@@ -401,7 +401,7 @@ class ReadingAssessment extends SectionColumns {
               title: "Average Reading Score based on Parents Education",
               domain: [0, 300]
             },
-            tooltipConfig: {tbody: [["Score", d => d["Average Reading Score"]]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Score", d => d["Average Reading Score"]]]}
           }}
           />
         </SectionColumns>
@@ -482,7 +482,7 @@ class ReadingAssessment extends SectionColumns {
             shapeConfig: {
               strokeDasharray: d => d.Geography === "Nation" ?  "4 1" : null
             },
-            tooltipConfig: {tbody: [["Score", d => d["Average Reading Score"]]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Score", d => d["Average Reading Score"]]]}
           }}
           />
         </SectionColumns>

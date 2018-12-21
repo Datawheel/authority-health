@@ -82,7 +82,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
           groupBy: d => `${d["Family type"]}`,
           x: d => d["Number of workers"],
           y: "share",
-          time: "ID Year",
+          time: "Year",
           xSort: (a, b) => a["ID Number of workers"] - b["ID Number of workers"],
           xConfig: {labelRotation: false},
           yConfig: {
@@ -92,7 +92,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Share", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]}
         }}
         />
       </SectionColumns>

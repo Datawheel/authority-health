@@ -11,7 +11,7 @@ class ReadingAssessment extends SectionColumns {
 
   constructor(props) {
     super(props);
-    this.state = {dropdownValue: "Geography"};
+    this.state = {dropdownValue: "Overall"};
   }
 
   // Handler function for dropdown onChange.
@@ -21,28 +21,25 @@ class ReadingAssessment extends SectionColumns {
     maleEighthGradeReadingScores, femaleEighthGradeReadingScores) => {
     const stats = [];
     stats.push(<Stat
-      title={"4th Grade Score"}
+      title={"4th grade male (Detroit)"}
       year={maleFourthGradeReadingScores.Year}
-      value={maleFourthGradeReadingScores.Gender}
-      qualifier={maleFourthGradeReadingScores["Average Reading Score"]}
+      value={maleFourthGradeReadingScores["Average Reading Score"]}
     />);
     stats.push(<Stat
-      title={"4th Grade Score"}
+      title={"4th grade female (Detroit)"}
       year={femaleFourthGradeReadingScores.Year}
-      value={femaleFourthGradeReadingScores.Gender}
-      qualifier={femaleFourthGradeReadingScores["Average Reading Score"]}
+      value={femaleFourthGradeReadingScores["Average Reading Score"]}
     />);
     stats.push(<Stat
-      title={"8th Grade Score"}
+      title={"8th Grade male (Detroit)"}
       year={maleEighthGradeReadingScores.Year}
       value={maleEighthGradeReadingScores.Gender}
       qualifier={maleEighthGradeReadingScores["Average Reading Score"]}
     />);
     stats.push(<Stat
-      title={"8th Grade Score"}
+      title={"8th Grade female (Detroit)"}
       year={femaleEighthGradeReadingScores.Year}
-      value={femaleEighthGradeReadingScores.Gender}
-      qualifier={femaleEighthGradeReadingScores["Average Reading Score"]}
+      value={femaleEighthGradeReadingScores["Average Reading Score"]}
     />);
     return stats;
   }
@@ -51,22 +48,22 @@ class ReadingAssessment extends SectionColumns {
     noELLFourthGradeReadingScores, noELLEighthGradeReadingScores) => {
     const stats = [];
     stats.push(<Stat
-      title={"4th Grade Score With ELL"}
+      title={"4th Grade Score With ELL (Detroit)"}
       year={withELLFourthGradeReadingScores.Year}
       value={withELLFourthGradeReadingScores["Average Reading Score"]}
     />);
     stats.push(<Stat
-      title={"8th Grade Score With ELL"}
+      title={"8th Grade Score With ELL (Detroit)"}
       year={withELLEighthGradeReadingScores.Year}
       value={withELLEighthGradeReadingScores["Average Reading Score"]}
     />);
     stats.push(<Stat
-      title={"4th Grade Score with No ELL"}
+      title={"4th Grade Score with No ELL (Detroit)"}
       year={noELLFourthGradeReadingScores.Year}
       value={noELLFourthGradeReadingScores["Average Reading Score"]}
     />);
     stats.push(<Stat
-      title={"8th Grade Score with No ELL"}
+      title={"8th Grade Score with No ELL (Detroit)"}
       year={noELLEighthGradeReadingScores.Year}
       value={noELLEighthGradeReadingScores["Average Reading Score"]}
     />);
@@ -77,22 +74,22 @@ class ReadingAssessment extends SectionColumns {
     noDisabilityFourthGradeReadingScores, noDisabilityEighthGradeReadingScores) => {
     const stats = [];
     stats.push(<Stat
-      title={"4th Grade Score With Disability"}
+      title={"4th Grade Score With Disability (Detroit)"}
       year={withDisabilityFourthGradeReadingScores.Year}
       value={withDisabilityFourthGradeReadingScores["Average Reading Score"]}
     />);
     stats.push(<Stat
-      title={"8th Grade Score With Disability"}
+      title={"8th Grade Score With Disability (Detroit)"}
       year={withDisabilityEighthGradeReadingScores.Year}
       value={withDisabilityEighthGradeReadingScores["Average Reading Score"]}
     />);
     stats.push(<Stat
-      title={"4th Grade Score with No Disability"}
+      title={"4th Grade Score with No Disability (Detroit)"}
       year={noDisabilityFourthGradeReadingScores.Year}
       value={noDisabilityFourthGradeReadingScores["Average Reading Score"]}
     />);
     stats.push(<Stat
-      title={"8th Grade Score with No Disability"}
+      title={"8th Grade Score with No Disability (Detroit)"}
       year={noDisabilityEighthGradeReadingScores.Year}
       value={noDisabilityEighthGradeReadingScores["Average Reading Score"]}
     />);
@@ -102,7 +99,7 @@ class ReadingAssessment extends SectionColumns {
   getStatsByParentsEducation = topReadingScoreForEighthGrade => {
     const stats = [];
     stats.push(<Stat
-      title={"8th Grade Score"}
+      title={"8th Grade Score (Detroit)"}
       year={topReadingScoreForEighthGrade.Year}
       value={topReadingScoreForEighthGrade["Parents Education"]}
       qualifier={topReadingScoreForEighthGrade["Average Reading Score"]}
@@ -110,32 +107,28 @@ class ReadingAssessment extends SectionColumns {
     return stats;
   }
 
-  getStatsForGeography = (nationalFourthGradeReadingScores, nationalEighthGradeReadingScores,
+  getStatsForOverallScores = (nationalFourthGradeReadingScores, nationalEighthGradeReadingScores,
     fourthGradeReadingScoresbyCity, eighthGradeReadingScoresbyCity) => {
     const stats = [];
     stats.push(<Stat
-      title={"4th Grade Score"}
+      title={"4th Grade Score (United States)"}
       year={nationalFourthGradeReadingScores.Year}
-      value={nationalFourthGradeReadingScores.Nation}
-      qualifier={nationalFourthGradeReadingScores["Average Reading Score"]}
+      value={nationalFourthGradeReadingScores["Average Reading Score"]}
     />);
     stats.push(<Stat
-      title={"8th Grade Score"}
+      title={"8th Grade Score (United States)"}
       year={nationalEighthGradeReadingScores.Year}
-      value={nationalEighthGradeReadingScores.Nation}
-      qualifier={nationalEighthGradeReadingScores["Average Reading Score"]}
+      value={nationalEighthGradeReadingScores["Average Reading Score"]}
     />);
     stats.push(<Stat
-      title={"4th Grade Score"}
+      title={"4th Grade Score (Detroit)"}
       year={fourthGradeReadingScoresbyCity.Year}
-      value={fourthGradeReadingScoresbyCity.City}
-      qualifier={fourthGradeReadingScoresbyCity["Average Reading Score"]}
+      value={fourthGradeReadingScoresbyCity["Average Reading Score"]}
     />);
     stats.push(<Stat
-      title={"8th Grade Score in $"}
+      title={"8th Grade Score (Detroit)"}
       year={eighthGradeReadingScoresbyCity.Year}
-      value={eighthGradeReadingScoresbyCity.City}
-      qualifier={eighthGradeReadingScoresbyCity["Average Reading Score"]}
+      value={eighthGradeReadingScoresbyCity["Average Reading Score"]}
     />);
     return stats;
   }
@@ -148,7 +141,7 @@ class ReadingAssessment extends SectionColumns {
     return dropdownComponents;
   }
 
-  getShortDescription = str => <p>The Lineplot here shows the Average Reading Assessment Score {str} in Detroit City, MI over the years.</p>;
+  getShortDescription = str => <p>The following chart shows the average reading assessment score in Detroit {str} over time.</p>;
 
   drawLinePlot = (readingScoresData, categoryName, xTitle) => {
     console.log("readingScoresData: ", readingScoresData);
@@ -160,12 +153,9 @@ class ReadingAssessment extends SectionColumns {
       groupBy: d => `${d.Grade} ${d[categoryName]}`,
       label: d => `${d.Grade}th Grade ${d[categoryName]}`,
       x: "Year",
-      xConfig: {
-        title: xTitle
-      },
       y: "Average Reading Score",
       yConfig: {
-        title: "Average Reading Score"
+        title: `Average Reading Score ${xTitle}`
       },
       tooltipConfig: {tbody: [["Score", d => d["Average Reading Score"]]]}
     }}
@@ -180,14 +170,8 @@ class ReadingAssessment extends SectionColumns {
     const data = this.props[`readingScoresBy${dropdownValue}`];
 
     const {readingScoresByParentsEducation, readingScoresByNation, readingScoresByCity} = this.props;
-    // console.log("readingScoresByGender: ", readingScoresByGender);
-    // console.log("readingScoresByELL: ", readingScoresByELL);
-    // console.log("readingScoresByDisability: ", readingScoresByDisability);
-    // console.log("readingScoresByParentsEducation: ", readingScoresByParentsEducation);
-    // console.log("readingScoresByNation: ", readingScoresByNation);
-    // console.log("readingScoresByCity: ", readingScoresByCity);
 
-    const readingAssessmentChoices = ["Geography", "Gender", "ELL", "Disability", "Parents Education"];
+    const readingAssessmentChoices = ["Overall", "Gender", "ELL", "Disability", "Parents Education"];
 
     if (dropdownValue === "Gender") {
       // Get the recent year male and female 4th and 8th grade data.
@@ -218,12 +202,12 @@ class ReadingAssessment extends SectionColumns {
         maleEighthGradeReadingScores[0], femaleEighthGradeReadingScores[0]);
 
       const dropdownComponents = this.getDropdownComponents(readingAssessmentChoices);
-      const paragraph = this.getShortDescription("by Gender");
+      const paragraph = this.getShortDescription("by gender");
       // const linePlot = this.drawLinePlot(data, "Gender", "Scores by Gender");
 
       return (
         <SectionColumns>
-          <SectionTitle>Reading Assessment</SectionTitle>
+          <SectionTitle>Reading Assessment Scores</SectionTitle>
           <article>
             {dropdownComponents}
             {paragraph}
@@ -239,13 +223,12 @@ class ReadingAssessment extends SectionColumns {
             height: 400,
             groupBy: d => `${d.Grade} ${d.Gender}`,
             label: d => `${d.Grade}th Grade ${d.Gender}`,
+            baseline: 0,
             x: "Year",
-            xConfig: {
-              title: "Scores by Gender"
-            },
             y: "Average Reading Score",
             yConfig: {
-              title: "Average Reading Score"
+              title: "Average Reading Score by Gender",
+              domain: [0, 300]
             },
             tooltipConfig: {tbody: [["Score", d => d["Average Reading Score"]]]}
           }}
@@ -287,7 +270,7 @@ class ReadingAssessment extends SectionColumns {
 
       return (
         <SectionColumns>
-          <SectionTitle>Reading Assessment</SectionTitle>
+          <SectionTitle>Reading Assessment Scores</SectionTitle>
           <article>
             {dropdownComponents}
             {paragraph}
@@ -301,13 +284,12 @@ class ReadingAssessment extends SectionColumns {
             height: 400,
             groupBy: d => `${d.Grade} ${d.ELL}`,
             label: d => `${d.Grade}th Grade ${d.ELL === "Yes" ? "With ELL" : "No ELL"}`,
+            baseline: 0,
             x: "Year",
-            xConfig: {
-              title: "Year"
-            },
             y: "Average Reading Score",
             yConfig: {
-              title: "Average Reading Score"
+              title: "Average Reading Score",
+              domain: [0, 300]
             },
             tooltipConfig: {tbody: [["Score", d => d["Average Reading Score"]]]}
           }}
@@ -344,11 +326,11 @@ class ReadingAssessment extends SectionColumns {
         noDisabilityFourthGradeReadingScores[0], noDisabilityEighthGradeReadingScores[0]);
 
       const dropdownComponents = this.getDropdownComponents(readingAssessmentChoices);
-      const paragraph = this.getShortDescription("by ELL");
+      const paragraph = this.getShortDescription("by disability");
 
       return (
         <SectionColumns>
-          <SectionTitle>Reading Assessment</SectionTitle>
+          <SectionTitle>Reading Assessment Scores</SectionTitle>
           <article>
             {dropdownComponents}
             {paragraph}
@@ -362,13 +344,12 @@ class ReadingAssessment extends SectionColumns {
             height: 400,
             groupBy: d => `${d.Grade} ${d.Disability}`,
             label: d => `${d.Grade}th Grade ${d.Disability === "Yes" ? "With Disability" : "No Disability"}`,
+            baseline: 0,
             x: "Year",
-            xConfig: {
-              title: "Year"
-            },
             y: "Average Reading Score",
             yConfig: {
-              title: "Average Reading Score"
+              title: "Average Reading Score",
+              domain: [0, 300]
             },
             tooltipConfig: {tbody: [["Score", d => d["Average Reading Score"]]]}
           }}
@@ -395,11 +376,11 @@ class ReadingAssessment extends SectionColumns {
       const stats = this.getStatsByParentsEducation(topReadingScoreForEighthGrade);
 
       const dropdownComponents = this.getDropdownComponents(readingAssessmentChoices);
-      const paragraph = this.getShortDescription("based on Parents Education");
+      const paragraph = this.getShortDescription("based on parents education");
 
       return (
         <SectionColumns>
-          <SectionTitle>Reading Assessment</SectionTitle>
+          <SectionTitle>Reading Assessment Scores</SectionTitle>
           <article>
             {dropdownComponents}
             {paragraph}
@@ -413,13 +394,12 @@ class ReadingAssessment extends SectionColumns {
             height: 400,
             groupBy: d => `${d.Grade} ${d["Parents Education"]}`,
             label: d => `${d["Parents Education"]}`,
+            baseline: 0,
             x: "Year",
-            xConfig: {
-              title: "Reading scores based on Parents Education"
-            },
             y: "Average Reading Score",
             yConfig: {
-              title: "Average Reading Score"
+              title: "Average Reading Score based on Parents Education",
+              domain: [0, 300]
             },
             tooltipConfig: {tbody: [["Score", d => d["Average Reading Score"]]]}
           }}
@@ -427,7 +407,7 @@ class ReadingAssessment extends SectionColumns {
         </SectionColumns>
       );
     }
-    else if (dropdownValue === "Geography") {
+    else if (dropdownValue === "Overall") {
       // Merge readingScoresByNation and readingScoresByCity arrays to readingScoresByGeography array.
       const readingScoresByGeography = [];
       readingScoresByNation.forEach(d => {
@@ -470,15 +450,15 @@ class ReadingAssessment extends SectionColumns {
       const eighthGradeReadingScoresbyCity = recentYearReadingScoresByCity.values.filter(d => d.Grade === "8");
 
       // Get stats for scores by Geography.
-      const stats = this.getStatsForGeography(nationalFourthGradeReadingScores[0], nationalEighthGradeReadingScores[0],
+      const stats = this.getStatsForOverallScores(nationalFourthGradeReadingScores[0], nationalEighthGradeReadingScores[0],
         fourthGradeReadingScoresbyCity[0], eighthGradeReadingScoresbyCity[0]);
 
       const dropdownComponents = this.getDropdownComponents(readingAssessmentChoices);
-      const paragraph = this.getShortDescription("in United States and");
+      const paragraph = this.getShortDescription("compared to the United States");
 
       return (
         <SectionColumns>
-          <SectionTitle>Reading Assessment</SectionTitle>
+          <SectionTitle>Reading Assessment Scores</SectionTitle>
           <article>
             {dropdownComponents}
             {paragraph}
@@ -492,13 +472,12 @@ class ReadingAssessment extends SectionColumns {
             height: 400,
             groupBy: d => `${d.Grade} ${d.Geography}`,
             label: d => `${d.Grade}th Grade ${d[d.Geography]}`,
+            baseline: 0,
             x: "Year",
-            xConfig: {
-              title: "Year"
-            },
             y: "Average Reading Score",
             yConfig: {
-              title: "Average Reading Score"
+              title: "Average Reading Score",
+              domain: [0, 300]
             },
             shapeConfig: {
               strokeDasharray: d => d.Geography === "Nation" ?  "4 1" : null
@@ -516,7 +495,7 @@ class ReadingAssessment extends SectionColumns {
 }
 
 ReadingAssessment.defaultProps = {
-  slug: "reading-assessment"
+  slug: "reading-assessment-scores"
 };
 
 

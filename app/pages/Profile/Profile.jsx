@@ -78,6 +78,19 @@ class Profile extends Component {
           </SectionColumns>
         </div>
 
+        <TopicTitle slug="access-to-care">
+          <div className="section-container">
+            <Icon iconName="office" />
+            Access to Care
+          </div>
+        </TopicTitle>
+        <div className="section-container">
+          <HealthCenters />
+          <DentistsDemographic />
+          <DentistsWorkStatus />
+          <Coverage />
+        </div>
+
         <TopicTitle slug="food-access">
           <div className="section-container">
             <div className="section-title-stat-container">
@@ -89,7 +102,6 @@ class Profile extends Component {
             </div>
           </div>
         </TopicTitle>
-
         <div className="section-container">
           <FoodAvailability />
           <StoreAccessByDemographic />
@@ -108,19 +120,6 @@ class Profile extends Component {
           <Cancer />
           <RiskyBehaviors />
           <PhysicalInactivity />
-        </div>
-
-        <TopicTitle slug="access-to-care">
-          <div className="section-container">
-            <Icon iconName="office" />
-            Access to Care
-          </div>
-        </TopicTitle>
-        <div className="section-container">
-          <HealthCenters />
-          <DentistsDemographic />
-          <DentistsWorkStatus />
-          <Coverage />
         </div>
 
         <TopicTitle slug="special-population">

@@ -117,7 +117,7 @@ class HearingAndAuditoryDisabilities extends SectionColumns {
           groupBy: ["disabilityType", "Sex"],
           x: d => d.Age,
           y: "share",
-          time: "ID Year",
+          time: "Year",
           xSort: (a, b) => a["ID Age"] - b["ID Age"],
           xConfig: {
             labelRotation: false,
@@ -128,7 +128,7 @@ class HearingAndAuditoryDisabilities extends SectionColumns {
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Gender", d => d.Sex], ["Share", d => formatPopulation(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Gender", d => d.Sex], ["Share", d => formatPopulation(d.share)]]}
         }}
         />
       </SectionColumns>
@@ -137,7 +137,7 @@ class HearingAndAuditoryDisabilities extends SectionColumns {
 }
 
 HearingAndAuditoryDisabilities.defaultProps = {
-  slug: "hearing-and-auditory-disabilities"
+  slug: "vision-and-auditory-disabilities"
 };
 
 HearingAndAuditoryDisabilities.need = [

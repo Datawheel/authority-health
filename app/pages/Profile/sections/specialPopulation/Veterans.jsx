@@ -110,7 +110,7 @@ class Veterans extends SectionColumns {
           legend: false,
           x: d => d["Period of Service"],
           y: "share",
-          time: "ID Year",
+          time: "Year",
           xSort: (a, b) => a["ID Period of Service"] - b["ID Period of Service"],
           xConfig: {
             labelRotation: false,
@@ -121,7 +121,7 @@ class Veterans extends SectionColumns {
             title: "Share"
           },
           shapeConfig: {label: false},
-          tooltipConfig: {tbody: [["Share", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]}
         }}
         />
       </SectionColumns>

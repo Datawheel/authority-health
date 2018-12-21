@@ -102,7 +102,7 @@ class HealthConditonChronicDiseases extends SectionColumns {
             label: d => d.County,
             height: 400,
             time: "End Year",
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue])}`]]},
+            tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue])}`]]},
             topojson: "/topojson/county.json",
             topojsonFilter: d => d.id.startsWith("05000US26")
           }}

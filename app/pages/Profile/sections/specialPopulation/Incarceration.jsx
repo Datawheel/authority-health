@@ -101,13 +101,13 @@ class Incarceration extends SectionColumns {
           groupBy: "Offense",
           x: "Punishment",
           y: "share",
-          time: "ID Year",
+          time: "Year",
           yConfig: {tickFormat: d => formatPercentage(d)},
           xConfig: {labelRotation: false},
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Share", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]}
         }}
         />
       </SectionColumns>

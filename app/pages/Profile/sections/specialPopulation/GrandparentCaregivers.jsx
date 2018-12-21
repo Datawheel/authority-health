@@ -63,7 +63,7 @@ class GrandparentCaregivers extends SectionColumns {
           legend: false,
           x: d => d["Responsibility Length"],
           y: "share",
-          time: "ID Year",
+          time: "Year",
           xSort: (a, b) => a["ID Responsibility Length"] - b["ID Responsibility Length"],
           xConfig: {
             labelRotation: false,
@@ -71,7 +71,7 @@ class GrandparentCaregivers extends SectionColumns {
           },
           yConfig: {tickFormat: d => formatPercentage(d)},
           shapeConfig: {label: false},
-          tooltipConfig: {tbody: [["Share", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]}
         }}
         />
       </SectionColumns>

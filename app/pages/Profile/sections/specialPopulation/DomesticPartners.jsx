@@ -55,7 +55,7 @@ class DomesticPartners extends SectionColumns {
           legend: false,
           x: "Sex of Partner",
           y: "share",
-          time: "ID Year",
+          time: "Year",
           xConfig: {
             labelRotation: false,
             tickFormat: d => formatPartnerLabel(d),
@@ -64,7 +64,7 @@ class DomesticPartners extends SectionColumns {
           yConfig: {tickFormat: d => formatPopulation(d)},
           xSort: (a, b) => a["ID Sex of Partner"] - b["ID Sex of Partner"],
           shapeConfig: {label: false},
-          tooltipConfig: {tbody: [["Share", d => formatPopulation(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)]]}
         }}
         />
       </SectionColumns>

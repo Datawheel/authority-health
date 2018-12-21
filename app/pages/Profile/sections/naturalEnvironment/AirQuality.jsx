@@ -76,19 +76,20 @@ class AirQuality extends SectionColumns {
           />
 
           <p>{topRecentYearAirQualityDays["Number of Days"]} of 90 days measured were good quality air in {topRecentYearAirQualityDays.Year}. The most common air pollutants was {topRecentYearAirPollutant.Pollutant} ({topRecentYearAirPollutant.Year}) and the median AQI was {recentYearAirQualityMedianAQIs.values[0]["Median AQI"]} in {recentYearAirQualityMedianAQIs.values[0].Geography}.</p>
-          <p>The following charts show the distribution of air quality days, air pollutants and median AQI.</p>
+          <p>The following charts show the distribution of air quality days, air pollutants and median AQI over years.</p>
 
           {/* Lineplot to show air pollutants over the years. */}
           <LinePlot config={{
             data: airPollutants,
             discrete: "x",
             height: 200,
+            title: "Air Pollutants Over Years",
             legend: false,
             groupBy: "Pollutant",
             x: "Year",
             y: "Number of Days",
             yConfig: {
-              title: "Air Pollutants"
+              title: "Testing Days"
             },
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Number of Days", d => d["Number of Days"]]]}
           }}
@@ -99,6 +100,7 @@ class AirQuality extends SectionColumns {
             data: airQualityMedianAQIs,
             discrete: "x",
             height: 200,
+            title: "Median AQI Over Years",
             legend: false,
             groupBy: "Geography",
             x: "Year",
@@ -119,6 +121,7 @@ class AirQuality extends SectionColumns {
           data: airQualityDays,
           discrete: "x",
           height: 400,
+          title: "Air Quality Over Years",
           legend: false,
           label: d => titleCase(d.Category),
           groupBy: "Category",

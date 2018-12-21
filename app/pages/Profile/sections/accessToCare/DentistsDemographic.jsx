@@ -72,7 +72,7 @@ class DentistsDemographic extends SectionColumns {
             legend: false,
             groupBy: "Sex",
             time: "Year",
-            tooltipConfig: {tbody: [["Share", d => formatPercentage(d.share)]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]}
           }}
           />
         </article>

@@ -167,7 +167,7 @@ Homeless.need = [
   fetchData("typesOfUnshelteredHomeless", "/api/data?measures=Unsheltered&drilldowns=Category&Geography=<id>&Year=all", d => d.data),
   fetchData("typesOfHomeless", "/api/data?measures=Sheltered,Unsheltered&drilldowns=Sub-group&Geography=<id>&Year=all", d => d.data),
   fetchData("totalHomelessData", "/api/data?measures=Sheltered,Unsheltered&drilldowns=Group&Geography=<id>&Year=latest", d => d.data),
-  fetchData("population", "https://mammoth.datausa.io/api/data?measures=Population&Geography=<id>&year=latest")
+  fetchData("population", "https://niagara.datausa.io/api/data?measures=Population&Geography=<id>&year=latest")
 ];
 
 const mapStateToProps = state => ({

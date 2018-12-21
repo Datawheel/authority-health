@@ -140,8 +140,8 @@ Poverty.defaultProps = {
 };
 
 Poverty.need = [
-  fetchData("povertyByRace", "https://mammoth.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Race&Geography=<id>&Year=all", d => d.data),
-  fetchData("povertyByAgeAndGender", "https://mammoth.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Age,Gender&Geography=<id>&Year=all", d => d.data),
+  fetchData("povertyByRace", "https://niagara.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Race&Geography=<id>&Year=all", d => d.data),
+  fetchData("povertyByAgeAndGender", "https://niagara.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Age,Gender&Geography=<id>&Year=all", d => d.data),
   fetchData("incomeToPovertyLevelRatio", "/api/data?measures=Population&drilldowns=Ratio of Income to Poverty Level&Geography=<id>&Year=all", d => d.data)
 ];
 

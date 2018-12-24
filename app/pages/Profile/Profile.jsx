@@ -8,6 +8,7 @@ import Stat from "components/Stat";
 import ProfileHeader from "./components/ProfileHeader";
 import "./Profile.css";
 
+import Demographics from "./sections/about/Demographics";
 import Insecurity from "./sections/foodAccess/Insecurity";
 import FoodAvailability from "./sections/foodAccess/FoodAvailability";
 import StoreAccessByDemographic from "./sections/foodAccess/StoreAccessByDemographic";
@@ -68,12 +69,13 @@ class Profile extends Component {
               (Introduction Text in Progress)
             </article>
           </SectionColumns>
+
           <SectionColumns>
-            <SectionTitle>Demographics</SectionTitle>
+            <SectionTitle slug="demographics">Demographics</SectionTitle>
             <article>
               <Stat title="Population" value={ formatAbbreviate(population.data[0].Population) } />
               <br />
-              (Demographics Section in Progress)
+              <Demographics />
             </article>
           </SectionColumns>
         </div>
@@ -194,6 +196,7 @@ class Profile extends Component {
 }
 
 Profile.need = [
+  Demographics,
   Insecurity,
   FoodAvailability,
   StoreAccessByDemographic,

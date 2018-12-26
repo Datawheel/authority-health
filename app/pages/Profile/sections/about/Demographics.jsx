@@ -23,7 +23,7 @@ const commas = format(",d");
 class Demographics extends SectionColumns {
 
   render() {
-    const {population, populationByAgeAndGender, unemploymentRate, lifeExpectancy, employmentStatus, workExperience, socioeconomicRanking} = this.props;
+    const {population, populationByAgeAndGender, unemploymentRate, lifeExpectancy, employmentStatus, workExperience, socioeconomicRanking, percentChangeInEmploymemt} = this.props;
 
     // Find share for population by Age and Gender.
     nest()
@@ -68,6 +68,14 @@ class Demographics extends SectionColumns {
             year={socioeconomicRanking[0].Year}
             value={commas(socioeconomicRanking[0]["Socioeconomic Ranking"])}
           />
+
+          {percentChangeInEmploymemt.length !== 0
+            ? <Stat
+              title="Percent Change in Employment"
+              year={percentChangeInEmploymemt[0].Year}
+              value={formatPercentage(percentChangeInEmploymemt[0]["Percent Change in Employment"] * 100)}
+            />
+            : <div></div>}
         </SectionColumns>
 
         <SectionColumns>
@@ -197,7 +205,8 @@ Demographics.need = [
   fetchData("lifeExpectancy", "/api/data?measures=Life Expectancy&Geography=<id>", d => d.data), // Year data not available
   fetchData("employmentStatus", "/api/data?measures=Population&drilldowns=Employment Status,Age,Sex&Geography=<id>&Year=all", d => d.data),
   fetchData("workExperience", "/api/data?measures=Population&drilldowns=Work Experience,Sex&Geography=<id>&Year=all", d => d.data),
-  fetchData("socioeconomicRanking", "/api/data?measures=Socioeconomic Ranking&Geography=<id>&Year=latest", d => d.data)
+  fetchData("socioeconomicRanking", "/api/data?measures=Socioeconomic Ranking&Geography=<id>&Year=latest", d => d.data),
+  fetchData("percentChangeInEmploymemt", "/api/data?measures=Percent Change in Employment&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
@@ -207,7 +216,8 @@ const mapStateToProps = state => ({
   lifeExpectancy: state.data.lifeExpectancy,
   employmentStatus: state.data.employmentStatus,
   workExperience: state.data.workExperience,
-  socioeconomicRanking: state.data.socioeconomicRanking
+  socioeconomicRanking: state.data.socioeconomicRanking,
+  percentChangeInEmploymemt: state.data.percentChangeInEmploymemt
 });
 
 export default connect(mapStateToProps)(Demographics);

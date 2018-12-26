@@ -142,7 +142,7 @@ class HealthCenters extends SectionColumns {
               labelRotation: false
             },
             yConfig: {ticks: []},
-            tooltipConfig: {tbody: [["Share", d => formatPercentage(d[d.RaceType])]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d[d.RaceType])]]}
           }}
           />
         </article>

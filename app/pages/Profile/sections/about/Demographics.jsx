@@ -145,7 +145,7 @@ class Demographics extends SectionColumns {
             shapeConfig: {
               label: false
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Work Hours", d => formatWorkHours(d["Work Experience"])], ["Share", d => formatPercentage(d.share)]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Working Hours", d => formatWorkHours(d["Work Experience"])], ["Share", d => formatPercentage(d.share)]]}
           }}
           />
           

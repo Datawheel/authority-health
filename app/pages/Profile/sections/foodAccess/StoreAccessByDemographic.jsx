@@ -98,7 +98,7 @@ class StoreAccessByDemographic extends SectionColumns {
             },
             yConfig: {ticks: []},
             time: "Year",
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", d => `${d["Age Group"]}`], ["Low-Access Rate", d => formatPercentage(d.Percent)]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", d => ageSelected ? `${d["Age Group"]}` : `${d["Race Group"]}`], ["Low-Access Rate", d => formatPercentage(d.Percent)]]}
           }}
           />
         </article>
@@ -114,7 +114,7 @@ class StoreAccessByDemographic extends SectionColumns {
           label: d => d.County,
           height: 400,
           time: "Year",
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", `${dropdownValue}`], ["Low-Access Rate", d => formatPercentage(d.Percent)]]},
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", dropdownValue], ["Low-Access Rate", d => formatPercentage(d.Percent)]]},
           topojson: "/topojson/county.json",
           topojsonFilter: d => d.id.startsWith("05000US26")
         }}

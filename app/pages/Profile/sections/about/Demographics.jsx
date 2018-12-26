@@ -42,6 +42,7 @@ class Demographics extends SectionColumns {
         const total = sum(group.values, d => d.Population);
         group.values.forEach(d => d.share = d.Population / total * 100);
       });
+    const filteredWorkExperienceData = workExperience.filter(d => d["Work Experience"] !== "Did Not Work");
 
     // Find share for employmentStatus.
     nest()
@@ -123,7 +124,7 @@ class Demographics extends SectionColumns {
         <SectionColumns>
           {/* Barchart to show work experience by gender over the years for selected geography. */}
           <BarChart config={{
-            data: workExperience,
+            data: filteredWorkExperienceData,
             discrete: "y",
             height: 300,
             groupBy: ["Work Experience", "Sex"],

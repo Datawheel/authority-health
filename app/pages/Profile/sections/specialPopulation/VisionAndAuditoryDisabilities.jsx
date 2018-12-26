@@ -13,7 +13,7 @@ import Stat from "../../../../components/Stat";
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 const formatDisabilityName = d => d === "visionDifficulty" ? "Vision Difficulty" : "Hearing Difficulty";
 
-class HearingAndAuditoryDisabilities extends SectionColumns {
+class VisionAndAuditoryDisabilities extends SectionColumns {
 
   render() {
     const {hearingDifficulty, visionDifficulty} = this.props;
@@ -136,11 +136,11 @@ class HearingAndAuditoryDisabilities extends SectionColumns {
   }
 }
 
-HearingAndAuditoryDisabilities.defaultProps = {
+VisionAndAuditoryDisabilities.defaultProps = {
   slug: "vision-and-auditory-disabilities"
 };
 
-HearingAndAuditoryDisabilities.need = [
+VisionAndAuditoryDisabilities.need = [
   fetchData("hearingDifficulty", "/api/data?measures=Population&drilldowns=Hearing Disability Status,Age,Sex&Geography=<id>&Year=all", d => d.data),
   fetchData("visionDifficulty", "/api/data?measures=Population&drilldowns=Vision Disability Status,Age,Sex&Geography=<id>&Year=all", d => d.data)
 ];
@@ -150,4 +150,4 @@ const mapStateToProps = state => ({
   visionDifficulty: state.data.visionDifficulty
 });
 
-export default connect(mapStateToProps)(HearingAndAuditoryDisabilities);
+export default connect(mapStateToProps)(VisionAndAuditoryDisabilities);

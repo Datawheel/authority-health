@@ -29,7 +29,7 @@ import DomesticPartners from "./sections/specialPopulation/DomesticPartners";
 import DisabilityStatus from "./sections/specialPopulation/DisabilityStatus";
 import Homeless from "./sections/specialPopulation/Homeless";
 import Incarceration from "./sections/specialPopulation/Incarceration";
-import HearingAndAuditoryDisabilities from "./sections/specialPopulation/HearingAndAuditoryDisabilities";
+import VisionAndAuditoryDisabilities from "./sections/specialPopulation/VisionAndAuditoryDisabilities";
 import Homeownership from "./sections/builtSocialEnvironment/Homeownership";
 import Rentals from "./sections/builtSocialEnvironment/Rentals";
 import Transportation from "./sections/builtSocialEnvironment/Transportation";
@@ -53,7 +53,6 @@ class Profile extends Component {
 
   render() {
 
-    const {population} = this.props;
     const {name} = this.props.meta;
 
     return (
@@ -69,15 +68,16 @@ class Profile extends Component {
               (Introduction Text in Progress)
             </article>
           </SectionColumns>
+        </div>
 
-          <SectionColumns>
-            <SectionTitle slug="demographics">Demographics</SectionTitle>
-            <article>
-              <Stat title="Population" value={ formatAbbreviate(population.data[0].Population) } />
-              <br />
-              <Demographics />
-            </article>
-          </SectionColumns>
+        <TopicTitle slug="about">
+          <div className="section-container">
+            <Icon iconName="about" />
+            About
+          </div>
+        </TopicTitle>
+        <div className="section-container">
+          <Demographics />
         </div>
 
         <TopicTitle slug="access-to-care">
@@ -135,7 +135,7 @@ class Profile extends Component {
           <Immigrants />
           <DomesticPartners />
           <DisabilityStatus />
-          <HearingAndAuditoryDisabilities />
+          <VisionAndAuditoryDisabilities />
           <Homeless />
           <Veterans />
           <Incarceration />
@@ -214,7 +214,7 @@ Profile.need = [
   Immigrants,
   DomesticPartners,
   DisabilityStatus,
-  HearingAndAuditoryDisabilities,
+  VisionAndAuditoryDisabilities,
   Incarceration,
   Veterans,
   Homeless,
@@ -232,8 +232,7 @@ Profile.need = [
   ReadingAssessment,
   WaterQuality,
   AirQuality,
-  fetchData("meta", "/api/search?id=<id>", resp => resp[0]),
-  fetchData("population", "https://niagara.datausa.io/api/data?measures=Population&Geography=<id>&year=latest")
+  fetchData("meta", "/api/search?id=<id>", resp => resp[0])
 ];
 
 const mapStateToProps = state => ({

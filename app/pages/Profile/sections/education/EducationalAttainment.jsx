@@ -54,7 +54,7 @@ class EducationalAttainment extends SectionColumns {
             qualifier={formatPopulation(topEducationalAttainment.share)}
           />
           <p>In {topEducationalAttainment.Year}, the most common education level attained in {topEducationalAttainment.Geography} County was {topEducationalAttainment["Educational Attainment"].toLowerCase()} with a share of {formatPopulation(topEducationalAttainment.share)}.</p>
-          <p>The following chart shows the education attainment for male and female in {topEducationalAttainment.Geography} County.</p>
+          <p>The following chart shows educational attainment of male and female in {topEducationalAttainment.Geography} County.</p>
         </article>
 
         {/* Draw a Barchart to show Educational Attainment for all types of education buckets. */}
@@ -69,12 +69,18 @@ class EducationalAttainment extends SectionColumns {
           y: "share",
           time: "ID Year",
           xSort: (a, b) => a["ID Educational Attainment"] - b["ID Educational Attainment"],
-          xConfig: {tickFormat: d => formatLabels(d)},
-          yConfig: {tickFormat: d => formatPopulation(d)},
+          xConfig: {
+            tickFormat: d => formatLabels(d),
+            title: "Educational Attainment by Gender"
+          },
+          yConfig: {
+            tickFormat: d => formatPopulation(d),
+            title: "Share"
+          },
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Educational Attainment", d => formatLabels(d["Educational Attainment"])], ["Share", d => formatPopulation(d.share)]]}
         }}
         />
       </SectionColumns>

@@ -136,7 +136,7 @@ class HealthCenters extends SectionColumns {
             label: d => formatName(d.RaceType),
             x: d => d[d.RaceType],
             y: "RaceType",
-            time: "ID Year",
+            time: "Year",
             xConfig: {
               tickFormat: d => formatPercentage(d),
               labelRotation: false

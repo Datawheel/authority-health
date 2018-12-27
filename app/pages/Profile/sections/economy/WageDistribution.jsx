@@ -37,7 +37,7 @@ class WageDistribution extends SectionColumns {
             value={wageGinidata[0]["Wage GINI"]}
           />
           <p>In {wageGinidata[0].Year}, the income inequality in {wageGinidata[0].Geography} was {wageGinidata[0]["Wage GINI"]}. The GINI coefficient is a measure of statistical dispersion intended to represent the equality of a distribution, and is the most commonly used measure of inequality. Values range from 0 to 1, with 0 being perfect equality.</p>
-          <p>The following chart shows the number of workers in various wage buckets in {wageDistributionData[0].Geography}.</p>
+          <p>The following chart shows the household income bucket and share for each bucket in {wageDistributionData[0].Geography}.</p>
         </article>
 
         {/* Draw Geomap to show wage distribution for each place in the Wayne county. */}
@@ -52,8 +52,8 @@ class WageDistribution extends SectionColumns {
           time: "Year",
           xSort: (a, b) => a["ID Household Income Bucket"] - b["ID Household Income Bucket"],
           xConfig: {
-            labelRotation: false,
-            tickFormat: d => rangeFormatter(d)
+            tickFormat: d => rangeFormatter(d),
+            title: "Household Income Bucket"
           },
           yConfig: {
             tickFormat: d => formatPopulation(d),

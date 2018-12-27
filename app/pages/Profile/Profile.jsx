@@ -2,12 +2,11 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Icon} from "@blueprintjs/core";
 import {fetchData, SectionColumns, SectionTitle, TopicTitle} from "@datawheel/canon-core";
-import {formatAbbreviate} from "d3plus-format";
 
-import Stat from "components/Stat";
 import ProfileHeader from "./components/ProfileHeader";
 import "./Profile.css";
 
+import Introduction from "./sections/about/Introduction";
 import Demographics from "./sections/about/Demographics";
 import Insecurity from "./sections/foodAccess/Insecurity";
 import FoodAvailability from "./sections/foodAccess/FoodAvailability";
@@ -77,6 +76,7 @@ class Profile extends Component {
           </div>
         </TopicTitle>
         <div className="section-container">
+          <Introduction />
           <Demographics />
         </div>
 
@@ -196,6 +196,7 @@ class Profile extends Component {
 }
 
 Profile.need = [
+  Introduction,
   Demographics,
   Insecurity,
   FoodAvailability,

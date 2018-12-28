@@ -111,7 +111,6 @@ class Cancer extends SectionColumns {
             legend: false,
             groupBy: ["Cancer Site", "Sex"],
             stacked: true,
-            label: d => d.Sex === "M" ? "Male" : "Female",
             x: "share",
             y: "Cancer Site",
             time: "Year",

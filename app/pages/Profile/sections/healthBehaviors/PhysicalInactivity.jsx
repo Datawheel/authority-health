@@ -10,13 +10,13 @@ import Stat from "../../../../components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
-const formatDropdownChoiceName = d => d === "Physical Health Data Value" ? "Physical Bad Health" : "Physical Inactivity";
+const formatDropdownChoiceName = d => d === "Physical Health" ? "Physical Bad Health" : "Physical Inactivity";
 
 class PhysicalInactivity extends SectionColumns {
 
   constructor(props) {
     super(props);
-    this.state = {dropdownValue: "Physical Inactivity Data Value"};
+    this.state = {dropdownValue: "Physical Inactivity"};
   }
 
   // Handler function for dropdown onChange event.
@@ -26,9 +26,9 @@ class PhysicalInactivity extends SectionColumns {
 
     const {physicalInActivity, physicalInactivityPrevalenceBySex} = this.props;
     const {dropdownValue} = this.state;
-    const dropdownList = ["Physical Inactivity Data Value", "Physical Health Data Value"];
+    const dropdownList = ["Physical Inactivity", "Physical Health"];
 
-    const physicalInactivitySelected = dropdownValue === "Physical Inactivity Data Value";
+    const physicalInactivitySelected = dropdownValue === "Physical Inactivity";
 
     // We don't find latest year data here (as we usually do for other topics) since we have only 1 year data for physical inactivity and physical health.
     const topRecentYearData = physicalInActivity.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
@@ -69,15 +69,15 @@ class PhysicalInactivity extends SectionColumns {
               <Stat
                 title={"Male Prevalence"}
                 year={topPhysicalInactivityMaleData.Year}
-                value={formatPercentage(topPhysicalInactivityMaleData["Adj Percent"])}
+                value={formatPercentage(topPhysicalInactivityMaleData["Physical Inactivity Adj Percent"])}
               />
               <Stat
                 title={"Female Prevalence"}
                 year={topPhysicalInactivityFemaleData.Year}
-                value={formatPercentage(topPhysicalInactivityFemaleData["Adj Percent"])}
+                value={formatPercentage(topPhysicalInactivityFemaleData["Physical Inactivity Adj Percent"])}
               />
               <p>In {topRecentYearData.Year}, {topRecentYearData.Tract} had the highest prevalence of {formatDropdownChoiceName(dropdownValue).toLowerCase()} ({formatPercentage(topRecentYearData[dropdownValue])}) out of all tracts in Wayne County.</p>
-              <p>In {topPhysicalInactivityFemaleData.Year}, {formatDropdownChoiceName(dropdownValue).toLowerCase()} rates for male and female residents of Wayne County were {formatPercentage(topPhysicalInactivityMaleData["Adj Percent"])} and {formatPercentage(topPhysicalInactivityFemaleData["Adj Percent"])} respectively in the {topPhysicalInactivityFemaleData.Geography}, MI.</p>
+              <p>In {topPhysicalInactivityFemaleData.Year}, {formatDropdownChoiceName(dropdownValue).toLowerCase()} rates for male and female residents of Wayne County were {formatPercentage(topPhysicalInactivityMaleData["Physical Inactivity Adj Percent"])} and {formatPercentage(topPhysicalInactivityFemaleData["Physical Inactivity Adj Percent"])} respectively in the {topPhysicalInactivityFemaleData.Geography}, MI.</p>
               <p>The barchart here shows the {formatDropdownChoiceName(dropdownValue).toLowerCase()} data for male and female in {topPhysicalInactivityFemaleData.Geography}.</p>
             </div>
             : <p>In {topRecentYearData.Year}, {topRecentYearData.Tract} had the highest prevalence of {formatDropdownChoiceName(dropdownValue).toLowerCase()} ({formatPercentage(topRecentYearData[dropdownValue])}) out of all tracts in Wayne County.</p>
@@ -94,7 +94,7 @@ class PhysicalInactivity extends SectionColumns {
               legend: false,
               groupBy: "Sex",
               label: d => d.Sex,
-              x: "Adj Percent",
+              x: "Physical Inactivity Adj Percent",
               y: "Sex",
               time: "Year",
               xConfig: {
@@ -104,7 +104,7 @@ class PhysicalInactivity extends SectionColumns {
               yConfig: {
                 ticks: []
               },
-              tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", `${formatDropdownChoiceName(dropdownValue)}`], ["Prevalence", d => formatPercentage(d["Adj Percent"])]]}
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", `${formatDropdownChoiceName(dropdownValue)}`], ["Prevalence", d => formatPercentage(d["Physical Inactivity Adj Percent"])]]}
             }}
             />
             : null
@@ -138,8 +138,8 @@ PhysicalInactivity.defaultProps = {
 };
 
 PhysicalInactivity.need = [
-  fetchData("physicalInActivity", "/api/data?measures=Physical Health Data Value,Physical Inactivity Data Value&drilldowns=Tract&Year=all", d => d.data),
-  fetchData("physicalInactivityPrevalenceBySex", "/api/data?measures=Adj Percent&drilldowns=Sex&Geography=<id>&Year=all", d => d.data)
+  fetchData("physicalInActivity", "/api/data?measures=Physical Health,Physical Inactivity&drilldowns=Tract&Year=all", d => d.data),
+  fetchData("physicalInactivityPrevalenceBySex", "/api/data?measures=Physical Inactivity Adj Percent&drilldowns=Sex&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

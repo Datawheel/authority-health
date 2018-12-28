@@ -14,7 +14,7 @@ class PreventiveCare extends SectionColumns {
 
   constructor(props) {
     super(props);
-    this.state = {dropdownValue: "Annual Checkup Data Value"};
+    this.state = {dropdownValue: "Annual Checkup"};
   }
 
   // Handler function for dropdown onChange event.
@@ -32,10 +32,10 @@ class PreventiveCare extends SectionColumns {
     });
 
     // Check if the selected dropdown values are from the preventiveCareWeightedData.
-    const isPreventativeCareWeightedValueSelected = dropdownValue === "Had Flu Vaccine Yes Weighted Percent" ||
-    dropdownValue === "Had Pneumonia Vaccine Yes Weighted Percent" ||
-    dropdownValue === "Had Routine Checkup Last Year Yes Weighted Percent" ||
-    dropdownValue === "FOBT or Endoscopy Yes Weighted Percent";
+    const isPreventativeCareWeightedValueSelected = dropdownValue === "Had Flu Vaccine" ||
+    dropdownValue === "Had Pneumonia Vaccine" ||
+    dropdownValue === "Had Routine Checkup Last Year" ||
+    dropdownValue === "FOBT or Endoscopy";
 
     // Find recent year top data for the selceted dropdown value.
     const recentYearWeightedData = {};
@@ -129,8 +129,8 @@ PreventiveCare.defaultProps = {
 };
 
 PreventiveCare.need = [
-  fetchData("preventiveCareData", "/api/data?measures=Annual Checkup Data Value,Core preventive services for older men Data Value,Core preventive services for older women Data Value,Dental Visit Data Value,Colorectal Cancer Screening Data Value,Pap Smear Test Data Value,Mammography Data Value,Cholesterol Screening Data Value&drilldowns=Tract&Year=all"),
-  fetchData("preventiveCareWeightedData", "/api/data?measures=Had Flu Vaccine Yes Weighted Percent,Had Pneumonia Vaccine Yes Weighted Percent,Had Routine Checkup Last Year Yes Weighted Percent,FOBT or Endoscopy Yes Weighted Percent&drilldowns=End Year,County")
+  fetchData("preventiveCareData", "/api/data?measures=Annual Checkup,Core preventive services for older men,Core preventive services for older women,Dental Visit,Colorectal Cancer Screening,Pap Smear Test,Mammography,Cholesterol Screening&drilldowns=Tract&Year=all"),
+  fetchData("preventiveCareWeightedData", "/api/data?measures=Had Flu Vaccine,Had Pneumonia Vaccine,Had Routine Checkup Last Year,FOBT or Endoscopy&drilldowns=End Year,County")
 ];
 
 const mapStateToProps = state => ({

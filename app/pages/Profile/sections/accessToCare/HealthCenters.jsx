@@ -61,9 +61,9 @@ class HealthCenters extends SectionColumns {
           const result = group.values.reduce((acc, currentValue) => {
             if (acc === null && currentValue[d] !== null) {
               // Non-white race population is the sum of all the race population minus White population.
-              if (d === "% Non-white") {
-                d = "% White";
-                currentValue[d] = 1 - currentValue["% Non-white"];
+              if (d === "Percent Non-white") {
+                d = "Percent White";
+                currentValue[d] = 1 - currentValue["Percent Non-white"];
                 return Object.assign({}, currentValue, {RaceType: d});
               }
               return Object.assign({}, currentValue, {RaceType: d});
@@ -175,7 +175,7 @@ HealthCenters.defaultProps = {
 
 HealthCenters.need = [
   fetchData("healthCenterData", "/api/data?measures=Health Centers,Penetration of Total Population,Penetration of Low-Income,Penetration of Uninsured Population&drilldowns=Zip Code&Year=all"),
-  fetchData("raceAndEthnicityData", "/api/data?measures=% Non-white,% Hispanic,% Black,% Asian,% American Indian/Alaska Native&Year=all")
+  fetchData("raceAndEthnicityData", "/api/data?measures=Percent Non-white,Percent Hispanic,Percent Black,Percent Asian,Percent American Indian/Alaska Native&Year=all")
 ];
 
 const mapStateToProps = state => ({

@@ -16,7 +16,6 @@ class Introduction extends SectionColumns {
 
   render() {
     const {population, populationByAgeAndGender, unemploymentRate, lifeExpectancy, employmentStatus, workExperience, socioeconomicRanking, percentChangeInEmploymemt} = this.props;
-    console.log("percentChangeInEmploymemt: ", percentChangeInEmploymemt);
 
     const populationGrowth = formatAbbreviate(growthCalculator(population.data[0].Population, population.data[1].Population));
 

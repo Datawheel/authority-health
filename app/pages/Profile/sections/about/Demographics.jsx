@@ -57,25 +57,30 @@ class Demographics extends SectionColumns {
       <div>
         <SectionColumns>
           <SectionTitle>Demographics</SectionTitle>
+          <article>
+            <Stat
+              title="Life Expectancy"
+              year={""}
+              value={`${formatAbbreviate(lifeExpectancy[0]["Life Expectancy"])}`}
+            />
+          </article>
 
-          <Stat
-            title="Life Expectancy"
-            year={""}
-            value={`${formatAbbreviate(lifeExpectancy[0]["Life Expectancy"])} Years`}
-          />
-
-          <Stat
-            title="Socioeconomic Ranking"
-            year={socioeconomicRanking[0].Year}
-            value={commas(socioeconomicRanking[0]["Socioeconomic Ranking"])}
-          />
+          <article>
+            <Stat
+              title="Socioeconomic Ranking"
+              year={socioeconomicRanking[0].Year}
+              value={commas(socioeconomicRanking[0]["Socioeconomic Ranking"])}
+            />
+          </article>
 
           {percentChangeInEmploymemt.length !== 0
-            ? <Stat
-              title="Percent Change in Employment"
-              year={percentChangeInEmploymemt[0].Year}
-              value={formatPercentage(percentChangeInEmploymemt[0]["Percent Change in Employment"] * 100)}
-            />
+            ? <article>
+              <Stat
+                title="Percent Change in Employment"
+                year={percentChangeInEmploymemt[0].Year}
+                value={formatPercentage(percentChangeInEmploymemt[0]["Percent Change in Employment"] * 100)}
+              />
+            </article>
             : <div></div>}
         </SectionColumns>
 
@@ -118,7 +123,6 @@ class Demographics extends SectionColumns {
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => rangeFormatter(d.Age)], ["Share", d => formatPercentage(d.share)]]}
           }}
           />
-
         </SectionColumns>
 
         <SectionColumns>

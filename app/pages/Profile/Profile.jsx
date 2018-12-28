@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Icon} from "@blueprintjs/core";
-import {fetchData, SectionColumns, SectionTitle, TopicTitle} from "@datawheel/canon-core";
+import {fetchData, TopicTitle} from "@datawheel/canon-core";
 
 import ProfileHeader from "./components/ProfileHeader";
 import "./Profile.css";
@@ -60,14 +60,14 @@ class Profile extends Component {
           title={ name }
         />
 
-        <div className="section-container">
+        {/* <div className="section-container">
           <SectionColumns>
             <SectionTitle>Introduction</SectionTitle>
             <article>
               (Introduction Text in Progress)
             </article>
           </SectionColumns>
-        </div>
+        </div> */}
 
         <TopicTitle slug="about">
           <div className="section-container">

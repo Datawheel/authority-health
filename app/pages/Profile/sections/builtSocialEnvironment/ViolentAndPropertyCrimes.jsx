@@ -58,13 +58,13 @@ class Crime extends SectionColumns {
 
           {/* Show stats and short paragraph for each type of crime based on the dropdown value. */}
           <Stat
-            title="Top Violent Crime"
+            title="Most common Violent Crime"
             year={topRecentYearViolentCrime.Year}
             value={titleCase(topRecentYearViolentCrime.Crime)}
             qualifier={formatPercentage(topRecentYearViolentCrime.share)}
           />
           <Stat
-            title="Top Property Crime"
+            title="Most common Property Crime"
             year={topRecentYearPropertyCrime.Year}
             value={titleCase(topRecentYearPropertyCrime.Crime)}
             qualifier={formatPercentage(topRecentYearPropertyCrime.share)}

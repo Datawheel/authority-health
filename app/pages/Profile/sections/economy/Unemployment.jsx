@@ -17,12 +17,9 @@ class Unemployment extends SectionColumns {
   render() {
 
     const {employmentStatus, workExperience, unemploymentRate} = this.props;
-    // console.log("employmentStatus: ", employmentStatus);
-    console.log("workExperience: ", workExperience);
 
     // Find share for work experience.
     const filteredWorkExperienceData = workExperience.filter(d => d["Work Experience"] !== "Did Not Work");
-    // const recentYear
     nest()
       .key(d => d.Year)
       .entries(filteredWorkExperienceData)
@@ -30,19 +27,31 @@ class Unemployment extends SectionColumns {
         const total = sum(group.values, d => d.Population);
         group.values.forEach(d => d.share = d.Population / total * 100);
       });
-    console.log("filteredWorkExperienceData: ", filteredWorkExperienceData);
     const getMaleFullTimeData = filteredWorkExperienceData.filter(d => d.Sex === "Male" && d["ID Work Experience"] === 0);
-    console.log("getMaleFullTimeData", getMaleFullTimeData);
     const getFemaleFullTimeData = filteredWorkExperienceData.filter(d => d.Sex === "Female" && d["ID Work Experience"] === 0);
 
     // Find share for employmentStatus.
     const unemployedData = employmentStatus.filter(d => d["Employment Status"] === "Unemployed");
+    const recentYearUnemploymentData = {};
     nest()
       .key(d => d.Year)
       .entries(unemployedData)
       .forEach(group => {
         const total = sum(group.values, d => d.Population);
         group.values.forEach(d => d.share = d.Population / total * 100);
+        group.key >= unemployedData[0].Year ? Object.assign(recentYearUnemploymentData, group) : {};
+      });
+    const getMaleUnemploymemtData = recentYearUnemploymentData.values.filter(d => d.Sex === "Male");
+    const getTopMaleUnemploymemtData = getMaleUnemploymemtData.sort((a, b) => b.share - a.share)[0];
+    const getFemaleUnemploymemtData = recentYearUnemploymentData.values.filter(d => d.Sex === "Female");
+    const getTopFemaleUnemploymemtData = getFemaleUnemploymemtData.sort((a, b) => b.share - a.share)[0];
+
+    const recentYearUnemploymentRate = {};
+    nest()
+      .key(d => d.Year)
+      .entries(unemploymentRate)
+      .forEach(group => {
+        group.key >= unemploymentRate[0].Year ? Object.assign(recentYearUnemploymentRate, group) : {};
       });
     
     return (
@@ -54,12 +63,18 @@ class Unemployment extends SectionColumns {
             year={getMaleFullTimeData[0].Year}
             value={formatPercentage(getMaleFullTimeData[0].share)}
           />
-
           <Stat
             title="Female Working Full Time"
             year={getFemaleFullTimeData[0].Year}
             value={formatPercentage(getFemaleFullTimeData[0].share)}
           />
+
+          <p>
+            In {getMaleFullTimeData[0].Year}, male and female population that worked full-time was {formatPercentage(getMaleFullTimeData[0].share)} and {formatPercentage(getFemaleFullTimeData[0].share)}, respectively.
+            The most common unemployment age group amomg male population was {getTopMaleUnemploymemtData.Age.toLowerCase()} ({formatPercentage(getTopMaleUnemploymemtData.share)}), while most common female unemployment age group was {getTopFemaleUnemploymemtData.Age.toLowerCase()} ({formatPercentage(getTopFemaleUnemploymemtData.share)}).  
+          </p>
+          <p>In {recentYearUnemploymentRate.values[0].Year}, the overall unemploymemt rate in {recentYearUnemploymentRate.values[0].Geography} was {formatPercentage(recentYearUnemploymentRate.values[0]["Unemployment Rate"])}.</p>
+          <p>The following charts show overall unemployment rate over years and unemployment rate by age and gender.</p>
           
           {/* Barchart to show population by age and gender over the years for selected geography. */}
           <BarChart config={{

@@ -13,12 +13,12 @@ import rangeFormatter from "../../../../utils/rangeFormatter";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
-const commas = format(",d");
+const commas = format(".2f");
 
 class Demographics extends SectionColumns {
 
   render() {
-    const {population, populationByAgeAndGender, lifeExpectancy, socioeconomicRanking, percentChangeInEmploymemt} = this.props;
+    const {population, populationByAgeAndGender, lifeExpectancy, socialVulnerabilityIndex} = this.props;
 
     // Find share for population by Age and Gender.
     nest()
@@ -43,21 +43,45 @@ class Demographics extends SectionColumns {
 
           <article>
             <Stat
+              title="Overall Ranking"
+              year={socialVulnerabilityIndex[0].Year}
+              value={formatAbbreviate(socialVulnerabilityIndex[0]["Overall Ranking"])}
+            />
+          </article>
+            
+          <article>
+            <Stat
               title="Socioeconomic Ranking"
-              year={socioeconomicRanking[0].Year}
-              value={commas(socioeconomicRanking[0]["Socioeconomic Ranking"])}
+              year={socialVulnerabilityIndex[0].Year}
+              value={commas(socialVulnerabilityIndex[0]["Socioeconomic Ranking"])}
+            />
+          </article>
+        </SectionColumns>
+
+        <SectionColumns>
+          <article>
+            <Stat
+              title="Household Composition and Disability Ranking"
+              year={socialVulnerabilityIndex[0].Year}
+              value={commas(socialVulnerabilityIndex[0]["Household Composition and Disability Ranking"])}
             />
           </article>
 
-          {percentChangeInEmploymemt.length !== 0
-            ? <article>
-              <Stat
-                title="Percent Change in Employment"
-                year={percentChangeInEmploymemt[0].Year}
-                value={formatPercentage(percentChangeInEmploymemt[0]["Percent Change in Employment"] * 100)}
-              />
-            </article>
-            : <div></div>}
+          <article>
+            <Stat
+              title="Minority Status and Language Ranking"
+              year={socialVulnerabilityIndex[0].Year}
+              value={commas(socialVulnerabilityIndex[0]["Minority Status and Language Ranking"])}
+            />
+          </article>
+
+          <article>
+            <Stat
+              title="Housing and Transportation Ranking"
+              year={socialVulnerabilityIndex[0].Year}
+              value={commas(socialVulnerabilityIndex[0]["Housing and Transportation Ranking"])}
+            />
+          </article>
         </SectionColumns>
 
         <SectionColumns>
@@ -113,16 +137,14 @@ Demographics.need = [
   fetchData("population", "https://niagara.datausa.io/api/data?measures=Population&Geography=<id>&year=all"),
   fetchData("populationByAgeAndGender", "/api/data?measures=Population&drilldowns=Age,Sex&Geography=<id>&Year=all", d => d.data),
   fetchData("lifeExpectancy", "/api/data?measures=Life Expectancy&Geography=<id>", d => d.data), // Year data not available
-  fetchData("socioeconomicRanking", "/api/data?measures=Socioeconomic Ranking&Geography=<id>&Year=latest", d => d.data),
-  fetchData("percentChangeInEmploymemt", "/api/data?measures=Percent Change in Employment&Geography=<id>&Year=latest", d => d.data)
+  fetchData("socialVulnerabilityIndex", "/api/data?measures=Socioeconomic Ranking,Household Composition and Disability Ranking,Minority Status and Language Ranking,Housing and Transportation Ranking,Overall Ranking&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   population: state.data.population,
   populationByAgeAndGender: state.data.populationByAgeAndGender,
   lifeExpectancy: state.data.lifeExpectancy,
-  socioeconomicRanking: state.data.socioeconomicRanking,
-  percentChangeInEmploymemt: state.data.percentChangeInEmploymemt
+  socialVulnerabilityIndex: state.data.socialVulnerabilityIndex
 });
 
 export default connect(mapStateToProps)(Demographics);

@@ -29,6 +29,14 @@ class Demographics extends SectionColumns {
         group.values.forEach(d => d.share = d.Population / total * 100);
       });
 
+    const recentYearPopulation = {};
+    nest()
+      .key(d => d.Year)
+      .entries(population.data)
+      .forEach(group => {
+        group.key >= population.data[0].Year ? Object.assign(recentYearPopulation, group) : {};
+      });
+
     return (
       <div>
         <SectionColumns>
@@ -40,15 +48,13 @@ class Demographics extends SectionColumns {
               value={`${formatAbbreviate(lifeExpectancy[0]["Life Expectancy"])}`}
             />
           </article>
-
           <article>
             <Stat
               title="Overall Ranking"
               year={socialVulnerabilityIndex[0].Year}
-              value={formatAbbreviate(socialVulnerabilityIndex[0]["Overall Ranking"])}
+              value={commas(socialVulnerabilityIndex[0]["Overall Ranking"])}
             />
           </article>
-            
           <article>
             <Stat
               title="Socioeconomic Ranking"
@@ -85,18 +91,10 @@ class Demographics extends SectionColumns {
         </SectionColumns>
 
         <SectionColumns>
-          {/* Lineplot to show total population over the years for selected geography. */}
-          <LinePlot config={{
-            data: population.data,
-            discrete: "x",
-            height: 300,
-            title: "Population Over Years",
-            legend: false,
-            groupBy: "Geography",
-            x: "Year",
-            y: "Population",
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Population", d => formatAbbreviate(d.Population)]]}
-          }}
+          <Stat
+            title="Total Population"
+            year={recentYearPopulation.values[0].Year}
+            value={`${formatAbbreviate(recentYearPopulation.values[0].Population)}`}
           />
 
           {/* Barchart to show population by age and gender over the years for selected geography. */}

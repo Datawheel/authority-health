@@ -33,6 +33,7 @@ import Homeownership from "./sections/builtSocialEnvironment/Homeownership";
 import Rentals from "./sections/builtSocialEnvironment/Rentals";
 import Transportation from "./sections/builtSocialEnvironment/Transportation";
 import ViolentAndPropertyCrimes from "./sections/builtSocialEnvironment/ViolentAndPropertyCrimes";
+import EmploymentGrowth from "./sections/economy/EmploymentGrowth";
 import Unemployment from "./sections/economy/Unemployment";
 import DistressScore from "./sections/economy/DistressScore";
 import HouseholdIncomeFromPublicAssistance from "./sections/economy/HouseholdIncomeFromPublicAssistance";
@@ -77,8 +78,8 @@ class Profile extends Component {
           </div>
         </TopicTitle>
         <div className="section-container">
-          <Introduction />
-          <Demographics />
+          {/* <Introduction />
+          <Demographics /> */}
         </div>
 
         <TopicTitle slug="access-to-care">
@@ -162,6 +163,7 @@ class Profile extends Component {
           </div>
         </TopicTitle>
         <div className="section-container">
+          <EmploymentGrowth />
           <Unemployment />
           <DistressScore />
           <HouseholdIncomeFromPublicAssistance />
@@ -198,8 +200,8 @@ class Profile extends Component {
 }
 
 Profile.need = [
-  Introduction,
-  Demographics,
+  // Introduction,
+  // Demographics,
   Insecurity,
   FoodAvailability,
   StoreAccessByDemographic,
@@ -225,6 +227,7 @@ Profile.need = [
   Rentals,
   Transportation,
   ViolentAndPropertyCrimes,
+  EmploymentGrowth,
   Unemployment,
   DistressScore,
   HouseholdIncomeFromPublicAssistance,

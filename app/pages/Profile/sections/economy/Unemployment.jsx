@@ -70,8 +70,8 @@ class Unemployment extends SectionColumns {
           />
 
           <p>
-            In {getMaleFullTimeData[0].Year}, male and female population that worked full-time was {formatPercentage(getMaleFullTimeData[0].share)} and {formatPercentage(getFemaleFullTimeData[0].share)}, respectively.
-            The most common unemployment age group amomg male population was {getTopMaleUnemploymemtData.Age.toLowerCase()} ({formatPercentage(getTopMaleUnemploymemtData.share)}), while most common female unemployment age group was {getTopFemaleUnemploymemtData.Age.toLowerCase()} ({formatPercentage(getTopFemaleUnemploymemtData.share)}).  
+            In {getMaleFullTimeData[0].Year}, male and female population in {getMaleFullTimeData[0].Geography} that worked full-time was {formatPercentage(getMaleFullTimeData[0].share)} and {formatPercentage(getFemaleFullTimeData[0].share)}, respectively.
+            The most common male unemployment age group was {getTopMaleUnemploymemtData.Age.toLowerCase()} ({formatPercentage(getTopMaleUnemploymemtData.share)}), and most common female unemployment age group was {getTopFemaleUnemploymemtData.Age.toLowerCase()} ({formatPercentage(getTopFemaleUnemploymemtData.share)}).  
           </p>
           <p>In {recentYearUnemploymentRate.values[0].Year}, the overall unemploymemt rate in {recentYearUnemploymentRate.values[0].Geography} was {formatPercentage(recentYearUnemploymentRate.values[0]["Unemployment Rate"])}.</p>
           <p>The following charts show overall unemployment rate over years and unemployment rate by age and gender.</p>
@@ -108,7 +108,7 @@ class Unemployment extends SectionColumns {
           discrete: "x",
           height: 300,
           baseline: 0,
-          title: "Unemplyment Rate Over Years",
+          title: "Unemployment Rate Over Years",
           legend: false,
           groupBy: "Geography",
           x: "Year",

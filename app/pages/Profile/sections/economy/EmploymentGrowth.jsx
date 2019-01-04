@@ -35,7 +35,8 @@ class EmploymentGrowth extends SectionColumns {
           groupBy: "Zip Code",
           colorScale: "Percent Change in Employment",
           colorScaleConfig: {
-            axisConfig: {tickFormat: d => `${d}%`}
+            axisConfig: {tickFormat: d => `${d}%`},
+            color: ["red", "#ccc", "green"]
           },
           label: d => d["Zip Code"],
           height: 400,

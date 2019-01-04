@@ -55,21 +55,13 @@ class Profile extends Component {
   render() {
 
     const {name} = this.props.meta;
+    const {population, populationByRaceAndEthnicity, populationByAgeAndGender, lifeExpectancy} = this.props;
 
     return (
       <div className="profile">
         <ProfileHeader
           title={ name }
         />
-
-        {/* <div className="section-container">
-          <SectionColumns>
-            <SectionTitle>Introduction</SectionTitle>
-            <article>
-              (Introduction Text in Progress)
-            </article>
-          </SectionColumns>
-        </div> */}
 
         <TopicTitle slug="about">
           <div className="section-container">
@@ -78,8 +70,8 @@ class Profile extends Component {
           </div>
         </TopicTitle>
         <div className="section-container">
-          {/* <Introduction />
-          <Demographics /> */}
+          <Introduction population={population.data} populationByRaceAndEthnicity={populationByRaceAndEthnicity.data} populationByAgeAndGender={populationByAgeAndGender} lifeExpectancy={lifeExpectancy}/>
+          <Demographics population={population.data} populationByRaceAndEthnicity={populationByRaceAndEthnicity.data} populationByAgeAndGender={populationByAgeAndGender} lifeExpectancy={lifeExpectancy}/>
         </div>
 
         <TopicTitle slug="access-to-care">
@@ -138,7 +130,7 @@ class Profile extends Component {
           <DomesticPartners />
           <DisabilityStatus />
           <VisionAndAuditoryDisabilities />
-          <Homeless />
+          <Homeless population={population.data}/>
           <Veterans />
           <Incarceration />
         </div>
@@ -200,8 +192,8 @@ class Profile extends Component {
 }
 
 Profile.need = [
-  // Introduction,
-  // Demographics,
+  Introduction,
+  Demographics,
   Insecurity,
   FoodAvailability,
   StoreAccessByDemographic,
@@ -239,13 +231,19 @@ Profile.need = [
   ReadingAssessment,
   WaterQuality,
   AirQuality,
-  fetchData("meta", "/api/search?id=<id>", resp => resp[0])
+  fetchData("meta", "/api/search?id=<id>", resp => resp[0]),
+  fetchData("population", "https://niagara.datausa.io/api/data?measures=Population&Geography=<id>&year=all"),
+  fetchData("populationByAgeAndGender", "/api/data?measures=Population&drilldowns=Age,Sex&Geography=<id>&Year=all", d => d.data),
+  fetchData("lifeExpectancy", "/api/data?measures=Life Expectancy&Geography=<id>", d => d.data), // Year data not available
+  fetchData("populationByRaceAndEthnicity", "https://niagara.datausa.io/api/data?measures=Hispanic Population&drilldowns=Race,Ethnicity&Geography=<id>&Year=all")
 ];
 
 const mapStateToProps = state => ({
-  diabetes: state.data.diabetes,
   meta: state.data.meta,
-  population: state.data.population
+  population: state.data.population,
+  populationByAgeAndGender: state.data.populationByAgeAndGender,
+  populationByRaceAndEthnicity: state.data.populationByRaceAndEthnicity,
+  lifeExpectancy: state.data.lifeExpectancy
 });
 
 export default connect(mapStateToProps)(Profile);

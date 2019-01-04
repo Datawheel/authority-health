@@ -18,8 +18,8 @@ class Unemployment extends SectionColumns {
 
     const {employmentStatus, workExperience, unemploymentRate} = this.props;
 
-    // Find share for work experience.
-    const filteredWorkExperienceData = workExperience.filter(d => d["Work Experience"] !== "Did Not Work");
+    // Find full-time work share for male and female population.
+    const filteredWorkExperienceData = workExperience.filter(d => d["Work Experience"] === "Worked Full Time, Year-round");
     nest()
       .key(d => d.Year)
       .entries(filteredWorkExperienceData)
@@ -27,8 +27,8 @@ class Unemployment extends SectionColumns {
         const total = sum(group.values, d => d.Population);
         group.values.forEach(d => d.share = d.Population / total * 100);
       });
-    const getMaleFullTimeData = filteredWorkExperienceData.filter(d => d.Sex === "Male" && d["ID Work Experience"] === 0);
-    const getFemaleFullTimeData = filteredWorkExperienceData.filter(d => d.Sex === "Female" && d["ID Work Experience"] === 0);
+    const getMaleFullTimeData = filteredWorkExperienceData.filter(d => d.Sex === "Male");
+    const getFemaleFullTimeData = filteredWorkExperienceData.filter(d => d.Sex === "Female");
 
     // Find share for employmentStatus.
     const unemployedData = employmentStatus.filter(d => d["Employment Status"] === "Unemployed");
@@ -70,11 +70,11 @@ class Unemployment extends SectionColumns {
           />
 
           <p>
-            In {getMaleFullTimeData[0].Year}, male and female population in {getMaleFullTimeData[0].Geography} that worked full-time was {formatPercentage(getMaleFullTimeData[0].share)} and {formatPercentage(getFemaleFullTimeData[0].share)}, respectively.
-            The most common male unemployment age group was {getTopMaleUnemploymemtData.Age.toLowerCase()} ({formatPercentage(getTopMaleUnemploymemtData.share)}), and most common female unemployment age group was {getTopFemaleUnemploymemtData.Age.toLowerCase()} ({formatPercentage(getTopFemaleUnemploymemtData.share)}).  
+            In {getMaleFullTimeData[0].Year}, the percentage of the working population in {getMaleFullTimeData[0].Geography} that worked full-time for men and women was {formatPercentage(getMaleFullTimeData[0].share)} and {formatPercentage(getFemaleFullTimeData[0].share)}, respectively.
+            The most common unemployed age group for men was {getTopMaleUnemploymemtData.Age.toLowerCase()} ({formatPercentage(getTopMaleUnemploymemtData.share)}), and the most common female unemployed age group for women was {getTopFemaleUnemploymemtData.Age.toLowerCase()} ({formatPercentage(getTopFemaleUnemploymemtData.share)}).  
+            In {recentYearUnemploymentRate.values[0].Year}, the overall unemploymemt rate in {recentYearUnemploymentRate.values[0].Geography} was {formatPercentage(recentYearUnemploymentRate.values[0]["Unemployment Rate"])}.
           </p>
-          <p>In {recentYearUnemploymentRate.values[0].Year}, the overall unemploymemt rate in {recentYearUnemploymentRate.values[0].Geography} was {formatPercentage(recentYearUnemploymentRate.values[0]["Unemployment Rate"])}.</p>
-          <p>The following charts show overall unemployment rate over years and unemployment rate by age and gender.</p>
+          <p>The following charts show the unemployment rate over time both overall and by age and gender.</p>
           
           {/* Barchart to show population by age and gender over the years for selected geography. */}
           <BarChart config={{
@@ -87,8 +87,7 @@ class Unemployment extends SectionColumns {
             time: "Year",
             xSort: (a, b) => a["ID Age"] - b["ID Age"],
             xConfig: {
-              tickFormat: d => rangeFormatter(d),
-              title: "Unemployment Rate by Age and Gender"
+              tickFormat: d => rangeFormatter(d)
             },
             yConfig: {
               tickFormat: d => formatPercentage(d),
@@ -108,7 +107,6 @@ class Unemployment extends SectionColumns {
           discrete: "x",
           height: 300,
           baseline: 0,
-          title: "Unemployment Rate Over Years",
           legend: false,
           groupBy: "Geography",
           x: "Year",

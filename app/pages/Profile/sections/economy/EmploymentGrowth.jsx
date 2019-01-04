@@ -19,13 +19,13 @@ class EmploymentGrowth extends SectionColumns {
         <SectionTitle>Employment Growth</SectionTitle>
         <article>
           <Stat
-            title={"Zip Code with the most employment growth"}
+            title={"Zip Code with the largest employment growth"}
             year={topEmploymentRateData.Year}
             value={topEmploymentRateData["Zip Code"]}
             qualifier={`${topEmploymentRateData["Percent Change in Employment"]}%`}
           />
 
-          <p>In {topEmploymentRateData.Year}, the zip code in Wayne County with the most employment growth was {topEmploymentRateData["Zip Code"]} ({topEmploymentRateData["Percent Change in Employment"]}%).</p>
+          <p>In {topEmploymentRateData.Year}, the zip code in Wayne County with the largest employment growth was {topEmploymentRateData["Zip Code"]} ({topEmploymentRateData["Percent Change in Employment"]}%).</p>
           <p>The following map shows the employment growth for all zip codes in Wayne County.</p>
         </article>
 

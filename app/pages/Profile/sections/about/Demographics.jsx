@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {sum} from "d3-array";
 import {nest} from "d3-collection";
 import {format} from "d3-format";
-import {BarChart, LinePlot} from "d3plus-react";
+import {BarChart, Treemap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
@@ -18,7 +18,16 @@ const commas = format(".2f");
 class Demographics extends SectionColumns {
 
   render() {
-    const {population, populationByAgeAndGender, lifeExpectancy, socialVulnerabilityIndex} = this.props;
+    const {population, populationByAgeAndGender, populationByRaceAndEthnicity, lifeExpectancy, socialVulnerabilityIndex} = this.props;
+
+    // Find recent year population data.
+    const recentYearPopulation = {};
+    nest()
+      .key(d => d.Year)
+      .entries(population)
+      .forEach(group => {
+        group.key >= population[0].Year ? Object.assign(recentYearPopulation, group) : {};
+      });
 
     // Find share for population by Age and Gender.
     nest()
@@ -28,13 +37,14 @@ class Demographics extends SectionColumns {
         const total = sum(group.values, d => d.Population);
         group.values.forEach(d => d.share = d.Population / total * 100);
       });
-
-    const recentYearPopulation = {};
+      
+    // Find share for population by Race and Ethnicity.
     nest()
       .key(d => d.Year)
-      .entries(population.data)
+      .entries(populationByRaceAndEthnicity)
       .forEach(group => {
-        group.key >= population.data[0].Year ? Object.assign(recentYearPopulation, group) : {};
+        const total = sum(group.values, d => d["Hispanic Population"]);
+        group.values.forEach(d => d.share = d["Hispanic Population"] / total * 100);
       });
 
     return (
@@ -121,6 +131,18 @@ class Demographics extends SectionColumns {
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => rangeFormatter(d.Age)], ["Share", d => formatPercentage(d.share)]]}
           }}
           />
+
+          <Treemap config={{
+            data: populationByRaceAndEthnicity,
+            height: 300,
+            sum: d => d["Hispanic Population"],
+            groupBy: ["Race", "Ethnicity"],
+            label: d => d.Race,
+            time: "Year",
+            title: "Population by Race and Ethnicity",
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Ethnicity", d => d.Ethnicity], ["Share", d => formatPercentage(d.share)]]}
+          }}
+          />
         </SectionColumns>
       </div>
     );
@@ -132,16 +154,10 @@ Demographics.defaultProps = {
 };
 
 Demographics.need = [
-  fetchData("population", "https://niagara.datausa.io/api/data?measures=Population&Geography=<id>&year=all"),
-  fetchData("populationByAgeAndGender", "/api/data?measures=Population&drilldowns=Age,Sex&Geography=<id>&Year=all", d => d.data),
-  fetchData("lifeExpectancy", "/api/data?measures=Life Expectancy&Geography=<id>", d => d.data), // Year data not available
   fetchData("socialVulnerabilityIndex", "/api/data?measures=Socioeconomic Ranking,Household Composition and Disability Ranking,Minority Status and Language Ranking,Housing and Transportation Ranking,Overall Ranking&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
-  population: state.data.population,
-  populationByAgeAndGender: state.data.populationByAgeAndGender,
-  lifeExpectancy: state.data.lifeExpectancy,
   socialVulnerabilityIndex: state.data.socialVulnerabilityIndex
 });
 

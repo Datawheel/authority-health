@@ -44,9 +44,10 @@ function formatter(members, data, dimension, level) {
     .filter(d => geoFilter[level](d.key))
     .reduce((arr, d) => {
       const obj = {};
+      const name = d.name.replace(", MI", "").replace(", Wayne County", "");
       obj.id = `${d.key}`;
-      obj.name = d.name;
-      obj.display = d.caption;
+      obj.name = name;
+      obj.display = name;
       obj.zvalue = data[obj.id] || 0;
       obj.dimension = dimension;
       obj.hierarchy = level;

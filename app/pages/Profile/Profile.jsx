@@ -7,14 +7,15 @@ import ProfileHeader from "./components/ProfileHeader";
 import "./Profile.css";
 
 import Introduction from "./sections/about/Introduction";
-import Demographics from "./sections/about/Demographics";
+import SocioeconomicOutcomes from "./sections/about/SocioeconomicOutcomes";
+import HealthOutcomes from "./sections/about/HealthOutcomes";
 import Insecurity from "./sections/foodAccess/Insecurity";
 import FoodAvailability from "./sections/foodAccess/FoodAvailability";
 import StoreAccessByDemographic from "./sections/foodAccess/StoreAccessByDemographic";
 import RiskyBehaviors from "./sections/healthBehaviors/RiskyBehaviors";
 import Cancer from "./sections/healthBehaviors/Cancer";
 import PhysicalInactivity from "./sections/healthBehaviors/PhysicalInactivity";
-import HealthConditonChronicDiseases from "./sections/healthBehaviors/HealthConditonChronicDiseases";
+import ConditonsAndChronicDiseases from "./sections/healthBehaviors/ConditonsAndChronicDiseases";
 import PreventiveCare from "./sections/healthBehaviors/PreventiveCare";
 import ObesityAndDiabetes from "./sections/healthBehaviors/ObesityAndDiabetes";
 import DentistsDemographic from "./sections/accessToCare/DentistsDemographic";
@@ -66,13 +67,14 @@ class Profile extends Component {
 
         <TopicTitle slug="about">
           <div className="section-container">
-            <Icon iconName="about" />
+            <Icon iconName="info-sign" />
             About
           </div>
         </TopicTitle>
         <div className="section-container">
           <Introduction population={population.data} populationByRaceAndEthnicity={populationByRaceAndEthnicity.data} populationByAgeAndGender={populationByAgeAndGender} lifeExpectancy={lifeExpectancy}/>
-          <Demographics population={population.data} populationByRaceAndEthnicity={populationByRaceAndEthnicity.data} populationByAgeAndGender={populationByAgeAndGender} lifeExpectancy={lifeExpectancy}/>
+          <SocioeconomicOutcomes population={population.data} populationByRaceAndEthnicity={populationByRaceAndEthnicity.data} populationByAgeAndGender={populationByAgeAndGender} lifeExpectancy={lifeExpectancy}/>
+          <HealthOutcomes />
         </div>
 
         <TopicTitle slug="access-to-care">
@@ -111,7 +113,7 @@ class Profile extends Component {
           </div>
         </TopicTitle>
         <div className="section-container">
-          <HealthConditonChronicDiseases />
+          <ConditonsAndChronicDiseases />
           <PreventiveCare />
           <ObesityAndDiabetes />
           <Cancer />
@@ -195,11 +197,12 @@ class Profile extends Component {
 
 Profile.need = [
   Introduction,
-  Demographics,
+  SocioeconomicOutcomes,
+  HealthOutcomes,
   Insecurity,
   FoodAvailability,
   StoreAccessByDemographic,
-  HealthConditonChronicDiseases,
+  ConditonsAndChronicDiseases,
   PreventiveCare,
   ObesityAndDiabetes,
   Cancer,

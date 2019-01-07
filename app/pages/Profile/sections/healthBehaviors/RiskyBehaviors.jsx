@@ -8,10 +8,6 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Stat from "../../../../components/Stat";
 
-const formatName = name => {
-  const nameArr = name.split(" ");
-  return `${nameArr[0]} ${nameArr[1]} ${nameArr[2]}`;
-};
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
 class RiskyBehaviors extends SectionColumns {
@@ -79,7 +75,7 @@ class RiskyBehaviors extends SectionColumns {
             <label>
               <div className="pt-select pt-fill">
                 <select onChange={this.handleChange}>
-                  {drugTypes.map(item => <option key={item} value={item}>{formatName(item)}</option>)}
+                  {drugTypes.map(item => <option key={item} value={item}>{item}</option>)}
                 </select>
               </div>
             </label>
@@ -101,12 +97,12 @@ class RiskyBehaviors extends SectionColumns {
           }
           {isSecondHandSmokeOrMonthlyAlcoholSelected
             ? <div>
-              <p>In {topSecondHandSmokeAndMonthlyAlcoholData["End Year"]}, {topSecondHandSmokeAndMonthlyAlcoholData.County} had the highest prevalence of {formatName(dropdownValue.toLowerCase())} ({formatAbbreviate(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue])}%).</p>
-              <p>The map here shows the {formatName(dropdownValue.toLowerCase())} for Wayne County.</p>
+              <p>In {topSecondHandSmokeAndMonthlyAlcoholData["End Year"]}, {topSecondHandSmokeAndMonthlyAlcoholData.County} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatAbbreviate(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue])}%).</p>
+              <p>The map here shows the {dropdownValue.toLowerCase()} for Wayne County.</p>
             </div>
             : <div>
-              <p>In {year}, {topTractNum} had the highest prevalence of {formatName(dropdownValue.toLowerCase())} ({topTractRate}%) out of all Tracts in Wayne County.</p>
-              <p>The map here shows the {formatName(dropdownValue.toLowerCase())} for all tracts in Wayne County.</p>
+              <p>In {year}, {topTractNum} had the highest prevalence of {dropdownValue.toLowerCase()} ({topTractRate}%) out of all Tracts in Wayne County.</p>
+              <p>The map here shows the {dropdownValue.toLowerCase()} for all tracts in Wayne County.</p>
             </div>
           }
 
@@ -155,7 +151,7 @@ class RiskyBehaviors extends SectionColumns {
             label: d => d.County,
             height: 400,
             time: "End Year",
-            tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Behavior", `${formatName(dropdownValue)}`], ["Prevalence", d => formatPercentage(d[dropdownValue])]]},
+            tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Behavior", `${dropdownValue}`], ["Prevalence", d => formatPercentage(d[dropdownValue])]]},
             topojson: "/topojson/county.json",
             topojsonFilter: d => d.id.startsWith("05000US26")
           }}
@@ -170,7 +166,7 @@ class RiskyBehaviors extends SectionColumns {
             label: d => d.Tract,
             height: 400,
             time: "Year",
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Behavior", `${formatName(dropdownValue)}`], ["Prevalence", d => formatPercentage(d[dropdownValue])]]},
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Behavior", `${dropdownValue}`], ["Prevalence", d => formatPercentage(d[dropdownValue])]]},
             topojson: "/topojson/tract.json",
             topojsonFilter: d => d.id.startsWith("14000US26163")
           }}

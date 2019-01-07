@@ -8,17 +8,13 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Stat from "../../../../components/Stat";
 
-const formatName = name => {
-  const nameArr = name.split(" ");
-  return `${nameArr[0]} ${nameArr[1]} ${nameArr[2]}`;
-};
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
 class RiskyBehaviors extends SectionColumns {
 
   constructor(props) {
     super(props);
-    this.state = {dropdownValue: "Current Smoking Data Value"};
+    this.state = {dropdownValue: "Current Smoking"};
   }
 
   // Handler function for dropdown onChange.
@@ -35,7 +31,7 @@ class RiskyBehaviors extends SectionColumns {
       drugTypes.push(d);
     });
 
-    const isSecondHandSmokeOrMonthlyAlcoholSelected = dropdownValue === "Secondhand Smoke Exposure Yes Weighted Percent" || dropdownValue === "Monthly Alcohol Consumption Some Weighted Percent";
+    const isSecondHandSmokeOrMonthlyAlcoholSelected = dropdownValue === "Secondhand Smoke Exposure" || dropdownValue === "Monthly Alcohol Consumption";
 
     // Find recent year top data for the selceted dropdown value.
     const recentYearSecondHandSmokeAndMonthlyAlcoholData = {};
@@ -79,7 +75,7 @@ class RiskyBehaviors extends SectionColumns {
             <label>
               <div className="pt-select pt-fill">
                 <select onChange={this.handleChange}>
-                  {drugTypes.map(item => <option key={item} value={item}>{formatName(item)}</option>)}
+                  {drugTypes.map(item => <option key={item} value={item}>{item}</option>)}
                 </select>
               </div>
             </label>
@@ -101,12 +97,12 @@ class RiskyBehaviors extends SectionColumns {
           }
           {isSecondHandSmokeOrMonthlyAlcoholSelected
             ? <div>
-              <p>In {topSecondHandSmokeAndMonthlyAlcoholData["End Year"]}, {topSecondHandSmokeAndMonthlyAlcoholData.County} had the highest prevalence of {formatName(dropdownValue.toLowerCase())} ({formatAbbreviate(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue])}%).</p>
-              <p>The map here shows the {formatName(dropdownValue.toLowerCase())} for Wayne County.</p>
+              <p>In {topSecondHandSmokeAndMonthlyAlcoholData["End Year"]}, {topSecondHandSmokeAndMonthlyAlcoholData.County} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatAbbreviate(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue])}%).</p>
+              <p>The map here shows the {dropdownValue.toLowerCase()} for Wayne County.</p>
             </div>
             : <div>
-              <p>In {year}, {topTractNum} had the highest prevalence of {formatName(dropdownValue.toLowerCase())} ({topTractRate}%) out of all Tracts in Wayne County.</p>
-              <p>The map here shows the {formatName(dropdownValue.toLowerCase())} for all tracts in Wayne County.</p>
+              <p>In {year}, {topTractNum} had the highest prevalence of {dropdownValue.toLowerCase()} ({topTractRate}%) out of all Tracts in Wayne County.</p>
+              <p>The map here shows the {dropdownValue.toLowerCase()} for all tracts in Wayne County.</p>
             </div>
           }
 
@@ -115,7 +111,7 @@ class RiskyBehaviors extends SectionColumns {
             ? <div>
               <p>The chart here shows the former, current and never smoking status in Wayne County.</p>
               <Treemap config={{
-                data: "/api/data?measures=Smoking Status Current Weighted Percent,Smoking Status Former Weighted Percent,Smoking Status Never Weighted Percent&drilldowns=End Year",
+                data: "/api/data?measures=Smoking Status Current,Smoking Status Former,Smoking Status Never&drilldowns=End Year",
                 height: 250,
                 sum: d => d[d.SmokingType],
                 legend: false,
@@ -155,7 +151,7 @@ class RiskyBehaviors extends SectionColumns {
             label: d => d.County,
             height: 400,
             time: "End Year",
-            tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Behavior", `${formatName(dropdownValue)}`], ["Prevalence", d => formatPercentage(d[dropdownValue])]]},
+            tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Behavior", `${dropdownValue}`], ["Prevalence", d => formatPercentage(d[dropdownValue])]]},
             topojson: "/topojson/county.json",
             topojsonFilter: d => d.id.startsWith("05000US26")
           }}
@@ -170,7 +166,7 @@ class RiskyBehaviors extends SectionColumns {
             label: d => d.Tract,
             height: 400,
             time: "Year",
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Behavior", `${formatName(dropdownValue)}`], ["Prevalence", d => formatPercentage(d[dropdownValue])]]},
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Behavior", `${dropdownValue}`], ["Prevalence", d => formatPercentage(d[dropdownValue])]]},
             topojson: "/topojson/tract.json",
             topojsonFilter: d => d.id.startsWith("14000US26163")
           }}
@@ -187,8 +183,8 @@ RiskyBehaviors.defaultProps = {
 };
 
 RiskyBehaviors.need = [
-  fetchData("allTractSmokingDrinkingData", "/api/data?measures=Current Smoking Data Value,Binge Drinking Data Value&drilldowns=Tract&Year=latest"),
-  fetchData("secondHandSmokeAndMonthlyAlcohol", "/api/data?measures=Secondhand Smoke Exposure Yes Weighted Percent,Monthly Alcohol Consumption Some Weighted Percent&drilldowns=End Year,County")
+  fetchData("allTractSmokingDrinkingData", "/api/data?measures=Current Smoking,Binge Drinking&drilldowns=Tract&Year=latest"),
+  fetchData("secondHandSmokeAndMonthlyAlcohol", "/api/data?measures=Secondhand Smoke Exposure,Monthly Alcohol Consumption&drilldowns=End Year,County")
 ];
 
 const mapStateToProps = state => ({

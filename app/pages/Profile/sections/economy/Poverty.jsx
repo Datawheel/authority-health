@@ -90,17 +90,17 @@ class Poverty extends SectionColumns {
             height: 300,
             groupBy: "Race",
             legend: false,
+            label: d => d.Race,
             y: "Race",
             x: "share",
             time: "Year",
-            label: d => d.Race,
-            ySort: (a, b) => a["ID Race"] - b["ID Race"],
             yConfig: {
-              ticks: []
+              ticks: [],
+              title: "Population Below Poverty by Race"
             },
             xConfig: {
               tickFormat: d => formatPopulation(d),
-              title: "Population Below Poverty"
+              title: "Share"
             },
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)]]}
           }}
@@ -118,11 +118,12 @@ class Poverty extends SectionColumns {
           xSort: (a, b) => a["ID Age"] - b["ID Age"],
           xConfig: {
             labelRotation: false,
-            tickFormat: d => rangeFormatter(d)
+            tickFormat: d => rangeFormatter(d),
+            title: "Population Below Poverty by Age and Gender"
           },
           yConfig: {
             tickFormat: d => formatPopulation(d),
-            title: "Population Below Poverty Level"
+            title: "Share"
           },
           shapeConfig: {
             label: false

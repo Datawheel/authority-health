@@ -1,22 +1,23 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Icon} from "@blueprintjs/core";
-import {fetchData, SectionColumns, SectionTitle, TopicTitle} from "@datawheel/canon-core";
-import {formatAbbreviate} from "d3plus-format";
+import {fetchData, TopicTitle} from "@datawheel/canon-core";
 
-import Stat from "components/Stat";
 import ProfileHeader from "./components/ProfileHeader";
 import "./Profile.css";
 
+import Introduction from "./sections/about/Introduction";
+import SocioeconomicOutcomes from "./sections/about/SocioeconomicOutcomes";
+import HealthOutcomes from "./sections/about/HealthOutcomes";
 import Insecurity from "./sections/foodAccess/Insecurity";
 import FoodAvailability from "./sections/foodAccess/FoodAvailability";
 import StoreAccessByDemographic from "./sections/foodAccess/StoreAccessByDemographic";
-import RiskyBehaviors from "./sections/healthBehaviors/RiskyBehaviors";
-import Cancer from "./sections/healthBehaviors/Cancer";
-import PhysicalInactivity from "./sections/healthBehaviors/PhysicalInactivity";
-import HealthConditonChronicDiseases from "./sections/healthBehaviors/HealthConditonChronicDiseases";
 import PreventiveCare from "./sections/healthBehaviors/PreventiveCare";
-import ObesityAndDiabetes from "./sections/healthBehaviors/ObesityAndDiabetes";
+import RiskyBehaviors from "./sections/healthBehaviors/RiskyBehaviors";
+import PhysicalInactivity from "./sections/healthBehaviors/PhysicalInactivity";
+import Cancer from "./sections/healthConditions/Cancer";
+import ObesityAndDiabetes from "./sections/healthConditions/ObesityAndDiabetes";
+import ConditionsAndChronicDiseases from "./sections/healthConditions/ConditionsAndChronicDiseases";
 import DentistsDemographic from "./sections/accessToCare/DentistsDemographic";
 import DentistsWorkStatus from "./sections/accessToCare/DentistsWorkStatus";
 import HealthCenters from "./sections/accessToCare/HealthCenters";
@@ -28,11 +29,14 @@ import DomesticPartners from "./sections/specialPopulation/DomesticPartners";
 import DisabilityStatus from "./sections/specialPopulation/DisabilityStatus";
 import Homeless from "./sections/specialPopulation/Homeless";
 import Incarceration from "./sections/specialPopulation/Incarceration";
-import HearingAndAuditoryDisabilities from "./sections/specialPopulation/HearingAndAuditoryDisabilities";
+import VisionAndAuditoryDisabilities from "./sections/specialPopulation/VisionAndAuditoryDisabilities";
 import Homeownership from "./sections/builtSocialEnvironment/Homeownership";
 import Rentals from "./sections/builtSocialEnvironment/Rentals";
 import Transportation from "./sections/builtSocialEnvironment/Transportation";
 import ViolentAndPropertyCrimes from "./sections/builtSocialEnvironment/ViolentAndPropertyCrimes";
+import EmploymentGrowth from "./sections/economy/EmploymentGrowth";
+import Unemployment from "./sections/economy/Unemployment";
+import ConsumerPriceIndex from "./sections/economy/ConsumerPriceIndex";
 import DistressScore from "./sections/economy/DistressScore";
 import HouseholdIncomeFromPublicAssistance from "./sections/economy/HouseholdIncomeFromPublicAssistance";
 import WageDistribution from "./sections/economy/WageDistribution";
@@ -52,8 +56,8 @@ class Profile extends Component {
 
   render() {
 
-    const {population} = this.props;
     const {name} = this.props.meta;
+    const {population, populationByRaceAndEthnicity, populationByAgeAndGender, lifeExpectancy} = this.props;
 
     return (
       <div className="profile">
@@ -61,21 +65,16 @@ class Profile extends Component {
           title={ name }
         />
 
+        <TopicTitle slug="about">
+          <div className="section-container">
+            <Icon iconName="info-sign" />
+            About
+          </div>
+        </TopicTitle>
         <div className="section-container">
-          <SectionColumns>
-            <SectionTitle>Introduction</SectionTitle>
-            <article>
-              (Introduction Text in Progress)
-            </article>
-          </SectionColumns>
-          <SectionColumns>
-            <SectionTitle>Demographics</SectionTitle>
-            <article>
-              <Stat title="Population" value={ formatAbbreviate(population.data[0].Population) } />
-              <br />
-              (Demographics Section in Progress)
-            </article>
-          </SectionColumns>
+          <Introduction population={population.data} populationByRaceAndEthnicity={populationByRaceAndEthnicity.data} populationByAgeAndGender={populationByAgeAndGender} lifeExpectancy={lifeExpectancy}/>
+          <SocioeconomicOutcomes population={population.data} populationByRaceAndEthnicity={populationByRaceAndEthnicity.data} populationByAgeAndGender={populationByAgeAndGender} lifeExpectancy={lifeExpectancy}/>
+          <HealthOutcomes />
         </div>
 
         <TopicTitle slug="access-to-care">
@@ -109,17 +108,26 @@ class Profile extends Component {
 
         <TopicTitle slug="health-behaviors">
           <div className="section-container">
-            <Icon iconName="pulse" />
+            <Icon iconName="heart" />
             Health Behaviors
           </div>
         </TopicTitle>
         <div className="section-container">
-          <HealthConditonChronicDiseases />
           <PreventiveCare />
-          <ObesityAndDiabetes />
-          <Cancer />
           <RiskyBehaviors />
           <PhysicalInactivity />
+        </div>
+
+        <TopicTitle slug="health-conditions">
+          <div className="section-container">
+            <Icon iconName="pulse" />
+            Health Conditions
+          </div>
+        </TopicTitle>
+        <div className="section-container">
+          <ConditionsAndChronicDiseases />
+          <ObesityAndDiabetes />
+          <Cancer />
         </div>
 
         <TopicTitle slug="special-population">
@@ -133,8 +141,8 @@ class Profile extends Component {
           <Immigrants />
           <DomesticPartners />
           <DisabilityStatus />
-          <HearingAndAuditoryDisabilities />
-          <Homeless />
+          <VisionAndAuditoryDisabilities /> 
+          <Homeless population={population.data}/>
           <Veterans />
           <Incarceration />
         </div>
@@ -159,6 +167,9 @@ class Profile extends Component {
           </div>
         </TopicTitle>
         <div className="section-container">
+          <EmploymentGrowth />
+          <Unemployment />
+          <ConsumerPriceIndex />
           <DistressScore />
           <HouseholdIncomeFromPublicAssistance />
           <WageDistribution />
@@ -194,10 +205,13 @@ class Profile extends Component {
 }
 
 Profile.need = [
+  Introduction,
+  SocioeconomicOutcomes,
+  HealthOutcomes,
   Insecurity,
   FoodAvailability,
   StoreAccessByDemographic,
-  HealthConditonChronicDiseases,
+  ConditionsAndChronicDiseases,
   PreventiveCare,
   ObesityAndDiabetes,
   Cancer,
@@ -211,7 +225,7 @@ Profile.need = [
   Immigrants,
   DomesticPartners,
   DisabilityStatus,
-  HearingAndAuditoryDisabilities,
+  VisionAndAuditoryDisabilities,
   Incarceration,
   Veterans,
   Homeless,
@@ -219,6 +233,9 @@ Profile.need = [
   Rentals,
   Transportation,
   ViolentAndPropertyCrimes,
+  EmploymentGrowth,
+  Unemployment,
+  ConsumerPriceIndex,
   DistressScore,
   HouseholdIncomeFromPublicAssistance,
   WageDistribution,
@@ -230,13 +247,18 @@ Profile.need = [
   WaterQuality,
   AirQuality,
   fetchData("meta", "/api/search?id=<id>", resp => resp[0]),
-  fetchData("population", "https://niagara.datausa.io/api/data?measures=Population&Geography=<id>&year=latest")
+  fetchData("population", "https://niagara.datausa.io/api/data?measures=Population&Geography=<id>&year=all"),
+  fetchData("populationByAgeAndGender", "/api/data?measures=Population&drilldowns=Age,Sex&Geography=<id>&Year=all", d => d.data),
+  fetchData("lifeExpectancy", "/api/data?measures=Life Expectancy&Geography=<id>", d => d.data), // Year data not available
+  fetchData("populationByRaceAndEthnicity", "https://niagara.datausa.io/api/data?measures=Hispanic Population&drilldowns=Race,Ethnicity&Geography=<id>&Year=all")
 ];
 
 const mapStateToProps = state => ({
-  diabetes: state.data.diabetes,
   meta: state.data.meta,
-  population: state.data.population
+  population: state.data.population,
+  populationByAgeAndGender: state.data.populationByAgeAndGender,
+  populationByRaceAndEthnicity: state.data.populationByRaceAndEthnicity,
+  lifeExpectancy: state.data.lifeExpectancy
 });
 
 export default connect(mapStateToProps)(Profile);

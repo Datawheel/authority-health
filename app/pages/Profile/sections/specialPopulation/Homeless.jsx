@@ -72,8 +72,17 @@ class Homeless extends SectionColumns {
         group.key >= data[0].Year ? Object.assign(recentYearTypesOfHomeless, group) : {};
       });
     const shelteredData = data.filter(d => d.HomelessType === "Sheltered");
+
+    // Find recent year population data.
+    const recentYearPopulation = {};
+    nest()
+      .key(d => d.Year)
+      .entries(population)
+      .forEach(group => {
+        group.key >= population[0].Year ? Object.assign(recentYearPopulation, group) : {};
+      });
     
-    const totalHomelessPopulation = (totalHomelessData[0].Sheltered + totalHomelessData[0].Unsheltered) / population.data[0].Population * 100;
+    const totalHomelessPopulation = (totalHomelessData[0].Sheltered + totalHomelessData[0].Unsheltered) / recentYearPopulation.values[0].Population * 100;
 
     return (
       <SectionColumns>
@@ -166,16 +175,14 @@ Homeless.need = [
   fetchData("typesOfShelteredHomeless", "/api/data?measures=Sheltered&drilldowns=Category&Geography=<id>&Year=all", d => d.data),
   fetchData("typesOfUnshelteredHomeless", "/api/data?measures=Unsheltered&drilldowns=Category&Geography=<id>&Year=all", d => d.data),
   fetchData("typesOfHomeless", "/api/data?measures=Sheltered,Unsheltered&drilldowns=Sub-group&Geography=<id>&Year=all", d => d.data),
-  fetchData("totalHomelessData", "/api/data?measures=Sheltered,Unsheltered&drilldowns=Group&Geography=<id>&Year=latest", d => d.data),
-  fetchData("population", "https://niagara.datausa.io/api/data?measures=Population&Geography=<id>&year=latest")
+  fetchData("totalHomelessData", "/api/data?measures=Sheltered,Unsheltered&drilldowns=Group&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   typesOfShelteredHomeless: state.data.typesOfShelteredHomeless,
   typesOfUnshelteredHomeless: state.data.typesOfUnshelteredHomeless,
   typesOfHomeless: state.data.typesOfHomeless,
-  totalHomelessData: state.data.totalHomelessData,
-  population: state.data.population
+  totalHomelessData: state.data.totalHomelessData
 });
 
 export default connect(mapStateToProps)(Homeless);

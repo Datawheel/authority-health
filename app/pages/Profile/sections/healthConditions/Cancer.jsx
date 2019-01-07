@@ -111,7 +111,6 @@ class Cancer extends SectionColumns {
             legend: false,
             groupBy: ["Cancer Site", "Sex"],
             stacked: true,
-            label: d => d.Sex === "M" ? "Male" : "Female",
             x: "share",
             y: "Cancer Site",
             time: "Year",
@@ -122,7 +121,7 @@ class Cancer extends SectionColumns {
             yConfig: {
               tickFormat: d => d
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Occurance per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Rate"])], ["Share", d => formatPercentage(d.share)]]}
+            tooltipConfig: {tbody: [["Cancer Type", d => d["Cancer Site"]], ["Year", d => d.Year], ["Prevalence", d => formatPercentage(d.share)], ["Occurance per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Rate"])]]}
           }}
           dataFormat={resp => {
             nest()
@@ -161,7 +160,7 @@ class Cancer extends SectionColumns {
               labelRotation: false
             },
             yConfig: {tickFormat: d => d},
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Occurance per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Rate"])], ["Share", d => formatPercentage(d.share)]]}
+            tooltipConfig: {tbody: [["Cancer Type", d => d["Cancer Site"]], ["Year", d => d.Year], ["Prevalence", d => formatPercentage(d.share)], ["Occurance per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Rate"])]]}
           }}
           dataFormat={resp => {
             nest()

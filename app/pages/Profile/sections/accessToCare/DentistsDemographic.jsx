@@ -61,8 +61,8 @@ class DentistsDemographic extends SectionColumns {
           />
 
           <p>In {topDentistsAgeData.Year}, the most common age group of dentists in {topDentistsAgeData.Geography} County was {topDentistsAgeData["Age Group"]} years ({formatPercentage(topDentistsAgeData.share)}) and most common gender group was {topDentistsByGender.Sex} ({formatPercentage(topDentistsByGender.share)}).</p>
-          <p>The barchart here shows dentists age group share in {topDentistsAgeData.Geography} County.</p>
-          <p>The following barchart shows dentists gender share in {topDentistsByGender.Geography} County.</p>
+          <p>The chart on the right shows dentists age group share in {topDentistsAgeData.Geography} County.</p>
+          <p>The following chart shows dentists gender share in {topDentistsByGender.Geography} County.</p>
 
           {/* Draw a Treemap for Dentists by Gender. */}
           <Treemap config={{

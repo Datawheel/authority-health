@@ -88,6 +88,7 @@ class WaterQuality extends SectionColumns {
         <Geomap config={{
           data: chartData,
           groupBy: "ID Tract",
+          label: d => d.Tract,
           colorScale: leadLevelSelected ? d => formatData(d["Lead Level"]) : d => formatData(d["Mercury Level"]),
           colorScaleConfig: {
             axisConfig: {tickFormat: d => formatLabel(d)},

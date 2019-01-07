@@ -10,11 +10,11 @@ import Stat from "../../../../components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
-class HealthConditonChronicDiseases extends SectionColumns {
+class ConditionsAndChronicDiseases extends SectionColumns {
 
   constructor(props) {
     super(props);
-    this.state = {dropdownValue: "Arthritis Data Value"};
+    this.state = {dropdownValue: "Arthritis"};
   }
 
   // Handler function for dropdown onChange event.
@@ -32,13 +32,13 @@ class HealthConditonChronicDiseases extends SectionColumns {
     });
 
     // Check if the selected dropdown values are from the healthConditionWeightedData.
-    const isHealthConditionWeightedValueSelected = dropdownValue === "Cardiovascular Disease Yes Weighted Percent" ||
-    dropdownValue === "Ever Depressive Yes Weighted Percent" ||
-    dropdownValue === "Ever Heart Attack Yes Weighted Percent" ||
-    dropdownValue === "Heart Disease Yes Weighted Percent" ||
-    dropdownValue === "HIV Tested Yes Weighted Percent" ||
-    dropdownValue === "Poor Mental Health 14 Or More Days Weighted Percent" ||
-    dropdownValue === "Gen Health Fair Or Poor Weighted Percent";
+    const isHealthConditionWeightedValueSelected = dropdownValue === "Cardiovascular Disease" ||
+    dropdownValue === "Ever Depressive" ||
+    dropdownValue === "Ever Heart Attack" ||
+    dropdownValue === "Heart Disease" ||
+    dropdownValue === "HIV Tested" ||
+    dropdownValue === "Poor Mental Health 14 Or More Days" ||
+    dropdownValue === "Gen Health Fair Or Poor";
 
     // Get top stats for the most recent year data for the selected dropdown value.
     const topDropdownValueTract = healthConditionData.data.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
@@ -54,7 +54,7 @@ class HealthConditonChronicDiseases extends SectionColumns {
 
     return (
       <SectionColumns>
-        <SectionTitle>Health Conditon/Chronic Diseases</SectionTitle>
+        <SectionTitle>Conditons & Chronic Diseases</SectionTitle>
         <article>
           {/* Create a dropdown for different types of health conditions. */}
           <div className="pt-select pt-fill">
@@ -127,13 +127,13 @@ class HealthConditonChronicDiseases extends SectionColumns {
   }
 }
 
-HealthConditonChronicDiseases.defaultProps = {
-  slug: "health-conditon-chronic-diseases"
+ConditionsAndChronicDiseases.defaultProps = {
+  slug: "conditons-and-chronic-diseases"
 };
 
-HealthConditonChronicDiseases.need = [
-  fetchData("healthConditionData", "/api/data?measures=Arthritis Data Value,COPD Data Value,Chronic Kidney Disease Data Value,Coronary Heart Disease Data Value,Current Asthma Data Value,High Blood Pressure Data Value,High Cholesterol Data Value,Mental Health Data Value,Stroke Data Value,Taking BP Medication Data Value,Teeth Loss Data Value,Sleep less than 7 hours Data Value&drilldowns=Tract&Year=all"),
-  fetchData("healthConditionWeightedData", "/api/data?measures=Cardiovascular Disease Yes Weighted Percent,Ever Depressive Yes Weighted Percent,Ever Heart Attack Yes Weighted Percent,Heart Disease Yes Weighted Percent,HIV Tested Yes Weighted Percent,Poor Mental Health 14 Or More Days Weighted Percent,Gen Health Fair Or Poor Weighted Percent&drilldowns=End Year,County")
+ConditionsAndChronicDiseases.need = [
+  fetchData("healthConditionData", "/api/data?measures=Arthritis,COPD,Chronic Kidney Disease,Coronary Heart Disease,Current Asthma,High Blood Pressure,High Cholesterol,Mental Health,Stroke,Taking BP Medication,Teeth Loss,Sleep less than 7 hours&drilldowns=Tract&Year=all"),
+  fetchData("healthConditionWeightedData", "/api/data?measures=Cardiovascular Disease,Ever Depressive,Ever Heart Attack,Heart Disease,HIV Tested,Poor Mental Health 14 Or More Days,Gen Health Fair Or Poor&drilldowns=End Year,County")
 ];
 
 const mapStateToProps = state => ({
@@ -141,4 +141,4 @@ const mapStateToProps = state => ({
   healthConditionWeightedData: state.data.healthConditionWeightedData
 });
 
-export default connect(mapStateToProps)(HealthConditonChronicDiseases);
+export default connect(mapStateToProps)(ConditionsAndChronicDiseases);

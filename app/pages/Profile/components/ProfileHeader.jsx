@@ -26,8 +26,12 @@ export default class ProfileHeader extends Component {
             Food Access
           </AnchorLink>
           <AnchorLink to="health-behaviors" className="section-header-anchor">
-            <Icon iconName="pulse" />
+            <Icon iconName="heart" />
             Health Behaviors
+          </AnchorLink>
+          <AnchorLink to="health-conditions" className="section-header-anchor">
+            <Icon iconName="pulse" />
+            Health Conditions
           </AnchorLink>
           <AnchorLink to="access-to-care" className="section-header-anchor">
             <Icon iconName="office" />

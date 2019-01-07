@@ -65,9 +65,8 @@ class Coverage extends SectionColumns {
           data: filteredRecentYearData,
           discrete: "x",
           height: 400,
-          label: d => `${d.Sex}`,
           groupBy: "Sex",
-          x: d => d.Age,
+          x: "Age",
           y: "share",
           time: "ID Year",
           xSort: (a, b) => a["ID Age"] - b["ID Age"],
@@ -80,7 +79,7 @@ class Coverage extends SectionColumns {
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Share", d => formatPercentage(d.share)]]}
         }}
         />
       </SectionColumns>

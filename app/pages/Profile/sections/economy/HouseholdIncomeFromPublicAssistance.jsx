@@ -78,7 +78,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
           height: 400,
           stacked: true,
           legend: false,
-          label: d => `${d["Family type"]} ${d["Number of workers"]}`,
+          label: d => `${d["Family type"]}`,
           groupBy: d => `${d["Family type"]}`,
           x: d => d["Number of workers"],
           y: "share",
@@ -92,7 +92,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Workers", d => d["Number of workers"]], ["Share", d => formatPercentage(d.share)]]}
         }}
         />
       </SectionColumns>

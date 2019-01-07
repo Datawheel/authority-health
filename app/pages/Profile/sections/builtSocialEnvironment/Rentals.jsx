@@ -62,8 +62,7 @@ class HouseRentals extends SectionColumns {
             data: rentAmountData,
             discrete: "x",
             height: 175,
-            groupBy: "ID Geography",
-            label: d => d.Year,
+            groupBy: "Geography",
             x: "Year",
             y: "Rent Amount",
             yConfig: {

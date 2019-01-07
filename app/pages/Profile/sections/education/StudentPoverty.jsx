@@ -64,7 +64,7 @@ class StudentPoverty extends SectionColumns {
             value={formatPopulation(recentYearEnrolledInSchoolPercentage)}
           />
           <p>In {topLevelOfSchoolData.Year}, the most common education level of students in {topLevelOfSchoolData.Geography} County living in poverty were {topLevelOfSchoolData["Level of School"].toLowerCase()} ({formatPopulation(topLevelOfSchoolData.share)}) and {formatPopulation(recentYearEnrolledInSchoolPercentage)} of the total population was enrolled in school in {topLevelOfSchoolData.Geography} County.</p>
-          <p>The following chart shows the level of school and the share of population in poverty that were enrolled in school.</p>
+          <p>The following chart shows the level of school and the share of students in poverty that were enrolled in school.</p>
         </article>
 
         {/* Draw a Barchart to show Level Of School for students in poverty. */}
@@ -81,7 +81,8 @@ class StudentPoverty extends SectionColumns {
           xSort: (a, b) => a["ID Level of School"] - b["ID Level of School"],
           xConfig: {
             labelRotation: false,
-            tickFormat: d => formatLabel(d)
+            tickFormat: d => formatLabel(d),
+            title: "Level of School"
           },
           yConfig: {
             tickFormat: d => formatPopulation(d),

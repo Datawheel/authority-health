@@ -10,7 +10,7 @@ import Stat from "../../../../components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
-class HealthConditonChronicDiseases extends SectionColumns {
+class ConditonsAndChronicDiseases extends SectionColumns {
 
   constructor(props) {
     super(props);
@@ -54,7 +54,7 @@ class HealthConditonChronicDiseases extends SectionColumns {
 
     return (
       <SectionColumns>
-        <SectionTitle>Health Conditon/Chronic Diseases</SectionTitle>
+        <SectionTitle>Conditons & Chronic Diseases</SectionTitle>
         <article>
           {/* Create a dropdown for different types of health conditions. */}
           <div className="pt-select pt-fill">
@@ -127,11 +127,11 @@ class HealthConditonChronicDiseases extends SectionColumns {
   }
 }
 
-HealthConditonChronicDiseases.defaultProps = {
-  slug: "health-conditon-chronic-diseases"
+ConditonsAndChronicDiseases.defaultProps = {
+  slug: "conditons-and-chronic-diseases"
 };
 
-HealthConditonChronicDiseases.need = [
+ConditonsAndChronicDiseases.need = [
   fetchData("healthConditionData", "/api/data?measures=Arthritis,COPD,Chronic Kidney Disease,Coronary Heart Disease,Current Asthma,High Blood Pressure,High Cholesterol,Mental Health,Stroke,Taking BP Medication,Teeth Loss,Sleep less than 7 hours&drilldowns=Tract&Year=all"),
   fetchData("healthConditionWeightedData", "/api/data?measures=Cardiovascular Disease,Ever Depressive,Ever Heart Attack,Heart Disease,HIV Tested,Poor Mental Health 14 Or More Days,Gen Health Fair Or Poor&drilldowns=End Year,County")
 ];
@@ -141,4 +141,4 @@ const mapStateToProps = state => ({
   healthConditionWeightedData: state.data.healthConditionWeightedData
 });
 
-export default connect(mapStateToProps)(HealthConditonChronicDiseases);
+export default connect(mapStateToProps)(ConditonsAndChronicDiseases);

@@ -12,12 +12,12 @@ import HealthOutcomes from "./sections/about/HealthOutcomes";
 import Insecurity from "./sections/foodAccess/Insecurity";
 import FoodAvailability from "./sections/foodAccess/FoodAvailability";
 import StoreAccessByDemographic from "./sections/foodAccess/StoreAccessByDemographic";
-import RiskyBehaviors from "./sections/healthBehaviors/RiskyBehaviors";
-import Cancer from "./sections/healthBehaviors/Cancer";
-import PhysicalInactivity from "./sections/healthBehaviors/PhysicalInactivity";
-import ConditionsAndChronicDiseases from "./sections/healthBehaviors/ConditionsAndChronicDiseases";
 import PreventiveCare from "./sections/healthBehaviors/PreventiveCare";
-import ObesityAndDiabetes from "./sections/healthBehaviors/ObesityAndDiabetes";
+import RiskyBehaviors from "./sections/healthBehaviors/RiskyBehaviors";
+import PhysicalInactivity from "./sections/healthBehaviors/PhysicalInactivity";
+import Cancer from "./sections/healthConditions/Cancer";
+import ObesityAndDiabetes from "./sections/healthConditions/ObesityAndDiabetes";
+import ConditionsAndChronicDiseases from "./sections/healthConditions/ConditionsAndChronicDiseases";
 import DentistsDemographic from "./sections/accessToCare/DentistsDemographic";
 import DentistsWorkStatus from "./sections/accessToCare/DentistsWorkStatus";
 import HealthCenters from "./sections/accessToCare/HealthCenters";
@@ -108,17 +108,26 @@ class Profile extends Component {
 
         <TopicTitle slug="health-behaviors">
           <div className="section-container">
-            <Icon iconName="pulse" />
+            <Icon iconName="heart" />
             Health Behaviors
           </div>
         </TopicTitle>
         <div className="section-container">
-          <ConditionsAndChronicDiseases />
           <PreventiveCare />
-          <ObesityAndDiabetes />
-          <Cancer />
           <RiskyBehaviors />
           <PhysicalInactivity />
+        </div>
+
+        <TopicTitle slug="health-conditions">
+          <div className="section-container">
+            <Icon iconName="pulse" />
+            Health Conditions
+          </div>
+        </TopicTitle>
+        <div className="section-container">
+          <ConditionsAndChronicDiseases />
+          <ObesityAndDiabetes />
+          <Cancer />
         </div>
 
         <TopicTitle slug="special-population">

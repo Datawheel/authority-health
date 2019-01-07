@@ -141,7 +141,7 @@ class Profile extends Component {
           <Immigrants />
           <DomesticPartners />
           <DisabilityStatus />
-          <VisionAndAuditoryDisabilities />
+          <VisionAndAuditoryDisabilities /> 
           <Homeless population={population.data}/>
           <Veterans />
           <Incarceration />

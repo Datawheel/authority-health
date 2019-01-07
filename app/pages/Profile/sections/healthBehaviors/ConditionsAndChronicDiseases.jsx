@@ -10,7 +10,7 @@ import Stat from "../../../../components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
-class ConditonsAndChronicDiseases extends SectionColumns {
+class ConditionsAndChronicDiseases extends SectionColumns {
 
   constructor(props) {
     super(props);
@@ -127,11 +127,11 @@ class ConditonsAndChronicDiseases extends SectionColumns {
   }
 }
 
-ConditonsAndChronicDiseases.defaultProps = {
+ConditionsAndChronicDiseases.defaultProps = {
   slug: "conditons-and-chronic-diseases"
 };
 
-ConditonsAndChronicDiseases.need = [
+ConditionsAndChronicDiseases.need = [
   fetchData("healthConditionData", "/api/data?measures=Arthritis,COPD,Chronic Kidney Disease,Coronary Heart Disease,Current Asthma,High Blood Pressure,High Cholesterol,Mental Health,Stroke,Taking BP Medication,Teeth Loss,Sleep less than 7 hours&drilldowns=Tract&Year=all"),
   fetchData("healthConditionWeightedData", "/api/data?measures=Cardiovascular Disease,Ever Depressive,Ever Heart Attack,Heart Disease,HIV Tested,Poor Mental Health 14 Or More Days,Gen Health Fair Or Poor&drilldowns=End Year,County")
 ];
@@ -141,4 +141,4 @@ const mapStateToProps = state => ({
   healthConditionWeightedData: state.data.healthConditionWeightedData
 });
 
-export default connect(mapStateToProps)(ConditonsAndChronicDiseases);
+export default connect(mapStateToProps)(ConditionsAndChronicDiseases);

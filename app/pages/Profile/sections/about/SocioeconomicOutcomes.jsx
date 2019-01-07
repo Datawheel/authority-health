@@ -12,11 +12,12 @@ import Stat from "../../../../components/Stat";
 import rangeFormatter from "../../../../utils/rangeFormatter";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
+const formatRaceName = d => d.replace("Alone", "");
+const formatEthnicityName = d => d.replace("Not Hispanic or Latino", "Non Hispanic");
 
 const commas = format(".2f");
 
 class Demographics extends SectionColumns {
-
   render() {
     const {population, populationByAgeAndGender, populationByRaceAndEthnicity, lifeExpectancy, socialVulnerabilityIndex} = this.props;
 
@@ -50,7 +51,7 @@ class Demographics extends SectionColumns {
     return (
       <div>
         <SectionColumns>
-          <SectionTitle>Demographics</SectionTitle>
+          <SectionTitle>Socioeconomic Outcomes</SectionTitle>
           <article>
             <Stat
               title="Life Expectancy"
@@ -137,10 +138,10 @@ class Demographics extends SectionColumns {
             height: 300,
             sum: d => d["Hispanic Population"],
             groupBy: ["Race", "Ethnicity"],
-            label: d => d.Race,
+            label: d => `${formatEthnicityName(d.Ethnicity)} ${formatRaceName(d.Race)}`,
             time: "Year",
             title: "Population by Race and Ethnicity",
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Ethnicity", d => d.Ethnicity], ["Share", d => formatPercentage(d.share)]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]}
           }}
           />
         </SectionColumns>
@@ -150,7 +151,7 @@ class Demographics extends SectionColumns {
 }
 
 Demographics.defaultProps = {
-  slug: "demographics"
+  slug: "socioeconomic-outcomes"
 };
 
 Demographics.need = [

@@ -39,7 +39,6 @@ class DentistsDemographic extends SectionColumns {
         group.values.forEach(d => d.share = d["Number of Dentists"] / total * 100);
         group.key >= dentistsByGender[0].Year ? Object.assign(recentYearDentistsByGender, group) : {};
       });
-
     recentYearDentistsByGender.values.sort((a, b) => b.share - a.share);
     const topDentistsByGender = recentYearDentistsByGender.values[0];
 

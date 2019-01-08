@@ -17,7 +17,7 @@ const formatEthnicityName = d => d.replace("Not Hispanic or Latino", "Non-Hispan
 
 const commas = format(".2f");
 
-class Demographics extends SectionColumns {
+class SocioeconomicOutcomes extends SectionColumns {
   render() {
     const {population, populationByAgeAndGender, populationByRaceAndEthnicity, lifeExpectancy, socialVulnerabilityIndex} = this.props;
 
@@ -150,11 +150,11 @@ class Demographics extends SectionColumns {
   }
 }
 
-Demographics.defaultProps = {
+SocioeconomicOutcomes.defaultProps = {
   slug: "socioeconomic-outcomes"
 };
 
-Demographics.need = [
+SocioeconomicOutcomes.need = [
   fetchData("socialVulnerabilityIndex", "/api/data?measures=Socioeconomic Ranking,Household Composition and Disability Ranking,Minority Status and Language Ranking,Housing and Transportation Ranking,Overall Ranking&Geography=<id>&Year=latest", d => d.data)
 ];
 
@@ -162,4 +162,4 @@ const mapStateToProps = state => ({
   socialVulnerabilityIndex: state.data.socialVulnerabilityIndex
 });
 
-export default connect(mapStateToProps)(Demographics);
+export default connect(mapStateToProps)(SocioeconomicOutcomes);

@@ -94,7 +94,7 @@ EducationalAttainment.defaultProps = {
 
 EducationalAttainment.need = [
   fetchData("educationalAttainmentData", "/api/data?measures=Population&drilldowns=Educational Attainment,Sex&Geography=<id>&Year=all", d => d.data),
-  fetchData("highSchoolDropoutRate", "/api/data?measures=Total Population,High School Dropout Rate&drilldowns=Zip Code&Year=latest", d => d.data)
+  fetchData("highSchoolDropoutRate", "/api/data?measures=Total Population,High School Dropout Rate&drilldowns=Zip&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({

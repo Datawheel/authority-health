@@ -100,32 +100,32 @@ class HealthCenters extends SectionColumns {
             </select>
           </div>
           {/* Show top stats for each dropdown choice. */}
-          {isHealthCentersSelected 
+          {isHealthCentersSelected
             ? <div>
               <Stat
                 title={`Zip Code with the most ${formatMeasureName(dropdownValue)}`}
                 year={`${topRecentYearDropdownValueData.Year}`}
-                value={topRecentYearDropdownValueData["Zip Code"]}
+                value={topRecentYearDropdownValueData["Zip"]}
                 qualifier={`${topRecentYearDropdownValueData[dropdownValue]} Health Centers`}
               />
-              <p>In {topRecentYearDropdownValueData.Year}, the zip code in Wayne County with the most {dropdownValue} was {topRecentYearDropdownValueData["Zip Code"]} ({topRecentYearDropdownValueData[dropdownValue]} health centers).</p>
+              <p>In {topRecentYearDropdownValueData.Year}, the zip code in Wayne County with the most {dropdownValue} was {topRecentYearDropdownValueData["Zip"]} ({topRecentYearDropdownValueData[dropdownValue]} health centers).</p>
               <p>The following map shows the total number of health centers for all zip codes in Wayne County, MI.</p>
             </div>
             : <div>
               <Stat
                 title="Zip Code with the most health center visits"
                 year={`${topRecentYearDropdownValueData.Year}`}
-                value={topRecentYearDropdownValueData["Zip Code"]}
+                value={topRecentYearDropdownValueData["Zip"]}
                 qualifier={formatPercentage(topRecentYearDropdownValueData[dropdownValue])}
               />
-              <p>In {topRecentYearDropdownValueData.Year}, the zip code in Wayne County with the most {formatMeasureName(dropdownValue).toLowerCase()} visiting health centers was {topRecentYearDropdownValueData["Zip Code"]} ({formatPercentage(topRecentYearDropdownValueData[dropdownValue])}).</p>
+              <p>In {topRecentYearDropdownValueData.Year}, the zip code in Wayne County with the most {formatMeasureName(dropdownValue).toLowerCase()} visiting health centers was {topRecentYearDropdownValueData["Zip"]} ({formatPercentage(topRecentYearDropdownValueData[dropdownValue])}).</p>
               <p>The following map shows the share of {formatMeasureName(dropdownValue).toLowerCase()} visiting health centers for all zip codes in Wayne County, MI.</p>
             </div>
           }
 
           <p>{formatRaceNames(topMostRaceData.RaceType)} Residents of Wayne County visit health centers more than any other race/ethnicity group ({formatPercentage(topMostRaceData[topMostRaceData.RaceType])}). This is followed by {formatRaceNames(topSecondRaceData.RaceType)} residents ({formatPercentage(topSecondRaceData[topSecondRaceData.RaceType])}) and then {formatRaceNames(topThirdRaceData.RaceType)} residents ({formatPercentage(topThirdRaceData[topThirdRaceData.RaceType])}).</p>
           <p> The following barchart shows the breakdown across all race/ethnicity groups in Wayne County.</p>
-          
+
           {/* Draw a BarChart to show data for health center data by race */}
           <BarChart config={{
             data,
@@ -150,12 +150,12 @@ class HealthCenters extends SectionColumns {
         {/* Draw Geomap to show health center count for each zip code in the Wayne county */}
         <Geomap config={{
           data: healthCenterData.data,
-          groupBy: "Zip Code",
+          groupBy: "Zip",
           colorScale: dropdownValue,
           colorScaleConfig: {
             axisConfig: {tickFormat: isHealthCentersSelected ? d => d : d => formatPercentage(d)}
           },
-          label: d => d["Zip Code"],
+          label: d => d["Zip"],
           height: 400,
           time: "Year",
           tooltipConfig: isHealthCentersSelected ? {tbody: [["Year", d => d.Year], ["Health Centers", d => d[dropdownValue]]]} : {tbody: [["Year", d => d.Year], ["Visitor", formatMeasureName(dropdownValue)], ["Share", d => formatPercentage(d[dropdownValue])]]},
@@ -174,7 +174,7 @@ HealthCenters.defaultProps = {
 };
 
 HealthCenters.need = [
-  fetchData("healthCenterData", "/api/data?measures=Health Centers,Penetration of Total Population,Penetration of Low-Income,Penetration of Uninsured Population&drilldowns=Zip Code&Year=all"),
+  fetchData("healthCenterData", "/api/data?measures=Health Centers,Penetration of Total Population,Penetration of Low-Income,Penetration of Uninsured Population&drilldowns=Zip&Year=all"),
   fetchData("raceAndEthnicityData", "/api/data?measures=Percent Non-white,Percent Hispanic,Percent Black,Percent Asian,Percent American Indian/Alaska Native&Year=all")
 ];
 

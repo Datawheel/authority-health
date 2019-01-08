@@ -24,17 +24,17 @@ class DistressScore extends SectionColumns {
           <Stat
             title="Zip code with highest Distress Score"
             year={topDistressScoreData.Year}
-            value={topDistressScoreData["Zip Code"]}
+            value={topDistressScoreData["Zip"]}
             qualifier={`${formatAbbreviate(topDistressScoreData["Distress Score"])} percentile`}
           />
-          <p>The maximum distress score was observed in the zip code {topDistressScoreData["Zip Code"]} with {formatAbbreviate(topDistressScoreData["Distress Score"])} percentile in the year {topDistressScoreData.Year}.</p>
+          <p>The maximum distress score was observed in the zip code {topDistressScoreData["Zip"]} with {formatAbbreviate(topDistressScoreData["Distress Score"])} percentile in the year {topDistressScoreData.Year}.</p>
           <p>The following map shows the distress score percentile for each zip code in Wayne County, MI.</p>
         </article>
 
         {/* Draw Geomap to show distress scores for each zip code in the Wayne county. */}
         <Geomap config={{
           data: distressScoreData,
-          groupBy: "ID Zip Code",
+          groupBy: "ID Zip",
           colorScale: "Distress Score",
           height: 400,
           time: "Year",
@@ -54,7 +54,7 @@ DistressScore.defaultProps = {
 };
 
 DistressScore.need = [
-  fetchData("distressScoreData", "/api/data?measures=Distress Score&drilldowns=Zip Code&Year=all", d => d.data)
+  fetchData("distressScoreData", "/api/data?measures=Distress Score&drilldowns=Zip&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

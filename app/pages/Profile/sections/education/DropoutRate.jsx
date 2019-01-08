@@ -28,22 +28,22 @@ class DropoutRate extends SectionColumns {
           <Stat
             title="Zip code with highest dropout rate"
             year={topDropoutRate.Year}
-            value={topDropoutRate["Zip Code"]}
+            value={topDropoutRate["Zip"]}
             qualifier={formatPercentage(topDropoutRate["High School Dropout Rate"])}
           />
-          <p>In {topDropoutRate.Year}, zip code {topDropoutRate["Zip Code"]} had the highest dropout rate ({formatPercentage(topDropoutRate["High School Dropout Rate"])}).</p>
+          <p>In {topDropoutRate.Year}, zip code {topDropoutRate["Zip"]} had the highest dropout rate ({formatPercentage(topDropoutRate["High School Dropout Rate"])}).</p>
           <p>The following map shows the dropout rate for areas by zip code in Wayne County.</p>
         </article>
 
         {/* Draw Geomap to show dropout rate for each zip code in the Wayne county */}
         <Geomap config={{
           data: highSchoolDropoutRate,
-          groupBy: "Zip Code",
+          groupBy: "Zip",
           colorScale: "High School Dropout Rate",
           colorScaleConfig: {
             axisConfig: {tickFormat: d => formatPercentage(d)}
           },
-          label: d => d["Zip Code"],
+          label: d => d["Zip"],
           height: 400,
           time: "Year",
           tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d["High School Dropout Rate"])]]},
@@ -62,7 +62,7 @@ DropoutRate.defaultProps = {
 };
 
 DropoutRate.need = [
-  fetchData("highSchoolDropoutRate", "/api/data?measures=Total Population,High School Dropout Rate&drilldowns=Zip Code&Year=all", d => d.data)
+  fetchData("highSchoolDropoutRate", "/api/data?measures=Total Population,High School Dropout Rate&drilldowns=Zip&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

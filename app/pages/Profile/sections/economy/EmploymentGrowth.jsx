@@ -21,24 +21,24 @@ class EmploymentGrowth extends SectionColumns {
           <Stat
             title={"Zip Code with the largest employment growth"}
             year={topEmploymentRateData.Year}
-            value={topEmploymentRateData["Zip Code"]}
+            value={topEmploymentRateData["Zip"]}
             qualifier={`${topEmploymentRateData["Percent Change in Employment"]}%`}
           />
 
-          <p>In {topEmploymentRateData.Year}, the zip code in Wayne County with the largest employment growth was {topEmploymentRateData["Zip Code"]} ({topEmploymentRateData["Percent Change in Employment"]}%).</p>
+          <p>In {topEmploymentRateData.Year}, the zip code in Wayne County with the largest employment growth was {topEmploymentRateData["Zip"]} ({topEmploymentRateData["Percent Change in Employment"]}%).</p>
           <p>The following map shows the employment growth for all zip codes in Wayne County.</p>
         </article>
 
         {/* Draw Geomap to show health center count for each zip code in the Wayne county */}
         <Geomap config={{
           data: percentChangeInEmploymemt,
-          groupBy: "Zip Code",
+          groupBy: "Zip",
           colorScale: "Percent Change in Employment",
           colorScaleConfig: {
             axisConfig: {tickFormat: d => `${d}%`},
             color: ["red", "#ccc", "green"]
           },
-          label: d => d["Zip Code"],
+          label: d => d["Zip"],
           height: 400,
           time: "Year",
           tooltipConfig: {tbody: [["Year", d => d.Year], ["Employment Growth", d => `${d["Percent Change in Employment"]}%`]]},
@@ -57,7 +57,7 @@ EmploymentGrowth.defaultProps = {
 };
 
 EmploymentGrowth.need = [
-  fetchData("percentChangeInEmploymemt", "/api/data?measures=Percent Change in Employment&drilldowns=Zip Code&Year=all", d => d.data)
+  fetchData("percentChangeInEmploymemt", "/api/data?measures=Percent Change in Employment&drilldowns=Zip&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

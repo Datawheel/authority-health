@@ -6,7 +6,7 @@ import {formatAbbreviate} from "d3plus-format";
 import growthCalculator from "../../../../utils/growthCalculator";
 
 const formatRaceName = d => d.replace("Alone", "");
-const formatEthnicityName = d => d.replace("Not Hispanic or Latino", "Non Hispanic");
+const formatEthnicityName = d => d.replace("Not Hispanic or Latino", "Non-Hispanic").replace("or Latino", "");
 
 class Introduction extends SectionColumns {
 
@@ -55,7 +55,7 @@ class Introduction extends SectionColumns {
         <article>
           <p>
             Most of the population in {recentYearPopulationByRaceAndEthnicity.values[0].Geography} is {formatEthnicityName(recentYearPopulationByRaceAndEthnicity.values[0].Ethnicity).toLowerCase()} { }
-            {formatRaceName(recentYearPopulationByRaceAndEthnicity.values[0].Race).toLowerCase()} ({formatAbbreviate(recentYearPopulationByRaceAndEthnicity.values[0].share)}%) and { }
+            {formatRaceName(recentYearPopulationByRaceAndEthnicity.values[0].Race).toLowerCase()} ({formatAbbreviate(recentYearPopulationByRaceAndEthnicity.values[0].share)}%), followed by { }
             {formatEthnicityName(recentYearPopulationByRaceAndEthnicity.values[1].Ethnicity).toLowerCase()} {formatRaceName(recentYearPopulationByRaceAndEthnicity.values[1].Race).toLowerCase()} 
             ({formatAbbreviate(recentYearPopulationByRaceAndEthnicity.values[1].share)}%).
           </p>

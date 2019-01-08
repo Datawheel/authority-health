@@ -13,7 +13,7 @@ import rangeFormatter from "../../../../utils/rangeFormatter";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 const formatRaceName = d => d.replace("Alone", "");
-const formatEthnicityName = d => d.replace("Not Hispanic or Latino", "Non Hispanic");
+const formatEthnicityName = d => d.replace("Not Hispanic or Latino", "Non-Hispanic").replace("or Latino", "");
 
 const commas = format(".2f");
 

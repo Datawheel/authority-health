@@ -90,7 +90,6 @@ class Poverty extends SectionColumns {
             height: 300,
             groupBy: "Race",
             legend: false,
-            label: d => d.Race,
             y: "Race",
             x: "share",
             time: "Year",

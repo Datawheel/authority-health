@@ -90,7 +90,7 @@ class Coverage extends SectionColumns {
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Location", d => d.Geography], ["Age", d => d.Age], ["Share", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
         }}
         dataFormat={resp => formatCoverageData(resp.data)}
         />

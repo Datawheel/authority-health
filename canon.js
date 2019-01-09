@@ -6,6 +6,12 @@ const {CANON_API, CANON_LOGICLAYER_CUBE} = process.env;
 */
 module.exports = {
   logiclayer: {
+    cubeFilters: [
+      {
+        filter: cubes => cubes.filter(c => c.name.includes("_5")),
+        key: cube => cube.name.replace(/_[0-9]$/g, "")
+      }
+    ],
     relations: {
       Geography: {
         tracts: {

@@ -87,7 +87,7 @@ class Incarceration extends SectionColumns {
             value={`${topPunishmentData.Punishment}`}
             qualifier={formatPercentage(topPunishmentData.share)}
           />
-          <p>In {topIncarcerationData.Year}, the most common crime in {topIncarcerationData.Geography} County was {topOffenceData.Offense.toLowerCase()} ({formatPercentage(topOffenceData.share)}) and the most common punishment was {topPunishmentData.Punishment.toLowerCase()} ({formatPercentage(topPunishmentData.share)}).</p>
+          <p>In {topIncarcerationData.Year}, the most common crime in {topIncarcerationData.Geography} was {topOffenceData.Offense.toLowerCase()} ({formatPercentage(topOffenceData.share)}) and the most common punishment was {topPunishmentData.Punishment.toLowerCase()} ({formatPercentage(topPunishmentData.share)}).</p>
           <p>The chart here shows the types of offenses for each incarceration type.</p>
         </article>
 

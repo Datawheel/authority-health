@@ -56,8 +56,8 @@ class DisabilityStatus extends SectionColumns {
             qualifier={formatPopulation(topDisabilityData.share)}
           />
           {/* Write short paragraph describing stats and barchart. */}
-          <p>In {topDisabilityData.Year}, the most common disabled age group was {rangeFormatter(topDisabilityData.Age)} years making up {formatPopulation(topDisabilityData.share)} of all disabled citizens in {topDisabilityData.Geography} County.</p>
-          <p>The chart here shows the health coverage breakdown of the disabled population in {topDisabilityData.Geography} County.</p>
+          <p>In {topDisabilityData.Year}, the most common disabled age group was {rangeFormatter(topDisabilityData.Age)} years making up {formatPopulation(topDisabilityData.share)} of all disabled citizens in {topDisabilityData.Geography}.</p>
+          <p>The chart here shows the health coverage breakdown of the disabled population in {topDisabilityData.Geography}.</p>
         </article>
 
         {/* Show barchart for each age group type with public, private and no health insurance coverage*/}

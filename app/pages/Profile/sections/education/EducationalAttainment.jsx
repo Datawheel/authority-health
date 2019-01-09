@@ -53,8 +53,8 @@ class EducationalAttainment extends SectionColumns {
             value={topEducationalAttainment["Educational Attainment"]}
             qualifier={formatPopulation(topEducationalAttainment.share)}
           />
-          <p>In {topEducationalAttainment.Year}, the most common education level attained in {topEducationalAttainment.Geography} County was {topEducationalAttainment["Educational Attainment"].toLowerCase()} with a share of {formatPopulation(topEducationalAttainment.share)}.</p>
-          <p>The following chart shows educational attainment of male and female in {topEducationalAttainment.Geography} County.</p>
+          <p>In {topEducationalAttainment.Year}, the most common education level attained in {topEducationalAttainment.Geography} was {topEducationalAttainment["Educational Attainment"].toLowerCase()} with a share of {formatPopulation(topEducationalAttainment.share)}.</p>
+          <p>The following chart shows educational attainment of male and female in {topEducationalAttainment.Geography}.</p>
         </article>
 
         {/* Draw a Barchart to show Educational Attainment for all types of education buckets. */}

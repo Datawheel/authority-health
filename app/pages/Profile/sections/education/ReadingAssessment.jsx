@@ -498,7 +498,6 @@ ReadingAssessment.defaultProps = {
   slug: "reading-assessment-scores"
 };
 
-
 ReadingAssessment.need = [
   fetchData("readingScoresByGender", "/api/data?measures=Average Reading Score&drilldowns=Grade,Gender,City&Year=all", d => d.data),
   fetchData("readingScoresByELL", "/api/data?measures=Average Reading Score&drilldowns=Grade,ELL,City&Year=all", d => d.data),

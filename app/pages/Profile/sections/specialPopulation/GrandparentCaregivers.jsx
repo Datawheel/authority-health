@@ -50,7 +50,7 @@ class GrandparentCaregivers extends SectionColumns {
             value={formatAge(topRecentYearData["Responsibility Length"])}
             qualifier={formatPercentage(topRecentYearData.share)}
           />
-          <p>In {topRecentYearData.Year}, {formatPercentage(overallGrandparentsResponsible)} of grandparents in {topRecentYearData.Geography} County were the primary care givers to their grandchildren. The most common age group of grandchildren is {formatAge(topRecentYearData["Responsibility Length"])}.</p>
+          <p>In {topRecentYearData.Year}, {formatPercentage(overallGrandparentsResponsible)} of grandparents in {topRecentYearData.Geography} were the primary care givers to their grandchildren. The most common age group of grandchildren is {formatAge(topRecentYearData["Responsibility Length"])}.</p>
           <p>The chart here shows the breakdown by age of grandchildren and the percentage of grandparents responsible for them.</p>
         </article>
 

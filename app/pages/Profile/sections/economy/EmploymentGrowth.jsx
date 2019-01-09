@@ -21,11 +21,11 @@ class EmploymentGrowth extends SectionColumns {
           <Stat
             title={"Zip Code with the largest employment growth"}
             year={topEmploymentRateData.Year}
-            value={topEmploymentRateData["Zip"]}
+            value={topEmploymentRateData.Zip}
             qualifier={`${topEmploymentRateData["Percent Change in Employment"]}%`}
           />
 
-          <p>In {topEmploymentRateData.Year}, the zip code in Wayne County with the largest employment growth was {topEmploymentRateData["Zip"]} ({topEmploymentRateData["Percent Change in Employment"]}%).</p>
+          <p>In {topEmploymentRateData.Year}, the zip code in Wayne County with the largest employment growth was {topEmploymentRateData.Zip} ({topEmploymentRateData["Percent Change in Employment"]}%).</p>
           <p>The following map shows the employment growth for all zip codes in Wayne County.</p>
         </article>
 
@@ -38,7 +38,7 @@ class EmploymentGrowth extends SectionColumns {
             axisConfig: {tickFormat: d => `${d}%`},
             color: ["red", "#ccc", "green"]
           },
-          label: d => d["Zip"],
+          label: d => d.Zip,
           height: 400,
           time: "Year",
           tooltipConfig: {tbody: [["Year", d => d.Year], ["Employment Growth", d => `${d["Percent Change in Employment"]}%`]]},

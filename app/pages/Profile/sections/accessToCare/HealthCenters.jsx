@@ -105,20 +105,20 @@ class HealthCenters extends SectionColumns {
               <Stat
                 title={`Zip Code with the most ${formatMeasureName(dropdownValue)}`}
                 year={`${topRecentYearDropdownValueData.Year}`}
-                value={topRecentYearDropdownValueData["Zip"]}
+                value={topRecentYearDropdownValueData.Zip}
                 qualifier={`${topRecentYearDropdownValueData[dropdownValue]} Health Centers`}
               />
-              <p>In {topRecentYearDropdownValueData.Year}, the zip code in Wayne County with the most {dropdownValue} was {topRecentYearDropdownValueData["Zip"]} ({topRecentYearDropdownValueData[dropdownValue]} health centers).</p>
+              <p>In {topRecentYearDropdownValueData.Year}, the zip code in Wayne County with the most {dropdownValue} was {topRecentYearDropdownValueData.Zip} ({topRecentYearDropdownValueData[dropdownValue]} health centers).</p>
               <p>The following map shows the total number of health centers for all zip codes in Wayne County, MI.</p>
             </div>
             : <div>
               <Stat
                 title="Zip Code with the most health center visits"
                 year={`${topRecentYearDropdownValueData.Year}`}
-                value={topRecentYearDropdownValueData["Zip"]}
+                value={topRecentYearDropdownValueData.Zip}
                 qualifier={formatPercentage(topRecentYearDropdownValueData[dropdownValue])}
               />
-              <p>In {topRecentYearDropdownValueData.Year}, the zip code in Wayne County with the most {formatMeasureName(dropdownValue).toLowerCase()} visiting health centers was {topRecentYearDropdownValueData["Zip"]} ({formatPercentage(topRecentYearDropdownValueData[dropdownValue])}).</p>
+              <p>In {topRecentYearDropdownValueData.Year}, the zip code in Wayne County with the most {formatMeasureName(dropdownValue).toLowerCase()} visiting health centers was {topRecentYearDropdownValueData.Zip} ({formatPercentage(topRecentYearDropdownValueData[dropdownValue])}).</p>
               <p>The following map shows the share of {formatMeasureName(dropdownValue).toLowerCase()} visiting health centers for all zip codes in Wayne County, MI.</p>
             </div>
           }
@@ -155,7 +155,7 @@ class HealthCenters extends SectionColumns {
           colorScaleConfig: {
             axisConfig: {tickFormat: isHealthCentersSelected ? d => d : d => formatPercentage(d)}
           },
-          label: d => d["Zip"],
+          label: d => d.Zip,
           height: 400,
           time: "Year",
           tooltipConfig: isHealthCentersSelected ? {tbody: [["Year", d => d.Year], ["Health Centers", d => d[dropdownValue]]]} : {tbody: [["Year", d => d.Year], ["Visitor", formatMeasureName(dropdownValue)], ["Share", d => formatPercentage(d[dropdownValue])]]},

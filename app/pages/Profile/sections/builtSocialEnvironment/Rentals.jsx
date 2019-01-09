@@ -53,8 +53,8 @@ class HouseRentals extends SectionColumns {
             value={`${formatPercentage(recentYearNoExtraUtilitiesPercentage)}`}
           />
 
-          <p>In {rentAmountData[0].Year}, the median price for a rental unit in {rentAmountData[0].Geography} County was ${formatAbbreviate(rentAmountData[0]["Rent Amount"])}/month. This is a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "increase"} from the previous year (${formatAbbreviate(rentAmountData[1]["Rent Amount"])}/month).</p>
-          <p>{formatPercentage(recentYearNoExtraUtilitiesPercentage)} of the rental properties in {utilitiesData[0].Geography} County include utilities with the price of rent.</p>
+          <p>In {rentAmountData[0].Year}, the median price for a rental unit in {rentAmountData[0].Geography} was ${formatAbbreviate(rentAmountData[0]["Rent Amount"])}/month. This is a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "increase"} from the previous year (${formatAbbreviate(rentAmountData[1]["Rent Amount"])}/month).</p>
+          <p>{formatPercentage(recentYearNoExtraUtilitiesPercentage)} of the rental properties in {utilitiesData[0].Geography} include utilities with the price of rent.</p>
           <p>The average income bracket for renters in {topIncomeToPayMostRent.Geography} is {rangeFormatter(topIncomeToPayMostRent["Household Income"])} and the following bar chart shows the renter distribution across all income levels.</p>
           
           {/* Create a LinePlot. */}

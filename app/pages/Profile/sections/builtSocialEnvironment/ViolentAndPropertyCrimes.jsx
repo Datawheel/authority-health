@@ -69,7 +69,7 @@ class Crime extends SectionColumns {
             value={titleCase(topRecentYearPropertyCrime.Crime)}
             qualifier={formatPercentage(topRecentYearPropertyCrime.share)}
           />
-          <p>In {topRecentYearViolentCrime.Year}, the most common violent crime in {topRecentYearViolentCrime.Geography} County was {topRecentYearViolentCrime.Crime.toLowerCase()} ({formatPercentage(topRecentYearViolentCrime.share)}), and the most common property crime was {topRecentYearPropertyCrime.Crime.toLowerCase()} ({formatPercentage(topRecentYearPropertyCrime.share)}).</p>
+          <p>In {topRecentYearViolentCrime.Year}, the most common violent crime in {topRecentYearViolentCrime.Geography} was {topRecentYearViolentCrime.Crime.toLowerCase()} ({formatPercentage(topRecentYearViolentCrime.share)}), and the most common property crime was {topRecentYearPropertyCrime.Crime.toLowerCase()} ({formatPercentage(topRecentYearPropertyCrime.share)}).</p>
           <p>The following chart shows the distribution for the different types of property and violent crimes.</p>
 
         </article>

@@ -68,7 +68,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
             qualifier={formatPercentage(totalTopHouseoldShare)}
           />
 
-          <p>In {topPublicAssistanceData.Year}, {formatPercentage(topPublicAssistanceData.share)} of all population in {topPublicAssistanceData.Geography} County got public assistance or food stamps in cash. The most common number of workers per household  on public assistance is {topRecentYearHouseholdSnapData["Number of workers"].toLowerCase()} ({formatPercentage(totalTopHouseoldShare)}).</p>
+          <p>In {topPublicAssistanceData.Year}, {formatPercentage(topPublicAssistanceData.share)} of all population in {topPublicAssistanceData.Geography} got public assistance or food stamps in cash. The most common number of workers per household  on public assistance is {topRecentYearHouseholdSnapData["Number of workers"].toLowerCase()} ({formatPercentage(totalTopHouseoldShare)}).</p>
           <p>The following chart shows the number of workers per household on public assistance.</p>
         </article>
 

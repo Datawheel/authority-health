@@ -9,28 +9,34 @@ class Insecurity extends SectionColumns {
 
   render() {
     const {insecurityRate} = this.props;
+    const isInsecurityRateDataAvailableForCurrentGeography = insecurityRate.source[0].substitutions.length === 0;
+    const childInsecurity = insecurityRate.data[0];
+    const adultInsecurity = insecurityRate.data[1];
 
     return (
       <div className="section-title-stat-inner">
-        <Stat
-          title={"Child Insecurity"}
-          year={insecurityRate[0].Year}
-          value={`${insecurityRate[0]["Food Insecurity Rate"]}%`}
-          theme="marjoelle-light"
-        />
-        <Stat
-          title={"Adult Insecurity"}
-          year={insecurityRate[1].Year}
-          value={`${insecurityRate[1]["Food Insecurity Rate"] - insecurityRate[0]["Food Insecurity Rate"]}%`}
-          theme="marjoelle-light"
-        />
+        <SectionColumns>
+          <article>
+            {isInsecurityRateDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {insecurityRate.data[0].Geography}.</div>}
+            <Stat
+              title={"Child Insecurity"}
+              year={childInsecurity.Year}
+              value={`${childInsecurity["Food Insecurity Rate"]}%`}
+            />
+            <Stat
+              title={"Adult Insecurity"}
+              year={adultInsecurity.Year}
+              value={`${adultInsecurity["Food Insecurity Rate"] - childInsecurity["Food Insecurity Rate"]}%`}
+            />
+          </article>
+        </SectionColumns>
       </div>
     );
   }
 }
 
 Insecurity.need = [
-  fetchData("insecurityRate", "/api/data?measures=Food Insecurity Rate&drilldowns=Category&Geography=<id>&Year=latest", d => d.data)
+  fetchData("insecurityRate", "/api/data?measures=Food Insecurity Rate&drilldowns=Category&Geography=<id>&Year=latest")
 ];
 
 const mapStateToProps = state => ({

@@ -17,6 +17,7 @@ class Unemployment extends SectionColumns {
   render() {
 
     const {employmentStatus, workExperience, unemploymentRate} = this.props;
+    const isUnemploymentRateAvailableForCurrentLocation = unemploymentRate.source[0].substitutions.length === 0;
 
     // Find full-time work share for male and female population.
     const filteredWorkExperienceData = workExperience.filter(d => d["Work Experience"] === "Worked Full Time, Year-round");
@@ -49,15 +50,16 @@ class Unemployment extends SectionColumns {
     const recentYearUnemploymentRate = {};
     nest()
       .key(d => d.Year)
-      .entries(unemploymentRate)
+      .entries(unemploymentRate.data)
       .forEach(group => {
-        group.key >= unemploymentRate[0].Year ? Object.assign(recentYearUnemploymentRate, group) : {};
+        group.key >= unemploymentRate.data[0].Year ? Object.assign(recentYearUnemploymentRate, group) : {};
       });
     
     return (
       <SectionColumns>
         <SectionTitle>Unemployment</SectionTitle>
         <article>
+          {isUnemploymentRateAvailableForCurrentLocation ? <div></div> : <div className="disclaimer">Showing unemployment rate data for {unemploymentRate.data[0].Geography}.</div>}
           <Stat
             title="Male Working Full Time"
             year={getMaleFullTimeData[0].Year}
@@ -96,14 +98,14 @@ class Unemployment extends SectionColumns {
             shapeConfig: {
               label: false
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => rangeFormatter(d.Age)], ["Share", d => formatPercentage(d.share)]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => rangeFormatter(d.Age)], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
           }}
           />
         </article>
 
         {/* Lineplot to show total population over the years for selected geography. */}
         <LinePlot config={{
-          data: unemploymentRate,
+          data: unemploymentRate.data,
           discrete: "x",
           height: 300,
           baseline: 0,
@@ -125,7 +127,7 @@ Unemployment.defaultProps = {
 };
 
 Unemployment.need = [
-  fetchData("unemploymentRate", "/api/data?measures=Unemployment Rate&Geography=<id>&Year=all", d => d.data),
+  fetchData("unemploymentRate", "/api/data?measures=Unemployment Rate&Geography=<id>&Year=all"),
   fetchData("employmentStatus", "/api/data?measures=Population&drilldowns=Employment Status,Age,Sex&Geography=<id>&Year=all", d => d.data),
   fetchData("workExperience", "/api/data?measures=Population&drilldowns=Work Experience,Sex&Geography=<id>&Year=latest", d => d.data)
 ];

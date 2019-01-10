@@ -499,12 +499,12 @@ ReadingAssessment.defaultProps = {
 };
 
 ReadingAssessment.need = [
-  fetchData("readingScoresByGender", "/api/data?measures=Average Reading Score&drilldowns=Grade,Gender,City&Year=all", d => d.data),
-  fetchData("readingScoresByELL", "/api/data?measures=Average Reading Score&drilldowns=Grade,ELL,City&Year=all", d => d.data),
-  fetchData("readingScoresByDisability", "/api/data?measures=Average Reading Score&drilldowns=Grade,Disability,City&Year=all", d => d.data),
-  fetchData("readingScoresByParentsEducation", "/api/data?measures=Average Reading Score&drilldowns=Grade,Parents Education,City&Year=all", d => d.data),
+  fetchData("readingScoresByGender", "/api/data?measures=Average Reading Score&drilldowns=Grade,Gender,Place&Year=all", d => d.data),
+  fetchData("readingScoresByELL", "/api/data?measures=Average Reading Score&drilldowns=Grade,ELL,Place&Year=all", d => d.data),
+  fetchData("readingScoresByDisability", "/api/data?measures=Average Reading Score&drilldowns=Grade,Disability,Place&Year=all", d => d.data),
+  fetchData("readingScoresByParentsEducation", "/api/data?measures=Average Reading Score&drilldowns=Grade,Parents Education,Place&Year=all", d => d.data),
   fetchData("readingScoresByNation", "/api/data?measures=Average Reading Score&drilldowns=Grade,Nation&Year=all", d => d.data),
-  fetchData("readingScoresByCity", "/api/data?measures=Average Reading Score&drilldowns=Grade,City&Year=all", d => d.data)
+  fetchData("readingScoresByCity", "/api/data?measures=Average Reading Score&drilldowns=Grade,Place&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

@@ -80,7 +80,7 @@ class EducationalAttainment extends SectionColumns {
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Educational Attainment", d => formatLabels(d["Educational Attainment"])], ["Share", d => formatPopulation(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Educational Attainment", d => formatLabels(d["Educational Attainment"])], ["Share", d => formatPopulation(d.share)], ["Location", d => d.Geography]]}
         }}
         />
       </SectionColumns>
@@ -93,13 +93,11 @@ EducationalAttainment.defaultProps = {
 };
 
 EducationalAttainment.need = [
-  fetchData("educationalAttainmentData", "/api/data?measures=Population&drilldowns=Educational Attainment,Sex&Geography=<id>&Year=all", d => d.data),
-  fetchData("highSchoolDropoutRate", "/api/data?measures=Total Population,High School Dropout Rate&drilldowns=Zip&Year=latest", d => d.data)
+  fetchData("educationalAttainmentData", "/api/data?measures=Population&drilldowns=Educational Attainment,Sex&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({
-  educationalAttainmentData: state.data.educationalAttainmentData,
-  highSchoolDropoutRate: state.data.highSchoolDropoutRate
+  educationalAttainmentData: state.data.educationalAttainmentData
 });
 
 export default connect(mapStateToProps)(EducationalAttainment);

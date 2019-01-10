@@ -15,11 +15,12 @@ class FoodAvailability extends SectionColumns {
   render() {
 
     const {snapWicData} = this.props;
+    const isSnapWicDataAvailableForCurrentGeography = snapWicData.source[0].substitutions.length === 0;
 
     // Get latest year SNAP and WIC authorized stores data
     const snapWicArr = ["SNAP", "WIC"];
     const snapWicLatestData = snapWicArr.map(d => {
-      const result = snapWicData.reduce((acc, currentValue) => {
+      const result = snapWicData.data.reduce((acc, currentValue) => {
         if (acc === null && currentValue["Assistance Type"] !== null && currentValue["Assistance Type"] === d) {
           return currentValue;
         }
@@ -37,13 +38,14 @@ class FoodAvailability extends SectionColumns {
     const wicLatestYearValue = snapWicLatestData[1]["Number of Stores"];
 
     // Get county information for current location
-    const county = snapWicData[0].Geography;
-    const countyId = snapWicData[0]["ID Geography"];
+    const county = snapWicData.data[0].Geography;
+    const countyId = snapWicData.data[0]["ID Geography"];
 
     return (
       <SectionColumns>
         <SectionTitle>Food Availability</SectionTitle>
         <article>
+          {isSnapWicDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {snapWicData.data[0].Geography}.</div>}
           <Stat
             title="SNAP-authorized stores"
             year={snapLatestYear}
@@ -60,12 +62,12 @@ class FoodAvailability extends SectionColumns {
 
         {/* Draw a Treemap to show types of stores and restaurants. */}
         <Treemap config={{
-          data: `/api/data?measures=Number of Stores&drilldowns=Sub-category&County=${countyId}&Year=all`,
+          data: `/api/data?measures=Number of Stores&drilldowns=Sub-category&Geography=${countyId}&Year=all`,
           groupBy: ["Group", "Sub-category"],
           label: d => d["Sub-category"] instanceof Array ? titleCase(d.Group) : titleCase(d["Sub-category"]),
           height: 400,
           sum: d => d["Number of Stores"],
-          tooltipConfig: {tbody: [["Count", d => `${d["Number of Stores"]} in ${d.Year}`]]}
+          tooltipConfig: {tbody: [["Count", d => `${d["Number of Stores"]} in ${d.Year}`], ["Location", d => d.Geography]]}
         }}
         dataFormat={resp => {
           // Find and return an array of objects for the latest year data for each store type and restaurant type.
@@ -103,7 +105,7 @@ FoodAvailability.defaultProps = {
 };
 
 FoodAvailability.need = [
-  fetchData("snapWicData", "/api/data?measures=Number of Stores&drilldowns=Assistance Type&Geography=<id>&Year=all", d => d.data)
+  fetchData("snapWicData", "/api/data?measures=Number of Stores&drilldowns=Assistance Type&Geography=<id>&Year=all")
 ];
 
 const mapStateToProps = state => ({

@@ -13,17 +13,14 @@ import rangeFormatter from "../../../../utils/rangeFormatter";
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
 const formatDentistsByAge = dentistsByAge => {
-  const recentYearDentistsByAgeData = {};
   nest()
     .key(d => d.Year)
     .entries(dentistsByAge)
     .forEach(group => {
       const total = sum(group.values, d => d["Number of Dentists"]);
       group.values.forEach(d => d.share = d["Number of Dentists"] / total * 100);
-      group.key >= dentistsByAge[0].Year ? Object.assign(recentYearDentistsByAgeData, group) : {};
     });
-  recentYearDentistsByAgeData.values.sort((a, b) => b.share - a.share);
-  const topDentistsAgeData = recentYearDentistsByAgeData.values[0];
+  const topDentistsAgeData = dentistsByAge.sort((a, b) => b.share - a.share)[0];
   return [dentistsByAge, topDentistsAgeData];
 };
 
@@ -123,7 +120,7 @@ DentistsDemographic.defaultProps = {
 };
 
 DentistsDemographic.need = [
-  fetchData("dentistsByAge", "/api/data?measures=Number of Dentists&drilldowns=Age Group&Geography=<id>&Year=all"),
+  fetchData("dentistsByAge", "/api/data?measures=Number of Dentists&drilldowns=Age Group&Geography=<id>&Year=latest"),
   fetchData("dentistsByGender", "/api/data?measures=Number of Dentists&drilldowns=Sex&Geography=<id>&Year=latest")
 ];
 

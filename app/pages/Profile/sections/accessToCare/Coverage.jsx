@@ -52,7 +52,7 @@ class Coverage extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Coverage</SectionTitle>
         <article>
-          {isCoverageDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {coverageData[0].data.Geography}.</div>}
+          {isCoverageDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {coverageData.data[0].Geography}.</div>}
           <div>
             <Stat
               title="Most covered male group"

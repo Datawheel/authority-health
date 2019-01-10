@@ -66,6 +66,7 @@ class Homeownership extends SectionColumns {
         <Geomap config={{
           data: medianHousingUnitsValueForTracts,
           groupBy: "ID Geography",
+          label: d => d.Geography,
           colorScale: "Property Value",
           colorScaleConfig: {
             axisConfig: {tickFormat: d => formatPropertyValue(d)}

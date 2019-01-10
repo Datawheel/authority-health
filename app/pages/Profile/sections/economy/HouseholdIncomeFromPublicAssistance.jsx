@@ -92,7 +92,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Workers", d => d["Number of workers"]], ["Share", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Workers", d => d["Number of workers"]], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
         }}
         />
       </SectionColumns>

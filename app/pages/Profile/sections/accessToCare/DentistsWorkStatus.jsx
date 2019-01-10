@@ -11,59 +11,71 @@ import Stat from "../../../../components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
+// Get data for Part-time and Full-time Dentists.
+const formatDentistsByWorkingHours = dentistsByWorkingHours => {
+  nest()
+    .key(d => d.Year)
+    .entries(dentistsByWorkingHours)
+    .forEach(group => {
+      const total = sum(group.values, d => d["Number of Dentists"]);
+      group.values.forEach(d => d.share = d["Number of Dentists"] / total * 100);
+    });
+  return dentistsByWorkingHours;
+};
+
+// Get data for Dentists by their Specialty.
+const formatDentistsBySpecialty = dentistsBySpecialty => {
+  nest()
+    .key(d => d.Year)
+    .entries(dentistsBySpecialty)
+    .forEach(group => {
+      const total = sum(group.values, d => d["Number of Dentists"]);
+      group.values.forEach(d => d.share = d["Number of Dentists"] / total * 100);
+    });
+  const recentYearGpPediatricDentists = dentistsBySpecialty[0];
+  const recentYearOtherSpecialtyDentists = dentistsBySpecialty[1];
+  return [dentistsBySpecialty, recentYearGpPediatricDentists, recentYearOtherSpecialtyDentists];
+};
+
+// Get data for Types of Active Dentists.
+const formatTypesOfActiveDentists = typesOfActiveDentists => {
+  nest()
+    .key(d => d.Year)
+    .entries(typesOfActiveDentists)
+    .forEach(group => {
+      const total = sum(group.values, d => d["Number of Dentists"]);
+      group.values.forEach(d => d.share = d["Number of Dentists"] / total * 100);
+    });
+  // Filter out Private Practice Dentists data since it holds maximun percentage. Data for it is shown in stats.
+  const filteredActiveDentistsData = typesOfActiveDentists.filter(d => d.Work !== "Private Practice");
+  
+  // Find recent year top active dentists data for stats.
+  const topTypeOfActiveDentist = typesOfActiveDentists.sort((a, b) => b.share - a.share)[0];
+  return [filteredActiveDentistsData, topTypeOfActiveDentist];
+};
+
 class DentistsWorkStatus extends SectionColumns {
 
   render() {
 
     const {dentistsByWorkingHours, dentistsBySpecialty, typesOfActiveDentists} = this.props;
 
-    // Get data for Types of Active Dentists.
-    const recentYearTypesOfActiveDentists = {};
-    nest()
-      .key(d => d.Year)
-      .entries(typesOfActiveDentists)
-      .forEach(group => {
-        const total = sum(group.values, d => d["Number of Dentists"]);
-        group.values.forEach(d => d.share = d["Number of Dentists"] / total * 100);
-        group.key >= typesOfActiveDentists[0].Year ? Object.assign(recentYearTypesOfActiveDentists, group) : {};
-      });
+    // Check if the data is available for current profile or if it falls back to the parent geography.
+    const isDataAvailableForCurrentGeography = dentistsByWorkingHours.source[0].substitutions.length === 0;
 
-    // Filter out Private Practice Dentists data since it holds maximun percentage. Data for it is shown in stats.
-    const filteredActiveDentistsData = typesOfActiveDentists.filter(d => d.Work !== "Private Practice");
+    const recentYearFullTimeDentists = formatDentistsByWorkingHours(dentistsByWorkingHours.data)[0];
 
-    // Find recent year active dentists data for stats.
-    recentYearTypesOfActiveDentists.values.sort((a, b) => b.share - a.share);
-    const topTypeOfActiveDentist = recentYearTypesOfActiveDentists.values[0];
+    const recentYearGpPediatricDentists = formatDentistsBySpecialty(dentistsBySpecialty.data)[1];
+    const recentYearOtherSpecialtyDentists = formatDentistsBySpecialty(dentistsBySpecialty.data)[2];
 
-    // Get data for Dentists by their Specialty.
-    const recentYearDentistsBySpeciality = {};
-    nest()
-      .key(d => d.Year)
-      .entries(dentistsBySpecialty)
-      .forEach(group => {
-        const total = sum(group.values, d => d["Number of Dentists"]);
-        group.values.forEach(d => d.share = d["Number of Dentists"] / total * 100);
-        group.key >= dentistsBySpecialty[0].Year ? Object.assign(recentYearDentistsBySpeciality, group) : {};
-      });
-    const recentYearGpPediatricDentists = recentYearDentistsBySpeciality.values[0];
-    const recentYearOtherSpecialtyDentists = recentYearDentistsBySpeciality.values[1];
-
-    // Get data for Part-time and Full-time Dentists.
-    const recentYearDentistsByWorkingHours = {};
-    nest()
-      .key(d => d.Year)
-      .entries(dentistsByWorkingHours)
-      .forEach(group => {
-        const total = sum(group.values, d => d["Number of Dentists"]);
-        group.values.forEach(d => d.share = d["Number of Dentists"] / total * 100);
-        group.key >= dentistsByWorkingHours[0].Year ? Object.assign(recentYearDentistsByWorkingHours, group) : {};
-      });
-    const recentYearFullTimeDentists = recentYearDentistsByWorkingHours.values[0];
+    const topTypeOfActiveDentist = formatTypesOfActiveDentists(typesOfActiveDentists.data)[1];
+    const geoId = topTypeOfActiveDentist["ID Geography"];
 
     return (
       <SectionColumns>
         <SectionTitle>Dentists Work Status</SectionTitle>
         <article>
+          {isDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {dentistsByWorkingHours.data[0].Geography}.</div>}
           <Stat
             title={"Private Practice"}
             year={topTypeOfActiveDentist.Year}
@@ -92,7 +104,7 @@ class DentistsWorkStatus extends SectionColumns {
 
         {/* Draw a BarChart to show data for Types of Active Dentists */}
         <BarChart config={{
-          data: filteredActiveDentistsData,
+          data: `/api/data?measures=Number of Dentists&drilldowns=Work&Status=Active&Geography=${geoId}&Year=all`,
           discrete: "x",
           height: 400,
           legend: false,
@@ -110,8 +122,9 @@ class DentistsWorkStatus extends SectionColumns {
             tickFormat: d => formatPercentage(d)
           },
           shapeConfig: {label: false},
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
         }}
+        dataFormat={resp => formatTypesOfActiveDentists(resp.data)[0]}
         />
       </SectionColumns>
     );
@@ -123,9 +136,9 @@ DentistsWorkStatus.defaultProps = {
 };
 
 DentistsWorkStatus.need = [
-  fetchData("dentistsByWorkingHours", "/api/data?measures=Number of Dentists&drilldowns=Hours&Geography=<id>&Year=all", d => d.data),
-  fetchData("dentistsBySpecialty", "/api/data?measures=Number of Dentists&drilldowns=Specialty&Geography=<id>&Year=all", d => d.data),
-  fetchData("typesOfActiveDentists", "/api/data?measures=Number of Dentists&drilldowns=Work&Status=Active&Geography=<id>&Year=all", d => d.data)
+  fetchData("dentistsByWorkingHours", "/api/data?measures=Number of Dentists&drilldowns=Hours&Geography=<id>&Year=latest"),
+  fetchData("dentistsBySpecialty", "/api/data?measures=Number of Dentists&drilldowns=Specialty&Geography=<id>&Year=latest"),
+  fetchData("typesOfActiveDentists", "/api/data?measures=Number of Dentists&drilldowns=Work&Status=Active&Geography=<id>&Year=latest")
 ];
 
 const mapStateToProps = state => ({

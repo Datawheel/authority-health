@@ -10,6 +10,10 @@ module.exports = {
       {
         filter: cubes => cubes.filter(c => c.name.includes("_5")),
         key: cube => cube.name.replace(/_[0-9]$/g, "")
+      },
+      {
+        filter: cubes => cubes.filter(c => c.name.includes("_c_")),
+        key: cube => cube.name.replace("_c_", "_").replace(/_[0-9]$/g, "")
       }
     ],
     relations: {

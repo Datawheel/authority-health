@@ -22,6 +22,7 @@ class RiskyBehaviors extends SectionColumns {
 
   render() {
     const {dropdownValue} = this.state;
+    const {geoid} = this.props.meta;
 
     const {allTractSmokingDrinkingData, secondHandSmokeAndMonthlyAlcohol} = this.props;
 
@@ -111,7 +112,7 @@ class RiskyBehaviors extends SectionColumns {
             ? <div>
               <p>The chart here shows the former, current and never smoking status in Wayne County.</p>
               <Treemap config={{
-                data: "/api/data?measures=Smoking Status Current,Smoking Status Former,Smoking Status Never&drilldowns=End Year",
+                data: `/api/data?measures=Smoking Status Current,Smoking Status Former,Smoking Status Never&drilldowns=End Year&Geography=${geoid}`,
                 height: 250,
                 sum: d => d[d.SmokingType],
                 legend: false,
@@ -122,7 +123,7 @@ class RiskyBehaviors extends SectionColumns {
                 },
                 time: "End Year",
                 title: "Smoking Status",
-                tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Prevalence", d => formatPercentage(d[d.SmokingType] * 100)]]}
+                tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Prevalence", d => formatPercentage(d[d.SmokingType] * 100)], ["Location", d => d.Geography]]}
               }}
               dataFormat={resp => {
                 const data = [];
@@ -188,6 +189,7 @@ RiskyBehaviors.need = [
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
   allTractSmokingDrinkingData: state.data.allTractSmokingDrinkingData,
   secondHandSmokeAndMonthlyAlcohol: state.data.secondHandSmokeAndMonthlyAlcohol
 });

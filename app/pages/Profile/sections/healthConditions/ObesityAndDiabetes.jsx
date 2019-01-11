@@ -132,7 +132,8 @@ class ObesityAndDiabetes extends SectionColumns {
           }
 
           {/* Write short paragraphs explaining Barchart and top stats for the Diabetes/Obesity data. */}
-          <p>In {topMaleData.Year}, rates for male and female residents of {topMaleData.Geography} were {isDiabetesSelected ? formatPercentage(topMaleData["Diabetes Prevalence Adj Percent"]) : formatPercentage(topMaleData["Obesity Prevalence Adj Percent"])} and {isDiabetesSelected ? formatPercentage(topFemaleData["Diabetes Prevalence Adj Percent"]) : formatPercentage(topFemaleData["Obesity Prevalence Adj Percent"])} respectively.</p>
+          <p>In {topMaleData.Year}, rates for male and female residents of {topMaleData.Geography} were {isDiabetesSelected ? formatPercentage(topMaleData["Diabetes Prevalence Adj Percent"]) : formatPercentage(topMaleData["Obesity Prevalence Adj Percent"])} and {isDiabetesSelected ? formatPercentage(topFemaleData["Diabetes Prevalence Adj Percent"]) : formatPercentage(topFemaleData["Obesity Prevalence Adj Percent"])} respectively. { }
+          The chart here shows male and female prevalence in {topMaleData.Geography}.</p>
 
           {isBMIWeightedDataValueSelected
             ? <p>The map here shows the {dropdownValue.toLowerCase()} for all counties in Michigan.</p>
@@ -157,7 +158,8 @@ class ObesityAndDiabetes extends SectionColumns {
             yConfig: {
               ticks: []
             },
-            tooltipConfig: isDiabetesSelected ? {tbody: [["Year", d => d.Year], ["Condition", "Diabetes"], ["Share", d => formatPercentage(d["Diabetes Prevalence Adj Percent"])]]} : {tbody: [["Year", d => d.Year], ["Condition", "Obesity"], ["Prevalence", d => formatPercentage(d["Obesity Prevalence Adj Percent"])]]}
+            tooltipConfig: isDiabetesSelected ? {tbody: [["Year", d => d.Year], ["Condition", "Diabetes"], ["Share", d => formatPercentage(d["Diabetes Prevalence Adj Percent"])], ["Location", d => d.Geography]]} 
+              : {tbody: [["Year", d => d.Year], ["Condition", "Obesity"], ["Prevalence", d => formatPercentage(d["Obesity Prevalence Adj Percent"])], ["Location", d => d.Geography]]}
           }}
           />
         </article>

@@ -74,6 +74,7 @@ class WaterQuality extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Water Quality</SectionTitle>
         <article>
+          {this.props.meta.level !== "tract" ? <div className="disclaimer">Data only available for tracts.</div> : <div></div>}
           {/* Create a dropdown for lead and mercury level in water. */}
           <div className="pt-select pt-fill">
             <select onChange={this.handleChange}>
@@ -115,6 +116,7 @@ WaterQuality.need = [
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
   waterQualityData: state.data.waterQualityData
 });
 

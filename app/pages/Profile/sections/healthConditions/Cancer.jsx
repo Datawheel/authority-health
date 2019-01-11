@@ -86,6 +86,7 @@ class Cancer extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Cancer Prevalence by Demographic</SectionTitle>
         <article>
+          <div className="disclaimer">Data only available for the Detroit-Warren-Dearborn, MI metro area.</div>
           <MultiSelect
             items={items}
             itemPredicate={filterItem}
@@ -105,7 +106,7 @@ class Cancer extends SectionColumns {
           <p>The following chart shows the gender breakdowns for the selected cancer sites.</p>
           {/* Draw a mini BarChart to show Cancer by Sex for selected cancer type. */}
           <BarChart config={{
-            data: `/api/data?measures=Count,Age-Adjusted Rate&drilldowns=Sex&Cancer Site=${dropdownSelected}&Year=all`,
+            data: `/api/data?measures=Count,Age-Adjusted Rate&drilldowns=Sex,MSA&Cancer Site=${dropdownSelected}&Year=all`,
             discrete: "y",
             height: 250,
             legend: false,
@@ -121,7 +122,8 @@ class Cancer extends SectionColumns {
             yConfig: {
               tickFormat: d => d
             },
-            tooltipConfig: {tbody: [["Cancer Type", d => d["Cancer Site"]], ["Year", d => d.Year], ["Prevalence", d => formatPercentage(d.share)], ["Occurance per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Rate"])]]}
+            tooltipConfig: {tbody: [["Cancer Type", d => d["Cancer Site"]], ["Year", d => d.Year], ["Prevalence", d => formatPercentage(d.share)],
+              ["Occurance per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Rate"])], ["Location", d => d.MSA]]}
           }}
           dataFormat={resp => {
             nest()
@@ -145,7 +147,7 @@ class Cancer extends SectionColumns {
           <p>The following chart shows the race and Ethnicity breakdowns for the selected cancer sites.</p>
           {/* Draw a mini BarChart to show Cancer by Race and Ethnicity for selected cancer type. */}
           <BarChart config={{
-            data: `/api/data?measures=Count,Age-Adjusted Rate&drilldowns=Race,Ethnicity&Cancer Site=${dropdownSelected}&Year=all`,
+            data: `/api/data?measures=Count,Age-Adjusted Rate&drilldowns=Race,Ethnicity,MSA&Cancer Site=${dropdownSelected}&Year=all`,
             discrete: "y",
             height: 250,
             legend: false,
@@ -160,7 +162,8 @@ class Cancer extends SectionColumns {
               labelRotation: false
             },
             yConfig: {tickFormat: d => d},
-            tooltipConfig: {tbody: [["Cancer Type", d => d["Cancer Site"]], ["Year", d => d.Year], ["Prevalence", d => formatPercentage(d.share)], ["Occurance per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Rate"])]]}
+            tooltipConfig: {tbody: [["Cancer Type", d => d["Cancer Site"]], ["Year", d => d.Year], ["Prevalence", d => formatPercentage(d.share)],
+              ["Occurance per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Rate"])], ["Location", d => d.MSA]]}
           }}
           dataFormat={resp => {
             nest()
@@ -186,7 +189,7 @@ class Cancer extends SectionColumns {
           <p>The following chart shows the occurance rate per 100,000 people for the selected cancer sites.</p>
           {/* Draw a LinePlot to show age adjusted data for the selected cancer types. */}
           <LinePlot config={{
-            data: `/api/data?measures=Age-Adjusted Rate,Age-Adjusted Rate Lower 95 Percent Confidence Interval,Age-Adjusted Rate Upper 95 Percent Confidence Interval&Cancer Site=${dropdownSelected}&Year=all`,
+            data: `/api/data?measures=Age-Adjusted Rate,Age-Adjusted Rate Lower 95 Percent Confidence Interval,Age-Adjusted Rate Upper 95 Percent Confidence Interval&Cancer Site=${dropdownSelected}&drilldowns=MSA&Year=all`,
             discrete: "x",
             height: 400,
             groupBy: "Cancer Site",
@@ -204,7 +207,7 @@ class Cancer extends SectionColumns {
             confidenceConfig: {
               fillOpacity: 0.2
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Occurance per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Rate"])]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Occurance per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Rate"])], ["Location", d => d.MSA]]}
           }}
           dataFormat={resp => resp.data}
           />

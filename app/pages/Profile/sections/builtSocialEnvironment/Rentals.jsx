@@ -93,7 +93,7 @@ class Rentals extends SectionColumns {
             tickFormat: d => formatPercentage(d),
             title: "Share of Renters"},
           shapeConfig: {label: false},
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
         }}
         />
       </SectionColumns>

@@ -26,6 +26,8 @@ class PhysicalInactivity extends SectionColumns {
 
     const {physicalInActivity, physicalInactivityPrevalenceBySex} = this.props;
     const {dropdownValue} = this.state;
+    const isPhysicalInactivityBySexAvailableForCurrentlocation =  physicalInactivityPrevalenceBySex.source[0].substitutions.length === 0;
+
     const dropdownList = ["Physical Inactivity", "Physical Health"];
 
     const physicalInactivitySelected = dropdownValue === "Physical Inactivity";
@@ -37,9 +39,9 @@ class PhysicalInactivity extends SectionColumns {
     const recentYearPhysicalInactivityPrevalenceBySex = {};
     nest()
       .key(d => d["End Year"])
-      .entries(physicalInactivityPrevalenceBySex)
+      .entries(physicalInactivityPrevalenceBySex.data)
       .forEach(group => {
-        group.key >= physicalInactivityPrevalenceBySex[0].Year ? Object.assign(recentYearPhysicalInactivityPrevalenceBySex, group) : {};
+        group.key >= physicalInactivityPrevalenceBySex.data[0].Year ? Object.assign(recentYearPhysicalInactivityPrevalenceBySex, group) : {};
       });
     const topPhysicalInactivityMaleData = recentYearPhysicalInactivityPrevalenceBySex.values.filter(d => d.Sex === "Male")[0];
     const topPhysicalInactivityFemaleData = recentYearPhysicalInactivityPrevalenceBySex.values.filter(d => d.Sex === "Female")[0];
@@ -48,6 +50,7 @@ class PhysicalInactivity extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Physical Health and Inactivity</SectionTitle>
         <article>
+          {isPhysicalInactivityBySexAvailableForCurrentlocation ? <div></div> : <div className="disclaimer">Showing data for {physicalInactivityPrevalenceBySex.data[0].Geography}.</div>}
           {/* Create a dropdown list for Physical Health and Physical Inactivity options. */}
           <div className="pt-select pt-fill">
             <select onChange={this.handleChange}>
@@ -88,7 +91,7 @@ class PhysicalInactivity extends SectionColumns {
           {/* Draw a BarChart to show data for Physical Inactivity by Sex. */}
           {physicalInactivitySelected
             ? <BarChart config={{
-              data: physicalInactivityPrevalenceBySex,
+              data: physicalInactivityPrevalenceBySex.data,
               discrete: "y",
               height: 250,
               legend: false,
@@ -104,7 +107,8 @@ class PhysicalInactivity extends SectionColumns {
               yConfig: {
                 ticks: []
               },
-              tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", `${formatDropdownChoiceName(dropdownValue)}`], ["Prevalence", d => formatPercentage(d["Physical Inactivity Adj Percent"])]]}
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", `${formatDropdownChoiceName(dropdownValue)}`], 
+                ["Prevalence", d => formatPercentage(d["Physical Inactivity Adj Percent"])], ["Location", d => d.Geography]]}
             }}
             />
             : null
@@ -139,7 +143,7 @@ PhysicalInactivity.defaultProps = {
 
 PhysicalInactivity.need = [
   fetchData("physicalInActivity", "/api/data?measures=Physical Health,Physical Inactivity&drilldowns=Tract&Year=all", d => d.data),
-  fetchData("physicalInactivityPrevalenceBySex", "/api/data?measures=Physical Inactivity Adj Percent&drilldowns=Sex&Geography=<id>&Year=all", d => d.data)
+  fetchData("physicalInactivityPrevalenceBySex", "/api/data?measures=Physical Inactivity Adj Percent&drilldowns=Sex&Geography=<id>&Year=all")
 ];
 
 const mapStateToProps = state => ({

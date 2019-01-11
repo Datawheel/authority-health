@@ -18,13 +18,16 @@ class AirQuality extends SectionColumns {
 
     const {airQualityDays, airQualityMedianAQIs, airPollutants} = this.props;
 
+    // Check if the data is available for current profile or if it falls back to the parent geography.
+    const isAirQualityDaysAvailableForCurrentGeography = airQualityDays.source[0].substitutions.length === 0;
+
     // Get the air polutants data.
     const recentYearAirQualityDays = {};
     nest()
       .key(d => d.Year)
-      .entries(airQualityDays)
+      .entries(airQualityDays.data)
       .forEach(group => {
-        group.key >= airQualityDays[0].Year ? Object.assign(recentYearAirQualityDays, group) : {};
+        group.key >= airQualityDays.data[0].Year ? Object.assign(recentYearAirQualityDays, group) : {};
       });
 
     // Find top recent year air polutants data:
@@ -57,6 +60,7 @@ class AirQuality extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Air Quality</SectionTitle>
         <article>
+          {isAirQualityDaysAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {airQualityDays.data[0].Geography}.</div>}
           <Stat
             title={"Days with good quality"}
             year={topRecentYearAirQualityDays.Year}
@@ -91,7 +95,7 @@ class AirQuality extends SectionColumns {
             yConfig: {
               title: "Testing Days"
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Number of Days", d => d["Number of Days"]]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Number of Days", d => d["Number of Days"]], ["Location", d => d.Geography]]}
           }}
           />
 
@@ -111,14 +115,14 @@ class AirQuality extends SectionColumns {
             yConfig: {
               title: "Median AQI"
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Median AQI", d => d["Median AQI"]]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Median AQI", d => d["Median AQI"]], ["Location", d => d.Geography]]}
           }}
           />
         </article>
 
         {/* Lineplot to show air pollutants over the years. */}
         <LinePlot config={{
-          data: airQualityDays,
+          data: airQualityDays.data,
           discrete: "x",
           height: 400,
           title: "Air Quality Over Years",
@@ -130,10 +134,9 @@ class AirQuality extends SectionColumns {
           yConfig: {
             title: "Testing Days"
           },
-          tooltipConfig: {tbody: [["Year", d => d.Year],  ["Number of Days", d => d["Number of Days"]]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Number of Days", d => d["Number of Days"]], ["Location", d => d.Geography]]}
         }}
         />
-
       </SectionColumns>
     );
   }
@@ -144,7 +147,7 @@ AirQuality.defaultProps = {
 };
 
 AirQuality.need = [
-  fetchData("airQualityDays", "/api/data?measures=Number of Days&drilldowns=Category&Geography=<id>&Year=all", d => d.data),
+  fetchData("airQualityDays", "/api/data?measures=Number of Days&drilldowns=Category&Geography=<id>&Year=all"),
   fetchData("airQualityMedianAQIs", "/api/data?measures=Median AQI&Geography=<id>&Year=all", d => d.data),
   fetchData("airPollutants", "/api/data?measures=Number of Days&drilldowns=Pollutant&Geography=<id>&Year=all", d => d.data)
 ];

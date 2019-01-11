@@ -65,18 +65,24 @@ class ConditionsAndChronicDiseases extends SectionColumns {
 
           {/* Show top stats for the dropdown selected. */}
           { isHealthConditionWeightedValueSelected
-            ? <Stat
-              title={"Location with highest prevalence"}
-              year={topDropdownWeightedData["End Year"]}
-              value={topDropdownWeightedData.County}
-              qualifier={formatPercentage(topDropdownWeightedData[dropdownValue])}
-            />
-            : <Stat
-              title={"Location with highest prevalence"}
-              year={topDropdownValueTract.Year}
-              value={topDropdownValueTract.Tract}
-              qualifier={formatPercentage(topDropdownValueTract[dropdownValue])}
-            />
+            ? <div>
+              <div className="disclaimer">Data only available for county.</div>
+              <Stat
+                title={"Location with highest prevalence"}
+                year={topDropdownWeightedData["End Year"]}
+                value={topDropdownWeightedData.County}
+                qualifier={formatPercentage(topDropdownWeightedData[dropdownValue])}
+              />
+            </div>
+            : <div>
+              <div className="disclaimer">Data only available for tracts.</div>
+              <Stat
+                title={"Location with highest prevalence"}
+                year={topDropdownValueTract.Year}
+                value={topDropdownValueTract.Tract}
+                qualifier={formatPercentage(topDropdownValueTract[dropdownValue])}
+              />
+            </div>
           }
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
@@ -121,7 +127,8 @@ class ConditionsAndChronicDiseases extends SectionColumns {
             topojson: "/topojson/tract.json",
             topojsonFilter: d => d.id.startsWith("14000US26163")
           }}
-          />}
+          />
+        }
       </SectionColumns>
     );
   }

@@ -24,6 +24,8 @@ class StoreAccessByDemographic extends SectionColumns {
 
     const {foodAccessByAge, foodAccessByRace} = this.props;
     const {dropdownValue} = this.state;
+    const isFoodAccessByAgeAvailableForCurrentGeography = foodAccessByAge.source[0].substitutions.length === 0;
+    const isFoodAccessByRaceAvailableForCurrentGeography = foodAccessByRace.source[0].substitutions.length === 0;
 
     const raceAndAgeTypes = ["Children", "Seniors", "American Indian or Alaska Native", "Asian", "Black", "Hawaiian or Pacific Islander", "Hispanic ethnicity", "Multiracial", "White"];
     const ageSelected = dropdownValue === "Children" || dropdownValue === "Seniors";
@@ -32,9 +34,9 @@ class StoreAccessByDemographic extends SectionColumns {
     const recentYearFoodAccessByAge = {};
     nest()
       .key(d => d.Year)
-      .entries(foodAccessByAge)
+      .entries(foodAccessByAge.data)
       .forEach(group => {
-        group.key >= foodAccessByAge[0].Year ? Object.assign(recentYearFoodAccessByAge, group) : {};
+        group.key >= foodAccessByAge.data[0].Year ? Object.assign(recentYearFoodAccessByAge, group) : {};
       });
     recentYearFoodAccessByAge.values.sort((a, b) => b.Percent - a.Percent);
     const topFoodAccessByAge = recentYearFoodAccessByAge.values[0];
@@ -43,9 +45,9 @@ class StoreAccessByDemographic extends SectionColumns {
     const recentYearFoodAccessByRace = {};
     nest()
       .key(d => d.Year)
-      .entries(foodAccessByRace)
+      .entries(foodAccessByRace.data)
       .forEach(group => {
-        group.key >= foodAccessByRace[0].Year ? Object.assign(recentYearFoodAccessByRace, group) : {};
+        group.key >= foodAccessByRace.data[0].Year ? Object.assign(recentYearFoodAccessByRace, group) : {};
       });
     recentYearFoodAccessByRace.values.sort((a, b) => b.Percent - a.Percent);
     const topFoodAccessByRace = recentYearFoodAccessByRace.values[0];
@@ -54,6 +56,7 @@ class StoreAccessByDemographic extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Store Access by Demographic</SectionTitle>
         <article>
+          {isFoodAccessByAgeAvailableForCurrentGeography && isFoodAccessByRaceAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {foodAccessByRace.data[0].Geography}.</div>}
           {/* Create a dropdown for each age and race type using raceAndAgeTypes array. */}
           <div className="pt-select pt-fill">
             <select onChange={this.handleChange}>
@@ -85,7 +88,7 @@ class StoreAccessByDemographic extends SectionColumns {
 
           {/* Create a BarChart based on the dropdown choice. */}
           <BarChart config={{
-            data: ageSelected ? foodAccessByAge : foodAccessByRace,
+            data: ageSelected ? foodAccessByAge.data : foodAccessByRace.data,
             discrete: "y",
             height: 200,
             legend: false,
@@ -98,7 +101,7 @@ class StoreAccessByDemographic extends SectionColumns {
             },
             yConfig: {ticks: []},
             time: "Year",
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", d => ageSelected ? `${d["Age Group"]}` : `${d["Race Group"]}`], ["Low-Access Rate", d => formatPercentage(d.Percent)]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", d => ageSelected ? `${d["Age Group"]}` : `${d["Race Group"]}`], ["Low-Access Rate", d => formatPercentage(d.Percent)], ["Location", d => d.Geography]]}
           }}
           />
         </article>
@@ -130,8 +133,8 @@ StoreAccessByDemographic.defaultProps = {
 };
 
 StoreAccessByDemographic.need = [
-  fetchData("foodAccessByAge", "/api/data?measures=Percent&drilldowns=Age Group&Geography=<id>&Year=all", d => d.data),
-  fetchData("foodAccessByRace", "/api/data?measures=Percent&drilldowns=Race Group&Geography=<id>&Year=all", d => d.data)
+  fetchData("foodAccessByAge", "/api/data?measures=Percent&drilldowns=Age Group&Geography=<id>&Year=all"),
+  fetchData("foodAccessByRace", "/api/data?measures=Percent&drilldowns=Race Group&Geography=<id>&Year=all")
 ];
 
 const mapStateToProps = state => ({

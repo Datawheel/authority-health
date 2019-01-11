@@ -53,6 +53,7 @@ class PreventiveCare extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Preventive Care</SectionTitle>
         <article>
+          {isPreventativeCareWeightedValueSelected ? <div className="disclaimer">Data only available at the county level.</div> : <div className="disclaimer">Data only available at the tract level.</div>}
           {/* Create a dropdown for different types of preventive care. */}
           <div className="pt-select pt-fill">
             <select onChange={this.handleChange}>

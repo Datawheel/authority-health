@@ -24,10 +24,29 @@ class Immigrants extends SectionColumns {
 
   render() {
 
-    const {immigrantsData, immigrantsPovertyData} = this.props;
+    const {meta, immigrantsData, immigrantsPovertyData, immigrantsDataForCurrentLocation, immigrantsPovertyDataForCurrentLocation} = this.props;
+
     const {dropdownValue} = this.state;
     const dropdownList = ["Total Immigrants", "Immigrants in Poverty"];
     const totalImmigrantsSelected = dropdownValue === "Total Immigrants";
+
+    nest()
+      .key(d => d.Year)
+      .entries(immigrantsDataForCurrentLocation)
+      .forEach(group => {
+        const total = sum(group.values, d => d.Population);
+        group.values.forEach(d => d.share = d.Population / total * 100);
+      });
+    const getImmigrantsDataForCurrentLocation = immigrantsDataForCurrentLocation.filter(d => d.Nativity === "Foreign Born");
+
+    nest()
+      .key(d => d.Year)
+      .entries(immigrantsPovertyDataForCurrentLocation)
+      .forEach(group => {
+        const total = sum(group.values, d => d.Population);
+        group.values.forEach(d => d.share = d.Population / total * 100);
+      });
+    const getImmigrantsPovertyDataForCurrentLocation = immigrantsPovertyDataForCurrentLocation.filter((d => d.Nativity === "Foreign Born") && (d => d["ID Poverty Status"] === 0));
 
     // Find the percentage of immigrants for each city and add it to each immigrants object in immigrantsData array.
     nest()
@@ -49,8 +68,7 @@ class Immigrants extends SectionColumns {
     const recentImmigrantsYear = max(immigrantsData, d => d["ID Year"]);
     const recentYearImmigrantsData = immigrantsData.filter(d => d["ID Year"] === recentImmigrantsYear);
     const filteredImmigrantsData = recentYearImmigrantsData.filter(d => d["ID Nativity"] === 1);
-    filteredImmigrantsData.sort((a, b) => b.share - a.share);
-    const topImmigrantsData = filteredImmigrantsData[0];
+    const topImmigrantsData = filteredImmigrantsData.sort((a, b) => b.share - a.share)[0];
 
     // Find the percentage of immigrants in poverty for each city and add it to each object in immigrantsPovertyData array.
     nest()
@@ -72,8 +90,7 @@ class Immigrants extends SectionColumns {
     const recentProvertyYear = max(immigrantsPovertyData, d => d["ID Year"]);
     const recentYearPovertyData = immigrantsPovertyData.filter(d => d["ID Year"] === recentProvertyYear);
     const filteredPovertyData = recentYearPovertyData.filter(d => d["ID Nativity"] === 1 && d["ID Poverty Status"] === 0);
-    filteredPovertyData.sort((a, b) => b.share - a.share);
-    const topPovertyData = filteredPovertyData[0];
+    const topPovertyData = filteredPovertyData.sort((a, b) => b.share - a.share)[0];
 
     return (
       <SectionColumns>
@@ -90,15 +107,26 @@ class Immigrants extends SectionColumns {
           {totalImmigrantsSelected
             ? <div>
               <Stat
+                title={`Immigrants in ${getImmigrantsDataForCurrentLocation[0].Geography}`}
+                year={getImmigrantsDataForCurrentLocation[0].Year}
+                value={formatPopulation(getImmigrantsDataForCurrentLocation[0].share)}
+              />
+              <Stat
                 title="Most Immigrants"
                 year={topImmigrantsData.Year}
                 value={topImmigrantsData.Place}
                 qualifier={formatPopulation(topImmigrantsData.share)}
               />
-              <p>In {topImmigrantsData.Year}, the city with the highest Immigrant population was {topImmigrantsData.Place} ({formatPopulation(topImmigrantsData.share)}) compared to {topPovertyData.Place}, which has the most immigrants in poverty ({formatPopulation(topPovertyData.share)}).</p>
+              <p>In {getImmigrantsDataForCurrentLocation[0].Year}, {meta.level === "zip" ? "zip code" : ""} {getImmigrantsDataForCurrentLocation[0].Geography} had {formatPopulation(getImmigrantsDataForCurrentLocation[0].share)} of immigrant population.</p>
+              <p>The city with the highest immigrant population in Wayne County was {topImmigrantsData.Place} in {topImmigrantsData.Year} ({formatPopulation(topImmigrantsData.share)}) compared to {topPovertyData.Place}, which has the most immigrants in poverty ({formatPopulation(topPovertyData.share)}).</p>
               <p>The map here shows the cities by their percentage of immigrants.</p>
             </div>
             : <div>
+              <Stat
+                title={`Immigrants in poverty in ${getImmigrantsDataForCurrentLocation[0].Geography}`}
+                year={getImmigrantsDataForCurrentLocation[0].Year}
+                value={formatPopulation(getImmigrantsPovertyDataForCurrentLocation[0].share)}
+              />
               <Stat
                 title="Most Immigrants in Poverty"
                 year={topPovertyData.Year}
@@ -135,12 +163,17 @@ Immigrants.defaultProps = {
 
 Immigrants.need = [
   fetchData("immigrantsData", "/api/data?measures=Population&drilldowns=Nativity,Place&Year=all", d => d.data),
-  fetchData("immigrantsPovertyData", "/api/data?measures=Population&drilldowns=Nativity,Poverty Status,Place&Year=all", d => d.data)
+  fetchData("immigrantsPovertyData", "/api/data?measures=Population&drilldowns=Nativity,Poverty Status,Place&Year=all", d => d.data),
+  fetchData("immigrantsDataForCurrentLocation", "/api/data?measures=Population&drilldowns=Nativity&Geography=<id>&Year=latest", d => d.data),
+  fetchData("immigrantsPovertyDataForCurrentLocation", "/api/data?measures=Population&drilldowns=Nativity,Poverty Status&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
   immigrantsData: state.data.immigrantsData,
-  immigrantsPovertyData: state.data.immigrantsPovertyData
+  immigrantsPovertyData: state.data.immigrantsPovertyData,
+  immigrantsDataForCurrentLocation: state.data.immigrantsDataForCurrentLocation,
+  immigrantsPovertyDataForCurrentLocation: state.data.immigrantsPovertyDataForCurrentLocation
 });
 
 export default connect(mapStateToProps)(Immigrants);

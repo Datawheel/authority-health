@@ -16,6 +16,9 @@ class Incarceration extends SectionColumns {
   render() {
     const {incarcerationData, allOffenceData, allPunishmentData} = this.props;
 
+    // Check if the data is available for current profile or if it falls back to the parent geography.
+    const isIncarcerationDataAvailableForCurrentGeography = incarcerationData.source[0].substitutions.length === 0;
+
     // Format data for Incarceration data Barchart and stats.
     const data = [];
     incarcerationData.data.forEach(d => {
@@ -75,6 +78,7 @@ class Incarceration extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Incarceration</SectionTitle>
         <article>
+          {isIncarcerationDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {incarcerationData.data[0].Geography}.</div>}
           <Stat
             title="Most common crime"
             year={topOffenceData.Year}

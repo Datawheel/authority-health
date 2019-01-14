@@ -23,7 +23,10 @@ class Homeless extends SectionColumns {
 
   render() {
 
-    const {typesOfShelteredHomeless, typesOfUnshelteredHomeless, typesOfHomeless, totalHomelessData, population} = this.props;
+    const {typesOfShelteredHomeless, typesOfUnshelteredHomeless, typesOfHomeless, totalHomelessData, wayneCountyPopulation} = this.props;
+
+    // Check if the data is available for current profile or if it falls back to the parent geography.
+    const isHomelessDataAvailableForCurrentGeography = totalHomelessData.source[0].substitutions.length === 0;
 
     const {dropdownValue} = this.state;
     const dropdownList = ["Sheltered", "Unsheltered"];
@@ -72,22 +75,14 @@ class Homeless extends SectionColumns {
         group.key >= data[0].Year ? Object.assign(recentYearTypesOfHomeless, group) : {};
       });
     const shelteredData = data.filter(d => d.HomelessType === "Sheltered");
-
-    // Find recent year population data.
-    const recentYearPopulation = {};
-    nest()
-      .key(d => d.Year)
-      .entries(population)
-      .forEach(group => {
-        group.key >= population[0].Year ? Object.assign(recentYearPopulation, group) : {};
-      });
     
-    const totalHomelessPopulation = (totalHomelessData[0].Sheltered + totalHomelessData[0].Unsheltered) / recentYearPopulation.values[0].Population * 100;
+    const totalHomelessPopulation = (totalHomelessData.data[0].Sheltered + totalHomelessData.data[0].Unsheltered) / wayneCountyPopulation[0].Population * 100;
 
     return (
       <SectionColumns>
         <SectionTitle>Homeless</SectionTitle>
         <article>
+          {isHomelessDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {typesOfShelteredHomeless[0].Geography}.</div>}
           {/* Create a dropdown for sheltered and unsheltered choices. */}
           <div className="pt-select pt-fill">
             <select onChange={this.handleChange}>
@@ -110,13 +105,13 @@ class Homeless extends SectionColumns {
             />}
           <Stat
             title={"Homeless rate"}
-            year={totalHomelessData[0].Year}
+            year={totalHomelessData.data[0].Year}
             value={formatPercentage(totalHomelessPopulation)}
           />
 
           {shelteredSelected
-            ? <p>In {totalHomelessData[0].Year}, {formatPercentage(totalHomelessPopulation)} of the population in {totalHomelessData[0].Geography} was homeless. The most common demographic of {dropdownValue.toLowerCase()} individuals is {topShelteredHomelessTypes.Category.toLowerCase()} ({formatPercentage(topShelteredHomelessTypes.share)}).</p>
-            : <p>In {totalHomelessData[0].Year}, {formatPercentage(totalHomelessPopulation)} of the population in {totalHomelessData[0].Geography} was homeless. The most common demographic of {dropdownValue.toLowerCase()} individuals is {topUnshelteredHomelessTypes.Category.toLowerCase()} ({formatPercentage(topUnshelteredHomelessTypes.share)}).</p>
+            ? <p>In {totalHomelessData.data[0].Year}, {formatPercentage(totalHomelessPopulation)} of the population in {totalHomelessData.data[0].Geography} was homeless. The most common demographic of {dropdownValue.toLowerCase()} individuals is {topShelteredHomelessTypes.Category.toLowerCase()} ({formatPercentage(topShelteredHomelessTypes.share)}).</p>
+            : <p>In {totalHomelessData.data[0].Year}, {formatPercentage(totalHomelessPopulation)} of the population in {totalHomelessData.data[0].Geography} was homeless. The most common demographic of {dropdownValue.toLowerCase()} individuals is {topUnshelteredHomelessTypes.Category.toLowerCase()} ({formatPercentage(topUnshelteredHomelessTypes.share)}).</p>
           }
 
           <p>The chart on the right shows different categories of homeless population and the corresponding share for each category.</p>
@@ -175,14 +170,16 @@ Homeless.need = [
   fetchData("typesOfShelteredHomeless", "/api/data?measures=Sheltered&drilldowns=Category&Geography=<id>&Year=all", d => d.data),
   fetchData("typesOfUnshelteredHomeless", "/api/data?measures=Unsheltered&drilldowns=Category&Geography=<id>&Year=all", d => d.data),
   fetchData("typesOfHomeless", "/api/data?measures=Sheltered,Unsheltered&drilldowns=Sub-group&Geography=<id>&Year=all", d => d.data),
-  fetchData("totalHomelessData", "/api/data?measures=Sheltered,Unsheltered&drilldowns=Group&Geography=<id>&Year=latest", d => d.data)
+  fetchData("totalHomelessData", "/api/data?measures=Sheltered,Unsheltered&drilldowns=Group&Geography=<id>&Year=latest"),
+  fetchData("wayneCountyPopulation", "https://niagara.datausa.io/api/data?measures=Population&Geography=05000US26163&year=latest")
 ];
 
 const mapStateToProps = state => ({
   typesOfShelteredHomeless: state.data.typesOfShelteredHomeless,
   typesOfUnshelteredHomeless: state.data.typesOfUnshelteredHomeless,
   typesOfHomeless: state.data.typesOfHomeless,
-  totalHomelessData: state.data.totalHomelessData
+  totalHomelessData: state.data.totalHomelessData,
+  wayneCountyPopulation: state.data.wayneCountyPopulation.data
 });
 
 export default connect(mapStateToProps)(Homeless);

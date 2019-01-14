@@ -121,7 +121,7 @@ class Veterans extends SectionColumns {
             title: "Share"
           },
           shapeConfig: {label: false},
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
         }}
         />
       </SectionColumns>

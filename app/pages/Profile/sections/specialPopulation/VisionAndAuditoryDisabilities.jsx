@@ -128,7 +128,7 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Gender", d => d.Sex], ["Share", d => formatPopulation(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Gender", d => d.Sex], ["Share", d => formatPopulation(d.share)], ["Location", d => d.Geography]]}
         }}
         />
       </SectionColumns>

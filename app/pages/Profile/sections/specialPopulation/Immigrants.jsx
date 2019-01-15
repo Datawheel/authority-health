@@ -107,34 +107,39 @@ class Immigrants extends SectionColumns {
           {totalImmigrantsSelected
             ? <div>
               <Stat
-                title={`Immigrants in ${getImmigrantsDataForCurrentLocation[0].Geography}`}
+                title={"Immigrant population"}
                 year={getImmigrantsDataForCurrentLocation[0].Year}
                 value={formatPopulation(getImmigrantsDataForCurrentLocation[0].share)}
               />
               <Stat
-                title="Most Immigrants"
+                title="City with most immigrants"
                 year={topImmigrantsData.Year}
                 value={topImmigrantsData.Place}
                 qualifier={formatPopulation(topImmigrantsData.share)}
               />
-              <p>In {getImmigrantsDataForCurrentLocation[0].Year}, {meta.level === "zip" ? "zip code" : ""} {getImmigrantsDataForCurrentLocation[0].Geography} had {formatPopulation(getImmigrantsDataForCurrentLocation[0].share)} of immigrant population.</p>
-              <p>The city with the highest immigrant population in Wayne County was {topImmigrantsData.Place} in {topImmigrantsData.Year} ({formatPopulation(topImmigrantsData.share)}) compared to {topPovertyData.Place}, which has the most immigrants in poverty ({formatPopulation(topPovertyData.share)}).</p>
-              <p>The map here shows the cities by their percentage of immigrants.</p>
+              <p>
+                In {getImmigrantsDataForCurrentLocation[0].Year}, {formatPopulation(getImmigrantsDataForCurrentLocation[0].share)} of the population in {meta.level === "zip" ? "zip code" : ""} {getImmigrantsDataForCurrentLocation[0].Geography} was immigrants.{" "} 
+                The city with the highest immigrant population in Wayne County was {topImmigrantsData.Place} ({formatPopulation(topImmigrantsData.share)}).
+              </p>
+              <p>The map here shows the cities in {meta.level === "zip" ? "zip code" : ""} {getImmigrantsDataForCurrentLocation[0].Geography} by their percentage of immigrants.</p>
             </div>
             : <div>
               <Stat
-                title={`Immigrants in poverty in ${getImmigrantsDataForCurrentLocation[0].Geography}`}
+                title={"Immigrants in poverty"}
                 year={getImmigrantsDataForCurrentLocation[0].Year}
                 value={formatPopulation(getImmigrantsPovertyDataForCurrentLocation[0].share)}
               />
               <Stat
-                title="Most Immigrants in Poverty"
+                title="City with most immigrants in poverty"
                 year={topPovertyData.Year}
                 value={topPovertyData.Place}
                 qualifier={formatPopulation(topPovertyData.share)}
               />
-              <p>In {topImmigrantsData.Year}, the city with the highest Immigrant population was {topImmigrantsData.Place} ({formatPopulation(topImmigrantsData.share)}) compared to {topPovertyData.Place}, which has the most immigrants in poverty ({formatPopulation(topPovertyData.share)}).</p>
-              <p>The map here shows the cities by their percentage of immigrants in poverty.</p>
+              <p>
+                In {getImmigrantsDataForCurrentLocation[0].Year}, {formatPopulation(getImmigrantsDataForCurrentLocation[0].share)} of the population in {meta.level === "zip" ? "zip code" : ""} {getImmigrantsDataForCurrentLocation[0].Geography} was immigrants.{" "}
+                The city with the highest immigrants in poverty in Wayne County was {topImmigrantsData.Place} ({formatPopulation(topImmigrantsData.share)}).
+              </p>
+              <p>The map here shows the cities in {meta.level === "zip" ? "zip code" : ""} {getImmigrantsDataForCurrentLocation[0].Geography} by their percentage of immigrants in poverty.</p>
             </div>
           }
         </article>
@@ -143,6 +148,7 @@ class Immigrants extends SectionColumns {
           data: totalImmigrantsSelected ? filteredImmigrantsData : filteredPovertyData,
           groupBy: "ID Place",
           colorScale: "share",
+          title: totalImmigrantsSelected ? "Immigrant Population" : "Immigrants in Poverty",
           colorScaleConfig: {axisConfig: {tickFormat: d => formatPopulation(d)}},
           time: "Year",
           label: d => d.Place,

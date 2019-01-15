@@ -159,9 +159,9 @@ Transportation.defaultProps = {
 };
 
 Transportation.need = [
-  fetchData("commuteTimeData", "https://niagara.datausa.io/api/data?measures=Commuter Population&drilldowns=Travel Time&Geography=<id>&Year=all", d => d.data),
-  fetchData("numberOfVehiclesData", "https://niagara.datausa.io/api/data?measures=Commute Means by Gender&drilldowns=Vehicles Available,Gender&Geography=<id>&Year=all", d => d.data),
-  fetchData("transportationMeans", "https://niagara.datausa.io/api/data?measures=Commute Means&drilldowns=Transportation Means&Geography=<id>&Year=all", d => d.data)
+  fetchData("commuteTimeData", "https://olympic.datausa.io/api/data?measures=Commuter Population&drilldowns=Travel Time&Geography=<id>&Year=all", d => d.data),
+  fetchData("numberOfVehiclesData", "https://olympic.datausa.io/api/data?measures=Commute Means by Gender&drilldowns=Vehicles Available,Gender&Geography=<id>&Year=all", d => d.data),
+  fetchData("transportationMeans", "https://olympic.datausa.io/api/data?measures=Commute Means&drilldowns=Transportation Means&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

@@ -1,4 +1,5 @@
 import React from "react";
+import {connect} from "react-redux";
 import {nest} from "d3-collection";
 import {sum} from "d3-array";
 import {SectionColumns, SectionTitle} from "@datawheel/canon-core";
@@ -61,6 +62,7 @@ class Introduction extends SectionColumns {
           </p>
         </article>
 
+        {/* Add empty article tags for allignment. */}
         <article>
         </article>
       </SectionColumns>
@@ -72,4 +74,11 @@ Introduction.defaultProps = {
   slug: "introduction"
 };
 
-export default Introduction;
+const mapStateToProps = state => ({
+  population: state.data.population.data, 
+  populationByAgeAndGender: state.data.populationByAgeAndGender,
+  populationByRaceAndEthnicity: state.data.populationByRaceAndEthnicity.data,
+  lifeExpectancy: state.data.lifeExpectancy
+});
+
+export default connect(mapStateToProps)(Introduction);

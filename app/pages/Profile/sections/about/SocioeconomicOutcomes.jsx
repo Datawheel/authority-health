@@ -159,6 +159,10 @@ SocioeconomicOutcomes.need = [
 ];
 
 const mapStateToProps = state => ({
+  population: state.data.population.data, 
+  populationByAgeAndGender: state.data.populationByAgeAndGender,
+  populationByRaceAndEthnicity: state.data.populationByRaceAndEthnicity.data,
+  lifeExpectancy: state.data.lifeExpectancy,
   socialVulnerabilityIndex: state.data.socialVulnerabilityIndex
 });
 

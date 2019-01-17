@@ -62,7 +62,7 @@ class WageDistribution extends SectionColumns {
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)], ["Location", d => d.Geography]]}
         }}
         />
       </SectionColumns>
@@ -76,7 +76,7 @@ WageDistribution.defaultProps = {
 
 WageDistribution.need = [
   fetchData("wageDistributionData", "https://acs.datausa.io/api/data?measures=Household Income&drilldowns=Household Income Bucket&Geography=<id>&Year=all", d => d.data),
-  fetchData("wageGinidata", "https://acs.datausa.io/api/data?measures=Wage GINI&Geography=<id>&Year=latest", d => d.data)
+  fetchData("wageGinidata", "https://acs.datausa.io/api/data?measures=Wage GINI&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

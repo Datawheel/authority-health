@@ -106,7 +106,7 @@ class Transportation extends SectionColumns {
             shapeConfig: {
               label: false
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Number of Vehicles", d => rangeFormatter(d["Vehicles Available"])], ["Share", d => formatPercentage(d.share)]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Number of Vehicles", d => rangeFormatter(d["Vehicles Available"])], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
           }}
           />
         </article>
@@ -133,7 +133,7 @@ class Transportation extends SectionColumns {
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
         }}
         />
 
@@ -146,7 +146,7 @@ class Transportation extends SectionColumns {
           groupBy: "Transportation Means",
           time: "Year",
           title: "Means of Transportation",
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
         }}
         />
       </SectionColumns>

@@ -144,7 +144,6 @@ class ReadingAssessment extends SectionColumns {
   getShortDescription = str => <p>The following chart shows the average reading assessment score in Detroit {str} over time.</p>;
 
   drawLinePlot = (readingScoresData, categoryName, xTitle) => {
-    console.log("readingScoresData: ", readingScoresData);
     const lineplot = [];
     lineplot.push(<LinePlot config={{
       data: readingScoresData,

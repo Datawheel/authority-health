@@ -101,7 +101,7 @@ class Poverty extends SectionColumns {
               tickFormat: d => formatPopulation(d),
               title: "Share"
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)], ["Location", d => d.Geography]]}
           }}
           />
         </article>
@@ -127,7 +127,7 @@ class Poverty extends SectionColumns {
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Share", d => formatPopulation(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Share", d => formatPopulation(d.share)], ["Location", d => d.Geography]]}
         }}
         />
       </SectionColumns>
@@ -141,14 +141,12 @@ Poverty.defaultProps = {
 
 Poverty.need = [
   fetchData("povertyByRace", "https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Race&Geography=<id>&Year=all", d => d.data),
-  fetchData("povertyByAgeAndGender", "https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Age,Gender&Geography=<id>&Year=all", d => d.data),
-  fetchData("incomeToPovertyLevelRatio", "/api/data?measures=Population&drilldowns=Ratio of Income to Poverty Level&Geography=<id>&Year=all", d => d.data)
+  fetchData("povertyByAgeAndGender", "https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Age,Gender&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   povertyByRace: state.data.povertyByRace,
-  povertyByAgeAndGender: state.data.povertyByAgeAndGender,
-  incomeToPovertyLevelRatio: state.data.incomeToPovertyLevelRatio
+  povertyByAgeAndGender: state.data.povertyByAgeAndGender
 });
 
 export default connect(mapStateToProps)(Poverty);

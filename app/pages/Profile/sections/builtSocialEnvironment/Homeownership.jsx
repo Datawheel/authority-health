@@ -89,8 +89,8 @@ Homeownership.defaultProps = {
 
 Homeownership.need = [
   fetchData("occupancyData", "/api/data?measures=Housing Units&drilldowns=Occupancy Status&Geography=<id>&Year=all", d => d.data),
-  fetchData("medianHousingUnitsValueForTracts", "https://olympic.datausa.io/api/data?measures=Property Value&Year=all&Geography=05000US26163:children", d => d.data),
-  fetchData("medianHousingUnitsValueForProfile", "https://olympic.datausa.io/api/data?measures=Property Value&Year=all&Geography=<id>", d => d.data),
+  fetchData("medianHousingUnitsValueForTracts", "https://acs.datausa.io/api/data?measures=Property Value&Year=all&Geography=05000US26163:children", d => d.data),
+  fetchData("medianHousingUnitsValueForProfile", "https://acs.datausa.io/api/data?measures=Property Value&Year=all&Geography=<id>", d => d.data),
   fetchData("constructionDateData", "/api/data?measures=Construction Date&Geography=<id>&Year=all", d => d.data)
 ];
 

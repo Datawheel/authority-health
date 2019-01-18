@@ -19,7 +19,9 @@ const commas = format(".2f");
 
 class SocioeconomicOutcomes extends SectionColumns {
   render() {
-    const {population, populationByAgeAndGender, populationByRaceAndEthnicity, lifeExpectancy, socialVulnerabilityIndex} = this.props;
+    const {meta, population, populationByAgeAndGender, populationByRaceAndEthnicity, lifeExpectancy, socialVulnerabilityIndex} = this.props;
+
+    const onCityOrZipLevel = meta.level === "place" || meta.level === "zip";
 
     // Find recent year population data.
     const recentYearPopulation = {};
@@ -57,6 +59,7 @@ class SocioeconomicOutcomes extends SectionColumns {
               title="Life Expectancy"
               year={""}
               value={`${formatAbbreviate(lifeExpectancy[0]["Life Expectancy"])}`}
+              qualifier={onCityOrZipLevel ? lifeExpectancy[0].Geography : ""}
             />
           </article>
           <article>
@@ -64,6 +67,7 @@ class SocioeconomicOutcomes extends SectionColumns {
               title="Overall Ranking"
               year={socialVulnerabilityIndex[0].Year}
               value={commas(socialVulnerabilityIndex[0]["Overall Ranking"])}
+              qualifier={onCityOrZipLevel ? socialVulnerabilityIndex[0].Geography : ""}
             />
           </article>
           <article>
@@ -71,6 +75,7 @@ class SocioeconomicOutcomes extends SectionColumns {
               title="Socioeconomic Ranking"
               year={socialVulnerabilityIndex[0].Year}
               value={commas(socialVulnerabilityIndex[0]["Socioeconomic Ranking"])}
+              qualifier={onCityOrZipLevel ? socialVulnerabilityIndex[0].Geography : ""}
             />
           </article>
         </SectionColumns>
@@ -81,6 +86,7 @@ class SocioeconomicOutcomes extends SectionColumns {
               title="Household Composition and Disability Ranking"
               year={socialVulnerabilityIndex[0].Year}
               value={commas(socialVulnerabilityIndex[0]["Household Composition and Disability Ranking"])}
+              qualifier={onCityOrZipLevel ? socialVulnerabilityIndex[0].Geography : ""}
             />
           </article>
 
@@ -89,6 +95,7 @@ class SocioeconomicOutcomes extends SectionColumns {
               title="Minority Status and Language Ranking"
               year={socialVulnerabilityIndex[0].Year}
               value={commas(socialVulnerabilityIndex[0]["Minority Status and Language Ranking"])}
+              qualifier={onCityOrZipLevel ? socialVulnerabilityIndex[0].Geography : ""}
             />
           </article>
 
@@ -97,6 +104,7 @@ class SocioeconomicOutcomes extends SectionColumns {
               title="Housing and Transportation Ranking"
               year={socialVulnerabilityIndex[0].Year}
               value={commas(socialVulnerabilityIndex[0]["Housing and Transportation Ranking"])}
+              qualifier={onCityOrZipLevel ? socialVulnerabilityIndex[0].Geography : ""}
             />
           </article>
         </SectionColumns>
@@ -129,7 +137,7 @@ class SocioeconomicOutcomes extends SectionColumns {
             shapeConfig: {
               label: false
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => rangeFormatter(d.Age)], ["Share", d => formatPercentage(d.share)]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => rangeFormatter(d.Age)], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
           }}
           />
 
@@ -141,7 +149,7 @@ class SocioeconomicOutcomes extends SectionColumns {
             label: d => `${formatEthnicityName(d.Ethnicity)} ${formatRaceName(d.Race)}`,
             time: "Year",
             title: "Population by Race and Ethnicity",
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
           }}
           />
         </SectionColumns>
@@ -159,6 +167,7 @@ SocioeconomicOutcomes.need = [
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
   population: state.data.population.data, 
   populationByAgeAndGender: state.data.populationByAgeAndGender,
   populationByRaceAndEthnicity: state.data.populationByRaceAndEthnicity.data,

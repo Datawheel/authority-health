@@ -21,6 +21,10 @@ export default class ProfileHeader extends Component {
 
         {/* profile section anchor links */}
         <div className="profile-header-sections">
+          <AnchorLink to="access-to-care" className="section-header-anchor">
+            <Icon iconName="office" />
+            Access to Care
+          </AnchorLink>
           <AnchorLink to="food-access" className="section-header-anchor">
             <Icon iconName="shop" />
             Food Access
@@ -32,10 +36,6 @@ export default class ProfileHeader extends Component {
           <AnchorLink to="health-conditions" className="section-header-anchor">
             <Icon iconName="pulse" />
             Health Conditions
-          </AnchorLink>
-          <AnchorLink to="access-to-care" className="section-header-anchor">
-            <Icon iconName="office" />
-            Access to Care
           </AnchorLink>
           <AnchorLink to="special-population" className="section-header-anchor">
             <Icon iconName="people" />

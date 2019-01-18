@@ -31,7 +31,7 @@ export default class HomeHeader extends Component {
                 <a className="result-link" href={`/profile/${d.geoid}`}>
                   { d.name }
                 </a>}
-                url="/api/search/"
+              url="/api/search/"
             />
           </div>
 

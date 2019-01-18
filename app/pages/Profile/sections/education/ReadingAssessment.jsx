@@ -156,7 +156,7 @@ class ReadingAssessment extends SectionColumns {
       yConfig: {
         title: `Average Reading Score ${xTitle}`
       },
-      tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score"]]]}
+      tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score"]], ["Location", "Detroit"]]}
     }}
     />);
 
@@ -229,7 +229,7 @@ class ReadingAssessment extends SectionColumns {
               title: "Average Reading Score by Gender",
               domain: [0, 300]
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score"]]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score"]], ["Location", "Detroit"]]}
           }}
           />
         </SectionColumns>
@@ -290,7 +290,7 @@ class ReadingAssessment extends SectionColumns {
               title: "Average Reading Score",
               domain: [0, 300]
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score"]]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score"]], ["Location", "Detroit"]]}
           }}
           />
         </SectionColumns>
@@ -350,7 +350,7 @@ class ReadingAssessment extends SectionColumns {
               title: "Average Reading Score",
               domain: [0, 300]
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score"]]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score"]], ["Location", "Detroit"]]}
           }}
           />
         </SectionColumns>
@@ -400,7 +400,7 @@ class ReadingAssessment extends SectionColumns {
               title: "Average Reading Score based on Parents Education",
               domain: [0, 300]
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score"]]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score"]], ["Location", "Detroit"]]}
           }}
           />
         </SectionColumns>

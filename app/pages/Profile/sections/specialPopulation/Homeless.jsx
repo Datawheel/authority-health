@@ -133,7 +133,7 @@ class Homeless extends SectionColumns {
               tickFormat: d => formatPercentage(d),
               title: "Sheltered Population"
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
           }}
           />
         </article>
@@ -154,7 +154,7 @@ class Homeless extends SectionColumns {
             tickFormat: d => formatPercentage(d),
             title: "Homeless Categories"
           },
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
         }}
         />
       </SectionColumns>

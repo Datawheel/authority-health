@@ -11,10 +11,13 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Stat from "../../../../components/Stat";
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
-class Crime extends SectionColumns {
+class ViolentAndPropertyCrimes extends SectionColumns {
 
   render() {
-    const {crimeData} = this.props;
+    const {meta, crimeDataOverall, crimeDataForPlace} = this.props;
+
+    const isPlaceDataAvailable = meta.level === "place";
+    const crimeData = isPlaceDataAvailable ? crimeDataForPlace : crimeDataOverall;
 
     // Find the percentage for each type of crime and add "share" property to each data point.
     nest()
@@ -55,10 +58,10 @@ class Crime extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Violent and Property Crimes</SectionTitle>
         <article>
-
+          {isPlaceDataAvailable ? <div></div> : <div className="disclaimer">Data only available for cities. Showing data for overall cities in Wayne County.</div>}
           {/* Show stats and short paragraph for each type of crime based on the dropdown value. */}
           <Stat
-            title="Most common Violent Crime"
+            title= {isPlaceDataAvailable ? "Violent Crime" : "Most common Violent Crime"}
             year={topRecentYearViolentCrime.Year}
             value={titleCase(topRecentYearViolentCrime.Crime)}
             qualifier={formatPercentage(topRecentYearViolentCrime.share)}
@@ -69,8 +72,8 @@ class Crime extends SectionColumns {
             value={titleCase(topRecentYearPropertyCrime.Crime)}
             qualifier={formatPercentage(topRecentYearPropertyCrime.share)}
           />
-          <p>In {topRecentYearViolentCrime.Year}, the most common violent crime in {topRecentYearViolentCrime.Geography} was {topRecentYearViolentCrime.Crime.toLowerCase()} ({formatPercentage(topRecentYearViolentCrime.share)}), and the most common property crime was {topRecentYearPropertyCrime.Crime.toLowerCase()} ({formatPercentage(topRecentYearPropertyCrime.share)}).</p>
-          <p>The following chart shows the distribution for the different types of property and violent crimes.</p>
+          <p>In {topRecentYearViolentCrime.Year}, the most common violent crime{isPlaceDataAvailable ? ` in ${topRecentYearViolentCrime.Geography}` : ""} was {topRecentYearViolentCrime.Crime.toLowerCase()} ({formatPercentage(topRecentYearViolentCrime.share)}), and the most common property crime was {topRecentYearPropertyCrime.Crime.toLowerCase()} ({formatPercentage(topRecentYearPropertyCrime.share)}).</p>
+          <p>The following chart shows the distribution for the different types of property and violent crimes{isPlaceDataAvailable ? ` in ${topRecentYearViolentCrime.Geography}` : ""}.</p>
 
         </article>
 
@@ -96,7 +99,7 @@ class Crime extends SectionColumns {
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["Location", d => isPlaceDataAvailable ? d.Geography : "Wayne County"]]}
         }}
         />
       </SectionColumns>
@@ -104,16 +107,19 @@ class Crime extends SectionColumns {
   }
 }
 
-Crime.defaultProps = {
+ViolentAndPropertyCrimes.defaultProps = {
   slug: "violent-and-property-crimes"
 };
 
-Crime.need = [
-  fetchData("crimeData", "/api/data?measures=Number of Crimes&drilldowns=Type of Crime,Crime&Year=all", d => d.data)
+ViolentAndPropertyCrimes.need = [
+  fetchData("crimeDataOverall", "/api/data?measures=Number of Crimes&drilldowns=Type of Crime,Crime&Year=all", d => d.data),
+  fetchData("crimeDataForPlace", "/api/data?measures=Number of Crimes&drilldowns=Type of Crime,Crime&Year=all&Geography=<id>", d => d.data)
 ];
 
 const mapStateToProps = state => ({
-  crimeData: state.data.crimeData
+  meta: state.data.meta,
+  crimeDataOverall: state.data.crimeDataOverall,
+  crimeDataForPlace: state.data.crimeDataForPlace
 });
 
-export default connect(mapStateToProps)(Crime);
+export default connect(mapStateToProps)(ViolentAndPropertyCrimes);

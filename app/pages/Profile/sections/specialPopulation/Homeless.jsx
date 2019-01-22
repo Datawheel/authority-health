@@ -15,7 +15,7 @@ class Homeless extends SectionColumns {
 
   constructor(props) {
     super(props);
-    this.state = {dropdownValue: "Sheltered"};
+    this.state = {dropdownValue: "Sheltered Homeless Population"};
   }
 
   // Handler function for dropdown onChange event.
@@ -29,7 +29,7 @@ class Homeless extends SectionColumns {
     const isHomelessDataAvailableForCurrentGeography = totalHomelessData.source[0].substitutions.length === 0;
 
     const {dropdownValue} = this.state;
-    const dropdownList = ["Sheltered", "Unsheltered"];
+    const dropdownList = ["Sheltered Homeless Population", "Unsheltered Homeless Population"];
     const shelteredSelected = dropdownValue === "Sheltered";
 
     const recentYearTypesOfShelteredHomeless = {};
@@ -37,8 +37,8 @@ class Homeless extends SectionColumns {
       .key(d => d.Year)
       .entries(typesOfShelteredHomeless)
       .forEach(group => {
-        const total = sum(group.values, d => d.Sheltered);
-        group.values.forEach(d => d.share = d.Sheltered / total * 100);
+        const total = sum(group.values, d => d["Sheltered Homeless Population"]);
+        group.values.forEach(d => d.share = d["Sheltered Homeless Population"] / total * 100);
         group.key >= typesOfShelteredHomeless[0].Year ? Object.assign(recentYearTypesOfShelteredHomeless, group) : {};
       });
     recentYearTypesOfShelteredHomeless.values.sort((a, b) => b.share - a.share);
@@ -49,8 +49,8 @@ class Homeless extends SectionColumns {
       .key(d => d.Year)
       .entries(typesOfUnshelteredHomeless)
       .forEach(group => {
-        const total = sum(group.values, d => d.Unsheltered);
-        group.values.forEach(d => d.share = d.Unsheltered / total * 100);
+        const total = sum(group.values, d => d["Unsheltered Homeless Population"]);
+        group.values.forEach(d => d.share = d["Unsheltered Homeless Population"] / total * 100);
         group.key >= typesOfUnshelteredHomeless[0].Year ? Object.assign(recentYearTypesOfUnshelteredHomeless, group) : {};
       });
     recentYearTypesOfUnshelteredHomeless.values.sort((a, b) => b.share - a.share);
@@ -74,9 +74,9 @@ class Homeless extends SectionColumns {
         group.values.forEach(d => d.share = d[d.HomelessType] / total * 100);
         group.key >= data[0].Year ? Object.assign(recentYearTypesOfHomeless, group) : {};
       });
-    const shelteredData = data.filter(d => d.HomelessType === "Sheltered");
+    const shelteredData = data.filter(d => d.HomelessType === "Sheltered Homeless Population");
     
-    const totalHomelessPopulation = (totalHomelessData.data[0].Sheltered + totalHomelessData.data[0].Unsheltered) / wayneCountyPopulation[0].Population * 100;
+    const totalHomelessPopulation = (totalHomelessData.data[0]["Sheltered Homeless Population"] + totalHomelessData.data[0]["Unsheltered Homeless Population"]) / wayneCountyPopulation[0].Population * 100;
 
     return (
       <SectionColumns>
@@ -131,7 +131,7 @@ class Homeless extends SectionColumns {
             y: "share",
             yConfig: {
               tickFormat: d => formatPercentage(d),
-              title: "Sheltered Population"
+              title: "Sheltered Homeless Population"
             },
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
           }}
@@ -167,10 +167,10 @@ Homeless.defaultProps = {
 };
 
 Homeless.need = [
-  fetchData("typesOfShelteredHomeless", "/api/data?measures=Sheltered&drilldowns=Category&Geography=<id>&Year=all", d => d.data),
-  fetchData("typesOfUnshelteredHomeless", "/api/data?measures=Unsheltered&drilldowns=Category&Geography=<id>&Year=all", d => d.data),
-  fetchData("typesOfHomeless", "/api/data?measures=Sheltered,Unsheltered&drilldowns=Sub-group&Geography=<id>&Year=all", d => d.data),
-  fetchData("totalHomelessData", "/api/data?measures=Sheltered,Unsheltered&drilldowns=Group&Geography=<id>&Year=latest"),
+  fetchData("typesOfShelteredHomeless", "/api/data?measures=Sheltered Homeless Population&drilldowns=Category&Geography=<id>&Year=all", d => d.data),
+  fetchData("typesOfUnshelteredHomeless", "/api/data?measures=Unsheltered Homeless Population&drilldowns=Category&Geography=<id>&Year=all", d => d.data),
+  fetchData("typesOfHomeless", "/api/data?measures=Sheltered Homeless Population,Unsheltered Homeless Population&drilldowns=Sub-group&Geography=<id>&Year=all", d => d.data),
+  fetchData("totalHomelessData", "/api/data?measures=Sheltered Homeless Population,Unsheltered Homeless Population&drilldowns=Group&Geography=<id>&Year=latest"),
   fetchData("wayneCountyPopulation", "https://acs.datausa.io/api/data?measures=Population&Geography=05000US26163&year=latest")
 ];
 

@@ -139,7 +139,7 @@ ConditionsAndChronicDiseases.defaultProps = {
 };
 
 ConditionsAndChronicDiseases.need = [
-  fetchData("healthConditionData", "/api/data?measures=Arthritis,COPD,Chronic Kidney Disease,Coronary Heart Disease,Current Asthma,High Blood Pressure,High Cholesterol,Mental Health,Stroke,Taking BP Medication,Teeth Loss,Sleep less than 7 hours&drilldowns=Tract&Year=all"),
+  fetchData("healthConditionData", "/api/data?measures=Arthritis,COPD,Chronic Kidney Disease,Coronary Heart Disease,Current Asthma,High Blood Pressure,High Cholesterol,Mental Health,Stroke,Taking Blood Pressure Medication,Teeth Loss,Sleep Less Than 7 Hours&drilldowns=Tract&Year=all"),
   fetchData("healthConditionWeightedData", "/api/data?measures=Cardiovascular Disease,Ever Depressive,Ever Heart Attack,Heart Disease,HIV Tested,Poor Mental Health 14 Or More Days,Gen Health Fair Or Poor&drilldowns=End Year,County")
 ];
 

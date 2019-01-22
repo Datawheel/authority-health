@@ -38,7 +38,7 @@ class StoreAccessByDemographic extends SectionColumns {
       .forEach(group => {
         group.key >= foodAccessByAge.data[0].Year ? Object.assign(recentYearFoodAccessByAge, group) : {};
       });
-    recentYearFoodAccessByAge.values.sort((a, b) => b.Percent - a.Percent);
+    recentYearFoodAccessByAge.values.sort((a, b) => b["Low-Access to Food by Age"] - a["Low-Access to Food by Age"]);
     const topFoodAccessByAge = recentYearFoodAccessByAge.values[0];
 
     // Get recent year data for food access by Race.
@@ -49,7 +49,7 @@ class StoreAccessByDemographic extends SectionColumns {
       .forEach(group => {
         group.key >= foodAccessByRace.data[0].Year ? Object.assign(recentYearFoodAccessByRace, group) : {};
       });
-    recentYearFoodAccessByRace.values.sort((a, b) => b.Percent - a.Percent);
+    recentYearFoodAccessByRace.values.sort((a, b) => b["Low-Access to Food by Race"] - a["Low-Access to Food by Race"]);
     const topFoodAccessByRace = recentYearFoodAccessByRace.values[0];
 
     return (
@@ -69,19 +69,19 @@ class StoreAccessByDemographic extends SectionColumns {
               title={"Most at risk demographic"}
               year={topFoodAccessByAge.Year}
               value={topFoodAccessByAge["Age Group"]}
-              qualifier={`${formatPercentage(topFoodAccessByAge.Percent)} Low Access`}
+              qualifier={`${formatPercentage(topFoodAccessByAge["Low-Access to Food by Age"])} Low Access`}
             />
             : <Stat
               title={"Top Food Access by Race"}
               year={topFoodAccessByRace.Year}
               value={topFoodAccessByRace["Race Group"]}
-              qualifier={`${formatPercentage(topFoodAccessByRace.Percent)} Low Access`}
+              qualifier={`${formatPercentage(topFoodAccessByRace["Low-Access to Food by Race"])} Low Access`}
             />
           }
           {/* Write a paragraph for top stats based on the dropdown choice. */}
           {ageSelected
-            ? <p> In {topFoodAccessByAge.Geography}, {topFoodAccessByAge["Age Group"]} are the largest age group with low access to food stores ({formatPercentage(topFoodAccessByAge.Percent)} in {topFoodAccessByAge.Year}).</p>
-            : <p> In {topFoodAccessByRace.Geography}, {topFoodAccessByRace["Race Group"]} are the largest race group with low access to food stores ({formatPercentage(topFoodAccessByRace.Percent)} in {topFoodAccessByRace.Year}).</p>
+            ? <p> In {topFoodAccessByAge.Geography}, {topFoodAccessByAge["Age Group"]} are the largest age group with low access to food stores ({formatPercentage(topFoodAccessByAge["Low-Access to Food by Age"])} in {topFoodAccessByAge.Year}).</p>
+            : <p> In {topFoodAccessByRace.Geography}, {topFoodAccessByRace["Race Group"]} are the largest race group with low access to food stores ({formatPercentage(topFoodAccessByRace["Low-Access to Food by Race"])} in {topFoodAccessByRace.Year}).</p>
           }
 
           <p>The following map shows the low access rate for {dropdownValue.toLowerCase()} with low access to food stores across all counties in Michigan.</p>
@@ -93,7 +93,7 @@ class StoreAccessByDemographic extends SectionColumns {
             height: 200,
             legend: false,
             groupBy: ageSelected ? "Age Group" : "Race Group",
-            x: "Percent",
+            x: ageSelected ? "Low-Access to Food by Age" : "Low-Access to Food by Race",
             y: ageSelected ? "Age Group" : "Race Group",
             xConfig: {
               title: "Low Access To Food Stores",
@@ -101,23 +101,23 @@ class StoreAccessByDemographic extends SectionColumns {
             },
             yConfig: {ticks: []},
             time: "Year",
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", d => ageSelected ? `${d["Age Group"]}` : `${d["Race Group"]}`], ["Low-Access Rate", d => formatPercentage(d.Percent)], ["Location", d => d.Geography]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", d => ageSelected ? `${d["Age Group"]}` : `${d["Race Group"]}`], ["Low-Access Rate", d => ageSelected ? formatPercentage(d["Low-Access to Food by Age"]) : formatPercentage(d["Low-Access to Food by Race"])], ["Location", d => d.Geography]]}
           }}
           />
         </article>
 
         {/* Create a Geomap based on dropdown choice for all the counties in Michigan. */}
         <Geomap config={{
-          data: ageSelected ? `/api/data?measures=Percent&drilldowns=Age Group,County&Age Group=${dropdownValue}&Year=all` : `/api/data?measures=Percent&drilldowns=Race Group,County&Race Group=${dropdownValue}&Year=all`,
+          data: ageSelected ? `/api/data?measures=Low-Access to Food by Age&drilldowns=Age Group,County&Age Group=${dropdownValue}&Year=all` : `/api/data?measures=Low-Access to Food by Race&drilldowns=Race Group,County&Race Group=${dropdownValue}&Year=all`,
           groupBy: "ID County",
-          colorScale: "Percent",
+          colorScale: ageSelected ? "Low-Access to Food by Age" : "Low-Access to Food by Race",
           colorScaleConfig: {
             axisConfig: {tickFormat: d => formatPercentage(d)}
           },
           label: d => d.County,
           height: 400,
           time: "Year",
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", dropdownValue], ["Low-Access Rate", d => formatPercentage(d.Percent)]]},
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", dropdownValue], ["Low-Access Rate", d => ageSelected ? formatPercentage(d["Low-Access to Food by Age"]) : formatPercentage(d["Low-Access to Food by Race"])]]},
           topojson: "/topojson/county.json",
           topojsonFilter: d => d.id.startsWith("05000US26")
         }}
@@ -133,8 +133,8 @@ StoreAccessByDemographic.defaultProps = {
 };
 
 StoreAccessByDemographic.need = [
-  fetchData("foodAccessByAge", "/api/data?measures=Percent&drilldowns=Age Group&Geography=<id>&Year=all"),
-  fetchData("foodAccessByRace", "/api/data?measures=Percent&drilldowns=Race Group&Geography=<id>&Year=all")
+  fetchData("foodAccessByAge", "/api/data?measures=Low-Access to Food by Age&drilldowns=Age Group&Geography=<id>&Year=all"),
+  fetchData("foodAccessByRace", "/api/data?measures=Low-Access to Food by Race&drilldowns=Race Group&Geography=<id>&Year=all")
 ];
 
 const mapStateToProps = state => ({

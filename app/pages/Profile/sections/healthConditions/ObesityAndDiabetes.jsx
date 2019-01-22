@@ -117,12 +117,12 @@ class ObesityAndDiabetes extends SectionColumns {
           <Stat
             title={"Male prevalence"}
             year={topMaleData.Year}
-            value={isDiabetesSelected ? formatPercentage(topMaleData["Diabetes Prevalence Adj Percent"]) : formatPercentage(topMaleData["Obesity Prevalence Adj Percent"])}
+            value={isDiabetesSelected ? formatPercentage(topMaleData["Age-Adjusted Obesity Prevalence"]) : formatPercentage(topMaleData["Age-Adjusted Obesity Prevalence"])}
           />
           <Stat
             title={"Female prevalence"}
             year={topFemaleData.Year}
-            value={isDiabetesSelected ? formatPercentage(topFemaleData["Diabetes Prevalence Adj Percent"]) : formatPercentage(topFemaleData["Obesity Prevalence Adj Percent"])}
+            value={isDiabetesSelected ? formatPercentage(topFemaleData["Age-Adjusted Obesity Prevalence"]) : formatPercentage(topFemaleData["Age-Adjusted Obesity Prevalence"])}
           />
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
@@ -132,7 +132,7 @@ class ObesityAndDiabetes extends SectionColumns {
           }
 
           {/* Write short paragraphs explaining Barchart and top stats for the Diabetes/Obesity data. */}
-          <p>In {topMaleData.Year}, rates for male and female residents of {topMaleData.Geography} were {isDiabetesSelected ? formatPercentage(topMaleData["Diabetes Prevalence Adj Percent"]) : formatPercentage(topMaleData["Obesity Prevalence Adj Percent"])} and {isDiabetesSelected ? formatPercentage(topFemaleData["Diabetes Prevalence Adj Percent"]) : formatPercentage(topFemaleData["Obesity Prevalence Adj Percent"])} respectively. { }
+          <p>In {topMaleData.Year}, rates for male and female residents of {topMaleData.Geography} were {isDiabetesSelected ? formatPercentage(topMaleData["Age-Adjusted Obesity Prevalence"]) : formatPercentage(topMaleData["Age-Adjusted Obesity Prevalence"])} and {isDiabetesSelected ? formatPercentage(topFemaleData["Age-Adjusted Obesity Prevalence"]) : formatPercentage(topFemaleData["Age-Adjusted Obesity Prevalence"])} respectively. { }
           The chart here shows male and female prevalence in {topMaleData.Geography}.</p>
 
           {isBMIWeightedDataValueSelected
@@ -148,7 +148,7 @@ class ObesityAndDiabetes extends SectionColumns {
             legend: false,
             groupBy: "Sex",
             label: d => d.Sex,
-            x: isDiabetesSelected ? "Diabetes Prevalence Adj Percent" : "Obesity Prevalence Adj Percent",
+            x: isDiabetesSelected ? "Age-Adjusted Obesity Prevalence" : "Age-Adjusted Obesity Prevalence",
             y: "Sex",
             time: "ID Year",
             xConfig: {
@@ -158,8 +158,8 @@ class ObesityAndDiabetes extends SectionColumns {
             yConfig: {
               ticks: []
             },
-            tooltipConfig: isDiabetesSelected ? {tbody: [["Year", d => d.Year], ["Condition", "Diabetes"], ["Share", d => formatPercentage(d["Diabetes Prevalence Adj Percent"])], ["Location", d => d.Geography]]} 
-              : {tbody: [["Year", d => d.Year], ["Condition", "Obesity"], ["Prevalence", d => formatPercentage(d["Obesity Prevalence Adj Percent"])], ["Location", d => d.Geography]]}
+            tooltipConfig: isDiabetesSelected ? {tbody: [["Year", d => d.Year], ["Condition", "Diabetes"], ["Share", d => formatPercentage(d["Age-Adjusted Obesity Prevalence"])], ["Location", d => d.Geography]]} 
+              : {tbody: [["Year", d => d.Year], ["Condition", "Obesity"], ["Prevalence", d => formatPercentage(d["Age-Adjusted Obesity Prevalence"])], ["Location", d => d.Geography]]}
           }}
           />
         </article>
@@ -209,8 +209,8 @@ ObesityAndDiabetes.defaultProps = {
 ObesityAndDiabetes.need = [
   fetchData("obesityAndDibetesDataValue", "/api/data?measures=Obesity,Diabetes&drilldowns=Tract&Year=all"),
   fetchData("BMIWeightedData", "/api/data?measures=BMI Healthy Weight,BMI Obese,BMI Overweight,BMI Underweight&drilldowns=End Year,County"),
-  fetchData("obesityPrevalenceBySex", "/api/data?measures=Obesity Prevalence Adj Percent&drilldowns=Sex&Geography=<id>&Year=all", d => d.data),
-  fetchData("diabetesPrevalenceBySex", "/api/data?measures=Diabetes Prevalence Adj Percent&drilldowns=Sex&Geography=<id>&Year=all", d => d.data)
+  fetchData("obesityPrevalenceBySex", "/api/data?measures=Age-Adjusted Obesity Prevalence&drilldowns=Sex&Geography=<id>&Year=all", d => d.data),
+  fetchData("diabetesPrevalenceBySex", "/api/data?measures=Age-Adjusted Obesity Prevalence&drilldowns=Sex&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

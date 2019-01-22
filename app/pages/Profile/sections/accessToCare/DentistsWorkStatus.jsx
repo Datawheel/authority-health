@@ -17,8 +17,8 @@ const formatDentistsByWorkingHours = dentistsByWorkingHours => {
     .key(d => d.Year)
     .entries(dentistsByWorkingHours)
     .forEach(group => {
-      const total = sum(group.values, d => d["Number of Dentists"]);
-      group.values.forEach(d => d.share = d["Number of Dentists"] / total * 100);
+      const total = sum(group.values, d => d["Dentists in Private Practice by Hours"]);
+      group.values.forEach(d => d.share = d["Dentists in Private Practice by Hours"] / total * 100);
     });
   return dentistsByWorkingHours;
 };
@@ -29,8 +29,8 @@ const formatDentistsBySpecialty = dentistsBySpecialty => {
     .key(d => d.Year)
     .entries(dentistsBySpecialty)
     .forEach(group => {
-      const total = sum(group.values, d => d["Number of Dentists"]);
-      group.values.forEach(d => d.share = d["Number of Dentists"] / total * 100);
+      const total = sum(group.values, d => d["Dentists in Private Practice by Specialty"]);
+      group.values.forEach(d => d.share = d["Dentists in Private Practice by Specialty"] / total * 100);
     });
   const recentYearGpPediatricDentists = dentistsBySpecialty[0];
   const recentYearOtherSpecialtyDentists = dentistsBySpecialty[1];
@@ -136,8 +136,8 @@ DentistsWorkStatus.defaultProps = {
 };
 
 DentistsWorkStatus.need = [
-  fetchData("dentistsByWorkingHours", "/api/data?measures=Number of Dentists&drilldowns=Hours&Geography=<id>&Year=latest"),
-  fetchData("dentistsBySpecialty", "/api/data?measures=Number of Dentists&drilldowns=Specialty&Geography=<id>&Year=latest"),
+  fetchData("dentistsByWorkingHours", "/api/data?measures=Dentists in Private Practice by Hours&drilldowns=Hours&Geography=<id>&Year=latest"),
+  fetchData("dentistsBySpecialty", "/api/data?measures=Dentists in Private Practice by Specialty&drilldowns=Specialty&Geography=<id>&Year=latest"),
   fetchData("typesOfActiveDentists", "/api/data?measures=Number of Dentists&drilldowns=Work&Status=Active&Geography=<id>&Year=latest")
 ];
 

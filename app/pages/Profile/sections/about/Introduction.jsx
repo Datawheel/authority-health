@@ -51,7 +51,7 @@ class Introduction extends SectionColumns {
             {population[0].Geography} has a population of {formatAbbreviate(population[0].Population)} people with life expectancy of {formatAbbreviate(lifeExpectancy[0]["Life Expectancy"])} {onCityOrZipLevel ? `(in ${lifeExpectancy[0].Geography})` : ""}. 
             The most common age group for male is {getTopMaleData.Age.toLowerCase()} and for female it is {getTopFemaleData.Age.toLowerCase()}. 
             Between 2015 and 2016 the population of {population[0].Geography} {populationGrowth < 0 ? "reduced" : "increased"} from {formatAbbreviate(population[1].Population)} to {formatAbbreviate(population[0].Population)}, 
-            a {populationGrowth < 0 ? "decline" : "increase"} of {populationGrowth < 0 ? populationGrowth * -1 : populationGrowth}%.
+            { } {populationGrowth < 0 ? "a decline" : "an increase"} of {populationGrowth < 0 ? populationGrowth * -1 : populationGrowth}%.
           </p>
         </article>
 

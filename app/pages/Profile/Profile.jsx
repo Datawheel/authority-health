@@ -45,6 +45,7 @@ import EducationalAttainment from "./sections/education/EducationalAttainment";
 import DropoutRate from "./sections/education/DropoutRate";
 import StudentPoverty from "./sections/education/StudentPoverty";
 import ReadingAssessment from "./sections/education/ReadingAssessment";
+// import Test from "./sections/education/Test";
 import WaterQuality from "./sections/naturalEnvironment/WaterQuality";
 import AirQuality from "./sections/naturalEnvironment/AirQuality";
 
@@ -56,13 +57,12 @@ class Profile extends Component {
 
   render() {
 
-    const {name} = this.props.meta;
-    const {population, populationByRaceAndEthnicity, populationByAgeAndGender, lifeExpectancy} = this.props;
+    const {name, level} = this.props.meta;
 
     return (
       <div className="profile">
         <ProfileHeader
-          title={ name }
+          title={level === "zip" ? `Zip Code ${name}` : name}
         />
 
         <TopicTitle slug="about">
@@ -72,8 +72,8 @@ class Profile extends Component {
           </div>
         </TopicTitle>
         <div className="section-container">
-          <Introduction population={population.data} populationByRaceAndEthnicity={populationByRaceAndEthnicity.data} populationByAgeAndGender={populationByAgeAndGender} lifeExpectancy={lifeExpectancy}/>
-          <SocioeconomicOutcomes population={population.data} populationByRaceAndEthnicity={populationByRaceAndEthnicity.data} populationByAgeAndGender={populationByAgeAndGender} lifeExpectancy={lifeExpectancy}/>
+          <Introduction />
+          <SocioeconomicOutcomes />
           <HealthOutcomes />
         </div>
 
@@ -84,7 +84,7 @@ class Profile extends Component {
           </div>
         </TopicTitle>
         <div className="section-container">
-          <HealthCenters />
+          {/* <HealthCenters /> */}
           <DentistsDemographic />
           <DentistsWorkStatus />
           <Coverage />
@@ -92,16 +92,12 @@ class Profile extends Component {
 
         <TopicTitle slug="food-access">
           <div className="section-container">
-            <div className="section-title-stat-container">
-              <span className="section-title-inner">
-                <Icon iconName="shop" />
-                Food Access
-              </span>
-              <Insecurity />
-            </div>
+            <Icon iconName="shop" />
+            Food Access
           </div>
         </TopicTitle>
         <div className="section-container">
+          <Insecurity />
           <FoodAvailability />
           <StoreAccessByDemographic />
         </div>
@@ -142,7 +138,7 @@ class Profile extends Component {
           <DomesticPartners />
           <DisabilityStatus />
           <VisionAndAuditoryDisabilities /> 
-          <Homeless population={population.data}/>
+          <Homeless />
           <Veterans />
           <Incarceration />
         </div>
@@ -187,6 +183,7 @@ class Profile extends Component {
           <DropoutRate />
           <StudentPoverty />
           <ReadingAssessment />
+          {/* <Test /> */}
         </div>
 
         <TopicTitle slug="natural-environment">
@@ -217,7 +214,7 @@ Profile.need = [
   Cancer,
   RiskyBehaviors,
   PhysicalInactivity,
-  HealthCenters,
+  // HealthCenters,
   DentistsDemographic,
   DentistsWorkStatus,
   Coverage,
@@ -244,13 +241,14 @@ Profile.need = [
   DropoutRate,
   StudentPoverty,
   ReadingAssessment,
+  // Test,
   WaterQuality,
   AirQuality,
   fetchData("meta", "/api/search?id=<id>", resp => resp[0]),
-  fetchData("population", "https://niagara.datausa.io/api/data?measures=Population&Geography=<id>&year=all"),
+  fetchData("population", "https://acs.datausa.io/api/data?measures=Population&Geography=<id>&year=all"),
   fetchData("populationByAgeAndGender", "/api/data?measures=Population&drilldowns=Age,Sex&Geography=<id>&Year=all", d => d.data),
   fetchData("lifeExpectancy", "/api/data?measures=Life Expectancy&Geography=<id>", d => d.data), // Year data not available
-  fetchData("populationByRaceAndEthnicity", "https://niagara.datausa.io/api/data?measures=Hispanic Population&drilldowns=Race,Ethnicity&Geography=<id>&Year=all")
+  fetchData("populationByRaceAndEthnicity", "https://acs.datausa.io/api/data?measures=Hispanic Population&drilldowns=Race,Ethnicity&Geography=<id>&Year=all")
 ];
 
 const mapStateToProps = state => ({

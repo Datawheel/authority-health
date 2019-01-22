@@ -245,10 +245,10 @@ Profile.need = [
   WaterQuality,
   AirQuality,
   fetchData("meta", "/api/search?id=<id>", resp => resp[0]),
-  fetchData("population", "https://acs.datausa.io/api/data?measures=Population&Geography=<id>&year=all"),
+  fetchData("population", "https://quincy.datausa.io/api/data?measures=Population&Geography=<id>&year=all"),
   fetchData("populationByAgeAndGender", "/api/data?measures=Population&drilldowns=Age,Sex&Geography=<id>&Year=all", d => d.data),
   fetchData("lifeExpectancy", "/api/data?measures=Life Expectancy&Geography=<id>", d => d.data), // Year data not available
-  fetchData("populationByRaceAndEthnicity", "https://acs.datausa.io/api/data?measures=Hispanic Population&drilldowns=Race,Ethnicity&Geography=<id>&Year=all")
+  fetchData("populationByRaceAndEthnicity", "https://quincy.datausa.io/api/data?measures=Hispanic Population&drilldowns=Race,Ethnicity&Geography=<id>&Year=all")
 ];
 
 const mapStateToProps = state => ({

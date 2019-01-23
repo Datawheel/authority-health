@@ -80,13 +80,13 @@ class PhysicalInactivity extends SectionColumns {
                 value={formatPercentage(topPhysicalInactivityFemaleData["Age-Adjusted Physical Inactivity"])}
               />
               <p>In {topRecentYearData.Year}, {topRecentYearData.Tract} had the highest prevalence of {formatDropdownChoiceName(dropdownValue).toLowerCase()} ({formatPercentage(topRecentYearData[dropdownValue])}) out of all tracts in Wayne County.</p>
-              <p>In {topPhysicalInactivityFemaleData.Year}, {formatDropdownChoiceName(dropdownValue).toLowerCase()} rates for male and female residents of Wayne County were {formatPercentage(topPhysicalInactivityMaleData["Age-Adjusted Physical Inactivity"])} and {formatPercentage(topPhysicalInactivityFemaleData["Age-Adjusted Physical Inactivity"])} respectively in the {topPhysicalInactivityFemaleData.Geography}, MI.</p>
+              <p>In {topPhysicalInactivityFemaleData.Year}, {formatDropdownChoiceName(dropdownValue).toLowerCase()} rates for male and female residents of Wayne County were {formatPercentage(topPhysicalInactivityMaleData["Age-Adjusted Physical Inactivity"])} and {formatPercentage(topPhysicalInactivityFemaleData["Age-Adjusted Physical Inactivity"])} respectively in the {topPhysicalInactivityFemaleData.Geography}.</p>
               <p>The barchart here shows the {formatDropdownChoiceName(dropdownValue).toLowerCase()} data for male and female in {topPhysicalInactivityFemaleData.Geography}.</p>
             </div>
             : <p>In {topRecentYearData.Year}, {topRecentYearData.Tract} had the highest prevalence of {formatDropdownChoiceName(dropdownValue).toLowerCase()} ({formatPercentage(topRecentYearData[dropdownValue])}) out of all tracts in Wayne County.</p>
           }
 
-          <p>The following map shows the {formatDropdownChoiceName(dropdownValue)} for all tracts in Wayne County, MI.</p>
+          <p>The following map shows the {formatDropdownChoiceName(dropdownValue)} for all tracts in Wayne County.</p>
 
           {/* Draw a BarChart to show data for Physical Inactivity by Sex. */}
           {physicalInactivitySelected

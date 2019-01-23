@@ -92,7 +92,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
           }
           { isHealthConditionWeightedValueSelected
             ? <p>The map here shows the {dropdownValue.toLowerCase()} for all counties in Michigan.</p>
-            : <p>The map here shows the {dropdownValue.toLowerCase()} for all tracts in Wayne County, MI.</p>
+            : <p>The map here shows the {dropdownValue.toLowerCase()} for all tracts in Wayne County.</p>
           }
         </article>
 

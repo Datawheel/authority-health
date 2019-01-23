@@ -23,23 +23,23 @@ class ReadingAssessment extends SectionColumns {
     stats.push(<Stat
       title={"4th grade male (Detroit)"}
       year={maleFourthGradeReadingScores.Year}
-      value={maleFourthGradeReadingScores["Average Reading Score"]}
+      value={maleFourthGradeReadingScores["Average Reading Score by Gender"]}
     />);
     stats.push(<Stat
       title={"4th grade female (Detroit)"}
       year={femaleFourthGradeReadingScores.Year}
-      value={femaleFourthGradeReadingScores["Average Reading Score"]}
+      value={femaleFourthGradeReadingScores["Average Reading Score by Gender"]}
     />);
     stats.push(<Stat
       title={"8th Grade male (Detroit)"}
       year={maleEighthGradeReadingScores.Year}
       value={maleEighthGradeReadingScores.Gender}
-      qualifier={maleEighthGradeReadingScores["Average Reading Score"]}
+      qualifier={maleEighthGradeReadingScores["Average Reading Score by Gender"]}
     />);
     stats.push(<Stat
       title={"8th Grade female (Detroit)"}
       year={femaleEighthGradeReadingScores.Year}
-      value={femaleEighthGradeReadingScores["Average Reading Score"]}
+      value={femaleEighthGradeReadingScores["Average Reading Score by Gender"]}
     />);
     return stats;
   }
@@ -50,22 +50,22 @@ class ReadingAssessment extends SectionColumns {
     stats.push(<Stat
       title={"4th Grade Score With ELL (Detroit)"}
       year={withELLFourthGradeReadingScores.Year}
-      value={withELLFourthGradeReadingScores["Average Reading Score"]}
+      value={withELLFourthGradeReadingScores["Average Reading Score by ELL"]}
     />);
     stats.push(<Stat
       title={"8th Grade Score With ELL (Detroit)"}
       year={withELLEighthGradeReadingScores.Year}
-      value={withELLEighthGradeReadingScores["Average Reading Score"]}
+      value={withELLEighthGradeReadingScores["Average Reading Score by ELL"]}
     />);
     stats.push(<Stat
       title={"4th Grade Score with No ELL (Detroit)"}
       year={noELLFourthGradeReadingScores.Year}
-      value={noELLFourthGradeReadingScores["Average Reading Score"]}
+      value={noELLFourthGradeReadingScores["Average Reading Score by ELL"]}
     />);
     stats.push(<Stat
       title={"8th Grade Score with No ELL (Detroit)"}
       year={noELLEighthGradeReadingScores.Year}
-      value={noELLEighthGradeReadingScores["Average Reading Score"]}
+      value={noELLEighthGradeReadingScores["Average Reading Score by ELL"]}
     />);
     return stats;
   };
@@ -76,22 +76,22 @@ class ReadingAssessment extends SectionColumns {
     stats.push(<Stat
       title={"4th Grade Score With Disability (Detroit)"}
       year={withDisabilityFourthGradeReadingScores.Year}
-      value={withDisabilityFourthGradeReadingScores["Average Reading Score"]}
+      value={withDisabilityFourthGradeReadingScores["Average Reading Score by Disability"]}
     />);
     stats.push(<Stat
       title={"8th Grade Score With Disability (Detroit)"}
       year={withDisabilityEighthGradeReadingScores.Year}
-      value={withDisabilityEighthGradeReadingScores["Average Reading Score"]}
+      value={withDisabilityEighthGradeReadingScores["Average Reading Score by Disability"]}
     />);
     stats.push(<Stat
       title={"4th Grade Score with No Disability (Detroit)"}
       year={noDisabilityFourthGradeReadingScores.Year}
-      value={noDisabilityFourthGradeReadingScores["Average Reading Score"]}
+      value={noDisabilityFourthGradeReadingScores["Average Reading Score by Disability"]}
     />);
     stats.push(<Stat
       title={"8th Grade Score with No Disability (Detroit)"}
       year={noDisabilityEighthGradeReadingScores.Year}
-      value={noDisabilityEighthGradeReadingScores["Average Reading Score"]}
+      value={noDisabilityEighthGradeReadingScores["Average Reading Score by Disability"]}
     />);
     return stats;
   }
@@ -102,7 +102,7 @@ class ReadingAssessment extends SectionColumns {
       title={"8th Grade Score (Detroit)"}
       year={topReadingScoreForEighthGrade.Year}
       value={topReadingScoreForEighthGrade["Parents Education"]}
-      qualifier={topReadingScoreForEighthGrade["Average Reading Score"]}
+      qualifier={topReadingScoreForEighthGrade["Average Reading Score by Parents Education"]}
     />);
     return stats;
   }
@@ -143,25 +143,25 @@ class ReadingAssessment extends SectionColumns {
 
   getShortDescription = str => <p>The following chart shows the average reading assessment score in Detroit {str} over time.</p>;
 
-  drawLinePlot = (readingScoresData, categoryName, xTitle) => {
-    const lineplot = [];
-    lineplot.push(<LinePlot config={{
-      data: readingScoresData,
-      discrete: "x",
-      height: 400,
-      groupBy: d => `${d.Grade} ${d[categoryName]}`,
-      label: d => `${d.Grade}th Grade ${d[categoryName]}`,
-      x: "Year",
-      y: "Average Reading Score",
-      yConfig: {
-        title: `Average Reading Score ${xTitle}`
-      },
-      tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score"]], ["Location", "Detroit"]]}
-    }}
-    />);
+  // drawLinePlot = (readingScoresData, categoryName, xTitle) => {
+  //   const lineplot = [];
+  //   lineplot.push(<LinePlot config={{
+  //     data: readingScoresData,
+  //     discrete: "x",
+  //     height: 400,
+  //     groupBy: d => `${d.Grade} ${d[categoryName]}`,
+  //     label: d => `${d.Grade}th Grade ${d[categoryName]}`,
+  //     x: "Year",
+  //     y: "Average Reading Score",
+  //     yConfig: {
+  //       title: `Average Reading Score ${xTitle}`
+  //     },
+  //     tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score"]], ["Location", "Detroit"]]}
+  //   }}
+  //   />);
 
-    return lineplot;
-  }
+  //   return lineplot;
+  // }
 
   render() {
     const {dropdownValue} = this.state;
@@ -224,12 +224,12 @@ class ReadingAssessment extends SectionColumns {
             label: d => `${d.Grade}th Grade ${d.Gender}`,
             baseline: 0,
             x: "Year",
-            y: "Average Reading Score",
+            y: "Average Reading Score by Gender",
             yConfig: {
-              title: "Average Reading Score by Gender",
+              title: "Average Reading Score by Gender by Gender",
               domain: [0, 300]
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score"]], ["Location", "Detroit"]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score by Gender"]], ["Location", "Detroit"]]}
           }}
           />
         </SectionColumns>
@@ -285,12 +285,12 @@ class ReadingAssessment extends SectionColumns {
             label: d => `${d.Grade}th Grade ${d.ELL === "Yes" ? "With ELL" : "No ELL"}`,
             baseline: 0,
             x: "Year",
-            y: "Average Reading Score",
+            y: "Average Reading Score by ELL",
             yConfig: {
-              title: "Average Reading Score",
+              title: "Average Reading Score by ELL",
               domain: [0, 300]
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score"]], ["Location", "Detroit"]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score by ELL"]], ["Location", "Detroit"]]}
           }}
           />
         </SectionColumns>
@@ -345,12 +345,12 @@ class ReadingAssessment extends SectionColumns {
             label: d => `${d.Grade}th Grade ${d.Disability === "Yes" ? "With Disability" : "No Disability"}`,
             baseline: 0,
             x: "Year",
-            y: "Average Reading Score",
+            y: "Average Reading Score by Disability",
             yConfig: {
-              title: "Average Reading Score",
+              title: "Average Reading Score by Disability",
               domain: [0, 300]
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score"]], ["Location", "Detroit"]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score by Disability"]], ["Location", "Detroit"]]}
           }}
           />
         </SectionColumns>
@@ -368,7 +368,7 @@ class ReadingAssessment extends SectionColumns {
 
       // Find top reading score by Parent's Education for 8th Grade data.
       const readingScoresForEighthGrade = recentYearReadingScoresByParentsEdu.values.filter(d => d.Grade === "8");
-      readingScoresForEighthGrade.sort((a, b) => b["Average Reading Score"] - a["Average Reading Score"]);
+      readingScoresForEighthGrade.sort((a, b) => b["Average Reading Score by Parents Education"] - a["Average Reading Score by Parents Education"]);
       const topReadingScoreForEighthGrade = readingScoresForEighthGrade[0];
 
       // Get stats for scores based on Parents Education.
@@ -395,12 +395,12 @@ class ReadingAssessment extends SectionColumns {
             label: d => `${d["Parents Education"]}`,
             baseline: 0,
             x: "Year",
-            y: "Average Reading Score",
+            y: "Average Reading Score by Parents Education",
             yConfig: {
-              title: "Average Reading Score based on Parents Education",
+              title: "Average Reading Score by Parents Education based on Parents Education",
               domain: [0, 300]
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score"]], ["Location", "Detroit"]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score by Parents Education"]], ["Location", "Detroit"]]}
           }}
           />
         </SectionColumns>
@@ -498,10 +498,10 @@ ReadingAssessment.defaultProps = {
 };
 
 ReadingAssessment.need = [
-  fetchData("readingScoresByGender", "/api/data?measures=Average Reading Score&drilldowns=Grade,Gender,Place&Year=all", d => d.data),
-  fetchData("readingScoresByELL", "/api/data?measures=Average Reading Score&drilldowns=Grade,ELL,Place&Year=all", d => d.data),
-  fetchData("readingScoresByDisability", "/api/data?measures=Average Reading Score&drilldowns=Grade,Disability,Place&Year=all", d => d.data),
-  fetchData("readingScoresByParentsEducation", "/api/data?measures=Average Reading Score&drilldowns=Grade,Parents Education,Place&Year=all", d => d.data),
+  fetchData("readingScoresByGender", "/api/data?measures=Average Reading Score by Gender&drilldowns=Grade,Gender,Place&Year=all", d => d.data),
+  fetchData("readingScoresByELL", "/api/data?measures=Average Reading Score by ELL&drilldowns=Grade,ELL,Place&Year=all", d => d.data),
+  fetchData("readingScoresByDisability", "/api/data?measures=Average Reading Score by Disability&drilldowns=Grade,Disability,Place&Year=all", d => d.data),
+  fetchData("readingScoresByParentsEducation", "/api/data?measures=Average Reading Score by Parents Education&drilldowns=Grade,Parents Education,Place&Year=all", d => d.data),
   fetchData("readingScoresByNation", "/api/data?measures=Average Reading Score&drilldowns=Grade,Nation&Year=all", d => d.data),
   fetchData("readingScoresByCity", "/api/data?measures=Average Reading Score&drilldowns=Grade,Place&Year=all", d => d.data)
 ];

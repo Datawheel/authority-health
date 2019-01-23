@@ -37,8 +37,8 @@ class SocioeconomicOutcomes extends SectionColumns {
       .key(d => d.Year)
       .entries(populationByAgeAndGender)
       .forEach(group => {
-        const total = sum(group.values, d => d.Population);
-        group.values.forEach(d => d.share = d.Population / total * 100);
+        const total = sum(group.values, d => d["Population by Sex and Age"]);
+        group.values.forEach(d => d.share = d["Population by Sex and Age"] / total * 100);
       });
       
     // Find share for population by Race and Ethnicity.

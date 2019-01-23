@@ -23,8 +23,8 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
       .key(d => d.Year)
       .entries(publicAssistanceData)
       .forEach(group => {
-        const total = sum(group.values, d => d.Population);
-        group.values.forEach(d => d.share = d.Population / total * 100);
+        const total = sum(group.values, d => d["Food-Stamp Population"]);
+        group.values.forEach(d => d.share = d["Food-Stamp Population"] / total * 100);
         group.key >= publicAssistanceData[0].Year ? Object.assign(recentYearPublicAssistanceData, group) : {};
       });
 
@@ -38,8 +38,8 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
       .key(d => d.Year)
       .entries(householdSnapData)
       .forEach(group => {
-        const total = sum(group.values, d => d.Population);
-        group.values.forEach(d => d.share = d.Population / total * 100);
+        const total = sum(group.values, d => d["SNAP Receipts"]);
+        group.values.forEach(d => d.share = d["SNAP Receipts"] / total * 100);
         group.key >= householdSnapData[0].Year ? Object.assign(recentYearHouseholdSnapData, group) : {};
       });
     const filterSnapRecievedData = householdSnapData.filter(d => d["ID Snap Receipt"] === 0);
@@ -105,8 +105,8 @@ HouseholdIncomeFromPublicAssistance.defaultProps = {
 };
 
 HouseholdIncomeFromPublicAssistance.need = [
-  fetchData("publicAssistanceData", "/api/data?measures=Population&drilldowns=Public Assistance or Snap&Geography=<id>&Year=all", d => d.data),
-  fetchData("householdSnapData", "/api/data?measures=Population&drilldowns=Snap Receipt,Family type,Number of workers&Geography=<id>&Year=all", d => d.data)
+  fetchData("publicAssistanceData", "/api/data?measures=Food-Stamp Population&drilldowns=Public Assistance or Snap&Geography=<id>&Year=all", d => d.data),
+  fetchData("householdSnapData", "/api/data?measures=SNAP Receipts&drilldowns=Snap Receipt,Family type,Number of workers&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

@@ -23,8 +23,8 @@ class Veterans extends SectionColumns {
       .key(d => d.Year)
       .entries(veteransEmploymentStatus)
       .forEach(group => {
-        const total = sum(group.values, d => d.Population);
-        group.values.forEach(d => d.share = d.Population / total * 100);
+        const total = sum(group.values, d => d["Veteran Population"]);
+        group.values.forEach(d => d.share = d["Veteran Population"] / total * 100);
         group.key >= veteransEmploymentStatus[0].Year ? Object.assign(recentYearVeteransByEmploymentStatus, group) : {};
       });
     const recentYearUnemployedVeterans = recentYearVeteransByEmploymentStatus.values.filter(d => d["Employment Status"] === "Unemployed");
@@ -36,8 +36,8 @@ class Veterans extends SectionColumns {
       .key(d => d.Year)
       .entries(veteransPovertyStatus)
       .forEach(group => {
-        const total = sum(group.values, d => d.Population);
-        group.values.forEach(d => d.share = d.Population / total * 100);
+        const total = sum(group.values, d => d["Veteran Population"]);
+        group.values.forEach(d => d.share = d["Veteran Population"] / total * 100);
         group.key >= veteransPovertyStatus[0].Year ? Object.assign(recentYearVeteransPovertyStatus, group) : {};
       });
     // Get stats for Veterans in Poverty.
@@ -49,8 +49,8 @@ class Veterans extends SectionColumns {
       .key(d => d.Year)
       .entries(veteransDisabilityStatus)
       .forEach(group => {
-        const total = sum(group.values, d => d.Population);
-        group.values.forEach(d => d.share = d.Population / total * 100);
+        const total = sum(group.values, d => d["Veteran Population"]);
+        group.values.forEach(d => d.share = d["Veteran Population"] / total * 100);
         group.key >= veteransDisabilityStatus[0].Year ? Object.assign(recentYearVeteransDisabilityStatus, group) : {};
       });
     // Get stats for Veterans With Disability.
@@ -134,9 +134,9 @@ Veterans.defaultProps = {
 };
 
 Veterans.need = [
-  fetchData("veteransEmploymentStatus", "/api/data?measures=Population&drilldowns=Employment Status&Geography=<id>&Year=all", d => d.data),
-  fetchData("veteransPovertyStatus", "/api/data?measures=Population&drilldowns=Poverty Status&Geography=<id>&Year=all", d => d.data),
-  fetchData("veteransDisabilityStatus", "/api/data?measures=Population&drilldowns=Disability Status&Geography=<id>&Year=all", d => d.data),
+  fetchData("veteransEmploymentStatus", "/api/data?measures=Veteran Population&drilldowns=Employment Status&Geography=<id>&Year=all", d => d.data),
+  fetchData("veteransPovertyStatus", "/api/data?measures=Veteran Population&drilldowns=Poverty Status&Geography=<id>&Year=all", d => d.data),
+  fetchData("veteransDisabilityStatus", "/api/data?measures=Veteran Population&drilldowns=Disability Status&Geography=<id>&Year=all", d => d.data),
   fetchData("periodOfService", "https://acs.datausa.io/api/data?measures=Veterans&drilldowns=Period of Service&Geography=<id>&Year=all", d => d.data)
 ];
 

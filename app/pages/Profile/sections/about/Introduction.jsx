@@ -27,9 +27,9 @@ class Introduction extends SectionColumns {
         group.key >= populationByAgeAndGender[0].Year ? Object.assign(recentYearPopulationByAgeAndGender, group) : {};
       });
     const getMaleData = recentYearPopulationByAgeAndGender.values.filter(d => d.Sex === "Male");
-    const getTopMaleData = getMaleData.sort((a, b) => b.Population - a.Population)[0];
+    const getTopMaleData = getMaleData.sort((a, b) => b["Population by Sex and Age"] - a["Population by Sex and Age"])[0];
     const getFemaleData = populationByAgeAndGender.filter(d => d.Sex === "Female");
-    const getTopFemaleData = getFemaleData.sort((a, b) => b.Population - a.Population)[0];
+    const getTopFemaleData = getFemaleData.sort((a, b) => b["Population by Sex and Age"] - a["Population by Sex and Age"])[0];
 
     // Get recent year race and ethnicity population data.
     const recentYearPopulationByRaceAndEthnicity = {};

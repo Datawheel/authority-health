@@ -23,8 +23,8 @@ class DomesticPartners extends SectionColumns {
       .key(d => d.Year)
       .entries(filteredDomesticPartnersData)
       .forEach(group => {
-        const total = sum(group.values, d => d.Population);
-        group.values.forEach(d => d.share = d.Population / total * 100);
+        const total = sum(group.values, d => d["Unmarried Partner Households"]);
+        group.values.forEach(d => d.share = d["Unmarried Partner Households"] / total * 100);
         group.key >= filteredDomesticPartnersData[0].Year ? Object.assign(recentDomesticPartnersData, group) : {};
       });
     recentDomesticPartnersData.values.sort((a, b) => b.share - a.share);
@@ -77,7 +77,7 @@ DomesticPartners.defaultProps = {
 };
 
 DomesticPartners.need = [
-  fetchData("domesticPartnersData", "/api/data?measures=Population&drilldowns=Sex of Partner&Geography=<id>&Year=all", d => d.data)
+  fetchData("domesticPartnersData", "/api/data?measures=Unmarried Partner Households&drilldowns=Sex of Partner&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

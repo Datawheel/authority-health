@@ -24,7 +24,7 @@ class Immigrants extends SectionColumns {
 
   render() {
 
-    const {meta, immigrantsData, immigrantsPovertyData, immigrantsDataForCurrentLocation, immigrantsPovertyDataForCurrentLocation} = this.props;
+    const {immigrantsData, immigrantsPovertyData, immigrantsDataForCurrentLocation, immigrantsPovertyDataForCurrentLocation} = this.props;
 
     const {dropdownValue} = this.state;
     const dropdownList = ["Total Immigrants", "Immigrants in Poverty"];
@@ -118,10 +118,10 @@ class Immigrants extends SectionColumns {
                 qualifier={formatPopulation(topImmigrantsData.share)}
               />
               <p>
-                In {getImmigrantsDataForCurrentLocation[0].Year}, {formatPopulation(getImmigrantsDataForCurrentLocation[0].share)} of the population in {meta.level === "zip" ? "zip code" : ""} {getImmigrantsDataForCurrentLocation[0].Geography} was immigrants.{" "} 
+                In {getImmigrantsDataForCurrentLocation[0].Year}, {formatPopulation(getImmigrantsDataForCurrentLocation[0].share)} of the population in {getImmigrantsDataForCurrentLocation[0].Geography} was immigrants.{" "} 
                 The city with the highest immigrant population in Wayne County was {topImmigrantsData.Place} ({formatPopulation(topImmigrantsData.share)}).
               </p>
-              <p>The map here shows the cities in {meta.level === "zip" ? "zip code" : ""} {getImmigrantsDataForCurrentLocation[0].Geography} by their percentage of immigrants.</p>
+              <p>The map here shows the cities in {getImmigrantsDataForCurrentLocation[0].Geography} by their percentage of immigrants.</p>
             </div>
             : <div>
               <Stat
@@ -136,10 +136,10 @@ class Immigrants extends SectionColumns {
                 qualifier={formatPopulation(topPovertyData.share)}
               />
               <p>
-                In {getImmigrantsDataForCurrentLocation[0].Year}, {formatPopulation(getImmigrantsDataForCurrentLocation[0].share)} of the population in {meta.level === "zip" ? "zip code" : ""} {getImmigrantsDataForCurrentLocation[0].Geography} was immigrants.{" "}
+                In {getImmigrantsDataForCurrentLocation[0].Year}, {formatPopulation(getImmigrantsDataForCurrentLocation[0].share)} of the population in {getImmigrantsDataForCurrentLocation[0].Geography} was immigrants.{" "}
                 The city with the highest immigrants in poverty in Wayne County was {topImmigrantsData.Place} ({formatPopulation(topImmigrantsData.share)}).
               </p>
-              <p>The map here shows the cities in {meta.level === "zip" ? "zip code" : ""} {getImmigrantsDataForCurrentLocation[0].Geography} by their percentage of immigrants in poverty.</p>
+              <p>The map here shows the cities in {getImmigrantsDataForCurrentLocation[0].Geography} by their percentage of immigrants in poverty.</p>
             </div>
           }
         </article>
@@ -175,7 +175,6 @@ Immigrants.need = [
 ];
 
 const mapStateToProps = state => ({
-  meta: state.data.meta,
   immigrantsData: state.data.immigrantsData,
   immigrantsPovertyData: state.data.immigrantsPovertyData,
   immigrantsDataForCurrentLocation: state.data.immigrantsDataForCurrentLocation,

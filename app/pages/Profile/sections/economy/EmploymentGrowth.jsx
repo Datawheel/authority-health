@@ -32,7 +32,7 @@ class EmploymentGrowth extends SectionColumns {
         {/* Draw Geomap to show health center count for each zip code in the Wayne county */}
         <Geomap config={{
           data: percentChangeInEmploymemt,
-          groupBy: "Zip",
+          groupBy: "ID Zip",
           colorScale: "Percent Change in Employment",
           colorScaleConfig: {
             axisConfig: {tickFormat: d => `${d}%`},

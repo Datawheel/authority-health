@@ -38,7 +38,7 @@ class DropoutRate extends SectionColumns {
         {/* Draw Geomap to show dropout rate for each zip code in the Wayne county */}
         <Geomap config={{
           data: highSchoolDropoutRate,
-          groupBy: "Zip",
+          groupBy: "ID Zip",
           colorScale: "High School Dropout Rate",
           colorScaleConfig: {
             axisConfig: {tickFormat: d => formatPercentage(d)}

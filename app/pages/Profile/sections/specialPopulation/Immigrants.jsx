@@ -34,8 +34,8 @@ class Immigrants extends SectionColumns {
       .key(d => d.Year)
       .entries(immigrantsDataForCurrentLocation)
       .forEach(group => {
-        const total = sum(group.values, d => d.Population);
-        group.values.forEach(d => d.share = d.Population / total * 100);
+        const total = sum(group.values, d => d["Poverty by Nativity"]);
+        group.values.forEach(d => d.share = d["Poverty by Nativity"] / total * 100);
       });
     const getImmigrantsDataForCurrentLocation = immigrantsDataForCurrentLocation.filter(d => d.Nativity === "Foreign Born");
 
@@ -43,8 +43,8 @@ class Immigrants extends SectionColumns {
       .key(d => d.Year)
       .entries(immigrantsPovertyDataForCurrentLocation)
       .forEach(group => {
-        const total = sum(group.values, d => d.Population);
-        group.values.forEach(d => d.share = d.Population / total * 100);
+        const total = sum(group.values, d => d["Poverty by Nativity"]);
+        group.values.forEach(d => d.share = d["Poverty by Nativity"] / total * 100);
       });
     const getImmigrantsPovertyDataForCurrentLocation = immigrantsPovertyDataForCurrentLocation.filter((d => d.Nativity === "Foreign Born") && (d => d["ID Poverty Status"] === 0));
 
@@ -57,9 +57,9 @@ class Immigrants extends SectionColumns {
           .key(d => d["ID Place"])
           .entries(group.values)
           .forEach(place => {
-            const total = sum(place.values, d => d.Population);
+            const total = sum(place.values, d => d["Poverty by Nativity"]);
             place.values.forEach(d => {
-              if (d["ID Nativity"] === 1) d.share = d.Population / total * 100;
+              if (d["ID Nativity"] === 1) d.share = d["Poverty by Nativity"] / total * 100;
             });
           });
       });
@@ -79,9 +79,9 @@ class Immigrants extends SectionColumns {
           .key(d => d["ID Place"])
           .entries(group.values)
           .forEach(place => {
-            const total = sum(place.values, d => d.Population);
+            const total = sum(place.values, d => d["Poverty by Nativity"]);
             place.values.forEach(d => {
-              if (d["ID Poverty Status"] === 0) d.share = d.Population / total * 100;
+              if (d["ID Poverty Status"] === 0) d.share = d["Poverty by Nativity"] / total * 100;
             });
           });
       });
@@ -168,10 +168,10 @@ Immigrants.defaultProps = {
 };
 
 Immigrants.need = [
-  fetchData("immigrantsData", "/api/data?measures=Population&drilldowns=Nativity,Place&Year=all", d => d.data),
-  fetchData("immigrantsPovertyData", "/api/data?measures=Population&drilldowns=Nativity,Poverty Status,Place&Year=all", d => d.data),
-  fetchData("immigrantsDataForCurrentLocation", "/api/data?measures=Population&drilldowns=Nativity&Geography=<id>&Year=latest", d => d.data),
-  fetchData("immigrantsPovertyDataForCurrentLocation", "/api/data?measures=Population&drilldowns=Nativity,Poverty Status&Geography=<id>&Year=latest", d => d.data)
+  fetchData("immigrantsData", "/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Place&Year=all", d => d.data),
+  fetchData("immigrantsPovertyData", "/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Poverty Status,Place&Year=all", d => d.data),
+  fetchData("immigrantsDataForCurrentLocation", "/api/data?measures=Poverty by Nativity&drilldowns=Nativity&Geography=<id>&Year=latest", d => d.data),
+  fetchData("immigrantsPovertyDataForCurrentLocation", "/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Poverty Status&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({

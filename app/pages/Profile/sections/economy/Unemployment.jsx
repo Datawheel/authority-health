@@ -25,8 +25,8 @@ class Unemployment extends SectionColumns {
       .key(d => d.Year)
       .entries(filteredWorkExperienceData)
       .forEach(group => {
-        const total = sum(group.values, d => d.Population);
-        group.values.forEach(d => d.share = d.Population / total * 100);
+        const total = sum(group.values, d => d["Poverty by Work Experience"]);
+        group.values.forEach(d => d.share = d["Poverty by Work Experience"] / total * 100);
       });
     const getMaleFullTimeData = filteredWorkExperienceData.filter(d => d.Sex === "Male");
     const getFemaleFullTimeData = filteredWorkExperienceData.filter(d => d.Sex === "Female");
@@ -38,8 +38,8 @@ class Unemployment extends SectionColumns {
       .key(d => d.Year)
       .entries(unemployedData)
       .forEach(group => {
-        const total = sum(group.values, d => d.Population);
-        group.values.forEach(d => d.share = d.Population / total * 100);
+        const total = sum(group.values, d => d["Population by Employment Status"]);
+        group.values.forEach(d => d.share = d["Population by Employment Status"] / total * 100);
         group.key >= unemployedData[0].Year ? Object.assign(recentYearUnemploymentData, group) : {};
       });
     const getMaleUnemploymemtData = recentYearUnemploymentData.values.filter(d => d.Sex === "Male");
@@ -128,8 +128,8 @@ Unemployment.defaultProps = {
 
 Unemployment.need = [
   fetchData("unemploymentRate", "/api/data?measures=Unemployment Rate&Geography=<id>&Year=all"),
-  fetchData("employmentStatus", "/api/data?measures=Population&drilldowns=Employment Status,Age,Sex&Geography=<id>&Year=all", d => d.data),
-  fetchData("workExperience", "/api/data?measures=Population&drilldowns=Work Experience,Sex&Geography=<id>&Year=latest", d => d.data)
+  fetchData("employmentStatus", "/api/data?measures=Population by Employment Status&drilldowns=Employment Status,Age,Sex&Geography=<id>&Year=all", d => d.data),
+  fetchData("workExperience", "/api/data?measures=Poverty by Work Experience&drilldowns=Work Experience,Sex&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({

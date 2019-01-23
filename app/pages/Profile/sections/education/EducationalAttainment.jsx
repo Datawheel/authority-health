@@ -33,8 +33,8 @@ class EducationalAttainment extends SectionColumns {
       .key(d => d.Year)
       .entries(educationalAttainmentData)
       .forEach(group => {
-        const total = sum(group.values, d => d.Population);
-        group.values.forEach(d => d.share = d.Population / total * 100);
+        const total = sum(group.values, d => d["Population by Education Level"]);
+        group.values.forEach(d => d.share = d["Population by Education Level"] / total * 100);
         group.key >= educationalAttainmentData[0].Year ? Object.assign(recentYearEducationalAttainment, group) : {};
       });
 
@@ -93,7 +93,7 @@ EducationalAttainment.defaultProps = {
 };
 
 EducationalAttainment.need = [
-  fetchData("educationalAttainmentData", "/api/data?measures=Population&drilldowns=Educational Attainment,Sex&Geography=<id>&Year=all", d => d.data)
+  fetchData("educationalAttainmentData", "/api/data?measures=Population by Education Level&drilldowns=Educational Attainment,Sex&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

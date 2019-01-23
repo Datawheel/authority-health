@@ -24,10 +24,10 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
       .key(d => d.Year)
       .entries(visionDifficulty)
       .forEach(group => {
-        const total = sum(group.values, d => d.Population);
+        const total = sum(group.values, d => d["Vision Disabilities"]);
         group.values.forEach(d => {
           if (d["ID Vision Disability Status"] === 0) {
-            d.share = d.Population / total * 100;
+            d.share = d["Vision Disabilities"] / total * 100;
             d.disabilityType = "visionDifficulty";
             visionAndHearingData.push(d);
           }
@@ -49,10 +49,10 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
       .key(d => d.Year)
       .entries(hearingDifficulty)
       .forEach(group => {
-        const total = sum(group.values, d => d.Population);
+        const total = sum(group.values, d => d["Hearing Disabilities"]);
         group.values.forEach(d => {
           if (d["ID Hearing Disability Status"] === 0) {
-            d.share = d.Population / total * 100;
+            d.share = d["Hearing Disabilities"] / total * 100;
             d.disabilityType = "hearingDifficulty";
             visionAndHearingData.push(d);
           }
@@ -141,8 +141,8 @@ VisionAndAuditoryDisabilities.defaultProps = {
 };
 
 VisionAndAuditoryDisabilities.need = [
-  fetchData("hearingDifficulty", "/api/data?measures=Population&drilldowns=Hearing Disability Status,Age,Sex&Geography=<id>&Year=all", d => d.data),
-  fetchData("visionDifficulty", "/api/data?measures=Population&drilldowns=Vision Disability Status,Age,Sex&Geography=<id>&Year=all", d => d.data)
+  fetchData("hearingDifficulty", "/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status,Age,Sex&Geography=<id>&Year=all", d => d.data),
+  fetchData("visionDifficulty", "/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status,Age,Sex&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

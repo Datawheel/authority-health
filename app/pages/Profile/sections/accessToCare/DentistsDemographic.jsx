@@ -17,8 +17,8 @@ const formatDentistsByAge = dentistsByAge => {
     .key(d => d.Year)
     .entries(dentistsByAge)
     .forEach(group => {
-      const total = sum(group.values, d => d["Number of Dentists"]);
-      group.values.forEach(d => d.share = d["Number of Dentists"] / total * 100);
+      const total = sum(group.values, d => d["Dentists in Private Practice by Age"]);
+      group.values.forEach(d => d.share = d["Dentists in Private Practice by Age"] / total * 100);
     });
   const topDentistsAgeData = dentistsByAge.sort((a, b) => b.share - a.share)[0];
   return [dentistsByAge, topDentistsAgeData];
@@ -29,8 +29,8 @@ const formatDentistsByGender = dentistsByGender => {
     .key(d => d.Year)
     .entries(dentistsByGender)
     .forEach(group => {
-      const total = sum(group.values, d => d["Number of Dentists"]);
-      group.values.forEach(d => d.share = d["Number of Dentists"] / total * 100);
+      const total = sum(group.values, d => d["Dentists in Private Practice by Sex"]);
+      group.values.forEach(d => d.share = d["Dentists in Private Practice by Sex"] / total * 100);
     });
   const topDentistsByGender = dentistsByGender.sort((a, b) => b.share - a.share)[0];
   return [dentistsByGender, topDentistsByGender];
@@ -45,8 +45,9 @@ class DentistsDemographic extends SectionColumns {
 
     const topDentistsAgeData = formatDentistsByAge(dentistsByAge.data)[1];
     const ageGeoId = formatDentistsByAge(dentistsByAge.data)[1]["ID Geography"];
+
     const topDentistsByGender = formatDentistsByGender(dentistsByGender.data)[1];
-    const genderGeoId = formatDentistsByAge(dentistsByGender.data)[1]["ID Geography"];
+    const genderGeoId = formatDentistsByGender(dentistsByGender.data)[1]["ID Geography"];
 
     return (
       <SectionColumns>
@@ -72,9 +73,9 @@ class DentistsDemographic extends SectionColumns {
 
           {/* Draw a Treemap for Dentists by Gender. */}
           <Treemap config={{
-            data: `/api/data?measures=Number of Dentists&drilldowns=Sex&Geography=${genderGeoId}&Year=all`,
+            data: `/api/data?measures=Dentists in Private Practice by Sex&drilldowns=Sex&Geography=${genderGeoId}&Year=all`,
             height: 200,
-            sum: d => d["Number of Dentists"],
+            sum: d => d["Dentists in Private Practice by Sex"],
             legend: false,
             groupBy: "Sex",
             time: "Year",
@@ -86,7 +87,7 @@ class DentistsDemographic extends SectionColumns {
 
         {/* Draw a BarChart to show data for health center data by race */}
         <BarChart config={{
-          data: `/api/data?measures=Number of Dentists&drilldowns=Age Group&Geography=${ageGeoId}&Year=all`,
+          data: `/api/data?measures=Dentists in Private Practice by Age&drilldowns=Age Group&Geography=${ageGeoId}&Year=all`,
           discrete: "x",
           height: 400,
           legend: false,
@@ -120,8 +121,8 @@ DentistsDemographic.defaultProps = {
 };
 
 DentistsDemographic.need = [
-  fetchData("dentistsByAge", "/api/data?measures=Number of Dentists&drilldowns=Age Group&Geography=<id>&Year=latest"),
-  fetchData("dentistsByGender", "/api/data?measures=Number of Dentists&drilldowns=Sex&Geography=<id>&Year=latest")
+  fetchData("dentistsByAge", "/api/data?measures=Dentists in Private Practice by Age&drilldowns=Age Group&Geography=<id>&Year=latest"),
+  fetchData("dentistsByGender", "/api/data?measures=Dentists in Private Practice by Sex&drilldowns=Sex&Geography=<id>&Year=latest")
 ];
 
 const mapStateToProps = state => ({

@@ -25,8 +25,8 @@ class GrandparentCaregivers extends SectionColumns {
       .key(d => d.Year)
       .entries(responsibilityData.data)
       .forEach(group => {
-        const total = sum(group.values, d => d.Population);
-        group.values.forEach(d => d.share = d.Population / total * 100);
+        const total = sum(group.values, d => d["Grandparent Caregivers"]);
+        group.values.forEach(d => d.share = d["Grandparent Caregivers"] / total * 100);
         group.key >= responsibilityData.data[0].Year ? Object.assign(recentYearData, group) : {};
       });
 
@@ -84,7 +84,7 @@ GrandparentCaregivers.defaultProps = {
 };
 
 GrandparentCaregivers.need = [
-  fetchData("responsibilityData", "/api/data?measures=Population&drilldowns=Responsibility Length&Geography=<id>&Year=all")
+  fetchData("responsibilityData", "/api/data?measures=Grandparent Caregivers&drilldowns=Responsibility Length&Geography=<id>&Year=all")
 ];
 
 const mapStateToProps = state => ({

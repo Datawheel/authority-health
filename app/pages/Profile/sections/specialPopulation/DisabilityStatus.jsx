@@ -24,8 +24,8 @@ class DisabilityStatus extends SectionColumns {
       .key(d => d.Year)
       .entries(disabilityData)
       .forEach(group => {
-        const total = sum(group.values, d => d.Population);
-        group.values.forEach(d => d.share = d.Population / total * 100);
+        const total = sum(group.values, d => d["Population in Disability"]);
+        group.values.forEach(d => d.share = d["Population in Disability"] / total * 100);
         group.key >= disabilityData[0].Year ? Object.assign(recentYearDisabilityData, group) : {};
       });
     const filteredRecentYearDisabilityData = recentYearDisabilityData.values.filter(d => d["ID Disability Status"] === 0);
@@ -37,8 +37,8 @@ class DisabilityStatus extends SectionColumns {
       .key(d => d.Year)
       .entries(healthCoverageType)
       .forEach(group => {
-        const total = sum(group.values, d => d.Population);
-        group.values.forEach(d => d.share = d.Population / total * 100);
+        const total = sum(group.values, d => d["Population in Disability"]);
+        group.values.forEach(d => d.share = d["Population in Disability"] / total * 100);
       });
 
     // Show barchart for only disabled population.
@@ -95,8 +95,8 @@ DisabilityStatus.defaultProps = {
 };
 
 DisabilityStatus.need = [
-  fetchData("healthCoverageType", "/api/data?measures=Population&drilldowns=Health Insurance coverage:status,Health Insurance coverage:type,Disability Status,Age&Geography=<id>&Year=all", d => d.data),
-  fetchData("disabilityData", "/api/data?measures=Population&drilldowns=Disability Status,Age&Geography=<id>&Year=all", d => d.data)
+  fetchData("healthCoverageType", "/api/data?measures=Population in Disability&drilldowns=Coverage Status,Coverage Type,Disability Status,Age&Geography=<id>&Year=all", d => d.data),
+  fetchData("disabilityData", "/api/data?measures=Population in Disability&drilldowns=Disability Status,Age&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

@@ -20,8 +20,8 @@ const formatCoverageData = coverageData => {
         .key(d => d["ID Age"])
         .entries(group.values)
         .forEach(ageGroup => {
-          const total = sum(ageGroup.values, d => d.Population);
-          ageGroup.values.forEach(d => d.share = d.Population / total * 100);
+          const total = sum(ageGroup.values, d => d["Population by Insurance Coverage"]);
+          ageGroup.values.forEach(d => d.share = d["Population by Insurance Coverage"] / total * 100);
         });
     });
   return coverageData;
@@ -73,7 +73,7 @@ class Coverage extends SectionColumns {
         </article>
 
         <BarChart config={{
-          data: `/api/data?measures=Population&drilldowns=Health Insurance Coverage Status,Sex,Age&Geography=${geoId}&Year=all`,
+          data: `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status,Sex,Age&Geography=${geoId}&Year=all`,
           discrete: "x",
           height: 400,
           groupBy: "Sex",
@@ -104,7 +104,7 @@ Coverage.defaultProps = {
 };
 
 Coverage.need = [
-  fetchData("coverageData", "/api/data?measures=Population&drilldowns=Health Insurance Coverage Status,Sex,Age&Geography=<id>&Year=latest")
+  fetchData("coverageData", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status,Sex,Age&Geography=<id>&Year=latest")
 ];
 
 const mapStateToProps = state => ({

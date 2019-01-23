@@ -30,8 +30,8 @@ class StudentPoverty extends SectionColumns {
       .key(d => d.Year)
       .entries(levelOfSchoolData)
       .forEach(group => {
-        const total = sum(group.values, d => d.Population);
-        group.values.forEach(d => d.share = d.Population / total * 100);
+        const total = sum(group.values, d => d["Poverty by Schooling"]);
+        group.values.forEach(d => d.share = d["Poverty by Schooling"] / total * 100);
         group.key >= levelOfSchoolData[0].Year ? Object.assign(recentYearLevelOfSchoolData, group) : {};
       });
 
@@ -104,7 +104,7 @@ StudentPoverty.defaultProps = {
 };
 
 StudentPoverty.need = [
-  fetchData("levelOfSchoolData", "/api/data?measures=Population&drilldowns=Level of School,Poverty Status&Geography=<id>&Year=all", d => d.data)
+  fetchData("levelOfSchoolData", "/api/data?measures=Poverty by Schooling&drilldowns=Level of School,Poverty Status&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

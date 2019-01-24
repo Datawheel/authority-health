@@ -32,10 +32,10 @@ module.exports = {
     substitutions: {
       Geography: {
         levels: {
-          County: ["County"],
-          Place: ["County"],
-          Tract: ["Zip", "Place", "County"],
-          Zip: ["Tract", "Place", "County"]
+          County: ["County", "State"],
+          Place: ["County", "State"],
+          Tract: ["Zip", "Place", "County", "State"],
+          Zip: ["Tract", "Place", "County", "State"]
         },
         url: (id, level) => {
           const targetLevel = level.replace(/^[A-Z]{1}/g, chr => chr.toLowerCase());

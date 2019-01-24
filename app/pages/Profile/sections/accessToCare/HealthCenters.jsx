@@ -9,9 +9,7 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Stat from "../../../../components/Stat";
 import zipcodes from "../../../../utils/zipcodes";
 
-const formatName = d => d.replace("Health Center Patients", "");
-
-const formatRaceNames = d => d;
+const formatRaceNames = d => d.replace("Health Center Patients", "");
 
 const formatPercentage = d => `${formatAbbreviate(d * 100)}%`;
 
@@ -92,7 +90,7 @@ class HealthCenters extends SectionColumns {
                 qualifier={`${topRecentYearDropdownValueData[dropdownValue]} Health Centers`}
               />
               <p>In {topRecentYearDropdownValueData.Year}, the zip code in Wayne County with the most {dropdownValue} was {topRecentYearDropdownValueData.Zip} ({topRecentYearDropdownValueData[dropdownValue]} health centers).</p>
-              <p>The following map shows the total number of health centers for all zip codes in Wayne County, MI.</p>
+              <p>The following map shows the total number of health centers for all zip codes in Wayne County.</p>
             </div>
             : <div>
               <Stat
@@ -102,11 +100,11 @@ class HealthCenters extends SectionColumns {
                 qualifier={formatPercentage(topRecentYearDropdownValueData[dropdownValue])}
               />
               <p>In {topRecentYearDropdownValueData.Year}, the zip code in Wayne County with the most {dropdownValue.toLowerCase()} visiting health centers was {topRecentYearDropdownValueData.Zip} ({formatPercentage(topRecentYearDropdownValueData[dropdownValue])}).</p>
-              <p>The following map shows the share of {dropdownValue.toLowerCase()} visiting health centers for all zip codes in Wayne County, MI.</p>
+              <p>The following map shows the share of {dropdownValue.toLowerCase()} for all zip codes in Wayne County.</p>
             </div>
           }
 
-          <p>{formatRaceNames(topMostRaceData.RaceType)} Residents of Wayne County visit health centers more than any other race/ethnicity group ({formatPercentage(topMostRaceData[topMostRaceData.RaceType])}). This is followed by {formatRaceNames(topSecondRaceData.RaceType)} residents ({formatPercentage(topSecondRaceData[topSecondRaceData.RaceType])}) and then {formatRaceNames(topThirdRaceData.RaceType)} residents ({formatPercentage(topThirdRaceData[topThirdRaceData.RaceType])}).</p>
+          <p>{formatRaceNames(topMostRaceData.RaceType)} residents of Wayne County visit health centers more than any other race/ethnicity group ({formatPercentage(topMostRaceData[topMostRaceData.RaceType])}). This is followed by {formatRaceNames(topSecondRaceData.RaceType)} residents ({formatPercentage(topSecondRaceData[topSecondRaceData.RaceType])}) and then {formatRaceNames(topThirdRaceData.RaceType)} residents ({formatPercentage(topThirdRaceData[topThirdRaceData.RaceType])}).</p>
           <p> The following barchart shows the breakdown across all race/ethnicity groups in Wayne County.</p>
 
           {/* Draw a BarChart to show data for health center data by race */}
@@ -116,7 +114,7 @@ class HealthCenters extends SectionColumns {
             height: 250,
             legend: false,
             groupBy: "RaceType",
-            label: d => formatName(d.RaceType),
+            label: d => formatRaceNames(d.RaceType),
             x: d => d[d.RaceType],
             y: "RaceType",
             time: "Year",

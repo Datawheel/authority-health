@@ -27,6 +27,7 @@
     "@datawheel/canon-core": "^0.16.19",
     "@datawheel/canon-logiclayer": "^0.3.8",
     "@datawheel/canon-vizbuilder": "^0.1.19",
+    "d3plus-format": "^0.1.4",
     "mondrian-rest-client": "^1.0.4",
     "prop-types": "^15.6.2",
     "react-image-fallback": "^8.0.0",

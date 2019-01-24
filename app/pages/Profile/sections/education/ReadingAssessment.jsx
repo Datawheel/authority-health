@@ -218,7 +218,6 @@ class ReadingAssessment extends SectionColumns {
     const {dropdownValue} = this.state;
 
     const data = this.props[`readingScoresBy${dropdownValue}`];
-    const {readingScoresByRace} = this.props;
 
     const {readingScoresByParentsEducation, readingScoresByNation, readingScoresByCity} = this.props;
 

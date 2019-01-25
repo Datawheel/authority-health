@@ -21,6 +21,11 @@ class SocioeconomicOutcomes extends SectionColumns {
   render() {
     const {meta, population, populationByAgeAndGender, populationByRaceAndEthnicity, lifeExpectancy, socialVulnerabilityIndex} = this.props;
 
+    const populationByAgeAndGenderAvailable = populationByAgeAndGender.length !== 0;
+    const populationByRaceAndEthnicityAvailable = populationByRaceAndEthnicity.length !== 0;
+    const lifeExpectancyAvailable = lifeExpectancy.length !== 0;
+    const socialVulnerabilityIndexAvailable = socialVulnerabilityIndex.length !== 0;
+
     const onCityOrZipLevel = meta.level === "place" || meta.level === "zip";
 
     // Find recent year population data.
@@ -33,22 +38,26 @@ class SocioeconomicOutcomes extends SectionColumns {
       });
 
     // Find share for population by Age and Gender.
-    nest()
-      .key(d => d.Year)
-      .entries(populationByAgeAndGender)
-      .forEach(group => {
-        const total = sum(group.values, d => d["Population by Sex and Age"]);
-        group.values.forEach(d => d.share = d["Population by Sex and Age"] / total * 100);
-      });
+    if (populationByAgeAndGenderAvailable) {
+      nest()
+        .key(d => d.Year)
+        .entries(populationByAgeAndGender)
+        .forEach(group => {
+          const total = sum(group.values, d => d["Population by Sex and Age"]);
+          group.values.forEach(d => d.share = d["Population by Sex and Age"] / total * 100);
+        });
+    }
       
     // Find share for population by Race and Ethnicity.
-    nest()
-      .key(d => d.Year)
-      .entries(populationByRaceAndEthnicity)
-      .forEach(group => {
-        const total = sum(group.values, d => d["Hispanic Population"]);
-        group.values.forEach(d => d.share = d["Hispanic Population"] / total * 100);
-      });
+    if (populationByRaceAndEthnicityAvailable) {
+      nest()
+        .key(d => d.Year)
+        .entries(populationByRaceAndEthnicity)
+        .forEach(group => {
+          const total = sum(group.values, d => d["Hispanic Population"]);
+          group.values.forEach(d => d.share = d["Hispanic Population"] / total * 100);
+        });
+    }
 
     return (
       <div>
@@ -58,24 +67,24 @@ class SocioeconomicOutcomes extends SectionColumns {
             <Stat
               title="Life Expectancy"
               year={""}
-              value={`${formatAbbreviate(lifeExpectancy[0]["Life Expectancy"])}`}
-              qualifier={onCityOrZipLevel ? lifeExpectancy[0].Geography : ""}
+              value={lifeExpectancyAvailable ? `${formatAbbreviate(lifeExpectancy[0]["Life Expectancy"])}` : "N/A"}
+              qualifier={lifeExpectancyAvailable ? onCityOrZipLevel ? lifeExpectancy[0].Geography : "" : ""}
             />
           </article>
           <article>
             <Stat
               title="Overall Ranking"
-              year={socialVulnerabilityIndex[0].Year}
-              value={commas(socialVulnerabilityIndex[0]["Overall Ranking"])}
-              qualifier={onCityOrZipLevel ? socialVulnerabilityIndex[0].Geography : ""}
+              year={socialVulnerabilityIndexAvailable ? socialVulnerabilityIndex[0].Year : ""}
+              value={socialVulnerabilityIndexAvailable ? commas(socialVulnerabilityIndex[0]["Overall Ranking"]) : "N/A"}
+              qualifier={socialVulnerabilityIndexAvailable ? onCityOrZipLevel ? socialVulnerabilityIndex[0].Geography : "" : ""}
             />
           </article>
           <article>
             <Stat
               title="Socioeconomic Ranking"
-              year={socialVulnerabilityIndex[0].Year}
-              value={commas(socialVulnerabilityIndex[0]["Socioeconomic Ranking"])}
-              qualifier={onCityOrZipLevel ? socialVulnerabilityIndex[0].Geography : ""}
+              year={socialVulnerabilityIndexAvailable ? socialVulnerabilityIndex[0].Year : ""}
+              value={socialVulnerabilityIndexAvailable ? commas(socialVulnerabilityIndex[0]["Socioeconomic Ranking"]) : "N/A"}
+              qualifier={socialVulnerabilityIndexAvailable ? onCityOrZipLevel ? socialVulnerabilityIndex[0].Geography : "" : ""}
             />
           </article>
         </SectionColumns>
@@ -84,27 +93,27 @@ class SocioeconomicOutcomes extends SectionColumns {
           <article>
             <Stat
               title="Household Composition and Disability Ranking"
-              year={socialVulnerabilityIndex[0].Year}
-              value={commas(socialVulnerabilityIndex[0]["Household Composition and Disability Ranking"])}
-              qualifier={onCityOrZipLevel ? socialVulnerabilityIndex[0].Geography : ""}
+              year={socialVulnerabilityIndexAvailable ? socialVulnerabilityIndex[0].Year : ""}
+              value={socialVulnerabilityIndexAvailable ? commas(socialVulnerabilityIndex[0]["Household Composition and Disability Ranking"]) : "N/A"}
+              qualifier={socialVulnerabilityIndexAvailable ? onCityOrZipLevel ? socialVulnerabilityIndex[0].Geography : "" : ""}
             />
           </article>
 
           <article>
             <Stat
               title="Minority Status and Language Ranking"
-              year={socialVulnerabilityIndex[0].Year}
-              value={commas(socialVulnerabilityIndex[0]["Minority Status and Language Ranking"])}
-              qualifier={onCityOrZipLevel ? socialVulnerabilityIndex[0].Geography : ""}
+              year={socialVulnerabilityIndexAvailable ? socialVulnerabilityIndex[0].Year : ""}
+              value={socialVulnerabilityIndexAvailable ? commas(socialVulnerabilityIndex[0]["Minority Status and Language Ranking"]) : "N/A"}
+              qualifier={socialVulnerabilityIndexAvailable ? onCityOrZipLevel ? socialVulnerabilityIndex[0].Geography : "" : ""}
             />
           </article>
 
           <article>
             <Stat
               title="Housing and Transportation Ranking"
-              year={socialVulnerabilityIndex[0].Year}
-              value={commas(socialVulnerabilityIndex[0]["Housing and Transportation Ranking"])}
-              qualifier={onCityOrZipLevel ? socialVulnerabilityIndex[0].Geography : ""}
+              year={socialVulnerabilityIndexAvailable ? socialVulnerabilityIndex[0].Year : ""}
+              value={socialVulnerabilityIndexAvailable ? commas(socialVulnerabilityIndex[0]["Housing and Transportation Ranking"]) : "N/A"}
+              qualifier={socialVulnerabilityIndexAvailable ? onCityOrZipLevel ? socialVulnerabilityIndex[0].Geography : "" : ""}
             />
           </article>
         </SectionColumns>
@@ -117,41 +126,43 @@ class SocioeconomicOutcomes extends SectionColumns {
           />
 
           {/* Barchart to show population by age and gender over the years for selected geography. */}
-          <BarChart config={{
-            data: populationByAgeAndGender,
-            discrete: "x",
-            height: 300,
-            groupBy: "Sex",
-            x: "Age",
-            y: "share",
-            time: "Year",
-            xSort: (a, b) => a["ID Age"] - b["ID Age"],
-            xConfig: {
-              tickFormat: d => rangeFormatter(d),
-              title: "Population by Age and Gender"
-            },
-            yConfig: {
-              tickFormat: d => formatPercentage(d),
-              title: "Share"
-            },
-            shapeConfig: {
-              label: false
-            },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => rangeFormatter(d.Age)], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
-          }}
-          />
+          {populationByAgeAndGenderAvailable
+            ? <BarChart config={{
+              data: populationByAgeAndGender,
+              discrete: "x",
+              height: 300,
+              groupBy: "Sex",
+              x: "Age",
+              y: "share",
+              time: "Year",
+              xSort: (a, b) => a["ID Age"] - b["ID Age"],
+              xConfig: {
+                tickFormat: d => rangeFormatter(d),
+                title: "Population by Age and Gender"
+              },
+              yConfig: {
+                tickFormat: d => formatPercentage(d),
+                title: "Share"
+              },
+              shapeConfig: {
+                label: false
+              },
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => rangeFormatter(d.Age)], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
+            }}
+            /> : <div></div>}
 
-          <Treemap config={{
-            data: populationByRaceAndEthnicity,
-            height: 300,
-            sum: d => d["Hispanic Population"],
-            groupBy: ["Race", "Ethnicity"],
-            label: d => `${formatEthnicityName(d.Ethnicity)} ${formatRaceName(d.Race)}`,
-            time: "Year",
-            title: "Population by Race and Ethnicity",
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
-          }}
-          />
+          {populationByRaceAndEthnicityAvailable
+            ? <Treemap config={{
+              data: populationByRaceAndEthnicity,
+              height: 300,
+              sum: d => d["Hispanic Population"],
+              groupBy: ["Race", "Ethnicity"],
+              label: d => `${formatEthnicityName(d.Ethnicity)} ${formatRaceName(d.Race)}`,
+              time: "Year",
+              title: "Population by Race and Ethnicity",
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
+            }}
+            /> : <div></div>}
         </SectionColumns>
       </div>
     );

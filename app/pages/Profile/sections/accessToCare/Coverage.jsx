@@ -32,70 +32,78 @@ class Coverage extends SectionColumns {
   render() {
     const {coverageData} = this.props;
 
+    const coverageDataAvailable = coverageData.data.length !== 0;
+
     // Check if the data is available for current profile or if it falls back to the parent geography.
     const isCoverageDataAvailableForCurrentGeography = coverageData.source[0].substitutions.length === 0;
 
     // Find top stats data.
-    const recentYearCoverageData = formatCoverageData(coverageData.data);
-    const filteredRecentYearData = recentYearCoverageData.filter(d => d["ID Health Insurance Coverage Status"] === 0);
-    const femaleCoverageData = filteredRecentYearData.filter(d => d.Sex === "Female").sort((a, b) => b.share - a.share);
-    const topFemaleAgeGroup = rangeFormatter(femaleCoverageData[0].Age);
-    const topFemaleShare = formatPercentage(femaleCoverageData[0].share);
+    let ageGroupYear, geoId, maleCoverageData, topFemaleAgeGroup, topFemaleShare, topMaleAgeGroup, topMaleShare;
+    if (coverageDataAvailable) {
+      const recentYearCoverageData = formatCoverageData(coverageData.data);
+      const filteredRecentYearData = recentYearCoverageData.filter(d => d["ID Health Insurance Coverage Status"] === 0);
+      const femaleCoverageData = filteredRecentYearData.filter(d => d.Sex === "Female").sort((a, b) => b.share - a.share);
+      topFemaleAgeGroup = rangeFormatter(femaleCoverageData[0].Age);
+      topFemaleShare = formatPercentage(femaleCoverageData[0].share);
   
-    const maleCoverageData = recentYearCoverageData.filter(d => d.Sex === "Male").sort((a, b) => b.share - a.share);
-    const topMaleAgeGroup = rangeFormatter(maleCoverageData[0].Age);
-    const ageGroupYear = maleCoverageData[0].Year;
-    const topMaleShare = formatPercentage(maleCoverageData[0].share);
-    const geoId = maleCoverageData[0]["ID Geography"];
+      maleCoverageData = recentYearCoverageData.filter(d => d.Sex === "Male").sort((a, b) => b.share - a.share);
+      topMaleAgeGroup = rangeFormatter(maleCoverageData[0].Age);
+      ageGroupYear = maleCoverageData[0].Year;
+      topMaleShare = formatPercentage(maleCoverageData[0].share);
+      geoId = maleCoverageData[0]["ID Geography"];
+    }
 
-    return (
-      <SectionColumns>
-        <SectionTitle>Coverage</SectionTitle>
-        <article>
-          {isCoverageDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {coverageData.data[0].Geography}.</div>}
-          <div>
-            <Stat
-              title="Most covered male group"
-              year={ageGroupYear}
-              value={topMaleAgeGroup}
-              qualifier={topMaleShare}
-            />
-            <Stat
-              title="Most covered female group"
-              year={ageGroupYear}
-              value={topFemaleAgeGroup}
-              qualifier={topFemaleShare}
-            />
-          </div>
+    if (coverageDataAvailable) { 
+      return (
+        <SectionColumns>
+          <SectionTitle>Coverage</SectionTitle>
+          <article>
+            {isCoverageDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {coverageData.data[0].Geography}.</div>}
+            <div>
+              <Stat
+                title="Most covered male group"
+                year={ageGroupYear}
+                value={topMaleAgeGroup}
+                qualifier={topMaleShare}
+              />
+              <Stat
+                title="Most covered female group"
+                year={ageGroupYear}
+                value={topFemaleAgeGroup}
+                qualifier={topFemaleShare}
+              />
+            </div>
           
-          <p>In {ageGroupYear}, the age groups most likely to have health care coverage in {maleCoverageData[0].Geography} are {topMaleAgeGroup} and {topFemaleAgeGroup} years, for men and women respectively.</p>
-          <p>The following chart shows the male and female age groups with health insurance coverage in {maleCoverageData[0].Geography}.</p>
-        </article>
+            <p>In {ageGroupYear}, the age groups most likely to have health care coverage in {maleCoverageData[0].Geography} are {topMaleAgeGroup} and {topFemaleAgeGroup} years, for men and women respectively.</p>
+            <p>The following chart shows the male and female age groups with health insurance coverage in {maleCoverageData[0].Geography}.</p>
+          </article>
 
-        <BarChart config={{
-          data: `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status,Sex,Age&Geography=${geoId}&Year=all`,
-          discrete: "x",
-          height: 400,
-          groupBy: "Sex",
-          x: "Age",
-          y: "share",
-          time: "ID Year",
-          xSort: (a, b) => a["ID Age"] - b["ID Age"],
-          xConfig: {
-            labelRotation: false,
-            tickFormat: d => rangeFormatter(d),
-            title: "Population with Coverage"
-          },
-          yConfig: {tickFormat: d => formatPercentage(d)},
-          shapeConfig: {
-            label: false
-          },
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
-        }}
-        dataFormat={resp => formatCoverageData(resp.data)}
-        />
-      </SectionColumns>
-    );
+          <BarChart config={{
+            data: `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status,Sex,Age&Geography=${geoId}&Year=all`,
+            discrete: "x",
+            height: 400,
+            groupBy: "Sex",
+            x: "Age",
+            y: "share",
+            time: "ID Year",
+            xSort: (a, b) => a["ID Age"] - b["ID Age"],
+            xConfig: {
+              labelRotation: false,
+              tickFormat: d => rangeFormatter(d),
+              title: "Population with Coverage"
+            },
+            yConfig: {tickFormat: d => formatPercentage(d)},
+            shapeConfig: {
+              label: false
+            },
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
+          }}
+          dataFormat={resp => formatCoverageData(resp.data)}
+          />
+        </SectionColumns>
+      );
+    }
+    else return <div></div>;
   }
 }
 

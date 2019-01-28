@@ -57,12 +57,13 @@ class Profile extends Component {
 
   render() {
 
-    const {name, level} = this.props.meta;
+    const {id, name, level} = this.props.meta;
 
     return (
       <div className="profile">
         <ProfileHeader
           title={level === "zip" ? `Zip Code ${name}` : name}
+          id={id}
         />
 
         <TopicTitle slug="about">
@@ -137,7 +138,7 @@ class Profile extends Component {
           <Immigrants />
           <DomesticPartners />
           <DisabilityStatus />
-          <VisionAndAuditoryDisabilities /> 
+          <VisionAndAuditoryDisabilities />
           <Homeless />
           <Veterans />
           <Incarceration />

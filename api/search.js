@@ -15,6 +15,7 @@ module.exports = function(app) {
 
     if (q) {
       where[sequelize.Op.or] = [
+        {name: {[sequelize.Op.iLike]: `%${q}%`}},
         {display: {[sequelize.Op.iLike]: `%${q}%`}},
         {keywords: {[sequelize.Op.overlap]: [q]}}
       ];
@@ -31,10 +32,11 @@ module.exports = function(app) {
 
     const results = rows.map(d => ({
       level: d.hierarchy.toLowerCase(),
-      geoid: d.id,
+      id: d.id,
       image: d.image,
       keywords: d.keywords,
-      name: d.display,
+      name: d.name,
+      display: d.display,
       slug: d.slug
     }));
 

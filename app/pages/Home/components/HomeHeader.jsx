@@ -26,9 +26,9 @@ export default class HomeHeader extends Component {
               className="home-search"
               placeholder="i.e., Woodhaven, Romulus, Wayne&hellip;"
               primary={true}
-              resultLink={ d => `/profile/${d.geoid}` }
+              resultLink={ d => `/profile/${d.id}` }
               resultRender={d =>
-                <a className="result-link" href={`/profile/${d.geoid}`}>
+                <a className="result-link" href={`/profile/${d.id}`}>
                   { d.name }
                 </a>}
               url="/api/search/"
@@ -53,7 +53,7 @@ export default class HomeHeader extends Component {
 
         {/* bg image */}
         <div className="home-header-background">
-          <img className="home-header-background-img" src="/images/profiles/places/detroit.jpg" alt=""/>
+          <img className="home-header-background-img" src="/images/profile/splash/76.jpg" alt=""/>
         </div>
       </div>
     );

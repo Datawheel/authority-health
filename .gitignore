@@ -23,3 +23,5 @@ jsconfig.json
 # docker files
 dockerfiles/nginx/certs/*
 dockerfiles/nginx/conf.d/default.conf
+
+google_auth.json

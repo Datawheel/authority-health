@@ -1,14 +1,11 @@
 import React, {Component} from "react";
-import LazyLoad from "react-lazyload";
 import {Link} from "react-router";
-import {translate} from "react-i18next";
-import ReactImageFallback from "react-image-fallback";
 
 import "./ProfileTile.css";
 
 class ProfileTile extends Component {
   render() {
-    const {classes, filterUrl, item, t} = this.props;
+    const {classes, filterUrl, item} = this.props;
 
     // get truncated name & label id
     let titleTruncated = null;
@@ -17,8 +14,6 @@ class ProfileTile extends Component {
       titleTruncated = item.name;
       labelId = `${item.name}-label`;
     }
-
-    // console.log(item);
 
     return (
       <div className={`profile-tile ${classes || ""}`}>
@@ -40,27 +35,16 @@ class ProfileTile extends Component {
           <Link to={filterUrl} className="filter-button font-xxs">
             <span className="filter-button-icon pt-icon pt-icon-multi-select" />
             <span className="filter-button-text inverted-link">
-              {" "}{t("related profiles")}
+              related profiles
             </span>
           </Link>
         }
 
         {/* background image */}
-        <LazyLoad offset={100}>
-          <ReactImageFallback
-            className="tile-img"
-            src={`/images/${item.url}-thumb.jpg`}
-            fallbackImage={
-              item.parentUrl
-                ? `/images/${item.parentUrl}-thumb.jpg`
-                : "/images/profiles/places/detroit-thumb.jpg"
-            }
-            alt=""
-          />
-        </LazyLoad>
+        <img className="tile-img" src={`/api/image/${item.id}/thumb`} alt="" />
       </div>
     );
   }
 }
 
-export default translate()(ProfileTile);
+export default ProfileTile;

@@ -137,7 +137,7 @@ Veterans.need = [
   fetchData("veteransEmploymentStatus", "/api/data?measures=Veteran Population&drilldowns=Employment Status&Geography=<id>&Year=all", d => d.data),
   fetchData("veteransPovertyStatus", "/api/data?measures=Veteran Population&drilldowns=Poverty Status&Geography=<id>&Year=all", d => d.data),
   fetchData("veteransDisabilityStatus", "/api/data?measures=Veteran Population&drilldowns=Disability Status&Geography=<id>&Year=all", d => d.data),
-  fetchData("periodOfService", "https://acs.datausa.io/api/data?measures=Veterans&drilldowns=Period of Service&Geography=<id>&Year=all", d => d.data)
+  fetchData("periodOfService", "https://quincy.datausa.io/api/data?measures=Veterans&drilldowns=Period of Service&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

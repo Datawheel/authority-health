@@ -175,9 +175,9 @@ Transportation.defaultProps = {
 };
 
 Transportation.need = [
-  fetchData("commuteTimeData", "https://acs.datausa.io/api/data?measures=Commuter Population&drilldowns=Travel Time&Geography=<id>&Year=all", d => d.data),
-  fetchData("numberOfVehiclesData", "https://acs.datausa.io/api/data?measures=Commute Means by Gender&drilldowns=Vehicles Available,Gender&Geography=<id>&Year=all", d => d.data),
-  fetchData("transportationMeans", "https://acs.datausa.io/api/data?measures=Commute Means&drilldowns=Transportation Means&Geography=<id>&Year=all", d => d.data)
+  fetchData("commuteTimeData", "https://quincy.datausa.io/api/data?measures=Commuter Population&drilldowns=Travel Time&Geography=<id>&Year=all", d => d.data),
+  fetchData("numberOfVehiclesData", "https://quincy.datausa.io/api/data?measures=Commute Means by Gender&drilldowns=Vehicles Available,Gender&Geography=<id>&Year=all", d => d.data),
+  fetchData("transportationMeans", "https://quincy.datausa.io/api/data?measures=Commute Means&drilldowns=Transportation Means&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

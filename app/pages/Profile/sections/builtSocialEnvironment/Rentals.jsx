@@ -120,7 +120,7 @@ Rentals.defaultProps = {
 Rentals.need = [
   fetchData("rentAmountData", "/api/data?measures=Rent Amount&Geography=<id>&Year=all", d => d.data),
   fetchData("utilitiesData", "/api/data?measures=Renter-Occupied Housing Units&drilldowns=Inclusion of Utilities in Rent&Geography=<id>&Year=latest", d => d.data),
-  fetchData("rentersByIncomePercentage", "https://acs.datausa.io/api/data?measures=Renters by Income Percentage&drilldowns=Household Income&Year=all&Geography=<id>", d => d.data)
+  fetchData("rentersByIncomePercentage", "https://quincy.datausa.io/api/data?measures=Renters by Income Percentage&drilldowns=Household Income&Year=all&Geography=<id>", d => d.data)
 ];
 
 const mapStateToProps = state => ({

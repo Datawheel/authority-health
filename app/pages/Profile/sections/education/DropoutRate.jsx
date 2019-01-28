@@ -37,7 +37,7 @@ class DropoutRate extends SectionColumns {
 
         {/* Draw Geomap to show dropout rate for each zip code in the Wayne county */}
         <Geomap config={{
-          data: highSchoolDropoutRate,
+          data: "/api/data?measures=Total Population,High School Dropout Rate&drilldowns=Zip&Year=all",
           groupBy: "ID Zip",
           colorScale: "High School Dropout Rate",
           colorScaleConfig: {
@@ -51,6 +51,7 @@ class DropoutRate extends SectionColumns {
           topojsonFilter: d => zipcodes.includes(d.properties.ZCTA5CE10),
           topojsonId: d => d.properties.ZCTA5CE10
         }}
+        dataFormat={resp => resp.data}
         />
       </SectionColumns>
     );
@@ -62,7 +63,7 @@ DropoutRate.defaultProps = {
 };
 
 DropoutRate.need = [
-  fetchData("highSchoolDropoutRate", "/api/data?measures=Total Population,High School Dropout Rate&drilldowns=Zip&Year=all", d => d.data)
+  fetchData("highSchoolDropoutRate", "/api/data?measures=Total Population,High School Dropout Rate&drilldowns=Zip&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({

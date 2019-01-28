@@ -7,7 +7,7 @@ export default class ProfileHeader extends Component {
 
   render() {
 
-    const {title} = this.props;
+    const {id, title} = this.props;
 
     return (
       <div className="profile-header header dark-theme" role="banner">
@@ -59,10 +59,8 @@ export default class ProfileHeader extends Component {
           </AnchorLink>
         </div>
 
-        {/* bg image */}
-        {/* TODO: replace with profile image */}
         <div className="profile-header-background">
-          <img className="profile-header-background-img" src="/images/profiles/places/detroit.jpg" alt=""/>
+          <img className="profile-header-background-img" src={`/api/image/${id}/splash`} alt=""/>
         </div>
       </div>
     );

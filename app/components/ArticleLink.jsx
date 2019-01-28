@@ -1,8 +1,5 @@
 import React, {Component} from "react";
-import LazyLoad from "react-lazyload";
 import {Link} from "react-router";
-import {translate} from "react-i18next";
-import ReactImageFallback from "react-image-fallback";
 
 import "./ArticleLink.css";
 
@@ -32,4 +29,4 @@ class ArticleLink extends Component {
   }
 }
 
-export default translate()(ArticleLink);
+export default ArticleLink;

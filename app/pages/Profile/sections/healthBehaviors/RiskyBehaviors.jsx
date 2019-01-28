@@ -22,7 +22,7 @@ class RiskyBehaviors extends SectionColumns {
 
   render() {
     const {dropdownValue} = this.state;
-    const {geoid} = this.props.meta;
+    const {id} = this.props.meta;
 
     const {allTractSmokingDrinkingData, secondHandSmokeAndMonthlyAlcohol} = this.props;
 
@@ -112,7 +112,7 @@ class RiskyBehaviors extends SectionColumns {
             ? <div>
               <p>The chart here shows the former, current and never smoking status in Wayne County.</p>
               <Treemap config={{
-                data: `/api/data?measures=Smoking Status Current,Smoking Status Former,Smoking Status Never&drilldowns=End Year&Geography=${geoid}`,
+                data: `/api/data?measures=Smoking Status Current,Smoking Status Former,Smoking Status Never&drilldowns=End Year&Geography=${id}`,
                 height: 250,
                 sum: d => d[d.SmokingType],
                 legend: false,

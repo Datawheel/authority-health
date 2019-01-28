@@ -12,19 +12,23 @@ export default class ProfileTileList extends Component {
     const profiles = [
       {
         name: "Detroit",
-        url: "profiles/places/detroit"
+        url: "profiles/places/detroit",
+        id: "16000US2622000"
       },
       {
         name: "Romulus",
-        url: "profiles/places/romulus"
+        url: "profiles/places/romulus",
+        id: "16000US2669420"
       },
       {
         name: "Livonia",
-        url: "profiles/places/livonia"
+        url: "profiles/places/livonia",
+        id: "16000US2649000"
       },
       {
         name: "Dearborn heights",
-        url: "profiles/places/dearborn-heights"
+        url: "profiles/places/dearborn-heights",
+        id: "16000US2621020"
       }
     ];
 

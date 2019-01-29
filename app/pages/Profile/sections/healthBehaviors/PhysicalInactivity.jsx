@@ -26,7 +26,7 @@ class PhysicalInactivity extends SectionColumns {
 
     const {physicalInActivity, physicalInactivityPrevalenceBySex} = this.props;
     const {dropdownValue} = this.state;
-    const isPhysicalInactivityBySexAvailableForCurrentlocation =  physicalInactivityPrevalenceBySex.source[0].substitutions.length === 0;
+    const isPhysicalInactivityBySexAvailableForCurrentlocation = physicalInactivityPrevalenceBySex.source[0].substitutions.length === 0;
 
     const dropdownList = ["Physical Inactivity", "Physical Health"];
 

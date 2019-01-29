@@ -19,63 +19,68 @@ class GrandparentCaregivers extends SectionColumns {
 
     const {responsibilityData} = this.props;
 
+    const responsibilityDataAvailable = responsibilityData.length !== 0;
+
+    if (responsibilityDataAvailable) {
     // Add the total population for each year data then find the percentage of grandparents responsible.
-    const recentYearData = {};
-    nest()
-      .key(d => d.Year)
-      .entries(responsibilityData.data)
-      .forEach(group => {
-        const total = sum(group.values, d => d["Grandparent Caregivers"]);
-        group.values.forEach(d => d.share = d["Grandparent Caregivers"] / total * 100);
-        group.key >= responsibilityData.data[0].Year ? Object.assign(recentYearData, group) : {};
-      });
+      const recentYearData = {};
+      nest()
+        .key(d => d.Year)
+        .entries(responsibilityData.data)
+        .forEach(group => {
+          const total = sum(group.values, d => d["Grandparent Caregivers"]);
+          group.values.forEach(d => d.share = d["Grandparent Caregivers"] / total * 100);
+          group.key >= responsibilityData.data[0].Year ? Object.assign(recentYearData, group) : {};
+        });
 
-    // Find the top data for the most recent year
-    const recentYearFilteredData = recentYearData.values.filter(d => d["ID Responsibility Length"] !== 5 && d["ID Responsibility Length"] !== 6);
-    const overallGrandparentsResponsible = recentYearFilteredData.reduce((acc, currValue) => acc + currValue.share, 0);
-    recentYearFilteredData.sort((a, b) =>  b.share - a.share);
-    const topRecentYearData = recentYearFilteredData[0];
+      // Find the top data for the most recent year
+      const recentYearFilteredData = recentYearData.values.filter(d => d["ID Responsibility Length"] !== 5 && d["ID Responsibility Length"] !== 6);
+      const overallGrandparentsResponsible = recentYearFilteredData.reduce((acc, currValue) => acc + currValue.share, 0);
+      recentYearFilteredData.sort((a, b) =>  b.share - a.share);
+      const topRecentYearData = recentYearFilteredData[0];
 
-    // Filter the data and pass it to the BarChart "data" key.
-    const data = responsibilityData.data.filter(d => d["ID Responsibility Length"] !== 5 && d["ID Responsibility Length"] !== 6);
+      // Filter the data and pass it to the BarChart "data" key.
+      const data = responsibilityData.data.filter(d => d["ID Responsibility Length"] !== 5 && d["ID Responsibility Length"] !== 6);
 
-    return (
-      <SectionColumns>
-        <SectionTitle>Grandparent Caregivers</SectionTitle>
-        <article>
-          {/* Display stats and write short description of the top data for the most recent year */}
-          <Stat
-            title="Most common age group"
-            year={recentYearFilteredData[0].Year}
-            value={formatAge(topRecentYearData["Responsibility Length"])}
-            qualifier={formatPercentage(topRecentYearData.share)}
+      return (
+        <SectionColumns>
+          <SectionTitle>Grandparent Caregivers</SectionTitle>
+          <article>
+            {/* Display stats and write short description of the top data for the most recent year */}
+            <Stat
+              title="Most common age group"
+              year={recentYearFilteredData[0].Year}
+              value={formatAge(topRecentYearData["Responsibility Length"])}
+              qualifier={formatPercentage(topRecentYearData.share)}
+            />
+            <p>In {topRecentYearData.Year}, {formatPercentage(overallGrandparentsResponsible)} of grandparents in {topRecentYearData.Geography} were the primary care givers to their grandchildren. The most common age group of grandchildren is {formatAge(topRecentYearData["Responsibility Length"])}.</p>
+            <p>The chart here shows the breakdown by age of grandchildren and the percentage of grandparents responsible for them.</p>
+          </article>
+
+          {/* Draw a BarChart */}
+          <BarChart config={{
+            data,
+            discrete: "x",
+            height: 400,
+            groupBy: "Responsibility Length",
+            legend: false,
+            x: d => d["Responsibility Length"],
+            y: "share",
+            time: "Year",
+            xSort: (a, b) => a["ID Responsibility Length"] - b["ID Responsibility Length"],
+            xConfig: {
+              labelRotation: false,
+              tickFormat: d => formatAge(d)
+            },
+            yConfig: {tickFormat: d => formatPercentage(d)},
+            shapeConfig: {label: false},
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
+          }}
           />
-          <p>In {topRecentYearData.Year}, {formatPercentage(overallGrandparentsResponsible)} of grandparents in {topRecentYearData.Geography} were the primary care givers to their grandchildren. The most common age group of grandchildren is {formatAge(topRecentYearData["Responsibility Length"])}.</p>
-          <p>The chart here shows the breakdown by age of grandchildren and the percentage of grandparents responsible for them.</p>
-        </article>
-
-        {/* Draw a BarChart */}
-        <BarChart config={{
-          data,
-          discrete: "x",
-          height: 400,
-          groupBy: "Responsibility Length",
-          legend: false,
-          x: d => d["Responsibility Length"],
-          y: "share",
-          time: "Year",
-          xSort: (a, b) => a["ID Responsibility Length"] - b["ID Responsibility Length"],
-          xConfig: {
-            labelRotation: false,
-            tickFormat: d => formatAge(d)
-          },
-          yConfig: {tickFormat: d => formatPercentage(d)},
-          shapeConfig: {label: false},
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
-        }}
-        />
-      </SectionColumns>
-    );
+        </SectionColumns>
+      );
+    }
+    else return <div></div>;
   }
 }
 

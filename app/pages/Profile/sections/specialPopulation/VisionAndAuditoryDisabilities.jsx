@@ -17,57 +17,59 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
 
   render() {
     const {hearingDifficulty, visionDifficulty} = this.props;
+    
+    const hearingDifficultyDataAvailable = hearingDifficulty.length !== 0;
+    const visionDifficultyDataAvailable = visionDifficulty.length !== 0;
+    
     const visionAndHearingData = [];
 
     const recentYearVisionDifficultyData = {};
-    nest()
-      .key(d => d.Year)
-      .entries(visionDifficulty)
-      .forEach(group => {
-        const total = sum(group.values, d => d["Vision Disabilities"]);
-        group.values.forEach(d => {
-          if (d["ID Vision Disability Status"] === 0) {
-            d.share = d["Vision Disabilities"] / total * 100;
-            d.disabilityType = "visionDifficulty";
-            visionAndHearingData.push(d);
-          }
+    let topFemaleVisionDifficultyData, topMaleVisionDifficultyData;
+    if (visionDifficultyDataAvailable) {
+      nest()
+        .key(d => d.Year)
+        .entries(visionDifficulty)
+        .forEach(group => {
+          const total = sum(group.values, d => d["Vision Disabilities"]);
+          group.values.forEach(d => {
+            if (d["ID Vision Disability Status"] === 0) {
+              d.share = d["Vision Disabilities"] / total * 100;
+              d.disabilityType = "visionDifficulty";
+              visionAndHearingData.push(d);
+            }
+          });
+          group.key >= visionDifficulty[0].Year ? Object.assign(recentYearVisionDifficultyData, group) : {};
         });
-        group.key >= visionDifficulty[0].Year ? Object.assign(recentYearVisionDifficultyData, group) : {};
-      });
-    const filteredRecentVisionDifficulty = recentYearVisionDifficultyData.values.filter(d => d["ID Vision Disability Status"] === 0);
-
-    // Find Top Female Vision disability Data
-    const femaleMajorityVisionDifficulty = filteredRecentVisionDifficulty.filter(d => d.Sex === "Female").sort((a, b) => b.share - a.share);
-    const topFemaleVisionDifficultyData = femaleMajorityVisionDifficulty[0];
-
-    // Find Top Female Vision disability Data
-    const maleMajorityVisionDifficulty = filteredRecentVisionDifficulty.filter(d => d.Sex === "Male").sort((a, b) => b.share - a.share);
-    const topMaleVisionDifficultyData = maleMajorityVisionDifficulty[0];
+      const filteredRecentVisionDifficulty = recentYearVisionDifficultyData.values.filter(d => d["ID Vision Disability Status"] === 0);
+      // Find Top Female Vision disability Data
+      topFemaleVisionDifficultyData = filteredRecentVisionDifficulty.filter(d => d.Sex === "Female").sort((a, b) => b.share - a.share)[0];
+      // Find Top Female Vision disability Data
+      topMaleVisionDifficultyData = filteredRecentVisionDifficulty.filter(d => d.Sex === "Male").sort((a, b) => b.share - a.share)[0];
+    }
 
     const recentYearHearingDifficultyData = {};
-    nest()
-      .key(d => d.Year)
-      .entries(hearingDifficulty)
-      .forEach(group => {
-        const total = sum(group.values, d => d["Hearing Disabilities"]);
-        group.values.forEach(d => {
-          if (d["ID Hearing Disability Status"] === 0) {
-            d.share = d["Hearing Disabilities"] / total * 100;
-            d.disabilityType = "hearingDifficulty";
-            visionAndHearingData.push(d);
-          }
+    let topFemaleHearingDifficultyData, topMaleHearingDifficultyData;
+    if (hearingDifficultyDataAvailable) {
+      nest()
+        .key(d => d.Year)
+        .entries(hearingDifficulty)
+        .forEach(group => {
+          const total = sum(group.values, d => d["Hearing Disabilities"]);
+          group.values.forEach(d => {
+            if (d["ID Hearing Disability Status"] === 0) {
+              d.share = d["Hearing Disabilities"] / total * 100;
+              d.disabilityType = "hearingDifficulty";
+              visionAndHearingData.push(d);
+            }
+          });
+          group.key >= hearingDifficulty[0].Year ? Object.assign(recentYearHearingDifficultyData, group) : {};
         });
-        group.key >= hearingDifficulty[0].Year ? Object.assign(recentYearHearingDifficultyData, group) : {};
-      });
-    const filteredRecentHearingDifficulty = recentYearHearingDifficultyData.values.filter(d => d["ID Hearing Disability Status"] === 0);
-
-    // Find Top Female Vision disability Data
-    const femaleMajorityHearingDifficulty = filteredRecentHearingDifficulty.filter(d => d.Sex === "Female").sort((a, b) => b.share - a.share);
-    const topFemaleHearingDifficultyData = femaleMajorityHearingDifficulty[0];
-
-    // Find Top Female Vision disability Data
-    const maleMajorityHearingDifficulty = filteredRecentHearingDifficulty.filter(d => d.Sex === "Male").sort((a, b) => b.share - a.share);
-    const topMaleHearingDifficultyData = maleMajorityHearingDifficulty[0];
+      const filteredRecentHearingDifficulty = recentYearHearingDifficultyData.values.filter(d => d["ID Hearing Disability Status"] === 0);
+      // Find Top Female Vision disability Data
+      topFemaleHearingDifficultyData = filteredRecentHearingDifficulty.filter(d => d.Sex === "Female").sort((a, b) => b.share - a.share)[0];
+      // Find Top Female Vision disability Data
+      topMaleHearingDifficultyData = filteredRecentHearingDifficulty.filter(d => d.Sex === "Male").sort((a, b) => b.share - a.share)[0];
+    }
 
     return (
       <SectionColumns>
@@ -77,16 +79,16 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
           <h3>Vision Difficulty</h3>
           <Stat
             title="Male majority"
-            year={topMaleVisionDifficultyData.Year}
-            value={rangeFormatter(topMaleVisionDifficultyData.Age)}
-            qualifier={formatPopulation(topMaleVisionDifficultyData.share)}
+            year={visionDifficultyDataAvailable ? topMaleVisionDifficultyData.Year : visionDifficultyDataAvailable}
+            value={visionDifficultyDataAvailable ? rangeFormatter(topMaleVisionDifficultyData.Age) : "N/A"}
+            qualifier={visionDifficultyDataAvailable ? formatPopulation(topMaleVisionDifficultyData.share) : ""}
             theme="terra-cotta-dark"
           />
           <Stat
             title="Female majority"
-            year={topFemaleVisionDifficultyData.Year}
-            value={rangeFormatter(topFemaleVisionDifficultyData.Age)}
-            qualifier={formatPopulation(topFemaleVisionDifficultyData.share)}
+            year={visionDifficultyDataAvailable ? topFemaleVisionDifficultyData.Year : ""}
+            value={visionDifficultyDataAvailable ? rangeFormatter(topFemaleVisionDifficultyData.Age) : "N/A"}
+            qualifier={visionDifficultyDataAvailable ? formatPopulation(topFemaleVisionDifficultyData.share) : ""}
           />
 
           <h3>Hearing Difficulty</h3>
@@ -99,38 +101,39 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
           />
           <Stat
             title="Female majority"
-            year={topFemaleHearingDifficultyData.Year}
-            value={rangeFormatter(topFemaleHearingDifficultyData.Age)}
-            qualifier={formatPopulation(topFemaleHearingDifficultyData.share)}
+            year={hearingDifficultyDataAvailable ? topFemaleHearingDifficultyData.Year : ""}
+            value={hearingDifficultyDataAvailable ? rangeFormatter(topFemaleHearingDifficultyData.Age) : "N/A"}
+            qualifier={hearingDifficultyDataAvailable ? formatPopulation(topFemaleHearingDifficultyData.share) : ""}
           />
 
-          <p>In {topMaleVisionDifficultyData.Year}, the age groups most likely to have difficulty in seeing in {topMaleVisionDifficultyData.Geography} are {rangeFormatter(topMaleVisionDifficultyData.Age)} years and {rangeFormatter(topFemaleVisionDifficultyData.Age)} years for men and women respectively. In comparison, the age groups most likely to have difficulty in hearing are {rangeFormatter(topMaleHearingDifficultyData.Age)} years and {rangeFormatter(topFemaleHearingDifficultyData.Age)} years for men and women respectively.</p>
-          <p>The chart here shows the share of each male and female age group with difficulty in hearing and seeing in {topMaleVisionDifficultyData.Geography}.</p>
+          <p>{visionDifficultyDataAvailable ? <span>In {topMaleVisionDifficultyData.Year}, the age groups most likely to have difficulty in seeing in {topMaleVisionDifficultyData.Geography} are {rangeFormatter(topMaleVisionDifficultyData.Age)} years and {rangeFormatter(topFemaleVisionDifficultyData.Age)} years for men and women respectively.</span> : ""} In comparison, the age groups most likely to have difficulty in hearing are {hearingDifficultyDataAvailable ? rangeFormatter(topMaleHearingDifficultyData.Age) : "N/A"} years and {hearingDifficultyDataAvailable ? rangeFormatter(topFemaleHearingDifficultyData.Age) : ""} years for men and women respectively.</p>
+          <p>The chart here shows the share of each male and female age group with difficulty in hearing and seeing {visionDifficultyDataAvailable ? ` in ${topMaleVisionDifficultyData.Geography}` : "N/A"}.</p>
         </article>
 
-        <BarChart config={{
-          data: visionAndHearingData,
-          discrete: "x",
-          height: 400,
-          stacked: true,
-          label: d => d.disabilityType instanceof Array ? d.Sex : formatDisabilityName(d.disabilityType),
-          groupBy: ["disabilityType", "Sex"],
-          x: d => d.Age,
-          y: "share",
-          time: "Year",
-          xSort: (a, b) => a["ID Age"] - b["ID Age"],
-          xConfig: {
-            labelRotation: false,
-            tickFormat: d => rangeFormatter(d),
-            title: "Age distribution"
-          },
-          yConfig: {tickFormat: d => formatPopulation(d)},
-          shapeConfig: {
-            label: false
-          },
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Gender", d => d.Sex], ["Share", d => formatPopulation(d.share)], ["Location", d => d.Geography]]}
-        }}
-        />
+        {hearingDifficultyDataAvailable || topMaleVisionDifficultyData 
+          ? <BarChart config={{
+            data: visionAndHearingData,
+            discrete: "x",
+            height: 400,
+            stacked: true,
+            label: d => d.disabilityType instanceof Array ? d.Sex : formatDisabilityName(d.disabilityType),
+            groupBy: ["disabilityType", "Sex"],
+            x: d => d.Age,
+            y: "share",
+            time: "Year",
+            xSort: (a, b) => a["ID Age"] - b["ID Age"],
+            xConfig: {
+              labelRotation: false,
+              tickFormat: d => rangeFormatter(d),
+              title: "Age distribution"
+            },
+            yConfig: {tickFormat: d => formatPopulation(d)},
+            shapeConfig: {
+              label: false
+            },
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Gender", d => d.Sex], ["Share", d => formatPopulation(d.share)], ["Location", d => d.Geography]]}
+          }}
+          /> : <div></div>}
       </SectionColumns>
     );
   }

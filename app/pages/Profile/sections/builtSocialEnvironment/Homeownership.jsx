@@ -74,7 +74,7 @@ class Homeownership extends SectionColumns {
 
         {/* Geomap to show Property Values for all tracts in the Wayne County. */}
         <Geomap config={{
-          data: "https://quincy.datausa.io/api/data?measures=Property Value&Year=all&Geography=05000US26163:children",
+          data: "https://acs.datausa.io/api/data?measures=Property Value&Year=all&Geography=05000US26163:children",
           groupBy: "ID Geography",
           label: d => d.Geography,
           colorScale: "Property Value",
@@ -100,7 +100,7 @@ Homeownership.defaultProps = {
 
 Homeownership.need = [
   fetchData("occupancyData", "/api/data?measures=Housing Units&drilldowns=Occupancy Status&Geography=<id>&Year=all", d => d.data),
-  fetchData("medianHousingUnitsValueForProfile", "https://quincy.datausa.io/api/data?measures=Property Value&Year=all&Geography=<id>", d => d.data),
+  fetchData("medianHousingUnitsValueForProfile", "https://acs.datausa.io/api/data?measures=Property Value&Year=all&Geography=<id>", d => d.data),
   fetchData("constructionDateData", "/api/data?measures=Construction Date&Geography=<id>&Year=all", d => d.data)
 ];
 

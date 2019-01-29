@@ -171,7 +171,7 @@ Homeless.need = [
   fetchData("typesOfUnshelteredHomeless", "/api/data?measures=Unsheltered Homeless Population&drilldowns=Category&Geography=<id>&Year=all", d => d.data),
   fetchData("typesOfHomeless", "/api/data?measures=Sheltered Homeless Population,Unsheltered Homeless Population&drilldowns=Sub-group&Geography=<id>&Year=all", d => d.data),
   fetchData("totalHomelessData", "/api/data?measures=Sheltered Homeless Population,Unsheltered Homeless Population&drilldowns=Group&Geography=<id>&Year=latest"),
-  fetchData("wayneCountyPopulation", "https://quincy.datausa.io/api/data?measures=Population&Geography=05000US26163&year=latest")
+  fetchData("wayneCountyPopulation", "https://acs.datausa.io/api/data?measures=Population&Geography=05000US26163&year=latest")
 ];
 
 const mapStateToProps = state => ({

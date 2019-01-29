@@ -81,8 +81,8 @@ WageDistribution.defaultProps = {
 };
 
 WageDistribution.need = [
-  fetchData("wageDistributionData", "https://quincy.datausa.io/api/data?measures=Household Income&drilldowns=Household Income Bucket&Geography=<id>&Year=all", d => d.data),
-  fetchData("wageGinidata", "https://quincy.datausa.io/api/data?measures=Wage GINI&Geography=<id>&Year=all", d => d.data)
+  fetchData("wageDistributionData", "https://acs.datausa.io/api/data?measures=Household Income&drilldowns=Household Income Bucket&Geography=<id>&Year=all", d => d.data),
+  fetchData("wageGinidata", "https://acs.datausa.io/api/data?measures=Wage GINI&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({

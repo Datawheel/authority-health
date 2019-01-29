@@ -44,7 +44,7 @@ class SocioeconomicOutcomes extends SectionColumns {
         .entries(populationByAgeAndGender)
         .forEach(group => {
           const total = sum(group.values, d => d["Population by Sex and Age"]);
-          group.values.forEach(d => d.share = d["Population by Sex and Age"] / total * 100);
+          group.values.forEach(d => total !== 0 ? d.share = d["Population by Sex and Age"] / total * 100 : d.share = 0);
         });
     }
       
@@ -55,7 +55,7 @@ class SocioeconomicOutcomes extends SectionColumns {
         .entries(populationByRaceAndEthnicity)
         .forEach(group => {
           const total = sum(group.values, d => d["Hispanic Population"]);
-          group.values.forEach(d => d.share = d["Hispanic Population"] / total * 100);
+          group.values.forEach(d => total !== 0 ? d.share = d["Hispanic Population"] / total * 100 : d.share = 0);
         });
     }
 

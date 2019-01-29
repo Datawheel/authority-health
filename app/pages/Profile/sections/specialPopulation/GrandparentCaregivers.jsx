@@ -29,7 +29,7 @@ class GrandparentCaregivers extends SectionColumns {
         .entries(responsibilityData.data)
         .forEach(group => {
           const total = sum(group.values, d => d["Grandparent Caregivers"]);
-          group.values.forEach(d => d.share = d["Grandparent Caregivers"] / total * 100);
+          group.values.forEach(d => total !== 0 ? d.share = d["Grandparent Caregivers"] / total * 100 : d.share = 0);
           group.key >= responsibilityData.data[0].Year ? Object.assign(recentYearData, group) : {};
         });
 

@@ -31,7 +31,7 @@ class Unemployment extends SectionColumns {
         .entries(filteredWorkExperienceData)
         .forEach(group => {
           const total = sum(group.values, d => d["Poverty by Work Experience"]);
-          group.values.forEach(d => d.share = d["Poverty by Work Experience"] / total * 100);
+          group.values.forEach(d => total !== 0 ? d.share = d["Poverty by Work Experience"] / total * 100 : d.share = 0);
         });
       getMaleFullTimeData = filteredWorkExperienceData.filter(d => d.Sex === "Male");
       getFemaleFullTimeData = filteredWorkExperienceData.filter(d => d.Sex === "Female");
@@ -47,7 +47,7 @@ class Unemployment extends SectionColumns {
         .entries(unemployedData)
         .forEach(group => {
           const total = sum(group.values, d => d["Population by Employment Status"]);
-          group.values.forEach(d => d.share = d["Population by Employment Status"] / total * 100);
+          group.values.forEach(d => total !== 0 ? d.share = d["Population by Employment Status"] / total * 100 : d.share = 0);
           group.key >= unemployedData[0].Year ? Object.assign(recentYearUnemploymentData, group) : {};
         });
       const getMaleUnemploymemtData = recentYearUnemploymentData.values.filter(d => d.Sex === "Male");

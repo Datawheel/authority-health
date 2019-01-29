@@ -21,7 +21,7 @@ const formatCoverageData = coverageData => {
         .entries(group.values)
         .forEach(ageGroup => {
           const total = sum(ageGroup.values, d => d["Population by Insurance Coverage"]);
-          ageGroup.values.forEach(d => d.share = d["Population by Insurance Coverage"] / total * 100);
+          ageGroup.values.forEach(d => total !== 0 ? d.share = d["Population by Insurance Coverage"] / total * 100 : d.share = 0);
         });
     });
   return coverageData;

@@ -27,7 +27,7 @@ class DomesticPartners extends SectionColumns {
         .entries(filteredDomesticPartnersData)
         .forEach(group => {
           const total = sum(group.values, d => d["Unmarried Partner Households"]);
-          group.values.forEach(d => d.share = d["Unmarried Partner Households"] / total * 100);
+          group.values.forEach(d => total !== 0 ? d.share = d["Unmarried Partner Households"] / total * 100 : d.share = 0);
           group.key >= filteredDomesticPartnersData[0].Year ? Object.assign(recentDomesticPartnersData, group) : {};
         });
       recentDomesticPartnersData.values.sort((a, b) => b.share - a.share);

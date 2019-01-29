@@ -31,7 +31,7 @@ class Homeownership extends SectionColumns {
         .entries(occupancyData)
         .forEach(group => {
           const total = sum(group.values, d => d["Housing Units"]);
-          group.values.forEach(d => d.share = d["Housing Units"] / total * 100);
+          group.values.forEach(d => total !== 0 ? d.share = d["Housing Units"] / total * 100 : d.share = 0);
           group.key >= occupancyData[0].Year ? Object.assign(recentYearOccupancyData, group) : {};
         });
       // Find top Occupancy data for most recent year.

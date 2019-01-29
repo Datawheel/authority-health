@@ -30,14 +30,14 @@ class DisabilityStatus extends SectionColumns {
         .entries(disabilityStatus)
         .forEach(group => {
           const total = sum(group.values, d => d["Population in Disability"]);
-          group.values.forEach(d => d.share = d["Population in Disability"] / total * 100);
+          group.values.forEach(d => total !== 0 ? d.share = d["Population in Disability"] / total * 100 : d.share = 0);
           group.key >= disabilityStatus[0].Year ? Object.assign(recentYearDisabilityStatus, group) : {};
         });
       const filteredRecentYearDisabilityStatus = recentYearDisabilityStatus.values.filter(d => d["ID Disability Status"] === 0);
       topDisabilityStatus = filteredRecentYearDisabilityStatus.sort((a, b) => b.share - a.share)[0];
     }
 
-    // Read and transform Health Insurance Status data into desired format.
+    // Read and transform Health Coverage type data into desired format.
     let filteredHealthCoverageType;
     if (healthCoverageTypeAvailable) {
       nest()
@@ -45,7 +45,7 @@ class DisabilityStatus extends SectionColumns {
         .entries(healthCoverageType)
         .forEach(group => {
           const total = sum(group.values, d => d["Population in Disability"]);
-          group.values.forEach(d => d.share = d["Population in Disability"] / total * 100);
+          group.values.forEach(d => total !== 0 ? d.share = d["Population in Disability"] / total * 100 : d.share = 0);
         });
       // Filter data for only disabled population.
       filteredHealthCoverageType = healthCoverageType.filter(d => d["Disability Status"] !== "No Disability");

@@ -31,7 +31,7 @@ class Veterans extends SectionColumns {
         .entries(veteransEmploymentStatus)
         .forEach(group => {
           const total = sum(group.values, d => d["Veteran Population"]);
-          group.values.forEach(d => d.share = d["Veteran Population"] / total * 100);
+          group.values.forEach(d => total !== 0 ? d.share = d["Veteran Population"] / total * 100 : d.share = 0);
           group.key >= veteransEmploymentStatus[0].Year ? Object.assign(recentYearVeteransByEmploymentStatus, group) : {};
         });
       topEmploymentStatus = recentYearVeteransByEmploymentStatus.values.filter(d => d["Employment Status"] === "Unemployed")[0];
@@ -46,7 +46,7 @@ class Veterans extends SectionColumns {
         .entries(veteransPovertyStatus)
         .forEach(group => {
           const total = sum(group.values, d => d["Veteran Population"]);
-          group.values.forEach(d => d.share = d["Veteran Population"] / total * 100);
+          group.values.forEach(d => total !== 0 ? d.share = d["Veteran Population"] / total * 100 : d.share = 0);
           group.key >= veteransPovertyStatus[0].Year ? Object.assign(recentYearVeteransPovertyStatus, group) : {};
         });
       // Get stats for Veterans in Poverty.
@@ -62,7 +62,7 @@ class Veterans extends SectionColumns {
         .entries(veteransDisabilityStatus)
         .forEach(group => {
           const total = sum(group.values, d => d["Veteran Population"]);
-          group.values.forEach(d => d.share = d["Veteran Population"] / total * 100);
+          group.values.forEach(d => total !== 0 ? d.share = d["Veteran Population"] / total * 100 : d.share = 0);
           group.key >= veteransDisabilityStatus[0].Year ? Object.assign(recentYearVeteransDisabilityStatus, group) : {};
         });
       // Get stats for Veterans With Disability.
@@ -78,7 +78,7 @@ class Veterans extends SectionColumns {
         .entries(periodOfService)
         .forEach(group => {
           const total = sum(group.values, d => d.Veterans);
-          group.values.forEach(d => d.share = d.Veterans / total * 100);
+          group.values.forEach(d => total !== 0 ? d.share = d.Veterans / total * 100 : d.share = 0);
           group.key >= veteransEmploymentStatus[0].Year ? Object.assign(recentYearPeriodOfService, group) : {};
         });
       filteredPeriodOfService = periodOfService.filter(d => d["Period of Service"] !== "Other");

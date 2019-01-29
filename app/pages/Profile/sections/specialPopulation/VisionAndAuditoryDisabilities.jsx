@@ -33,7 +33,7 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
           const total = sum(group.values, d => d["Vision Disabilities"]);
           group.values.forEach(d => {
             if (d["ID Vision Disability Status"] === 0) {
-              d.share = d["Vision Disabilities"] / total * 100;
+              total !== 0 ? d.share = d["Vision Disabilities"] / total * 100 : d.share = 0;
               d.disabilityType = "visionDifficulty";
               visionAndHearingData.push(d);
             }
@@ -57,7 +57,7 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
           const total = sum(group.values, d => d["Hearing Disabilities"]);
           group.values.forEach(d => {
             if (d["ID Hearing Disability Status"] === 0) {
-              d.share = d["Hearing Disabilities"] / total * 100;
+              total !== 0 ? d.share = d["Hearing Disabilities"] / total * 100 : d.share = 0;
               d.disabilityType = "hearingDifficulty";
               visionAndHearingData.push(d);
             }

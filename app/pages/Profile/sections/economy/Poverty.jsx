@@ -31,7 +31,7 @@ class Poverty extends SectionColumns {
         .entries(filterOutTotalRaceData)
         .forEach(group => {
           const total = sum(group.values, d => d["Poverty Population"]);
-          group.values.forEach(d => d.share = d["Poverty Population"] / total * 100);
+          group.values.forEach(d => total !== 0 ? d.share = d["Poverty Population"] / total * 100 : d.share = 0);
           group.key >= filterOutTotalRaceData[0].Year ? Object.assign(recentYearPovertyByRaceData, group) : {};
         });
       filterDataBelowPovertyByRace = filterOutTotalRaceData.filter(d => d["ID Poverty Status"] === 0);
@@ -49,7 +49,7 @@ class Poverty extends SectionColumns {
         .entries(belowPovertyLevelByAgeAndGender)
         .forEach(group => {
           const total = sum(group.values, d => d["Poverty Population"]);
-          group.values.forEach(d => d.share = d["Poverty Population"] / total * 100);
+          group.values.forEach(d => total !== 0 ? d.share = d["Poverty Population"] / total * 100 : d.share = 0);
           group.key >= belowPovertyLevelByAgeAndGender[0].Year ? Object.assign(recentYearPovertyByAgeAndGender, group) : {};
         });
       // Find top stats for povetry by Age and Gender.

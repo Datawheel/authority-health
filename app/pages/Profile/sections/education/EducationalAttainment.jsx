@@ -39,7 +39,7 @@ class EducationalAttainment extends SectionColumns {
           .entries(educationalAttainmentData)
           .forEach(group => {
             const total = sum(group.values, d => d["Population by Education Level"]);
-            group.values.forEach(d => d.share = d["Population by Education Level"] / total * 100);
+            group.values.forEach(d => total !== 0 ? d.share = d["Population by Education Level"] / total * 100 :  d.share = 0);
             group.key >= educationalAttainmentData[0].Year ? Object.assign(recentYearEducationalAttainment, group) : {};
           });
         // Find top recent year Educational attainment stats

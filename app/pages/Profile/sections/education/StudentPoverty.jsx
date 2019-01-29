@@ -34,7 +34,7 @@ class StudentPoverty extends SectionColumns {
         .entries(levelOfSchoolData)
         .forEach(group => {
           const total = sum(group.values, d => d["Poverty by Schooling"]);
-          group.values.forEach(d => d.share = d["Poverty by Schooling"] / total * 100);
+          group.values.forEach(d => total !== 0 ? d.share = d["Poverty by Schooling"] / total * 100 : d.share = 0);
           group.key >= levelOfSchoolData[0].Year ? Object.assign(recentYearLevelOfSchoolData, group) : {};
         });
 

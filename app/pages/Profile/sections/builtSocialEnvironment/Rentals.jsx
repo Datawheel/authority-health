@@ -26,7 +26,7 @@ class Rentals extends SectionColumns {
     let recentYearNoExtraUtilitiesPercentage; 
     if (utilitiesDataAvailable) {
       const totalUtilitiesData = utilitiesData[0]["Renter-Occupied Housing Units"] + utilitiesData[1]["Renter-Occupied Housing Units"];
-      recentYearNoExtraUtilitiesPercentage = utilitiesData[1]["Renter-Occupied Housing Units"] / totalUtilitiesData * 100;
+      recentYearNoExtraUtilitiesPercentage = totalUtilitiesData !== 0 ? utilitiesData[1]["Renter-Occupied Housing Units"] / totalUtilitiesData * 100 : 0;
     }
 
     const recentYearRentersByIncomePercentage = {};
@@ -37,7 +37,7 @@ class Rentals extends SectionColumns {
         .entries(rentersByIncomePercentage)
         .forEach(group => {
           const total = sum(group.values, d => d["Renters by Income Percentage"]);
-          group.values.forEach(d => d.share = d["Renters by Income Percentage"] / total * 100);
+          group.values.forEach(d => total !== 0 ? d.share = d["Renters by Income Percentage"] / total * 100 : d.share = 0);
           group.key >= rentersByIncomePercentage[0].Year ? Object.assign(recentYearRentersByIncomePercentage, group) : {};
         });
       topIncomeToPayMostRent = recentYearRentersByIncomePercentage.values.sort((a, b) => b.share - a.share)[0];

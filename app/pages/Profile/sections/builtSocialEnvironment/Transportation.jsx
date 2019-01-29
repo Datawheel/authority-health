@@ -32,7 +32,7 @@ class Transportation extends SectionColumns {
         .entries(numberOfVehiclesData)
         .forEach(group => {
           const total = sum(group.values, d => d["Commute Means by Gender"]);
-          group.values.forEach(d => d.share = d["Commute Means by Gender"] / total * 100);
+          group.values.forEach(d => total !== 0 ? d.share = d["Commute Means by Gender"] / total * 100 : d.share = 0);
           group.key >= numberOfVehiclesData[0].Year ? Object.assign(recentYearNumberOfVehicles, group) : {};
         });
       topRecentYearNumberOfVehicles = recentYearNumberOfVehicles.values.sort((a, b) => b.share - a.share)[0];
@@ -48,7 +48,7 @@ class Transportation extends SectionColumns {
         .entries(commuteTimeData)
         .forEach(group => {
           const total = sum(group.values, d => d["Commuter Population"]);
-          group.values.forEach(d => d.share = d["Commuter Population"] / total * 100);
+          group.values.forEach(d => total !== 0 ? d.share = d["Commuter Population"] / total * 100 : d.share = 0);
           group.key >= commuteTimeData[0].Year ? Object.assign(recentYearCommuteTime, group) : {};
         });
       topRecentYearCommuteTime = recentYearCommuteTime.values.sort((a, b) => b.share - a.share)[0];
@@ -63,7 +63,7 @@ class Transportation extends SectionColumns {
         .entries(transportationMeans)
         .forEach(group => {
           const total = sum(group.values, d => d["Commute Means"]);
-          group.values.forEach(d => d.share = d["Commute Means"] / total * 100);
+          group.values.forEach(d => total !== 0 ? d.share = d["Commute Means"] / total * 100 : d.share = 0);
           group.key >= transportationMeans[0].Year ? Object.assign(recentYearModeOfTransport, group) : {};
         });
       topRecentYearModeOfTransport = recentYearModeOfTransport.values.sort((a, b) => b.share - a.share)[0];

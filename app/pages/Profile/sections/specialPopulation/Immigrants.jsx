@@ -24,7 +24,7 @@ const formatImmigrantsData = immigrantsData => {
         .forEach(place => {
           const total = sum(place.values, d => d["Poverty by Nativity"]);
           place.values.forEach(d => {
-            if (d["ID Nativity"] === 1) d.share = d["Poverty by Nativity"] / total * 100;
+            if (d["ID Nativity"] === 1) total !== 0 ? d.share = d["Poverty by Nativity"] / total * 100 : d.share = 0;
           });
         });
     });
@@ -46,7 +46,7 @@ const formatImmigrantsPovertyData = immigrantsPovertyData => {
         .forEach(place => {
           const total = sum(place.values, d => d["Poverty by Nativity"]);
           place.values.forEach(d => {
-            if (d["ID Poverty Status"] === 0) d.share = d["Poverty by Nativity"] / total * 100;
+            if (d["ID Poverty Status"] === 0) total !== 0 ? d.share = d["Poverty by Nativity"] / total * 100 : d.share = 0;
           });
         });
     });
@@ -84,7 +84,7 @@ class Immigrants extends SectionColumns {
         .entries(immigrantsDataForCurrentLocation)
         .forEach(group => {
           const total = sum(group.values, d => d["Poverty by Nativity"]);
-          group.values.forEach(d => d.share = d["Poverty by Nativity"] / total * 100);
+          group.values.forEach(d => total !== 0 ? d.share = d["Poverty by Nativity"] / total * 100 : d.share = 0);
         });
       getImmigrantsDataForCurrentLocation = immigrantsDataForCurrentLocation.filter(d => d.Nativity === "Foreign Born");
     }
@@ -96,7 +96,7 @@ class Immigrants extends SectionColumns {
         .entries(immigrantsPovertyDataForCurrentLocation)
         .forEach(group => {
           const total = sum(group.values, d => d["Poverty by Nativity"]);
-          group.values.forEach(d => d.share = d["Poverty by Nativity"] / total * 100);
+          group.values.forEach(d => total !== 0 ? d.share = d["Poverty by Nativity"] / total * 100 : d.share = 0);
         });
       getImmigrantsPovertyDataForCurrentLocation = immigrantsPovertyDataForCurrentLocation.filter((d => d.Nativity === "Foreign Born") && (d => d["ID Poverty Status"] === 0));
     }

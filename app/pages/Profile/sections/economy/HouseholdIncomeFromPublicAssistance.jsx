@@ -29,7 +29,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
         .entries(publicAssistanceData)
         .forEach(group => {
           const total = sum(group.values, d => d["Food-Stamp Population"]);
-          group.values.forEach(d => d.share = d["Food-Stamp Population"] / total * 100);
+          group.values.forEach(d => total !== 0 ? d.share = d["Food-Stamp Population"] / total * 100 : d.share = 0);
           group.key >= publicAssistanceData[0].Year ? Object.assign(recentYearPublicAssistanceData, group) : {};
         });
       // Find top recent year data for publicAssistanceData
@@ -45,7 +45,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
         .entries(householdSnapData)
         .forEach(group => {
           const total = sum(group.values, d => d["SNAP Receipts"]);
-          group.values.forEach(d => d.share = d["SNAP Receipts"] / total * 100);
+          group.values.forEach(d => total !== 0 ? d.share = d["SNAP Receipts"] / total * 100 : d.share = 0);
           group.key >= householdSnapData[0].Year ? Object.assign(recentYearHouseholdSnapData, group) : {};
         });
       filterSnapRecievedData = householdSnapData.filter(d => d["ID Snap Receipt"] === 0);

@@ -27,7 +27,7 @@ class WageDistribution extends SectionColumns {
         .entries(wageDistributionData)
         .forEach(group => {
           const total = sum(group.values, d => d["Household Income"]);
-          group.values.forEach(d => d.share = d["Household Income"] / total * 100);
+          group.values.forEach(d => total !== 0 ? d.share = d["Household Income"] / total * 100 : d.share = 0);
         });
     }
 

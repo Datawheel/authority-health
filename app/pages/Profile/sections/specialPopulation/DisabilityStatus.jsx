@@ -16,33 +16,40 @@ class DisabilityStatus extends SectionColumns {
 
   render() {
 
-    const {healthCoverageType, disabilityData} = this.props;
+    const {healthCoverageType, disabilityStatus} = this.props;
+    
+    const healthCoverageTypeAvailable = healthCoverageType.length !== 0;
+    const disabilityStatusAvailable = disabilityStatus.length !== 0;
 
     // Get top stat for disabled population.
-    const recentYearDisabilityData = {};
-    nest()
-      .key(d => d.Year)
-      .entries(disabilityData)
-      .forEach(group => {
-        const total = sum(group.values, d => d["Population in Disability"]);
-        group.values.forEach(d => d.share = d["Population in Disability"] / total * 100);
-        group.key >= disabilityData[0].Year ? Object.assign(recentYearDisabilityData, group) : {};
-      });
-    const filteredRecentYearDisabilityData = recentYearDisabilityData.values.filter(d => d["ID Disability Status"] === 0);
-    filteredRecentYearDisabilityData.sort((a, b) => b.share - a.share);
-    const topDisabilityData = filteredRecentYearDisabilityData[0];
+    const recentYearDisabilityStatus = {};
+    let topDisabilityStatus;
+    if (disabilityStatusAvailable) {
+      nest()
+        .key(d => d.Year)
+        .entries(disabilityStatus)
+        .forEach(group => {
+          const total = sum(group.values, d => d["Population in Disability"]);
+          group.values.forEach(d => d.share = d["Population in Disability"] / total * 100);
+          group.key >= disabilityStatus[0].Year ? Object.assign(recentYearDisabilityStatus, group) : {};
+        });
+      const filteredRecentYearDisabilityStatus = recentYearDisabilityStatus.values.filter(d => d["ID Disability Status"] === 0);
+      topDisabilityStatus = filteredRecentYearDisabilityStatus.sort((a, b) => b.share - a.share)[0];
+    }
 
     // Read and transform Health Insurance Status data into desired format.
-    nest()
-      .key(d => d.Year)
-      .entries(healthCoverageType)
-      .forEach(group => {
-        const total = sum(group.values, d => d["Population in Disability"]);
-        group.values.forEach(d => d.share = d["Population in Disability"] / total * 100);
-      });
-
-    // Show barchart for only disabled population.
-    const filteredHealthCoverageType = healthCoverageType.filter(d => d["Disability Status"] !== "No Disability");
+    let filteredHealthCoverageType;
+    if (healthCoverageTypeAvailable) {
+      nest()
+        .key(d => d.Year)
+        .entries(healthCoverageType)
+        .forEach(group => {
+          const total = sum(group.values, d => d["Population in Disability"]);
+          group.values.forEach(d => d.share = d["Population in Disability"] / total * 100);
+        });
+      // Filter data for only disabled population.
+      filteredHealthCoverageType = healthCoverageType.filter(d => d["Disability Status"] !== "No Disability");
+    }
 
     return (
       <SectionColumns>
@@ -51,39 +58,40 @@ class DisabilityStatus extends SectionColumns {
           {/* Show stats for the top data. */}
           <Stat
             title="Largest age group with a disibility"
-            year={topDisabilityData.Year}
-            value={rangeFormatter(topDisabilityData.Age)}
-            qualifier={formatPopulation(topDisabilityData.share)}
+            year={disabilityStatusAvailable ? topDisabilityStatus.Year : ""}
+            value={disabilityStatusAvailable ? rangeFormatter(topDisabilityStatus.Age) : "N/A"}
+            qualifier={disabilityStatusAvailable ? formatPopulation(topDisabilityStatus.share) : ""}
           />
           {/* Write short paragraph describing stats and barchart. */}
-          <p>In {topDisabilityData.Year}, the most common disabled age group was {rangeFormatter(topDisabilityData.Age)} years making up {formatPopulation(topDisabilityData.share)} of all disabled citizens in {topDisabilityData.Geography}.</p>
-          <p>The chart here shows the health coverage breakdown of the disabled population in {topDisabilityData.Geography}.</p>
+          {disabilityStatusAvailable ? <p>In {topDisabilityStatus.Year}, the most common disabled age group was {rangeFormatter(topDisabilityStatus.Age)} years making up {formatPopulation(topDisabilityStatus.share)} of all disabled citizens in {topDisabilityStatus.Geography}.</p> : ""}
+          {healthCoverageTypeAvailable ? <p>The chart here shows the health coverage breakdown of the disabled population in {filteredHealthCoverageType[0].Geography}.</p> : ""}
         </article>
 
         {/* Show barchart for each age group type with public, private and no health insurance coverage*/}
-        <BarChart config={{
-          data: filteredHealthCoverageType,
-          discrete: "y",
-          height: 400,
-          stacked: true,
-          groupBy: ["Coverage Type"],
-          y: "Age",
-          x: "share",
-          time: "Year",
-          yConfig: {
-            tickFormat: d => rangeFormatter(d),
-            title: "Age group"
-          },
-          xConfig: {
-            tickFormat: d => formatPopulation(d)
-          },
-          ySort: (a, b) => a["ID Age"] - b["ID Age"],
-          shapeConfig: {
-            label: false
-          },
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Share", d => formatPopulation(d.share)], ["Location", d => d.Geography]]}
-        }}
-        />
+        {healthCoverageTypeAvailable 
+          ? <BarChart config={{
+            data: filteredHealthCoverageType,
+            discrete: "y",
+            height: 400,
+            stacked: true,
+            groupBy: ["Coverage Type"],
+            y: "Age",
+            x: "share",
+            time: "Year",
+            yConfig: {
+              tickFormat: d => rangeFormatter(d),
+              title: "Age group"
+            },
+            xConfig: {
+              tickFormat: d => formatPopulation(d)
+            },
+            ySort: (a, b) => a["ID Age"] - b["ID Age"],
+            shapeConfig: {
+              label: false
+            },
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Share", d => formatPopulation(d.share)], ["Location", d => d.Geography]]}
+          }}
+          /> : <div></div>}
       </SectionColumns>
     );
   }
@@ -95,12 +103,12 @@ DisabilityStatus.defaultProps = {
 
 DisabilityStatus.need = [
   fetchData("healthCoverageType", "/api/data?measures=Population in Disability&drilldowns=Coverage Status,Coverage Type,Disability Status,Age&Geography=<id>&Year=all", d => d.data),
-  fetchData("disabilityData", "/api/data?measures=Population in Disability&drilldowns=Disability Status,Age&Geography=<id>&Year=all", d => d.data)
+  fetchData("disabilityStatus", "/api/data?measures=Population in Disability&drilldowns=Disability Status,Age&Geography=<id>&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   healthCoverageType: state.data.healthCoverageType,
-  disabilityData: state.data.disabilityData
+  disabilityStatus: state.data.disabilityStatus
 });
 
 export default connect(mapStateToProps)(DisabilityStatus);

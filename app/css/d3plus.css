@@ -120,3 +120,38 @@ map zoom controls
 		}
 	}
 }
+
+/* -----------------------------------
+tooltip
+----------------------------------- */
+
+.d3plus-tooltip {
+	& .d3plus-tooltip-title {
+		color: var(--majorelle-dark);
+		font-family: var(--body-font);
+		padding: 7px 5px;
+	}
+  & .d3plus-tooltip-table {
+    border-collapse: collapse;
+    & .d3plus-tooltip-tbody {
+      & tr {
+        border-bottom: 1px solid #ddd;
+        font-family: var(--body-font);
+        line-height: 14px;
+        &:last-child {
+          border-bottom: none;
+        }
+        & td {
+          padding: 6px 5px 5px;
+          text-align: left;
+          &:last-child {
+            text-align: right;
+          }
+        }
+      }
+    }
+  }
+  & .d3plus-tooltip-footer {
+    text-align: center;
+  }
+}

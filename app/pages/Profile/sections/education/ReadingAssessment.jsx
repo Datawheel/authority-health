@@ -207,7 +207,7 @@ class ReadingAssessment extends SectionColumns {
   //     yConfig: {
   //       title: `Average Reading Score ${xTitle}`
   //     },
-  //     tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score"]], ["Location", "Detroit"]]}
+  //     tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score"]], ["Place", "Detroit"]]}
   //   }}
   //   />);
 
@@ -280,7 +280,7 @@ class ReadingAssessment extends SectionColumns {
               title: "Average Reading Score by Gender",
               domain: [0, 300]
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score by Gender"]], ["Location", "Detroit"]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score by Gender"]], ["Place", "Detroit"]]}
           }}
           />
         </SectionColumns>
@@ -343,7 +343,7 @@ class ReadingAssessment extends SectionColumns {
               title: "Average Reading Score by Race",
               domain: [0, 300]
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score by Race"]], ["Location", "Detroit"]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score by Race"]], ["Place", "Detroit"]]}
           }}
           />
         </SectionColumns>
@@ -404,7 +404,7 @@ class ReadingAssessment extends SectionColumns {
               title: "Average Reading Score by ELL",
               domain: [0, 300]
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score by ELL"]], ["Location", "Detroit"]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score by ELL"]], ["Place", "Detroit"]]}
           }}
           />
         </SectionColumns>
@@ -465,7 +465,7 @@ class ReadingAssessment extends SectionColumns {
               title: "Average Reading Score by NSLP",
               domain: [0, 300]
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score by NSLP"]], ["Location", "Detroit"]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score by NSLP"]], ["Place", "Detroit"]]}
           }}
           />
         </SectionColumns>
@@ -525,7 +525,7 @@ class ReadingAssessment extends SectionColumns {
               title: "Average Reading Score by Disability",
               domain: [0, 300]
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score by Disability"]], ["Location", "Detroit"]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score by Disability"]], ["Place", "Detroit"]]}
           }}
           />
         </SectionColumns>
@@ -575,7 +575,7 @@ class ReadingAssessment extends SectionColumns {
               title: "Average Reading Score by Parents Education based on Parents Education",
               domain: [0, 300]
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score by Parents Education"]], ["Location", "Detroit"]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score by Parents Education"]], ["Place", "Detroit"]]}
           }}
           />
         </SectionColumns>
@@ -645,7 +645,7 @@ class ReadingAssessment extends SectionColumns {
             discrete: "x",
             height: 400,
             groupBy: d => `${d.Grade} ${d.Geography}`,
-            label: d => `${d.Grade}th Grade ${d[d.Geography]}`,
+            label: d => `${d.Grade}th Grade ${d.Geography === "Nation" ? "United States" : "Detroit"}`,
             baseline: 0,
             x: "Year",
             y: "Average Reading Score",
@@ -656,7 +656,7 @@ class ReadingAssessment extends SectionColumns {
             shapeConfig: {
               strokeDasharray: d => d.Geography === "Nation" ?  "4 1" : null
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score"]]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score"]], ["Place", d => d.Geography === "Nation" ? "United States" : "Detroit"]]}
           }}
           />
         </SectionColumns>

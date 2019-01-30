@@ -4,6 +4,7 @@ import {nest} from "d3-collection";
 import {connect} from "react-redux";
 import {BarChart} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
+import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -17,7 +18,7 @@ class GrandparentCaregivers extends SectionColumns {
 
   render() {
 
-    const {responsibilityData} = this.props;
+    const {meta, responsibilityData} = this.props;
 
     const responsibilityDataAvailable = responsibilityData.length !== 0;
 
@@ -74,7 +75,7 @@ class GrandparentCaregivers extends SectionColumns {
             },
             yConfig: {tickFormat: d => formatPercentage(d)},
             shapeConfig: {label: false},
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
           />
         </SectionColumns>
@@ -93,6 +94,7 @@ GrandparentCaregivers.need = [
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
   responsibilityData: state.data.responsibilityData
 });
 

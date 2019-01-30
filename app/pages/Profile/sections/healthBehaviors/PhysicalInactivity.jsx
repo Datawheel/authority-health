@@ -108,7 +108,7 @@ class PhysicalInactivity extends SectionColumns {
                 ticks: []
               },
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", `${formatDropdownChoiceName(dropdownValue)}`], 
-                ["Prevalence", d => formatPercentage(d["Age-Adjusted Physical Inactivity"])], ["Location", d => d.Geography]]}
+                ["Prevalence", d => formatPercentage(d["Age-Adjusted Physical Inactivity"])], ["County", d => d.Geography]]}
             }}
             />
             : null

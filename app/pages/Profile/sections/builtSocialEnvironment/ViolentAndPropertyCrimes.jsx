@@ -74,7 +74,6 @@ class ViolentAndPropertyCrimes extends SectionColumns {
           />
           <p>In {topRecentYearViolentCrime.Year}, the most common violent crime{isPlaceDataAvailable ? ` in ${topRecentYearViolentCrime.Geography}` : ""} was {topRecentYearViolentCrime.Crime.toLowerCase()} ({formatPercentage(topRecentYearViolentCrime.share)}), and the most common property crime was {topRecentYearPropertyCrime.Crime.toLowerCase()} ({formatPercentage(topRecentYearPropertyCrime.share)}).</p>
           <p>The following chart shows the distribution for the different types of property and violent crimes{isPlaceDataAvailable ? ` in ${topRecentYearViolentCrime.Geography}` : ""}.</p>
-
         </article>
 
         {/* Draw a Barchart for each type of crime. */}
@@ -99,7 +98,7 @@ class ViolentAndPropertyCrimes extends SectionColumns {
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["Location", d => isPlaceDataAvailable ? d.Geography : "Wayne County"]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [isPlaceDataAvailable ? "Place" : "County", d => isPlaceDataAvailable ? d.Geography : "Wayne County"]]}
         }}
         />
       </SectionColumns>

@@ -4,6 +4,7 @@ import {nest} from "d3-collection";
 import {connect} from "react-redux";
 import {BarChart} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
+import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -22,7 +23,7 @@ const formatLabel = d => {
 class StudentPoverty extends SectionColumns {
 
   render() {
-    const {levelOfSchoolData} = this.props;
+    const {meta, levelOfSchoolData} = this.props;
 
     const levelOfSchoolDataAvailable = levelOfSchoolData.length !== 0;
 
@@ -94,7 +95,7 @@ class StudentPoverty extends SectionColumns {
             shapeConfig: {
               label: false
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)], ["Location", d => d.Geography]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
           />
         </SectionColumns>
@@ -113,6 +114,7 @@ StudentPoverty.need = [
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
   levelOfSchoolData: state.data.levelOfSchoolData
 });
 

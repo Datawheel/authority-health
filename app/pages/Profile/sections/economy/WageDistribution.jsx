@@ -4,6 +4,7 @@ import {sum} from "d3-array";
 import {nest} from "d3-collection";
 import {BarChart} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
+import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -16,7 +17,7 @@ class WageDistribution extends SectionColumns {
 
   render() {
 
-    const {wageDistributionData, wageGinidata} = this.props;
+    const {meta, wageDistributionData, wageGinidata} = this.props;
 
     const wageDistributionDataAvailable = wageDistributionData.length !== 0;
     const wageGinidataAvailable = wageGinidata.length !== 0;
@@ -68,7 +69,7 @@ class WageDistribution extends SectionColumns {
             shapeConfig: {
               label: false
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)], ["Location", d => d.Geography]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
           /> : <div></div>}
       </SectionColumns>
@@ -86,6 +87,7 @@ WageDistribution.need = [
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
   wageDistributionData: state.data.wageDistributionData,
   wageGinidata: state.data.wageGinidata
 });

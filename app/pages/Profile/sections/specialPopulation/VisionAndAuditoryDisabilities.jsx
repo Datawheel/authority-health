@@ -4,6 +4,7 @@ import {nest} from "d3-collection";
 import {connect} from "react-redux";
 import {BarChart} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
+import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -16,7 +17,7 @@ const formatDisabilityName = d => d === "visionDifficulty" ? "Vision Difficulty"
 class VisionAndAuditoryDisabilities extends SectionColumns {
 
   render() {
-    const {hearingDifficulty, visionDifficulty} = this.props;
+    const {meta, hearingDifficulty, visionDifficulty} = this.props;
     
     const hearingDifficultyDataAvailable = hearingDifficulty.length !== 0;
     const visionDifficultyDataAvailable = visionDifficulty.length !== 0;
@@ -131,7 +132,7 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             shapeConfig: {
               label: false
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Gender", d => d.Sex], ["Share", d => formatPopulation(d.share)], ["Location", d => d.Geography]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Gender", d => d.Sex], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
           /> : <div></div>}
       </SectionColumns>
@@ -149,6 +150,7 @@ VisionAndAuditoryDisabilities.need = [
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
   hearingDifficulty: state.data.hearingDifficulty,
   visionDifficulty: state.data.visionDifficulty
 });

@@ -158,8 +158,8 @@ class ObesityAndDiabetes extends SectionColumns {
             yConfig: {
               ticks: []
             },
-            tooltipConfig: isDiabetesSelected ? {tbody: [["Year", d => d.Year], ["Condition", "Diabetes"], ["Share", d => formatPercentage(d["Age-Adjusted Obesity Prevalence"])], ["Location", d => d.Geography]]} 
-              : {tbody: [["Year", d => d.Year], ["Condition", "Obesity"], ["Prevalence", d => formatPercentage(d["Age-Adjusted Obesity Prevalence"])], ["Location", d => d.Geography]]}
+            tooltipConfig: isDiabetesSelected ? {tbody: [["Year", d => d.Year], ["Condition", "Diabetes"], ["Share", d => formatPercentage(d["Age-Adjusted Obesity Prevalence"])], ["County", d => d.Geography]]} 
+              : {tbody: [["Year", d => d.Year], ["Condition", "Obesity"], ["Prevalence", d => formatPercentage(d["Age-Adjusted Obesity Prevalence"])], ["County", d => d.Geography]]}
           }}
           />
         </article>

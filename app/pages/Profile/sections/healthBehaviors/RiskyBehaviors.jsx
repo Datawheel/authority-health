@@ -123,7 +123,7 @@ class RiskyBehaviors extends SectionColumns {
                 },
                 time: "End Year",
                 title: "Smoking Status",
-                tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Prevalence", d => formatPercentage(d[d.SmokingType] * 100)], ["Location", d => d.Geography]]}
+                tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Prevalence", d => formatPercentage(d[d.SmokingType] * 100)], ["County", d => d.Geography]]}
               }}
               dataFormat={resp => {
                 const data = [];

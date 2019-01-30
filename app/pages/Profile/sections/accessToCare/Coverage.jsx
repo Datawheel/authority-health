@@ -4,6 +4,7 @@ import {sum} from "d3-array";
 import {nest} from "d3-collection";
 import {BarChart} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
+import {titleCase} from "d3plus-text";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import rangeFormatter from "../../../../utils/rangeFormatter";
@@ -30,7 +31,7 @@ const formatCoverageData = coverageData => {
 class Coverage extends SectionColumns {
 
   render() {
-    const {coverageData} = this.props;
+    const {meta, coverageData} = this.props;
 
     const coverageDataAvailable = coverageData.data.length !== 0;
 
@@ -96,7 +97,7 @@ class Coverage extends SectionColumns {
             shapeConfig: {
               label: false
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
           dataFormat={resp => formatCoverageData(resp.data)}
           />
@@ -116,6 +117,7 @@ Coverage.need = [
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
   coverageData: state.data.coverageData
 });
 

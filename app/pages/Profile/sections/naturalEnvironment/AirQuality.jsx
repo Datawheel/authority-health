@@ -95,7 +95,7 @@ class AirQuality extends SectionColumns {
             yConfig: {
               title: "Testing Days"
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Air Pollutant Days", d => d["Air Pollutant Days"]], ["Location", d => d.Geography]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Air Pollutant Days", d => d["Air Pollutant Days"]], ["County", d => d.Geography]]}
           }}
           />
 
@@ -115,7 +115,7 @@ class AirQuality extends SectionColumns {
             yConfig: {
               title: "Median AQI"
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Median AQI", d => d["Median AQI"]], ["Location", d => d.Geography]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Median AQI", d => d["Median AQI"]], ["County", d => d.Geography]]}
           }}
           />
         </article>
@@ -134,7 +134,7 @@ class AirQuality extends SectionColumns {
           yConfig: {
             title: "Testing Days"
           },
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Air Quality Days", d => d["Air Quality Days"]], ["Location", d => d.Geography]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Air Quality Days", d => d["Air Quality Days"]], ["County", d => d.Geography]]}
         }}
         />
       </SectionColumns>

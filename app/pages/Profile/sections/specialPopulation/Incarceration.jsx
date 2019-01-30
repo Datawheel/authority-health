@@ -111,7 +111,7 @@ class Incarceration extends SectionColumns {
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Punishment", d => d.Punishment], ["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
+          tooltipConfig: {tbody: [["Punishment", d => d.Punishment], ["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["County", d => d.Geography]]}
         }}
         />
       </SectionColumns>

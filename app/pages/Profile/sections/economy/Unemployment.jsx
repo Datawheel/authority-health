@@ -4,6 +4,7 @@ import {sum} from "d3-array";
 import {nest} from "d3-collection";
 import {BarChart, LinePlot} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
+import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -16,7 +17,7 @@ class Unemployment extends SectionColumns {
 
   render() {
 
-    const {employmentStatus, workExperience, unemploymentRate} = this.props;
+    const {meta, employmentStatus, workExperience, unemploymentRate} = this.props;
     
     const employmentStatusAvailable = employmentStatus.length !== 0;
     const workExperienceAvailable = workExperience.length !== 0;
@@ -108,7 +109,7 @@ class Unemployment extends SectionColumns {
               shapeConfig: {
                 label: false
               },
-              tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => rangeFormatter(d.Age)], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => rangeFormatter(d.Age)], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}
             /> : <div></div>}
         </article>
@@ -143,6 +144,7 @@ Unemployment.need = [
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
   unemploymentRate: state.data.unemploymentRate,
   employmentStatus: state.data.employmentStatus,
   workExperience: state.data.workExperience

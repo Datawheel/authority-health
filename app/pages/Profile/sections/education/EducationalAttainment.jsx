@@ -4,6 +4,7 @@ import {nest} from "d3-collection";
 import {connect} from "react-redux";
 import {BarChart} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
+import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -25,7 +26,7 @@ class EducationalAttainment extends SectionColumns {
 
   render() {
 
-    const {educationalAttainmentData} = this.props;
+    const {meta, educationalAttainmentData} = this.props;
 
     const educationalAttainmentDataAvailable = educationalAttainmentData.length !== 0;
 
@@ -84,7 +85,7 @@ class EducationalAttainment extends SectionColumns {
             shapeConfig: {
               label: false
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Educational Attainment", d => formatLabels(d["Educational Attainment"])], ["Share", d => formatPopulation(d.share)], ["Location", d => d.Geography]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Educational Attainment", d => formatLabels(d["Educational Attainment"])], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
           />
         </SectionColumns>
@@ -103,6 +104,7 @@ EducationalAttainment.need = [
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
   educationalAttainmentData: state.data.educationalAttainmentData
 });
 

@@ -4,6 +4,7 @@ import {sum} from "d3-array";
 import {nest} from "d3-collection";
 import {BarChart} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
+import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -16,7 +17,7 @@ class DisabilityStatus extends SectionColumns {
 
   render() {
 
-    const {healthCoverageType, disabilityStatus} = this.props;
+    const {meta, healthCoverageType, disabilityStatus} = this.props;
     
     const healthCoverageTypeAvailable = healthCoverageType.length !== 0;
     const disabilityStatusAvailable = disabilityStatus.length !== 0;
@@ -89,7 +90,7 @@ class DisabilityStatus extends SectionColumns {
             shapeConfig: {
               label: false
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Share", d => formatPopulation(d.share)], ["Location", d => d.Geography]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
           /> : <div></div>}
       </SectionColumns>
@@ -107,6 +108,7 @@ DisabilityStatus.need = [
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
   healthCoverageType: state.data.healthCoverageType,
   disabilityStatus: state.data.disabilityStatus
 });

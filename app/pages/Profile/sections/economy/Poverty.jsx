@@ -4,6 +4,7 @@ import {sum} from "d3-array";
 import {nest} from "d3-collection";
 import {BarChart} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
+import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -16,7 +17,7 @@ class Poverty extends SectionColumns {
 
   render() {
 
-    const {povertyByRace, povertyByAgeAndGender} = this.props;
+    const {meta, povertyByRace, povertyByAgeAndGender} = this.props;
 
     const povertyByRaceAvailable = povertyByRace.length !== 0;
     const povertyByAgeAndGenderAvailable = povertyByAgeAndGender.length !== 0;
@@ -103,7 +104,7 @@ class Poverty extends SectionColumns {
                 tickFormat: d => formatPopulation(d),
                 title: "Share"
               },
-              tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)], ["Location", d => d.Geography]]}
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}
             /> : <div></div>}
         </article>
@@ -130,7 +131,7 @@ class Poverty extends SectionColumns {
             shapeConfig: {
               label: false
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Share", d => formatPopulation(d.share)], ["Location", d => d.Geography]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
           /> : <div></div>}
       </SectionColumns>
@@ -148,6 +149,7 @@ Poverty.need = [
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
   povertyByRace: state.data.povertyByRace,
   povertyByAgeAndGender: state.data.povertyByAgeAndGender
 });

@@ -4,6 +4,7 @@ import {nest} from "d3-collection";
 import {connect} from "react-redux";
 import {BarChart, Treemap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
+import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -17,7 +18,7 @@ class Transportation extends SectionColumns {
 
   render() {
 
-    const {commuteTimeData, numberOfVehiclesData, transportationMeans} = this.props;
+    const {meta, commuteTimeData, numberOfVehiclesData, transportationMeans} = this.props;
 
     const commuteTimeDataAvailable = commuteTimeData.length !== 0;
     const numberOfVehiclesDataAvailable = numberOfVehiclesData.length !== 0;
@@ -120,7 +121,7 @@ class Transportation extends SectionColumns {
               shapeConfig: {
                 label: false
               },
-              tooltipConfig: {tbody: [["Year", d => d.Year], ["Number of Vehicles", d => rangeFormatter(d["Vehicles Available"])], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Number of Vehicles", d => rangeFormatter(d["Vehicles Available"])], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}
             /> : <div></div>}
         </article>
@@ -148,7 +149,7 @@ class Transportation extends SectionColumns {
             shapeConfig: {
               label: false
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
           /> : <div></div>}
 
@@ -162,7 +163,7 @@ class Transportation extends SectionColumns {
             groupBy: "Transportation Means",
             time: "Year",
             title: "Means of Transportation",
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
           /> : <div></div>}
       </SectionColumns>
@@ -181,6 +182,7 @@ Transportation.need = [
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
   commuteTimeData: state.data.commuteTimeData,
   numberOfVehiclesData: state.data.numberOfVehiclesData,
   transportationMeans: state.data.transportationMeans

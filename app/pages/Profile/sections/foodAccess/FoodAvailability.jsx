@@ -67,7 +67,7 @@ class FoodAvailability extends SectionColumns {
           label: d => d["Sub-category"] instanceof Array ? titleCase(d.Group) : titleCase(d["Sub-category"]),
           height: 400,
           sum: d => d["Number of Food Stores"],
-          tooltipConfig: {tbody: [["Count", d => `${d["Number of Food Stores"]} in ${d.Year}`], ["Location", d => d.Geography]]}
+          tooltipConfig: {tbody: [["Count", d => `${d["Number of Food Stores"]} in ${d.Year}`], ["County", d => d.Geography]]}
         }}
         dataFormat={resp => {
           // Find and return an array of objects for the latest year data for each store type and restaurant type.

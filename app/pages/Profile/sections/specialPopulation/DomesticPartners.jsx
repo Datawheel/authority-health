@@ -4,6 +4,7 @@ import {nest} from "d3-collection";
 import {connect} from "react-redux";
 import {BarChart} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
+import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -15,7 +16,7 @@ const formatPartnerLabel = d => d.replace("&", "w/");
 class DomesticPartners extends SectionColumns {
 
   render() {
-    const {domesticPartnersData} = this.props;
+    const {meta, domesticPartnersData} = this.props;
 
     const domesticPartnersDataAvailable = domesticPartnersData.length !== 0;
 
@@ -67,7 +68,7 @@ class DomesticPartners extends SectionColumns {
             yConfig: {tickFormat: d => formatPopulation(d)},
             xSort: (a, b) => a["ID Sex of Partner"] - b["ID Sex of Partner"],
             shapeConfig: {label: false},
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)], ["Location", d => d.Geography]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
           />
         </SectionColumns>
@@ -86,6 +87,7 @@ DomesticPartners.need = [
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
   domesticPartnersData: state.data.domesticPartnersData
 });
 

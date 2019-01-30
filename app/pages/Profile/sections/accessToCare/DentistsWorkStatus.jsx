@@ -122,7 +122,7 @@ class DentistsWorkStatus extends SectionColumns {
             tickFormat: d => formatPercentage(d)
           },
           shapeConfig: {label: false},
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["County", d => d.Geography]]}
         }}
         dataFormat={resp => formatTypesOfActiveDentists(resp.data)[0]}
         />

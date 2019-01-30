@@ -79,13 +79,13 @@ class DentistsDemographic extends SectionColumns {
             legend: false,
             groupBy: "Sex",
             time: "Year",
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["County", d => d.Geography]]}
           }}
           dataFormat={resp => formatDentistsByGender(resp.data)[0]}
           />
         </article>
 
-        {/* Draw a BarChart to show data for health center data by race */}
+        {/* Draw a Barchart to show data for dentists by age */}
         <BarChart config={{
           data: `/api/data?measures=Dentists in Private Practice by Age&drilldowns=Age Group&Geography=${ageGeoId}&Year=all`,
           discrete: "x",
@@ -107,7 +107,7 @@ class DentistsDemographic extends SectionColumns {
             tickFormat: d => formatPercentage(d)
           },
           shapeConfig: {label: false},
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["County", d => d.Geography]]}
         }}
         dataFormat={resp => formatDentistsByAge(resp.data)[0]}
         />

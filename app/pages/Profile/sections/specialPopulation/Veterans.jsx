@@ -4,6 +4,7 @@ import {sum} from "d3-array";
 import {nest} from "d3-collection";
 import {BarChart} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
+import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -15,7 +16,7 @@ class Veterans extends SectionColumns {
 
   render() {
 
-    const {veteransEmploymentStatus, veteransPovertyStatus, veteransDisabilityStatus, periodOfService} = this.props;
+    const {meta, veteransEmploymentStatus, veteransPovertyStatus, veteransDisabilityStatus, periodOfService} = this.props;
 
     const veteransEmploymentStatusAvailable = veteransEmploymentStatus.length !== 0;
     const veteransPovertyStatusAvailable = veteransPovertyStatus.length !== 0;
@@ -138,7 +139,7 @@ class Veterans extends SectionColumns {
               title: "Share"
             },
             shapeConfig: {label: false},
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
           /> : <div></div>}
       </SectionColumns>
@@ -158,6 +159,7 @@ Veterans.need = [
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
   veteransEmploymentStatus: state.data.veteransEmploymentStatus,
   veteransPovertyStatus: state.data.veteransPovertyStatus,
   veteransDisabilityStatus: state.data.veteransDisabilityStatus,

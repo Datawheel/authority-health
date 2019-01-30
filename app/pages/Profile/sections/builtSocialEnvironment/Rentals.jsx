@@ -4,6 +4,7 @@ import {nest} from "d3-collection";
 import {connect} from "react-redux";
 import {BarChart, LinePlot} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
+import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -17,7 +18,7 @@ class Rentals extends SectionColumns {
 
   render() {
 
-    const {rentAmountData, utilitiesData, rentersByIncomePercentage} = this.props;
+    const {meta, rentAmountData, utilitiesData, rentersByIncomePercentage} = this.props;
 
     const rentAmountDataAvailable = rentAmountData.length !== 0;
     const utilitiesDataAvailable = utilitiesData.length !== 0;
@@ -105,7 +106,7 @@ class Rentals extends SectionColumns {
               tickFormat: d => formatPercentage(d),
               title: "Share of Renters"},
             shapeConfig: {label: false},
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
           /> : <div></div>}
       </SectionColumns>
@@ -124,6 +125,7 @@ Rentals.need = [
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
   rentAmountData: state.data.rentAmountData,
   utilitiesData: state.data.utilitiesData,
   rentersByIncomePercentage: state.data.rentersByIncomePercentage

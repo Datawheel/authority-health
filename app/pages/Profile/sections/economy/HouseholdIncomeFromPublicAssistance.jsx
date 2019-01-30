@@ -4,6 +4,7 @@ import {sum} from "d3-array";
 import {nest} from "d3-collection";
 import {BarChart} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
+import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -15,7 +16,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
 
   render() {
 
-    const {publicAssistanceData, householdSnapData} = this.props;
+    const {meta, publicAssistanceData, householdSnapData} = this.props;
 
     const publicAssistanceDataAvailable = publicAssistanceData.length !== 0;
     const householdSnapDataAvailable = householdSnapData.length !== 0;
@@ -101,7 +102,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
             shapeConfig: {
               label: false
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Workers", d => d["Number of workers"]], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Workers", d => d["Number of workers"]], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
           /> : <div></div>}
       </SectionColumns>
@@ -119,6 +120,7 @@ HouseholdIncomeFromPublicAssistance.need = [
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
   publicAssistanceData: state.data.publicAssistanceData,
   householdSnapData: state.data.householdSnapData
 });

@@ -5,6 +5,7 @@ import {nest} from "d3-collection";
 import {format} from "d3-format";
 import {BarChart, Treemap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
+import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -147,7 +148,7 @@ class SocioeconomicOutcomes extends SectionColumns {
               shapeConfig: {
                 label: false
               },
-              tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => rangeFormatter(d.Age)], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => rangeFormatter(d.Age)], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}
             /> : <div></div>}
 
@@ -160,7 +161,7 @@ class SocioeconomicOutcomes extends SectionColumns {
               label: d => `${formatEthnicityName(d.Ethnicity)} ${formatRaceName(d.Race)}`,
               time: "Year",
               title: "Population by Race and Ethnicity",
-              tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["Location", d => d.Geography]]}
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}
             /> : <div></div>}
         </SectionColumns>

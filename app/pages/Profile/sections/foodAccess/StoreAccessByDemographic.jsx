@@ -101,7 +101,7 @@ class StoreAccessByDemographic extends SectionColumns {
             },
             yConfig: {ticks: []},
             time: "Year",
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", d => ageSelected ? `${d["Age Group"]}` : `${d["Race Group"]}`], ["Low-Access Rate", d => ageSelected ? formatPercentage(d["Low-Access to Food by Age"]) : formatPercentage(d["Low-Access to Food by Race"])], ["Location", d => d.Geography]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", d => ageSelected ? `${d["Age Group"]}` : `${d["Race Group"]}`], ["Low-Access Rate", d => ageSelected ? formatPercentage(d["Low-Access to Food by Age"]) : formatPercentage(d["Low-Access to Food by Race"])], ["County", d => d.Geography]]}
           }}
           />
         </article>

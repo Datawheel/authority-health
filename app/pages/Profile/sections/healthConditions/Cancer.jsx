@@ -123,7 +123,7 @@ class Cancer extends SectionColumns {
               tickFormat: d => d
             },
             tooltipConfig: {tbody: [["Cancer Type", d => d["Cancer Site"]], ["Year", d => d.Year], ["Prevalence", d => formatPercentage(d.share)],
-              ["Occurance per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Location", d => d.MSA]]}
+              ["Occurance per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
           }}
           dataFormat={resp => {
             nest()
@@ -163,7 +163,7 @@ class Cancer extends SectionColumns {
             },
             yConfig: {tickFormat: d => d},
             tooltipConfig: {tbody: [["Cancer Type", d => d["Cancer Site"]], ["Year", d => d.Year], ["Prevalence", d => formatPercentage(d.share)],
-              ["Occurance per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Location", d => d.MSA]]}
+              ["Occurance per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
           }}
           dataFormat={resp => {
             nest()
@@ -207,7 +207,7 @@ class Cancer extends SectionColumns {
             confidenceConfig: {
               fillOpacity: 0.2
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Occurance per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Location", d => d.MSA]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Occurance per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
           }}
           dataFormat={resp => resp.data}
           />

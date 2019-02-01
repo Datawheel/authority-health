@@ -1,24 +1,21 @@
 const {Client} = require("mondrian-rest-client");
 const {CANON_LOGICLAYER_CUBE} = process.env;
 
-const metaData = require("../app/utils/stats");
-const statTopics = {};
-statTopics.healthTopics = metaData.healthTopics;
-statTopics.socialDeterminants = metaData.socialDeterminants;
+const statTopics = require("../app/utils/stats");
 
 module.exports = async function() {
   Object.entries(statTopics).forEach(statTopic => {
-    console.log("statTopic: ", statTopic);
     const client = new Client(CANON_LOGICLAYER_CUBE);
     const levels = ["County", "Place", "Zip", "Tract", "Zip Region"];
     statTopic[1].forEach(async dataObj => {
+      const cut = dataObj.hasOwnProperty("yearDimension") ? `[End Year].[End Year].[End Year].&[${dataObj.latestYear}]` : `[Year].[Year].[Year].&[${dataObj.latestYear}]`;
       const popQueries = levels
         .map(level => client.cube(dataObj.cube)
           .then(c => {
             const query = c.query
               .drilldown("Geography", level, level)
               .measure(dataObj.measure)
-              .cut(`[Year].[Year].[Year].&[${dataObj.latestYear}]`);
+              .cut(cut);
             return client.query(query, "jsonrecords");
           })
           .then(resp => resp.data.data.reduce((acc, d) => {

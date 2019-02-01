@@ -1,6 +1,7 @@
 const {Client} = require("mondrian-rest-client");
-const {CANON_LOGICLAYER_CUBE} = process.env;
+const d3 = require("d3"); 
 
+const {CANON_LOGICLAYER_CUBE} = process.env;
 const statTopics = require("../app/utils/stats");
 
 module.exports = async function() {
@@ -29,7 +30,10 @@ module.exports = async function() {
 
       const rawPops = await Promise.all(popQueries);
       const pops = rawPops.reduce((obj, d) => (obj = Object.assign(obj, d), obj), {});
+      const allValues = Object.values(pops);
+      const domain = [d3.min(allValues), 0, d3.max(allValues)];
       dataObj.data = pops;
+      dataObj.domain = domain;
     });
   });
   return statTopics;

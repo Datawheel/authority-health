@@ -2,13 +2,16 @@ const {Client} = require("mondrian-rest-client");
 const {CANON_LOGICLAYER_CUBE} = process.env;
 
 const metaData = require("../app/utils/stats");
-const statTopics = [metaData.healthTopics, metaData.socialDeterminants];
-  
+const statTopics = {};
+statTopics.healthTopics = metaData.healthTopics;
+statTopics.socialDeterminants = metaData.socialDeterminants;
+
 module.exports = async function() {
-  statTopics.forEach(statTopic => {
+  Object.entries(statTopics).forEach(statTopic => {
+    console.log("statTopic: ", statTopic);
     const client = new Client(CANON_LOGICLAYER_CUBE);
-    const levels = ["County", "Place", "Zip", "Tract"];
-    statTopic.forEach(async dataObj => {
+    const levels = ["County", "Place", "Zip", "Tract", "Zip Region"];
+    statTopic[1].forEach(async dataObj => {
       const popQueries = levels
         .map(level => client.cube(dataObj.cube)
           .then(c => {
@@ -30,7 +33,7 @@ module.exports = async function() {
       const rawPops = await Promise.all(popQueries);
       const pops = rawPops.reduce((obj, d) => (obj = Object.assign(obj, d), obj), {});
       dataObj.data = pops;
-      dataObj.data.length !== undefined ? console.log("dataObj.cube: ", dataObj.cube) : "";
     });
   });
+  return statTopics;
 };

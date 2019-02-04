@@ -1,5 +1,5 @@
 const axios = require("axios");
-const d3 = require("d3-array"); 
+const d3 = require("d3-scale");
 
 const {CANON_LOGICLAYER_CUBE} = process.env;
 
@@ -55,7 +55,7 @@ module.exports = function(app) {
       
     const groupedValues = groupBy(locationData, "level");
     const geoLevels = findGeoLevels(groupedValues);
-    // Add current location ID in at the beginning of the geoLevels array.
+    // Add current location ID at the beginning of the geoLevels array.
     geoLevels.unshift(id);
     const currentLocationMeasureData = [];
 

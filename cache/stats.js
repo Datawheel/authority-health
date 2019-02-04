@@ -1,12 +1,12 @@
-const {Client} = require("mondrian-rest-client");
-const d3 = require("d3"); 
+const {MultiClient} = require("mondrian-rest-client");
+const d3 = require("d3-array"); 
 
 const {CANON_LOGICLAYER_CUBE} = process.env;
 const statTopics = require("../app/utils/stats");
 
 module.exports = async function() {
   Object.entries(statTopics).forEach(statTopic => {
-    const client = new Client(CANON_LOGICLAYER_CUBE);
+    const client = new MultiClient(["https://ah-birch-api.datawheel.us/", "https://acs-api.datausa.io/"]);
     const levels = ["County", "Place", "Zip", "Tract", "Zip Region"];
     statTopic[1].forEach(async dataObj => {
       const cut = dataObj.hasOwnProperty("yearDimension") ? `[End Year].[End Year].[End Year].&[${dataObj.latestYear}]` : `[Year].[Year].[Year].&[${dataObj.latestYear}]`;

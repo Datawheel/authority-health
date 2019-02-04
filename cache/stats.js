@@ -6,25 +6,33 @@ const statTopics = require("../app/utils/stats");
 
 module.exports = async function() {
   Object.entries(statTopics).forEach(statTopic => {
-    const client = new MultiClient(["https://ah-birch-api.datawheel.us/", "https://acs-api.datausa.io/"]);
-    const levels = ["County", "Place", "Zip", "Tract", "Zip Region"];
+    const client = new MultiClient([CANON_LOGICLAYER_CUBE, "https://acs-api.datausa.io/"]);
     statTopic[1].forEach(async dataObj => {
       const cut = dataObj.hasOwnProperty("yearDimension") ? `[End Year].[End Year].[End Year].&[${dataObj.latestYear}]` : `[Year].[Year].[Year].&[${dataObj.latestYear}]`;
-      const popQueries = levels
+      const popQueries = dataObj.depth
         .map(level => client.cube(dataObj.cube)
           .then(c => {
-            const query = c.query
-              .drilldown("Geography", level, level)
-              .measure(dataObj.measure)
-              .cut(cut);
-            return client.query(query, "jsonrecords");
+            if (level instanceof Array) {
+              const query = c.query
+                .drilldown("Geography", level[0], level[1])
+                .measure(dataObj.measure)
+                .cut(cut);
+              return client.query(query, "jsonrecords");
+            }
+            else {
+              const query = c.query
+                .drilldown("Geography", level, level)
+                .measure(dataObj.measure)
+                .cut(cut);
+              return client.query(query, "jsonrecords");
+            }
           })
           .then(resp => resp.data.data.reduce((acc, d) => {
             acc[d[`ID ${level}`]] = d[dataObj.measure];
             return acc;
           }, {}))
           .catch(err => {
-            console.error(` 🌎  ${level} Pop Cache Error: ${err.message}`);
+            console.error(` 🌎  ${dataObj.measure} Error: ${err.message}`);
             if (err.config) console.error(err.config.url);
           }));
 

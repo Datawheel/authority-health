@@ -31,7 +31,7 @@ module.exports = async function() {
       const rawPops = await Promise.all(popQueries);
       const pops = rawPops.reduce((obj, d) => (obj = Object.assign(obj, d), obj), {});
       const allValues = Object.values(pops);
-      const domain = [d3.min(allValues), 0, d3.max(allValues)];
+      const domain = [d3.min(allValues), d3.median(allValues), d3.max(allValues)];
       dataObj.data = pops;
       dataObj.domain = domain;
     });

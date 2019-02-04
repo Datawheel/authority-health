@@ -1,6 +1,6 @@
 module.exports = {
   healthTopics: [
-    {measure: "Life Expectancy", depth: ["County", "Tract"], latestYear: "2015", cube: "NVSS - Life Expectancy", yearDimension: "End Year"},
+    {measure: "Life Expectancy", depth: [["Tract", "County"], "Tract"], latestYear: "2015", cube: "NVSS - Life Expectancy", yearDimension: "End Year"},
     {measure: "Heart Disease", depth: ["County", "Zip Region"], latestYear: "2016", cube: "MiBRFS - All Years", yearDimension: "End Year"},
     {measure: "Coronary Heart Disease", depth: ["Place", "Tract"], latestYear: "2015", cube: "500 Cities"},
     {measure: "High Blood Pressure", depth: ["Place", "Tract"], latestYear: "2015", cube: "500 Cities"},

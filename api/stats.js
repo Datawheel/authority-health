@@ -1,8 +1,7 @@
 const axios = require("axios");
+const d3 = require("d3-array"); 
 
 const {CANON_LOGICLAYER_CUBE} = process.env;
-
-const statTopics = require("../app/utils/stats");
 
 const prefixMap = {
   "050": "county",
@@ -25,9 +24,9 @@ function groupBy(objectArray, property) {
 
 function findGeoLevels(groupedObj) {
   const result = [];
-  groupedObj.hasOwnProperty("zip") ? result.push({zip: groupedObj.zip.sort((a, b) => b.overlap_size - a.overlap_size)[0].geoid}) : "";
-  groupedObj.hasOwnProperty("place") ? result.push({place: groupedObj.place.sort((a, b) => b.overlap_size - a.overlap_size)[0].geoid}) : "";
-  groupedObj.hasOwnProperty("county") ? result.push({county: groupedObj.county.sort((a, b) => b.overlap_size - a.overlap_size)[0].geoid}) : "";
+  groupedObj.hasOwnProperty("zip") ? result.push(groupedObj.zip.sort((a, b) => b.overlap_size - a.overlap_size)[0].geoid) : "";
+  groupedObj.hasOwnProperty("place") ? result.push(groupedObj.place.sort((a, b) => b.overlap_size - a.overlap_size)[0].geoid) : "";
+  groupedObj.hasOwnProperty("county") ? result.push(groupedObj.county.sort((a, b) => b.overlap_size - a.overlap_size)[0].geoid) : "";
   return result;
 }
 
@@ -56,7 +55,25 @@ module.exports = function(app) {
       
     const groupedValues = groupBy(locationData, "level");
     const geoLevels = findGeoLevels(groupedValues);
-    console.log("geoLevels: ", geoLevels);
-    res.json(locationData);
+    // Add current location ID in at the beginning of the geoLevels array.
+    geoLevels.unshift(id);
+    const currentLocationMeasureData = [];
+
+    // Check if measure data is available for locations in geoLevels array and set their rank.
+    Object.entries(cache.stats).forEach(statTopic => {
+      statTopic[1].forEach(d => {
+        const matchId = geoLevels.find(parentId => d.data.hasOwnProperty(parentId));
+        const value = d.data[matchId];
+        if (value !== undefined) {
+          const scale = d3.scaleLinear()
+            .domain(d.domain)
+            .range([-1, 0, 1]);
+          currentLocationMeasureData.push({measure: d.measure, rank: scale(value)});
+        }
+      });
+    });
+    // console.log("currentLocationMeasureData: ", currentLocationMeasureData);
+    const sortedCurrentLocationData = currentLocationMeasureData.sort((a, b) => Math.abs(b.rank) - Math.abs(a.rank));
+    res.json(sortedCurrentLocationData);
   });
 };

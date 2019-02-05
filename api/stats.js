@@ -81,7 +81,7 @@ module.exports = function(app) {
           const statData = {
             measure: d.measure, 
             rank: scale(value),
-            value,
+            value: formatters.hasOwnProperty(d.measure) ? formatters[d.measure](formatAbbreviate(value)) : formatAbbreviate(value),
             years: d.cube.startsWith("acs_yg") ? 5 : cubeYearData[d.cube].years.length, // if its a shared acs cube (which is not in Authority Health), then set the years to 5.
             latestYear: d.latestYear,
             yearDimension: d.hasOwnProperty("yearDimension") ? true : false

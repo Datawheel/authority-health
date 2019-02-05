@@ -55,9 +55,13 @@ module.exports = function(app) {
       
     const groupedValues = groupBy(locationData, "level");
     const geoLevels = findGeoLevels(groupedValues);
+
     // Add current location ID at the beginning of the geoLevels array.
     geoLevels.unshift(id);
-    const currentLocationMeasureData = [];
+
+    const currentLocationMeasureData = {};
+    const healthTopics = [];
+    const socialDeterminants = [];
 
     // Check if measure data is available for locations in geoLevels array and set their rank.
     Object.entries(cache.stats).forEach(statTopic => {
@@ -68,12 +72,19 @@ module.exports = function(app) {
           const scale = d3.scaleLinear()
             .domain(d.domain)
             .range([-1, 0, 1]);
-          currentLocationMeasureData.push({measure: d.measure, rank: scale(value)});
+
+          statTopic[0] === "healthTopics" ? healthTopics.push({measure: d.measure, rank: scale(value), value}) : socialDeterminants.push({measure: d.measure, rank: scale(value), value});
         }
       });
     });
-    // console.log("currentLocationMeasureData: ", currentLocationMeasureData);
-    const sortedCurrentLocationData = currentLocationMeasureData.sort((a, b) => Math.abs(b.rank) - Math.abs(a.rank));
-    res.json(sortedCurrentLocationData);
+
+    // Sort and slice each topStat data and add it to the currentLocationMeasureData.
+    currentLocationMeasureData.healthTopics = healthTopics.sort((a, b) => Math.abs(b.rank) - Math.abs(a.rank));
+    currentLocationMeasureData.healthTopics = currentLocationMeasureData.healthTopics.length > 3 ? currentLocationMeasureData.healthTopics.slice(0, 3) : currentLocationMeasureData.healthTopics;
+
+    currentLocationMeasureData.socialDeterminants = socialDeterminants.sort((a, b) => Math.abs(b.rank) - Math.abs(a.rank)).slice(0, 3);
+    currentLocationMeasureData.socialDeterminants = currentLocationMeasureData.socialDeterminants.length > 3 ? currentLocationMeasureData.socialDeterminants.slice(0, 3) : currentLocationMeasureData.socialDeterminants;
+    
+    res.json(currentLocationMeasureData);
   });
 };

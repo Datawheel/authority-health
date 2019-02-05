@@ -1,5 +1,7 @@
 const axios = require("axios");
 const d3 = require("d3-scale");
+const {formatAbbreviate} = require("d3plus-format");
+const formatters = require("../app/utils/formatters");
 
 const {CANON_LOGICLAYER_CUBE} = process.env;
 
@@ -63,6 +65,9 @@ module.exports = function(app) {
     const healthTopics = [];
     const socialDeterminants = [];
 
+    // cache.cube has all the measure and years data. To look at the data go to localhost /api/cubes url.
+    const cubeYearData = cache.cube.years;
+
     // Check if measure data is available for locations in geoLevels array and set their rank.
     Object.entries(cache.stats).forEach(statTopic => {
       statTopic[1].forEach(d => {
@@ -73,7 +78,15 @@ module.exports = function(app) {
             .domain(d.domain)
             .range([-1, 0, 1]);
 
-          statTopic[0] === "healthTopics" ? healthTopics.push({measure: d.measure, rank: scale(value), value}) : socialDeterminants.push({measure: d.measure, rank: scale(value), value});
+          const statData = {
+            measure: d.measure, 
+            rank: scale(value),
+            value,
+            years: d.cube.startsWith("acs_yg") ? 5 : cubeYearData[d.cube].years.length, // if its a shared acs cube (which is not in Authority Health), then set the years to 5.
+            latestYear: d.latestYear,
+            yearDimension: d.hasOwnProperty("yearDimension") ? true : false
+          };
+          statTopic[0] === "healthTopics" ? healthTopics.push(statData) : socialDeterminants.push(statData);
         }
       });
     });

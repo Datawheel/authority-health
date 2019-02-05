@@ -23,6 +23,11 @@ module.exports = {
     {measure: "Health Centers", depth: ["Zip"], latestYear: "2014", cube: "UDS Mapper - Heatlh Centers"},
     {measure: "Health Center Penetration", depth: ["Zip"], latestYear: "2014", cube: "UDS Mapper - Heatlh Centers"},
     {measure: "Low-Income Health Center Penetration", depth: ["Zip"], latestYear: "2014", cube: "UDS Mapper - Heatlh Centers"},
-    {measure: "Uninsured Health Center Penetration", depth: ["Zip"], latestYear: "2014", cube: "UDS Mapper - Heatlh Centers"}
+    {measure: "Uninsured Health Center Penetration", depth: ["Zip"], latestYear: "2014", cube: "UDS Mapper - Heatlh Centers"},
+    {measure: "Socioeconomic Ranking", depth: [["Tract", "County"], "Tract"], latestYear: "2016", cube: "CDC - SVI"},
+    {measure: "Household Composition and Disability Ranking", depth: [["Tract", "County"], "Tract"], latestYear: "2016", cube: "CDC - SVI"},
+    {measure: "Minority Status and Language Ranking", depth: [["Tract", "County"], "Tract"], latestYear: "2016", cube: "CDC - SVI"},
+    {measure: "Housing and Transportation Ranking", depth: [["Tract", "County"], "Tract"], latestYear: "2016", cube: "CDC - SVI"},
+    {measure: "Overall Ranking", depth: [["Tract", "County"], "Tract"], latestYear: "2016", cube: "CDC - SVI"}
   ]
 };

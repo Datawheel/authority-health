@@ -92,19 +92,12 @@ class ObesityAndDiabetes extends SectionColumns {
 
           {/* Show top stats for the dropdown selected. */}
           {isBMIWeightedDataValueSelected
-            ? [isHealthyWeightSelected
-              ? <Stat
-                title={"Location with highest share"}
-                year={topDropdownWeightedData.Year}
-                value={topDropdownWeightedData.County}
-                qualifier={formatPercentage(topDropdownWeightedData[dropdownValue])}
-              />
-              : <Stat
-                title={"Location with highest prevalence"}
-                year={topDropdownWeightedData.Year}
-                value={topDropdownWeightedData.County}
-                qualifier={formatPercentage(topDropdownWeightedData[dropdownValue])}
-              />]
+            ? <Stat
+              title={isHealthyWeightSelected ? "Location with highest share" : "Location with highest prevalence"}
+              year={topDropdownWeightedData["End Year"]}
+              value={topDropdownWeightedData["Zip Region"]}
+              qualifier={formatPercentage(topDropdownWeightedData[dropdownValue])}
+            />
             : <Stat
               title={"Location with highest prevalence"}
               year={topDropdownValueTract.Year}
@@ -127,7 +120,7 @@ class ObesityAndDiabetes extends SectionColumns {
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           {isBMIWeightedDataValueSelected
-            ? <p>In {topDropdownWeightedData["End Year"]}, {topDropdownWeightedData.County} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownWeightedData[dropdownValue])}) out of all the counties in Michigan.</p>
+            ? <p>In {topDropdownWeightedData["End Year"]}, {topDropdownWeightedData["Zip Region"]} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownWeightedData[dropdownValue])}) out of all zip regions in Wayne County.</p>
             : <p>In {topDropdownValueTract.Year}, {topDropdownValueTract.Tract} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownValueTract[dropdownValue])}) out of all the tracts in Wayne County.</p>
           }
 
@@ -136,8 +129,8 @@ class ObesityAndDiabetes extends SectionColumns {
           The chart here shows male and female prevalence in {topMaleData.Geography}.</p>
 
           {isBMIWeightedDataValueSelected
-            ? <p>The map here shows the {dropdownValue.toLowerCase()} for all counties in Michigan.</p>
-            : <p>The map here shows the {dropdownValue.toLowerCase()} for all tracts in Wayne County, MI.</p>
+            ? <p>The map here shows the {dropdownValue.toLowerCase()} for all zip regions in Wayne County.</p>
+            : <p>The map here shows the {dropdownValue.toLowerCase()} for all tracts in Wayne County.</p>
           }
 
           {/* Draw a BarChart to show data for Obesity Rate by Sex. */}
@@ -168,17 +161,18 @@ class ObesityAndDiabetes extends SectionColumns {
         {isBMIWeightedDataValueSelected
           ? <Geomap config={{
             data: BMIWeightedData.data,
-            groupBy: "ID County",
+            groupBy: "ID Zip Region",
             colorScale: dropdownValue,
             colorScaleConfig: {
               axisConfig: {tickFormat: d => formatPercentage(d)}
             },
-            label: d => d.County,
+            label: d => d["Zip Region"],
             height: 400,
             time: "End Year",
             tooltipConfig: isHealthyWeightSelected ? {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Share", d => `${formatPercentage(d[dropdownValue])}`]]} : {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue])}`]]},
-            topojson: "/topojson/county.json",
-            topojsonFilter: d => d.id.startsWith("05000US26")
+            topojson: "/topojson/zipregions.json",
+            topojsonId: d => d.properties.REGION,
+            topojsonFilter: () => true
           }}
           />
           : <Geomap config={{
@@ -208,7 +202,7 @@ ObesityAndDiabetes.defaultProps = {
 
 ObesityAndDiabetes.need = [
   fetchData("obesityAndDibetesDataValue", "/api/data?measures=Obesity,Diabetes&drilldowns=Tract&Year=all"),
-  fetchData("BMIWeightedData", "/api/data?measures=BMI Healthy Weight,BMI Obese,BMI Overweight,BMI Underweight&drilldowns=End Year,County"),
+  fetchData("BMIWeightedData", "/api/data?measures=BMI Healthy Weight,BMI Obese,BMI Overweight,BMI Underweight&drilldowns=End Year,Zip Region"),
   fetchData("obesityPrevalenceBySex", "/api/data?measures=Age-Adjusted Obesity Prevalence&drilldowns=Sex&Geography=<id>&Year=all", d => d.data),
   fetchData("diabetesPrevalenceBySex", "/api/data?measures=Age-Adjusted Obesity Prevalence&drilldowns=Sex&Geography=<id>&Year=all", d => d.data)
 ];

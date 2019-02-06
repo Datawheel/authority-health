@@ -50,7 +50,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
       .forEach(group => {
         group.key >= healthConditionWeightedData.data[0]["End Year"] ? Object.assign(recentYearWeightedData, group) : {};
       });
-    const topDropdownWeightedData = recentYearWeightedData.values[0];
+    const topDropdownWeightedData = recentYearWeightedData.values.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
 
     return (
       <SectionColumns>
@@ -66,11 +66,11 @@ class ConditionsAndChronicDiseases extends SectionColumns {
           {/* Show top stats for the dropdown selected. */}
           { isHealthConditionWeightedValueSelected
             ? <div>
-              <div className="disclaimer">Data only available for county.</div>
+              <div className="disclaimer">Data only available for zip regions.</div>
               <Stat
                 title={"Location with highest prevalence"}
                 year={topDropdownWeightedData["End Year"]}
-                value={topDropdownWeightedData.County}
+                value={topDropdownWeightedData["Zip Region"]}
                 qualifier={formatPercentage(topDropdownWeightedData[dropdownValue])}
               />
             </div>
@@ -87,12 +87,12 @@ class ConditionsAndChronicDiseases extends SectionColumns {
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           { isHealthConditionWeightedValueSelected
-            ? <p>In {topDropdownWeightedData["End Year"]}, {topDropdownWeightedData.County} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownWeightedData[dropdownValue])}) out of all the counties in Michigan.</p>
+            ? <p>In {topDropdownWeightedData["End Year"]}, {topDropdownWeightedData["Zip Region"]} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownWeightedData[dropdownValue])}) out of all zip regions in Wayne County.</p>
             : <p>In {topDropdownValueTract.Year}, {topDropdownValueTract.Tract} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownValueTract[dropdownValue])}) out of all the tracts in Wayne County.</p>
           }
           { isHealthConditionWeightedValueSelected
-            ? <p>The map here shows the {dropdownValue.toLowerCase()} for all counties in Michigan.</p>
-            : <p>The map here shows the {dropdownValue.toLowerCase()} for all tracts in Wayne County.</p>
+            ? <p>The map here shows the {dropdownValue.toLowerCase()} for zip regions in Wayne County.</p>
+            : <p>The map here shows the {dropdownValue.toLowerCase()} for tracts in Wayne County.</p>
           }
         </article>
 
@@ -100,17 +100,18 @@ class ConditionsAndChronicDiseases extends SectionColumns {
         {isHealthConditionWeightedValueSelected
           ? <Geomap config={{
             data: healthConditionWeightedData.data,
-            groupBy: "ID County",
+            groupBy: "ID Zip Region",
             colorScale: dropdownValue,
             colorScaleConfig: {
               axisConfig: {tickFormat: d => formatPercentage(d)}
             },
-            label: d => d.County,
+            label: d => d["Zip Region"],
             height: 400,
             time: "End Year",
             tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue])}`]]},
-            topojson: "/topojson/county.json",
-            topojsonFilter: d => d.id.startsWith("05000US26")
+            topojson: "/topojson/zipregions.json",
+            topojsonId: d => d.properties.REGION,
+            topojsonFilter: () => true
           }}
           />
           : <Geomap config={{
@@ -140,7 +141,7 @@ ConditionsAndChronicDiseases.defaultProps = {
 
 ConditionsAndChronicDiseases.need = [
   fetchData("healthConditionData", "/api/data?measures=Arthritis,COPD,Chronic Kidney Disease,Coronary Heart Disease,Current Asthma,High Blood Pressure,High Cholesterol,Mental Health,Stroke,Taking Blood Pressure Medication,Teeth Loss,Sleep Less Than 7 Hours&drilldowns=Tract&Year=all"),
-  fetchData("healthConditionWeightedData", "/api/data?measures=Cardiovascular Disease,Ever Depressive,Ever Heart Attack,Heart Disease,HIV Tested,Poor Mental Health 14 Or More Days,Gen Health Fair Or Poor&drilldowns=End Year,County")
+  fetchData("healthConditionWeightedData", "/api/data?measures=Cardiovascular Disease,Ever Depressive,Ever Heart Attack,Heart Disease,HIV Tested,Poor Mental Health 14 Or More Days,Gen Health Fair Or Poor&drilldowns=Zip Region&Year=all")
 ];
 
 const mapStateToProps = state => ({

@@ -42,15 +42,13 @@ class RiskyBehaviors extends SectionColumns {
       .forEach(group => {
         group.key >= secondHandSmokeAndMonthlyAlcohol.data[0]["End Year"] ? Object.assign(recentYearSecondHandSmokeAndMonthlyAlcoholData, group) : {};
       });
-    const topSecondHandSmokeAndMonthlyAlcoholData = recentYearSecondHandSmokeAndMonthlyAlcoholData.values[0];
+    const topSecondHandSmokeAndMonthlyAlcoholData = recentYearSecondHandSmokeAndMonthlyAlcoholData.values.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
 
     const allTractSmokingData = allTractSmokingDrinkingData.data.slice(0);
-    allTractSmokingData.sort((a, b) => b[dropdownValue] - a[dropdownValue]);
-    const topTractSmokingData = allTractSmokingData[0];
+    const topTractSmokingData = allTractSmokingData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
 
     const allTractDrinkingData = allTractSmokingDrinkingData.data.slice(0);
-    allTractDrinkingData.sort((a, b) => b[dropdownValue] - a[dropdownValue]);
-    const topTractDrinkingData = allTractDrinkingData[0];
+    const topTractDrinkingData = allTractDrinkingData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
 
     let topTractNum = topTractSmokingData.Tract;
     let year = topTractSmokingData.Year;
@@ -84,8 +82,8 @@ class RiskyBehaviors extends SectionColumns {
 
           {isSecondHandSmokeOrMonthlyAlcoholSelected
             ? <Stat
-              title={"County with highest prevalence"}
-              value={topSecondHandSmokeAndMonthlyAlcoholData.County}
+              title={"Zip region with highest prevalence"}
+              value={topSecondHandSmokeAndMonthlyAlcoholData["Zip Region"]}
               year={topSecondHandSmokeAndMonthlyAlcoholData["End Year"]}
               qualifier={formatPercentage(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue])}
             />
@@ -98,8 +96,8 @@ class RiskyBehaviors extends SectionColumns {
           }
           {isSecondHandSmokeOrMonthlyAlcoholSelected
             ? <div>
-              <p>In {topSecondHandSmokeAndMonthlyAlcoholData["End Year"]}, {topSecondHandSmokeAndMonthlyAlcoholData.County} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatAbbreviate(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue])}%).</p>
-              <p>The map here shows the {dropdownValue.toLowerCase()} for Wayne County.</p>
+              <p>In {topSecondHandSmokeAndMonthlyAlcoholData["End Year"]}, {topSecondHandSmokeAndMonthlyAlcoholData["Zip Region"]} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatAbbreviate(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue])}%).</p>
+              <p>The map here shows the {dropdownValue.toLowerCase()} for zip regions in Wayne County.</p>
             </div>
             : <div>
               <p>In {year}, {topTractNum} had the highest prevalence of {dropdownValue.toLowerCase()} ({topTractRate}%) out of all Tracts in Wayne County.</p>
@@ -144,17 +142,18 @@ class RiskyBehaviors extends SectionColumns {
         {isSecondHandSmokeOrMonthlyAlcoholSelected
           ? <Geomap config={{
             data: secondHandSmokeAndMonthlyAlcohol.data,
-            groupBy: "ID County",
+            groupBy: "ID Zip Region",
             colorScale: dropdownValue,
             colorScaleConfig: {
               axisConfig: {tickFormat: d => formatPercentage(d)}
             },
-            label: d => d.County,
+            label: d => d["Zip Region"],
             height: 400,
             time: "End Year",
             tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Behavior", `${dropdownValue}`], ["Prevalence", d => formatPercentage(d[dropdownValue])]]},
-            topojson: "/topojson/county.json",
-            topojsonFilter: d => d.id.startsWith("05000US26")
+            topojson: "/topojson/zipregions.json",
+            topojsonId: d => d.properties.REGION,
+            topojsonFilter: () => true
           }}
           />
           : <Geomap config={{
@@ -184,8 +183,8 @@ RiskyBehaviors.defaultProps = {
 };
 
 RiskyBehaviors.need = [
-  fetchData("allTractSmokingDrinkingData", "/api/data?measures=Current Smoking,Binge Drinking&drilldowns=Tract&Year=latest"),
-  fetchData("secondHandSmokeAndMonthlyAlcohol", "/api/data?measures=Secondhand Smoke Exposure,Monthly Alcohol Consumption&drilldowns=End Year,County")
+  fetchData("allTractSmokingDrinkingData", "/api/data?measures=Current Smoking,Binge Drinking&drilldowns=Tract&Year=all"),
+  fetchData("secondHandSmokeAndMonthlyAlcohol", "/api/data?measures=Secondhand Smoke Exposure,Monthly Alcohol Consumption&drilldowns=Zip Region&Year=all")
 ];
 
 const mapStateToProps = state => ({

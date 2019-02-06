@@ -45,7 +45,7 @@ class PreventiveCare extends SectionColumns {
       .forEach(group => {
         group.key >= preventiveCareWeightedData.data[0]["End Year"] ? Object.assign(recentYearWeightedData, group) : {};
       });
-    const topDropdownWeightedData = recentYearWeightedData.values[0];
+    const topDropdownWeightedData = recentYearWeightedData.values.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
 
     const topDropdownValueTract = preventiveCareData.data.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
 
@@ -53,7 +53,7 @@ class PreventiveCare extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Preventive Care</SectionTitle>
         <article>
-          {isPreventativeCareWeightedValueSelected ? <div className="disclaimer">Data only available at the county level.</div> : <div className="disclaimer">Data only available at the tract level.</div>}
+          {isPreventativeCareWeightedValueSelected ? <div className="disclaimer">Data only available for zip regions.</div> : <div className="disclaimer">Data only available at the tract level.</div>}
           {/* Create a dropdown for different types of preventive care. */}
           <div className="pt-select pt-fill">
             <select onChange={this.handleChange}>
@@ -65,8 +65,8 @@ class PreventiveCare extends SectionColumns {
           {isPreventativeCareWeightedValueSelected
             ? <Stat
               title={"Location with highest share"}
-              year={topDropdownWeightedData.Year}
-              value={topDropdownWeightedData.County}
+              year={topDropdownWeightedData["End Year"]}
+              value={topDropdownWeightedData["Zip Region"]}
               qualifier={formatPercentage(topDropdownWeightedData[dropdownValue])}
             />
             : <Stat
@@ -79,12 +79,12 @@ class PreventiveCare extends SectionColumns {
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           {isPreventativeCareWeightedValueSelected
-            ? <p>In {topDropdownWeightedData["End Year"]}, {topDropdownWeightedData.County} had the highest share of {dropdownValue} ({formatPercentage(topDropdownWeightedData[dropdownValue])}) out of all the counties in Michigan.</p>
+            ? <p>In {topDropdownWeightedData["End Year"]}, {topDropdownWeightedData["Zip Region"]} had the highest share of {dropdownValue} ({formatPercentage(topDropdownWeightedData[dropdownValue])}) out of all zip regions in Wayne County.</p>
             : <p>In {topDropdownValueTract.Year}, {topDropdownValueTract.Tract} had the highest share of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownValueTract[dropdownValue])}) out of all the tracts in Wayne County.</p>
           }
           {isPreventativeCareWeightedValueSelected
-            ? <p>The map here shows the {dropdownValue.toLowerCase()} for all counties in Michigan.</p>
-            : <p>The map here shows the {dropdownValue.toLowerCase()} for all tracts in Wayne County, MI.</p>
+            ? <p>The map here shows the {dropdownValue.toLowerCase()} for all zip regions in Wayne County.</p>
+            : <p>The map here shows the {dropdownValue.toLowerCase()} for all tracts in Wayne County.</p>
           }
         </article>
 
@@ -92,17 +92,18 @@ class PreventiveCare extends SectionColumns {
         {isPreventativeCareWeightedValueSelected
           ? <Geomap config={{
             data: preventiveCareWeightedData.data,
-            groupBy: "ID County",
+            groupBy: "ID Zip Region",
             colorScale: dropdownValue,
             colorScaleConfig: {
               axisConfig: {tickFormat: d => formatPercentage(d)}
             },
-            label: d => d.County,
+            label: d => d["Zip Region"],
             height: 400,
             time: "End Year",
             tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Preventive Care", `${dropdownValue}`], ["Share", d => `${formatPercentage(d[dropdownValue])}`]]},
-            topojson: "/topojson/county.json",
-            topojsonFilter: d => d.id.startsWith("05000US26")
+            topojson: "/topojson/zipregions.json",
+            topojsonId: d => d.properties.REGION,
+            topojsonFilter: () => true
           }}
           />
           : <Geomap config={{
@@ -131,7 +132,7 @@ PreventiveCare.defaultProps = {
 
 PreventiveCare.need = [
   fetchData("preventiveCareData", "/api/data?measures=Annual Checkup,Core preventive services for older men,Core preventive services for older women,Dental Visit,Colorectal Cancer Screening,Pap Smear Test,Mammography,Cholesterol Screening&drilldowns=Tract&Year=all"),
-  fetchData("preventiveCareWeightedData", "/api/data?measures=Had Flu Vaccine,Had Pneumonia Vaccine,Had Routine Checkup Last Year,FOBT or Endoscopy&drilldowns=End Year,County")
+  fetchData("preventiveCareWeightedData", "/api/data?measures=Had Flu Vaccine,Had Pneumonia Vaccine,Had Routine Checkup Last Year,FOBT or Endoscopy&drilldowns=Zip Region&Year=all")
 ];
 
 const mapStateToProps = state => ({

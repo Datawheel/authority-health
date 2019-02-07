@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {translate} from "react-i18next";
 import {NonIdealState, ProgressBar} from "@blueprintjs/core";
 import "./Loading.css";
 
@@ -10,16 +9,16 @@ import "./Loading.css";
 */
 class Loading extends Component {
   render() {
-    const {progress, t, total} = this.props;
+    const {progress, total} = this.props;
     return <NonIdealState
-      className="Loading"
-      title={ t("Loading.title") }
-      description={ t("Loading.description", {progress, total}) }
-      visual={<ProgressBar value={progress / total} />} />;
+      className="loading"
+      title="Please Wait"
+      description={ total ? `Loading ${progress} of ${total} Datasets` : undefined }
+      visual={ total ? <ProgressBar value={progress / total} /> : undefined } />;
   }
 }
 
-export default translate()(connect(state => ({
+export default connect(state => ({
   total: state.loadingProgress.requests,
   progress: state.loadingProgress.fulfilled
-}))(Loading));
+}))(Loading);

@@ -13,7 +13,9 @@ export default class App extends Component {
   }
 
   render() {
-    const {children} = this.props;
+    const {children, router} = this.props;
+
+    const showFooter = !["charts"].includes(router.location.pathname);
 
     return (
       <div className="outer-container">
@@ -21,7 +23,7 @@ export default class App extends Component {
         <main className="main-container" role="main">
           { children }
         </main>
-        <Footer />
+        { showFooter && <Footer /> }
       </div>
     );
   }

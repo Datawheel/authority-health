@@ -8,6 +8,9 @@
   right: 0;
   /* keep in front */
   z-index: 20;
+  &.dark {
+    background: var(--brand-dark);
+  }
 }
 
 .main-nav-inner {

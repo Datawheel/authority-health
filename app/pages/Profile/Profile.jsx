@@ -2,13 +2,10 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Icon} from "@blueprintjs/core";
 import {fetchData, TopicTitle} from "@datawheel/canon-core";
-
 import ProfileHeader from "./components/ProfileHeader";
 import "./Profile.css";
 
 import Introduction from "./sections/about/Introduction";
-import SocioeconomicOutcomes from "./sections/about/SocioeconomicOutcomes";
-import HealthOutcomes from "./sections/about/HealthOutcomes";
 import Insecurity from "./sections/foodAccess/Insecurity";
 import FoodAvailability from "./sections/foodAccess/FoodAvailability";
 import StoreAccessByDemographic from "./sections/foodAccess/StoreAccessByDemographic";
@@ -66,16 +63,8 @@ class Profile extends Component {
           id={id}
         />
 
-        <TopicTitle slug="about">
-          <div className="section-container">
-            <Icon iconName="info-sign" />
-            About
-          </div>
-        </TopicTitle>
         <div className="section-container">
           <Introduction />
-          <SocioeconomicOutcomes />
-          <HealthOutcomes />
         </div>
 
         <TopicTitle slug="access-to-care">
@@ -204,8 +193,6 @@ class Profile extends Component {
 
 Profile.need = [
   Introduction,
-  SocioeconomicOutcomes,
-  HealthOutcomes,
   Insecurity,
   FoodAvailability,
   StoreAccessByDemographic,

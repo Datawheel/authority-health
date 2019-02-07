@@ -140,7 +140,7 @@ module.exports = function(app) {
     const locationData = await axios.get(`${CANON_LOGICLAYER_CUBE}/geoservice-api/relations/intersects/${id}?targetLevels=${targetLevels}&overlapSize=true`)
       .then(resp => resp.data)
       .catch(err => console.log(err));
-    
+
     const groupedValues = groupBy(locationData, "level");
     // Select top most parent from multiple same level parents with max overlap_size.
     const geoLevels = findParentGeoLevels(groupedValues);
@@ -186,7 +186,9 @@ module.exports = function(app) {
 
     currentLocationMeasureData.socialDeterminants = socialDeterminants.sort((a, b) => Math.abs(b.rank) - Math.abs(a.rank)).slice(0, 3);
     currentLocationMeasureData.socialDeterminants = currentLocationMeasureData.socialDeterminants.length > 3 ? currentLocationMeasureData.socialDeterminants.slice(0, 3) : currentLocationMeasureData.socialDeterminants;
-    
+
+    currentLocationMeasureData.total = healthTopics.length + socialDeterminants.length;
+
     res.json(currentLocationMeasureData);
   });
 };

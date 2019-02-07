@@ -1,3 +1,5 @@
+const title = "Authority Health Data Portal";
+
 export default {
   link: [
     {rel: "icon", href: "images/favicon.ico"}
@@ -10,7 +12,7 @@ export default {
     {name: "mobile-web-app-capable", content: "yes"},
     {name: "apple-mobile-web-app-capable", content: "yes"},
     {name: "apple-mobile-web-app-status-bar-style", content: "black"},
-    {name: "apple-mobile-web-app-title", content: "authority-health"}
+    {name: "apple-mobile-web-app-title", content: title}
   ],
-  title: "authority-health"
+  title
 };

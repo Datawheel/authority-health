@@ -1,0 +1,199 @@
+.vizbuilder {
+  & .area-sidebar {
+    height: calc(100vh - var(--home-nav-height));
+    margin-top: var(--home-nav-height);
+    overflow-y: scroll;
+  }
+  & .area-chart {
+    height: calc(100vh - var(--home-nav-height));
+    margin-top: var(--home-nav-height);
+  }
+  & .area-sidebar {
+    & .label {
+      font-size: 10px;
+      margin-bottom: 5px;
+    }
+    & .select-target-wrapper, & .select-wrapper {
+      border: 1px solid #bbb !important;
+      width: 100%;
+      & .select-option {
+        padding: 4px 9px;
+      }
+    }
+    & .select-option {
+      font-size: 13px;
+      & .dims {
+        & .pt-tag {
+          font-size: 10px;
+          margin: 1px 2px 0 0;
+          opacity: 0.5;
+          padding: 0px 3px 1px;
+        }
+      }
+    }
+    & .select-measure {
+      & .pt-popover-content {
+        max-width: 269px;
+        padding: 0;
+        & .select-popover-content {
+          min-width: 269px;
+          & .deeplist-wrapper {
+            margin-top: 0;
+          }
+          & .deeplist-header {
+            & .deeplist-title {
+              padding: 0;
+              & .topic  {
+                color: var(--black);
+                font-size: 14px;
+                padding: 7px 7px 0;
+                &:last-child {
+                  padding-bottom: 7px;
+                }
+              }
+              & .subtopic {
+                padding: 0 7px 7px;
+              }
+            }
+            & .pt-button {
+              margin-right: 5px;
+              &:before {
+                font-size: 14px;
+                margin-right: 5px;
+              }
+              &:hover {
+                opacity: 1;
+              }
+            }
+          }
+        }
+      }
+    }
+    & .grouping-items, & .filter-items {
+      & .pt-popover-content {
+        max-width: 248px;
+        padding: 0;
+        & .select-popover-content {
+          min-width: 248px;
+        }
+        & input {
+          border-radius: 0;
+        }
+        & .padded {
+          padding-left: 15px;
+        }
+        & .select-label {
+          display: inline-block;
+          padding: 3px 5px;
+        }
+      }
+      & .grouping-item, & .filter-item {
+        background-color: white;
+        border: 1px solid #bbb;
+        font-size: 13px;
+        padding: 10px;
+        &.editing {
+          & .grouping-members {
+            & .select-member {
+              background-color: transparent;
+              border-radius: 0;
+              margin: 0;
+              padding: 0;
+              width: 100%;
+              & > span {
+                width: 100%;
+              }
+              & .pt-tag-input {
+                border: 0;
+                border-radius: 0;
+                & .pt-input-ghost {
+                  font-size: 13px;
+                  margin-bottom: 3px;
+                  padding: 0 8px;
+                }
+              }
+            }
+          }
+        }
+        &:not(.editing) {
+          & .grouping-members {
+            & > span {
+              background-color: #eee;
+              border-radius: 3px;
+              display: inline-block;
+              font-size: 12px;
+              font-weight: 800;
+              margin: 5px 5px 0 0;
+              padding: 2px 5px 3px;
+            }
+            & .select-member {
+              background-color: transparent;
+              border-radius: 0;
+              margin: 0;
+              padding: 0;
+              width: 100%;
+            }
+          }
+        }
+        & .filter-name, & .filter-operator, & .filter-value {
+          display: inline-block;
+          font-size: 13px;
+          margin-right: 0;
+          margin-bottom: 3px;
+          text-transform: none;
+        }
+        & .filter-operator {
+          text-transform: lowercase;
+        }
+        & .filter-value {
+          background-color: #eee;
+          border-radius: 3px;
+          display: inline-block;
+          font-size: 12px;
+          font-weight: 800;
+          padding: 2px 5px 3px;
+        }
+        & .pt-numeric-input {
+          & input, & .pt-button-group {
+            border-radius: 0;
+            height: 35px;
+          }
+          & .pt-button-group {
+            height: 35px;
+            & button {
+              border-radius: 0;
+              flex: 1;
+            }
+          }
+        }
+        & .actions {
+          margin-top: 5px;
+        }
+      }
+    }
+    & .ranking {
+      & ol {
+        font-size: 12px;
+        line-height: 16px;
+        margin-bottom: 20px;
+        padding-left: 30px;
+        width: 100%;
+        & .ranking-item {
+          padding: 2px 5px;
+          & .item-value {
+            font-weight: 500;
+          }
+        }
+      }
+    }
+  }
+  & .area-chart {
+    padding: 25px 25px 25px 0;
+    & .wrapper {
+      padding: 0;
+      & .chart-card {
+        min-width: 400px;
+      }
+    }
+  }
+}

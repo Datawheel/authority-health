@@ -19,7 +19,7 @@ class ProfileTile extends Component {
       <div className={`profile-tile ${classes || ""}`}>
         <Link
           className="cover-link"
-          to={item.url}
+          to={`/profile/${item.id}`}
           title={item.name}
           aria-labelledby={labelId}
         />

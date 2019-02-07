@@ -11,7 +11,8 @@
     "locales": "canon-locales",
     "setup": "canon-setup",
     "start": "canon-start",
-    "release": "canon-release"
+    "release": "canon-release",
+    "topojson": "node scripts/topojson.js"
   },
   "repository": {
     "type": "git",
@@ -26,8 +27,8 @@
   "dependencies": {
     "@blueprintjs/labs": "^0.14.4",
     "@datawheel/canon-core": "^0.16.19",
-    "@datawheel/canon-logiclayer": "^0.3.8",
-    "@datawheel/canon-vizbuilder": "^0.1.19",
+    "@datawheel/canon-logiclayer": "^0.3.9",
+    "@datawheel/canon-vizbuilder": "^0.1.26",
     "d3plus-format": "^0.1.4",
     "flickr-sdk": "^3.8.0",
     "google-spreadsheet": "^2.0.7",

@@ -105,7 +105,7 @@ function findParentGeoLevels(groupedObj) {
   // If groupedObj has zip level data, then check for the zip region as well.
   if (groupedObj.hasOwnProperty("zip")) {
     const topZipLevel = groupedObj.zip.sort((a, b) => b.overlap_size - a.overlap_size)[0];
-    // Push zip ID the result array.
+    // Push zip ID to the result array.
     result.push(topZipLevel.geoid);
     // Push zip region ID to the result array if the topZipLevel is in the regionLookup.
     regionLookup.hasOwnProperty(topZipLevel.name) ? result.push(`ZRXXXUS${regionLookup[topZipLevel.name]}`) : "";

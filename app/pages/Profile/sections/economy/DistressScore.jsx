@@ -28,7 +28,7 @@ class DistressScore extends SectionColumns {
             qualifier={`${formatAbbreviate(topDistressScoreData["Distress Score"])} percentile`}
           />
           <p>The maximum distress score was observed in the zip code {topDistressScoreData.Zip} with {formatAbbreviate(topDistressScoreData["Distress Score"])} percentile in the year {topDistressScoreData.Year}.</p>
-          <p>The following map shows the distress score percentile for each zip code in Wayne County, MI.</p>
+          <p>The following map shows the distress score percentile for each zip code in Wayne County.</p>
         </article>
 
         {/* Draw Geomap to show distress scores for each zip code in the Wayne county. */}

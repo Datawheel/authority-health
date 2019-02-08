@@ -42,7 +42,6 @@ import EducationalAttainment from "./sections/education/EducationalAttainment";
 import DropoutRate from "./sections/education/DropoutRate";
 import StudentPoverty from "./sections/education/StudentPoverty";
 import ReadingAssessment from "./sections/education/ReadingAssessment";
-import Test from "./sections/education/Test";
 import WaterQuality from "./sections/naturalEnvironment/WaterQuality";
 import AirQuality from "./sections/naturalEnvironment/AirQuality";
 
@@ -173,7 +172,6 @@ class Profile extends Component {
           <DropoutRate />
           <StudentPoverty />
           <ReadingAssessment />
-          <Test />
         </div>
 
         <TopicTitle slug="natural-environment">
@@ -229,7 +227,6 @@ Profile.need = [
   DropoutRate,
   StudentPoverty,
   ReadingAssessment,
-  Test,
   WaterQuality,
   AirQuality,
   fetchData("meta", "/api/search?id=<id>", resp => resp[0]),

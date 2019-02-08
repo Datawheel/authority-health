@@ -1,675 +1,153 @@
 import React from "react";
-import {nest} from "d3-collection";
 import {connect} from "react-redux";
+import {nest} from "d3-collection";
 import {LinePlot} from "d3plus-react";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
-
 import Stat from "../../../../components/Stat";
 
 class ReadingAssessment extends SectionColumns {
-
   constructor(props) {
     super(props);
     this.state = {dropdownValue: "Overall"};
   }
 
-  // Handler function for dropdown onChange.
+  // Handler function for dropdown onChange event.
   handleChange = event => this.setState({dropdownValue: event.target.value});
-
-  getStatsForGender = (maleFourthGradeReadingScores, femaleFourthGradeReadingScores,
-    maleEighthGradeReadingScores, femaleEighthGradeReadingScores) => {
-    const stats = [];
-    stats.push(<Stat
-      title={"4th grade male (Detroit)"}
-      year={maleFourthGradeReadingScores.Year}
-      value={maleFourthGradeReadingScores["Average Reading Score by Gender"]}
-    />);
-    stats.push(<Stat
-      title={"4th grade female (Detroit)"}
-      year={femaleFourthGradeReadingScores.Year}
-      value={femaleFourthGradeReadingScores["Average Reading Score by Gender"]}
-    />);
-    stats.push(<Stat
-      title={"8th Grade male (Detroit)"}
-      year={maleEighthGradeReadingScores.Year}
-      value={maleEighthGradeReadingScores["Average Reading Score by Gender"]}
-    />);
-    stats.push(<Stat
-      title={"8th Grade female (Detroit)"}
-      year={femaleEighthGradeReadingScores.Year}
-      value={femaleEighthGradeReadingScores["Average Reading Score by Gender"]}
-    />);
-    return stats;
-  }
-
-  getStatsForRace = (blackFourthGradeReadingScores, hispanicFourthGradeReadingScores,
-    blackEighthGradeReadingScores, hispanicEighthGradeReadingScores) => {
-    const stats = [];
-    stats.push(<Stat
-      title={"4th grade black (Detroit)"}
-      year={blackFourthGradeReadingScores.Year}
-      value={blackFourthGradeReadingScores["Average Reading Score by Race"]}
-    />);
-    stats.push(<Stat
-      title={"4th grade hispanic (Detroit)"}
-      year={hispanicFourthGradeReadingScores.Year}
-      value={hispanicFourthGradeReadingScores["Average Reading Score by Race"]}
-    />);
-    stats.push(<Stat
-      title={"8th Grade black (Detroit)"}
-      year={blackEighthGradeReadingScores.Year}
-      value={blackEighthGradeReadingScores["Average Reading Score by Race"]}
-    />);
-    stats.push(<Stat
-      title={"8th Grade hispanic (Detroit)"}
-      year={hispanicEighthGradeReadingScores.Year}
-      value={hispanicEighthGradeReadingScores["Average Reading Score by Race"]}
-    />);
-    return stats;
-  }
-
-  getStatsForELL = (withELLFourthGradeReadingScores, withELLEighthGradeReadingScores,
-    noELLFourthGradeReadingScores, noELLEighthGradeReadingScores) => {
-    const stats = [];
-    stats.push(<Stat
-      title={"4th Grade Score With ELL (Detroit)"}
-      year={withELLFourthGradeReadingScores.Year}
-      value={withELLFourthGradeReadingScores["Average Reading Score by ELL"]}
-    />);
-    stats.push(<Stat
-      title={"8th Grade Score With ELL (Detroit)"}
-      year={withELLEighthGradeReadingScores.Year}
-      value={withELLEighthGradeReadingScores["Average Reading Score by ELL"]}
-    />);
-    stats.push(<Stat
-      title={"4th Grade Score with No ELL (Detroit)"}
-      year={noELLFourthGradeReadingScores.Year}
-      value={noELLFourthGradeReadingScores["Average Reading Score by ELL"]}
-    />);
-    stats.push(<Stat
-      title={"8th Grade Score with No ELL (Detroit)"}
-      year={noELLEighthGradeReadingScores.Year}
-      value={noELLEighthGradeReadingScores["Average Reading Score by ELL"]}
-    />);
-    return stats;
-  };
-
-  getStatsForNSLP = (withNSLPFourthGradeReadingScores, withNSLPEighthGradeReadingScores,
-    noNSLPFourthGradeReadingScores, noNSLPEighthGradeReadingScores) => {
-    const stats = [];
-    stats.push(<Stat
-      title={"4th Grade Score With NSLP (Detroit)"}
-      year={withNSLPFourthGradeReadingScores.Year}
-      value={withNSLPFourthGradeReadingScores["Average Reading Score by NSLP"]}
-    />);
-    stats.push(<Stat
-      title={"8th Grade Score With NSLP (Detroit)"}
-      year={withNSLPEighthGradeReadingScores.Year}
-      value={withNSLPEighthGradeReadingScores["Average Reading Score by NSLP"]}
-    />);
-    stats.push(<Stat
-      title={"4th Grade Score with No NSLP (Detroit)"}
-      year={noNSLPFourthGradeReadingScores.Year}
-      value={noNSLPFourthGradeReadingScores["Average Reading Score by NSLP"]}
-    />);
-    stats.push(<Stat
-      title={"8th Grade Score with No NSLP (Detroit)"}
-      year={noNSLPEighthGradeReadingScores.Year}
-      value={noNSLPEighthGradeReadingScores["Average Reading Score by NSLP"]}
-    />);
-    return stats;
-  };
-
-  getStatsForDisability = (withDisabilityFourthGradeReadingScores, withDisabilityEighthGradeReadingScores,
-    noDisabilityFourthGradeReadingScores, noDisabilityEighthGradeReadingScores) => {
-    const stats = [];
-    stats.push(<Stat
-      title={"4th Grade Score With Disability (Detroit)"}
-      year={withDisabilityFourthGradeReadingScores.Year}
-      value={withDisabilityFourthGradeReadingScores["Average Reading Score by Disability"]}
-    />);
-    stats.push(<Stat
-      title={"8th Grade Score With Disability (Detroit)"}
-      year={withDisabilityEighthGradeReadingScores.Year}
-      value={withDisabilityEighthGradeReadingScores["Average Reading Score by Disability"]}
-    />);
-    stats.push(<Stat
-      title={"4th Grade Score with No Disability (Detroit)"}
-      year={noDisabilityFourthGradeReadingScores.Year}
-      value={noDisabilityFourthGradeReadingScores["Average Reading Score by Disability"]}
-    />);
-    stats.push(<Stat
-      title={"8th Grade Score with No Disability (Detroit)"}
-      year={noDisabilityEighthGradeReadingScores.Year}
-      value={noDisabilityEighthGradeReadingScores["Average Reading Score by Disability"]}
-    />);
-    return stats;
-  }
-
-  getStatsByParentsEducation = topReadingScoreForEighthGrade => {
-    const stats = [];
-    stats.push(<Stat
-      title={"8th Grade Score (Detroit)"}
-      year={topReadingScoreForEighthGrade.Year}
-      value={topReadingScoreForEighthGrade["Parents Education"]}
-      qualifier={topReadingScoreForEighthGrade["Average Reading Score by Parents Education"]}
-    />);
-    return stats;
-  }
-
-  getStatsForOverallScores = (nationalFourthGradeReadingScores, nationalEighthGradeReadingScores,
-    fourthGradeReadingScoresbyCity, eighthGradeReadingScoresbyCity) => {
-    const stats = [];
-    stats.push(<Stat
-      title={"4th Grade Score (United States)"}
-      year={nationalFourthGradeReadingScores.Year}
-      value={nationalFourthGradeReadingScores["Average Reading Score"]}
-    />);
-    stats.push(<Stat
-      title={"8th Grade Score (United States)"}
-      year={nationalEighthGradeReadingScores.Year}
-      value={nationalEighthGradeReadingScores["Average Reading Score"]}
-    />);
-    stats.push(<Stat
-      title={"4th Grade Score (Detroit)"}
-      year={fourthGradeReadingScoresbyCity.Year}
-      value={fourthGradeReadingScoresbyCity["Average Reading Score"]}
-    />);
-    stats.push(<Stat
-      title={"8th Grade Score (Detroit)"}
-      year={eighthGradeReadingScoresbyCity.Year}
-      value={eighthGradeReadingScoresbyCity["Average Reading Score"]}
-    />);
-    return stats;
-  }
-
-  getDropdownComponents = readingAssessmentChoices => {
-    const dropdownComponents = [];
-    dropdownComponents.push(<div className="pt-select pt-fill"><select onChange={this.handleChange}>
-      {readingAssessmentChoices.map(item => <option key={item} value={item}>{item}</option>)}
-    </select></div>);
-    return dropdownComponents;
-  }
-
-  getShortDescription = str => <p>The following chart shows the average reading assessment score in Detroit {str} over time.</p>;
-
-  // drawLinePlot = (readingScoresData, categoryName, xTitle) => {
-  //   const lineplot = [];
-  //   lineplot.push(<LinePlot config={{
-  //     data: readingScoresData,
-  //     discrete: "x",
-  //     height: 400,
-  //     groupBy: d => `${d.Grade} ${d[categoryName]}`,
-  //     label: d => `${d.Grade}th Grade ${d[categoryName]}`,
-  //     x: "Year",
-  //     y: "Average Reading Score",
-  //     yConfig: {
-  //       title: `Average Reading Score ${xTitle}`
-  //     },
-  //     tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score"]], ["Place", "Detroit"]]}
-  //   }}
-  //   />);
-
-  //   return lineplot;
-  // }
 
   render() {
     const {dropdownValue} = this.state;
+    const dropdownList = ["Overall", "Gender", "Race", "ELL", "NSLP", "Disability", "Parents Education"];
+    const isOverallSelected = dropdownValue === "Overall";
+    const isParentsEducationSelected = dropdownValue === "Parents Education";
 
-    const data = this.props[`readingScoresBy${dropdownValue}`];
+    const readingScoresData = isOverallSelected ? [] : isParentsEducationSelected ? this.props.readingScoresByParentsEducation : this.props[`readingScoresBy${dropdownValue}`];
 
-    const {readingScoresByParentsEducation, readingScoresByNation, readingScoresByCity} = this.props;
-
-    const readingAssessmentChoices = ["Overall", "Gender", "Race", "ELL", "NSLP", "Disability", "Parents Education"];
-
-    if (dropdownValue === "Gender") {
-      // Get the recent year male and female 4th and 8th grade data.
-      const recentYearReadingScoresByGender = {};
-      nest()
-        .key(d => d.Year)
-        .entries(data)
-        .forEach(group => {
-          group.key >= data[0].Year ? Object.assign(recentYearReadingScoresByGender, group) : {};
-        });
-
-      // Find top male 4th Grade data.
-      const maleReadingScores = recentYearReadingScoresByGender.values.filter(d => d.Gender === "Male");
-      const maleFourthGradeReadingScores = maleReadingScores.filter(d => d.Grade === "4");
-
-      // Find top male 8th grade data.
-      const maleEighthGradeReadingScores = maleReadingScores.filter(d => d.Grade === "8");
-
-      // Find top female 4th Grade data.
-      const femaleReadingScores = recentYearReadingScoresByGender.values.filter(d => d.Gender === "Female");
-      const femaleFourthGradeReadingScores = femaleReadingScores.filter(d => d.Grade === "4");
-
-      // Find top female 8th grade data.
-      const femaleEighthGradeReadingScores = femaleReadingScores.filter(d => d.Grade === "8");
-
-      // Get stats for Gender.
-      const stats = this.getStatsForGender(maleFourthGradeReadingScores[0], femaleFourthGradeReadingScores[0],
-        maleEighthGradeReadingScores[0], femaleEighthGradeReadingScores[0]);
-
-      const dropdownComponents = this.getDropdownComponents(readingAssessmentChoices);
-      const paragraph = this.getShortDescription("by gender");
-      // const linePlot = this.drawLinePlot(data, "Gender", "Scores by Gender");
-
-      return (
-        <SectionColumns>
-          <SectionTitle>Reading Assessment Scores</SectionTitle>
-          <article>
-            {dropdownComponents}
-            {paragraph}
-            {stats}
-          </article>
-
-          {/* Lineplot to show the Reading assessment for different years in the Detroit City. */}
-          {/* {linePlot} */}
-
-          <LinePlot config={{
-            data,
-            discrete: "x",
-            height: 400,
-            groupBy: d => `${d.Grade} ${d.Gender}`,
-            label: d => `${d.Grade}th Grade ${d.Gender}`,
-            baseline: 0,
-            x: "Year",
-            y: "Average Reading Score by Gender",
-            yConfig: {
-              title: "Average Reading Score by Gender",
-              domain: [0, 300]
-            },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score by Gender"]], ["Place", "Detroit"]]}
-          }}
-          />
-        </SectionColumns>
-      );
-    }
-    else if (dropdownValue === "Race") {
-      // Get the recent year black and hispanic race 4th and 8th grade data.
-      const recentYearReadingScoresByRace = {};
-      nest()
-        .key(d => d.Year)
-        .entries(data)
-        .forEach(group => {
-          group.key >= data[0].Year ? Object.assign(recentYearReadingScoresByRace, group) : {};
-        });
-
-      // Find top black 4th Grade data.
-      const blackReadingScores = recentYearReadingScoresByRace.values.filter(d => d.Race === "Black");
-      const blackFourthGradeReadingScores = blackReadingScores.filter(d => d.Grade === "4");
-
-      // Find top black 8th grade data.
-      const blackEighthGradeReadingScores = blackReadingScores.filter(d => d.Grade === "8");
-
-      // Find top hispanic 4th Grade data.
-      const hispanicReadingScores = recentYearReadingScoresByRace.values.filter(d => d.Race === "Hispanic");
-      const hispanicFourthGradeReadingScores = hispanicReadingScores.filter(d => d.Grade === "4");
-
-      // Find top hispanic 8th grade data.
-      const hispanicEighthGradeReadingScores = hispanicReadingScores.filter(d => d.Grade === "8");
-
-      // Get stats for Race.
-      const stats = this.getStatsForRace(blackFourthGradeReadingScores[0], hispanicFourthGradeReadingScores[0],
-        blackEighthGradeReadingScores[0], hispanicEighthGradeReadingScores[0]);
-
-      const dropdownComponents = this.getDropdownComponents(readingAssessmentChoices);
-      const paragraph = this.getShortDescription("by race");
-      // const linePlot = this.drawLinePlot(data, "Race", "Scores by Race");
-
-      return (
-        <SectionColumns>
-          <SectionTitle>Reading Assessment Scores</SectionTitle>
-          <article>
-            {dropdownComponents}
-            {paragraph}
-            {stats}
-          </article>
-
-          {/* Lineplot to show the Reading assessment for different years in the Detroit City. */}
-          {/* {linePlot} */}
-
-          <LinePlot config={{
-            data,
-            discrete: "x",
-            height: 400,
-            groupBy: d => `${d.Grade} ${d.Race}`,
-            label: d => `${d.Grade}th Grade ${d.Race}`,
-            baseline: 0,
-            x: "Year",
-            y: "Average Reading Score by Race",
-            yConfig: {
-              title: "Average Reading Score by Race",
-              domain: [0, 300]
-            },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score by Race"]], ["Place", "Detroit"]]}
-          }}
-          />
-        </SectionColumns>
-      );
-    }
-    else if (dropdownValue === "ELL") {
-      // Get the recent year ELL scores for 4th and 8th grade.
-      const recentYearReadingScoresByELL = {};
-      nest()
-        .key(d => d.Year)
-        .entries(data)
-        .forEach(group => {
-          group.key >= data[0].Year ? Object.assign(recentYearReadingScoresByELL, group) : {};
-        });
-
-      // Find top with ELL 4th Grade data.
-      const withELLReadingScores = recentYearReadingScoresByELL.values.filter(d => d.ELL === "Yes");
-      const withELLFourthGradeReadingScores = withELLReadingScores.filter(d => d.Grade === "4");
-
-      // Find top male 8th grade data.
-      const withELLEighthGradeReadingScores = withELLReadingScores.filter(d => d.Grade === "8");
-
-      // Find top female 4th Grade data.
-      const noELLReadingScores = recentYearReadingScoresByELL.values.filter(d => d.ELL === "No");
-      const noELLFourthGradeReadingScores = noELLReadingScores.filter(d => d.Grade === "4");
-
-      // Find top female 8th grade data.
-      const noELLEighthGradeReadingScores = noELLReadingScores.filter(d => d.Grade === "8");
-
-      // Get stats for ELL.
-      const stats = this.getStatsForELL(withELLFourthGradeReadingScores[0], withELLEighthGradeReadingScores[0],
-        noELLFourthGradeReadingScores[0], noELLEighthGradeReadingScores[0]);
-
-      const dropdownComponents = this.getDropdownComponents(readingAssessmentChoices);
-
-      const paragraph = this.getShortDescription("by ELL");
-
-      return (
-        <SectionColumns>
-          <SectionTitle>Reading Assessment Scores</SectionTitle>
-          <article>
-            {dropdownComponents}
-            {paragraph}
-            {stats}
-          </article>
-
-          {/* Lineplot to show the Reading assessment for different years in the Detroit City. */}
-          <LinePlot config={{
-            data,
-            discrete: "x",
-            height: 400,
-            groupBy: d => `${d.Grade} ${d.ELL}`,
-            label: d => `${d.Grade}th Grade ${d.ELL === "Yes" ? "With ELL" : "No ELL"}`,
-            baseline: 0,
-            x: "Year",
-            y: "Average Reading Score by ELL",
-            yConfig: {
-              title: "Average Reading Score by ELL",
-              domain: [0, 300]
-            },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score by ELL"]], ["Place", "Detroit"]]}
-          }}
-          />
-        </SectionColumns>
-      );
-    }
-    else if (dropdownValue === "NSLP") {
-      // Get the recent year NSLP scores for 4th and 8th grade.
-      const recentYearReadingScoresByNSLP = {};
-      nest()
-        .key(d => d.Year)
-        .entries(data)
-        .forEach(group => {
-          group.key >= data[0].Year ? Object.assign(recentYearReadingScoresByNSLP, group) : {};
-        });
-
-      // Find top with NSLP 4th Grade data.
-      const withNSLPReadingScores = recentYearReadingScoresByNSLP.values.filter(d => d.NSLP === "Yes");
-      const withNSLPFourthGradeReadingScores = withNSLPReadingScores.filter(d => d.Grade === "4");
-
-      // Find top male 8th grade data.
-      const withNSLPEighthGradeReadingScores = withNSLPReadingScores.filter(d => d.Grade === "8");
-
-      // Find top female 4th Grade data.
-      const noNSLPReadingScores = recentYearReadingScoresByNSLP.values.filter(d => d.NSLP === "No");
-      const noNSLPFourthGradeReadingScores = noNSLPReadingScores.filter(d => d.Grade === "4");
-
-      // Find top female 8th grade data.
-      const noNSLPEighthGradeReadingScores = noNSLPReadingScores.filter(d => d.Grade === "8");
-
-      // Get stats for NSLP.
-      const stats = this.getStatsForNSLP(withNSLPFourthGradeReadingScores[0], withNSLPEighthGradeReadingScores[0],
-        noNSLPFourthGradeReadingScores[0], noNSLPEighthGradeReadingScores[0]);
-
-      const dropdownComponents = this.getDropdownComponents(readingAssessmentChoices);
-
-      const paragraph = this.getShortDescription("by NSLP");
-
-      return (
-        <SectionColumns>
-          <SectionTitle>Reading Assessment Scores</SectionTitle>
-          <article>
-            {dropdownComponents}
-            {paragraph}
-            {stats}
-          </article>
-
-          {/* Lineplot to show the Reading assessment for different years in the Detroit City. */}
-          <LinePlot config={{
-            data,
-            discrete: "x",
-            height: 400,
-            groupBy: d => `${d.Grade} ${d.NSLP}`,
-            label: d => `${d.Grade}th Grade ${d.NSLP === "Yes" ? "With NSLP" : "No NSLP"}`,
-            baseline: 0,
-            x: "Year",
-            y: "Average Reading Score by NSLP",
-            yConfig: {
-              title: "Average Reading Score by NSLP",
-              domain: [0, 300]
-            },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score by NSLP"]], ["Place", "Detroit"]]}
-          }}
-          />
-        </SectionColumns>
-      );
-    }
-    else if (dropdownValue === "Disability") {
-      // Get the recent year Disability scores for 4th and 8th grade.
-      const recentYearReadingScoresByDisability = {};
-      nest()
-        .key(d => d.Year)
-        .entries(data)
-        .forEach(group => {
-          group.key >= data[0].Year ? Object.assign(recentYearReadingScoresByDisability, group) : {};
-        });
-
-      // Find top with Disability 4th Grade data.
-      const withDisabilityReadingScores = recentYearReadingScoresByDisability.values.filter(d => d.Disability === "Yes");
-      const withDisabilityFourthGradeReadingScores = withDisabilityReadingScores.filter(d => d.Grade === "4");
-
-      // Find top with Disability 8th grade data.
-      const withDisabilityEighthGradeReadingScores = withDisabilityReadingScores.filter(d => d.Grade === "8");
-
-      // Find top no Disability 4th Grade data.
-      const noDisabilityReadingScores = recentYearReadingScoresByDisability.values.filter(d => d.Disability === "No");
-      const noDisabilityFourthGradeReadingScores = noDisabilityReadingScores.filter(d => d.Grade === "4");
-
-      // Find top no Disability 8th grade data.
-      const noDisabilityEighthGradeReadingScores = noDisabilityReadingScores.filter(d => d.Grade === "8");
-
-      // Get stats for Disability.
-      const stats = this.getStatsForDisability(withDisabilityFourthGradeReadingScores[0], withDisabilityEighthGradeReadingScores[0],
-        noDisabilityFourthGradeReadingScores[0], noDisabilityEighthGradeReadingScores[0]);
-
-      const dropdownComponents = this.getDropdownComponents(readingAssessmentChoices);
-      const paragraph = this.getShortDescription("by disability");
-
-      return (
-        <SectionColumns>
-          <SectionTitle>Reading Assessment Scores</SectionTitle>
-          <article>
-            {dropdownComponents}
-            {paragraph}
-            {stats}
-          </article>
-
-          {/* Lineplot to show the Reading assessment with and without disability for different years in the Detroit City. */}
-          <LinePlot config={{
-            data,
-            discrete: "x",
-            height: 400,
-            groupBy: d => `${d.Grade} ${d.Disability}`,
-            label: d => `${d.Grade}th Grade ${d.Disability === "Yes" ? "With Disability" : "No Disability"}`,
-            baseline: 0,
-            x: "Year",
-            y: "Average Reading Score by Disability",
-            yConfig: {
-              title: "Average Reading Score by Disability",
-              domain: [0, 300]
-            },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score by Disability"]], ["Place", "Detroit"]]}
-          }}
-          />
-        </SectionColumns>
-      );
-    }
-    else if (dropdownValue === "Parents Education") {
-      // Get the recent year Parents Education scores for 4th and 8th grade.
-      const recentYearReadingScoresByParentsEdu = {};
-      nest()
-        .key(d => d.Year)
-        .entries(readingScoresByParentsEducation)
-        .forEach(group => {
-          group.key >= readingScoresByParentsEducation[0].Year ? Object.assign(recentYearReadingScoresByParentsEdu, group) : {};
-        });
-
-      // Find top reading score by Parent's Education for 8th Grade data.
-      const readingScoresForEighthGrade = recentYearReadingScoresByParentsEdu.values.filter(d => d.Grade === "8");
-      readingScoresForEighthGrade.sort((a, b) => b["Average Reading Score by Parents Education"] - a["Average Reading Score by Parents Education"]);
-      const topReadingScoreForEighthGrade = readingScoresForEighthGrade[0];
-
-      // Get stats for scores based on Parents Education.
-      const stats = this.getStatsByParentsEducation(topReadingScoreForEighthGrade);
-
-      const dropdownComponents = this.getDropdownComponents(readingAssessmentChoices);
-      const paragraph = this.getShortDescription("based on parents education");
-
-      return (
-        <SectionColumns>
-          <SectionTitle>Reading Assessment Scores</SectionTitle>
-          <article>
-            {dropdownComponents}
-            {paragraph}
-            {stats}
-          </article>
-
-          {/* Lineplot to show the Reading assessment for different years in the Detroit City based on Parents Education. */}
-          <LinePlot config={{
-            data: readingScoresByParentsEducation,
-            discrete: "x",
-            height: 400,
-            groupBy: d => `${d.Grade} ${d["Parents Education"]}`,
-            label: d => `${d["Parents Education"]}`,
-            baseline: 0,
-            x: "Year",
-            y: "Average Reading Score by Parents Education",
-            yConfig: {
-              title: "Average Reading Score by Parents Education based on Parents Education",
-              domain: [0, 300]
-            },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score by Parents Education"]], ["Place", "Detroit"]]}
-          }}
-          />
-        </SectionColumns>
-      );
-    }
-    else if (dropdownValue === "Overall") {
-      // Merge readingScoresByNation and readingScoresByCity arrays to readingScoresByGeography array.
-      const readingScoresByGeography = [];
+    if (dropdownValue === "Overall") {
+      const {readingScoresByNation, readingScoresByCity} = this.props;
       readingScoresByNation.forEach(d => {
         d.Geography = "Nation";
-        readingScoresByGeography.push(d);
+        readingScoresData.push(d);
       });
       readingScoresByCity.forEach(d => {
         d.Geography = "City";
-        readingScoresByGeography.push(d);
+        readingScoresData.push(d);
+      });
+    }
+
+    let stat1Value = "Nation";
+    let stat2Value = "City";
+
+    if (dropdownValue === "Gender") {
+      stat1Value = "Male";
+      stat2Value = "Female";
+    }
+    if (dropdownValue === "ELL" || dropdownValue === "NSLP" || dropdownValue ===  "Disability") {
+      stat1Value = "No";
+      stat2Value = "Yes";
+    }
+    if (dropdownValue === "Race") {
+      stat1Value = "Black";
+      stat2Value = "Hispanic";
+    }
+
+    const isStatValueYesOrNo = stat1Value === "No" && stat2Value === "Yes";  
+
+    // Get recent year data.
+    const recentYearData = {};
+    nest()
+      .key(d => d.Year)
+      .entries(readingScoresData)
+      .forEach(group => {
+        group.key >= readingScoresData[0].Year ? Object.assign(recentYearData, group) : {};
       });
 
-      // Get the recent year 4th and 8th grade data for reading scores by Nation.
-      const recentYearReadingScoresByNation = {};
-      nest()
-        .key(d => d.Year)
-        .entries(readingScoresByNation)
-        .forEach(group => {
-          group.key >= readingScoresByNation[0].Year ? Object.assign(recentYearReadingScoresByNation, group) : {};
-        });
-
-      // Find top National average for 4th Grade.
-      const nationalFourthGradeReadingScores = recentYearReadingScoresByNation.values.filter(d => d.Grade === "4");
-
-      // Find top National average for 8th Grade.
-      const nationalEighthGradeReadingScores = recentYearReadingScoresByNation.values.filter(d => d.Grade === "8");
-
-      // Get the recent year 4th and 8th grade data for reading scores by City.
-      const recentYearReadingScoresByCity = {};
-      nest()
-        .key(d => d.Year)
-        .entries(readingScoresByCity)
-        .forEach(group => {
-          group.key >= readingScoresByCity[0].Year ? Object.assign(recentYearReadingScoresByCity, group) : {};
-        });
-
-      // Find top National average for 4th Grade.
-      const fourthGradeReadingScoresbyCity = recentYearReadingScoresByCity.values.filter(d => d.Grade === "4");
-
-      // Find top National average for 8th Grade.
-      const eighthGradeReadingScoresbyCity = recentYearReadingScoresByCity.values.filter(d => d.Grade === "8");
-
-      // Get stats for scores by Geography.
-      const stats = this.getStatsForOverallScores(nationalFourthGradeReadingScores[0], nationalEighthGradeReadingScores[0],
-        fourthGradeReadingScoresbyCity[0], eighthGradeReadingScoresbyCity[0]);
-
-      const dropdownComponents = this.getDropdownComponents(readingAssessmentChoices);
-      const paragraph = this.getShortDescription("compared to the United States");
-
-      return (
-        <SectionColumns>
-          <SectionTitle>Reading Assessment Scores</SectionTitle>
-          <article>
-            {dropdownComponents}
-            {paragraph}
-            {stats}
-          </article>
-
-          {/* Lineplot to show the Reading assessment for different years in the Detroit City. */}
-          <LinePlot config={{
-            data: readingScoresByGeography,
-            discrete: "x",
-            height: 400,
-            groupBy: d => `${d.Grade} ${d.Geography}`,
-            label: d => `${d.Grade}th Grade ${d.Geography === "Nation" ? "United States" : "Detroit"}`,
-            baseline: 0,
-            x: "Year",
-            y: "Average Reading Score",
-            yConfig: {
-              title: "Average Reading Score",
-              domain: [0, 300]
-            },
-            shapeConfig: {
-              strokeDasharray: d => d.Geography === "Nation" ?  "4 1" : null
-            },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => d["Average Reading Score"]], ["Place", d => d.Geography === "Nation" ? "United States" : "Detroit"]]}
-          }}
-          />
-        </SectionColumns>
-      );
+    let stat1EighthGradeReadingScores, stat1FourthGradeReadingScores, stat2EighthGradeReadingScores, stat2FourthGradeReadingScores;
+    if (!isParentsEducationSelected) {
+      // Find top stat1 4th Grade data.
+      const stat1ReadingScores = isOverallSelected ? recentYearData.values.filter(d => d.Geography === stat1Value) : recentYearData.values.filter(d => d[dropdownValue] === stat1Value);
+      stat1FourthGradeReadingScores = stat1ReadingScores.filter(d => d.Grade === "4")[0];
+  
+      // Find top stat1 8th grade data.
+      stat1EighthGradeReadingScores = stat1ReadingScores.filter(d => d.Grade === "8")[0];
+  
+      // Find top stat2 4th Grade data.
+      const stat2ReadingScores = isOverallSelected ? recentYearData.values.filter(d => d.Geography === stat2Value) : recentYearData.values.filter(d => d[dropdownValue] === stat2Value);
+      stat2FourthGradeReadingScores = stat2ReadingScores.filter(d => d.Grade === "4")[0];
+  
+      // Find top stat2 8th grade data.
+      stat2EighthGradeReadingScores = stat2ReadingScores.filter(d => d.Grade === "8")[0];
     }
-    else {
-      return <div></div>;
-    }
+
+    return (
+      <SectionColumns>
+        <SectionTitle>ReadingAssessment</SectionTitle>
+        <article>
+          {/* Create a dropdown for all categoeries of reading assessment. */}
+          <div className="pt-select pt-fill">
+            <select onChange={this.handleChange}>
+              {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
+            </select>
+          </div>
+          <p>The following chart shows the average reading assessment score {isParentsEducationSelected ? "for 8th grade students" : ""} in Detroit {isOverallSelected ? "compared to the United States" : isParentsEducationSelected ? `by their ${dropdownValue.toLowerCase()}` : `by ${dropdownValue.toLowerCase()}`} over time.</p>
+          {isParentsEducationSelected 
+            ? <div>
+              {recentYearData.values.map(item =>
+                <Stat key={item.measure}
+                  title={`${item["Parents Education"]} (DETROIT)`}
+                  year={item.Year}
+                  value={item["Average Reading Score by Parents Education"]}
+                />
+              )}
+            </div>
+            : <div>
+              <Stat
+                title={isOverallSelected ? "4TH grade Score (United States)" : `4TH GRADE ${stat1Value} ${isStatValueYesOrNo ? dropdownValue : ""} (DETROIT)`}
+                year={stat1FourthGradeReadingScores.Year}
+                value={isOverallSelected ? stat1FourthGradeReadingScores["Average Reading Score"] : stat1FourthGradeReadingScores[`Average Reading Score by ${dropdownValue}`]}
+              />
+              <Stat
+                title={isOverallSelected ? "4TH grade Score (DETROIT)" : `4TH GRADE  ${isStatValueYesOrNo ? `with ${dropdownValue}` : stat2Value} (DETROIT)`}
+                year={stat2FourthGradeReadingScores.Year}
+                value={isOverallSelected ? stat2FourthGradeReadingScores["Average Reading Score"] : stat2FourthGradeReadingScores[`Average Reading Score by ${dropdownValue}`]}
+              />
+              <Stat
+                title={isOverallSelected ? "8TH grade Score (United States)" : `8TH GRADE ${stat1Value} ${isStatValueYesOrNo ? dropdownValue : ""} (DETROIT)`}
+                year={stat1EighthGradeReadingScores.Year}
+                value={isOverallSelected ? stat1EighthGradeReadingScores["Average Reading Score"] : stat1EighthGradeReadingScores[`Average Reading Score by ${dropdownValue}`]}
+              />
+              <Stat
+                title={isOverallSelected ? "8TH grade Score (DETROIT)" : `8TH GRADE ${isStatValueYesOrNo ? `with ${dropdownValue}` : stat2Value} (DETROIT)`}
+                year={stat2EighthGradeReadingScores.Year}
+                value={isOverallSelected ? stat2EighthGradeReadingScores["Average Reading Score"] : stat2EighthGradeReadingScores[`Average Reading Score by ${dropdownValue}`]}
+              />
+            </div>}
+        </article>
+
+        <LinePlot config={{
+          data: readingScoresData,
+          discrete: "x",
+          height: 400,
+          groupBy: d => isOverallSelected ? `${d.Grade} ${d.Geography === "Nation" ? "United States" : "Detroit"}` : `${d.Grade} ${d[dropdownValue]}`,
+          label: d => isOverallSelected ? `${d.Grade}th Grade ${d.Geography === "Nation" ? "United States" : "Detroit"}` : `${d.Grade}th Grade ${d[dropdownValue]}`,
+          baseline: 0,
+          legend: false,
+          x: "Year",
+          y: isOverallSelected ? "Average Reading Score" : `Average Reading Score by ${dropdownValue}`,
+          yConfig: {
+            title: `Average Reading Score by ${dropdownValue}`,
+            domain: [0, 300]
+          },
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => isOverallSelected ? d["Average Reading Score"] : d[`Average Reading Score by ${dropdownValue}`]], ["Place", d => isOverallSelected ? d.Geography === "Nation" ? "United States" : "Detroit" : "Detroit"]]}
+        }}
+        />
+      </SectionColumns>
+    );
   }
 }
 
 ReadingAssessment.defaultProps = {
-  slug: "reading-assessment-scores"
+  slug: "reading-assessment"
 };
 
 ReadingAssessment.need = [

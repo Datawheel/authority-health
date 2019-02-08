@@ -144,7 +144,6 @@ module.exports = function(app) {
     const groupedValues = groupBy(locationData, "level");
     // Select top most parent from multiple same level parents with max overlap_size.
     const geoLevels = findParentGeoLevels(groupedValues);
-    console.log("geoLevels: ", geoLevels);
 
     // Add current location ID at the beginning of the geoLevels array.
     geoLevels.unshift(id);

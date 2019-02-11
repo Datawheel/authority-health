@@ -1,6 +1,5 @@
 import React from "react";
 import {connect} from "react-redux";
-import {nest} from "d3-collection";
 import {LinePlot} from "d3plus-react";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
@@ -54,25 +53,20 @@ class ReadingAssessment extends SectionColumns {
     const isStatValueYesOrNo = stat1Value === "No" && stat2Value === "Yes";  
 
     // Get recent year data.
-    const recentYearData = {};
-    nest()
-      .key(d => d.Year)
-      .entries(readingScoresData)
-      .forEach(group => {
-        group.key >= readingScoresData[0].Year ? Object.assign(recentYearData, group) : {};
-      });
+    const latestYear = readingScoresData[0].Year;
+    const recentYearData = readingScoresData.filter(d => d.Year === latestYear);
 
     let stat1EighthGradeReadingScores, stat1FourthGradeReadingScores, stat2EighthGradeReadingScores, stat2FourthGradeReadingScores;
     if (!isParentsEducationSelected) {
       // Find top stat1 4th Grade data.
-      const stat1ReadingScores = isOverallSelected ? recentYearData.values.filter(d => d.Geography === stat1Value) : recentYearData.values.filter(d => d[dropdownValue] === stat1Value);
+      const stat1ReadingScores = isOverallSelected ? recentYearData.filter(d => d.Geography === stat1Value) : recentYearData.filter(d => d[dropdownValue] === stat1Value);
       stat1FourthGradeReadingScores = stat1ReadingScores.filter(d => d.Grade === "4")[0];
   
       // Find top stat1 8th grade data.
       stat1EighthGradeReadingScores = stat1ReadingScores.filter(d => d.Grade === "8")[0];
   
       // Find top stat2 4th Grade data.
-      const stat2ReadingScores = isOverallSelected ? recentYearData.values.filter(d => d.Geography === stat2Value) : recentYearData.values.filter(d => d[dropdownValue] === stat2Value);
+      const stat2ReadingScores = isOverallSelected ? recentYearData.filter(d => d.Geography === stat2Value) : recentYearData.filter(d => d[dropdownValue] === stat2Value);
       stat2FourthGradeReadingScores = stat2ReadingScores.filter(d => d.Grade === "4")[0];
   
       // Find top stat2 8th grade data.
@@ -92,7 +86,7 @@ class ReadingAssessment extends SectionColumns {
           <p>The following chart shows the average reading assessment score {isParentsEducationSelected ? "for 8th grade students" : ""} in Detroit {isOverallSelected ? "compared to the United States" : isParentsEducationSelected ? `by their ${dropdownValue.toLowerCase()}` : `by ${dropdownValue.toLowerCase()}`} over time.</p>
           {isParentsEducationSelected 
             ? <div>
-              {recentYearData.values.map(item =>
+              {recentYearData.map(item =>
                 <Stat key={item.measure}
                   title={`${item["Parents Education"]} (DETROIT)`}
                   year={item.Year}

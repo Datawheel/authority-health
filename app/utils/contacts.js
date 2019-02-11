@@ -346,6 +346,109 @@ module.exports = [
     address2: "Wayne, MI 48184"
   },
   {
+    slug: "risky-behaviors",
+    agency: "Behavioral-24 Hour Residential Treatment",
+    subAgency: "Christian Guidance Center (CGC-Males), Genesis House III (Females)",
+    contact: "Margo Lane Martin",
+    phone: ["313263077x4013", "313263077x4000 (afterhours)"]
+  },
+  {
+    slug: "risky-behaviors",
+    agency: "Behavioral-24 Hour Residential Treatment",
+    subAgency: "Genesis III",
+    title: "Treatment Director",
+    contact: "Vera Foreman",
+    phone: ["3138835614x5556"]
+  },
+  {
+    slug: "risky-behaviors",
+    agency: "Behavioral-24 Hour Residential Treatment",
+    subAgency: "Elmhurst Home Inc. (Male)",
+    contact: "Michelle Strong",
+    phone: ["3138671090x105"]
+  },
+  {
+    slug: "risky-behaviors",
+    agency: "Behavioral-24 Hour Residential Treatment",
+    subAgency: "Elmhurst Home Inc. (Naomi's Nest-Female)",
+    contact: "Serina Oden",
+    phone: ["3138671090x112"]
+  },
+  {
+    slug: "risky-behaviors",
+    agency: "Behavioral-24 Hour Residential Treatment",
+    subAgency: "Heartline-(Female)",
+    contact: "Laurie Murphy",
+    title: "Resident advisor on duty",
+    phone: ["3139234200"]
+  },
+  {
+    slug: "risky-behaviors",
+    agency: "Behavioral-24 Hour Residential Treatment",
+    subAgency: "Operation Get Down (male)",
+    contact: "Linda Jefferson",
+    title: "Resident advisor on duty",
+    phone: ["3139219422"]
+  },
+  {
+    slug: "risky-behaviors",
+    agency: "Behavioral-Community-Based Case Management and Relapse Prevention",
+    subAgency: "Black Family Development",
+    phone: ["3137580150"]
+  },
+  {
+    slug: "risky-behaviors",
+    agency: "Behavioral-Community-Based Case Management and Relapse Prevention",
+    subAgency: "Detroit Recovery Project",
+    phone: ["3133653100x311"]
+  },
+  {
+    slug: "risky-behaviors",
+    agency: "Behavioral-Community-Based Case Management and Relapse Prevention",
+    subAgency: "Cherry Health Services",
+    phone: ["3138222087"]
+  },
+  {
+    slug: "risky-behaviors",
+    agency: "Behavioral-Community-Based Case Management and Relapse Prevention",
+    subAgency: "Operation Get-Down",
+    contact: "Gail Connors",
+    phone: ["3139219422"]
+  },
+  {
+    slug: "risky-behaviors",
+    agency: "Behavioral-Community-Based Case Management and Relapse Prevention",
+    subAgency: "OUIL3rd Relapse Prevention",
+    phone: ["2483992600"]
+  },
+  {
+    slug: "risky-behaviors",
+    agency: "Behavioral-Community-Based Case Management and Relapse Prevention",
+    subAgency: "CSSWC* Sex Offender treatment",
+    location: "16000US2621000",
+    contact: "Laura Bush",
+    phone: ["31383383250"]
+  },
+  {
+    slug: "risky-behaviors",
+    agency: "Behavioral-Community-Based Case Management and Relapse Prevention",
+    subAgency: "Detroit's East Side",
+    contact: "Robert Sisler",
+    phone: ["3138212500"]
+  },
+  {
+    slug: "risky-behaviors",
+    agency: "Behavioral-Community-Based Case Management and Relapse Prevention",
+    subAgency: "Transitions Domestic Violence Program",
+    phone: ["2483992600"]
+  },
+  {
+    slug: "risky-behaviors",
+    agency: "Behavioral-Jail-Based Cognitive Behavioral Therapy and Domestic Violence Treatment",
+    subAgency: "Community Corrections Case Differentiation Unit",
+    phone: ["2483992600", "3138758667"]
+  },
+  {
     slug: "physical-health-and-inactivity",
     agency: "Health and Nutrition; Eat Healthy, Be Active",
     contact: "Kristi Evans",
@@ -510,12 +613,14 @@ module.exports = [
   {
     slug: "incarceration",
     agency: "Juvenile Justice, Youth Assistance and Diversion Program",
+    subAgency: "Alkebu-Lan Village",
     contact: "Sammaria Johnson",
     email: "sammira.tyner@yahoo.com"
   },
   {
     slug: "incarceration",
     agency: "Juvenile Justice, Youth Assistance and Diversion Program",
+    subAgency: "Black Family Development",
     contact: "Cynthia Williams",
     title: "YAP Supervisor",
     email: "cwilliams@blackfamilydevelopment.org"
@@ -523,6 +628,7 @@ module.exports = [
   {
     slug: "incarceration",
     agency: "Juvenile Justice, Youth Assistance and Diversion Program",
+    subAgency: "CYF (CCMO)",
     contact: "Reginald Terry",
     title: "Prevention Director",
     email: "reginald.terry@ccmorg.org"
@@ -530,6 +636,7 @@ module.exports = [
   {
     slug: "incarceration",
     agency: "Juvenile Justice, Youth Assistance and Diversion Program",
+    subAgency: "Conference of Western Wayne YAP Partners",
     contact: "Karen Hall",
     title: "Contact Person",
     email: "Khall@vistamaria.org"
@@ -537,6 +644,7 @@ module.exports = [
   {
     slug: "incarceration",
     agency: "Juvenile Justice, Youth Assistance and Diversion Program",
+    subAgency: "Downriver Community Conference, Southern Downriver YAP",
     contact: "Kevin Carleton",
     title: "Contact Person",
     email: "kcarleton@iamtgc.net"
@@ -544,6 +652,7 @@ module.exports = [
   {
     slug: "incarceration",
     agency: "Juvenile Justice, Youth Assistance and Diversion Program",
+    subAgency: "Don Bosco Hall",
     contact: "Sherry Loury",
     title: "Contact Person",
     email: "aloury@donboscohall.org"
@@ -551,6 +660,7 @@ module.exports = [
   {
     slug: "incarceration",
     agency: "Juvenile Justice, Youth Assistance and Diversion Program",
+    subAgency: "Ennis Center for Children",
     contact: "Rhea Cooper",
     title: "YAP Supervisor",
     email: "Rhea.cooper@enniscenter.org"
@@ -558,6 +668,7 @@ module.exports = [
   {
     slug: "incarceration",
     agency: "Juvenile Justice, Youth Assistance and Diversion Program",
+    subAgency: "Healthy Kidz, Inc.",
     contact: "Maria Adams-Lawton",
     title: "Executive Director",
     email: "maria.adams-lawton@sbcglobal.net"
@@ -565,6 +676,7 @@ module.exports = [
   {
     slug: "incarceration",
     agency: "Juvenile Justice, Youth Assistance and Diversion Program",
+    subAgency: "Southwest Counseling Solutions",
     contact: "Chantel James",
     title: "YAP Supervisor",
     email: "cjames@swsol.org"
@@ -572,6 +684,7 @@ module.exports = [
   {
     slug: "incarceration",
     agency: "Juvenile Justice, Youth Assistance and Diversion Program",
+    subAgency: "Starr Commonwealth",
     contact: "Ashley Gray",
     title: "YAP Administrator",
     email: "graya@starr.org"
@@ -579,6 +692,7 @@ module.exports = [
   {
     slug: "incarceration",
     agency: "Juvenile Justice, Youth Assistance and Diversion Program",
+    subAgency: "The Yunion",
     contact: "Ron Lee",
     title: "Program Coordinator",
     email: "ron@theyunion.com"

@@ -22,8 +22,7 @@ class Homeownership extends SectionColumns {
     const medianHousingUnitsValueForProfileAvailable = medianHousingUnitsValueForProfile.length !== 0;
     const constructionDateDataAvailable = constructionDateData.length !== 0;
 
-    // Get occupancy data data for latest year.
-    const recentYearOccupancyData = {};
+    // Get topOccupancyData data data for latest year.
     let topOccupancyData;
     if (occupancyDataAvailable) {
       nest()
@@ -32,26 +31,15 @@ class Homeownership extends SectionColumns {
         .forEach(group => {
           const total = sum(group.values, d => d["Housing Units"]);
           group.values.forEach(d => total !== 0 ? d.share = d["Housing Units"] / total * 100 : d.share = 0);
-          group.key >= occupancyData[0].Year ? Object.assign(recentYearOccupancyData, group) : {};
         });
-      // Find top Occupancy data for most recent year.
-      const recentYearOccupiedHouses = recentYearOccupancyData.values.filter(d => d["ID Occupancy Status"] === 0);
-      recentYearOccupiedHouses.sort((a, b) => b.share - a.share);
-      topOccupancyData = recentYearOccupiedHouses[0];
+      occupancyData.sort((a, b) => b.share - a.share);
+      topOccupancyData = occupancyData[0];
     }
 
     // Find top Median Housing Units value for most recent year.
-    const recentYearHousingValueForProfile = {};
     let topMedianHousingUnitsValueForProfile;
     if (medianHousingUnitsValueForProfileAvailable) {
-      nest()
-        .key(d => d.Year)
-        .entries(medianHousingUnitsValueForProfile)
-        .forEach(group => {
-          group.key >= medianHousingUnitsValueForProfile[0].Year ? Object.assign(recentYearHousingValueForProfile, group) : {};
-        });
-      recentYearHousingValueForProfile.values.sort((a, b) => b["Property Value"] - a["Property Value"]);
-      topMedianHousingUnitsValueForProfile = recentYearHousingValueForProfile.values[0];
+      topMedianHousingUnitsValueForProfile = medianHousingUnitsValueForProfile[0];
     }
 
     return (
@@ -74,7 +62,7 @@ class Homeownership extends SectionColumns {
 
         {/* Geomap to show Property Values for all tracts in the Wayne County. */}
         <Geomap config={{
-          data: "https://acs.datausa.io/api/data?measures=Property Value&Year=all&Geography=05000US26163:children",
+          data: "https://acs.datausa.io/api/data?measures=Property Value&Geography=05000US26163:children&Year=all",
           groupBy: "ID Geography",
           label: d => d.Geography,
           colorScale: "Property Value",
@@ -99,9 +87,9 @@ Homeownership.defaultProps = {
 };
 
 Homeownership.need = [
-  fetchData("occupancyData", "/api/data?measures=Housing Units&drilldowns=Occupancy Status&Geography=<id>&Year=all", d => d.data),
-  fetchData("medianHousingUnitsValueForProfile", "https://acs.datausa.io/api/data?measures=Property Value&Year=all&Geography=<id>", d => d.data),
-  fetchData("constructionDateData", "/api/data?measures=Construction Date&Geography=<id>&Year=all", d => d.data)
+  fetchData("occupancyData", "/api/data?measures=Housing Units&drilldowns=Occupancy Status&Geography=<id>&Year=latest", d => d.data),
+  fetchData("medianHousingUnitsValueForProfile", "https://acs.datausa.io/api/data?measures=Property Value&Geography=<id>&Year=latest", d => d.data),
+  fetchData("constructionDateData", "/api/data?measures=Construction Date&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({

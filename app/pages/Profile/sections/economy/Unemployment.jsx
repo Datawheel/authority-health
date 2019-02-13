@@ -23,11 +23,9 @@ const formatEmploymentStatusData = employmentStatus => {
       const total = sum(group.values, d => d["Population by Employment Status"]);
       group.values.forEach(d => total !== 0 ? d.share = d["Population by Employment Status"] / total * 100 : d.share = 0);
     });
-  const latestYear = unemployedData[0].Year;
-  const recentYearUnemploymentData = unemployedData.filter(d => d.Year === latestYear);
-  const getMaleUnemploymemtData = recentYearUnemploymentData.filter(d => d.Sex === "Male");
+  const getMaleUnemploymemtData = unemployedData.filter(d => d.Sex === "Male");
   const getTopMaleUnemploymemtData = getMaleUnemploymemtData.sort((a, b) => b.share - a.share)[0];
-  const getFemaleUnemploymemtData = recentYearUnemploymentData.filter(d => d.Sex === "Female");
+  const getFemaleUnemploymemtData = unemployedData.filter(d => d.Sex === "Female");
   const getTopFemaleUnemploymemtData = getFemaleUnemploymemtData.sort((a, b) => b.share - a.share)[0];
   
   return [unemployedData, getTopMaleUnemploymemtData, getTopFemaleUnemploymemtData];

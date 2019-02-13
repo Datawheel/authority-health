@@ -22,9 +22,7 @@ const formatPublicAssistanceData = publicAssistanceData => {
       group.values.forEach(d => total !== 0 ? d.share = d["Food-Stamp Population"] / total * 100 : d.share = 0);
     });
   // Find top recent year data for publicAssistanceData
-  const latestYear = publicAssistanceData[0].Year;
-  const recentYearPublicAssistanceData = publicAssistanceData.filter(d => d.Year === latestYear);
-  const topPublicAssistanceData = recentYearPublicAssistanceData.filter(d => d["ID Public Assistance or Snap"] === 0).sort((a, b) => b.share - a.share)[0];
+  const topPublicAssistanceData = publicAssistanceData.filter(d => d["ID Public Assistance or Snap"] === 0).sort((a, b) => b.share - a.share)[0];
   return [publicAssistanceData, topPublicAssistanceData];
 };
 

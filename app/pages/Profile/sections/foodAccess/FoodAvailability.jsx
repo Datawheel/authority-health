@@ -105,7 +105,7 @@ FoodAvailability.defaultProps = {
 };
 
 FoodAvailability.need = [
-  fetchData("snapWicData", "/api/data?measures=Number of Nutrition Assistance Stores&drilldowns=Assistance Type&Geography=<id>&Year=all")
+  fetchData("snapWicData", "/api/data?measures=Number of Nutrition Assistance Stores&drilldowns=Assistance Type&Geography=<id>&Year=all") // getting all year data since WIC and SNAP both have different latest years.
 ];
 
 const mapStateToProps = state => ({

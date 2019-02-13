@@ -31,7 +31,7 @@ class EmploymentGrowth extends SectionColumns {
 
         {/* Draw Geomap to show health center count for each zip code in the Wayne county */}
         <Geomap config={{
-          data: percentChangeInEmploymemt,
+          data: "/api/data?measures=Percent Change in Employment&drilldowns=Zip&Year=all",
           groupBy: "ID Zip",
           colorScale: "Percent Change in Employment",
           colorScaleConfig: {
@@ -46,6 +46,7 @@ class EmploymentGrowth extends SectionColumns {
           topojsonFilter: d => zipcodes.includes(d.properties.ZCTA5CE10),
           topojsonId: d => d.properties.ZCTA5CE10
         }}
+        dataFormat={resp => resp.data}
         />
       </SectionColumns>
     );
@@ -57,7 +58,7 @@ EmploymentGrowth.defaultProps = {
 };
 
 EmploymentGrowth.need = [
-  fetchData("percentChangeInEmploymemt", "/api/data?measures=Percent Change in Employment&drilldowns=Zip&Year=all", d => d.data)
+  fetchData("percentChangeInEmploymemt", "/api/data?measures=Percent Change in Employment&drilldowns=Zip&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({

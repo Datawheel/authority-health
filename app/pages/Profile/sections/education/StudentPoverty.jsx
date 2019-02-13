@@ -20,6 +20,28 @@ const formatLabel = d => {
   return newStr;
 };
 
+const formatLevelOfSchoolData = levelOfSchoolData => {
+  nest()
+    .key(d => d.Year)
+    .entries(levelOfSchoolData)
+    .forEach(group => {
+      const total = sum(group.values, d => d["Poverty by Schooling"]);
+      group.values.forEach(d => total !== 0 ? d.share = d["Poverty by Schooling"] / total * 100 : d.share = 0);
+    });
+
+  // Filter out Not Enrolled In School and above Poverty level data.
+  const filteredLevelOfSchoolData = levelOfSchoolData.filter(d => d["ID Level of School"] !== 7 && d["ID Poverty Status"] !== 1);
+
+  // Find top recent year Level of School Data.
+  const topLevelOfSchoolData = filteredLevelOfSchoolData.sort((a, b) => b.share - a.share)[0];
+
+  // Find percentage of population that were enrolled in school for the most recent year.
+  const recentYearNotEnrolledInSchool = levelOfSchoolData.filter(d => d["ID Level of School"] === 7);
+  const recentYearEnrolledInSchoolPercentage = 100 - recentYearNotEnrolledInSchool[0].share - recentYearNotEnrolledInSchool[1].share;
+
+  return [filteredLevelOfSchoolData, topLevelOfSchoolData, recentYearEnrolledInSchoolPercentage];
+};
+
 class StudentPoverty extends SectionColumns {
 
   render() {
@@ -28,28 +50,10 @@ class StudentPoverty extends SectionColumns {
     const levelOfSchoolDataAvailable = levelOfSchoolData.length !== 0;
 
     if (levelOfSchoolDataAvailable) {
-    // Format data for Level Of School.
-      const recentYearLevelOfSchoolData = {};
-      nest()
-        .key(d => d.Year)
-        .entries(levelOfSchoolData)
-        .forEach(group => {
-          const total = sum(group.values, d => d["Poverty by Schooling"]);
-          group.values.forEach(d => total !== 0 ? d.share = d["Poverty by Schooling"] / total * 100 : d.share = 0);
-          group.key >= levelOfSchoolData[0].Year ? Object.assign(recentYearLevelOfSchoolData, group) : {};
-        });
-
-      // Filter out Not Enrolled In School and above Poverty level data.
-      const filteredLevelOfSchoolData = levelOfSchoolData.filter(d => d["ID Level of School"] !== 7 && d["ID Poverty Status"] !== 1);
-
-      // Find top recent year Level of School Data.
-      const filteredRecentYearLevelOfSchoolData = recentYearLevelOfSchoolData.values.filter(d => d["ID Level of School"] !== 7 && d["ID Poverty Status"] !== 1);
-      filteredRecentYearLevelOfSchoolData.sort((a, b) => b.share - a.share);
-      const topLevelOfSchoolData = filteredRecentYearLevelOfSchoolData[0];
-
-      // Find percentage of population that were enrolled in school for the most recent year.
-      const recentYearNotEnrolledInSchool = recentYearLevelOfSchoolData.values.filter(d => d["ID Level of School"] === 7);
-      const recentYearEnrolledInSchoolPercentage = 100 - recentYearNotEnrolledInSchool[0].share - recentYearNotEnrolledInSchool[1].share;
+      // Format data for Level Of School.
+      const formattedLevelOfSchoolData = formatLevelOfSchoolData(levelOfSchoolData);
+      const topLevelOfSchoolData = formattedLevelOfSchoolData[1];
+      const recentYearEnrolledInSchoolPercentage = formattedLevelOfSchoolData[2];
 
       return (
         <SectionColumns>
@@ -73,7 +77,7 @@ class StudentPoverty extends SectionColumns {
 
           {/* Draw a Barchart to show Level Of School for students in poverty. */}
           <BarChart config={{
-            data: filteredLevelOfSchoolData,
+            data: `/api/data?measures=Poverty by Schooling&drilldowns=Level of School,Poverty Status&Geography=${meta.id}&Year=all`,
             discrete: "x",
             height: 400,
             legend: false,
@@ -97,6 +101,7 @@ class StudentPoverty extends SectionColumns {
             },
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
+          dataFormat={resp => formatLevelOfSchoolData(resp.data)[0]}
           />
         </SectionColumns>
       );
@@ -110,7 +115,7 @@ StudentPoverty.defaultProps = {
 };
 
 StudentPoverty.need = [
-  fetchData("levelOfSchoolData", "/api/data?measures=Poverty by Schooling&drilldowns=Level of School,Poverty Status&Geography=<id>&Year=all", d => d.data)
+  fetchData("levelOfSchoolData", "/api/data?measures=Poverty by Schooling&drilldowns=Level of School,Poverty Status&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({

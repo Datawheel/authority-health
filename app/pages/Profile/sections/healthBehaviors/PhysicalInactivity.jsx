@@ -1,6 +1,5 @@
 import React from "react";
 import {connect} from "react-redux";
-import {nest} from "d3-collection";
 import {BarChart, Geomap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
@@ -24,7 +23,7 @@ class PhysicalInactivity extends SectionColumns {
 
   render() {
 
-    const {physicalInActivity, physicalInactivityPrevalenceBySex} = this.props;
+    const {meta, physicalInActivity, physicalInactivityPrevalenceBySex} = this.props;
     const {dropdownValue} = this.state;
     const isPhysicalInactivityBySexAvailableForCurrentlocation = physicalInactivityPrevalenceBySex.source[0].substitutions.length === 0;
 
@@ -36,15 +35,8 @@ class PhysicalInactivity extends SectionColumns {
     const topRecentYearData = physicalInActivity.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
 
     // Find recent year top data for physicalInactivityPrevalenceBySex.
-    const recentYearPhysicalInactivityPrevalenceBySex = {};
-    nest()
-      .key(d => d["End Year"])
-      .entries(physicalInactivityPrevalenceBySex.data)
-      .forEach(group => {
-        group.key >= physicalInactivityPrevalenceBySex.data[0].Year ? Object.assign(recentYearPhysicalInactivityPrevalenceBySex, group) : {};
-      });
-    const topPhysicalInactivityMaleData = recentYearPhysicalInactivityPrevalenceBySex.values.filter(d => d.Sex === "Male")[0];
-    const topPhysicalInactivityFemaleData = recentYearPhysicalInactivityPrevalenceBySex.values.filter(d => d.Sex === "Female")[0];
+    const topPhysicalInactivityMaleData = physicalInactivityPrevalenceBySex.data.filter(d => d.Sex === "Male")[0];
+    const topPhysicalInactivityFemaleData = physicalInactivityPrevalenceBySex.data.filter(d => d.Sex === "Female")[0];
 
     return (
       <SectionColumns>
@@ -91,7 +83,7 @@ class PhysicalInactivity extends SectionColumns {
           {/* Draw a BarChart to show data for Physical Inactivity by Sex. */}
           {physicalInactivitySelected
             ? <BarChart config={{
-              data: physicalInactivityPrevalenceBySex.data,
+              data: `/api/data?measures=Age-Adjusted Physical Inactivity&drilldowns=Sex&Geography=${meta.id}&Year=all`,
               discrete: "y",
               height: 250,
               legend: false,
@@ -110,6 +102,7 @@ class PhysicalInactivity extends SectionColumns {
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", `${formatDropdownChoiceName(dropdownValue)}`], 
                 ["Prevalence", d => formatPercentage(d["Age-Adjusted Physical Inactivity"])], ["County", d => d.Geography]]}
             }}
+            dataFormat={resp => resp.data}
             />
             : null
           }
@@ -119,7 +112,7 @@ class PhysicalInactivity extends SectionColumns {
         <Geomap config={{
           data: physicalInActivity,
           groupBy: "ID Tract",
-          dropdownValue, // This attribute is added so that the Geomap re-renders and updates when the dropdown value changes.
+          dropdownValue, // This attribute is added so that the geomap re-renders and updates when the dropdown value changes.
           label: d => d.Tract,
           colorScale: d => d[dropdownValue],
           colorScaleConfig: {
@@ -142,11 +135,12 @@ PhysicalInactivity.defaultProps = {
 };
 
 PhysicalInactivity.need = [
-  fetchData("physicalInActivity", "/api/data?measures=Physical Health,Physical Inactivity&drilldowns=Tract&Year=all", d => d.data),
-  fetchData("physicalInactivityPrevalenceBySex", "/api/data?measures=Age-Adjusted Physical Inactivity&drilldowns=Sex&Geography=<id>&Year=all")
+  fetchData("physicalInActivity", "/api/data?measures=Physical Health,Physical Inactivity&drilldowns=Tract&Year=all", d => d.data), // physicalInActivity has only 1 year data (so Year=all is just 1 year data). 
+  fetchData("physicalInactivityPrevalenceBySex", "/api/data?measures=Age-Adjusted Physical Inactivity&drilldowns=Sex&Geography=<id>&Year=latest")
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
   physicalInActivity: state.data.physicalInActivity,
   physicalInactivityPrevalenceBySex: state.data.physicalInactivityPrevalenceBySex
 });

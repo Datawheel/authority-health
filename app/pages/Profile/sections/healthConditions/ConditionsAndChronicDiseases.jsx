@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {nest} from "d3-collection";
 import {Geomap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
+import axios from "axios";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -14,22 +15,44 @@ class ConditionsAndChronicDiseases extends SectionColumns {
 
   constructor(props) {
     super(props);
-    this.state = {dropdownValue: "Arthritis"};
+    this.state = {
+      dropdownValue: "Arthritis",
+      healthConditionWeightedData: [],
+      healthConditionData: this.props.healthConditionData
+    };
   }
 
   // Handler function for dropdown onChange event.
-  handleChange = event => this.setState({dropdownValue: event.target.value});
+  handleChange = event => {
+    const dropdownValue = event.target.value;
+    if (dropdownValue === "Cardiovascular Disease" ||
+    dropdownValue === "Ever Depressive" ||
+    dropdownValue === "Ever Heart Attack" ||
+    dropdownValue === "Heart Disease" ||
+    dropdownValue === "HIV Tested" ||
+    dropdownValue === "Poor Mental Health 14 Or More Days" ||
+    dropdownValue === "Gen Health Fair Or Poor") { 
+      axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=latest`)
+        .then(resp => {
+          this.setState({healthConditionWeightedData: resp.data.data});
+          this.setState({dropdownValue});
+        }); 
+    }
+    else {
+      axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Tract&Year=latest`)
+        .then(resp => {
+          this.setState({healthConditionData: resp.data.data});
+          this.setState({dropdownValue});
+        });
+    }
+  }
 
   render() {
-
-    const {healthConditionData, healthConditionWeightedData} = this.props;
-
-    // Include all the measures from healthConditionData and healthConditionWeightedData in the dropdown list.
-    const {dropdownValue} = this.state;
-    const dropdownList = healthConditionData.source[0].measures.slice();
-    healthConditionWeightedData.source[0].measures.forEach(d => {
-      dropdownList.push(d);
-    });
+    // Include all the measures in the dropdown list.
+    const {dropdownValue, healthConditionData, healthConditionWeightedData} = this.state;
+    const dropdownList = ["Arthritis", "COPD", "Chronic Kidney Disease", "Coronary Heart Disease", "Current Asthma", "High Blood Pressure", "High Cholesterol", 
+      "Mental Health", "Stroke", "Taking Blood Pressure Medication", "Teeth Loss", "Sleep Less Than 7 Hours", "Cardiovascular Disease", "Ever Depressive", 
+      "Ever Heart Attack", "Heart Disease", "HIV Tested", "Poor Mental Health 14 Or More Days", "Gen Health Fair Or Poor"];
 
     // Check if the selected dropdown values are from the healthConditionWeightedData.
     const isHealthConditionWeightedValueSelected = dropdownValue === "Cardiovascular Disease" ||
@@ -41,16 +64,8 @@ class ConditionsAndChronicDiseases extends SectionColumns {
     dropdownValue === "Gen Health Fair Or Poor";
 
     // Get top stats for the most recent year data for the selected dropdown value.
-    const topDropdownValueTract = healthConditionData.data.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
-
-    const recentYearWeightedData = {};
-    nest()
-      .key(d => d["End Year"])
-      .entries(healthConditionWeightedData.data)
-      .forEach(group => {
-        group.key >= healthConditionWeightedData.data[0]["End Year"] ? Object.assign(recentYearWeightedData, group) : {};
-      });
-    const topDropdownWeightedData = recentYearWeightedData.values.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
+    const topDropdownValueTract = healthConditionData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
+    const topDropdownWeightedData = healthConditionWeightedData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
 
     return (
       <SectionColumns>
@@ -99,7 +114,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
         {/* Geomap to show health condition data for selected dropdown value. */}
         {isHealthConditionWeightedValueSelected
           ? <Geomap config={{
-            data: healthConditionWeightedData.data,
+            data: `/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=all`,
             groupBy: "ID Zip Region",
             colorScale: dropdownValue,
             colorScaleConfig: {
@@ -113,9 +128,10 @@ class ConditionsAndChronicDiseases extends SectionColumns {
             topojsonId: d => d.properties.REGION,
             topojsonFilter: () => true
           }}
+          dataFormat={resp => resp.data}
           />
           : <Geomap config={{
-            data: healthConditionData.data,
+            data: `/api/data?measures=${dropdownValue}&drilldowns=Tract&Year=all`,
             groupBy: "ID Tract",
             colorScale: dropdownValue,
             colorScaleConfig: {
@@ -128,6 +144,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
             topojson: "/topojson/tract.json",
             topojsonFilter: d => d.id.startsWith("14000US26163")
           }}
+          dataFormat={resp => resp.data}
           />
         }
       </SectionColumns>
@@ -140,13 +157,11 @@ ConditionsAndChronicDiseases.defaultProps = {
 };
 
 ConditionsAndChronicDiseases.need = [
-  fetchData("healthConditionData", "/api/data?measures=Arthritis,COPD,Chronic Kidney Disease,Coronary Heart Disease,Current Asthma,High Blood Pressure,High Cholesterol,Mental Health,Stroke,Taking Blood Pressure Medication,Teeth Loss,Sleep Less Than 7 Hours&drilldowns=Tract&Year=all"),
-  fetchData("healthConditionWeightedData", "/api/data?measures=Cardiovascular Disease,Ever Depressive,Ever Heart Attack,Heart Disease,HIV Tested,Poor Mental Health 14 Or More Days,Gen Health Fair Or Poor&drilldowns=Zip Region&Year=all")
+  fetchData("healthConditionData", "/api/data?measures=Arthritis&drilldowns=Tract&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
-  healthConditionData: state.data.healthConditionData,
-  healthConditionWeightedData: state.data.healthConditionWeightedData
+  healthConditionData: state.data.healthConditionData
 });
 
 export default connect(mapStateToProps)(ConditionsAndChronicDiseases);

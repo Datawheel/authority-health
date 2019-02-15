@@ -11,40 +11,41 @@ import Stat from "../../../../components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
+const formatIncarcerationData = incarcerationData => {
+  // Format data for Incarceration data Barchart and stats.
+  const data = [];
+  incarcerationData.data.forEach(d => {
+    incarcerationData.source[0].measures.forEach(punishment => {
+      if (d[punishment] !== null) {
+        data.push(Object.assign({}, d, {Punishment: punishment}));
+      }
+    });
+  });
+
+  // Filter out "Total Incarcerations" from the Incarceration data.
+  const filteredData = data.filter(d => d.Punishment !== "Total Incarcerations");
+  nest()
+    .key(d => d.Year)
+    .entries(filteredData)
+    .forEach(group => {
+      const total = sum(group.values, d => d[d.Punishment]);
+      group.values.forEach(d => d.share = d[d.Punishment] / total * 100);
+    });
+  // Find top recent year Incarceration data.
+  const topIncarcerationData = filteredData.sort((a, b) => b.share - a.share)[0];
+  return [filteredData, topIncarcerationData];
+};
+
 class Incarceration extends SectionColumns {
 
   render() {
-    const {incarcerationData, allOffenceData, allPunishmentData} = this.props;
+    const {meta, incarcerationData, allOffenceData, allPunishmentData} = this.props;
 
     // Check if the data is available for current profile or if it falls back to the parent geography.
     const isIncarcerationDataAvailableForCurrentGeography = incarcerationData.source[0].substitutions.length === 0;
 
-    // Format data for Incarceration data Barchart and stats.
-    const data = [];
-    incarcerationData.data.forEach(d => {
-      incarcerationData.source[0].measures.forEach(punishment => {
-        if (d[punishment] !== null) {
-          data.push(Object.assign({}, d, {Punishment: punishment}));
-        }
-      });
-    });
-
-    // Filter "Total" from the Incarceration data.
-    const filteredData = data.filter(d => d.Punishment !== "Total Incarcerations");
-    const recentYearIncarcerationData = {};
-    nest()
-      .key(d => d.Year)
-      .entries(filteredData)
-      .forEach(group => {
-        const total = sum(group.values, d => d[d.Punishment]);
-        group.values.forEach(d => d.share = d[d.Punishment] / total * 100);
-        group.key >= data[0].Year ? Object.assign(recentYearIncarcerationData, group) : {};
-      });
-    // Find top recent year Incarceration data.
-    const filteredRecentYearData = recentYearIncarcerationData.values;
-    const sortedData = filteredRecentYearData.sort((a, b) => b.share - a.share);
-    const topIncarcerationData = sortedData[0];
-
+    const topIncarcerationData = formatIncarcerationData(incarcerationData)[1];
+    
     // Find top most offence for recent year.
     nest()
       .key(d => d.Year)
@@ -97,7 +98,7 @@ class Incarceration extends SectionColumns {
 
         {/* Draw a Barchart to show Incarceration data. */}
         <BarChart config={{
-          data: filteredData,
+          data: `/api/data?measures=Total Incarcerations,Prison Incarceration,Jail Incarceration,Jail/Probation Incarceration,Probation Incarceration,Other Incarceration&drilldowns=Offense&Geography=${meta.id}&Year=all`,
           discrete: "x",
           height: 400,
           stacked: true,
@@ -113,6 +114,7 @@ class Incarceration extends SectionColumns {
           },
           tooltipConfig: {tbody: [["Punishment", d => d.Punishment], ["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["County", d => d.Geography]]}
         }}
+        dataFormat={resp => formatIncarcerationData(resp)[0]} // pass resp and not resp.data since we access .data in the formatIncarcerationData() function.
         />
       </SectionColumns>
     );
@@ -124,12 +126,13 @@ Incarceration.defaultProps = {
 };
 
 Incarceration.need = [
-  fetchData("incarcerationData", "/api/data?measures=Total Incarcerations,Prison Incarceration,Jail Incarceration,Jail/Probation Incarceration,Probation Incarceration,Other Incarceration&drilldowns=Offense&Geography=<id>&Year=all"),
+  fetchData("incarcerationData", "/api/data?measures=Total Incarcerations,Prison Incarceration,Jail Incarceration,Jail/Probation Incarceration,Probation Incarceration,Other Incarceration&drilldowns=Offense&Geography=<id>&Year=latest"),
   fetchData("allOffenceData", "/api/data?measures=Total Incarcerations&drilldowns=Offense&Geography=<id>&Year=latest", d => d.data),
   fetchData("allPunishmentData", "/api/data?measures=Total Incarcerations,Prison Incarceration,Jail Incarceration,Jail/Probation Incarceration,Probation Incarceration,Other Incarceration&Geography=<id>&Year=latest")
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
   incarcerationData: state.data.incarcerationData,
   allOffenceData: state.data.allOffenceData,
   allPunishmentData: state.data.allPunishmentData

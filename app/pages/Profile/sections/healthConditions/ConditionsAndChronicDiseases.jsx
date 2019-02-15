@@ -1,6 +1,5 @@
 import React from "react";
 import {connect} from "react-redux";
-import {nest} from "d3-collection";
 import {Geomap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 import axios from "axios";

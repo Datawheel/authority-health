@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {nest} from "d3-collection";
 import {Geomap, Treemap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
+import axios from "axios";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -14,56 +15,42 @@ class RiskyBehaviors extends SectionColumns {
 
   constructor(props) {
     super(props);
-    this.state = {dropdownValue: "Current Smoking"};
+    this.state = {
+      dropdownValue: "Current Smoking",
+      secondHandSmokeAndMonthlyAlcohol: [],
+      allTractSmokingDrinkingData: this.props.allTractSmokingDrinkingData
+    };
   }
 
   // Handler function for dropdown onChange.
-  handleChange = event => this.setState({dropdownValue: event.target.value});
+  handleChange = event => {
+    const dropdownValue = event.target.value;
+    if (dropdownValue === "Secondhand Smoke Exposure" || dropdownValue === "Monthly Alcohol Consumption") { 
+      axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=latest`)
+        .then(resp => {
+          this.setState({secondHandSmokeAndMonthlyAlcohol: resp.data.data});
+          this.setState({dropdownValue});
+        }); 
+    }
+    else {
+      axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Tract&Year=latest`)
+        .then(resp => {
+          this.setState({allTractSmokingDrinkingData: resp.data.data});
+          this.setState({dropdownValue});
+        });
+    }
+  }
 
   render() {
-    const {dropdownValue} = this.state;
     const {id} = this.props.meta;
+    const {dropdownValue, secondHandSmokeAndMonthlyAlcohol, allTractSmokingDrinkingData} = this.state;
 
-    const {allTractSmokingDrinkingData, secondHandSmokeAndMonthlyAlcohol} = this.props;
-
-    // Include all the measures from allTractSmokingDrinkingData and secondHandSmokeAndMonthlyAlcohol in the dropdown list.
-    const drugTypes = allTractSmokingDrinkingData.source[0].measures.slice();
-    secondHandSmokeAndMonthlyAlcohol.source[0].measures.forEach(d => {
-      drugTypes.push(d);
-    });
+    const drugTypes = ["Current Smoking", "Binge Drinking", "Secondhand Smoke Exposure", "Monthly Alcohol Consumption"];
 
     const isSecondHandSmokeOrMonthlyAlcoholSelected = dropdownValue === "Secondhand Smoke Exposure" || dropdownValue === "Monthly Alcohol Consumption";
+    const topSecondHandSmokeAndMonthlyAlcoholData = secondHandSmokeAndMonthlyAlcohol.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
 
-    // Find recent year top data for the selceted dropdown value.
-    const recentYearSecondHandSmokeAndMonthlyAlcoholData = {};
-    nest()
-      .key(d => d["End Year"])
-      .entries(secondHandSmokeAndMonthlyAlcohol.data)
-      .forEach(group => {
-        group.key >= secondHandSmokeAndMonthlyAlcohol.data[0]["End Year"] ? Object.assign(recentYearSecondHandSmokeAndMonthlyAlcoholData, group) : {};
-      });
-    const topSecondHandSmokeAndMonthlyAlcoholData = recentYearSecondHandSmokeAndMonthlyAlcoholData.values.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
-
-    const allTractSmokingData = allTractSmokingDrinkingData.data.slice(0);
-    const topTractSmokingData = allTractSmokingData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
-
-    const allTractDrinkingData = allTractSmokingDrinkingData.data.slice(0);
-    const topTractDrinkingData = allTractDrinkingData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
-
-    let topTractNum = topTractSmokingData.Tract;
-    let year = topTractSmokingData.Year;
-    let topTractRate = topTractSmokingData[dropdownValue];
-
-    if (dropdownValue === drugTypes[0]) { // Assign all Smoking data here.
-      topTractNum = topTractSmokingData.Tract;
-      year = topTractSmokingData.Year;
-      topTractRate = topTractSmokingData[dropdownValue];
-    }
-    else { // Assign all Drinking data here.
-      topTractNum = topTractDrinkingData.Tract;
-      year = topTractDrinkingData.Year;
-      topTractRate = topTractDrinkingData[dropdownValue];
-    }
+    const topTractSmokingDrinkingData = allTractSmokingDrinkingData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
 
     return (
       <SectionColumns>
@@ -80,27 +67,19 @@ class RiskyBehaviors extends SectionColumns {
             </label>
           </div>
 
-          {isSecondHandSmokeOrMonthlyAlcoholSelected
-            ? <Stat
-              title={"Zip region with highest prevalence"}
-              value={topSecondHandSmokeAndMonthlyAlcoholData["Zip Region"]}
-              year={topSecondHandSmokeAndMonthlyAlcoholData["End Year"]}
-              qualifier={formatPercentage(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue])}
-            />
-            : <Stat
-              title={"Tract with highest prevalence"}
-              year={year}
-              value={topTractNum}
-              qualifier={formatPercentage(topTractRate)}
-            />
-          }
+          <Stat
+            title={isSecondHandSmokeOrMonthlyAlcoholSelected ? "Zip region with highest prevalence" : "Tract with highest prevalence"}
+            value={isSecondHandSmokeOrMonthlyAlcoholSelected ? topSecondHandSmokeAndMonthlyAlcoholData["Zip Region"] : topTractSmokingDrinkingData.Year}
+            year={isSecondHandSmokeOrMonthlyAlcoholSelected ? topSecondHandSmokeAndMonthlyAlcoholData["End Year"] : topTractSmokingDrinkingData.Tract}
+            qualifier={isSecondHandSmokeOrMonthlyAlcoholSelected ? formatPercentage(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue]) : formatPercentage(topTractSmokingDrinkingData[dropdownValue])}
+          />
           {isSecondHandSmokeOrMonthlyAlcoholSelected
             ? <div>
               <p>In {topSecondHandSmokeAndMonthlyAlcoholData["End Year"]}, {topSecondHandSmokeAndMonthlyAlcoholData["Zip Region"]} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatAbbreviate(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue])}%).</p>
               <p>The map here shows the {dropdownValue.toLowerCase()} for zip regions in Wayne County.</p>
             </div>
             : <div>
-              <p>In {year}, {topTractNum} had the highest prevalence of {dropdownValue.toLowerCase()} ({topTractRate}%) out of all Tracts in Wayne County.</p>
+              <p>In {topTractSmokingDrinkingData.Year}, {topTractSmokingDrinkingData.Tract} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatAbbreviate(topTractSmokingDrinkingData[dropdownValue])}%) out of all Tracts in Wayne County.</p>
               <p>The map here shows the {dropdownValue.toLowerCase()} for all tracts in Wayne County.</p>
             </div>
           }
@@ -141,7 +120,7 @@ class RiskyBehaviors extends SectionColumns {
         {/* Create a Geomap based on the dropdown choice. */}
         {isSecondHandSmokeOrMonthlyAlcoholSelected
           ? <Geomap config={{
-            data: secondHandSmokeAndMonthlyAlcohol.data,
+            data: `/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=all`,
             groupBy: "ID Zip Region",
             colorScale: dropdownValue,
             colorScaleConfig: {
@@ -155,9 +134,10 @@ class RiskyBehaviors extends SectionColumns {
             topojsonId: d => d.properties.REGION,
             topojsonFilter: () => true
           }}
+          dataFormat={resp => resp.data}
           />
           : <Geomap config={{
-            data: `/api/data?measures=${dropdownValue.replace(/\s/g, " ")}&drilldowns=Tract&Year=latest`,
+            data: `/api/data?measures=${dropdownValue}&drilldowns=Tract&Year=all`,
             groupBy: "ID Tract",
             colorScale: dropdownValue,
             colorScaleConfig: {
@@ -183,14 +163,12 @@ RiskyBehaviors.defaultProps = {
 };
 
 RiskyBehaviors.need = [
-  fetchData("allTractSmokingDrinkingData", "/api/data?measures=Current Smoking,Binge Drinking&drilldowns=Tract&Year=all"),
-  fetchData("secondHandSmokeAndMonthlyAlcohol", "/api/data?measures=Secondhand Smoke Exposure,Monthly Alcohol Consumption&drilldowns=Zip Region&Year=all")
+  fetchData("allTractSmokingDrinkingData", "/api/data?measures=Current Smoking&drilldowns=Tract&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   meta: state.data.meta,
-  allTractSmokingDrinkingData: state.data.allTractSmokingDrinkingData,
-  secondHandSmokeAndMonthlyAlcohol: state.data.secondHandSmokeAndMonthlyAlcohol
+  allTractSmokingDrinkingData: state.data.allTractSmokingDrinkingData
 });
 
 export default connect(mapStateToProps)(RiskyBehaviors);

@@ -65,8 +65,7 @@ class Homeless extends SectionColumns {
     this.state = {
       meta: this.props.meta,
       dropdownValue: "Sheltered Homeless Population",
-      typesOfUnshelteredHomeless: [],
-      typesOfShelteredHomeless: this.props.typesOfShelteredHomeless
+      typesOfUnshelteredHomeless: []
     };
   }
 

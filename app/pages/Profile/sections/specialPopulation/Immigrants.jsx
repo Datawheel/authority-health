@@ -64,8 +64,6 @@ class Immigrants extends SectionColumns {
     this.state = {
       meta: this.props.meta,
       dropdownValue: "Total Immigrants",
-      immigrantsData: this.props.immigrantsData,
-      immigrantsDataForCurrentLocation: this.props.immigrantsDataForCurrentLocation,
       immigrantsPovertyData: [],
       immigrantsPovertyDataForCurrentLocation: []
     };
@@ -92,7 +90,8 @@ class Immigrants extends SectionColumns {
 
   render() {
 
-    const {dropdownValue, immigrantsData, immigrantsPovertyData, immigrantsDataForCurrentLocation, immigrantsPovertyDataForCurrentLocation} = this.state;
+    const {dropdownValue, immigrantsPovertyData, immigrantsPovertyDataForCurrentLocation} = this.state;
+    const {immigrantsData, immigrantsDataForCurrentLocation} = this.props;
 
     const dropdownList = ["Total Immigrants", "Immigrants in Poverty"];
     const totalImmigrantsSelected = dropdownValue === "Total Immigrants";

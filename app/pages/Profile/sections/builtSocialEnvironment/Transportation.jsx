@@ -14,6 +14,44 @@ import rangeFormatter from "../../../../utils/rangeFormatter";
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 const filterTimeBucket = d => d.split(" ").filter(d => d !== "Minutes").join("");
 
+const formatCommuteTimeData = commuteTimeData => {
+  nest()
+    .key(d => d.Year)
+    .entries(commuteTimeData)
+    .forEach(group => {
+      const total = sum(group.values, d => d["Commuter Population"]);
+      group.values.forEach(d => total !== 0 ? d.share = d["Commuter Population"] / total * 100 : d.share = 0);
+    });
+  const topRecentYearCommuteTime = commuteTimeData.sort((a, b) => b.share - a.share)[0];
+  return [commuteTimeData, topRecentYearCommuteTime];
+};
+
+const formatNumberOfVehiclesData = numberOfVehiclesData => {
+  nest()
+    .key(d => d.Year)
+    .entries(numberOfVehiclesData)
+    .forEach(group => {
+      const total = sum(group.values, d => d["Commute Means by Gender"]);
+      group.values.forEach(d => total !== 0 ? d.share = d["Commute Means by Gender"] / total * 100 : d.share = 0);
+    });
+  const topRecentYearNumberOfVehicles = numberOfVehiclesData.sort((a, b) => b.share - a.share)[0];
+  const topAverageVehiclesPerHousehold = numberOfVehiclesData[0].share + numberOfVehiclesData[1].share;
+
+  return [numberOfVehiclesData, topRecentYearNumberOfVehicles, topAverageVehiclesPerHousehold];
+};
+
+const formatTransportationMeans = transportationMeans => {
+  nest()
+    .key(d => d.Year)
+    .entries(transportationMeans)
+    .forEach(group => {
+      const total = sum(group.values, d => d["Commute Means"]);
+      group.values.forEach(d => total !== 0 ? d.share = d["Commute Means"] / total * 100 : d.share = 0);
+    });
+  const topRecentYearModeOfTransport = transportationMeans.sort((a, b) => b.share - a.share)[0];
+  return [transportationMeans, topRecentYearModeOfTransport];
+};
+
 class Transportation extends SectionColumns {
 
   render() {
@@ -25,49 +63,23 @@ class Transportation extends SectionColumns {
     const transportationMeansAvailable = transportationMeans.length !== 0;
 
     // Get data for number of vehicles.
-    const recentYearNumberOfVehicles = {};
     let topAverageVehiclesPerHousehold, topRecentYearNumberOfVehicles;
     if (numberOfVehiclesDataAvailable) {
-      nest()
-        .key(d => d.Year)
-        .entries(numberOfVehiclesData)
-        .forEach(group => {
-          const total = sum(group.values, d => d["Commute Means by Gender"]);
-          group.values.forEach(d => total !== 0 ? d.share = d["Commute Means by Gender"] / total * 100 : d.share = 0);
-          group.key >= numberOfVehiclesData[0].Year ? Object.assign(recentYearNumberOfVehicles, group) : {};
-        });
-      topRecentYearNumberOfVehicles = recentYearNumberOfVehicles.values.sort((a, b) => b.share - a.share)[0];
-      topAverageVehiclesPerHousehold = recentYearNumberOfVehicles.values[0].share + recentYearNumberOfVehicles.values[1].share;
+      const getRecentYeraNumberOfVehiclesData = formatNumberOfVehiclesData(numberOfVehiclesData);
+      topRecentYearNumberOfVehicles = getRecentYeraNumberOfVehiclesData[1];
+      topAverageVehiclesPerHousehold = getRecentYeraNumberOfVehiclesData[2];
     }
 
     // Get data for commute time.
-    const recentYearCommuteTime = {};
     let topRecentYearCommuteTime;
     if (commuteTimeDataAvailable) {
-      nest()
-        .key(d => d.Year)
-        .entries(commuteTimeData)
-        .forEach(group => {
-          const total = sum(group.values, d => d["Commuter Population"]);
-          group.values.forEach(d => total !== 0 ? d.share = d["Commuter Population"] / total * 100 : d.share = 0);
-          group.key >= commuteTimeData[0].Year ? Object.assign(recentYearCommuteTime, group) : {};
-        });
-      topRecentYearCommuteTime = recentYearCommuteTime.values.sort((a, b) => b.share - a.share)[0];
+      topRecentYearCommuteTime = formatCommuteTimeData(commuteTimeData)[1];
     }
 
     // Get data for Mode of transport.
-    const recentYearModeOfTransport = {};
     let topRecentYearModeOfTransport;
     if (transportationMeansAvailable) {
-      nest()
-        .key(d => d.Year)
-        .entries(transportationMeans)
-        .forEach(group => {
-          const total = sum(group.values, d => d["Commute Means"]);
-          group.values.forEach(d => total !== 0 ? d.share = d["Commute Means"] / total * 100 : d.share = 0);
-          group.key >= transportationMeans[0].Year ? Object.assign(recentYearModeOfTransport, group) : {};
-        });
-      topRecentYearModeOfTransport = recentYearModeOfTransport.values.sort((a, b) => b.share - a.share)[0];
+      topRecentYearModeOfTransport = formatTransportationMeans(transportationMeans)[1];
     }
 
     return (
@@ -101,7 +113,7 @@ class Transportation extends SectionColumns {
           {/* Draw a Barchart for Number of vehicles in each household. */}
           {numberOfVehiclesDataAvailable 
             ? <BarChart config={{
-              data: numberOfVehiclesData,
+              data: `https://acs.datausa.io/api/data?measures=Commute Means by Gender&drilldowns=Vehicles Available,Gender&Geography=${meta.id}&Year=all`,
               discrete: "x",
               height: 300,
               groupBy: "Gender",
@@ -123,13 +135,14 @@ class Transportation extends SectionColumns {
               },
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Number of Vehicles", d => rangeFormatter(d["Vehicles Available"])], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}
+            dataFormat={resp => formatNumberOfVehiclesData(resp.data)[0]}
             /> : <div></div>}
         </article>
 
         {/* Draw a Barchart for commute time. */}
         {commuteTimeDataAvailable 
           ? <BarChart config={{
-            data: commuteTimeData,
+            data: `https://acs.datausa.io/api/data?measures=Commuter Population&drilldowns=Travel Time&Geography=${meta.id}&Year=all`,
             discrete: "x",
             height: 400,
             legend: false,
@@ -151,12 +164,13 @@ class Transportation extends SectionColumns {
             },
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
+          dataFormat={resp => formatCommuteTimeData(resp.data)[0]}
           /> : <div></div>}
 
         {/* Draw a Treemap for Modes of tranportation. */}
         {transportationMeansAvailable
           ? <Treemap config={{
-            data: transportationMeans,
+            data: `https://acs.datausa.io/api/data?measures=Commute Means&drilldowns=Transportation Means&Geography=${meta.id}&Year=all`,
             height: 400,
             sum: d => d["Commute Means"],
             legend: false,
@@ -165,6 +179,7 @@ class Transportation extends SectionColumns {
             title: "Means of Transportation",
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
+          dataFormat={resp => formatTransportationMeans(resp.data)[0]}
           /> : <div></div>}
       </SectionColumns>
     );
@@ -176,9 +191,9 @@ Transportation.defaultProps = {
 };
 
 Transportation.need = [
-  fetchData("commuteTimeData", "https://acs.datausa.io/api/data?measures=Commuter Population&drilldowns=Travel Time&Geography=<id>&Year=all", d => d.data),
-  fetchData("numberOfVehiclesData", "https://acs.datausa.io/api/data?measures=Commute Means by Gender&drilldowns=Vehicles Available,Gender&Geography=<id>&Year=all", d => d.data),
-  fetchData("transportationMeans", "https://acs.datausa.io/api/data?measures=Commute Means&drilldowns=Transportation Means&Geography=<id>&Year=all", d => d.data)
+  fetchData("commuteTimeData", "https://acs.datausa.io/api/data?measures=Commuter Population&drilldowns=Travel Time&Geography=<id>&Year=latest", d => d.data),
+  fetchData("numberOfVehiclesData", "https://acs.datausa.io/api/data?measures=Commute Means by Gender&drilldowns=Vehicles Available,Gender&Geography=<id>&Year=latest", d => d.data),
+  fetchData("transportationMeans", "https://acs.datausa.io/api/data?measures=Commute Means&drilldowns=Transportation Means&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({

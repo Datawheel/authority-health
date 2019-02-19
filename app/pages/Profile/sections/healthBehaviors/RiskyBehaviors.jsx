@@ -28,15 +28,19 @@ class RiskyBehaviors extends SectionColumns {
     if (dropdownValue === "Secondhand Smoke Exposure" || dropdownValue === "Monthly Alcohol Consumption") { 
       axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=latest`)
         .then(resp => {
-          this.setState({secondHandSmokeAndMonthlyAlcohol: resp.data.data});
-          this.setState({dropdownValue});
+          this.setState({
+            secondHandSmokeAndMonthlyAlcohol: resp.data.data,
+            dropdownValue
+          });
         }); 
     }
     else {
       axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Tract&Year=latest`)
         .then(resp => {
-          this.setState({allTractSmokingDrinkingData: resp.data.data});
-          this.setState({dropdownValue});
+          this.setState({
+            allTractSmokingDrinkingData: resp.data.data,
+            dropdownValue
+          });
         });
     }
   }

@@ -74,8 +74,10 @@ class Homeless extends SectionColumns {
     const dropdownValue =  event.target.value;
     axios.get(`/api/data?measures=Unsheltered Homeless Population&drilldowns=Category&Geography=${this.state.meta.id}&Year=latest`)
       .then(resp => {
-        this.setState({typesOfUnshelteredHomeless: resp.data.data});
-        this.setState({dropdownValue});
+        this.setState({
+          typesOfUnshelteredHomeless: resp.data.data,
+          dropdownValue
+        });
       });
   }
 

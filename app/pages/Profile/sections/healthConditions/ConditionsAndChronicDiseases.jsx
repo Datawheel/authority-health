@@ -33,15 +33,19 @@ class ConditionsAndChronicDiseases extends SectionColumns {
     dropdownValue === "Gen Health Fair Or Poor") { 
       axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=latest`)
         .then(resp => {
-          this.setState({healthConditionWeightedData: resp.data.data});
-          this.setState({dropdownValue});
+          this.setState({
+            healthConditionWeightedData: resp.data.data,
+            dropdownValue
+          });
         }); 
     }
     else {
       axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Tract&Year=latest`)
         .then(resp => {
-          this.setState({healthConditionData: resp.data.data});
-          this.setState({dropdownValue});
+          this.setState({
+            healthConditionData: resp.data.data,
+            dropdownValue
+          });
         });
     }
   }

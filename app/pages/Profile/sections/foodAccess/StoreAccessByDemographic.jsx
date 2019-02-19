@@ -26,8 +26,10 @@ class StoreAccessByDemographic extends SectionColumns {
     if (dropdownValue !== "Children" && dropdownValue !== "Seniors") { 
       axios.get(`/api/data?measures=Low-Access to Food by Race&drilldowns=Race Group&Geography=${this.state.meta.id}&Year=latest`)
         .then(resp => {
-          this.setState({foodAccessByRace: resp.data});
-          this.setState({dropdownValue});
+          this.setState({
+            foodAccessByRace: resp.data,
+            dropdownValue
+          });
         });
     }
     else this.setState({dropdownValue});

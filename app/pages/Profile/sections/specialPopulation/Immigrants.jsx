@@ -77,12 +77,12 @@ class Immigrants extends SectionColumns {
         .then(resp => {
           axios.get(`/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Poverty Status&Geography=${this.state.meta.id}&Year=latest`)
             .then(d => {
-              this.setState({immigrantsPovertyDataForCurrentLocation: d.data.data});
+              this.setState({
+                immigrantsPovertyDataForCurrentLocation: d.data.data,
+                immigrantsPovertyData: resp.data.data,
+                dropdownValue
+              });
             });
-          this.setState({
-            immigrantsPovertyData: resp.data.data,
-            dropdownValue
-          });
         });
     }
     else this.setState({dropdownValue});

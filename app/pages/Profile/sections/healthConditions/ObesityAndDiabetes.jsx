@@ -1,8 +1,8 @@
 import React from "react";
 import {connect} from "react-redux";
-import {nest} from "d3-collection";
 import {BarChart, Geomap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
+import axios from "axios";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -14,22 +14,45 @@ class ObesityAndDiabetes extends SectionColumns {
 
   constructor(props) {
     super(props);
-    this.state = {dropdownValue: "Obesity"};
+    this.state = {
+      meta: this.props.meta,
+      dropdownValue: "Diabetes",
+      BMIWeightedData: [],
+      obesityPrevalenceBySex: []
+    };
   }
 
   // Handler function for dropdown onChange event.
-  handleChange = event => this.setState({dropdownValue: event.target.value});
+  handleChange = event => {
+    const dropdownValue = event.target.value;
+    const geoId = this.state.meta.id;
+    if (dropdownValue === "BMI Healthy Weight" ||
+    dropdownValue === "BMI Obese" ||
+    dropdownValue === "BMI Overweight" ||
+    dropdownValue === "BMI Underweight" ||
+    dropdownValue === "Obesity") { 
+      axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=latest`)
+        .then(resp => {
+          axios.get(`/api/data?measures=Age-Adjusted Obesity Prevalence&drilldowns=Sex&Geography=${geoId}&Year=latest`)
+            .then(d => {
+              this.setState({
+                obesityPrevalenceBySex: d.data.data,
+                BMIWeightedData: resp.data.data,
+                dropdownValue
+              });
+            });
+        });
+    }
+    else this.setState({dropdownValue});
+  }
 
   render() {
 
-    const {obesityAndDibetesDataValue, obesityPrevalenceBySex, diabetesPrevalenceBySex, BMIWeightedData} = this.props;
+    const {obesityAndDibetesDataValue, diabetesPrevalenceBySex} = this.props;
 
     // Include all the measures from obesityAndDibetesDataValue and BMIWeightedData in the dropdown list.
-    const {dropdownValue} = this.state;
-    const dropdownList = obesityAndDibetesDataValue.source[0].measures.slice();
-    BMIWeightedData.source[0].measures.forEach(d => {
-      dropdownList.push(d);
-    });
+    const {meta, dropdownValue, obesityPrevalenceBySex, BMIWeightedData} = this.state;
+    const dropdownList = ["Diabetes", "Obesity", "BMI Healthy Weight", "BMI Obese", "BMI Overweight", "BMI Underweight"];
 
     // Check if the selected dropdown value is from the BMIWeightedData.
     const isBMIWeightedDataValueSelected = dropdownValue === "BMI Healthy Weight" ||
@@ -43,38 +66,20 @@ class ObesityAndDiabetes extends SectionColumns {
     const isHealthyWeightSelected = dropdownValue === "BMI Healthy Weight";
 
     // Find recent year top data for the selceted dropdown value.
-    const recentYearWeightedData = {};
-    nest()
-      .key(d => d["End Year"])
-      .entries(BMIWeightedData.data)
-      .forEach(group => {
-        group.key >= BMIWeightedData.data[0]["End Year"] ? Object.assign(recentYearWeightedData, group) : {};
-      });
-    const topDropdownWeightedData = recentYearWeightedData.values[0];
+    const topDropdownWeightedData = BMIWeightedData[0];
 
-    const topDropdownValueTract = obesityAndDibetesDataValue.data.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
+    const topDropdownValueTract = obesityAndDibetesDataValue.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
 
-    // Find recent year top data for diabetesPrevalenceBySex.
-    const recentYearDiabetesPrevalenceBySexData = {};
-    nest()
-      .key(d => d.Year)
-      .entries(diabetesPrevalenceBySex)
-      .forEach(group => {
-        group.key >= diabetesPrevalenceBySex[0].Year ? Object.assign(recentYearDiabetesPrevalenceBySexData, group) : {};
-      });
-    const topDiabetesMaleData = recentYearDiabetesPrevalenceBySexData.values.filter(d => d.Sex === "Male")[0];
-    const topDiabetesFemaleData = recentYearDiabetesPrevalenceBySexData.values.filter(d => d.Sex === "Female")[0];
-
-    // Find recent year top data for obesityPrevalenceBySex.
-    const recentYearObesityPrevalenceBySexData = {};
-    nest()
-      .key(d => d.Year)
-      .entries(obesityPrevalenceBySex)
-      .forEach(group => {
-        group.key >= obesityPrevalenceBySex[0].Year ? Object.assign(recentYearObesityPrevalenceBySexData, group) : {};
-      });
-    const topObesityMaleData = recentYearObesityPrevalenceBySexData.values.filter(d => d.Sex === "Male")[0];
-    const topObesityFemaleData = recentYearObesityPrevalenceBySexData.values.filter(d => d.Sex === "Female")[0];
+    // Find top stats data.
+    let topDiabetesFemaleData, topDiabetesMaleData, topObesityFemaleData, topObesityMaleData;
+    if (isDiabetesSelected) {
+      topDiabetesMaleData = diabetesPrevalenceBySex.filter(d => d.Sex === "Male")[0];
+      topDiabetesFemaleData = diabetesPrevalenceBySex.filter(d => d.Sex === "Female")[0];
+    }
+    else {
+      topObesityMaleData = obesityPrevalenceBySex.filter(d => d.Sex === "Male")[0];
+      topObesityFemaleData = obesityPrevalenceBySex.filter(d => d.Sex === "Female")[0];
+    }
 
     const topMaleData = isDiabetesSelected ? topDiabetesMaleData : topObesityMaleData;
     const topFemaleData = isDiabetesSelected ? topDiabetesFemaleData : topObesityFemaleData;
@@ -110,12 +115,12 @@ class ObesityAndDiabetes extends SectionColumns {
           <Stat
             title={"Male prevalence"}
             year={topMaleData.Year}
-            value={isDiabetesSelected ? formatPercentage(topMaleData["Age-Adjusted Obesity Prevalence"]) : formatPercentage(topMaleData["Age-Adjusted Obesity Prevalence"])}
+            value={isDiabetesSelected ? formatPercentage(topMaleData["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(topMaleData["Age-Adjusted Obesity Prevalence"])}
           />
           <Stat
             title={"Female prevalence"}
             year={topFemaleData.Year}
-            value={isDiabetesSelected ? formatPercentage(topFemaleData["Age-Adjusted Obesity Prevalence"]) : formatPercentage(topFemaleData["Age-Adjusted Obesity Prevalence"])}
+            value={isDiabetesSelected ? formatPercentage(topFemaleData["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(topFemaleData["Age-Adjusted Obesity Prevalence"])}
           />
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
@@ -125,7 +130,7 @@ class ObesityAndDiabetes extends SectionColumns {
           }
 
           {/* Write short paragraphs explaining Barchart and top stats for the Diabetes/Obesity data. */}
-          <p>In {topMaleData.Year}, rates for male and female residents of {topMaleData.Geography} were {isDiabetesSelected ? formatPercentage(topMaleData["Age-Adjusted Obesity Prevalence"]) : formatPercentage(topMaleData["Age-Adjusted Obesity Prevalence"])} and {isDiabetesSelected ? formatPercentage(topFemaleData["Age-Adjusted Obesity Prevalence"]) : formatPercentage(topFemaleData["Age-Adjusted Obesity Prevalence"])} respectively. { }
+          <p>In {topMaleData.Year}, rates for male and female residents of {topMaleData.Geography} were {isDiabetesSelected ? formatPercentage(topMaleData["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(topMaleData["Age-Adjusted Obesity Prevalence"])} and {isDiabetesSelected ? formatPercentage(topFemaleData["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(topFemaleData["Age-Adjusted Obesity Prevalence"])} respectively. { }
           The chart here shows male and female prevalence in {topMaleData.Geography}.</p>
 
           {isBMIWeightedDataValueSelected
@@ -135,13 +140,13 @@ class ObesityAndDiabetes extends SectionColumns {
 
           {/* Draw a BarChart to show data for Obesity Rate by Sex. */}
           <BarChart config={{
-            data: isDiabetesSelected ? diabetesPrevalenceBySex : obesityPrevalenceBySex,
+            data: isDiabetesSelected ? `/api/data?measures=Age-Adjusted Diabetes Prevalence&drilldowns=Sex&Geography=${meta.id}&Year=all` : `/api/data?measures=Age-Adjusted Obesity Prevalence&drilldowns=Sex&Geography=${meta.id}&Year=all`,
             discrete: "y",
             height: 250,
             legend: false,
             groupBy: "Sex",
             label: d => d.Sex,
-            x: isDiabetesSelected ? "Age-Adjusted Obesity Prevalence" : "Age-Adjusted Obesity Prevalence",
+            x: isDiabetesSelected ? "Age-Adjusted Diabetes Prevalence" : "Age-Adjusted Obesity Prevalence",
             y: "Sex",
             time: "ID Year",
             xConfig: {
@@ -151,16 +156,16 @@ class ObesityAndDiabetes extends SectionColumns {
             yConfig: {
               ticks: []
             },
-            tooltipConfig: isDiabetesSelected ? {tbody: [["Year", d => d.Year], ["Condition", "Diabetes"], ["Share", d => formatPercentage(d["Age-Adjusted Obesity Prevalence"])], ["County", d => d.Geography]]} 
-              : {tbody: [["Year", d => d.Year], ["Condition", "Obesity"], ["Prevalence", d => formatPercentage(d["Age-Adjusted Obesity Prevalence"])], ["County", d => d.Geography]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", isDiabetesSelected ? "Diabetes" : "Obesity"], ["Share", d => isDiabetesSelected ? formatPercentage(d["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(d["Age-Adjusted Obesity Prevalence"])], ["County", d => d.Geography]]}
           }}
+          dataFormat={resp => resp.data}
           />
         </article>
 
         {/* Geomap to show Obesity and Diabetes data based on the dropdown value. */}
         {isBMIWeightedDataValueSelected
           ? <Geomap config={{
-            data: BMIWeightedData.data,
+            data: `/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=all`,
             groupBy: "ID Zip Region",
             colorScale: dropdownValue,
             colorScaleConfig: {
@@ -174,9 +179,10 @@ class ObesityAndDiabetes extends SectionColumns {
             topojsonId: d => d.properties.REGION,
             topojsonFilter: () => true
           }}
+          dataFormat={resp => resp.data}
           />
           : <Geomap config={{
-            data: obesityAndDibetesDataValue.data,
+            data: `/api/data?measures=${dropdownValue}&drilldowns=Tract&Year=all`,
             groupBy: "ID Tract",
             colorScale: dropdownValue,
             colorScaleConfig: {
@@ -189,6 +195,7 @@ class ObesityAndDiabetes extends SectionColumns {
             topojson: "/topojson/tract.json",
             topojsonFilter: d => d.id.startsWith("14000US26163")
           }}
+          dataFormat={resp => resp.data}
           />
         }
       </SectionColumns>
@@ -201,16 +208,13 @@ ObesityAndDiabetes.defaultProps = {
 };
 
 ObesityAndDiabetes.need = [
-  fetchData("obesityAndDibetesDataValue", "/api/data?measures=Obesity,Diabetes&drilldowns=Tract&Year=all"),
-  fetchData("BMIWeightedData", "/api/data?measures=BMI Healthy Weight,BMI Obese,BMI Overweight,BMI Underweight&drilldowns=End Year,Zip Region"),
-  fetchData("obesityPrevalenceBySex", "/api/data?measures=Age-Adjusted Obesity Prevalence&drilldowns=Sex&Geography=<id>&Year=all", d => d.data),
-  fetchData("diabetesPrevalenceBySex", "/api/data?measures=Age-Adjusted Obesity Prevalence&drilldowns=Sex&Geography=<id>&Year=all", d => d.data)
+  fetchData("obesityAndDibetesDataValue", "/api/data?measures=Obesity,Diabetes&drilldowns=Tract&Year=latest", d => d.data),
+  fetchData("diabetesPrevalenceBySex", "/api/data?measures=Age-Adjusted Diabetes Prevalence&drilldowns=Sex&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
   obesityAndDibetesDataValue: state.data.obesityAndDibetesDataValue,
-  BMIWeightedData: state.data.BMIWeightedData,
-  obesityPrevalenceBySex: state.data.obesityPrevalenceBySex,
   diabetesPrevalenceBySex: state.data.diabetesPrevalenceBySex
 });
 

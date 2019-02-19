@@ -1,62 +1,54 @@
 import React from "react";
 import {connect} from "react-redux";
-import {nest} from "d3-collection";
 import {BarChart, Geomap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
+import axios from "axios";
 
 import Stat from "../../../../components/Stat";
 
-// const formatName = name => name.split(",")[0];
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
 class StoreAccessByDemographic extends SectionColumns {
 
   constructor(props) {
     super(props);
-    this.state = {dropdownValue: "Children"};
+    this.state = {
+      meta: this.props.meta,
+      dropdownValue: "Children",
+      foodAccessByRace: []
+    };
   }
 
   // Handler function for dropdown onChange event.
-  handleChange = event => this.setState({dropdownValue: event.target.value});
+  handleChange = event => {
+    const dropdownValue = event.target.value;
+    if (dropdownValue !== "Children" && dropdownValue !== "Seniors") { 
+      axios.get(`/api/data?measures=Low-Access to Food by Race&drilldowns=Race Group&Geography=${this.state.meta.id}&Year=latest`)
+        .then(resp => {
+          this.setState({foodAccessByRace: resp.data});
+          this.setState({dropdownValue});
+        });
+    }
+    else this.setState({dropdownValue});
+  }
 
   render() {
 
-    const {foodAccessByAge, foodAccessByRace} = this.props;
-    const {dropdownValue} = this.state;
-    const isFoodAccessByAgeAvailableForCurrentGeography = foodAccessByAge.source[0].substitutions.length === 0;
-    const isFoodAccessByRaceAvailableForCurrentGeography = foodAccessByRace.source[0].substitutions.length === 0;
-
+    const {foodAccessByAge} = this.props;
+    const {meta, dropdownValue, foodAccessByRace} = this.state;
     const raceAndAgeTypes = ["Children", "Seniors", "American Indian or Alaska Native", "Asian", "Black", "Hawaiian or Pacific Islander", "Hispanic ethnicity", "Multiracial", "White"];
     const ageSelected = dropdownValue === "Children" || dropdownValue === "Seniors";
+    const isCurrentLocationDataAvailable = ageSelected ? foodAccessByAge.source[0].substitutions.length === 0 : foodAccessByRace.source[0].substitutions.length === 0;
 
-    // Get recent year data for food access by Age.
-    const recentYearFoodAccessByAge = {};
-    nest()
-      .key(d => d.Year)
-      .entries(foodAccessByAge.data)
-      .forEach(group => {
-        group.key >= foodAccessByAge.data[0].Year ? Object.assign(recentYearFoodAccessByAge, group) : {};
-      });
-    recentYearFoodAccessByAge.values.sort((a, b) => b["Low-Access to Food by Age"] - a["Low-Access to Food by Age"]);
-    const topFoodAccessByAge = recentYearFoodAccessByAge.values[0];
-
-    // Get recent year data for food access by Race.
-    const recentYearFoodAccessByRace = {};
-    nest()
-      .key(d => d.Year)
-      .entries(foodAccessByRace.data)
-      .forEach(group => {
-        group.key >= foodAccessByRace.data[0].Year ? Object.assign(recentYearFoodAccessByRace, group) : {};
-      });
-    recentYearFoodAccessByRace.values.sort((a, b) => b["Low-Access to Food by Race"] - a["Low-Access to Food by Race"]);
-    const topFoodAccessByRace = recentYearFoodAccessByRace.values[0];
+    // Get recent year data for food access by Age/Race based on the dropdown.
+    const topFoodAccessData = ageSelected ? foodAccessByAge.data.sort((a, b) => b["Low-Access to Food by Age"] - a["Low-Access to Food by Age"])[0] : foodAccessByRace.data.sort((a, b) => b["Low-Access to Food by Race"] - a["Low-Access to Food by Race"])[0];
 
     return (
       <SectionColumns>
         <SectionTitle>Store Access by Demographic</SectionTitle>
         <article>
-          {isFoodAccessByAgeAvailableForCurrentGeography && isFoodAccessByRaceAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {foodAccessByRace.data[0].Geography}.</div>}
+          {isCurrentLocationDataAvailable ? <div></div> : <div className="disclaimer">Showing data for {ageSelected ? foodAccessByAge.data[0].Geography : foodAccessByRace.data[0].Geography}.</div>}
           {/* Create a dropdown for each age and race type using raceAndAgeTypes array. */}
           <div className="pt-select pt-fill">
             <select onChange={this.handleChange}>
@@ -64,31 +56,19 @@ class StoreAccessByDemographic extends SectionColumns {
             </select>
           </div>
           {/* Show top stats for Age and Race groups based on the drilldown value. */}
-          { ageSelected
-            ? <Stat
-              title={"Most at risk demographic"}
-              year={topFoodAccessByAge.Year}
-              value={topFoodAccessByAge["Age Group"]}
-              qualifier={`${formatPercentage(topFoodAccessByAge["Low-Access to Food by Age"])} Low Access`}
-            />
-            : <Stat
-              title={"Top Food Access by Race"}
-              year={topFoodAccessByRace.Year}
-              value={topFoodAccessByRace["Race Group"]}
-              qualifier={`${formatPercentage(topFoodAccessByRace["Low-Access to Food by Race"])} Low Access`}
-            />
-          }
+          <Stat
+            title={ageSelected ? "Most at risk demographic" : "Top Food Access by Race"}
+            year={topFoodAccessData.Year}
+            value={ageSelected ? topFoodAccessData["Age Group"] : topFoodAccessData["Race Group"]}
+            qualifier={ageSelected ? `${formatPercentage(topFoodAccessData["Low-Access to Food by Age"])} Low Access` : `${formatPercentage(topFoodAccessData["Low-Access to Food by Race"])} Low Access`}
+          />
           {/* Write a paragraph for top stats based on the dropdown choice. */}
-          {ageSelected
-            ? <p> In {topFoodAccessByAge.Geography}, {topFoodAccessByAge["Age Group"]} are the largest age group with low access to food stores ({formatPercentage(topFoodAccessByAge["Low-Access to Food by Age"])} in {topFoodAccessByAge.Year}).</p>
-            : <p> In {topFoodAccessByRace.Geography}, {topFoodAccessByRace["Race Group"]} are the largest race group with low access to food stores ({formatPercentage(topFoodAccessByRace["Low-Access to Food by Race"])} in {topFoodAccessByRace.Year}).</p>
-          }
-
+          <p> In {topFoodAccessData.Geography}, {ageSelected ? topFoodAccessData["Age Group"].toLowerCase() : topFoodAccessData["Race Group"]} were the largest {ageSelected ? "age" : "race"} group with low access to food stores ({ageSelected ? formatPercentage(topFoodAccessData["Low-Access to Food by Age"]) : formatPercentage(topFoodAccessData["Low-Access to Food by Race"])} in {topFoodAccessData.Year}).</p>
           <p>The following map shows the low access rate for {dropdownValue.toLowerCase()} with low access to food stores across all counties in Michigan.</p>
 
           {/* Create a BarChart based on the dropdown choice. */}
           <BarChart config={{
-            data: ageSelected ? foodAccessByAge.data : foodAccessByRace.data,
+            data: ageSelected ? `/api/data?measures=Low-Access to Food by Age&drilldowns=Age Group&Geography=${meta.id}&Year=all` : `/api/data?measures=Low-Access to Food by Race&drilldowns=Race Group&Geography=${meta.id}&Year=all`,
             discrete: "y",
             height: 200,
             legend: false,
@@ -103,6 +83,7 @@ class StoreAccessByDemographic extends SectionColumns {
             time: "Year",
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", d => ageSelected ? `${d["Age Group"]}` : `${d["Race Group"]}`], ["Low-Access Rate", d => ageSelected ? formatPercentage(d["Low-Access to Food by Age"]) : formatPercentage(d["Low-Access to Food by Race"])], ["County", d => d.Geography]]}
           }}
+          dataFormat={resp => resp.data}
           />
         </article>
 
@@ -133,13 +114,12 @@ StoreAccessByDemographic.defaultProps = {
 };
 
 StoreAccessByDemographic.need = [
-  fetchData("foodAccessByAge", "/api/data?measures=Low-Access to Food by Age&drilldowns=Age Group&Geography=<id>&Year=all"),
-  fetchData("foodAccessByRace", "/api/data?measures=Low-Access to Food by Race&drilldowns=Race Group&Geography=<id>&Year=all")
+  fetchData("foodAccessByAge", "/api/data?measures=Low-Access to Food by Age&drilldowns=Age Group&Geography=<id>&Year=latest")
 ];
 
 const mapStateToProps = state => ({
-  foodAccessByAge: state.data.foodAccessByAge,
-  foodAccessByRace: state.data.foodAccessByRace
+  meta: state.data.meta,
+  foodAccessByAge: state.data.foodAccessByAge
 });
 
 export default connect(mapStateToProps)(StoreAccessByDemographic);

@@ -20,7 +20,6 @@ module.exports = [
     agency: "Early On Program",
     contact: "Diane Rushlow",
     email: "Earlyonprogram@waynecounty.com",
-    location: "16000US2684940",
     phone: ["7347277094"]
   },
   {
@@ -70,6 +69,13 @@ module.exports = [
   {
     slug: "coverage",
     agency: "HealthChoice Senior Prescription Savings Program",
+    contact: "Patsy Walton",
+    email: "pwalton1@waynecounty.com",
+    phone: ["1800WellNow"]
+  },
+  {
+    slug: "coverage",
+    agency: "HealthChoice Senior Vision",
     contact: "Patsy Walton",
     email: "pwalton1@waynecounty.com",
     phone: ["1800WellNow"]
@@ -130,6 +136,14 @@ module.exports = [
   {
     slug: "food-availability",
     agency: "WIC Program",
+    location: "16000US2622000",
+    phone: ["3136764220"],
+    address1: "25321 Five Mile Road, Ste.2t",
+    address2: "Redford, MI 48239"
+  },
+  {
+    slug: "food-availability",
+    agency: "WIC Program",
     location: "16000US2668760",
     phone: ["3139142373"],
     address1: "550 Eaton St., Room 224",
@@ -142,6 +156,14 @@ module.exports = [
     phone: ["7342873075"],
     address1: "18635 Bowie Street",
     address2: "Southgate, MI 48195"
+  },
+  {
+    slug: "food-availability",
+    agency: "WIC Program",
+    location: "16000US2669420",
+    phone: ["7344616419"],
+    address1: "23501 Sumter Road",
+    address2: "Belleville, MI 48111"
   },
   {
     slug: "food-availability",
@@ -248,7 +270,7 @@ module.exports = [
     slug: "preventive-care",
     agency: "STDs & AIDS Counseling and Testing (HIV,AIDS)",
     contact: "Todd Spreitzer",
-    title: "Report Results",
+    title: "Result Reporting",
     email: "Tspreitz@waynecounty.com",
     phone: ["7347277101"]
   },
@@ -316,6 +338,14 @@ module.exports = [
   {
     slug: "preventive-care",
     agency: "WIC Program",
+    location: "16000US2622000",
+    phone: ["3136764220"],
+    address1: "25321 Five Mile Road, Ste.2t",
+    address2: "Redford, MI 48239"
+  },
+  {
+    slug: "preventive-care",
+    agency: "WIC Program",
     location: "16000US2668760",
     phone: ["3139142373"],
     address1: "550 Eaton St., Room 224",
@@ -328,6 +358,14 @@ module.exports = [
     phone: ["7342873075"],
     address1: "18635 Bowie Street",
     address2: "Southgate, MI 48195"
+  },
+  {
+    slug: "preventive-care",
+    agency: "WIC Program",
+    location: "16000US2669420",
+    phone: ["7344616419"],
+    address1: "23501 Sumter Road",
+    address2: "Belleville, MI 48111"
   },
   {
     slug: "preventive-care",
@@ -424,7 +462,7 @@ module.exports = [
   {
     slug: "risky-behaviors",
     agency: "Behavioral-Community-Based Case Management and Relapse Prevention",
-    subAgency: "CSSWC* Sex Offender treatment",
+    subAgency: "CSSWC*Sex Offender treatment",
     location: "16000US2621000",
     contact: "Laura Bush",
     phone: ["31383383250"]
@@ -432,7 +470,7 @@ module.exports = [
   {
     slug: "risky-behaviors",
     agency: "Behavioral-Community-Based Case Management and Relapse Prevention",
-    subAgency: "Detroit's East Side",
+    subAgency: "Detroit's East Side - Transitions Domestic Violence Program",
     contact: "Robert Sisler",
     phone: ["3138212500"]
   },
@@ -446,7 +484,7 @@ module.exports = [
     slug: "risky-behaviors",
     agency: "Behavioral-Jail-Based Cognitive Behavioral Therapy and Domestic Violence Treatment",
     subAgency: "Community Corrections Case Differentiation Unit",
-    phone: ["2483992600", "3138758667"]
+    phone: ["2483992600", "3138758667 (referrals)"]
   },
   {
     slug: "physical-health-and-inactivity",
@@ -541,7 +579,7 @@ module.exports = [
     agency: "Senior Citizen Nutrition Program",
     contact: "Joan Siavarkas",
     email: "jsiavrak@waynecounty.com",
-    title: "Home Delivered/Liquid Meals",
+    subAgency: "Home Delivered/Liquid Meals",
     phone: ["18008511454", "7347277357"]
   },
   {
@@ -549,7 +587,7 @@ module.exports = [
     agency: "Senior Citizen Nutrition Program",
     contact: "Joan Siavarkas",
     email: "jsiavrak@waynecounty.com",
-    title: "Congregate Meals",
+    subAgency: "Congregate Meals",
     phone: ["18008511455", "7347277388"]
   },
   {
@@ -557,7 +595,7 @@ module.exports = [
     agency: "Senior Citizen Nutrition Program",
     contact: "Joan Siavarkas",
     email: "jsiavrak@waynecounty.com",
-    title: "Administration",
+    subAgency: "Administration",
     phone: ["7347277373"]
   },
   {
@@ -599,13 +637,6 @@ module.exports = [
   {
     slug: "incarceration",
     agency: "Jail Medical Health",
-    contact: "Keith Dlugokinski",
-    email: "uward@waynecounty.com",
-    phone: ["3132248192"]
-  },
-  {
-    slug: "incarceration",
-    agency: "Jail Mental Health",
     contact: "Keith Dlugokinski",
     email: "uward@waynecounty.com",
     phone: ["3132248192"]
@@ -741,13 +772,6 @@ module.exports = [
   },
   {
     slug: "household-income-from-public-assistance",
-    agency: "Childhood Lead Poisoning, Community Outreach and Lead Education",
-    contact: "Anthony Matlock",
-    email: "amatlock@waynecounty.com",
-    phone: ["7347277400"]
-  },
-  {
-    slug: "household-income-from-public-assistance",
     agency: "WIC Program",
     contact: "Central Call Center",
     phone: ["7347277156"]
@@ -793,7 +817,15 @@ module.exports = [
     address2: "Inkster, MI 48141"
   },
   {
-    slug: "household-income-from-public-assistance",
+    slug: "food-availability",
+    agency: "WIC Program",
+    location: "16000US2622000",
+    phone: ["3136764220"],
+    address1: "25321 Five Mile Road, Ste.2t",
+    address2: "Redford, MI 48239"
+  },
+  {
+    slug: "food-availability",
     agency: "WIC Program",
     location: "16000US2668760",
     phone: ["3139142373"],
@@ -801,12 +833,20 @@ module.exports = [
     address2: "River Rouge, MI 48218"
   },
   {
-    slug: "household-income-from-public-assistance",
+    slug: "food-availability",
     agency: "WIC Program",
     location: "16000US2674960",
     phone: ["7342873075"],
     address1: "18635 Bowie Street",
     address2: "Southgate, MI 48195"
+  },
+  {
+    slug: "food-availability",
+    agency: "WIC Program",
+    location: "16000US2669420",
+    phone: ["7344616419"],
+    address1: "23501 Sumter Road",
+    address2: "Belleville, MI 48111"
   },
   {
     slug: "household-income-from-public-assistance",

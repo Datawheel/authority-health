@@ -4,8 +4,9 @@ import {Geomap} from "d3plus-react";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
-import zipcodes from "../../../../utils/zipcodes";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
+import zipcodes from "utils/zipcodes";
 
 class EmploymentGrowth extends SectionColumns {
 
@@ -27,6 +28,7 @@ class EmploymentGrowth extends SectionColumns {
 
           <p>In {topEmploymentRateData.Year}, the zip code in Wayne County with the largest employment growth was {topEmploymentRateData.Zip} ({topEmploymentRateData["Percent Change in Employment"]}%).</p>
           <p>The following map shows the employment growth for all zip codes in Wayne County.</p>
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Draw Geomap to show health center count for each zip code in the Wayne county */}

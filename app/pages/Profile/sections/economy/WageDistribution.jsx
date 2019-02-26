@@ -8,8 +8,9 @@ import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
-import rangeFormatter from "../../../../utils/rangeFormatter";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
+import rangeFormatter from "utils/rangeFormatter";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
@@ -44,6 +45,7 @@ class WageDistribution extends SectionColumns {
           />
           {wageGinidataAvailable ? <p>In {wageGinidata[0].Year}, the income inequality in {wageGinidata[0].Geography} was {wageGinidata[0]["Wage GINI"]}. The GINI coefficient is a measure of statistical dispersion intended to represent the equality of a distribution, and is the most commonly used measure of inequality. Values range from 0 to 1, with 0 being perfect equality.</p> : ""}
           {wageDistributionDataAvailable ? <p>The following chart shows the household income bucket and share for each bucket in {wageDistributionData[0].Geography}.</p> : ""}
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Draw Geomap to show wage distribution for each place in the Wayne county. */}

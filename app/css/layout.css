@@ -198,6 +198,14 @@ layout
       font-family: inherit;
       color: inherit;
 
+      & .disclaimer {
+        @add-mixin font-xs;
+        @add-mixin font-uppercase;
+        color: var(--majorelle-dark);
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+
       & .pt-select {
         margin-bottom: 10px;
       }

@@ -5,8 +5,9 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
-import zipcodes from "../../../../utils/zipcodes";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
+import zipcodes from "utils/zipcodes";
 
 const formatPercentage = d => `${formatAbbreviate(d * 100)}%`;
 
@@ -33,6 +34,7 @@ class DropoutRate extends SectionColumns {
           />
           <p>In {topDropoutRate.Year}, zip code {topDropoutRate.Zip} had the highest dropout rate ({formatPercentage(topDropoutRate["High School Dropout Rate"])}).</p>
           <p>The following map shows the dropout rate for areas by zip code in Wayne County.</p>
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Draw Geomap to show dropout rate for each zip code in the Wayne county */}

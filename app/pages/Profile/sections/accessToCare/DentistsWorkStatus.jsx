@@ -7,7 +7,8 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -48,7 +49,7 @@ const formatTypesOfActiveDentists = typesOfActiveDentists => {
     });
   // Filter out Private Practice Dentists data since it holds maximun percentage. Data for it is shown in stats.
   const filteredActiveDentistsData = typesOfActiveDentists.filter(d => d.Work !== "Private Practice");
-  
+
   // Find recent year top active dentists data for stats.
   const topTypeOfActiveDentist = typesOfActiveDentists.sort((a, b) => b.share - a.share)[0];
   return [filteredActiveDentistsData, topTypeOfActiveDentist];
@@ -100,6 +101,7 @@ class DentistsWorkStatus extends SectionColumns {
           <p>{formatPercentage(topTypeOfActiveDentist.share)} of dentists in {topTypeOfActiveDentist.Geography} operate out of a private practice and {formatPercentage(recentYearFullTimeDentists.share)} of dentists work full-time.</p>
           <p>In {recentYearGpPediatricDentists.Year}, {formatPercentage(recentYearGpPediatricDentists.share)} of all dentists in {recentYearGpPediatricDentists.Geography} work in either pediatrics or general practice, with only {formatPercentage(recentYearOtherSpecialtyDentists.share)} practicing a speciality dental field.</p>
           <p>The following chart shows the breakdown of dentists who do not work in a private practice.</p>
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Draw a BarChart to show data for Types of Active Dentists */}

@@ -8,8 +8,9 @@ import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
-import rangeFormatter from "../../../../utils/rangeFormatter";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
+import rangeFormatter from "utils/rangeFormatter";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -18,7 +19,7 @@ class Unemployment extends SectionColumns {
   render() {
 
     const {meta, employmentStatus, workExperience, unemploymentRate} = this.props;
-    
+
     const employmentStatusAvailable = employmentStatus.length !== 0;
     const workExperienceAvailable = workExperience.length !== 0;
     const isUnemploymentRateAvailableForCurrentLocation = unemploymentRate.source[0].substitutions.length === 0;
@@ -64,7 +65,7 @@ class Unemployment extends SectionColumns {
       .forEach(group => {
         group.key >= unemploymentRate.data[0].Year ? Object.assign(recentYearUnemploymentRate, group) : {};
       });
-    
+
     return (
       <SectionColumns>
         <SectionTitle>Unemployment</SectionTitle>
@@ -87,9 +88,9 @@ class Unemployment extends SectionColumns {
             In {recentYearUnemploymentRate.values[0].Year}, the overall unemploymemt rate in {recentYearUnemploymentRate.values[0].Geography} was {formatPercentage(recentYearUnemploymentRate.values[0]["Unemployment Rate"])}.
           </p>
           <p>The following charts show the unemployment rate over time both{workExperienceAvailable ? <span> overall and by age and gender.</span> : "."}</p>
-          
+
           {/* Barchart to show population by age and gender over the years for selected geography. */}
-          {workExperienceAvailable 
+          {workExperienceAvailable
             ? <BarChart config={{
               data: unemployedData,
               discrete: "x",
@@ -112,6 +113,7 @@ class Unemployment extends SectionColumns {
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => rangeFormatter(d.Age)], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}
             /> : <div></div>}
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Lineplot to show total population over the years for selected geography. */}

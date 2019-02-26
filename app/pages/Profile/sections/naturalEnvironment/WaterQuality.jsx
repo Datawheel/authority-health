@@ -7,7 +7,8 @@ import styles from "style.yml";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
 
 const formatData = d => {
   let value = -1;
@@ -57,7 +58,7 @@ class WaterQuality extends SectionColumns {
   render() {
     const {waterQualityData} = this.props;
     const filteredData = waterQualityData.data.filter(d => d["ID Tract"].startsWith("14000US26163"));
-    
+
     const {dropdownValue} = this.state;
     const dropdownList = ["Lead Level", "Mercury Level"];
     const leadLevelSelected = dropdownValue === "Lead Level";
@@ -81,8 +82,8 @@ class WaterQuality extends SectionColumns {
               {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
             </select>
           </div>
-
           {leadLevelSelected ? leadStats : mercuryStats}
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Geomap to show Lead and Mercury level in water for all tracts in the Wayne County. */}

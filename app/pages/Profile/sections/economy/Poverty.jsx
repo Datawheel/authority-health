@@ -8,8 +8,9 @@ import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
-import rangeFormatter from "../../../../utils/rangeFormatter";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
+import rangeFormatter from "utils/rangeFormatter";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
@@ -107,6 +108,7 @@ class Poverty extends SectionColumns {
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}
             /> : <div></div>}
+          <Contact slug={this.props.slug} />
         </article>
 
         {povertyByAgeAndGenderAvailable

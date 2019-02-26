@@ -8,7 +8,8 @@ import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -58,7 +59,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
         if (d["Number of workers"] === topRecentYearHouseholdSnapData["Number of workers"]) totalTopHouseoldShare += d.share;
       });
     }
-    
+
     return (
       <SectionColumns>
         <SectionTitle>Household Income From Public Assistance</SectionTitle>
@@ -79,9 +80,10 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
             {householdSnapDataAvailable ? <span>The most common number of workers per household  on public assistance is {topRecentYearHouseholdSnapData["Number of workers"].toLowerCase()} ({formatPercentage(totalTopHouseoldShare)}).</span> : ""}
           </p>
           {householdSnapDataAvailable ? <p>The following chart shows the number of workers per household on public assistance.</p> : ""}
+          <Contact slug={this.props.slug} />
         </article>
 
-        {householdSnapDataAvailable 
+        {householdSnapDataAvailable
           ? <BarChart config={{
             data: filterSnapRecievedData,
             discrete: "x",

@@ -8,7 +8,8 @@ import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
@@ -60,6 +61,7 @@ class EducationalAttainment extends SectionColumns {
             />
             <p>In {topEducationalAttainment.Year}, the most common education level attained in {topEducationalAttainment.Geography} was {topEducationalAttainment["Educational Attainment"].toLowerCase()} with a share of {formatPopulation(topEducationalAttainment.share)}.</p>
             <p>The following chart shows educational attainment of male and female in {topEducationalAttainment.Geography}.</p>
+            <Contact slug={this.props.slug} />
           </article>
 
           {/* Draw a Barchart to show Educational Attainment for all types of education buckets. */}

@@ -8,8 +8,9 @@ import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
-import rangeFormatter from "../../../../utils/rangeFormatter";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
+import rangeFormatter from "utils/rangeFormatter";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
@@ -18,7 +19,7 @@ class DisabilityStatus extends SectionColumns {
   render() {
 
     const {meta, healthCoverageType, disabilityStatus} = this.props;
-    
+
     const healthCoverageTypeAvailable = healthCoverageType.length !== 0;
     const disabilityStatusAvailable = disabilityStatus.length !== 0;
 
@@ -66,10 +67,11 @@ class DisabilityStatus extends SectionColumns {
           {/* Write short paragraph describing stats and barchart. */}
           {disabilityStatusAvailable ? <p>In {topDisabilityStatus.Year}, the most common disabled age group was {rangeFormatter(topDisabilityStatus.Age)} years making up {formatPopulation(topDisabilityStatus.share)} of all disabled citizens in {topDisabilityStatus.Geography}.</p> : ""}
           {healthCoverageTypeAvailable ? <p>The chart here shows the health coverage breakdown of the disabled population in {filteredHealthCoverageType[0].Geography}.</p> : ""}
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Show barchart for each age group type with public, private and no health insurance coverage*/}
-        {healthCoverageTypeAvailable 
+        {healthCoverageTypeAvailable
           ? <BarChart config={{
             data: filteredHealthCoverageType,
             discrete: "y",

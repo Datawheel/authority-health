@@ -6,7 +6,8 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -151,10 +152,11 @@ class ObesityAndDiabetes extends SectionColumns {
             yConfig: {
               ticks: []
             },
-            tooltipConfig: isDiabetesSelected ? {tbody: [["Year", d => d.Year], ["Condition", "Diabetes"], ["Share", d => formatPercentage(d["Age-Adjusted Obesity Prevalence"])], ["County", d => d.Geography]]} 
+            tooltipConfig: isDiabetesSelected ? {tbody: [["Year", d => d.Year], ["Condition", "Diabetes"], ["Share", d => formatPercentage(d["Age-Adjusted Obesity Prevalence"])], ["County", d => d.Geography]]}
               : {tbody: [["Year", d => d.Year], ["Condition", "Obesity"], ["Prevalence", d => formatPercentage(d["Age-Adjusted Obesity Prevalence"])], ["County", d => d.Geography]]}
           }}
           />
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Geomap to show Obesity and Diabetes data based on the dropdown value. */}

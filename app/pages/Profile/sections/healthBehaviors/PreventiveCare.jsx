@@ -6,7 +6,8 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -86,6 +87,7 @@ class PreventiveCare extends SectionColumns {
             ? <p>The map here shows the {dropdownValue.toLowerCase()} for all zip regions in Wayne County.</p>
             : <p>The map here shows the {dropdownValue.toLowerCase()} for all tracts in Wayne County.</p>
           }
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Geomap to show Preventive care data for selected dropdown Value. */}

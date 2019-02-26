@@ -1,4 +1,4 @@
-module.exports = [
+export default [
   {
     slug: "health-centers",
     agency: "Federally Qualified Health Care Center",
@@ -386,9 +386,9 @@ module.exports = [
   {
     slug: "risky-behaviors",
     agency: "Behavioral-24 Hour Residential Treatment",
-    subAgency: "Christian Guidance Center (CGC-Males), Genesis House III (Females)",
+    subAgency: "Christian Guidance Center (CGC-Males)<br />Genesis House III (Females)",
     contact: "Margo Lane Martin",
-    phone: ["313263077x4013", "313263077x4000 (afterhours)"]
+    phone: ["3132630077x4013", "3132630077x4000 (afterhours)"]
   },
   {
     slug: "risky-behaviors",
@@ -817,7 +817,7 @@ module.exports = [
     address2: "Inkster, MI 48141"
   },
   {
-    slug: "food-availability",
+    slug: "household-income-from-public-assistance",
     agency: "WIC Program",
     location: "16000US2622000",
     phone: ["3136764220"],
@@ -825,7 +825,7 @@ module.exports = [
     address2: "Redford, MI 48239"
   },
   {
-    slug: "food-availability",
+    slug: "household-income-from-public-assistance",
     agency: "WIC Program",
     location: "16000US2668760",
     phone: ["3139142373"],
@@ -833,7 +833,7 @@ module.exports = [
     address2: "River Rouge, MI 48218"
   },
   {
-    slug: "food-availability",
+    slug: "household-income-from-public-assistance",
     agency: "WIC Program",
     location: "16000US2674960",
     phone: ["7342873075"],
@@ -841,7 +841,7 @@ module.exports = [
     address2: "Southgate, MI 48195"
   },
   {
-    slug: "food-availability",
+    slug: "household-income-from-public-assistance",
     agency: "WIC Program",
     location: "16000US2669420",
     phone: ["7344616419"],

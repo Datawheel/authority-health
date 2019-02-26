@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 
 import {fetchData, SectionColumns} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
+import Stat from "components/Stat";
 
 class Insecurity extends SectionColumns {
 
@@ -23,6 +23,8 @@ class Insecurity extends SectionColumns {
               year={childInsecurity.Year}
               value={`${childInsecurity["Food Insecurity Rate"]}%`}
             />
+          </article>
+          <article>
             <Stat
               title={"Adult Insecurity"}
               year={adultInsecurity.Year}

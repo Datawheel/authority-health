@@ -8,7 +8,8 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
 const formatPropertyValue = d => `$${formatAbbreviate(d)}`;
 const commas = format(",d");
 
@@ -70,6 +71,7 @@ class Homeownership extends SectionColumns {
           />
           <p>{medianHousingUnitsValueForProfileAvailable ? <span>The median property value in {topMedianHousingUnitsValueForProfile.Geography}, as of {topMedianHousingUnitsValueForProfile.Year}, is ${commas(topMedianHousingUnitsValueForProfile["Property Value"])}.</span> : ""} {occupancyDataAvailable ? <span>{formatAbbreviate(topOccupancyData.share)}% of households in {topOccupancyData.Geography} were occupied in {topOccupancyData.Year}.</span> : ""}</p>
           <p>The following map shows the median property value for tracts in Wayne County.</p>
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Geomap to show Property Values for all tracts in the Wayne County. */}

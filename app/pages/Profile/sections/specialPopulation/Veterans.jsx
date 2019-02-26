@@ -8,7 +8,8 @@ import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -116,10 +117,11 @@ class Veterans extends SectionColumns {
           {periodOfServiceAvailable ? <p>In {topPeriodOfService.Year}, the most common period of service by {topPeriodOfService.Geography} veterans was served in {topPeriodOfService["Period of Service"]} ({formatPercentage(topPeriodOfService.share)}).</p> : ""}
           <p>The unemployed veterans population was {veteransEmploymentStatusAvailable ? formatPercentage(topEmploymentStatus.share) : "N/A"}, while the impoverished population was {veteransPovertyStatusAvailable ? formatPercentage(recentYearVeteransInPoverty.share) : ""} and the disabled veterans population was {veteransDisabilityStatusAvailable ? formatPercentage(recentYearVeteransWithDisability.share) : "N/A"}</p>
           {periodOfServiceAvailable ? <p>The chart here shows the period of service by veterans.</p> : ""}
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Draw a BarChart for Veterans Period of Service. */}
-        {periodOfServiceAvailable 
+        {periodOfServiceAvailable
           ? <BarChart config={{
             data: filteredPeriodOfService,
             discrete: "x",

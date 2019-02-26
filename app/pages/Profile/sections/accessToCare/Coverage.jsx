@@ -7,8 +7,9 @@ import {formatAbbreviate} from "d3plus-format";
 import {titleCase} from "d3plus-text";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import rangeFormatter from "../../../../utils/rangeFormatter";
-import Stat from "../../../../components/Stat";
+import Contact from "components/Contact";
+import rangeFormatter from "utils/rangeFormatter";
+import Stat from "components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -46,7 +47,7 @@ class Coverage extends SectionColumns {
       const femaleCoverageData = filteredRecentYearData.filter(d => d.Sex === "Female").sort((a, b) => b.share - a.share);
       topFemaleAgeGroup = rangeFormatter(femaleCoverageData[0].Age);
       topFemaleShare = formatPercentage(femaleCoverageData[0].share);
-  
+
       maleCoverageData = recentYearCoverageData.filter(d => d.Sex === "Male").sort((a, b) => b.share - a.share);
       topMaleAgeGroup = rangeFormatter(maleCoverageData[0].Age);
       ageGroupYear = maleCoverageData[0].Year;
@@ -54,7 +55,7 @@ class Coverage extends SectionColumns {
       geoId = maleCoverageData[0]["ID Geography"];
     }
 
-    if (coverageDataAvailable) { 
+    if (coverageDataAvailable) {
       return (
         <SectionColumns>
           <SectionTitle>Coverage</SectionTitle>
@@ -74,9 +75,10 @@ class Coverage extends SectionColumns {
                 qualifier={topFemaleShare}
               />
             </div>
-          
+
             <p>In {ageGroupYear}, the age groups most likely to have health care coverage in {maleCoverageData[0].Geography} are {topMaleAgeGroup} and {topFemaleAgeGroup} years, for men and women respectively.</p>
             <p>The following chart shows the male and female age groups with health insurance coverage in {maleCoverageData[0].Geography}.</p>
+            <Contact slug={this.props.slug} />
           </article>
 
           <BarChart config={{

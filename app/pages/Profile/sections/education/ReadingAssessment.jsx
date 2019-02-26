@@ -3,7 +3,9 @@ import {connect} from "react-redux";
 import {LinePlot} from "d3plus-react";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
-import Stat from "../../../../components/Stat";
+
+import Contact from "components/Contact";
+import Stat from "components/Stat";
 
 class ReadingAssessment extends SectionColumns {
   constructor(props) {
@@ -75,7 +77,7 @@ class ReadingAssessment extends SectionColumns {
 
     return (
       <SectionColumns>
-        <SectionTitle>ReadingAssessment</SectionTitle>
+        <SectionTitle>Reading Assessment</SectionTitle>
         <article>
           {/* Create a dropdown for all categoeries of reading assessment. */}
           <div className="pt-select pt-fill">
@@ -116,6 +118,7 @@ class ReadingAssessment extends SectionColumns {
                 value={isOverallSelected ? stat2EighthGrade["Average Reading Score"] : stat2EighthGrade[`Average Reading Score by ${dropdownValue}`]}
               />
             </div>}
+          <Contact slug={this.props.slug} />
         </article>
 
         <LinePlot config={{

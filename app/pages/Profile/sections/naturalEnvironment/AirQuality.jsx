@@ -9,8 +9,8 @@ import {titleCase} from "d3plus-text";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
-
-import Stat from "../../../../components/Stat";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
 
 class AirQuality extends SectionColumns {
 
@@ -55,7 +55,7 @@ class AirQuality extends SectionColumns {
       });
     recentYearAirPollutantsData.values.sort((a, b) => b["Air Pollutant Days"] - a["Air Pollutant Days"]);
     const topRecentYearAirPollutant = recentYearAirPollutantsData.values[0];
-    
+
     return (
       <SectionColumns>
         <SectionTitle>Air Quality</SectionTitle>
@@ -118,6 +118,7 @@ class AirQuality extends SectionColumns {
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Median AQI", d => d["Median AQI"]], ["County", d => d.Geography]]}
           }}
           />
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Lineplot to show air pollutants over the years. */}

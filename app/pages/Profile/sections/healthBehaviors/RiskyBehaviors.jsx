@@ -6,7 +6,8 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -136,6 +137,7 @@ class RiskyBehaviors extends SectionColumns {
               }}
               />
             </div> : null }
+            <Contact slug={this.props.slug} />
         </article>
 
         {/* Create a Geomap based on the dropdown choice. */}

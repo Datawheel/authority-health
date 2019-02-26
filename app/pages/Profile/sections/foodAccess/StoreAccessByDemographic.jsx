@@ -5,7 +5,8 @@ import {BarChart, Geomap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
 
 // const formatName = name => name.split(",")[0];
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
@@ -104,6 +105,7 @@ class StoreAccessByDemographic extends SectionColumns {
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", d => ageSelected ? `${d["Age Group"]}` : `${d["Race Group"]}`], ["Low-Access Rate", d => ageSelected ? formatPercentage(d["Low-Access to Food by Age"]) : formatPercentage(d["Low-Access to Food by Race"])], ["County", d => d.Geography]]}
           }}
           />
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Create a Geomap based on dropdown choice for all the counties in Michigan. */}

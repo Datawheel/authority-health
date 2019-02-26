@@ -6,7 +6,8 @@ import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
 
 const commas = format(",d");
 
@@ -58,6 +59,7 @@ class FoodAvailability extends SectionColumns {
           />
           <p>The average monthly number of SNAP-authorized stores in {county} in {snapLatestYear} was {commas(snapLatestYearValue)} and there were {commas(wicLatestYearValue)} WIC-authorized stores in {wicLatestYear}.</p>
           <p>The chart here shows the share of fast-food restaurants, full-service restaurants, convinence stores, grocery stores, specialized food stores, supercenters and farmers market in {county}.</p>
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Draw a Treemap to show types of stores and restaurants. */}

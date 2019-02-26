@@ -187,6 +187,7 @@ module.exports = function(app) {
     currentLocationMeasureData.socialDeterminants = currentLocationMeasureData.socialDeterminants.length > 3 ? currentLocationMeasureData.socialDeterminants.slice(0, 3) : currentLocationMeasureData.socialDeterminants;
 
     currentLocationMeasureData.total = healthTopics.length + socialDeterminants.length;
+    currentLocationMeasureData.locations = geoLevels;
 
     res.json(currentLocationMeasureData);
   });

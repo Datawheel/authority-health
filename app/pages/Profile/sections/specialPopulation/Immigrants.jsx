@@ -7,8 +7,9 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
-import places from "../../../../utils/places";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
+import places from "utils/places";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
@@ -103,7 +104,7 @@ class Immigrants extends SectionColumns {
 
     const topImmigrantsData = formatImmigrantsData(immigrantsData)[1];
     const topPovertyData = formatImmigrantsPovertyData(immigrantsPovertyData)[1];
-    
+
     return (
       <SectionColumns>
         <SectionTitle>Immigrants</SectionTitle>
@@ -130,7 +131,7 @@ class Immigrants extends SectionColumns {
                 qualifier={formatPopulation(topImmigrantsData.share)}
               />
               <p>
-                {getImmigrantsDataForCurrentLocation ? <span>In {getImmigrantsDataForCurrentLocation[0].Year}, {formatPopulation(getImmigrantsDataForCurrentLocation[0].share)} of the population in {getImmigrantsDataForCurrentLocation[0].Geography} was immigrants.</span> : ""} {" "} 
+                {getImmigrantsDataForCurrentLocation ? <span>In {getImmigrantsDataForCurrentLocation[0].Year}, {formatPopulation(getImmigrantsDataForCurrentLocation[0].share)} of the population in {getImmigrantsDataForCurrentLocation[0].Geography} was immigrants.</span> : ""} {" "}
                 The city with the highest immigrant population in Wayne County was {topImmigrantsData.Place} ({formatPopulation(topImmigrantsData.share)}).
               </p>
               {getImmigrantsDataForCurrentLocation ? <p>The map here shows the cities in {getImmigrantsDataForCurrentLocation[0].Geography} by their percentage of immigrants.</p> : ""}
@@ -154,6 +155,8 @@ class Immigrants extends SectionColumns {
               {getImmigrantsPovertyDataForCurrentLocation ? <p>The map here shows the cities in {getImmigrantsPovertyDataForCurrentLocation[0].Geography} by their percentage of immigrants in poverty.</p> : "" }
             </div>
           }
+
+          <Contact slug={this.props.slug} />
         </article>
 
         <Geomap config={{

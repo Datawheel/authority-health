@@ -6,8 +6,9 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
-import zipcodes from "../../../../utils/zipcodes";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
+import zipcodes from "utils/zipcodes";
 
 const formatRaceNames = d => d.replace("Health Center Patients", "");
 
@@ -75,7 +76,7 @@ class HealthCenters extends SectionColumns {
         <SectionTitle>Health Centers</SectionTitle>
         <article>
           {/* Create a dropdown list. */}
-          <div className="pt-select">
+          <div className="pt-select pt-fill">
             <select onChange={this.handleChange}>
               {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
             </select>
@@ -126,6 +127,9 @@ class HealthCenters extends SectionColumns {
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d[d.RaceType])]]}
           }}
           />
+
+          <Contact slug={this.props.slug} />
+
         </article>
 
         {/* Draw Geomap to show health center count for each zip code in the Wayne county */}

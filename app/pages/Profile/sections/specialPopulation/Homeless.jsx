@@ -7,7 +7,8 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -55,7 +56,7 @@ class Homeless extends SectionColumns {
       });
     recentYearTypesOfUnshelteredHomeless.values.sort((a, b) => b.share - a.share);
     const topUnshelteredHomelessTypes = recentYearTypesOfUnshelteredHomeless.values[0];
-    
+
     // Get data for Homeless types - Sheltered and Unsheltered with their sub-categories.
     const data = [];
     typesOfHomeless.forEach(d => {
@@ -75,7 +76,7 @@ class Homeless extends SectionColumns {
         group.key >= data[0].Year ? Object.assign(recentYearTypesOfHomeless, group) : {};
       });
     const shelteredData = data.filter(d => d.HomelessType === "Sheltered Homeless Population");
-    
+
     const totalHomelessPopulation = (totalHomelessData.data[0]["Sheltered Homeless Population"] + totalHomelessData.data[0]["Unsheltered Homeless Population"]) / wayneCountyPopulation[0].Population * 100;
 
     return (
@@ -136,6 +137,7 @@ class Homeless extends SectionColumns {
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["County", d => d.Geography]]}
           }}
           />
+          <Contact slug={this.props.slug} />
         </article>
 
         <LinePlot config={{

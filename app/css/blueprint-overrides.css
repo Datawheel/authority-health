@@ -24,3 +24,12 @@ tabs
   background-color: var(--brand-dark) !important;
   height: 2px !important;
 }
+
+/* -----------------------------------
+overlays/dialogs
+----------------------------------- */
+
+.pt-overlay-inline .pt-overlay-content,
+.pt-overlay-scroll-container .pt-overlay-content {
+  position: relative;
+}

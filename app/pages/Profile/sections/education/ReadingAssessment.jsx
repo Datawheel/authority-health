@@ -1,6 +1,5 @@
 import React from "react";
 import {connect} from "react-redux";
-import {nest} from "d3-collection";
 import {LinePlot} from "d3plus-react";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
@@ -21,17 +20,17 @@ class ReadingAssessment extends SectionColumns {
     const isOverallSelected = dropdownValue === "Overall";
     const isParentsEducationSelected = dropdownValue === "Parents Education";
 
-    const readingScoresData = isOverallSelected ? [] : isParentsEducationSelected ? this.props.readingScoresByParentsEducation : this.props[`readingScoresBy${dropdownValue}`];
+    const data = isOverallSelected ? [] : isParentsEducationSelected ? this.props.readingScoresByParentsEducation : this.props[`readingScoresBy${dropdownValue}`];
 
     if (dropdownValue === "Overall") {
       const {readingScoresByNation, readingScoresByCity} = this.props;
       readingScoresByNation.forEach(d => {
         d.Geography = "Nation";
-        readingScoresData.push(d);
+        data.push(d);
       });
       readingScoresByCity.forEach(d => {
         d.Geography = "City";
-        readingScoresData.push(d);
+        data.push(d);
       });
     }
 
@@ -51,32 +50,27 @@ class ReadingAssessment extends SectionColumns {
       stat2Value = "Hispanic";
     }
 
-    const isStatValueYesOrNo = stat1Value === "No" && stat2Value === "Yes";  
+    const isStatValueYesOrNo = stat1Value === "No" && stat2Value === "Yes";
 
     // Get recent year data.
-    const recentYearData = {};
-    nest()
-      .key(d => d.Year)
-      .entries(readingScoresData)
-      .forEach(group => {
-        group.key >= readingScoresData[0].Year ? Object.assign(recentYearData, group) : {};
-      });
+    const latestYear = data[0].Year;
+    const recentYearData = data.filter(d => d.Year === latestYear);
 
-    let stat1EighthGradeReadingScores, stat1FourthGradeReadingScores, stat2EighthGradeReadingScores, stat2FourthGradeReadingScores;
+    let stat1EighthGrade, stat1FourthGrade, stat2EighthGrade, stat2FourthGrade;
     if (!isParentsEducationSelected) {
       // Find top stat1 4th Grade data.
-      const stat1ReadingScores = isOverallSelected ? recentYearData.values.filter(d => d.Geography === stat1Value) : recentYearData.values.filter(d => d[dropdownValue] === stat1Value);
-      stat1FourthGradeReadingScores = stat1ReadingScores.filter(d => d.Grade === "4")[0];
-  
+      const stat1Data = isOverallSelected ? recentYearData.filter(d => d.Geography === stat1Value) : recentYearData.filter(d => d[dropdownValue] === stat1Value);
+      stat1FourthGrade = stat1Data.filter(d => d.Grade === "4")[0];
+
       // Find top stat1 8th grade data.
-      stat1EighthGradeReadingScores = stat1ReadingScores.filter(d => d.Grade === "8")[0];
-  
+      stat1EighthGrade = stat1Data.filter(d => d.Grade === "8")[0];
+
       // Find top stat2 4th Grade data.
-      const stat2ReadingScores = isOverallSelected ? recentYearData.values.filter(d => d.Geography === stat2Value) : recentYearData.values.filter(d => d[dropdownValue] === stat2Value);
-      stat2FourthGradeReadingScores = stat2ReadingScores.filter(d => d.Grade === "4")[0];
-  
+      const stat2Data = isOverallSelected ? recentYearData.filter(d => d.Geography === stat2Value) : recentYearData.filter(d => d[dropdownValue] === stat2Value);
+      stat2FourthGrade = stat2Data.filter(d => d.Grade === "4")[0];
+
       // Find top stat2 8th grade data.
-      stat2EighthGradeReadingScores = stat2ReadingScores.filter(d => d.Grade === "8")[0];
+      stat2EighthGrade = stat2Data.filter(d => d.Grade === "8")[0];
     }
 
     return (
@@ -90,9 +84,9 @@ class ReadingAssessment extends SectionColumns {
             </select>
           </div>
           <p>The following chart shows the average reading assessment score {isParentsEducationSelected ? "for 8th grade students" : ""} in Detroit {isOverallSelected ? "compared to the United States" : isParentsEducationSelected ? `by their ${dropdownValue.toLowerCase()}` : `by ${dropdownValue.toLowerCase()}`} over time.</p>
-          {isParentsEducationSelected 
+          {isParentsEducationSelected
             ? <div>
-              {recentYearData.values.map(item =>
+              {recentYearData.map(item =>
                 <Stat key={item.measure}
                   title={`${item["Parents Education"]} (DETROIT)`}
                   year={item.Year}
@@ -103,29 +97,29 @@ class ReadingAssessment extends SectionColumns {
             : <div>
               <Stat
                 title={isOverallSelected ? "4TH grade Score (United States)" : `4TH GRADE ${stat1Value} ${isStatValueYesOrNo ? dropdownValue : ""} (DETROIT)`}
-                year={stat1FourthGradeReadingScores.Year}
-                value={isOverallSelected ? stat1FourthGradeReadingScores["Average Reading Score"] : stat1FourthGradeReadingScores[`Average Reading Score by ${dropdownValue}`]}
+                year={stat1FourthGrade.Year}
+                value={isOverallSelected ? stat1FourthGrade["Average Reading Score"] : stat1FourthGrade[`Average Reading Score by ${dropdownValue}`]}
               />
               <Stat
                 title={isOverallSelected ? "4TH grade Score (DETROIT)" : `4TH GRADE  ${isStatValueYesOrNo ? `with ${dropdownValue}` : stat2Value} (DETROIT)`}
-                year={stat2FourthGradeReadingScores.Year}
-                value={isOverallSelected ? stat2FourthGradeReadingScores["Average Reading Score"] : stat2FourthGradeReadingScores[`Average Reading Score by ${dropdownValue}`]}
+                year={stat2FourthGrade.Year}
+                value={isOverallSelected ? stat2FourthGrade["Average Reading Score"] : stat2FourthGrade[`Average Reading Score by ${dropdownValue}`]}
               />
               <Stat
                 title={isOverallSelected ? "8TH grade Score (United States)" : `8TH GRADE ${stat1Value} ${isStatValueYesOrNo ? dropdownValue : ""} (DETROIT)`}
-                year={stat1EighthGradeReadingScores.Year}
-                value={isOverallSelected ? stat1EighthGradeReadingScores["Average Reading Score"] : stat1EighthGradeReadingScores[`Average Reading Score by ${dropdownValue}`]}
+                year={stat1EighthGrade.Year}
+                value={isOverallSelected ? stat1EighthGrade["Average Reading Score"] : stat1EighthGrade[`Average Reading Score by ${dropdownValue}`]}
               />
               <Stat
                 title={isOverallSelected ? "8TH grade Score (DETROIT)" : `8TH GRADE ${isStatValueYesOrNo ? `with ${dropdownValue}` : stat2Value} (DETROIT)`}
-                year={stat2EighthGradeReadingScores.Year}
-                value={isOverallSelected ? stat2EighthGradeReadingScores["Average Reading Score"] : stat2EighthGradeReadingScores[`Average Reading Score by ${dropdownValue}`]}
+                year={stat2EighthGrade.Year}
+                value={isOverallSelected ? stat2EighthGrade["Average Reading Score"] : stat2EighthGrade[`Average Reading Score by ${dropdownValue}`]}
               />
             </div>}
         </article>
 
         <LinePlot config={{
-          data: readingScoresData,
+          data,
           discrete: "x",
           height: 400,
           groupBy: d => isOverallSelected ? `${d.Grade} ${d.Geography === "Nation" ? "United States" : "Detroit"}` : `${d.Grade} ${d[dropdownValue]}`,

@@ -50,7 +50,7 @@ class ReadingAssessment extends SectionColumns {
       stat2Value = "Hispanic";
     }
 
-    const isStatValueYesOrNo = stat1Value === "No" && stat2Value === "Yes";  
+    const isStatValueYesOrNo = stat1Value === "No" && stat2Value === "Yes";
 
     // Get recent year data.
     const latestYear = data[0].Year;
@@ -61,14 +61,14 @@ class ReadingAssessment extends SectionColumns {
       // Find top stat1 4th Grade data.
       const stat1Data = isOverallSelected ? recentYearData.filter(d => d.Geography === stat1Value) : recentYearData.filter(d => d[dropdownValue] === stat1Value);
       stat1FourthGrade = stat1Data.filter(d => d.Grade === "4")[0];
-  
+
       // Find top stat1 8th grade data.
       stat1EighthGrade = stat1Data.filter(d => d.Grade === "8")[0];
-  
+
       // Find top stat2 4th Grade data.
       const stat2Data = isOverallSelected ? recentYearData.filter(d => d.Geography === stat2Value) : recentYearData.filter(d => d[dropdownValue] === stat2Value);
       stat2FourthGrade = stat2Data.filter(d => d.Grade === "4")[0];
-  
+
       // Find top stat2 8th grade data.
       stat2EighthGrade = stat2Data.filter(d => d.Grade === "8")[0];
     }
@@ -84,7 +84,7 @@ class ReadingAssessment extends SectionColumns {
             </select>
           </div>
           <p>The following chart shows the average reading assessment score {isParentsEducationSelected ? "for 8th grade students" : ""} in Detroit {isOverallSelected ? "compared to the United States" : isParentsEducationSelected ? `by their ${dropdownValue.toLowerCase()}` : `by ${dropdownValue.toLowerCase()}`} over time.</p>
-          {isParentsEducationSelected 
+          {isParentsEducationSelected
             ? <div>
               {recentYearData.map(item =>
                 <Stat key={item.measure}

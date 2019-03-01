@@ -11,6 +11,18 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Stat from "../../../../components/Stat";
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
+const formatCrimeData = crimeData => {
+  // Find the percentage for each type of crime and add "share" property to each data point.
+  nest()
+    .key(d => d.Year)
+    .entries(crimeData)
+    .forEach(group => {
+      const total = sum(group.values, d => d["Number of Crimes"]);
+      group.values.forEach(d => d.share = d["Number of Crimes"] / total * 100);
+    });
+  return crimeData;
+};
+
 class ViolentAndPropertyCrimes extends SectionColumns {
 
   render() {
@@ -19,40 +31,15 @@ class ViolentAndPropertyCrimes extends SectionColumns {
     const isPlaceDataAvailable = meta.level === "place";
     const crimeData = isPlaceDataAvailable ? crimeDataForPlace : crimeDataOverall;
 
-    // Find the percentage for each type of crime and add "share" property to each data point.
-    nest()
-      .key(d => d.Year)
-      .entries(crimeData)
-      .forEach(group => {
-        const total = sum(group.values, d => d["Number of Crimes"]);
-        group.values.forEach(d => d.share = d["Number of Crimes"] / total * 100);
-      });
-
     // Seperate property crime and violent crime data from crime data array.
     const propertyCrime = [], violentCrime = [];
-    crimeData.forEach(d => d["Type of Crime"] === "Violent crime" ? violentCrime.push(d) : propertyCrime.push(d));
+    formatCrimeData(crimeData).forEach(d => d["Type of Crime"] === "Violent crime" ? violentCrime.push(d) : propertyCrime.push(d));
 
     // Get data for Property crime stats.
-    const recentYearPropertyCrime = {};
-    nest()
-      .key(d => d.Year)
-      .entries(propertyCrime)
-      .forEach(group => {
-        group.key >= propertyCrime[0].Year ? Object.assign(recentYearPropertyCrime, group) : {};
-      });
-    recentYearPropertyCrime.values.sort((a, b) => b.share - a.share);
-    const topRecentYearPropertyCrime = recentYearPropertyCrime.values[0];
+    const topRecentYearPropertyCrime = propertyCrime.sort((a, b) => b.share - a.share)[0];
 
-    // Get data for Property crime stats.
-    const recentYearViolentCrime = {};
-    nest()
-      .key(d => d.Year)
-      .entries(violentCrime)
-      .forEach(group => {
-        group.key >= violentCrime[0].Year ? Object.assign(recentYearViolentCrime, group) : {};
-      });
-    recentYearViolentCrime.values.sort((a, b) => b.share - a.share);
-    const topRecentYearViolentCrime = recentYearViolentCrime.values[0];
+    // Get data for Violent crime stats.
+    const topRecentYearViolentCrime = violentCrime.sort((a, b) => b.share - a.share)[0];
 
     return (
       <SectionColumns>
@@ -78,7 +65,7 @@ class ViolentAndPropertyCrimes extends SectionColumns {
 
         {/* Draw a Barchart for each type of crime. */}
         <BarChart config={{
-          data: crimeData,
+          data: isPlaceDataAvailable ? `/api/data?measures=Number of Crimes&drilldowns=Type of Crime,Crime&Geography=${meta.id}&Year=all` : "/api/data?measures=Number of Crimes&drilldowns=Type of Crime,Crime&Year=all",
           discrete: "x",
           height: 400,
           legend: false,
@@ -100,6 +87,8 @@ class ViolentAndPropertyCrimes extends SectionColumns {
           },
           tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [isPlaceDataAvailable ? "Place" : "County", d => isPlaceDataAvailable ? d.Geography : "Wayne County"]]}
         }}
+        dataFormat={resp => formatCrimeData(resp.data)
+        }
         />
       </SectionColumns>
     );
@@ -111,8 +100,8 @@ ViolentAndPropertyCrimes.defaultProps = {
 };
 
 ViolentAndPropertyCrimes.need = [
-  fetchData("crimeDataOverall", "/api/data?measures=Number of Crimes&drilldowns=Type of Crime,Crime&Year=all", d => d.data),
-  fetchData("crimeDataForPlace", "/api/data?measures=Number of Crimes&drilldowns=Type of Crime,Crime&Year=all&Geography=<id>", d => d.data)
+  fetchData("crimeDataOverall", "/api/data?measures=Number of Crimes&drilldowns=Type of Crime,Crime&Year=latest", d => d.data),
+  fetchData("crimeDataForPlace", "/api/data?measures=Number of Crimes&drilldowns=Type of Crime,Crime&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({

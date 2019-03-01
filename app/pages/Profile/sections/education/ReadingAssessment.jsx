@@ -166,7 +166,7 @@ ReadingAssessment.defaultProps = {
 };
 
 ReadingAssessment.need = [
-  // All year data is fetched because we pass this data to chart as well. Since default dropdown "Overall" needs 2 APIs to get data, we can't pass 2 urls to a chart.
+  // Default dropdown value "Overall" needs data from 2 APIs, and merge them into one array. Hence all year data is fetched.
   fetchData("readingScoresByNation", "/api/data?measures=Average Reading Score&drilldowns=Grade,Nation&Year=all", d => d.data),
   fetchData("readingScoresByCity", "/api/data?measures=Average Reading Score&drilldowns=Grade,Place&Year=all", d => d.data)
 ];

@@ -7,8 +7,9 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
-import rangeFormatter from "../../../../utils/rangeFormatter";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
+import rangeFormatter from "utils/rangeFormatter";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -83,6 +84,9 @@ class DentistsDemographic extends SectionColumns {
           }}
           dataFormat={resp => formatDentistsByGender(resp.data)[0]}
           />
+
+          <Contact slug={this.props.slug} />
+
         </article>
 
         {/* Draw a Barchart to show data for dentists by age */}

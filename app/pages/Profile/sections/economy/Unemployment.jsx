@@ -8,8 +8,9 @@ import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
-import rangeFormatter from "../../../../utils/rangeFormatter";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
+import rangeFormatter from "utils/rangeFormatter";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -36,7 +37,7 @@ class Unemployment extends SectionColumns {
   render() {
 
     const {meta, employmentStatus, workExperience, unemploymentRate} = this.props;
-    
+
     const employmentStatusAvailable = employmentStatus.length !== 0;
     const workExperienceAvailable = workExperience.length !== 0;
     const isUnemploymentRateAvailableForCurrentLocation = unemploymentRate.source[0].substitutions.length === 0;
@@ -87,9 +88,9 @@ class Unemployment extends SectionColumns {
             In {recentYearUnemploymentRate.Year}, the overall unemploymemt rate in {recentYearUnemploymentRate.Geography} was {formatPercentage(recentYearUnemploymentRate["Unemployment Rate"])}.
           </p>
           <p>The following charts show the unemployment rate over time both{workExperienceAvailable ? <span> overall and by age and gender.</span> : "."}</p>
-          
+
           {/* Barchart to show population by age and gender over the years for selected geography. */}
-          {workExperienceAvailable 
+          {workExperienceAvailable
             ? <BarChart config={{
               data: `/api/data?measures=Population by Employment Status&drilldowns=Employment Status,Age,Sex&Geography=${meta.id}&Year=all`,
               discrete: "x",
@@ -113,6 +114,7 @@ class Unemployment extends SectionColumns {
             }}
             dataFormat={resp => formatEmploymentStatusData(resp.data)[0]}
             /> : <div></div>}
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Lineplot to show total population over the years for selected geography. */}

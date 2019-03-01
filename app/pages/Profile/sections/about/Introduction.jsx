@@ -4,7 +4,7 @@ import {nest} from "d3-collection";
 import {sum} from "d3-array";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import {formatAbbreviate} from "d3plus-format";
-import growthCalculator from "../../../../utils/growthCalculator";
+import growthCalculator from "utils/growthCalculator";
 import Stat from "components/Stat";
 
 const formatRaceName = d => d.replace("Alone", "");

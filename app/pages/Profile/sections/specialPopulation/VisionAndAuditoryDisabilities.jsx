@@ -8,8 +8,9 @@ import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import rangeFormatter from "../../../../utils/rangeFormatter";
-import Stat from "../../../../components/Stat";
+import Contact from "components/Contact";
+import rangeFormatter from "utils/rangeFormatter";
+import Stat from "components/Stat";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 const formatDisabilityName = d => d === "visionDifficulty" ? "Vision Difficulty" : "Hearing Difficulty";
@@ -18,10 +19,10 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
 
   render() {
     const {meta, hearingDifficulty, visionDifficulty} = this.props;
-    
+
     const hearingDifficultyDataAvailable = hearingDifficulty.length !== 0;
     const visionDifficultyDataAvailable = visionDifficulty.length !== 0;
-    
+
     const visionAndHearingData = [];
 
     const recentYearVisionDifficultyData = {};
@@ -115,9 +116,10 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             {hearingDifficultyDataAvailable ? rangeFormatter(topFemaleHearingDifficultyData.Age) : ""} years for men and women respectively.
           </p>
           <p>The chart here shows the share of each male and female age group with difficulty in hearing and seeing {visionDifficultyDataAvailable ? ` in ${topMaleVisionDifficultyData.Geography}` : "N/A"}.</p>
+          <Contact slug={this.props.slug} />
         </article>
 
-        {hearingDifficultyDataAvailable || topMaleVisionDifficultyData 
+        {hearingDifficultyDataAvailable || topMaleVisionDifficultyData
           ? <BarChart config={{
             data: visionAndHearingData,
             discrete: "x",

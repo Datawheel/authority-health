@@ -5,8 +5,9 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
-import zipcodes from "../../../../utils/zipcodes";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
+import zipcodes from "utils/zipcodes";
 
 class DistressScore extends SectionColumns {
 
@@ -29,6 +30,7 @@ class DistressScore extends SectionColumns {
           />
           <p>The maximum distress score was observed in the zip code {topDistressScoreData.Zip} with {formatAbbreviate(topDistressScoreData["Distress Score"])} percentile in the year {topDistressScoreData.Year}.</p>
           <p>The following map shows the distress score percentile for each zip code in Wayne County.</p>
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Draw Geomap to show distress scores for each zip code in the Wayne county. */}

@@ -8,8 +8,9 @@ import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
-import rangeFormatter from "../../../../utils/rangeFormatter";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
+import rangeFormatter from "utils/rangeFormatter";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 const filterTimeBucket = d => d.split(" ").filter(d => d !== "Minutes").join("");
@@ -111,7 +112,7 @@ class Transportation extends SectionColumns {
           <p>The following charts show the distribution of commute times, access to cars by gender, and share of commute means.</p>
 
           {/* Draw a Barchart for Number of vehicles in each household. */}
-          {numberOfVehiclesDataAvailable 
+          {numberOfVehiclesDataAvailable
             ? <BarChart config={{
               data: `https://acs.datausa.io/api/data?measures=Commute Means by Gender&drilldowns=Vehicles Available,Gender&Geography=${meta.id}&Year=all`,
               discrete: "x",
@@ -137,10 +138,11 @@ class Transportation extends SectionColumns {
             }}
             dataFormat={resp => formatNumberOfVehiclesData(resp.data)[0]}
             /> : <div></div>}
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Draw a Barchart for commute time. */}
-        {commuteTimeDataAvailable 
+        {commuteTimeDataAvailable
           ? <BarChart config={{
             data: `https://acs.datausa.io/api/data?measures=Commuter Population&drilldowns=Travel Time&Geography=${meta.id}&Year=all`,
             discrete: "x",

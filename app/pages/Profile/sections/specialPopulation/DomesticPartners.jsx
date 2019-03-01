@@ -8,7 +8,8 @@ import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 const formatPartnerLabel = d => d.replace("&", "w/");
@@ -49,6 +50,7 @@ class DomesticPartners extends SectionColumns {
             />
             <p>In {topData.Year}, most common domestic partnership in {topData.Geography} was {formatPartnerLabel(topData["Sex of Partner"]).toLowerCase()} ({formatPopulation(topData.share)}).</p>
             <p>The chart here shows the types of domestic partners and the corresponding share for each type.</p>
+            <Contact slug={this.props.slug} />
           </article>
 
           {/* BarChart for Domestic Partner types. */}

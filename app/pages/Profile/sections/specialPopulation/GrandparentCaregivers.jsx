@@ -8,8 +8,9 @@ import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
-import rangeFormatter from "../../../../utils/rangeFormatter";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
+import rangeFormatter from "utils/rangeFormatter";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 const formatAge = d => rangeFormatter(d) === "< 6" || rangeFormatter(d) === "6 - 11" ? `${rangeFormatter(d)} months` : `${rangeFormatter(d)} years`;
@@ -58,6 +59,9 @@ class GrandparentCaregivers extends SectionColumns {
             />
             <p>In {topRecentYearData.Year}, {formatPercentage(overallGrandparentsResponsible)} of grandparents in {topRecentYearData.Geography} were the primary care givers to their grandchildren. The most common age group of grandchildren is {formatAge(topRecentYearData["Responsibility Length"])}.</p>
             <p>The chart here shows the breakdown by age of grandchildren and the percentage of grandparents responsible for them.</p>
+
+            <Contact slug={this.props.slug} />
+
           </article>
 
           {/* Draw a BarChart */}

@@ -8,8 +8,9 @@ import axios from "axios";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
-import places from "../../../../utils/places";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
+import places from "utils/places";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
@@ -175,6 +176,8 @@ class Immigrants extends SectionColumns {
               {getImmigrantsPovertyDataForCurrentLocation ? <p>The map here shows the cities in {getImmigrantsPovertyDataForCurrentLocation[0].Geography} by their percentage of immigrants in poverty.</p> : "" }
             </div>
           }
+
+          <Contact slug={this.props.slug} />
         </article>
 
         <Geomap config={{

@@ -5,7 +5,8 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -99,13 +100,14 @@ class PhysicalInactivity extends SectionColumns {
               yConfig: {
                 ticks: []
               },
-              tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", `${formatDropdownChoiceName(dropdownValue)}`], 
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", `${formatDropdownChoiceName(dropdownValue)}`],
                 ["Prevalence", d => formatPercentage(d["Age-Adjusted Physical Inactivity"])], ["County", d => d.Geography]]}
             }}
             dataFormat={resp => resp.data}
             />
             : null
           }
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Geomap to show Physical health and physical Inactivity for tracts in the Wayne County. */}

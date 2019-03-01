@@ -6,7 +6,8 @@ import axios from "axios";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -112,6 +113,9 @@ class ConditionsAndChronicDiseases extends SectionColumns {
             ? <p>The map here shows the {dropdownValue.toLowerCase()} for zip regions in Wayne County.</p>
             : <p>The map here shows the {dropdownValue.toLowerCase()} for tracts in Wayne County.</p>
           }
+
+          <Contact slug={this.props.slug} />
+
         </article>
 
         {/* Geomap to show health condition data for selected dropdown value. */}

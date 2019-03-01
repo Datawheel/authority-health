@@ -8,8 +8,9 @@ import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
-import rangeFormatter from "../../../../utils/rangeFormatter";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
+import rangeFormatter from "utils/rangeFormatter";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
@@ -114,6 +115,7 @@ class Poverty extends SectionColumns {
             }}
             dataFormat={resp => formatPovertyByRaceData(resp.data)[0]}
             /> : <div></div>}
+          <Contact slug={this.props.slug} />
         </article>
 
         {povertyByAgeAndGenderAvailable

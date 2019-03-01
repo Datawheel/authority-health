@@ -5,7 +5,8 @@ import {formatAbbreviate} from "d3plus-format";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import axios from "axios";
 
-import Stat from "../../../../components/Stat";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -87,6 +88,7 @@ class StoreAccessByDemographic extends SectionColumns {
           }}
           dataFormat={resp => resp.data}
           />
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Create a Geomap based on dropdown choice for all the counties in Michigan. */}

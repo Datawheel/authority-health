@@ -8,9 +8,10 @@ import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
-import rangeFormatter from "../../../../utils/rangeFormatter";
-import growthCalculator from "../../../../utils/growthCalculator";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
+import rangeFormatter from "utils/rangeFormatter";
+import growthCalculator from "utils/growthCalculator";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -35,7 +36,7 @@ class Rentals extends SectionColumns {
     const utilitiesDataAvailable = utilitiesData.length !== 0;
     const rentersByIncomePercentageAvailable = rentersByIncomePercentage.length !== 0;
 
-    let recentYearNoExtraUtilitiesPercentage; 
+    let recentYearNoExtraUtilitiesPercentage;
     if (utilitiesDataAvailable) {
       const totalUtilitiesData = utilitiesData[0]["Renter-Occupied Housing Units"] + utilitiesData[1]["Renter-Occupied Housing Units"];
       recentYearNoExtraUtilitiesPercentage = totalUtilitiesData !== 0 ? utilitiesData[1]["Renter-Occupied Housing Units"] / totalUtilitiesData * 100 : 0;
@@ -67,7 +68,7 @@ class Rentals extends SectionColumns {
           <p>{rentAmountDataAvailable ? <span>In {rentAmountData[0].Year}, the median price for a rental unit in {rentAmountData[0].Geography} was ${formatAbbreviate(rentAmountData[0]["Rent Amount"])}/month. This is a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "increase"} from the previous year (${formatAbbreviate(rentAmountData[1]["Rent Amount"])}/month).</span> : ""}</p>
           <p>{utilitiesDataAvailable ? <span>{formatPercentage(recentYearNoExtraUtilitiesPercentage)} of the rental properties in {utilitiesData[0].Geography} include utilities with the price of rent.</span> : ""}</p>
           <p>{rentersByIncomePercentageAvailable ? <span> The average income bracket for renters in {topIncomeToPayMostRent.Geography} is {rangeFormatter(topIncomeToPayMostRent["Household Income"])} and the following bar chart shows the renter distribution across all income levels.</span> : ""}</p>
-          
+
           {/* Create a LinePlot. */}
           {rentAmountDataAvailable
             ? <LinePlot config={{
@@ -84,9 +85,10 @@ class Rentals extends SectionColumns {
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => `$${formatAbbreviate(d["Rent Amount"])}`]]}
             }}
             /> : <div></div>}
+          <Contact slug={this.props.slug} />
         </article>
 
-        {rentersByIncomePercentageAvailable 
+        {rentersByIncomePercentageAvailable
           ? <BarChart config={{
             data: `https://acs.datausa.io/api/data?measures=Renters by Income Percentage&drilldowns=Household Income&Geography=${meta.id}&Year=all`,
             discrete: "x",

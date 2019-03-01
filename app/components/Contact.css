@@ -1,0 +1,39 @@
+.contact-dialog {
+  padding-bottom: 0;
+  & .pt-dialog-body {
+    margin: 0;
+    max-height: 60vh;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+  & .agency-list {
+    list-style: none;
+    margin: 25px;
+    padding-left: 0;
+    & .contact-agency {
+      color: var(--majorelle-dark);
+    }
+    & .contact-list {
+      list-style: none;
+      margin: 10px 0 25px;
+      padding-left: 0;
+      & .contact {
+        margin-bottom: 10px;
+        & .contact-subAgency, & .contact-title {
+          line-height: 1.25;
+        }
+        & .contact-address {
+          line-height: 1.25;
+        }
+        & .has-icon {
+          align-items: center;
+          display: flex;
+          & .pt-icon-standard {
+            font-size: 10px;
+            margin-right: 8px;
+          }
+        }
+      }
+    }
+  }
+}

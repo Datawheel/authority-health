@@ -10,7 +10,9 @@ import {MultiSelect} from "@blueprintjs/labs";
 import "@blueprintjs/labs/dist/blueprint-labs.css";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
-import growthCalculator from "../../../../utils/growthCalculator";
+
+import Contact from "components/Contact";
+import growthCalculator from "utils/growthCalculator";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -181,6 +183,8 @@ class Cancer extends SectionColumns {
             return resp.data;
           }}
           />
+
+          <Contact slug={this.props.slug} />
         </article>
 
         <div>

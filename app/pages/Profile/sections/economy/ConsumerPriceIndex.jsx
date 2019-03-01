@@ -7,8 +7,9 @@ import {formatAbbreviate} from "d3plus-format";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import styles from "style.yml";
-import Stat from "../../../../components/Stat";
-import growthCalculator from "../../../../utils/growthCalculator";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
+import growthCalculator from "utils/growthCalculator";
 
 const commas = format(".2f");
 
@@ -50,12 +51,13 @@ class ConsumerPriceIndex extends SectionColumns {
             value={formatAbbreviate(data[0]["Average CPI (Nation)"])}
           />
           <p>
-            In {data[0].Year}, the average CPI for the Detroit-Warren-Dearborn, MI metro area was {formatAbbreviate(data[0]["Average CPI"])}, 
+            In {data[0].Year}, the average CPI for the Detroit-Warren-Dearborn, MI metro area was {formatAbbreviate(data[0]["Average CPI"])},
             which was less than the midwest CPI ({formatAbbreviate(data[0]["Average CPI (Midwest)"])}) and also less than the national CPI ({formatAbbreviate(data[0]["Average CPI (Nation)"])}).
             Between {data[3].Year} and {data[0].Year} the average CPI of the Detroit-Warren-Dearborn, MI metro area {cpiGrowth < 0 ? "reduced" : "increased"} from {formatAbbreviate(data[3]["Average CPI"])} to {formatAbbreviate(data[0]["Average CPI"])},
             {cpiGrowth < 0 ? " a decline" : " an increase"} of {cpiGrowth < 0 ? cpiGrowth * -1 : cpiGrowth}%.
           </p>
           <p>The following chart shows the average consumer price index for the Detroit-Warren-Dearborn, MI metro area compared to the midwest region and nation.</p>
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Create a LinePlot. */}

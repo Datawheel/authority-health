@@ -8,7 +8,8 @@ import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 const formatLabel = d => {
@@ -73,6 +74,7 @@ class StudentPoverty extends SectionColumns {
             />
             <p>In {topLevelOfSchoolData.Year}, the most common education level of students in {topLevelOfSchoolData.Geography} living in poverty were {topLevelOfSchoolData["Level of School"].toLowerCase()} ({formatPopulation(topLevelOfSchoolData.share)}) and {formatPopulation(recentYearEnrolledInSchoolPercentage)} of the total population was enrolled in school in {topLevelOfSchoolData.Geography}.</p>
             <p>The following chart shows the level of school and the share of students in poverty that were enrolled in school.</p>
+            <Contact slug={this.props.slug} />
           </article>
 
           {/* Draw a Barchart to show Level Of School for students in poverty. */}

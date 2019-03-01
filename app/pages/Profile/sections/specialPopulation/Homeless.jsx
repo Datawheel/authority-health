@@ -8,7 +8,8 @@ import axios from "axios";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
-import Stat from "../../../../components/Stat";
+import Contact from "components/Contact";
+import Stat from "components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -148,6 +149,7 @@ class Homeless extends SectionColumns {
           }}
           dataFormat={resp => formatTypesOfHomeless(resp.data, shelteredSelected)}
           />
+          <Contact slug={this.props.slug} />
         </article>
 
         <LinePlot config={{

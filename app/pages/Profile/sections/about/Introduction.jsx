@@ -23,7 +23,7 @@ class Introduction extends SectionColumns {
 
     const onCityOrZipLevel = level === "place" || level === "zip";
 
-    const populationGrowth = formatAbbreviate(growthCalculator(population[0].Population, population[1].Population));
+    const populationGrowth = formatAbbreviate(growthCalculator(population[0].Population, population[population.length - 1].Population));
 
     // Get recent year male and female population data by their age.
     const recentYearPopulationByAgeAndGender = {};
@@ -62,8 +62,8 @@ class Introduction extends SectionColumns {
           <p>
             {level === "zip" ? `Zip code ${population[0].Geography}` : population[0].Geography} has a population of {formatAbbreviate(population[0].Population)} people with life expectancy of {lifeExpectancyAvailable ? formatAbbreviate(lifeExpectancy[0]["Life Expectancy"]) : "N/A"} {lifeExpectancyAvailable ? onCityOrZipLevel ? <span>(in {lifeExpectancy[0].Geography})</span> : "" : ""}.
             The most common age group for male is {populationByAgeAndGenderAvailable ? getTopMaleData.Age.toLowerCase() : "N/A"} and for female it is {populationByAgeAndGenderAvailable ? getTopFemaleData.Age.toLowerCase() : "N/A"}.
-            Between 2015 and 2016 the population of {population[0].Geography} {populationGrowth < 0 ? "reduced" : "increased"} from {formatAbbreviate(population[1].Population)} to {formatAbbreviate(population[0].Population)},
-            { } {populationGrowth < 0 ? "a decline" : "an increase"} of {populationGrowth < 0 ? populationGrowth * -1 : populationGrowth !== Number ? "N/A" : `${populationGrowth}%`}.
+            Between {population[population.length - 1].Year} and {population[0].Year} the population of {population[0].Geography} {populationGrowth < 0 ? "decreased" : "increased"} from {formatAbbreviate(population[population.length - 1].Population)} to {formatAbbreviate(population[0].Population)},
+            {} {populationGrowth < 0 ? "a decline" : "an increase"} of {populationGrowth < 0 ? populationGrowth * -1 : isNaN(populationGrowth) ? "N/A" : `${populationGrowth}%`}.
           </p>
           {populationByRaceAndEthnicityAvailable
             ? <p>
@@ -105,7 +105,7 @@ Introduction.defaultProps = {
 };
 
 Introduction.need = [
-  fetchData("topStats", "/api/stats/<id>", d => d)
+  fetchData("topStats", "/api/stats/<id>")
 ];
 
 const mapStateToProps = state => ({

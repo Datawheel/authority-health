@@ -1,39 +1,59 @@
 import React from "react";
 import {connect} from "react-redux";
-import {nest} from "d3-collection";
 import {LinePlot} from "d3plus-react";
+import axios from "axios";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Stat from "../../../../components/Stat";
 
+const formatOverallData = (readingScoresByNation, readingScoresByCity) => {
+  const readingScoresData = [];
+  readingScoresByNation.forEach(d => {
+    d.Geography = "Nation";
+    readingScoresData.push(d);
+  });
+  readingScoresByCity.forEach(d => {
+    d.Geography = "City";
+    readingScoresData.push(d);
+  });
+  return readingScoresData;
+};
+
 class ReadingAssessment extends SectionColumns {
   constructor(props) {
     super(props);
-    this.state = {dropdownValue: "Overall"};
+    const readingScoresData = formatOverallData(this.props.readingScoresByNation, this.props.readingScoresByCity);
+    this.state = {
+      dropdownValue: "Overall",
+      readingScoresData
+    };
   }
 
   // Handler function for dropdown onChange event.
-  handleChange = event => this.setState({dropdownValue: event.target.value});
+  handleChange = event => {
+    const dropdownValue = event.target.value;
+    if (dropdownValue !== "Overall") {
+      axios.get(`/api/data?measures=Average Reading Score by ${dropdownValue}&drilldowns=Grade,${dropdownValue},Place&Year=all`)
+        .then(resp => {
+          this.setState({
+            readingScoresData: resp.data.data,
+            dropdownValue
+          });
+        });
+    }
+    else {
+      this.setState({
+        readingScoresData: formatOverallData(this.props.readingScoresByNation, this.props.readingScoresByCity),
+        dropdownValue
+      });
+    }
+  }
 
   render() {
-    const {dropdownValue} = this.state;
+    const {dropdownValue, readingScoresData} = this.state;
     const dropdownList = ["Overall", "Gender", "Race", "ELL", "NSLP", "Disability", "Parents Education"];
     const isOverallSelected = dropdownValue === "Overall";
     const isParentsEducationSelected = dropdownValue === "Parents Education";
-
-    const readingScoresData = isOverallSelected ? [] : isParentsEducationSelected ? this.props.readingScoresByParentsEducation : this.props[`readingScoresBy${dropdownValue}`];
-
-    if (dropdownValue === "Overall") {
-      const {readingScoresByNation, readingScoresByCity} = this.props;
-      readingScoresByNation.forEach(d => {
-        d.Geography = "Nation";
-        readingScoresData.push(d);
-      });
-      readingScoresByCity.forEach(d => {
-        d.Geography = "City";
-        readingScoresData.push(d);
-      });
-    }
 
     let stat1Value = "Nation";
     let stat2Value = "City";
@@ -54,25 +74,20 @@ class ReadingAssessment extends SectionColumns {
     const isStatValueYesOrNo = stat1Value === "No" && stat2Value === "Yes";  
 
     // Get recent year data.
-    const recentYearData = {};
-    nest()
-      .key(d => d.Year)
-      .entries(readingScoresData)
-      .forEach(group => {
-        group.key >= readingScoresData[0].Year ? Object.assign(recentYearData, group) : {};
-      });
+    const recentYear = readingScoresData[0].Year;
+    const recentYearData = readingScoresData.filter(d => d.Year === recentYear);
 
     let stat1EighthGradeReadingScores, stat1FourthGradeReadingScores, stat2EighthGradeReadingScores, stat2FourthGradeReadingScores;
     if (!isParentsEducationSelected) {
       // Find top stat1 4th Grade data.
-      const stat1ReadingScores = isOverallSelected ? recentYearData.values.filter(d => d.Geography === stat1Value) : recentYearData.values.filter(d => d[dropdownValue] === stat1Value);
+      const stat1ReadingScores = isOverallSelected ? readingScoresData.filter(d => d.Geography === stat1Value) : readingScoresData.filter(d => d[dropdownValue] === stat1Value);
       stat1FourthGradeReadingScores = stat1ReadingScores.filter(d => d.Grade === "4")[0];
   
       // Find top stat1 8th grade data.
       stat1EighthGradeReadingScores = stat1ReadingScores.filter(d => d.Grade === "8")[0];
   
       // Find top stat2 4th Grade data.
-      const stat2ReadingScores = isOverallSelected ? recentYearData.values.filter(d => d.Geography === stat2Value) : recentYearData.values.filter(d => d[dropdownValue] === stat2Value);
+      const stat2ReadingScores = isOverallSelected ? readingScoresData.filter(d => d.Geography === stat2Value) : readingScoresData.filter(d => d[dropdownValue] === stat2Value);
       stat2FourthGradeReadingScores = stat2ReadingScores.filter(d => d.Grade === "4")[0];
   
       // Find top stat2 8th grade data.
@@ -92,7 +107,7 @@ class ReadingAssessment extends SectionColumns {
           <p>The following chart shows the average reading assessment score {isParentsEducationSelected ? "for 8th grade students" : ""} in Detroit {isOverallSelected ? "compared to the United States" : isParentsEducationSelected ? `by their ${dropdownValue.toLowerCase()}` : `by ${dropdownValue.toLowerCase()}`} over time.</p>
           {isParentsEducationSelected 
             ? <div>
-              {recentYearData.values.map(item =>
+              {recentYearData.map(item =>
                 <Stat key={item.measure}
                   title={`${item["Parents Education"]} (DETROIT)`}
                   year={item.Year}
@@ -151,23 +166,12 @@ ReadingAssessment.defaultProps = {
 };
 
 ReadingAssessment.need = [
-  fetchData("readingScoresByGender", "/api/data?measures=Average Reading Score by Gender&drilldowns=Grade,Gender,Place&Year=all", d => d.data),
-  fetchData("readingScoresByRace", "/api/data?measures=Average Reading Score by Race&drilldowns=Grade,Race,Place&Year=all", d => d.data),
-  fetchData("readingScoresByELL", "/api/data?measures=Average Reading Score by ELL&drilldowns=Grade,ELL,Place&Year=all", d => d.data),
-  fetchData("readingScoresByNSLP", "/api/data?measures=Average Reading Score by NSLP&drilldowns=Grade,NSLP,Place&Year=all", d => d.data),
-  fetchData("readingScoresByDisability", "/api/data?measures=Average Reading Score by Disability&drilldowns=Grade,Disability,Place&Year=all", d => d.data),
-  fetchData("readingScoresByParentsEducation", "/api/data?measures=Average Reading Score by Parents Education&drilldowns=Grade,Parents Education,Place&Year=all", d => d.data),
+  // All year data is fetched because we pass this data to chart as well. Since default dropdown "Overall" needs 2 APIs to get data, we can't pass 2 urls to a chart.
   fetchData("readingScoresByNation", "/api/data?measures=Average Reading Score&drilldowns=Grade,Nation&Year=all", d => d.data),
   fetchData("readingScoresByCity", "/api/data?measures=Average Reading Score&drilldowns=Grade,Place&Year=all", d => d.data)
 ];
 
 const mapStateToProps = state => ({
-  readingScoresByGender: state.data.readingScoresByGender,
-  readingScoresByRace: state.data.readingScoresByRace,
-  readingScoresByELL: state.data.readingScoresByELL,
-  readingScoresByNSLP: state.data.readingScoresByNSLP,
-  readingScoresByDisability: state.data.readingScoresByDisability,
-  readingScoresByParentsEducation: state.data.readingScoresByParentsEducation,
   readingScoresByNation: state.data.readingScoresByNation,
   readingScoresByCity: state.data.readingScoresByCity
 });

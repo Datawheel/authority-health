@@ -13,6 +13,42 @@ import Stat from "components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
+const formatPublicAssistanceData = publicAssistanceData => {
+  // Format data for publicAssistanceData
+  nest()
+    .key(d => d.Year)
+    .entries(publicAssistanceData)
+    .forEach(group => {
+      const total = sum(group.values, d => d["Food-Stamp Population"]);
+      group.values.forEach(d => total !== 0 ? d.share = d["Food-Stamp Population"] / total * 100 : d.share = 0);
+    });
+  // Find top recent year data for publicAssistanceData
+  const topPublicAssistanceData = publicAssistanceData.filter(d => d["ID Public Assistance or Snap"] === 0).sort((a, b) => b.share - a.share)[0];
+  return [publicAssistanceData, topPublicAssistanceData];
+};
+
+const formatHouseholdSnapData = householdSnapData => {
+  // Find share for each data in householdSnapData.
+  const recentYearHouseholdSnapData = {};
+  nest()
+    .key(d => d.Year)
+    .entries(householdSnapData)
+    .forEach(group => {
+      const total = sum(group.values, d => d["SNAP Receipts"]);
+      group.values.forEach(d => total !== 0 ? d.share = d["SNAP Receipts"] / total * 100 : d.share = 0);
+      group.key >= householdSnapData[0].Year ? Object.assign(recentYearHouseholdSnapData, group) : {};
+    });
+  const filterSnapRecievedData = householdSnapData.filter(d => d["ID Snap Receipt"] === 0);
+  // Get top stats for householdSnapData.
+  const filteredTopRecentYearHouseholdSnapData = recentYearHouseholdSnapData.values.filter(d => d["ID Snap Receipt"] === 0);
+  const topRecentYearHouseholdSnapData = filteredTopRecentYearHouseholdSnapData.sort((a, b) => b.share - a.share)[0];
+  let totalTopHouseoldShare = 0;
+  filteredTopRecentYearHouseholdSnapData.forEach(d => {
+    if (d["Number of workers"] === topRecentYearHouseholdSnapData["Number of workers"]) totalTopHouseoldShare += d.share;
+  });
+  return [filterSnapRecievedData, topRecentYearHouseholdSnapData, totalTopHouseoldShare];
+};
+
 class HouseholdIncomeFromPublicAssistance extends SectionColumns {
 
   render() {
@@ -23,41 +59,16 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
     const householdSnapDataAvailable = householdSnapData.length !== 0;
 
     // Format data for publicAssistanceData
-    const recentYearPublicAssistanceData = {};
     let topPublicAssistanceData;
     if (publicAssistanceDataAvailable) {
-      nest()
-        .key(d => d.Year)
-        .entries(publicAssistanceData)
-        .forEach(group => {
-          const total = sum(group.values, d => d["Food-Stamp Population"]);
-          group.values.forEach(d => total !== 0 ? d.share = d["Food-Stamp Population"] / total * 100 : d.share = 0);
-          group.key >= publicAssistanceData[0].Year ? Object.assign(recentYearPublicAssistanceData, group) : {};
-        });
-      // Find top recent year data for publicAssistanceData
-      topPublicAssistanceData = recentYearPublicAssistanceData.values.filter(d => d["ID Public Assistance or Snap"] === 0).sort((a, b) => b.share - a.share)[0];
+      topPublicAssistanceData = formatPublicAssistanceData(publicAssistanceData)[1];
     }
 
     // Find share for each data in householdSnapData.
-    const recentYearHouseholdSnapData = {};
-    let filterSnapRecievedData, topRecentYearHouseholdSnapData, totalTopHouseoldShare = 0;
+    let topRecentYearHouseholdSnapData, totalTopHouseoldShare = 0;
     if (householdSnapDataAvailable) {
-      nest()
-        .key(d => d.Year)
-        .entries(householdSnapData)
-        .forEach(group => {
-          const total = sum(group.values, d => d["SNAP Receipts"]);
-          group.values.forEach(d => total !== 0 ? d.share = d["SNAP Receipts"] / total * 100 : d.share = 0);
-          group.key >= householdSnapData[0].Year ? Object.assign(recentYearHouseholdSnapData, group) : {};
-        });
-      filterSnapRecievedData = householdSnapData.filter(d => d["ID Snap Receipt"] === 0);
-      // Get top stats for householdSnapData.
-      const filteredTopRecentYearHouseholdSnapData = recentYearHouseholdSnapData.values.filter(d => d["ID Snap Receipt"] === 0);
-      topRecentYearHouseholdSnapData = filteredTopRecentYearHouseholdSnapData.sort((a, b) => b.share - a.share)[0];
-      totalTopHouseoldShare = 0;
-      filteredTopRecentYearHouseholdSnapData.forEach(d => {
-        if (d["Number of workers"] === topRecentYearHouseholdSnapData["Number of workers"]) totalTopHouseoldShare += d.share;
-      });
+      topRecentYearHouseholdSnapData = formatHouseholdSnapData(householdSnapData)[1];
+      totalTopHouseoldShare = formatHouseholdSnapData(householdSnapData)[2];
     }
 
     return (
@@ -85,7 +96,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
 
         {householdSnapDataAvailable
           ? <BarChart config={{
-            data: filterSnapRecievedData,
+            data: `/api/data?measures=SNAP Receipts&drilldowns=Snap Receipt,Family type,Number of workers&Geography=${meta.id}&Year=all`,
             discrete: "x",
             height: 400,
             stacked: true,
@@ -106,6 +117,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
             },
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Workers", d => d["Number of workers"]], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
+          dataFormat={resp => formatHouseholdSnapData(resp.data)[0]}
           /> : <div></div>}
       </SectionColumns>
     );
@@ -117,8 +129,8 @@ HouseholdIncomeFromPublicAssistance.defaultProps = {
 };
 
 HouseholdIncomeFromPublicAssistance.need = [
-  fetchData("publicAssistanceData", "/api/data?measures=Food-Stamp Population&drilldowns=Public Assistance or Snap&Geography=<id>&Year=all", d => d.data),
-  fetchData("householdSnapData", "/api/data?measures=SNAP Receipts&drilldowns=Snap Receipt,Family type,Number of workers&Geography=<id>&Year=all", d => d.data)
+  fetchData("publicAssistanceData", "/api/data?measures=Food-Stamp Population&drilldowns=Public Assistance or Snap&Geography=<id>&Year=latest", d => d.data),
+  fetchData("householdSnapData", "/api/data?measures=SNAP Receipts&drilldowns=Snap Receipt,Family type,Number of workers&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({

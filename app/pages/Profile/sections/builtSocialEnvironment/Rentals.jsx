@@ -15,6 +15,17 @@ import growthCalculator from "utils/growthCalculator";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
+const formatRentersByIncomePercentage = rentersByIncomePercentage => {
+  nest()
+    .key(d => d.Year)
+    .entries(rentersByIncomePercentage)
+    .forEach(group => {
+      const total = sum(group.values, d => d["Renters by Income Percentage"]);
+      group.values.forEach(d => total !== 0 ? d.share = d["Renters by Income Percentage"] / total * 100 : d.share = 0);
+    });
+  return rentersByIncomePercentage;
+};
+
 class Rentals extends SectionColumns {
 
   render() {
@@ -31,19 +42,8 @@ class Rentals extends SectionColumns {
       recentYearNoExtraUtilitiesPercentage = totalUtilitiesData !== 0 ? utilitiesData[1]["Renter-Occupied Housing Units"] / totalUtilitiesData * 100 : 0;
     }
 
-    const recentYearRentersByIncomePercentage = {};
     let topIncomeToPayMostRent;
-    if (rentersByIncomePercentageAvailable) {
-      nest()
-        .key(d => d.Year)
-        .entries(rentersByIncomePercentage)
-        .forEach(group => {
-          const total = sum(group.values, d => d["Renters by Income Percentage"]);
-          group.values.forEach(d => total !== 0 ? d.share = d["Renters by Income Percentage"] / total * 100 : d.share = 0);
-          group.key >= rentersByIncomePercentage[0].Year ? Object.assign(recentYearRentersByIncomePercentage, group) : {};
-        });
-      topIncomeToPayMostRent = recentYearRentersByIncomePercentage.values.sort((a, b) => b.share - a.share)[0];
-    }
+    if (rentersByIncomePercentageAvailable) topIncomeToPayMostRent = formatRentersByIncomePercentage(rentersByIncomePercentage).sort((a, b) => b.share - a.share)[0];
 
     let growthRate;
     if (rentAmountDataAvailable) growthRate = growthCalculator(rentAmountData[0]["Rent Amount"], rentAmountData[1]["Rent Amount"]);
@@ -90,7 +90,7 @@ class Rentals extends SectionColumns {
 
         {rentersByIncomePercentageAvailable
           ? <BarChart config={{
-            data: rentersByIncomePercentage,
+            data: `https://acs.datausa.io/api/data?measures=Renters by Income Percentage&drilldowns=Household Income&Geography=${meta.id}&Year=all`,
             discrete: "x",
             height: 400,
             legend: false,
@@ -110,6 +110,7 @@ class Rentals extends SectionColumns {
             shapeConfig: {label: false},
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
+          dataFormat={resp => formatRentersByIncomePercentage(resp.data)}
           /> : <div></div>}
       </SectionColumns>
     );
@@ -121,9 +122,9 @@ Rentals.defaultProps = {
 };
 
 Rentals.need = [
-  fetchData("rentAmountData", "/api/data?measures=Rent Amount&Geography=<id>&Year=all", d => d.data),
+  fetchData("rentAmountData", "/api/data?measures=Rent Amount&Geography=<id>&Year=all", d => d.data), // gets all year data to find growthRate
   fetchData("utilitiesData", "/api/data?measures=Renter-Occupied Housing Units&drilldowns=Inclusion of Utilities in Rent&Geography=<id>&Year=latest", d => d.data),
-  fetchData("rentersByIncomePercentage", "https://acs.datausa.io/api/data?measures=Renters by Income Percentage&drilldowns=Household Income&Year=all&Geography=<id>", d => d.data)
+  fetchData("rentersByIncomePercentage", "https://acs.datausa.io/api/data?measures=Renters by Income Percentage&drilldowns=Household Income&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({

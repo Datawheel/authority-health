@@ -14,6 +14,17 @@ import rangeFormatter from "utils/rangeFormatter";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
+const formatWageDistributionData = wageDistributionData => {
+  nest()
+    .key(d => d.Year)
+    .entries(wageDistributionData)
+    .forEach(group => {
+      const total = sum(group.values, d => d["Household Income"]);
+      group.values.forEach(d => total !== 0 ? d.share = d["Household Income"] / total * 100 : d.share = 0);
+    });
+  return wageDistributionData;
+};
+
 class WageDistribution extends SectionColumns {
 
   render() {
@@ -22,16 +33,6 @@ class WageDistribution extends SectionColumns {
 
     const wageDistributionDataAvailable = wageDistributionData.length !== 0;
     const wageGinidataAvailable = wageGinidata.length !== 0;
-
-    if (wageDistributionDataAvailable) {
-      nest()
-        .key(d => d.Year)
-        .entries(wageDistributionData)
-        .forEach(group => {
-          const total = sum(group.values, d => d["Household Income"]);
-          group.values.forEach(d => total !== 0 ? d.share = d["Household Income"] / total * 100 : d.share = 0);
-        });
-    }
 
     return (
       <SectionColumns>
@@ -51,7 +52,7 @@ class WageDistribution extends SectionColumns {
         {/* Draw Geomap to show wage distribution for each place in the Wayne county. */}
         {wageDistributionDataAvailable
           ? <BarChart config={{
-            data: wageDistributionData,
+            data: `https://acs.datausa.io/api/data?measures=Household Income&drilldowns=Household Income Bucket&Geography=${meta.id}&Year=all`,
             discrete: "x",
             height: 400,
             legend: false,
@@ -73,6 +74,7 @@ class WageDistribution extends SectionColumns {
             },
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
+          dataFormat={resp => formatWageDistributionData(resp.data)}
           /> : <div></div>}
       </SectionColumns>
     );
@@ -84,8 +86,8 @@ WageDistribution.defaultProps = {
 };
 
 WageDistribution.need = [
-  fetchData("wageDistributionData", "https://acs.datausa.io/api/data?measures=Household Income&drilldowns=Household Income Bucket&Geography=<id>&Year=all", d => d.data),
-  fetchData("wageGinidata", "https://acs.datausa.io/api/data?measures=Wage GINI&Geography=<id>&Year=all", d => d.data)
+  fetchData("wageDistributionData", "https://acs.datausa.io/api/data?measures=Household Income&drilldowns=Household Income Bucket&Geography=<id>&Year=latest", d => d.data),
+  fetchData("wageGinidata", "https://acs.datausa.io/api/data?measures=Wage GINI&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({

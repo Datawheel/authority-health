@@ -15,6 +15,24 @@ import rangeFormatter from "utils/rangeFormatter";
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 const formatAge = d => rangeFormatter(d) === "< 6" || rangeFormatter(d) === "6 - 11" ? `${rangeFormatter(d)} months` : `${rangeFormatter(d)} years`;
 
+const formatResponsibilityData = responsibilityData => {
+// Add the total population for each year data then find the percentage of grandparents responsible.
+  nest()
+    .key(d => d.Year)
+    .entries(responsibilityData)
+    .forEach(group => {
+      const total = sum(group.values, d => d["Grandparent Caregivers"]);
+      group.values.forEach(d => total !== 0 ? d.share = d["Grandparent Caregivers"] / total * 100 : d.share = 0);
+    });
+
+  // Find the top data for the most recent year
+  const filteredData = responsibilityData.filter(d => d["ID Responsibility Length"] !== 5 && d["ID Responsibility Length"] !== 6);
+  const topRecentYearData = filteredData.sort((a, b) =>  b.share - a.share)[0];
+  const overallGrandparentsResponsible = filteredData.reduce((acc, currValue) => acc + currValue.share, 0);
+
+  return [filteredData, topRecentYearData, overallGrandparentsResponsible];
+};
+
 class GrandparentCaregivers extends SectionColumns {
 
   render() {
@@ -24,25 +42,9 @@ class GrandparentCaregivers extends SectionColumns {
     const responsibilityDataAvailable = responsibilityData.length !== 0;
 
     if (responsibilityDataAvailable) {
-    // Add the total population for each year data then find the percentage of grandparents responsible.
-      const recentYearData = {};
-      nest()
-        .key(d => d.Year)
-        .entries(responsibilityData.data)
-        .forEach(group => {
-          const total = sum(group.values, d => d["Grandparent Caregivers"]);
-          group.values.forEach(d => total !== 0 ? d.share = d["Grandparent Caregivers"] / total * 100 : d.share = 0);
-          group.key >= responsibilityData.data[0].Year ? Object.assign(recentYearData, group) : {};
-        });
-
-      // Find the top data for the most recent year
-      const recentYearFilteredData = recentYearData.values.filter(d => d["ID Responsibility Length"] !== 5 && d["ID Responsibility Length"] !== 6);
-      const overallGrandparentsResponsible = recentYearFilteredData.reduce((acc, currValue) => acc + currValue.share, 0);
-      recentYearFilteredData.sort((a, b) =>  b.share - a.share);
-      const topRecentYearData = recentYearFilteredData[0];
-
-      // Filter the data and pass it to the BarChart "data" key.
-      const data = responsibilityData.data.filter(d => d["ID Responsibility Length"] !== 5 && d["ID Responsibility Length"] !== 6);
+      const formattedResponsibilityData = formatResponsibilityData(responsibilityData);
+      const topRecentYearData = formattedResponsibilityData[1];
+      const overallGrandparentsResponsible = formattedResponsibilityData[2];
 
       return (
         <SectionColumns>
@@ -51,7 +53,7 @@ class GrandparentCaregivers extends SectionColumns {
             {/* Display stats and write short description of the top data for the most recent year */}
             <Stat
               title="Most common age group"
-              year={recentYearFilteredData[0].Year}
+              year={topRecentYearData.Year}
               value={formatAge(topRecentYearData["Responsibility Length"])}
               qualifier={formatPercentage(topRecentYearData.share)}
             />
@@ -64,7 +66,7 @@ class GrandparentCaregivers extends SectionColumns {
 
           {/* Draw a BarChart */}
           <BarChart config={{
-            data,
+            data: `/api/data?measures=Grandparent Caregivers&drilldowns=Responsibility Length&Geography=${meta.id}&Year=all`,
             discrete: "x",
             height: 400,
             groupBy: "Responsibility Length",
@@ -81,6 +83,7 @@ class GrandparentCaregivers extends SectionColumns {
             shapeConfig: {label: false},
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
+          dataFormat={resp => formatResponsibilityData(resp.data)[0]}
           />
         </SectionColumns>
       );
@@ -94,7 +97,7 @@ GrandparentCaregivers.defaultProps = {
 };
 
 GrandparentCaregivers.need = [
-  fetchData("responsibilityData", "/api/data?measures=Grandparent Caregivers&drilldowns=Responsibility Length&Geography=<id>&Year=all")
+  fetchData("responsibilityData", "/api/data?measures=Grandparent Caregivers&drilldowns=Responsibility Length&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({

@@ -14,6 +14,37 @@ import rangeFormatter from "utils/rangeFormatter";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
+const formatPovertyByRaceData = povertyByRace => {
+  const filterOutTotalRaceData = povertyByRace.filter(d => d.Race !== "Total");
+  nest()
+    .key(d => d.Year)
+    .entries(filterOutTotalRaceData)
+    .forEach(group => {
+      const total = sum(group.values, d => d["Poverty Population"]);
+      group.values.forEach(d => total !== 0 ? d.share = d["Poverty Population"] / total * 100 : d.share = 0);
+    });
+  const filterDataBelowPovertyByRace = filterOutTotalRaceData.filter(d => d["ID Poverty Status"] === 0);
+  // Find top stats for Poverty by Race
+  const topPovertyByRace = filterDataBelowPovertyByRace.sort((a, b) => b.share - a.share)[0];
+  return [filterDataBelowPovertyByRace, topPovertyByRace];
+};
+
+const formatPovertyByAgeAndGender = povertyByAgeAndGender => {
+  const belowPovertyLevelByAgeAndGender = povertyByAgeAndGender.filter(d => d["ID Poverty Status"] === 0);
+  nest()
+    .key(d => d.Year)
+    .entries(belowPovertyLevelByAgeAndGender)
+    .forEach(group => {
+      const total = sum(group.values, d => d["Poverty Population"]);
+      group.values.forEach(d => total !== 0 ? d.share = d["Poverty Population"] / total * 100 : d.share = 0);
+    });
+  // Find top male poverty data.
+  const topMalePovertyData = belowPovertyLevelByAgeAndGender.filter(d => d.Gender === "Male").sort((a, b) => b.share - a.share)[0];
+  // Find top female poverty data.
+  const topFemalePovertyData = belowPovertyLevelByAgeAndGender.filter(d => d.Gender === "Female").sort((a, b) => b.share - a.share)[0];
+  return [belowPovertyLevelByAgeAndGender, topMalePovertyData, topFemalePovertyData];
+};
+
 class Poverty extends SectionColumns {
 
   render() {
@@ -24,42 +55,17 @@ class Poverty extends SectionColumns {
     const povertyByAgeAndGenderAvailable = povertyByAgeAndGender.length !== 0;
 
     // Get the Poverty by Race data.
-    const recentYearPovertyByRaceData = {};
-    let filterDataBelowPovertyByRace, topPovertyByRace;
+    let topPovertyByRace;
     if (povertyByRaceAvailable) {
-      const filterOutTotalRaceData = povertyByRace.filter(d => d.Race !== "Total");
-      nest()
-        .key(d => d.Year)
-        .entries(filterOutTotalRaceData)
-        .forEach(group => {
-          const total = sum(group.values, d => d["Poverty Population"]);
-          group.values.forEach(d => total !== 0 ? d.share = d["Poverty Population"] / total * 100 : d.share = 0);
-          group.key >= filterOutTotalRaceData[0].Year ? Object.assign(recentYearPovertyByRaceData, group) : {};
-        });
-      filterDataBelowPovertyByRace = filterOutTotalRaceData.filter(d => d["ID Poverty Status"] === 0);
-      // Find top stats for Poverty by Race
-      topPovertyByRace = recentYearPovertyByRaceData.values.filter(d => d["ID Poverty Status"] === 0).sort((a, b) => b.share - a.share)[0];
+      topPovertyByRace = formatPovertyByRaceData(povertyByRace)[1];
     }
 
     // Get data for Poverty by Age and Gender.
-    let belowPovertyLevelByAgeAndGender, topFemalePovertyData, topMalePovertyData;
-    const recentYearPovertyByAgeAndGender = {};
+    let topFemalePovertyData, topMalePovertyData;
     if (povertyByAgeAndGenderAvailable) {
-      belowPovertyLevelByAgeAndGender = povertyByAgeAndGender.filter(d => d["ID Poverty Status"] === 0);
-      nest()
-        .key(d => d.Year)
-        .entries(belowPovertyLevelByAgeAndGender)
-        .forEach(group => {
-          const total = sum(group.values, d => d["Poverty Population"]);
-          group.values.forEach(d => total !== 0 ? d.share = d["Poverty Population"] / total * 100 : d.share = 0);
-          group.key >= belowPovertyLevelByAgeAndGender[0].Year ? Object.assign(recentYearPovertyByAgeAndGender, group) : {};
-        });
-      // Find top stats for povetry by Age and Gender.
-      const recentYearPovertyByAgeAndGenderFiltered = recentYearPovertyByAgeAndGender.values.filter(d => d["ID Poverty Status"] === 0);
-      // Find top male poverty data.
-      topMalePovertyData = recentYearPovertyByAgeAndGenderFiltered.filter(d => d.Gender === "Male").sort((a, b) => b.share - a.share)[0];
-      // Find top female poverty data.
-      topFemalePovertyData = recentYearPovertyByAgeAndGenderFiltered.filter(d => d.Gender === "Female").sort((a, b) => b.share - a.share)[0];
+      const getPovertyByGenderData = formatPovertyByAgeAndGender(povertyByAgeAndGender);
+      topMalePovertyData = getPovertyByGenderData[1];
+      topFemalePovertyData = getPovertyByGenderData[2];
     }
 
     return (
@@ -89,7 +95,7 @@ class Poverty extends SectionColumns {
 
           {povertyByRaceAvailable
             ? <BarChart config={{
-              data: filterDataBelowPovertyByRace,
+              data: `https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Race&Geography=${meta.id}&Year=all`,
               discrete: "y",
               height: 300,
               groupBy: "Race",
@@ -107,13 +113,14 @@ class Poverty extends SectionColumns {
               },
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}
+            dataFormat={resp => formatPovertyByRaceData(resp.data)[0]}
             /> : <div></div>}
           <Contact slug={this.props.slug} />
         </article>
 
         {povertyByAgeAndGenderAvailable
           ? <BarChart config={{
-            data: belowPovertyLevelByAgeAndGender,
+            data: `https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Age,Gender&Geography=${meta.id}&Year=all`,
             discrete: "x",
             height: 400,
             groupBy: "Gender",
@@ -135,6 +142,7 @@ class Poverty extends SectionColumns {
             },
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
+          dataFormat={resp => formatPovertyByAgeAndGender(resp.data)[0]}
           /> : <div></div>}
       </SectionColumns>
     );
@@ -146,8 +154,8 @@ Poverty.defaultProps = {
 };
 
 Poverty.need = [
-  fetchData("povertyByRace", "https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Race&Geography=<id>&Year=all", d => d.data),
-  fetchData("povertyByAgeAndGender", "https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Age,Gender&Geography=<id>&Year=all", d => d.data)
+  fetchData("povertyByRace", "https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Race&Geography=<id>&Year=latest", d => d.data),
+  fetchData("povertyByAgeAndGender", "https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Age,Gender&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({

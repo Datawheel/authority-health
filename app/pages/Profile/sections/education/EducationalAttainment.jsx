@@ -23,6 +23,20 @@ const formatLabels = d => {
   return d;
 };
 
+const formatEducationalAttainmentData = educationalAttainmentData => {
+  nest()
+    .key(d => d.Year)
+    .entries(educationalAttainmentData)
+    .forEach(group => {
+      const total = sum(group.values, d => d["Population by Education Level"]);
+      group.values.forEach(d => total !== 0 ? d.share = d["Population by Education Level"] / total * 100 :  d.share = 0);
+    });
+  // Find top recent year Educational attainment stats
+  const topEducationalAttainment = educationalAttainmentData.sort((a, b) => b.share - a.share)[0];
+  
+  return [educationalAttainmentData, topEducationalAttainment];
+};
+
 class EducationalAttainment extends SectionColumns {
 
   render() {
@@ -32,21 +46,8 @@ class EducationalAttainment extends SectionColumns {
     const educationalAttainmentDataAvailable = educationalAttainmentData.length !== 0;
 
     if (educationalAttainmentDataAvailable) {
-    // Format data for public Assistance data.
-      const recentYearEducationalAttainment = {};
-      let topEducationalAttainment;
-      if (educationalAttainmentDataAvailable) {
-        nest()
-          .key(d => d.Year)
-          .entries(educationalAttainmentData)
-          .forEach(group => {
-            const total = sum(group.values, d => d["Population by Education Level"]);
-            group.values.forEach(d => total !== 0 ? d.share = d["Population by Education Level"] / total * 100 :  d.share = 0);
-            group.key >= educationalAttainmentData[0].Year ? Object.assign(recentYearEducationalAttainment, group) : {};
-          });
-        // Find top recent year Educational attainment stats
-        topEducationalAttainment = recentYearEducationalAttainment.values.sort((a, b) => b.share - a.share)[0];
-      }
+    // Find share for topEducationalAttainment data.
+      const  topEducationalAttainment = formatEducationalAttainmentData(educationalAttainmentData)[1];
 
       return (
         <SectionColumns>
@@ -66,7 +67,7 @@ class EducationalAttainment extends SectionColumns {
 
           {/* Draw a Barchart to show Educational Attainment for all types of education buckets. */}
           <BarChart config={{
-            data: educationalAttainmentData,
+            data: `/api/data?measures=Population by Education Level&drilldowns=Educational Attainment,Sex&Geography=${meta.id}&Year=all`,
             discrete: "x",
             height: 400,
             legend: true,
@@ -89,6 +90,7 @@ class EducationalAttainment extends SectionColumns {
             },
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Educational Attainment", d => formatLabels(d["Educational Attainment"])], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
+          dataFormat={resp => formatEducationalAttainmentData(resp.data)[0]}
           />
         </SectionColumns>
       );
@@ -102,7 +104,7 @@ EducationalAttainment.defaultProps = {
 };
 
 EducationalAttainment.need = [
-  fetchData("educationalAttainmentData", "/api/data?measures=Population by Education Level&drilldowns=Educational Attainment,Sex&Geography=<id>&Year=all", d => d.data)
+  fetchData("educationalAttainmentData", "/api/data?measures=Population by Education Level&drilldowns=Educational Attainment,Sex&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({

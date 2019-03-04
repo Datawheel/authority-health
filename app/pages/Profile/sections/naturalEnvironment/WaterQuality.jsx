@@ -2,6 +2,7 @@ import React from "react";
 import {connect} from "react-redux";
 import {Geomap} from "d3plus-react";
 import {titleCase} from "d3plus-text";
+import axios from "axios";
 
 import styles from "style.yml";
 
@@ -49,27 +50,31 @@ class WaterQuality extends SectionColumns {
 
   constructor(props) {
     super(props);
-    this.state = {dropdownValue: "Lead Level"};
+    this.state = {
+      waterQualityData: this.props.waterQualityData,
+      dropdownValue: "Mercury Level"
+    };
   }
 
   // Handler function for dropdown onChange event.
-  handleChange = event => this.setState({dropdownValue: event.target.value});
+  handleChange = event => {
+    this.setState({dropdownValue: event.target.value});
+    axios.get(`/api/data?measures=${event.target.value}&drilldowns=Tract&Year=all`)
+      .then(resp => this.setState({waterQualityData: resp.data.data}));
+  }
 
   render() {
-    const {waterQualityData} = this.props;
-    const filteredData = waterQualityData.data.filter(d => d["ID Tract"].startsWith("14000US26163"));
-
-    const {dropdownValue} = this.state;
-    const dropdownList = ["Lead Level", "Mercury Level"];
+    const {waterQualityData, dropdownValue} = this.state;
+    const dropdownList = ["Mercury Level", "Lead Level"];
     const leadLevelSelected = dropdownValue === "Lead Level";
 
+    const filteredData = waterQualityData.filter(d => d["ID Tract"].startsWith("14000US26163"));
     const excessiveLeadData = filteredData.filter(d => d["Lead Level"] === "excessive");
     const excessiveMercuryData = filteredData.filter(d => d["Mercury Level"] === "excessive");
 
-    const leadStats = getLeadStats(excessiveLeadData);
-    const mercuryStats = getMercuryStats(excessiveMercuryData);
+    const getStats = leadLevelSelected ? getLeadStats(excessiveLeadData) : getMercuryStats(excessiveMercuryData);
 
-    const chartData = waterQualityData.data.filter(d => formatData(d["Lead Level"]) !== -1);
+    const chartData = waterQualityData.filter(d => formatData(d[dropdownValue]) !== -1);
 
     return (
       <SectionColumns>
@@ -82,8 +87,7 @@ class WaterQuality extends SectionColumns {
               {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
             </select>
           </div>
-          {leadLevelSelected ? leadStats : mercuryStats}
-          <Contact slug={this.props.slug} />
+          {getStats}
         </article>
 
         {/* Geomap to show Lead and Mercury level in water for all tracts in the Wayne County. */}
@@ -113,7 +117,7 @@ WaterQuality.defaultProps = {
 };
 
 WaterQuality.need = [
-  fetchData("waterQualityData", "/api/data?measures=Lead Level,Mercury Level&drilldowns=Tract&Year=all")
+  fetchData("waterQualityData", "/api/data?measures=Mercury Level&drilldowns=Tract&Year=all", d => d.data) // fetching all years data since we have to find excessive mercury level in all the years.
 ];
 
 const mapStateToProps = state => ({

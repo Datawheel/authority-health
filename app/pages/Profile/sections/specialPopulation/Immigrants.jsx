@@ -4,6 +4,7 @@ import {sum} from "d3-array";
 import {nest} from "d3-collection";
 import {Geomap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
+import axios from "axios";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -61,17 +62,38 @@ class Immigrants extends SectionColumns {
 
   constructor(props) {
     super(props);
-    this.state = {dropdownValue: "Total Immigrants"};
+    this.state = {
+      meta: this.props.meta,
+      dropdownValue: "Total Immigrants",
+      immigrantsPovertyData: [],
+      immigrantsPovertyDataForCurrentLocation: []
+    };
   }
 
   // Handler function for dropdown onChange event.
-  handleChange = event => this.setState({dropdownValue: event.target.value});
+  handleChange = event => {
+    const dropdownValue =  event.target.value; // stores event value here to prevent "Synthetic Events" error.
+    if (dropdownValue === "Immigrants in Poverty") {
+      axios.get("/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Poverty Status,Place&Year=latest")
+        .then(resp => {
+          axios.get(`/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Poverty Status&Geography=${this.state.meta.id}&Year=latest`)
+            .then(d => {
+              this.setState({
+                immigrantsPovertyDataForCurrentLocation: d.data.data,
+                immigrantsPovertyData: resp.data.data,
+                dropdownValue
+              });
+            });
+        });
+    }
+    else this.setState({dropdownValue});
+  }
 
   render() {
 
-    const {immigrantsData, immigrantsPovertyData, immigrantsDataForCurrentLocation, immigrantsPovertyDataForCurrentLocation} = this.props;
+    const {dropdownValue, immigrantsPovertyData, immigrantsPovertyDataForCurrentLocation} = this.state;
+    const {immigrantsData, immigrantsDataForCurrentLocation} = this.props;
 
-    const {dropdownValue} = this.state;
     const dropdownList = ["Total Immigrants", "Immigrants in Poverty"];
     const totalImmigrantsSelected = dropdownValue === "Total Immigrants";
 
@@ -102,8 +124,7 @@ class Immigrants extends SectionColumns {
       getImmigrantsPovertyDataForCurrentLocation = immigrantsPovertyDataForCurrentLocation.filter((d => d.Nativity === "Foreign Born") && (d => d["ID Poverty Status"] === 0));
     }
 
-    const topImmigrantsData = formatImmigrantsData(immigrantsData)[1];
-    const topPovertyData = formatImmigrantsPovertyData(immigrantsPovertyData)[1];
+    const topStats = totalImmigrantsSelected ? formatImmigrantsData(immigrantsData)[1] : formatImmigrantsPovertyData(immigrantsPovertyData)[1];
 
     return (
       <SectionColumns>
@@ -126,13 +147,13 @@ class Immigrants extends SectionColumns {
               />
               <Stat
                 title="City with most immigrants"
-                year={topImmigrantsData.Year}
-                value={topImmigrantsData.Place}
-                qualifier={formatPopulation(topImmigrantsData.share)}
+                year={topStats.Year}
+                value={topStats.Place}
+                qualifier={formatPopulation(topStats.share)}
               />
               <p>
-                {getImmigrantsDataForCurrentLocation ? <span>In {getImmigrantsDataForCurrentLocation[0].Year}, {formatPopulation(getImmigrantsDataForCurrentLocation[0].share)} of the population in {getImmigrantsDataForCurrentLocation[0].Geography} was immigrants.</span> : ""} {" "}
-                The city with the highest immigrant population in Wayne County was {topImmigrantsData.Place} ({formatPopulation(topImmigrantsData.share)}).
+                {getImmigrantsDataForCurrentLocation ? <span>In {getImmigrantsDataForCurrentLocation[0].Year}, {formatPopulation(getImmigrantsDataForCurrentLocation[0].share)} of the population in {getImmigrantsDataForCurrentLocation[0].Geography} was immigrants.</span> : ""} {" "} 
+                The city with the highest immigrant population in Wayne County was {topStats.Place} ({formatPopulation(topStats.share)}).
               </p>
               {getImmigrantsDataForCurrentLocation ? <p>The map here shows the cities in {getImmigrantsDataForCurrentLocation[0].Geography} by their percentage of immigrants.</p> : ""}
             </div>
@@ -144,13 +165,13 @@ class Immigrants extends SectionColumns {
               />
               <Stat
                 title="City with most immigrants in poverty"
-                year={topPovertyData.Year}
-                value={topPovertyData.Place}
-                qualifier={formatPopulation(topPovertyData.share)}
+                year={topStats.Year}
+                value={topStats.Place}
+                qualifier={formatPopulation(topStats.share)}
               />
               <p>
                 {getImmigrantsPovertyDataForCurrentLocation ? <span>In {getImmigrantsDataForCurrentLocation[0].Year}, {formatPopulation(getImmigrantsDataForCurrentLocation[0].share)} of the population in {getImmigrantsDataForCurrentLocation[0].Geography} was immigrants.</span> : ""}{" "}
-                The city with the highest immigrants in poverty in Wayne County was {topPovertyData.Place} ({formatPopulation(topPovertyData.share)}).
+                The city with the highest immigrants in poverty in Wayne County was {topStats.Place} ({formatPopulation(topStats.share)}).
               </p>
               {getImmigrantsPovertyDataForCurrentLocation ? <p>The map here shows the cities in {getImmigrantsPovertyDataForCurrentLocation[0].Geography} by their percentage of immigrants in poverty.</p> : "" }
             </div>
@@ -185,16 +206,13 @@ Immigrants.defaultProps = {
 
 Immigrants.need = [
   fetchData("immigrantsData", "/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Place&Year=latest", d => d.data),
-  fetchData("immigrantsPovertyData", "/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Poverty Status,Place&Year=latest", d => d.data),
-  fetchData("immigrantsDataForCurrentLocation", "/api/data?measures=Poverty by Nativity&drilldowns=Nativity&Geography=<id>&Year=latest", d => d.data),
-  fetchData("immigrantsPovertyDataForCurrentLocation", "/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Poverty Status&Geography=<id>&Year=latest", d => d.data)
+  fetchData("immigrantsDataForCurrentLocation", "/api/data?measures=Poverty by Nativity&drilldowns=Nativity&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
   immigrantsData: state.data.immigrantsData,
-  immigrantsPovertyData: state.data.immigrantsPovertyData,
-  immigrantsDataForCurrentLocation: state.data.immigrantsDataForCurrentLocation,
-  immigrantsPovertyDataForCurrentLocation: state.data.immigrantsPovertyDataForCurrentLocation
+  immigrantsDataForCurrentLocation: state.data.immigrantsDataForCurrentLocation
 });
 
 export default connect(mapStateToProps)(Immigrants);

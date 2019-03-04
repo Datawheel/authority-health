@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {nest} from "d3-collection";
 import {BarChart, Geomap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
+import axios from "axios";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -14,60 +15,60 @@ const formatRaceNames = d => d.replace("Health Center Patients", "");
 
 const formatPercentage = d => `${formatAbbreviate(d * 100)}%`;
 
+const formatRaceAndEthnicityData = raceAndEthnicityData => {
+  // Add RaceType property to raceAndEthnicityData so that each race type can have individual object.
+  const data = [];
+  nest()
+    .key(d => d.Year)
+    .entries(raceAndEthnicityData.data)
+    .forEach(group => {
+      raceAndEthnicityData.source[0].measures.map(d => {
+        const result = group.values.reduce((acc, currentValue) => {
+          if (acc === null && currentValue[d] !== null) {
+            // Non-white race population is the sum of all the race population minus White population.
+            if (d === "Non-white Health Center Patients") {
+              d = "White Health Center Patients";
+              currentValue[d] = 1 - currentValue["Non-white Health Center Patients"];
+              return Object.assign({}, currentValue, {RaceType: d});
+            }
+            return Object.assign({}, currentValue, {RaceType: d});
+          }
+          return acc;
+        }, null);
+        data.push(result);
+      });
+    });
+  return data;
+};
+
 class HealthCenters extends SectionColumns {
   constructor(props) {
     super(props);
-    this.state = {dropdownValue: "Health Centers"};
+    this.state = {
+      healthCenterData: this.props.healthCenterData,
+      dropdownValue: "Health Centers"
+    };
+  }
+  
+  // Handler function for dropdown onChange event.
+  handleChange = event => {
+    this.setState({dropdownValue: event.target.value});
+    axios.get(`/api/data?measures=${event.target.value}&drilldowns=Zip&Year=latest`)
+      .then(resp => this.setState({healthCenterData: resp.data}));
   }
 
-  // Handler function for dropdown onChange event.
-  handleChange = event => this.setState({dropdownValue: event.target.value});
-
   render() {
-    const {healthCenterData, raceAndEthnicityData} = this.props;
-    const {dropdownValue} = this.state;
-    const dropdownList = healthCenterData.source[0].measures;
+    const {raceAndEthnicityData} = this.props;
+    const {healthCenterData, dropdownValue} = this.state;
+    const dropdownList = ["Health Centers", "Health Center Penetration", "Low-Income Health Center Penetration", "Uninsured Health Center Penetration"];
 
     // Get the current dropdown value data for latest year.
     const topRecentYearDropdownValueData = healthCenterData.data.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
 
-    // Get most recent year data for race and ethnicity.
-    // Add RaceType property to raceAndEthnicityData so that each race type can have individual object.
-    const recentYearRaceAndEthnicityData = {};
-    const data = [];
-    nest()
-      .key(d => d.Year)
-      .entries(raceAndEthnicityData.data)
-      .forEach(group => {
-        raceAndEthnicityData.source[0].measures.map(d => {
-          const result = group.values.reduce((acc, currentValue) => {
-            if (acc === null && currentValue[d] !== null) {
-              // Non-white race population is the sum of all the race population minus White population.
-              if (d === "Non-white Health Center Patients") {
-                d = "White Health Center Patients";
-                currentValue[d] = 1 - currentValue["Non-white Health Center Patients"];
-                return Object.assign({}, currentValue, {RaceType: d});
-              }
-              return Object.assign({}, currentValue, {RaceType: d});
-            }
-            return acc;
-          }, null);
-          data.push(result);
-        });
-        group.key >= raceAndEthnicityData.data[0].Year ? Object.assign(recentYearRaceAndEthnicityData, group) : {};
-      });
-
-    nest()
-      .key(d => d.Year)
-      .entries(data)
-      .forEach(group => {
-        group.key >= data[0].Year ? Object.assign(recentYearRaceAndEthnicityData, group) : {};
-      });
-
-    recentYearRaceAndEthnicityData.values.sort((a, b) => b[b.RaceType] - a[a.RaceType]);
-    const topMostRaceData = recentYearRaceAndEthnicityData.values[0];
-    const topSecondRaceData = recentYearRaceAndEthnicityData.values[1];
-    const topThirdRaceData = recentYearRaceAndEthnicityData.values[2];
+    const recentYearRaceAndEthnicityData = formatRaceAndEthnicityData(raceAndEthnicityData).sort((a, b) => b[b.RaceType] - a[a.RaceType]);
+    const topMostRaceData = recentYearRaceAndEthnicityData[0];
+    const topSecondRaceData = recentYearRaceAndEthnicityData[1];
+    const topThirdRaceData = recentYearRaceAndEthnicityData[2];
 
     const isHealthCentersSelected = dropdownValue === "Health Centers";
 
@@ -100,7 +101,7 @@ class HealthCenters extends SectionColumns {
                 value={topRecentYearDropdownValueData.Zip}
                 qualifier={formatPercentage(topRecentYearDropdownValueData[dropdownValue])}
               />
-              <p>In {topRecentYearDropdownValueData.Year}, the zip code in Wayne County with the most {dropdownValue.toLowerCase()} visiting health centers was {topRecentYearDropdownValueData.Zip} ({formatPercentage(topRecentYearDropdownValueData[dropdownValue])}).</p>
+              <p> In {topRecentYearDropdownValueData.Year}, the zip code in Wayne County with the most {dropdownValue.toLowerCase()} visiting health centers was {topRecentYearDropdownValueData.Zip} ({formatPercentage(topRecentYearDropdownValueData[dropdownValue])}).</p>
               <p>The following map shows the share of {dropdownValue.toLowerCase()} for all zip codes in Wayne County.</p>
             </div>
           }
@@ -110,7 +111,7 @@ class HealthCenters extends SectionColumns {
 
           {/* Draw a BarChart to show data for health center data by race */}
           <BarChart config={{
-            data,
+            data: "/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Year=all",
             discrete: "y",
             height: 250,
             legend: false,
@@ -126,6 +127,7 @@ class HealthCenters extends SectionColumns {
             yConfig: {ticks: []},
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d[d.RaceType])]]}
           }}
+          dataFormat={resp => formatRaceAndEthnicityData(resp)}
           />
 
           <Contact slug={this.props.slug} />
@@ -160,8 +162,8 @@ HealthCenters.defaultProps = {
 };
 
 HealthCenters.need = [
-  fetchData("healthCenterData", "/api/data?measures=Health Centers,Health Center Penetration,Low-Income Health Center Penetration,Uninsured Health Center Penetration&drilldowns=Zip&Year=latest"),
-  fetchData("raceAndEthnicityData", "/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Year=all")
+  fetchData("healthCenterData", "/api/data?measures=Health Centers&drilldowns=Zip&Year=latest"),
+  fetchData("raceAndEthnicityData", "/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Year=latest")
 ];
 
 const mapStateToProps = state => ({

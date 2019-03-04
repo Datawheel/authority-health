@@ -233,7 +233,7 @@ Cancer.need = [
   }),
   fetchData("occuranceByGender", "/api/data?measures=Age-Adjusted Cancer Rate&drilldowns=Sex,MSA&Year=latest", d => d.data),
   fetchData("occuranceByRaceAndEthnicity", "/api/data?measures=Age-Adjusted Cancer Rate&drilldowns=Race,Ethnicity,MSA&Year=latest", d => d.data),
-  fetchData("occuranceRate", "/api/data?measures=Age-Adjusted Cancer Rate&drilldowns=MSA&Year=all", d => d.data)
+  fetchData("occuranceRate", "/api/data?measures=Age-Adjusted Cancer Rate&drilldowns=MSA&Year=all", d => d.data) // getting all year data to find growthRate.
 ];
 
 const mapStateToProps = state => ({

@@ -35,7 +35,7 @@ class DistressScore extends SectionColumns {
 
         {/* Draw Geomap to show distress scores for each zip code in the Wayne county. */}
         <Geomap config={{
-          data: distressScoreData,
+          data: "/api/data?measures=Distress Score&drilldowns=Zip&Year=all",
           groupBy: "ID Zip",
           colorScale: "Distress Score",
           height: 400,
@@ -45,6 +45,7 @@ class DistressScore extends SectionColumns {
           topojsonFilter: d => zipcodes.includes(d.properties.ZCTA5CE10),
           topojsonId: d => d.properties.ZCTA5CE10
         }}
+        dataFormat={resp => resp.data}
         />
       </SectionColumns>
     );
@@ -56,7 +57,7 @@ DistressScore.defaultProps = {
 };
 
 DistressScore.need = [
-  fetchData("distressScoreData", "/api/data?measures=Distress Score&drilldowns=Zip&Year=all", d => d.data)
+  fetchData("distressScoreData", "/api/data?measures=Distress Score&drilldowns=Zip&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({

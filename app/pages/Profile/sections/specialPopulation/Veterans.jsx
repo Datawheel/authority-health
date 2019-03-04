@@ -13,6 +13,19 @@ import Stat from "components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
+const formatPeriodOfService = periodOfService => {
+  nest()
+    .key(d => d.Year)
+    .entries(periodOfService)
+    .forEach(group => {
+      const total = sum(group.values, d => d.Veterans);
+      group.values.forEach(d => total !== 0 ? d.share = d.Veterans / total * 100 : d.share = 0);
+    });
+  const filteredPeriodOfService = periodOfService.filter(d => d["Period of Service"] !== "Other");
+  const topPeriodOfService = filteredPeriodOfService.sort((a, b) => b.share - a.share)[0];
+  return [filteredPeriodOfService, topPeriodOfService];
+};
+
 class Veterans extends SectionColumns {
 
   render() {
@@ -24,8 +37,7 @@ class Veterans extends SectionColumns {
     const veteransDisabilityStatusAvailable = veteransDisabilityStatus.length !== 0;
     const periodOfServiceAvailable = periodOfService.length !== 0;
 
-    // Get data for Veteran's Employment status.
-    const recentYearVeteransByEmploymentStatus = {};
+    // Get top data for Veteran's Employment status.
     let topEmploymentStatus;
     if (veteransEmploymentStatusAvailable) {
       nest()
@@ -34,14 +46,11 @@ class Veterans extends SectionColumns {
         .forEach(group => {
           const total = sum(group.values, d => d["Veteran Population"]);
           group.values.forEach(d => total !== 0 ? d.share = d["Veteran Population"] / total * 100 : d.share = 0);
-          group.key >= veteransEmploymentStatus[0].Year ? Object.assign(recentYearVeteransByEmploymentStatus, group) : {};
         });
-      topEmploymentStatus = recentYearVeteransByEmploymentStatus.values.filter(d => d["Employment Status"] === "Unemployed")[0];
+      topEmploymentStatus = veteransEmploymentStatus.filter(d => d["Employment Status"] === "Unemployed")[0];
     }
 
     // Get data for Veterans Poverty status.
-    const recentYearVeteransPovertyStatus = {};
-    let recentYearVeteransInPoverty;
     if (veteransPovertyStatusAvailable) {
       nest()
         .key(d => d.Year)
@@ -49,15 +58,10 @@ class Veterans extends SectionColumns {
         .forEach(group => {
           const total = sum(group.values, d => d["Veteran Population"]);
           group.values.forEach(d => total !== 0 ? d.share = d["Veteran Population"] / total * 100 : d.share = 0);
-          group.key >= veteransPovertyStatus[0].Year ? Object.assign(recentYearVeteransPovertyStatus, group) : {};
         });
-      // Get stats for Veterans in Poverty.
-      recentYearVeteransInPoverty = recentYearVeteransPovertyStatus.values[0];
     }
 
     // Get data for Veterans Poverty status.
-    const recentYearVeteransDisabilityStatus = {};
-    let recentYearVeteransWithDisability;
     if (veteransDisabilityStatusAvailable) {
       nest()
         .key(d => d.Year)
@@ -65,27 +69,13 @@ class Veterans extends SectionColumns {
         .forEach(group => {
           const total = sum(group.values, d => d["Veteran Population"]);
           group.values.forEach(d => total !== 0 ? d.share = d["Veteran Population"] / total * 100 : d.share = 0);
-          group.key >= veteransDisabilityStatus[0].Year ? Object.assign(recentYearVeteransDisabilityStatus, group) : {};
         });
-      // Get stats for Veterans With Disability.
-      recentYearVeteransWithDisability = recentYearVeteransDisabilityStatus.values[1];
     }
 
     // Get data for Veterns Period of Service.
-    const recentYearPeriodOfService = {};
-    let filteredPeriodOfService, topPeriodOfService;
+    let topPeriodOfService;
     if (periodOfServiceAvailable) {
-      nest()
-        .key(d => d.Year)
-        .entries(periodOfService)
-        .forEach(group => {
-          const total = sum(group.values, d => d.Veterans);
-          group.values.forEach(d => total !== 0 ? d.share = d.Veterans / total * 100 : d.share = 0);
-          group.key >= veteransEmploymentStatus[0].Year ? Object.assign(recentYearPeriodOfService, group) : {};
-        });
-      filteredPeriodOfService = periodOfService.filter(d => d["Period of Service"] !== "Other");
-      recentYearPeriodOfService.values.sort((a, b) => b.share - a.share);
-      topPeriodOfService = recentYearPeriodOfService.values[0];
+      topPeriodOfService = formatPeriodOfService(periodOfService)[1];
     }
 
     return (
@@ -99,13 +89,13 @@ class Veterans extends SectionColumns {
           />
           <Stat
             title={"Impoverished"}
-            year={veteransPovertyStatusAvailable ? recentYearVeteransInPoverty.Year : ""}
-            value={veteransPovertyStatusAvailable ? formatPercentage(recentYearVeteransInPoverty.share) : "N/A"}
+            year={veteransPovertyStatusAvailable ? veteransPovertyStatus[0].Year : ""}
+            value={veteransPovertyStatusAvailable ? formatPercentage(veteransPovertyStatus[0].share) : "N/A"}
           />
           <Stat
             title={"Disabled"}
-            year={veteransDisabilityStatusAvailable ? recentYearVeteransWithDisability.Year : ""}
-            value={veteransDisabilityStatusAvailable ? formatPercentage(recentYearVeteransWithDisability.share) : "N/A"}
+            year={veteransDisabilityStatusAvailable ? veteransDisabilityStatus[0].Year : ""}
+            value={veteransDisabilityStatusAvailable ? formatPercentage(veteransDisabilityStatus[0].share) : "N/A"}
           />
           <Stat
             title={"Most common period of service"}
@@ -115,7 +105,7 @@ class Veterans extends SectionColumns {
           />
 
           {periodOfServiceAvailable ? <p>In {topPeriodOfService.Year}, the most common period of service by {topPeriodOfService.Geography} veterans was served in {topPeriodOfService["Period of Service"]} ({formatPercentage(topPeriodOfService.share)}).</p> : ""}
-          <p>The unemployed veterans population was {veteransEmploymentStatusAvailable ? formatPercentage(topEmploymentStatus.share) : "N/A"}, while the impoverished population was {veteransPovertyStatusAvailable ? formatPercentage(recentYearVeteransInPoverty.share) : ""} and the disabled veterans population was {veteransDisabilityStatusAvailable ? formatPercentage(recentYearVeteransWithDisability.share) : "N/A"}</p>
+          <p>The unemployed veterans population was {veteransEmploymentStatusAvailable ? formatPercentage(topEmploymentStatus.share) : "N/A"}, while the impoverished population was {veteransPovertyStatusAvailable ? formatPercentage(veteransPovertyStatus[0].share) : ""} and the disabled veterans population was {veteransDisabilityStatusAvailable ? formatPercentage(veteransDisabilityStatus[0].share) : "N/A"}</p>
           {periodOfServiceAvailable ? <p>The chart here shows the period of service by veterans.</p> : ""}
           <Contact slug={this.props.slug} />
         </article>
@@ -123,7 +113,7 @@ class Veterans extends SectionColumns {
         {/* Draw a BarChart for Veterans Period of Service. */}
         {periodOfServiceAvailable
           ? <BarChart config={{
-            data: filteredPeriodOfService,
+            data: `https://acs.datausa.io/api/data?measures=Veterans&drilldowns=Period of Service&Geography=${meta.id}&Year=all`,
             discrete: "x",
             height: 400,
             groupBy: "Period of Service",
@@ -143,6 +133,7 @@ class Veterans extends SectionColumns {
             shapeConfig: {label: false},
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
+          dataFormat={resp => formatPeriodOfService(resp.data)[0]}
           /> : <div></div>}
       </SectionColumns>
     );
@@ -154,10 +145,10 @@ Veterans.defaultProps = {
 };
 
 Veterans.need = [
-  fetchData("veteransEmploymentStatus", "/api/data?measures=Veteran Population&drilldowns=Employment Status&Geography=<id>&Year=all", d => d.data),
-  fetchData("veteransPovertyStatus", "/api/data?measures=Veteran Population&drilldowns=Poverty Status&Geography=<id>&Year=all", d => d.data),
-  fetchData("veteransDisabilityStatus", "/api/data?measures=Veteran Population&drilldowns=Disability Status&Geography=<id>&Year=all", d => d.data),
-  fetchData("periodOfService", "https://acs.datausa.io/api/data?measures=Veterans&drilldowns=Period of Service&Geography=<id>&Year=all", d => d.data)
+  fetchData("veteransEmploymentStatus", "/api/data?measures=Veteran Population&drilldowns=Employment Status&Geography=<id>&Year=latest", d => d.data),
+  fetchData("veteransPovertyStatus", "/api/data?measures=Veteran Population&drilldowns=Poverty Status&Geography=<id>&Year=latest", d => d.data),
+  fetchData("veteransDisabilityStatus", "/api/data?measures=Veteran Population&drilldowns=Disability Status&Geography=<id>&Year=latest", d => d.data),
+  fetchData("periodOfService", "https://acs.datausa.io/api/data?measures=Veterans&drilldowns=Period of Service&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({

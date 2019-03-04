@@ -1,8 +1,8 @@
 import React from "react";
 import {connect} from "react-redux";
-import {nest} from "d3-collection";
 import {Geomap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
+import axios from "axios";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -15,22 +15,42 @@ class PreventiveCare extends SectionColumns {
 
   constructor(props) {
     super(props);
-    this.state = {dropdownValue: "Annual Checkup"};
+    this.state = {
+      dropdownValue: "Annual Checkup",
+      preventiveCareWeightedData: [],
+      preventiveCareData: this.props.preventiveCareData
+    };
   }
 
   // Handler function for dropdown onChange event.
-  handleChange = event => this.setState({dropdownValue: event.target.value});
+  handleChange = event => {
+    const dropdownValue = event.target.value;
+    if (dropdownValue === "Had Flu Vaccine" ||
+    dropdownValue === "Had Pneumonia Vaccine" ||
+    dropdownValue === "Had Routine Checkup Last Year" ||
+    dropdownValue === "FOBT or Endoscopy") { 
+      axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=latest`)
+        .then(resp => {
+          this.setState({
+            preventiveCareWeightedData: resp.data.data,
+            dropdownValue
+          });
+        }); 
+    }
+    else {
+      axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Tract&Year=latest`)
+        .then(resp => {
+          this.setState({
+            preventiveCareData: resp.data.data,
+            dropdownValue
+          });
+        });
+    }
+  }
 
   render() {
-
-    const {preventiveCareData, preventiveCareWeightedData} = this.props;
-
-    // Include all the measures from preventiveCareData and preventiveCareWeightedData in the dropdown list.
-    const {dropdownValue} = this.state;
-    const dropdownList = preventiveCareData.source[0].measures.slice();
-    preventiveCareWeightedData.source[0].measures.forEach(d => {
-      dropdownList.push(d);
-    });
+    const {dropdownValue, preventiveCareData, preventiveCareWeightedData} = this.state;
+    const dropdownList = ["Annual Checkup", "Core Preventive Services for Older Men", "Core Preventive Services for Older Women", "Dental Visit", "Colorectal Cancer Screening", "Pap Smear Test", "Mammography", "Cholesterol Screening", "Had Flu Vaccine", "Had Pneumonia Vaccine", "Had Routine Checkup Last Year", "FOBT or Endoscopy"];
 
     // Check if the selected dropdown values are from the preventiveCareWeightedData.
     const isPreventativeCareWeightedValueSelected = dropdownValue === "Had Flu Vaccine" ||
@@ -38,17 +58,8 @@ class PreventiveCare extends SectionColumns {
     dropdownValue === "Had Routine Checkup Last Year" ||
     dropdownValue === "FOBT or Endoscopy";
 
-    // Find recent year top data for the selceted dropdown value.
-    const recentYearWeightedData = {};
-    nest()
-      .key(d => d["End Year"])
-      .entries(preventiveCareWeightedData.data)
-      .forEach(group => {
-        group.key >= preventiveCareWeightedData.data[0]["End Year"] ? Object.assign(recentYearWeightedData, group) : {};
-      });
-    const topDropdownWeightedData = recentYearWeightedData.values.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
-
-    const topDropdownValueTract = preventiveCareData.data.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
+    // Find recent year top data for the selected dropdown value.
+    const topDropdownData = isPreventativeCareWeightedValueSelected ? preventiveCareWeightedData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0] : preventiveCareData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
 
     return (
       <SectionColumns>
@@ -63,25 +74,17 @@ class PreventiveCare extends SectionColumns {
           </div>
 
           {/* Show top stats for the dropdown selected. */}
-          {isPreventativeCareWeightedValueSelected
-            ? <Stat
-              title={"Location with highest share"}
-              year={topDropdownWeightedData["End Year"]}
-              value={topDropdownWeightedData["Zip Region"]}
-              qualifier={formatPercentage(topDropdownWeightedData[dropdownValue])}
-            />
-            : <Stat
-              title={"Location with highest share"}
-              year={topDropdownValueTract.Year}
-              value={topDropdownValueTract.Tract}
-              qualifier={formatPercentage(topDropdownValueTract[dropdownValue])}
-            />
-          }
+          <Stat
+            title={"Location with highest share"}
+            year={isPreventativeCareWeightedValueSelected ? topDropdownData["End Year"] : topDropdownData.Year}
+            value={isPreventativeCareWeightedValueSelected ? topDropdownData["Zip Region"] : topDropdownData.Tract}
+            qualifier={isPreventativeCareWeightedValueSelected ? formatPercentage(topDropdownData[dropdownValue]) : formatPercentage(topDropdownData[dropdownValue])}
+          />
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           {isPreventativeCareWeightedValueSelected
-            ? <p>In {topDropdownWeightedData["End Year"]}, {topDropdownWeightedData["Zip Region"]} had the highest share of {dropdownValue} ({formatPercentage(topDropdownWeightedData[dropdownValue])}) out of all zip regions in Wayne County.</p>
-            : <p>In {topDropdownValueTract.Year}, {topDropdownValueTract.Tract} had the highest share of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownValueTract[dropdownValue])}) out of all the tracts in Wayne County.</p>
+            ? <p>In {topDropdownData["End Year"]}, {topDropdownData["Zip Region"]} had the highest share of {dropdownValue} ({formatPercentage(topDropdownData[dropdownValue])}) out of all zip regions in Wayne County.</p>
+            : <p>In {topDropdownData.Year}, {topDropdownData.Tract} had the highest share of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownData[dropdownValue])}) out of all the tracts in Wayne County.</p>
           }
           {isPreventativeCareWeightedValueSelected
             ? <p>The map here shows the {dropdownValue.toLowerCase()} for all zip regions in Wayne County.</p>
@@ -93,7 +96,7 @@ class PreventiveCare extends SectionColumns {
         {/* Geomap to show Preventive care data for selected dropdown Value. */}
         {isPreventativeCareWeightedValueSelected
           ? <Geomap config={{
-            data: preventiveCareWeightedData.data,
+            data: `/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=all`,
             groupBy: "ID Zip Region",
             colorScale: dropdownValue,
             colorScaleConfig: {
@@ -107,9 +110,10 @@ class PreventiveCare extends SectionColumns {
             topojsonId: d => d.properties.REGION,
             topojsonFilter: () => true
           }}
+          dataFormat={resp => resp.data}
           />
           : <Geomap config={{
-            data: preventiveCareData.data,
+            data: `/api/data?measures=${dropdownValue}&drilldowns=Tract&Year=all`,
             groupBy: "ID Tract",
             colorScale: dropdownValue,
             colorScaleConfig: {
@@ -122,6 +126,7 @@ class PreventiveCare extends SectionColumns {
             topojson: "/topojson/tract.json",
             topojsonFilter: d => d.id.startsWith("14000US26163")
           }}
+          dataFormat={resp => resp.data}
           />}
       </SectionColumns>
     );
@@ -133,13 +138,11 @@ PreventiveCare.defaultProps = {
 };
 
 PreventiveCare.need = [
-  fetchData("preventiveCareData", "/api/data?measures=Annual Checkup,Core preventive services for older men,Core preventive services for older women,Dental Visit,Colorectal Cancer Screening,Pap Smear Test,Mammography,Cholesterol Screening&drilldowns=Tract&Year=all"),
-  fetchData("preventiveCareWeightedData", "/api/data?measures=Had Flu Vaccine,Had Pneumonia Vaccine,Had Routine Checkup Last Year,FOBT or Endoscopy&drilldowns=Zip Region&Year=all")
+  fetchData("preventiveCareData", "/api/data?measures=Annual Checkup&drilldowns=Tract&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
-  preventiveCareData: state.data.preventiveCareData,
-  preventiveCareWeightedData: state.data.preventiveCareWeightedData
+  preventiveCareData: state.data.preventiveCareData 
 });
 
 export default connect(mapStateToProps)(PreventiveCare);

@@ -14,6 +14,24 @@ import rangeFormatter from "utils/rangeFormatter";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
+const formatEmploymentStatusData = employmentStatus => {
+  // Find share only for unemployed age and gender data.
+  const unemployedData = employmentStatus.filter(d => d["Employment Status"] === "Unemployed");
+  nest()
+    .key(d => d.Year)
+    .entries(unemployedData)
+    .forEach(group => {
+      const total = sum(group.values, d => d["Population by Employment Status"]);
+      group.values.forEach(d => total !== 0 ? d.share = d["Population by Employment Status"] / total * 100 : d.share = 0);
+    });
+  const getMaleUnemploymemtData = unemployedData.filter(d => d.Sex === "Male");
+  const getTopMaleUnemploymemtData = getMaleUnemploymemtData.sort((a, b) => b.share - a.share)[0];
+  const getFemaleUnemploymemtData = unemployedData.filter(d => d.Sex === "Female");
+  const getTopFemaleUnemploymemtData = getFemaleUnemploymemtData.sort((a, b) => b.share - a.share)[0];
+  
+  return [unemployedData, getTopMaleUnemploymemtData, getTopFemaleUnemploymemtData];
+};
+
 class Unemployment extends SectionColumns {
 
   render() {
@@ -40,32 +58,15 @@ class Unemployment extends SectionColumns {
     }
 
     // Find share for employmentStatus.
-    const recentYearUnemploymentData = {};
-    let getTopFemaleUnemploymemtData, getTopMaleUnemploymemtData, unemployedData;
+    let getTopFemaleUnemploymemtData, getTopMaleUnemploymemtData;
     if (employmentStatusAvailable) {
-      unemployedData = employmentStatus.filter(d => d["Employment Status"] === "Unemployed");
-      nest()
-        .key(d => d.Year)
-        .entries(unemployedData)
-        .forEach(group => {
-          const total = sum(group.values, d => d["Population by Employment Status"]);
-          group.values.forEach(d => total !== 0 ? d.share = d["Population by Employment Status"] / total * 100 : d.share = 0);
-          group.key >= unemployedData[0].Year ? Object.assign(recentYearUnemploymentData, group) : {};
-        });
-      const getMaleUnemploymemtData = recentYearUnemploymentData.values.filter(d => d.Sex === "Male");
-      getTopMaleUnemploymemtData = getMaleUnemploymemtData.sort((a, b) => b.share - a.share)[0];
-      const getFemaleUnemploymemtData = recentYearUnemploymentData.values.filter(d => d.Sex === "Female");
-      getTopFemaleUnemploymemtData = getFemaleUnemploymemtData.sort((a, b) => b.share - a.share)[0];
+      const unemploymentData = formatEmploymentStatusData(employmentStatus);
+      getTopMaleUnemploymemtData = unemploymentData[1];
+      getTopFemaleUnemploymemtData = unemploymentData[2];
     }
 
-    const recentYearUnemploymentRate = {};
-    nest()
-      .key(d => d.Year)
-      .entries(unemploymentRate.data)
-      .forEach(group => {
-        group.key >= unemploymentRate.data[0].Year ? Object.assign(recentYearUnemploymentRate, group) : {};
-      });
-
+    const recentYearUnemploymentRate = unemploymentRate.data[0];
+    
     return (
       <SectionColumns>
         <SectionTitle>Unemployment</SectionTitle>
@@ -81,18 +82,17 @@ class Unemployment extends SectionColumns {
             year={workExperienceAvailable ? getFemaleFullTimeData[0].Year : ""}
             value={workExperienceAvailable ? formatPercentage(getFemaleFullTimeData[0].share) : "N/A"}
           />
-
           <p>
             {workExperienceAvailable ? <span>In {getMaleFullTimeData[0].Year}, the percentage of the working population in {getMaleFullTimeData[0].Geography} that worked full-time for men and women was {formatPercentage(getMaleFullTimeData[0].share)} and {formatPercentage(getFemaleFullTimeData[0].share)}, respectively.</span> : ""}
             {employmentStatusAvailable ? <span> The most common unemployed age group for men was {getTopMaleUnemploymemtData.Age.toLowerCase()} ({formatPercentage(getTopMaleUnemploymemtData.share)}), and the most common female unemployed age group for women was {getTopFemaleUnemploymemtData.Age.toLowerCase()} ({formatPercentage(getTopFemaleUnemploymemtData.share)}).</span> : ""}
-            In {recentYearUnemploymentRate.values[0].Year}, the overall unemploymemt rate in {recentYearUnemploymentRate.values[0].Geography} was {formatPercentage(recentYearUnemploymentRate.values[0]["Unemployment Rate"])}.
+            In {recentYearUnemploymentRate.Year}, the overall unemploymemt rate in {recentYearUnemploymentRate.Geography} was {formatPercentage(recentYearUnemploymentRate["Unemployment Rate"])}.
           </p>
           <p>The following charts show the unemployment rate over time both{workExperienceAvailable ? <span> overall and by age and gender.</span> : "."}</p>
 
           {/* Barchart to show population by age and gender over the years for selected geography. */}
           {workExperienceAvailable
             ? <BarChart config={{
-              data: unemployedData,
+              data: `/api/data?measures=Population by Employment Status&drilldowns=Employment Status,Age,Sex&Geography=${meta.id}&Year=all`,
               discrete: "x",
               height: 300,
               groupBy: ["Employment Status", "Sex"],
@@ -112,13 +112,14 @@ class Unemployment extends SectionColumns {
               },
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => rangeFormatter(d.Age)], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}
+            dataFormat={resp => formatEmploymentStatusData(resp.data)[0]}
             /> : <div></div>}
           <Contact slug={this.props.slug} />
         </article>
 
         {/* Lineplot to show total population over the years for selected geography. */}
         <LinePlot config={{
-          data: unemploymentRate.data,
+          data: `/api/data?measures=Unemployment Rate&Geography=${meta.id}&Year=all`,
           discrete: "x",
           height: 300,
           baseline: 0,
@@ -129,6 +130,7 @@ class Unemployment extends SectionColumns {
           yConfig: {tickFormat: d => formatPercentage(d)},
           tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d["Unemployment Rate"])]]}
         }}
+        dataFormat={resp => resp.data}
         />
       </SectionColumns>
     );
@@ -140,8 +142,8 @@ Unemployment.defaultProps = {
 };
 
 Unemployment.need = [
-  fetchData("unemploymentRate", "/api/data?measures=Unemployment Rate&Geography=<id>&Year=all"),
-  fetchData("employmentStatus", "/api/data?measures=Population by Employment Status&drilldowns=Employment Status,Age,Sex&Geography=<id>&Year=all", d => d.data),
+  fetchData("unemploymentRate", "/api/data?measures=Unemployment Rate&Geography=<id>&Year=latest"),
+  fetchData("employmentStatus", "/api/data?measures=Population by Employment Status&drilldowns=Employment Status,Age,Sex&Geography=<id>&Year=latest", d => d.data),
   fetchData("workExperience", "/api/data?measures=Poverty by Work Experience&drilldowns=Work Experience,Sex&Geography=<id>&Year=latest", d => d.data)
 ];
 

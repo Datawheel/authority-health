@@ -108,7 +108,13 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             qualifier={hearingDifficultyDataAvailable ? formatPopulation(topFemaleHearingDifficultyData.share) : ""}
           />
 
-          <p>{visionDifficultyDataAvailable ? <span>In {topMaleVisionDifficultyData.Year}, the age groups most likely to have difficulty in seeing in {topMaleVisionDifficultyData.Geography} are {rangeFormatter(topMaleVisionDifficultyData.Age)} years and {rangeFormatter(topFemaleVisionDifficultyData.Age)} years for men and women respectively.</span> : ""} In comparison, the age groups most likely to have difficulty in hearing are {hearingDifficultyDataAvailable ? rangeFormatter(topMaleHearingDifficultyData.Age) : "N/A"} years and {hearingDifficultyDataAvailable ? rangeFormatter(topFemaleHearingDifficultyData.Age) : ""} years for men and women respectively.</p>
+          <p>
+            {visionDifficultyDataAvailable ? <span>In {topMaleVisionDifficultyData.Year}, the age groups most likely to have difficulty in seeing in { }
+              {topMaleVisionDifficultyData.Geography} are {rangeFormatter(topMaleVisionDifficultyData.Age)} years and {rangeFormatter(topFemaleVisionDifficultyData.Age)} { }
+            years for men and women respectively.</span> : ""} In comparison, the age groups most likely to have difficulty in hearing are  { }
+            {hearingDifficultyDataAvailable ? rangeFormatter(topMaleHearingDifficultyData.Age) : "N/A"} years and  { }
+            {hearingDifficultyDataAvailable ? rangeFormatter(topFemaleHearingDifficultyData.Age) : ""} years for men and women respectively.
+          </p>
           <p>The chart here shows the share of each male and female age group with difficulty in hearing and seeing {visionDifficultyDataAvailable ? ` in ${topMaleVisionDifficultyData.Geography}` : "N/A"}.</p>
           <Contact slug={this.props.slug} />
         </article>
@@ -147,6 +153,7 @@ VisionAndAuditoryDisabilities.defaultProps = {
 };
 
 VisionAndAuditoryDisabilities.need = [
+  // both hearing and vision difficulty data are from different cubes. We need to combine these data for chart. Hence, all Year data is fetched in need.
   fetchData("hearingDifficulty", "/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status,Age,Sex&Geography=<id>&Year=all", d => d.data),
   fetchData("visionDifficulty", "/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status,Age,Sex&Geography=<id>&Year=all", d => d.data)
 ];

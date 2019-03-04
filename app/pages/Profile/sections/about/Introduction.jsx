@@ -23,7 +23,7 @@ class Introduction extends SectionColumns {
 
     const onCityOrZipLevel = level === "place" || level === "zip";
 
-    const populationGrowth = formatAbbreviate(growthCalculator(population[0].Population, population[1].Population));
+    const populationGrowth = formatAbbreviate(growthCalculator(population[0].Population, population[population.length - 1].Population));
 
     // Get recent year male and female population data by their age.
     const recentYearPopulationByAgeAndGender = {};

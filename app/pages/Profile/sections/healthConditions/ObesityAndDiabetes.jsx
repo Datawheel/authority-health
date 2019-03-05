@@ -11,6 +11,8 @@ import Stat from "components/Stat";
 
 const formatPercentage = (d, mutiplyBy100 = false) => mutiplyBy100 ? `${formatAbbreviate(d * 100)}%` : `${formatAbbreviate(d)}%`;
 
+const formatDropdownName = d => d === "Diabetes" || d === "Obesity" ? `${d} in Census Tracts` : `${d} in Zip Regions`;
+
 class ObesityAndDiabetes extends SectionColumns {
 
   constructor(props) {
@@ -92,7 +94,7 @@ class ObesityAndDiabetes extends SectionColumns {
           {/* Create a dropdown for different types of health conditions. */}
           <div className="pt-select pt-fill">
             <select onChange={this.handleChange}>
-              {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
+              {dropdownList.map(item => <option key={item} value={item}>{formatDropdownName(item)}</option>)}
             </select>
           </div>
 

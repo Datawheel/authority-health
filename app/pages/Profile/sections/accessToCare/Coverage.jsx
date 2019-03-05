@@ -13,16 +13,17 @@ import Stat from "components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
+// Find share of coverage for each gender with in age group
 const formatCoverageData = coverageData => {
   nest()
     .key(d => d.Year)
     .entries(coverageData)
     .forEach(group => {
-      const total = sum(group.values, d => d["Population by Insurance Coverage"]);
       nest()
         .key(d => d["ID Age"])
         .entries(group.values)
         .forEach(ageGroup => {
+          const total = sum(ageGroup.values, d => d["Population by Insurance Coverage"]);
           ageGroup.values.forEach(d => total !== 0 ? d.share = d["Population by Insurance Coverage"] / total * 100 : d.share = 0);
         });
     });

@@ -12,8 +12,8 @@ import Stat from "components/Stat";
 import zipcodes from "utils/zipcodes";
 
 const formatRaceNames = d => d.replace("Health Center Patients", "");
-
 const formatPercentage = d => `${formatAbbreviate(d * 100)}%`;
+const formatDropdownName = d => d === "Health Centers" ? "Number of Health Centers" : d;
 
 const formatRaceAndEthnicityData = raceAndEthnicityData => {
   // Add RaceType property to raceAndEthnicityData so that each race type can have individual object.
@@ -79,7 +79,7 @@ class HealthCenters extends SectionColumns {
           {/* Create a dropdown list. */}
           <div className="pt-select pt-fill">
             <select onChange={this.handleChange}>
-              {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
+              {dropdownList.map(item => <option key={item} value={item}>{formatDropdownName(item)}</option>)}
             </select>
           </div>
           {/* Show top stats for each dropdown choice. */}
@@ -101,7 +101,7 @@ class HealthCenters extends SectionColumns {
                 value={topRecentYearDropdownValueData.Zip}
                 qualifier={formatPercentage(topRecentYearDropdownValueData[dropdownValue])}
               />
-              <p> In {topRecentYearDropdownValueData.Year}, the zip code in Wayne County with the most {dropdownValue.toLowerCase()} visiting health centers was {topRecentYearDropdownValueData.Zip} ({formatPercentage(topRecentYearDropdownValueData[dropdownValue])}).</p>
+              <p> In {topRecentYearDropdownValueData.Year}, the zip code in Wayne County with the most {dropdownValue.toLowerCase()} was {topRecentYearDropdownValueData.Zip} ({formatPercentage(topRecentYearDropdownValueData[dropdownValue])}).</p>
               <p>The following map shows the share of {dropdownValue.toLowerCase()} for all zip codes in Wayne County.</p>
             </div>
           }

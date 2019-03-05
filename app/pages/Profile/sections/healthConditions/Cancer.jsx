@@ -125,7 +125,7 @@ class Cancer extends SectionColumns {
               tickFormat: d => d
             },
             tooltipConfig: {tbody: [["Cancer Type", d => d["Cancer Site"]], ["Year", d => d.Year], ["Prevalence", d => formatPercentage(d.share)],
-              ["Occurance per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
+              ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
           }}
           dataFormat={resp => {
             nest()
@@ -165,7 +165,7 @@ class Cancer extends SectionColumns {
             },
             yConfig: {tickFormat: d => d},
             tooltipConfig: {tbody: [["Cancer Type", d => d["Cancer Site"]], ["Year", d => d.Year], ["Prevalence", d => formatPercentage(d.share)],
-              ["Occurance per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
+              ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
           }}
           dataFormat={resp => {
             nest()
@@ -188,9 +188,9 @@ class Cancer extends SectionColumns {
         </article>
 
         <div>
-          <h3>Overall Occurance</h3>
+          <h3>Overall Occurrence</h3>
           <p>In {mostRecentYearOccuranceRate.Year}, the cancer rate in the {mostRecentYearOccuranceRate.MSA} was {formatPercentage(mostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])}. This represents a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "growth"} from the previous year ({formatPercentage(secondMostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])}).</p>
-          <p>The following chart shows the occurance rate per 100,000 people for the selected cancer sites.</p>
+          <p>The following chart shows the occurrence rate per 100,000 people for the selected cancer sites.</p>
           {/* Draw a LinePlot to show age adjusted data for the selected cancer types. */}
           <LinePlot config={{
             data: `/api/data?measures=Age-Adjusted Cancer Rate,Age-Adjusted Cancer Rate Lower 95 Percent Confidence Interval,Age-Adjusted Cancer Rate Upper 95 Percent Confidence Interval&Cancer Site=${dropdownSelected}&drilldowns=MSA&Year=all`,
@@ -205,13 +205,13 @@ class Cancer extends SectionColumns {
             },
             yConfig: {
               tickFormat: d => d,
-              title: "Occurance per 100,000 People"
+              title: "Occurrence per 100,000 People"
             },
             confidence: [d => d["Age-Adjusted Cancer Rate Lower 95 Percent Confidence Interval"], d => d["Age-Adjusted Cancer Rate Upper 95 Percent Confidence Interval"]],
             confidenceConfig: {
               fillOpacity: 0.2
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Occurance per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
           }}
           dataFormat={resp => resp.data}
           />

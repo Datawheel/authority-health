@@ -9,7 +9,7 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Contact from "components/Contact";
 import Stat from "components/Stat";
 
-const formatPercentage = d => `${formatAbbreviate(d)}%`;
+const formatPercentage = (d, mutiplyBy100 = false) => mutiplyBy100 ? `${formatAbbreviate(d * 100)}%` : `${formatAbbreviate(d)}%`;
 
 class ConditionsAndChronicDiseases extends SectionColumns {
 
@@ -90,7 +90,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
                 title={"Location with highest prevalence"}
                 year={topDropdownWeightedData["End Year"]}
                 value={topDropdownWeightedData["Zip Region"]}
-                qualifier={formatPercentage(topDropdownWeightedData[dropdownValue])}
+                qualifier={formatPercentage(topDropdownWeightedData[dropdownValue], true)}
               />
             </div>
             : <div>
@@ -106,7 +106,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           { isHealthConditionWeightedValueSelected
-            ? <p>In {topDropdownWeightedData["End Year"]}, {topDropdownWeightedData["Zip Region"]} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownWeightedData[dropdownValue])}) out of all zip regions in Wayne County.</p>
+            ? <p>In {topDropdownWeightedData["End Year"]}, {topDropdownWeightedData["Zip Region"]} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownWeightedData[dropdownValue], true)}) out of all zip regions in Wayne County.</p>
             : <p>In {topDropdownValueTract.Year}, {topDropdownValueTract.Tract} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownValueTract[dropdownValue])}) out of all the tracts in Wayne County.</p>
           }
           { isHealthConditionWeightedValueSelected
@@ -125,12 +125,12 @@ class ConditionsAndChronicDiseases extends SectionColumns {
             groupBy: "ID Zip Region",
             colorScale: dropdownValue,
             colorScaleConfig: {
-              axisConfig: {tickFormat: d => formatPercentage(d)}
+              axisConfig: {tickFormat: d => formatPercentage(d, true)}
             },
             label: d => d["Zip Region"],
             height: 400,
             time: "End Year",
-            tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue])}`]]},
+            tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue], true)}`]]},
             topojson: "/topojson/zipregions.json",
             topojsonId: d => d.properties.REGION,
             topojsonFilter: () => true

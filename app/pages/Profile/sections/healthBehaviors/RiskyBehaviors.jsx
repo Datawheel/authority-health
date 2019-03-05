@@ -1,6 +1,5 @@
 import React from "react";
 import {connect} from "react-redux";
-import {nest} from "d3-collection";
 import {Geomap, Treemap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 import axios from "axios";
@@ -10,7 +9,7 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Contact from "components/Contact";
 import Stat from "components/Stat";
 
-const formatPercentage = d => `${formatAbbreviate(d)}%`;
+const formatPercentage = (d, mutiplyBy100 = false) => mutiplyBy100 ? `${formatAbbreviate(d * 100)}%` : `${formatAbbreviate(d)}%`;
 
 class RiskyBehaviors extends SectionColumns {
 
@@ -33,7 +32,7 @@ class RiskyBehaviors extends SectionColumns {
             secondHandSmokeAndMonthlyAlcohol: resp.data.data,
             dropdownValue
           });
-        }); 
+        });
     }
     else {
       axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Tract&Year=latest`)
@@ -76,15 +75,15 @@ class RiskyBehaviors extends SectionColumns {
             title={isSecondHandSmokeOrMonthlyAlcoholSelected ? "Zip region with highest prevalence" : "Tract with highest prevalence"}
             value={isSecondHandSmokeOrMonthlyAlcoholSelected ? topSecondHandSmokeAndMonthlyAlcoholData["Zip Region"] : topTractSmokingDrinkingData.Year}
             year={isSecondHandSmokeOrMonthlyAlcoholSelected ? topSecondHandSmokeAndMonthlyAlcoholData["End Year"] : topTractSmokingDrinkingData.Tract}
-            qualifier={isSecondHandSmokeOrMonthlyAlcoholSelected ? formatPercentage(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue]) : formatPercentage(topTractSmokingDrinkingData[dropdownValue])}
+            qualifier={isSecondHandSmokeOrMonthlyAlcoholSelected ? formatPercentage(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue], true) : formatPercentage(topTractSmokingDrinkingData[dropdownValue])}
           />
           {isSecondHandSmokeOrMonthlyAlcoholSelected
             ? <div>
-              <p>In {topSecondHandSmokeAndMonthlyAlcoholData["End Year"]}, {topSecondHandSmokeAndMonthlyAlcoholData["Zip Region"]} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatAbbreviate(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue])}%).</p>
+              <p>In {topSecondHandSmokeAndMonthlyAlcoholData["End Year"]}, {topSecondHandSmokeAndMonthlyAlcoholData["Zip Region"]} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatPercentage(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue], true)}).</p>
               <p>The map here shows the {dropdownValue.toLowerCase()} for zip regions in Wayne County.</p>
             </div>
             : <div>
-              <p>In {topTractSmokingDrinkingData.Year}, {topTractSmokingDrinkingData.Tract} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatAbbreviate(topTractSmokingDrinkingData[dropdownValue])}%) out of all Tracts in Wayne County.</p>
+              <p>In {topTractSmokingDrinkingData.Year}, {topTractSmokingDrinkingData.Tract} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatPercentage(topTractSmokingDrinkingData[dropdownValue])}) out of all Tracts in Wayne County.</p>
               <p>The map here shows the {dropdownValue.toLowerCase()} for all tracts in Wayne County.</p>
             </div>
           }
@@ -94,7 +93,7 @@ class RiskyBehaviors extends SectionColumns {
             ? <div>
               <p>The chart here shows the former, current and never smoking status in Wayne County.</p>
               <Treemap config={{
-                data: `/api/data?measures=Smoking Status Current,Smoking Status Former,Smoking Status Never&drilldowns=End Year&Geography=${id}`,
+                data: `/api/data?measures=Smoking Status Current,Smoking Status Former,Smoking Status Never&drilldowns=End Year&Geography=${id}`, // MiBRFS - All Years
                 height: 250,
                 sum: d => d[d.SmokingType],
                 legend: false,
@@ -105,7 +104,7 @@ class RiskyBehaviors extends SectionColumns {
                 },
                 time: "End Year",
                 title: "Smoking Status",
-                tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Prevalence", d => formatPercentage(d[d.SmokingType] * 100)], ["County", d => d.Geography]]}
+                tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Prevalence", d => formatPercentage(d[d.SmokingType], true)], ["County", d => d.Geography]]}
               }}
               dataFormat={resp => {
                 const data = [];
@@ -120,7 +119,7 @@ class RiskyBehaviors extends SectionColumns {
               }}
               />
             </div> : null }
-            <Contact slug={this.props.slug} />
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Create a Geomap based on the dropdown choice. */}
@@ -130,12 +129,12 @@ class RiskyBehaviors extends SectionColumns {
             groupBy: "ID Zip Region",
             colorScale: dropdownValue,
             colorScaleConfig: {
-              axisConfig: {tickFormat: d => formatPercentage(d)}
+              axisConfig: {tickFormat: d => formatPercentage(d, true)}
             },
             label: d => d["Zip Region"],
             height: 400,
             time: "End Year",
-            tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Behavior", `${dropdownValue}`], ["Prevalence", d => formatPercentage(d[dropdownValue])]]},
+            tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Behavior", `${dropdownValue}`], ["Prevalence", d => formatPercentage(d[dropdownValue], true)]]},
             topojson: "/topojson/zipregions.json",
             topojsonId: d => d.properties.REGION,
             topojsonFilter: () => true
@@ -169,7 +168,7 @@ RiskyBehaviors.defaultProps = {
 };
 
 RiskyBehaviors.need = [
-  fetchData("allTractSmokingDrinkingData", "/api/data?measures=Current Smoking&drilldowns=Tract&Year=latest", d => d.data)
+  fetchData("allTractSmokingDrinkingData", "/api/data?measures=Current Smoking&drilldowns=Tract&Year=latest", d => d.data) // 500 Cities
 ];
 
 const mapStateToProps = state => ({

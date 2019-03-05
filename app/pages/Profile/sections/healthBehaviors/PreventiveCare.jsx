@@ -9,7 +9,7 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Contact from "components/Contact";
 import Stat from "components/Stat";
 
-const formatPercentage = d => `${formatAbbreviate(d)}%`;
+const formatPercentage = (d, mutiplyBy100 = false) => mutiplyBy100 ? `${formatAbbreviate(d * 100)}%` : `${formatAbbreviate(d)}%`;
 
 class PreventiveCare extends SectionColumns {
 
@@ -29,7 +29,7 @@ class PreventiveCare extends SectionColumns {
     dropdownValue === "Had Pneumonia Vaccine" ||
     dropdownValue === "Had Routine Checkup Last Year" ||
     dropdownValue === "FOBT or Endoscopy") { 
-      axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=latest`)
+      axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=latest`) // MiBRFS - All Years
         .then(resp => {
           this.setState({
             preventiveCareWeightedData: resp.data.data,
@@ -65,7 +65,7 @@ class PreventiveCare extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Preventive Care</SectionTitle>
         <article>
-          {isPreventativeCareWeightedValueSelected ? <div className="disclaimer">Data only available for zip regions.</div> : <div className="disclaimer">Data only available at the tract level.</div>}
+          {isPreventativeCareWeightedValueSelected ? <div className="disclaimer">Data only available for zip regions.</div> : <div className="disclaimer">Data only available for census tracts.</div>}
           {/* Create a dropdown for different types of preventive care. */}
           <div className="pt-select pt-fill">
             <select onChange={this.handleChange}>
@@ -78,12 +78,12 @@ class PreventiveCare extends SectionColumns {
             title={"Location with highest share"}
             year={isPreventativeCareWeightedValueSelected ? topDropdownData["End Year"] : topDropdownData.Year}
             value={isPreventativeCareWeightedValueSelected ? topDropdownData["Zip Region"] : topDropdownData.Tract}
-            qualifier={isPreventativeCareWeightedValueSelected ? formatPercentage(topDropdownData[dropdownValue]) : formatPercentage(topDropdownData[dropdownValue])}
+            qualifier={isPreventativeCareWeightedValueSelected ? formatPercentage(topDropdownData[dropdownValue], true) : formatPercentage(topDropdownData[dropdownValue])}
           />
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           {isPreventativeCareWeightedValueSelected
-            ? <p>In {topDropdownData["End Year"]}, {topDropdownData["Zip Region"]} had the highest share of {dropdownValue} ({formatPercentage(topDropdownData[dropdownValue])}) out of all zip regions in Wayne County.</p>
+            ? <p>In {topDropdownData["End Year"]}, {topDropdownData["Zip Region"]} had the highest share of {dropdownValue} ({formatPercentage(topDropdownData[dropdownValue], true)}) out of all zip regions in Wayne County.</p>
             : <p>In {topDropdownData.Year}, {topDropdownData.Tract} had the highest share of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownData[dropdownValue])}) out of all the tracts in Wayne County.</p>
           }
           {isPreventativeCareWeightedValueSelected
@@ -100,12 +100,12 @@ class PreventiveCare extends SectionColumns {
             groupBy: "ID Zip Region",
             colorScale: dropdownValue,
             colorScaleConfig: {
-              axisConfig: {tickFormat: d => formatPercentage(d)}
+              axisConfig: {tickFormat: d => formatPercentage(d, true)}
             },
             label: d => d["Zip Region"],
             height: 400,
             time: "End Year",
-            tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Preventive Care", `${dropdownValue}`], ["Share", d => `${formatPercentage(d[dropdownValue])}`]]},
+            tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Preventive Care", `${dropdownValue}`], ["Share", d => `${formatPercentage(d[dropdownValue], true)}`]]},
             topojson: "/topojson/zipregions.json",
             topojsonId: d => d.properties.REGION,
             topojsonFilter: () => true
@@ -138,7 +138,7 @@ PreventiveCare.defaultProps = {
 };
 
 PreventiveCare.need = [
-  fetchData("preventiveCareData", "/api/data?measures=Annual Checkup&drilldowns=Tract&Year=latest", d => d.data)
+  fetchData("preventiveCareData", "/api/data?measures=Annual Checkup&drilldowns=Tract&Year=latest", d => d.data) // 500 Cities
 ];
 
 const mapStateToProps = state => ({

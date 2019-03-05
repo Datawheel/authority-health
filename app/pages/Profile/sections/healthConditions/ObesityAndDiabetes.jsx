@@ -9,7 +9,7 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Contact from "components/Contact";
 import Stat from "components/Stat";
 
-const formatPercentage = d => `${formatAbbreviate(d)}%`;
+const formatPercentage = (d, mutiplyBy100 = false) => mutiplyBy100 ? `${formatAbbreviate(d * 100)}%` : `${formatAbbreviate(d)}%`;
 
 class ObesityAndDiabetes extends SectionColumns {
 
@@ -32,9 +32,9 @@ class ObesityAndDiabetes extends SectionColumns {
     dropdownValue === "BMI Overweight" ||
     dropdownValue === "BMI Underweight" ||
     dropdownValue === "Obesity") { 
-      axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=latest`)
+      axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=latest`) // MiBRFS - All Years
         .then(resp => {
-          axios.get(`/api/data?measures=Age-Adjusted Obesity Prevalence&drilldowns=Sex&Geography=${geoId}&Year=latest`)
+          axios.get(`/api/data?measures=Age-Adjusted Obesity Prevalence&drilldowns=Sex&Geography=${geoId}&Year=latest`) // CDC Wonder - Obesity Prevalence by Sex
             .then(d => {
               this.setState({
                 obesityPrevalenceBySex: d.data.data,
@@ -102,7 +102,7 @@ class ObesityAndDiabetes extends SectionColumns {
               title={isHealthyWeightSelected ? "Location with highest share" : "Location with highest prevalence"}
               year={topDropdownWeightedData["End Year"]}
               value={topDropdownWeightedData["Zip Region"]}
-              qualifier={formatPercentage(topDropdownWeightedData[dropdownValue])}
+              qualifier={formatPercentage(topDropdownWeightedData[dropdownValue], true)}
             />
             : <Stat
               title={"Location with highest prevalence"}
@@ -126,7 +126,7 @@ class ObesityAndDiabetes extends SectionColumns {
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           {isBMIWeightedDataValueSelected
-            ? <p>In {topDropdownWeightedData["End Year"]}, {topDropdownWeightedData["Zip Region"]} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownWeightedData[dropdownValue])}) out of all zip regions in Wayne County.</p>
+            ? <p>In {topDropdownWeightedData["End Year"]}, {topDropdownWeightedData["Zip Region"]} had the highest {isHealthyWeightSelected ? "share" : "prevalence"} of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownWeightedData[dropdownValue], true)}) out of all zip regions in Wayne County.</p>
             : <p>In {topDropdownValueTract.Year}, {topDropdownValueTract.Tract} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownValueTract[dropdownValue])}) out of all the tracts in Wayne County.</p>
           }
 
@@ -135,8 +135,8 @@ class ObesityAndDiabetes extends SectionColumns {
           The chart here shows male and female prevalence in {topMaleData.Geography}.</p>
 
           {isBMIWeightedDataValueSelected
-            ? <p>The map here shows the {dropdownValue.toLowerCase()} for all zip regions in Wayne County.</p>
-            : <p>The map here shows the {dropdownValue.toLowerCase()} for all tracts in Wayne County.</p>
+            ? <p>The map here shows the {isHealthyWeightSelected ? "share" : "prevalence"} of {dropdownValue.toLowerCase()} for all zip regions in Wayne County.</p>
+            : <p>The map here shows the prevalence of {dropdownValue.toLowerCase()} for all census tracts in Wayne County.</p>
           }
 
           {/* Draw a BarChart to show data for Obesity Rate by Sex. */}
@@ -171,12 +171,12 @@ class ObesityAndDiabetes extends SectionColumns {
             groupBy: "ID Zip Region",
             colorScale: dropdownValue,
             colorScaleConfig: {
-              axisConfig: {tickFormat: d => formatPercentage(d)}
+              axisConfig: {tickFormat: d => formatPercentage(d, true)}
             },
             label: d => d["Zip Region"],
             height: 400,
             time: "End Year",
-            tooltipConfig: isHealthyWeightSelected ? {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Share", d => `${formatPercentage(d[dropdownValue])}`]]} : {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue])}`]]},
+            tooltipConfig: isHealthyWeightSelected ? {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Share", d => `${formatPercentage(d[dropdownValue], true)}`]]} : {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue], true)}`]]},
             topojson: "/topojson/zipregions.json",
             topojsonId: d => d.properties.REGION,
             topojsonFilter: () => true
@@ -210,8 +210,8 @@ ObesityAndDiabetes.defaultProps = {
 };
 
 ObesityAndDiabetes.need = [
-  fetchData("obesityAndDibetesDataValue", "/api/data?measures=Obesity,Diabetes&drilldowns=Tract&Year=latest", d => d.data),
-  fetchData("diabetesPrevalenceBySex", "/api/data?measures=Age-Adjusted Diabetes Prevalence&drilldowns=Sex&Geography=<id>&Year=latest", d => d.data)
+  fetchData("obesityAndDibetesDataValue", "/api/data?measures=Obesity,Diabetes&drilldowns=Tract&Year=latest", d => d.data), // 500 Cities
+  fetchData("diabetesPrevalenceBySex", "/api/data?measures=Age-Adjusted Diabetes Prevalence&drilldowns=Sex&Geography=<id>&Year=latest", d => d.data) // CDC Wonder - Diabetes Prevalence by Sex
 ];
 
 const mapStateToProps = state => ({

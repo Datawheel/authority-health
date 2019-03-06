@@ -103,11 +103,14 @@ class Homeless extends SectionColumns {
         <article>
           {isHomelessDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {typesOfShelteredHomeless[0].Geography}.</div>}
           {/* Create a dropdown for sheltered and unsheltered choices. */}
-          <div className="pt-select pt-fill">
-            <select onChange={this.handleChange}>
-              {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
-            </select>
-          </div>
+          <label className="pt-label pt-inline" htmlFor="health-center-dropdown">
+            Show data for
+            <div className="pt-select">
+              <select id="health-center-dropdown" onChange={this.handleChange}>
+                {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
+              </select>
+            </div>
+          </label>
 
           <Stat
             title={shelteredSelected ? "Most common Sheltered demographic" : "Most common Unsheltered demographic"}

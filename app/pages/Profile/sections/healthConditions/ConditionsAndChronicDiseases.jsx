@@ -76,11 +76,14 @@ class ConditionsAndChronicDiseases extends SectionColumns {
         <SectionTitle>Conditons & Chronic Diseases</SectionTitle>
         <article>
           {/* Create a dropdown for different types of health conditions. */}
-          <div className="pt-select pt-fill">
-            <select onChange={this.handleChange}>
-              {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
-            </select>
-          </div>
+          <label className="pt-label pt-inline" htmlFor="health-conditions-dropdown">
+            Show data for
+            <div className="pt-select">
+              <select id="health-conditions-dropdown" onChange={this.handleChange}>
+                {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
+              </select>
+            </div>
+          </label>
 
           {/* Show top stats for the dropdown selected. */}
           { isHealthConditionWeightedValueSelected

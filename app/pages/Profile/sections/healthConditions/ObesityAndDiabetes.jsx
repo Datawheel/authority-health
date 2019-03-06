@@ -92,11 +92,14 @@ class ObesityAndDiabetes extends SectionColumns {
         <SectionTitle>Obesity and Diabetes</SectionTitle>
         <article>
           {/* Create a dropdown for different types of health conditions. */}
-          <div className="pt-select pt-fill">
-            <select onChange={this.handleChange}>
-              {dropdownList.map(item => <option key={item} value={item}>{formatDropdownName(item)}</option>)}
-            </select>
-          </div>
+          <label className="pt-label pt-inline" htmlFor="obesity-diabetes-dropdown">
+            Show data for
+            <div className="pt-select">
+              <select id="obesity-diabetes-dropdown" onChange={this.handleChange}>
+                {dropdownList.map(item => <option key={item} value={item}>{formatDropdownName(item)}</option>)}
+              </select>
+            </div>
+          </label>
 
           {/* Show top stats for the dropdown selected. */}
           {isBMIWeightedDataValueSelected

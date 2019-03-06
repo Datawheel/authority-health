@@ -105,11 +105,14 @@ class ReadingAssessment extends SectionColumns {
         <SectionTitle>Reading Assessment</SectionTitle>
         <article>
           {/* Create a dropdown for all categoeries of reading assessment. */}
-          <div className="pt-select pt-fill">
-            <select onChange={this.handleChange}>
-              {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
-            </select>
-          </div>
+          <label className="pt-label pt-inline" htmlFor="reading-assessment-dropdown">
+            Show data for
+            <div className="pt-select">
+              <select id="reading-assessment-dropdown" onChange={this.handleChange}>
+                {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
+              </select>
+            </div>
+          </label>
           <p>The following chart shows the average reading assessment score {isParentsEducationSelected ? "for 8th grade students" : ""} in Detroit {isOverallSelected ? "compared to the United States" : isParentsEducationSelected ? `by their ${dropdownValue.toLowerCase()}` : `by ${dropdownValue.toLowerCase()}`} over time.</p>
           {isParentsEducationSelected
             ? <div>

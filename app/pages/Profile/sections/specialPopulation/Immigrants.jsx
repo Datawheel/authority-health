@@ -131,11 +131,14 @@ class Immigrants extends SectionColumns {
         <SectionTitle>Immigrants</SectionTitle>
         <article>
           {/* Create a dropdown for total immigrants and immigrants in poverty choices. */}
-          <div className="pt-select pt-fill">
-            <select onChange={this.handleChange}>
-              {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
-            </select>
-          </div>
+          <label className="pt-label pt-inline" htmlFor="health-center-dropdown">
+            Show data for
+            <div className="pt-select">
+              <select id="health-center-dropdown" onChange={this.handleChange}>
+                {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
+              </select>
+            </div>
+          </label>
 
           {/* Show top stats and a short paragraph about it for each Nativity. */}
           {totalImmigrantsSelected

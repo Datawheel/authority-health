@@ -53,11 +53,14 @@ class StoreAccessByDemographic extends SectionColumns {
         <article>
           {isCurrentLocationDataAvailable ? <div></div> : <div className="disclaimer">Showing data for {ageSelected ? foodAccessByAge.data[0].Geography : foodAccessByRace.data[0].Geography}.</div>}
           {/* Create a dropdown for each age and race type using raceAndAgeTypes array. */}
-          <div className="pt-select pt-fill">
-            <select onChange={this.handleChange}>
-              {raceAndAgeTypes.map(item => <option key={item} value={item}>{item}</option>)}
-            </select>
-          </div>
+          <label className="pt-label pt-inline" htmlFor="store-access-dropdown">
+            Show data for
+            <div className="pt-select">
+              <select id="store-access-dropdown" onChange={this.handleChange}>
+                {raceAndAgeTypes.map(item => <option key={item} value={item}>{item}</option>)}
+              </select>
+            </div>
+          </label>
           {/* Show top stats for Age and Race groups based on the drilldown value. */}
           <Stat
             title={ageSelected ? "Most at risk demographic" : "Top Food Access by Race"}

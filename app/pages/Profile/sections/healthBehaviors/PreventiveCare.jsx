@@ -67,11 +67,14 @@ class PreventiveCare extends SectionColumns {
         <article>
           {isPreventativeCareWeightedValueSelected ? <div className="disclaimer">Data only available for zip regions.</div> : <div className="disclaimer">Data only available for census tracts.</div>}
           {/* Create a dropdown for different types of preventive care. */}
-          <div className="pt-select pt-fill">
-            <select onChange={this.handleChange}>
-              {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
-            </select>
-          </div>
+          <label className="pt-label pt-inline" htmlFor="preventive-care-dropdown">
+            Show data for
+            <div className="pt-select">
+              <select id="preventive-care-dropdown" onChange={this.handleChange}>
+                {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
+              </select>
+            </div>
+          </label>
 
           {/* Show top stats for the dropdown selected. */}
           <Stat

@@ -61,15 +61,14 @@ class RiskyBehaviors extends SectionColumns {
         <SectionTitle>Risky Behaviors</SectionTitle>
         <article>
           {/* Create a dropdown for drug types. */}
-          <div className="field-container">
-            <label>
-              <div className="pt-select pt-fill">
-                <select onChange={this.handleChange}>
-                  {drugTypes.map(item => <option key={item} value={item}>{item}</option>)}
-                </select>
-              </div>
-            </label>
-          </div>
+          <label className="pt-label pt-inline" htmlFor="risky-behaviors-dropdown">
+            Show data for
+            <div className="pt-select">
+              <select id="risky-behaviors-dropdown" onChange={this.handleChange}>
+                {drugTypes.map(item => <option key={item} value={item}>{item}</option>)}
+              </select>
+            </div>
+          </label>
 
           <Stat
             title={isSecondHandSmokeOrMonthlyAlcoholSelected ? "Zip region with highest prevalence" : "Tract with highest prevalence"}

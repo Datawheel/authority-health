@@ -45,11 +45,14 @@ class PhysicalInactivity extends SectionColumns {
         <article>
           {isPhysicalInactivityBySexAvailableForCurrentlocation ? <div></div> : <div className="disclaimer">Showing data for {physicalInactivityPrevalenceBySex.data[0].Geography}.</div>}
           {/* Create a dropdown list for Physical Health and Physical Inactivity options. */}
-          <div className="pt-select pt-fill">
-            <select onChange={this.handleChange}>
-              {dropdownList.map(item => <option key={item} value={item}>{formatDropdownChoiceName(item)}</option>)}
-            </select>
-          </div>
+          <label className="pt-label pt-inline" htmlFor="physical-inactivity-dropdown">
+            Show data for
+            <div className="pt-select">
+              <select id="physical-inactivity-dropdown" onChange={this.handleChange}>
+                {dropdownList.map(item => <option key={item} value={item}>{formatDropdownChoiceName(item)}</option>)}
+              </select>
+            </div>
+          </label>
 
           <Stat
             title={"Location with highest prevalence"}

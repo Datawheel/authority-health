@@ -31,12 +31,17 @@ class Insecurity extends SectionColumns {
             <p>Food insecurity refers to <a href="https://www.ers.usda.gov/topics/food-nutrition-assistance/food-security-in-the-us.aspx">USDA’s measure</a> of lack of access, at times, to enough food for an active, healthy life for all household members and limited or uncertain availability of nutritionally adequate foods.</p>
             <p>In {childInsecurity.Year}, the food insecurity rate was {childInsecurity["Food Insecurity Rate"]}% of all children and {adultInsecurityRate}% of all adults in {childInsecurity.Geography}.</p>
           </article>
-          <div></div> {/* // adds empty div to for alignment of above text */}
+          {/* adds empty div for proper alignment of above text  */}
+          <div></div>
         </SectionColumns>
       </div>
     );
   }
 }
+
+Insecurity.defaultProps = {
+  slug: "insecurity"
+};
 
 Insecurity.need = [
   fetchData("insecurityRate", "/api/data?measures=Food Insecurity Rate&drilldowns=Category&Geography=<id>&Year=latest")

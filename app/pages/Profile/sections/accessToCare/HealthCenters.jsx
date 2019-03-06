@@ -77,11 +77,14 @@ class HealthCenters extends SectionColumns {
         <SectionTitle>Health Centers</SectionTitle>
         <article>
           {/* Create a dropdown list. */}
-          <div className="pt-select pt-fill">
-            <select onChange={this.handleChange}>
-              {dropdownList.map(item => <option key={item} value={item}>{formatDropdownName(item)}</option>)}
-            </select>
-          </div>
+          <label className="pt-label pt-inline" htmlFor="health-center-dropdown">
+            Show data for
+            <div className="pt-select">
+              <select id="health-center-dropdown" onChange={this.handleChange}>
+                {dropdownList.map(item => <option key={item} value={item}>{formatDropdownName(item)}</option>)}
+              </select>
+            </div>
+          </label>
           {/* Show top stats for each dropdown choice. */}
           {isHealthCentersSelected
             ? <div>

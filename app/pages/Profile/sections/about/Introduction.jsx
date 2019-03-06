@@ -7,8 +7,13 @@ import {formatAbbreviate} from "d3plus-format";
 import growthCalculator from "utils/growthCalculator";
 import Stat from "components/Stat";
 
-const formatRaceName = d => d.replace("Alone", "");
-const formatEthnicityName = d => d.replace("Not Hispanic or Latino", "Non-Hispanic").replace("or Latino", "");
+const formatRaceName = d => {
+  d = d.replace("Alone", "").replace("Black", "black").replace("White", "white").replace("Asian", "asian");
+  if (d.trim() === "Some Other Race") return d.toLowerCase();
+  if (d.trim() === "Two or More Races") return d.toLowerCase();
+  return d;
+};
+const formatEthnicityName = d => d.replace("Not Hispanic or Latino", "non-Hispanic").replace("or Latino", "");
 
 class Introduction extends SectionColumns {
 
@@ -63,13 +68,13 @@ class Introduction extends SectionColumns {
             {level === "zip" ? `Zip code ${population[0].Geography}` : population[0].Geography} has a population of {formatAbbreviate(population[0].Population)} people with life expectancy of {lifeExpectancyAvailable ? formatAbbreviate(lifeExpectancy[0]["Life Expectancy"]) : "N/A"} {lifeExpectancyAvailable ? onCityOrZipLevel ? <span>(in {lifeExpectancy[0].Geography})</span> : "" : ""}.
             The most common age group for male is {populationByAgeAndGenderAvailable ? getTopMaleData.Age.toLowerCase() : "N/A"} and for female it is {populationByAgeAndGenderAvailable ? getTopFemaleData.Age.toLowerCase() : "N/A"}.
             Between 2015 and 2016 the population of {population[0].Geography} {populationGrowth < 0 ? "reduced" : "increased"} from {formatAbbreviate(population[1].Population)} to {formatAbbreviate(population[0].Population)},
-            { } {populationGrowth < 0 ? "a decline" : "an increase"} of {populationGrowth < 0 ? populationGrowth * -1 : isNaN(populationGrowth) ? "N/A" : `${populationGrowth}%`}.
+            {} {populationGrowth < 0 ? "a decline" : "an increase"} of {populationGrowth < 0 ? `${populationGrowth * -1}%` : isNaN(populationGrowth) ? "N/A" : `${populationGrowth}%`}.
           </p>
           {populationByRaceAndEthnicityAvailable
             ? <p>
-              Most of the population in {recentYearPopulationByRaceAndEthnicity.values[0].Geography} is {formatEthnicityName(recentYearPopulationByRaceAndEthnicity.values[0].Ethnicity).toLowerCase()} { }
-              {formatRaceName(recentYearPopulationByRaceAndEthnicity.values[0].Race).toLowerCase()} ({formatAbbreviate(recentYearPopulationByRaceAndEthnicity.values[0].share)}%), followed by { }
-              {formatEthnicityName(recentYearPopulationByRaceAndEthnicity.values[1].Ethnicity).toLowerCase()} {formatRaceName(recentYearPopulationByRaceAndEthnicity.values[1].Race).toLowerCase()}
+              Most of the population in {recentYearPopulationByRaceAndEthnicity.values[0].Geography} is {formatEthnicityName(recentYearPopulationByRaceAndEthnicity.values[0].Ethnicity)} {}
+              {formatRaceName(recentYearPopulationByRaceAndEthnicity.values[0].Race)} ({formatAbbreviate(recentYearPopulationByRaceAndEthnicity.values[0].share)}%), followed by {}
+              {formatEthnicityName(recentYearPopulationByRaceAndEthnicity.values[1].Ethnicity)} {formatRaceName(recentYearPopulationByRaceAndEthnicity.values[1].Race)}
               ({formatAbbreviate(recentYearPopulationByRaceAndEthnicity.values[1].share)}%).
             </p>
             : null}

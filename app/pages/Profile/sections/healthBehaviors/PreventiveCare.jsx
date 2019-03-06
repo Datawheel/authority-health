@@ -124,6 +124,7 @@ class PreventiveCare extends SectionColumns {
             time: "Year",
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Preventive Care", `${dropdownValue}`], ["Share", d => `${formatPercentage(d[dropdownValue])}`]]},
             topojson: "/topojson/tract.json",
+            topojsonId: d => d.id,
             topojsonFilter: d => d.id.startsWith("14000US26163")
           }}
           dataFormat={resp => resp.data}

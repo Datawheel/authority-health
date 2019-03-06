@@ -197,6 +197,7 @@ class ObesityAndDiabetes extends SectionColumns {
             time: "Year",
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue])}`]]},
             topojson: "/topojson/tract.json",
+            topojsonId: d => d.id,
             topojsonFilter: d => d.id.startsWith("14000US26163")
           }}
           dataFormat={resp => resp.data}

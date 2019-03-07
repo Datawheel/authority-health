@@ -89,12 +89,19 @@ export default [
   },
   {
     slug: "food-availability",
+    agency: "Summer Food Program",
+    contact: "Vaughn Frederick",
+    email: "vfrederick@waynecounty.com",
+    phone: ["7347277189"]
+  },
+  {
+    slug: "food-stamps",
     agency: "WIC Program",
     contact: "Central Call Center",
     phone: ["7347277156"]
   },
   {
-    slug: "food-availability",
+    slug: "food-stamps",
     agency: "WIC Program",
     location: "16000US2621000",
     phone: ["3132162201"],
@@ -102,7 +109,7 @@ export default [
     address2: "Dearborn, MI 48126"
   },
   {
-    slug: "food-availability",
+    slug: "food-stamps",
     agency: "WIC Program",
     location: "16000US2631420",
     phone: ["7347628435"],
@@ -110,7 +117,7 @@ export default [
     address2: "Garden City, MI 48135"
   },
   {
-    slug: "food-availability",
+    slug: "food-stamps",
     agency: "WIC Program",
     location: "16000US2636280",
     phone: ["3138711963"],
@@ -118,7 +125,7 @@ export default [
     address2: "Hamtramck, MI 48212"
   },
   {
-    slug: "food-availability",
+    slug: "food-stamps",
     agency: "WIC Program",
     location: "16000US2638180",
     phone: ["3133694730x4735"],
@@ -126,7 +133,7 @@ export default [
     address2: "Highland Park, MI 48203"
   },
   {
-    slug: "food-availability",
+    slug: "food-stamps",
     agency: "WIC Program",
     location: "16000US2640680",
     phone: ["7347277156"],
@@ -134,7 +141,7 @@ export default [
     address2: "Inkster, MI 48141"
   },
   {
-    slug: "food-availability",
+    slug: "food-stamps",
     agency: "WIC Program",
     location: "16000US2622000",
     phone: ["3136764220"],
@@ -142,7 +149,7 @@ export default [
     address2: "Redford, MI 48239"
   },
   {
-    slug: "food-availability",
+    slug: "food-stamps",
     agency: "WIC Program",
     location: "16000US2668760",
     phone: ["3139142373"],
@@ -150,7 +157,7 @@ export default [
     address2: "River Rouge, MI 48218"
   },
   {
-    slug: "food-availability",
+    slug: "food-stamps",
     agency: "WIC Program",
     location: "16000US2674960",
     phone: ["7342873075"],
@@ -158,7 +165,7 @@ export default [
     address2: "Southgate, MI 48195"
   },
   {
-    slug: "food-availability",
+    slug: "food-stamps",
     agency: "WIC Program",
     location: "16000US2669420",
     phone: ["7344616419"],
@@ -166,7 +173,7 @@ export default [
     address2: "Belleville, MI 48111"
   },
   {
-    slug: "food-availability",
+    slug: "food-stamps",
     agency: "WIC Program",
     location: "16000US2679000",
     phone: ["7349553906"],
@@ -174,19 +181,12 @@ export default [
     address2: "Taylor, MI 48180"
   },
   {
-    slug: "food-availability",
+    slug: "food-stamps",
     agency: "WIC Program",
     location: "16000US2684940",
     phone: ["7347277156"],
     address1: "33030 Van Born",
     address2: "Wayne, MI 48184"
-  },
-  {
-    slug: "food-availability",
-    agency: "Summer Food Program",
-    contact: "Vaughn Frederick",
-    email: "vfrederick@waynecounty.com",
-    phone: ["7347277189"]
   },
   {
     slug: "preventive-care",

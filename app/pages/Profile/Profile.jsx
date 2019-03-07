@@ -8,6 +8,7 @@ import "./Profile.css";
 import Introduction from "./sections/about/Introduction";
 import Insecurity from "./sections/foodAccess/Insecurity";
 import FoodAvailability from "./sections/foodAccess/FoodAvailability";
+import FoodStamps from "./sections/foodAccess/FoodStamps";
 import StoreAccessByDemographic from "./sections/foodAccess/StoreAccessByDemographic";
 import PreventiveCare from "./sections/healthBehaviors/PreventiveCare";
 import RiskyBehaviors from "./sections/healthBehaviors/RiskyBehaviors";
@@ -112,6 +113,7 @@ class Profile extends Component {
         <div className="section-container">
           <Insecurity />
           <FoodAvailability />
+          <FoodStamps />
           <StoreAccessByDemographic />
         </div>
 
@@ -192,7 +194,7 @@ class Profile extends Component {
 
 Profile.need = [
   Introduction,
-  FoodAvailability,
+  FoodStamps,
   Insecurity,
   StoreAccessByDemographic,
   Cancer,

@@ -1,6 +1,10 @@
 import React from "react";
 import {connect} from "react-redux";
 import {format} from "d3-format";
+import {sum} from "d3-array";
+import {nest} from "d3-collection";
+import {LinePlot} from "d3plus-react";
+import {formatAbbreviate} from "d3plus-format";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
@@ -8,12 +12,38 @@ import Stat from "components/Stat";
 
 const commas = format(",d");
 
+const formatPercentage = d => `${formatAbbreviate(d)}%`;
+
+const formatPublicAssistanceData = publicAssistanceData => {
+  // Format data for publicAssistanceData
+  nest()
+    .key(d => d.Year)
+    .entries(publicAssistanceData)
+    .forEach(group => {
+      const total = sum(group.values, d => d["Food-Stamp Population"]);
+      group.values.forEach(d => {
+        if (total !== 0) {
+          d.total = total; // save total to later calculate total population with stamps.
+          d.share = d["Food-Stamp Population"] / total * 100;
+        } 
+        else d.share = 0;
+      });
+    });
+  const withCashFoodStamps = publicAssistanceData.filter(d => d["ID Public Assistance or Snap"] === 0);
+  return withCashFoodStamps;
+};
+
 class FoodStamps extends SectionColumns {
 
   render() {
 
-    const {snapWicData} = this.props;
+    const {meta, population, publicAssistanceData, snapWicData} = this.props;
     const isSnapWicDataAvailableForCurrentGeography = snapWicData.source[0].substitutions.length === 0;
+
+    const publicAssistanceDataAvailable = publicAssistanceData.length !== 0;
+    const topPublicAssistanceData = formatPublicAssistanceData(publicAssistanceData)[0];
+    const currentYearPopulation = population.filter(d => d.Year === topPublicAssistanceData.Year)[0];
+    const shareOfPopulationWithFoodStamps = formatPercentage(topPublicAssistanceData.total / currentYearPopulation.Population * 100);
 
     // Get latest year SNAP and WIC authorized stores data
     const snapWicArr = ["SNAP", "WIC"];
@@ -42,7 +72,7 @@ class FoodStamps extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Food Stamps</SectionTitle>
         <article>
-          {isSnapWicDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {snapWicData.data[0].Geography}.</div>}
+          {isSnapWicDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing stores data for {snapWicData.data[0].Geography}.</div>}
           <Stat
             title="SNAP-authorized stores"
             year={snapLatestYear}
@@ -53,9 +83,41 @@ class FoodStamps extends SectionColumns {
             year={wicLatestYear}
             value={wicLatestYearValue}
           />
-          <p>The average monthly number of SNAP-authorized stores in {county} in {snapLatestYear} was {commas(snapLatestYearValue)} and there were {commas(wicLatestYearValue)} WIC-authorized stores in {wicLatestYear}.</p>
+          <Stat
+            title="Population with food stamps"
+            year={topPublicAssistanceData.Year}
+            value={shareOfPopulationWithFoodStamps}
+            description={`of the total population in ${meta.name}`}
+          />
+          <Stat
+            title={"Population With Cash Public Assistance Or Food Stamps/SNAP"}
+            year={publicAssistanceDataAvailable ? topPublicAssistanceData.Year : ""}
+            value={publicAssistanceDataAvailable ? `${formatPercentage(topPublicAssistanceData.share)}` : "N/A"}
+            description={publicAssistanceDataAvailable ? `of the total population with food stamps in ${meta.name}` : ""}
+          />
+          <p>The monthly average number of SNAP-authorized stores in {county} in {snapLatestYear} was {commas(snapLatestYearValue)} and there were {commas(wicLatestYearValue)} WIC-authorized stores in {wicLatestYear}.</p>
+          <p>In {topPublicAssistanceData.Year}, {shareOfPopulationWithFoodStamps} of the total population in {topPublicAssistanceData.Geography} had food stamps, out of which {formatPercentage(topPublicAssistanceData.share)} population were given food stamps in cash.</p>
+          <p>The chart here shows the share of population who gets food stamps in cash out of the total population with food stamps.</p>
           <Contact slug={this.props.slug} />
         </article>
+
+        {publicAssistanceDataAvailable 
+          ? <LinePlot config={{
+            data: `/api/data?measures=Food-Stamp Population&drilldowns=Public Assistance or Snap&Geography=${meta.id}&Year=all`,
+            discrete: "x",
+            height: 400,
+            groupBy: "Public Assistance or Snap",
+            x: "Year",
+            y: "share",
+            yConfig: {
+              tickFormat: d => `${formatPercentage(d)}`,
+              title: "Share"
+            },
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => `${formatPercentage(d.share)}`]]}
+          }}
+          dataFormat={resp => formatPublicAssistanceData(resp.data)}
+          /> : null
+        }
       </SectionColumns>
     );
   }
@@ -66,10 +128,14 @@ FoodStamps.defaultProps = {
 };
 
 FoodStamps.need = [
+  fetchData("publicAssistanceData", "/api/data?measures=Food-Stamp Population&drilldowns=Public Assistance or Snap&Geography=<id>&Year=latest", d => d.data),
   fetchData("snapWicData", "/api/data?measures=Number of Nutrition Assistance Stores&drilldowns=Assistance Type&Geography=<id>&Year=all") // getting all year data since WIC and SNAP both have different latest years.
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
+  population: state.data.population.data,
+  publicAssistanceData: state.data.publicAssistanceData,
   snapWicData: state.data.snapWicData
 });
 

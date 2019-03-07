@@ -72,13 +72,13 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
             title={"Population With Cash Public Assistance Or Food Stamps/SNAP"}
             year={publicAssistanceDataAvailable ? topPublicAssistanceData.Year : ""}
             value={publicAssistanceDataAvailable ? `${formatPercentage(topPublicAssistanceData.share)}` : "N/A"}
-            description={publicAssistanceDataAvailable ? `of the total population with food stamp in ${topPublicAssistanceData.Geography}` : "N/A"}
+            qualifier={publicAssistanceDataAvailable ? `of the total population with food stamp in ${topPublicAssistanceData.Geography}` : "N/A"}
           />
           <Stat
             title={"most common number of workers per household"}
             year={householdSnapDataAvailable ? topRecentYearHouseholdSnapData.Year : ""}
             value={householdSnapDataAvailable ? topRecentYearHouseholdSnapData["Number of workers"] : "N/A"}
-            qualifier={householdSnapDataAvailable ? `${formatPercentage(topRecentYearHouseholdSnapData.totalShare)} of the total population in ${topRecentYearHouseholdSnapData.Geography}` : ""}
+            qualifier={householdSnapDataAvailable ? `(${formatPercentage(topRecentYearHouseholdSnapData.totalShare)} of the total population in ${topRecentYearHouseholdSnapData.Geography})` : ""}
           />
           <p>
             {publicAssistanceDataAvailable ? <span>In {topPublicAssistanceData.Year}, {formatPercentage(topPublicAssistanceData.share)} of total population in {topPublicAssistanceData.Geography} got public assistance or food stamps in cash. </span> : ""}

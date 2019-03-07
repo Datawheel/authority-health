@@ -87,13 +87,13 @@ class FoodStamps extends SectionColumns {
             title="Population with food stamps"
             year={topPublicAssistanceData.Year}
             value={shareOfPopulationWithFoodStamps}
-            description={`of the total population in ${meta.name}`}
+            qualifier={`of the total population in ${meta.name}`}
           />
           <Stat
             title={"Population With Cash Public Assistance Or Food Stamps/SNAP"}
             year={publicAssistanceDataAvailable ? topPublicAssistanceData.Year : ""}
             value={publicAssistanceDataAvailable ? `${formatPercentage(topPublicAssistanceData.share)}` : "N/A"}
-            description={publicAssistanceDataAvailable ? `of the total population with food stamps in ${meta.name}` : ""}
+            qualifier={publicAssistanceDataAvailable ? `of the total population with food stamps in ${meta.name}` : ""}
           />
           <p>The monthly average number of SNAP-authorized stores in {county} in {snapLatestYear} was {commas(snapLatestYearValue)} and there were {commas(wicLatestYearValue)} WIC-authorized stores in {wicLatestYear}.</p>
           <p>In {topPublicAssistanceData.Year}, {shareOfPopulationWithFoodStamps} of the total population in {topPublicAssistanceData.Geography} had food stamps, out of which {formatPercentage(topPublicAssistanceData.share)} population were given food stamps in cash.</p>

@@ -32,7 +32,7 @@ export default class Stat extends Component {
         <dd className={`stat-value title ${ value.length > 30 ? "font-md" : "font-lg" } ${ themeClass }`}>
           { value }
           { qualifier &&
-            <span className="stat-value-qualifier font-sm"> ({qualifier})</span>
+            <span className="stat-value-qualifier font-sm"> {qualifier}</span>
           }
         </dd>
       </dl>

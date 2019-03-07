@@ -13,40 +13,26 @@ import Stat from "components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
-const formatPublicAssistanceData = publicAssistanceData => {
-  // Format data for publicAssistanceData
-  nest()
-    .key(d => d.Year)
-    .entries(publicAssistanceData)
-    .forEach(group => {
-      const total = sum(group.values, d => d["Food-Stamp Population"]);
-      group.values.forEach(d => total !== 0 ? d.share = d["Food-Stamp Population"] / total * 100 : d.share = 0);
-    });
-  // Find top recent year data for publicAssistanceData
-  const topPublicAssistanceData = publicAssistanceData.filter(d => d["ID Public Assistance or Snap"] === 0).sort((a, b) => b.share - a.share)[0];
-  return [publicAssistanceData, topPublicAssistanceData];
-};
-
 const formatHouseholdSnapData = householdSnapData => {
   // Find share for each data in householdSnapData.
-  const recentYearHouseholdSnapData = {};
   nest()
     .key(d => d.Year)
     .entries(householdSnapData)
     .forEach(group => {
       const total = sum(group.values, d => d["SNAP Receipts"]);
       group.values.forEach(d => total !== 0 ? d.share = d["SNAP Receipts"] / total * 100 : d.share = 0);
-      group.key >= householdSnapData[0].Year ? Object.assign(recentYearHouseholdSnapData, group) : {};
     });
   const filterSnapRecievedData = householdSnapData.filter(d => d["ID Snap Receipt"] === 0);
-  // Get top stats for householdSnapData.
-  const filteredTopRecentYearHouseholdSnapData = recentYearHouseholdSnapData.values.filter(d => d["ID Snap Receipt"] === 0);
-  const topRecentYearHouseholdSnapData = filteredTopRecentYearHouseholdSnapData.sort((a, b) => b.share - a.share)[0];
-  let totalTopHouseoldShare = 0;
-  filteredTopRecentYearHouseholdSnapData.forEach(d => {
-    if (d["Number of workers"] === topRecentYearHouseholdSnapData["Number of workers"]) totalTopHouseoldShare += d.share;
-  });
-  return [filterSnapRecievedData, topRecentYearHouseholdSnapData, totalTopHouseoldShare];
+  nest()
+    .key(d => d["ID Number of workers"])
+    .entries(filterSnapRecievedData)
+    .forEach(group => {
+      const totalShare = sum(group.values, d => d.share);
+      group.values.forEach(d => d.totalShare = totalShare);
+    });
+  const topRecentYearTotalShareData = householdSnapData.sort((a, b) => b.totalShare - a.totalShare)[0];
+  const topRecentYearData = filterSnapRecievedData.filter(d => d.totalShare === topRecentYearTotalShareData.totalShare).sort((a, b) => b.share - a.share)[0];
+  return [filterSnapRecievedData, topRecentYearData];
 };
 
 class HouseholdIncomeFromPublicAssistance extends SectionColumns {
@@ -61,14 +47,21 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
     // Format data for publicAssistanceData
     let topPublicAssistanceData;
     if (publicAssistanceDataAvailable) {
-      topPublicAssistanceData = formatPublicAssistanceData(publicAssistanceData)[1];
+      // Format data for publicAssistanceData
+      nest()
+        .key(d => d.Year)
+        .entries(publicAssistanceData)
+        .forEach(group => {
+          const total = sum(group.values, d => d["Food-Stamp Population"]);
+          group.values.forEach(d => total !== 0 ? d.share = d["Food-Stamp Population"] / total * 100 : d.share = 0);
+        });
+      topPublicAssistanceData = publicAssistanceData.filter(d => d["ID Public Assistance or Snap"] === 0).sort((a, b) => b.share - a.share)[0];
     }
 
     // Find share for each data in householdSnapData.
-    let topRecentYearHouseholdSnapData, totalTopHouseoldShare = 0;
+    let topRecentYearHouseholdSnapData;
     if (householdSnapDataAvailable) {
       topRecentYearHouseholdSnapData = formatHouseholdSnapData(householdSnapData)[1];
-      totalTopHouseoldShare = formatHouseholdSnapData(householdSnapData)[2];
     }
 
     return (
@@ -79,16 +72,17 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
             title={"Population With Cash Public Assistance Or Food Stamps/SNAP"}
             year={publicAssistanceDataAvailable ? topPublicAssistanceData.Year : ""}
             value={publicAssistanceDataAvailable ? `${formatPercentage(topPublicAssistanceData.share)}` : "N/A"}
+            description={publicAssistanceDataAvailable ? `of the total population with food stamp in ${topPublicAssistanceData.Geography}` : "N/A"}
           />
           <Stat
             title={"most common number of workers per household"}
             year={householdSnapDataAvailable ? topRecentYearHouseholdSnapData.Year : ""}
             value={householdSnapDataAvailable ? topRecentYearHouseholdSnapData["Number of workers"] : "N/A"}
-            qualifier={householdSnapDataAvailable ? formatPercentage(totalTopHouseoldShare) : ""}
+            qualifier={householdSnapDataAvailable ? `${formatPercentage(topRecentYearHouseholdSnapData.totalShare)} of the total population in ${topRecentYearHouseholdSnapData.Geography}` : ""}
           />
           <p>
-            {publicAssistanceDataAvailable ? <span>In {topPublicAssistanceData.Year}, {formatPercentage(topPublicAssistanceData.share)} of all population in {topPublicAssistanceData.Geography} got public assistance or food stamps in cash. </span> : ""}
-            {householdSnapDataAvailable ? <span>The most common number of workers per household  on public assistance is {topRecentYearHouseholdSnapData["Number of workers"].toLowerCase()} ({formatPercentage(totalTopHouseoldShare)}).</span> : ""}
+            {publicAssistanceDataAvailable ? <span>In {topPublicAssistanceData.Year}, {formatPercentage(topPublicAssistanceData.share)} of total population in {topPublicAssistanceData.Geography} got public assistance or food stamps in cash. </span> : ""}
+            {householdSnapDataAvailable ? <span>The most common number of workers per household on public assistance is {topRecentYearHouseholdSnapData["Number of workers"].toLowerCase()} ({formatPercentage(topRecentYearHouseholdSnapData.totalShare)} of the total population in {topRecentYearHouseholdSnapData.Geography}).</span> : ""}
           </p>
           {householdSnapDataAvailable ? <p>The following chart shows the number of workers per household on public assistance.</p> : ""}
           <Contact slug={this.props.slug} />
@@ -125,7 +119,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
 }
 
 HouseholdIncomeFromPublicAssistance.defaultProps = {
-  slug: "household-income-from-public-assistance"
+  slug: "household-income-from-public-assistance" 
 };
 
 HouseholdIncomeFromPublicAssistance.need = [

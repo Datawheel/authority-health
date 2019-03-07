@@ -1,6 +1,5 @@
 import React from "react";
 import {connect} from "react-redux";
-import {format} from "d3-format";
 import {Treemap} from "d3plus-react";
 import {titleCase} from "d3plus-text";
 
@@ -9,62 +8,24 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Contact from "components/Contact";
 import Stat from "components/Stat";
 
-const commas = format(",d");
-
 class FoodAvailability extends SectionColumns {
 
   render() {
-
-    const {snapWicData} = this.props;
-    const isSnapWicDataAvailableForCurrentGeography = snapWicData.source[0].substitutions.length === 0;
-
-    // Get latest year SNAP and WIC authorized stores data
-    const snapWicArr = ["SNAP", "WIC"];
-    const snapWicLatestData = snapWicArr.map(d => {
-      const result = snapWicData.data.reduce((acc, currentValue) => {
-        if (acc === null && currentValue["Assistance Type"] !== null && currentValue["Assistance Type"] === d) {
-          return currentValue;
-        }
-        return acc;
-      }, null);
-      return result;
-    });
-
-    // Get SNAP latest year data:
-    const snapLatestYear = snapWicLatestData[0].Year;
-    const snapLatestYearValue = snapWicLatestData[0]["Number of Nutrition Assistance Stores"];
-
-    // Get WIC latest year data:
-    const wicLatestYear = snapWicLatestData[1].Year;
-    const wicLatestYearValue = snapWicLatestData[1]["Number of Nutrition Assistance Stores"];
-
-    // Get county information for current location
-    const county = snapWicData.data[0].Geography;
-    const countyId = snapWicData.data[0]["ID Geography"];
+    const {meta} = this.props;
 
     return (
       <SectionColumns>
         <SectionTitle>Food Availability</SectionTitle>
         <article>
-          {isSnapWicDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {snapWicData.data[0].Geography}.</div>}
-          <Stat
-            title="SNAP-authorized stores"
-            year={snapLatestYear}
-            value={commas(snapLatestYearValue)}
-          />
-          <Stat
-            title="WIC-authorized stores"
-            year={wicLatestYear}
-            value={wicLatestYearValue}
-          />
-          <p>The average monthly number of SNAP-authorized stores in {county} in {snapLatestYear} was {commas(snapLatestYearValue)} and there were {commas(wicLatestYearValue)} WIC-authorized stores in {wicLatestYear}.</p>
-          <p>The chart here shows the share of fast-food restaurants, full-service restaurants, convinence stores, grocery stores, specialized food stores, supercenters and farmers market in {county}.</p>
+          <p>Full Service Restaurants are establishments with a relatively broad menu along with table, counter and/or booth service and a wait staff. These establishments offer meals and snacks for immediate consumption primarily on-premise, though they may also offer takeout service.</p>
+          <p>Fast-food restaurant are establishments whose patrons generally order or select items and pay before eating. Food and drink may be consumed on premises, taken out, or delivered to customers' locations.</p>
+          <p>The chart here shows the share of fast-food restaurants, full-service restaurants, convenience stores, grocery stores, specialized food stores, supercenters and farmers market in {meta.name}.</p>
           <Contact slug={this.props.slug} />
         </article>
 
         {/* Draw a Treemap to show types of stores and restaurants. */}
         <Treemap config={{
-          data: `/api/data?measures=Number of Food Stores&drilldowns=Sub-category&Geography=${countyId}&Year=all`,
+          data: `/api/data?measures=Number of Food Stores&drilldowns=Sub-category&Geography=${meta.id}&Year=all`,
           groupBy: ["Group", "Sub-category"],
           label: d => d["Sub-category"] instanceof Array ? titleCase(d.Group) : titleCase(d["Sub-category"]),
           height: 400,
@@ -106,12 +67,8 @@ FoodAvailability.defaultProps = {
   slug: "food-availability"
 };
 
-FoodAvailability.need = [
-  fetchData("snapWicData", "/api/data?measures=Number of Nutrition Assistance Stores&drilldowns=Assistance Type&Geography=<id>&Year=all") // getting all year data since WIC and SNAP both have different latest years.
-];
-
 const mapStateToProps = state => ({
-  snapWicData: state.data.snapWicData
+  meta: state.data.meta
 });
 
 export default connect(mapStateToProps)(FoodAvailability);

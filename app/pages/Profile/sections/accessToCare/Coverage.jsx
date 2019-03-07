@@ -68,13 +68,13 @@ class Coverage extends SectionColumns {
                 title="Most covered male group"
                 year={ageGroupYear}
                 value={topMaleAgeGroup}
-                qualifier={`${topMaleShare} of total population within ${topMaleAgeGroup} years age group`}
+                qualifier={`${topMaleShare} of total population within this age group`}
               />
               <Stat
                 title="Most covered female group"
                 year={ageGroupYear}
                 value={topFemaleAgeGroup}
-                qualifier={`${topFemaleShare} of total population within ${topFemaleAgeGroup} years age group`}
+                qualifier={`${topFemaleShare} of total population within this age group`}
               />
             </div>
 

@@ -10,6 +10,13 @@ import Stat from "components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
+const formatRaceText = d => {
+  if (d === "Asian" || d === "Black" || d === "White") return `${d}(s)`;
+  else if (d === "American Indian or Alaska Native") return "American Indians or Alaska Natives";
+  else if (d === "Hawaiian or Pacific Islander") return "Hawaiians or Pacific Islanders";
+  else return d;
+};
+
 class StoreAccessByDemographic extends SectionColumns {
 
   constructor(props) {
@@ -66,11 +73,12 @@ class StoreAccessByDemographic extends SectionColumns {
             title={ageSelected ? "Most at risk demographic" : "Top Food Access by Race"}
             year={topFoodAccessData.Year}
             value={ageSelected ? topFoodAccessData["Age Group"] : topFoodAccessData["Race Group"]}
-            qualifier={ageSelected ? `${formatPercentage(topFoodAccessData["Low-Access to Food by Age"])} Low Access` : `${formatPercentage(topFoodAccessData["Low-Access to Food by Race"])} Low Access`}
+            qualifier={ageSelected ? `${formatPercentage(topFoodAccessData["Low-Access to Food by Age"])} of all ${topFoodAccessData["Age Group"].toLowerCase()} in ${topFoodAccessData.Geography} has low access` : `${formatPercentage(topFoodAccessData["Low-Access to Food by Race"])} of total population in ${topFoodAccessData.Geography} has low access`}
           />
           {/* Write a paragraph for top stats based on the dropdown choice. */}
-          <p> In {topFoodAccessData.Geography}, {ageSelected ? topFoodAccessData["Age Group"].toLowerCase() : topFoodAccessData["Race Group"]} were the largest {ageSelected ? "age" : "race"} group with low access to food stores ({ageSelected ? formatPercentage(topFoodAccessData["Low-Access to Food by Age"]) : formatPercentage(topFoodAccessData["Low-Access to Food by Race"])} in {topFoodAccessData.Year}).</p>
-          <p>The following map shows the low access rate for {dropdownValue.toLowerCase()} with low access to food stores across all counties in Michigan.</p>
+          <p>Low access to healthy food is defined as being far from a supermarket, supercenter, or large grocery store.</p>
+          <p>In {topFoodAccessData.Year}, {ageSelected ? `between children and seniors age groups, ${topFoodAccessData["Age Group"].toLowerCase()}` : topFoodAccessData["Race Group"].toLowerCase()} were the largest {ageSelected ? "age" : "race"} group ({ageSelected ? `${formatPercentage(topFoodAccessData["Low-Access to Food by Age"])} of all ${topFoodAccessData["Age Group"].toLowerCase()}` : `${formatPercentage(topFoodAccessData["Low-Access to Food by Race"])} of total ${topFoodAccessData["Race Group"].toLowerCase()} population`} in {topFoodAccessData.Geography}) with low access to food stores.</p>
+          <p>The following map shows the low access rate for {dropdownValue.split(" ").length === 1 ? formatRaceText(dropdownValue).toLowerCase() : formatRaceText(dropdownValue)} with low access to food stores across all counties in Michigan.</p>
 
           {/* Create a BarChart based on the dropdown choice. */}
           <BarChart config={{

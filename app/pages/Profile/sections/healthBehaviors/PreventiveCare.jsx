@@ -18,7 +18,8 @@ class PreventiveCare extends SectionColumns {
     this.state = {
       dropdownValue: "Annual Checkup",
       preventiveCareWeightedData: [],
-      preventiveCareData: this.props.preventiveCareData
+      preventiveCareData: this.props.preventiveCareData,
+      isPreventativeCareWeightedValueSelected: false
     };
   }
 
@@ -28,11 +29,13 @@ class PreventiveCare extends SectionColumns {
     if (dropdownValue === "Had Flu Vaccine" ||
     dropdownValue === "Had Pneumonia Vaccine" ||
     dropdownValue === "Had Routine Checkup Last Year" ||
-    dropdownValue === "FOBT or Endoscopy") { 
+    dropdownValue === "FOBT or Endoscopy" ||
+    dropdownValue === "HIV Tested") { 
       axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=latest`) // MiBRFS - All Years
         .then(resp => {
           this.setState({
             preventiveCareWeightedData: resp.data.data,
+            isPreventativeCareWeightedValueSelected: true,
             dropdownValue
           });
         }); 
@@ -42,6 +45,7 @@ class PreventiveCare extends SectionColumns {
         .then(resp => {
           this.setState({
             preventiveCareData: resp.data.data,
+            isPreventativeCareWeightedValueSelected: false,
             dropdownValue
           });
         });
@@ -49,14 +53,10 @@ class PreventiveCare extends SectionColumns {
   }
 
   render() {
-    const {dropdownValue, preventiveCareData, preventiveCareWeightedData} = this.state;
-    const dropdownList = ["Annual Checkup", "Core Preventive Services for Older Men", "Core Preventive Services for Older Women", "Dental Visit", "Colorectal Cancer Screening", "Pap Smear Test", "Mammography", "Cholesterol Screening", "Had Flu Vaccine", "Had Pneumonia Vaccine", "Had Routine Checkup Last Year", "FOBT or Endoscopy"];
-
-    // Check if the selected dropdown values are from the preventiveCareWeightedData.
-    const isPreventativeCareWeightedValueSelected = dropdownValue === "Had Flu Vaccine" ||
-    dropdownValue === "Had Pneumonia Vaccine" ||
-    dropdownValue === "Had Routine Checkup Last Year" ||
-    dropdownValue === "FOBT or Endoscopy";
+    const {dropdownValue, preventiveCareData, preventiveCareWeightedData, isPreventativeCareWeightedValueSelected} = this.state;
+    const dropdownList = ["Annual Checkup", "Core Preventive Services for Older Men", "Core Preventive Services for Older Women", 
+      "Dental Visit", "Colorectal Cancer Screening", "Pap Smear Test", "Mammography", "Cholesterol Screening", "Taking Blood Pressure Medication", "Had Flu Vaccine", 
+      "Sleep Less Than 7 Hours", "Had Pneumonia Vaccine", "Had Routine Checkup Last Year", "FOBT or Endoscopy", "HIV Tested"];
 
     // Find recent year top data for the selected dropdown value.
     const topDropdownData = isPreventativeCareWeightedValueSelected ? preventiveCareWeightedData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0] : preventiveCareData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];

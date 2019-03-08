@@ -11,7 +11,7 @@ import Stat from "components/Stat";
 
 const formatPercentage = (d, mutiplyBy100 = false) => mutiplyBy100 ? `${formatAbbreviate(d * 100)}%` : `${formatAbbreviate(d)}%`;
 
-const formatDropdownChoiceName = d => d === "Physical Health" ? "Poor Physical Health" : d;
+const formatDropdownChoiceName = d => d === "Physical Health" ? "Poor General Health Days" : d;
 
 class ConditionsAndChronicDiseases extends SectionColumns {
 
@@ -57,15 +57,14 @@ class ConditionsAndChronicDiseases extends SectionColumns {
     // Include all the measures in the dropdown list.
     const {dropdownValue, healthConditionData, healthConditionWeightedData} = this.state;
     const dropdownList = ["Arthritis", "COPD", "Chronic Kidney Disease", "Coronary Heart Disease", "Current Asthma", "High Blood Pressure", "High Cholesterol", 
-      "Mental Health", "Stroke", "Taking Blood Pressure Medication", "Teeth Loss", "Sleep Less Than 7 Hours", "Cardiovascular Disease", "Ever Depressive", 
-      "Ever Heart Attack", "Heart Disease", "HIV Tested", "Poor Mental Health 14 Or More Days", "Physical Health", "Gen Health Fair Or Poor"];
+      "Mental Health", "Stroke", "Teeth Loss", "Cardiovascular Disease", "Ever Depressive", 
+      "Ever Heart Attack", "Heart Disease", "Poor Mental Health 14 Or More Days", "Physical Health", "Gen Health Fair Or Poor"];
 
     // Check if the selected dropdown values are from the healthConditionWeightedData.
     const isHealthConditionWeightedValueSelected = dropdownValue === "Cardiovascular Disease" ||
     dropdownValue === "Ever Depressive" ||
     dropdownValue === "Ever Heart Attack" ||
     dropdownValue === "Heart Disease" ||
-    dropdownValue === "HIV Tested" ||
     dropdownValue === "Poor Mental Health 14 Or More Days" ||
     dropdownValue === "Gen Health Fair Or Poor";
 

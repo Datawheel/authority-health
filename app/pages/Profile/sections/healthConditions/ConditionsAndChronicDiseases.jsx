@@ -94,7 +94,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
                 title={"Location with highest prevalence"}
                 year={topDropdownWeightedData["End Year"]}
                 value={topDropdownWeightedData["Zip Region"]}
-                qualifier={formatPercentage(topDropdownWeightedData[dropdownValue], true)}
+                qualifier={`${formatPercentage(topDropdownWeightedData[dropdownValue], true)} of population in this zip region`}
               />
             </div>
             : <div>
@@ -103,15 +103,15 @@ class ConditionsAndChronicDiseases extends SectionColumns {
                 title={"Location with highest prevalence"}
                 year={topDropdownValueTract.Year}
                 value={topDropdownValueTract.Tract}
-                qualifier={formatPercentage(topDropdownValueTract[dropdownValue])}
+                qualifier={`${formatPercentage(topDropdownValueTract[dropdownValue])} of population in this tract`}
               />
             </div>
           }
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           { isHealthConditionWeightedValueSelected
-            ? <p>In {topDropdownWeightedData["End Year"]}, {topDropdownWeightedData["Zip Region"]} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownWeightedData[dropdownValue], true)}) out of all zip regions in Wayne County.</p>
-            : <p>In {topDropdownValueTract.Year}, {topDropdownValueTract.Tract} had the highest prevalence of {formatDropdownChoiceName(dropdownValue).toLowerCase()} ({formatPercentage(topDropdownValueTract[dropdownValue])}) out of all the tracts in Wayne County.</p>
+            ? <p>In {topDropdownWeightedData["End Year"]}, {topDropdownWeightedData["Zip Region"]} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownWeightedData[dropdownValue], true)} of population in this zip region) out of all zip regions in Wayne County.</p>
+            : <p>In {topDropdownValueTract.Year}, {topDropdownValueTract.Tract} had the highest prevalence of {formatDropdownChoiceName(dropdownValue).toLowerCase()} ({formatPercentage(topDropdownValueTract[dropdownValue])} of population in this tract) out of all the tracts in Wayne County.</p>
           }
           { isHealthConditionWeightedValueSelected
             ? <p>The map here shows the percentage of adults who have ever been diagnosed with {dropdownValue.toLowerCase()} within each zip regions in Wayne County.</p>

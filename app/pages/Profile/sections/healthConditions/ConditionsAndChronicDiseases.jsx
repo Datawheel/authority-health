@@ -114,8 +114,8 @@ class ConditionsAndChronicDiseases extends SectionColumns {
             : <p>In {topDropdownValueTract.Year}, {topDropdownValueTract.Tract} had the highest prevalence of {formatDropdownChoiceName(dropdownValue).toLowerCase()} ({formatPercentage(topDropdownValueTract[dropdownValue])}) out of all the tracts in Wayne County.</p>
           }
           { isHealthConditionWeightedValueSelected
-            ? <p>The map here shows the {dropdownValue.toLowerCase()} for zip regions in Wayne County.</p>
-            : <p>The map here shows the {formatDropdownChoiceName(dropdownValue).toLowerCase()} for tracts in Wayne County.</p>
+            ? <p>The map here shows the percentage of adults who have ever been diagnosed with {dropdownValue.toLowerCase()} within each zip regions in Wayne County.</p>
+            : <p>The map here shows the percentage of adults who have ever been diagnosed with {dropdownValue === "COPD" ? "COPD" : formatDropdownChoiceName(dropdownValue).toLowerCase()} within each census tract in Wayne County.</p>
           }
 
           <Contact slug={this.props.slug} />

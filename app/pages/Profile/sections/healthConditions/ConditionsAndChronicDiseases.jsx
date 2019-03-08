@@ -11,6 +11,8 @@ import Stat from "components/Stat";
 
 const formatPercentage = (d, mutiplyBy100 = false) => mutiplyBy100 ? `${formatAbbreviate(d * 100)}%` : `${formatAbbreviate(d)}%`;
 
+const formatDropdownChoiceName = d => d === "Physical Health" ? "Poor Physical Health" : d;
+
 class ConditionsAndChronicDiseases extends SectionColumns {
 
   constructor(props) {
@@ -56,7 +58,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
     const {dropdownValue, healthConditionData, healthConditionWeightedData} = this.state;
     const dropdownList = ["Arthritis", "COPD", "Chronic Kidney Disease", "Coronary Heart Disease", "Current Asthma", "High Blood Pressure", "High Cholesterol", 
       "Mental Health", "Stroke", "Taking Blood Pressure Medication", "Teeth Loss", "Sleep Less Than 7 Hours", "Cardiovascular Disease", "Ever Depressive", 
-      "Ever Heart Attack", "Heart Disease", "HIV Tested", "Poor Mental Health 14 Or More Days", "Gen Health Fair Or Poor"];
+      "Ever Heart Attack", "Heart Disease", "HIV Tested", "Poor Mental Health 14 Or More Days", "Physical Health", "Gen Health Fair Or Poor"];
 
     // Check if the selected dropdown values are from the healthConditionWeightedData.
     const isHealthConditionWeightedValueSelected = dropdownValue === "Cardiovascular Disease" ||
@@ -80,7 +82,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
             Show data for
             <div className="pt-select">
               <select id="health-conditions-dropdown" onChange={this.handleChange}>
-                {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
+                {dropdownList.map(item => <option key={item} value={item}>{formatDropdownChoiceName(item)}</option>)}
               </select>
             </div>
           </label>
@@ -110,11 +112,11 @@ class ConditionsAndChronicDiseases extends SectionColumns {
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           { isHealthConditionWeightedValueSelected
             ? <p>In {topDropdownWeightedData["End Year"]}, {topDropdownWeightedData["Zip Region"]} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownWeightedData[dropdownValue], true)}) out of all zip regions in Wayne County.</p>
-            : <p>In {topDropdownValueTract.Year}, {topDropdownValueTract.Tract} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownValueTract[dropdownValue])}) out of all the tracts in Wayne County.</p>
+            : <p>In {topDropdownValueTract.Year}, {topDropdownValueTract.Tract} had the highest prevalence of {formatDropdownChoiceName(dropdownValue).toLowerCase()} ({formatPercentage(topDropdownValueTract[dropdownValue])}) out of all the tracts in Wayne County.</p>
           }
           { isHealthConditionWeightedValueSelected
             ? <p>The map here shows the {dropdownValue.toLowerCase()} for zip regions in Wayne County.</p>
-            : <p>The map here shows the {dropdownValue.toLowerCase()} for tracts in Wayne County.</p>
+            : <p>The map here shows the {formatDropdownChoiceName(dropdownValue).toLowerCase()} for tracts in Wayne County.</p>
           }
 
           <Contact slug={this.props.slug} />

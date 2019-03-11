@@ -115,10 +115,14 @@ layout
 
       /* icons */
       & .pt-icon-standard {
-        font-size: 32px;
-        margin: 20px 10px 0 0;
+        font-size: 0.75em;
+        margin-right: 0.5em;
         opacity: 0.5;
-        vertical-align: top;
+        vertical-align: middle;
+
+        @mixin min-xl {
+          margin-left: -1.5em;
+        }
       }
     }
   }

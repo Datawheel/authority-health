@@ -2,7 +2,7 @@ import React from "react";
 import {connect} from "react-redux";
 import {sum} from "d3-array";
 import {nest} from "d3-collection";
-import {BarChart, LinePlot} from "d3plus-react";
+import {BarChart} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
 import {Classes, Button, MenuItem} from "@blueprintjs/core";
@@ -12,7 +12,6 @@ import "@blueprintjs/labs/dist/blueprint-labs.css";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
-import growthCalculator from "utils/growthCalculator";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -21,25 +20,20 @@ class CancerPrevalenceByDemographics extends SectionColumns {
   constructor(props) {
     super(props);
     this.state = {
-      selectedItems: [
-        {index: 0, title: "Digestive System"},
-        {index: 1, title: "Male Genital System"},
-        {index: 2, title: "Prostate"}
-      ]
+      selectedItems: []
     };
   }
 
   render() {
 
-    const {sortedCancerTypes, occuranceByGender, occuranceByRaceAndEthnicity, occuranceRate} = this.props;
+    const {sortedCancerTypes, occuranceByGender, occuranceByRaceAndEthnicity} = this.props;
     const selectedItems = this.state.selectedItems;
+    const isItemsListEmpty = selectedItems.length === 0;
+
+    console.log("occuranceByGender: ", occuranceByGender);
+    console.log("occuranceByRaceAndEthnicity: ", occuranceByRaceAndEthnicity);
 
     const topOccuranceByRaceAndEthnicity = occuranceByRaceAndEthnicity.sort((a, b) => b["Age-Adjusted Cancer Rate"] - a["Age-Adjusted Cancer Rate"])[0];
-
-    // Get top 2 recent year OccuranceRate data and find percent growth rate over last year.
-    const mostRecentYearOccuranceRate = occuranceRate[0];
-    const secondMostRecentYearOccuranceRate = occuranceRate[1];
-    const growthRate = growthCalculator(mostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"], secondMostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"]);
 
     // Get data to pass to the Multiselect component.
     const filteredCancerTypes = sortedCancerTypes.filter(d => d !== "All Invasive Cancer Sites Combined");
@@ -88,7 +82,8 @@ class CancerPrevalenceByDemographics extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Cancer Prevalence by Demographic</SectionTitle>
         <article>
-          <div className="disclaimer">Data only available for the Detroit-Warren-Dearborn, MI metro area.</div>
+          <p>Click on the box to select a cancer type and display its data in the bar charts to the right. You can select upto 5 types of cancer.</p>
+          {isItemsListEmpty ? null : <div className="disclaimer">Data only available for the Detroit-Warren-Dearborn, MI metro area.</div>}
           <MultiSelect
             items={items}
             itemPredicate={filterItem}
@@ -103,11 +98,19 @@ class CancerPrevalenceByDemographics extends SectionColumns {
             <Button rightIcon="caret-down" />
           </MultiSelect>
 
-          <h3>By Gender</h3>
-          <p>In {occuranceByGender[0].Year}, the overall prevalence of cancer in the {occuranceByGender[0].MSA} for men and women was {formatAbbreviate(occuranceByGender[1]["Age-Adjusted Cancer Rate"])} and {formatAbbreviate(occuranceByGender[0]["Age-Adjusted Cancer Rate"])} per 100,000 people, respectively.</p>
-          <p>The following chart shows the gender breakdowns for the selected cancer sites.</p>
-          {/* Draw a mini BarChart to show Cancer by Sex for selected cancer type. */}
-          <BarChart config={{
+          {isItemsListEmpty ? null
+            : <div>
+              <p>In {occuranceByGender[0].Year}, the overall prevalence of cancer in the {occuranceByGender[0].MSA} for men and women was {formatAbbreviate(occuranceByGender[1]["Age-Adjusted Cancer Rate"])} and {formatAbbreviate(occuranceByGender[0]["Age-Adjusted Cancer Rate"])} per 100,000 people, respectively.</p>
+              <p>In {topOccuranceByRaceAndEthnicity.Year}, the race/ethnicity group in the {topOccuranceByRaceAndEthnicity.MSA} with the highest overall cancer rate was {topOccuranceByRaceAndEthnicity.Race} {topOccuranceByRaceAndEthnicity.Ethnicity} ({formatAbbreviate(topOccuranceByRaceAndEthnicity["Age-Adjusted Cancer Rate"])} per 100,000 people).</p>
+              <p>The following charts shows the gender breakdowns and the race and Ethnicity breakdowns for the selected cancer site(s).</p>
+            </div>
+          }
+          <Contact slug={this.props.slug} />
+        </article>
+
+        {/* Draw a barchart to show Cancer by Sex for selected cancer type. */}
+        {isItemsListEmpty ? <div></div>
+          : <BarChart config={{
             data: `/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Sex,MSA&Cancer Site=${dropdownSelected}&Year=all`,
             discrete: "y",
             height: 250,
@@ -142,13 +145,11 @@ class CancerPrevalenceByDemographics extends SectionColumns {
               });
             return resp.data;
           }}
-          />
+          />}
 
-          <h3>By Race & Ethnicity</h3>
-          <p>In {topOccuranceByRaceAndEthnicity.Year}, the race/ethnicity group in the {topOccuranceByRaceAndEthnicity.MSA} with the highest overall cancer rate was {topOccuranceByRaceAndEthnicity.Race} {topOccuranceByRaceAndEthnicity.Ethnicity} ({formatAbbreviate(topOccuranceByRaceAndEthnicity["Age-Adjusted Cancer Rate"])} per 100,000 people).</p>
-          <p>The following chart shows the race and Ethnicity breakdowns for the selected cancer sites.</p>
-          {/* Draw a mini BarChart to show Cancer by Race and Ethnicity for selected cancer type. */}
-          <BarChart config={{
+        {/* Draw a barchart to show Cancer by Race and Ethnicity for selected cancer type. */}
+        {isItemsListEmpty ? <div></div>
+          : <BarChart config={{
             data: `/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Race,Ethnicity,MSA&Cancer Site=${dropdownSelected}&Year=all`,
             discrete: "y",
             height: 250,
@@ -182,40 +183,7 @@ class CancerPrevalenceByDemographics extends SectionColumns {
               });
             return resp.data;
           }}
-          />
-
-          <Contact slug={this.props.slug} />
-        </article>
-
-        <div>
-          <h3>Overall Occurrence</h3>
-          <p>In {mostRecentYearOccuranceRate.Year}, the cancer rate in the {mostRecentYearOccuranceRate.MSA} was {formatPercentage(mostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])}. This represents a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "growth"} from the previous year ({formatPercentage(secondMostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])}).</p>
-          <p>The following chart shows the occurrence rate per 100,000 people for the selected cancer sites.</p>
-          {/* Draw a LinePlot to show age adjusted data for the selected cancer types. */}
-          <LinePlot config={{
-            data: `/api/data?measures=Age-Adjusted Cancer Rate,Age-Adjusted Cancer Rate Lower 95 Percent Confidence Interval,Age-Adjusted Cancer Rate Upper 95 Percent Confidence Interval&Cancer Site=${dropdownSelected}&drilldowns=MSA&Year=all`,
-            discrete: "x",
-            height: 400,
-            groupBy: "Cancer Site",
-            legend: false,
-            x: "Year",
-            y: "Age-Adjusted Cancer Rate",
-            xConfig: {
-              labelRotation: false
-            },
-            yConfig: {
-              tickFormat: d => d,
-              title: "Occurrence per 100,000 People"
-            },
-            confidence: [d => d["Age-Adjusted Cancer Rate Lower 95 Percent Confidence Interval"], d => d["Age-Adjusted Cancer Rate Upper 95 Percent Confidence Interval"]],
-            confidenceConfig: {
-              fillOpacity: 0.2
-            },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
-          }}
-          dataFormat={resp => resp.data}
-          />
-        </div>
+          />}
       </SectionColumns>
     );
   }
@@ -232,15 +200,13 @@ CancerPrevalenceByDemographics.need = [
     return cancerList;
   }),
   fetchData("occuranceByGender", "/api/data?measures=Age-Adjusted Cancer Rate&drilldowns=Sex,MSA&Year=latest", d => d.data),
-  fetchData("occuranceByRaceAndEthnicity", "/api/data?measures=Age-Adjusted Cancer Rate&drilldowns=Race,Ethnicity,MSA&Year=latest", d => d.data),
-  fetchData("occuranceRate", "/api/data?measures=Age-Adjusted Cancer Rate&drilldowns=MSA&Year=all", d => d.data) // getting all year data to find growthRate.
+  fetchData("occuranceByRaceAndEthnicity", "/api/data?measures=Age-Adjusted Cancer Rate&drilldowns=Race,Ethnicity,MSA&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   sortedCancerTypes: state.data.sortedCancerTypes,
   occuranceByGender: state.data.occuranceByGender,
-  occuranceByRaceAndEthnicity: state.data.occuranceByRaceAndEthnicity,
-  occuranceRate: state.data.occuranceRate
+  occuranceByRaceAndEthnicity: state.data.occuranceByRaceAndEthnicity
 });
 
 export default connect(mapStateToProps)(CancerPrevalenceByDemographics);

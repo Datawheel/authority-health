@@ -107,13 +107,13 @@ class ObesityAndDiabetes extends SectionColumns {
               title={isHealthyWeightSelected ? "Location with highest share" : "Location with highest prevalence"}
               year={topDropdownWeightedData["End Year"]}
               value={topDropdownWeightedData["Zip Region"]}
-              qualifier={formatPercentage(topDropdownWeightedData[dropdownValue], true)}
+              qualifier={`${formatPercentage(topDropdownWeightedData[dropdownValue], true)} of population in this zip region`}
             />
             : <Stat
               title={"Location with highest prevalence"}
               year={topDropdownValueTract.Year}
               value={topDropdownValueTract.Tract}
-              qualifier={formatPercentage(topDropdownValueTract[dropdownValue])}
+              qualifier={`${formatPercentage(topDropdownValueTract[dropdownValue])} of total population in this tract`}
             />
           }
 
@@ -122,21 +122,23 @@ class ObesityAndDiabetes extends SectionColumns {
             title={"Male prevalence"}
             year={topMaleData.Year}
             value={isDiabetesSelected ? formatPercentage(topMaleData["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(topMaleData["Age-Adjusted Obesity Prevalence"])}
+            qualifier={`of total male population in ${topMaleData.Geography}`}
           />
           <Stat
             title={"Female prevalence"}
             year={topFemaleData.Year}
             value={isDiabetesSelected ? formatPercentage(topFemaleData["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(topFemaleData["Age-Adjusted Obesity Prevalence"])}
+            qualifier={`of total female population in ${topFemaleData.Geography}`}
           />
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           {isBMIWeightedDataValueSelected
-            ? <p>In {topDropdownWeightedData["End Year"]}, {topDropdownWeightedData["Zip Region"]} had the highest {isHealthyWeightSelected ? "share" : "prevalence"} of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownWeightedData[dropdownValue], true)}) out of all zip regions in Wayne County.</p>
-            : <p>In {topDropdownValueTract.Year}, {topDropdownValueTract.Tract} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatPercentage(topDropdownValueTract[dropdownValue])}) out of all the tracts in Wayne County.</p>
+            ? <p>In {topDropdownWeightedData["End Year"]}, {formatPercentage(topDropdownWeightedData[dropdownValue], true)} of total population in {topDropdownWeightedData["Zip Region"]} had the highest {isHealthyWeightSelected ? "share" : "prevalence"} of {dropdownValue.toLowerCase()} out of all zip regions in Wayne County.</p>
+            : <p>In {topDropdownValueTract.Year}, {formatPercentage(topDropdownValueTract[dropdownValue])} of total population in {topDropdownValueTract.Tract} had the highest prevalence of {dropdownValue.toLowerCase()} out of all tracts in Wayne County.</p>
           }
 
           {/* Write short paragraphs explaining Barchart and top stats for the Diabetes/Obesity data. */}
-          <p>In {topMaleData.Year}, rates for male and female residents of {topMaleData.Geography} were {isDiabetesSelected ? formatPercentage(topMaleData["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(topMaleData["Age-Adjusted Obesity Prevalence"])} and {isDiabetesSelected ? formatPercentage(topFemaleData["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(topFemaleData["Age-Adjusted Obesity Prevalence"])} respectively. { }
+          <p>In {topMaleData.Year}, {isDiabetesSelected ? formatPercentage(topMaleData["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(topMaleData["Age-Adjusted Obesity Prevalence"])} of total male population and {isDiabetesSelected ? formatPercentage(topFemaleData["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(topFemaleData["Age-Adjusted Obesity Prevalence"])} of total female population of {topMaleData.Geography} {isDiabetesSelected ? "had diabetes" : "were obese"}.
           The chart here shows male and female prevalence in {topMaleData.Geography}.</p>
 
           {isBMIWeightedDataValueSelected

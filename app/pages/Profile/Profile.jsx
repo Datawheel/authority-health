@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {Icon} from "@blueprintjs/core";
 import {fetchData, TopicTitle} from "@datawheel/canon-core";
 import ProfileHeader from "./components/ProfileHeader";
+import Subnav from "../../components/Subnav";
 import "./Profile.css";
 
 import Introduction from "./sections/about/Introduction";
@@ -63,6 +64,7 @@ class Profile extends Component {
           title={level === "zip" ? `Zip Code ${name}` : name}
           id={id}
         />
+        <Subnav />
 
         <div className="section-container">
           <Introduction />

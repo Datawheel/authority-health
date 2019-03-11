@@ -8,7 +8,7 @@
   @add-mixin centered-container;
   /* sizing */
   padding-top: var(--home-nav-height);
-  padding-bottom: 0;
+  padding-bottom: var(--nav-height);
   /* layout */
   display: flex;
   align-items: center;
@@ -23,7 +23,6 @@
       line-height: 1.125;
     }
   }
-
 }
 
 
@@ -52,39 +51,6 @@
     }
   }
 }
-
-/* section icon navigation */
-.profile-header-sections {
-  /* positioning */
-  @add-mixin centered-container;
-  /* sizing */
-  padding-bottom: 4rem;
-  padding-top: 2rem;
-  /* layout */
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  z-index: 1; /* allow bg to shuffle behind */
-
-  & .section-header-anchor {
-    color: white;
-    font-size: 16px;
-    opacity: 0.75;
-    text-align: center;
-    transition: opacity 0.2s;
-    width: 100px;
-    &:hover {
-      opacity: 1;
-      text-decoration: none;
-    }
-    & .pt-icon-standard {
-      display: block;
-      font-size: 32px;
-      margin-bottom: 10px;
-    }
-  }
-}
-
 
 /* hero image */
 .profile-header-background {

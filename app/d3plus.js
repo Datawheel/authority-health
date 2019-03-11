@@ -112,6 +112,12 @@ export default {
   },
   // map color scale key
   colorScaleConfig: {
+    // default to green
+    color: [
+      styles["success-dark"],
+      styles["success-light"],
+      styles.white
+    ],
     // the key itself
     rectConfig: {
       height: 12,
@@ -151,19 +157,10 @@ export default {
     brushing: false,
     buttonHeight: 20,
     buttonPadding: 10,
-    // handle
-    handleConfig: {
-      fill: styles["brand-dark"],
-      width: 5
-    },
     // main horizontal bar line
     barConfig: {
       stroke: styles["dark-1"],
       opacity: 0.75
-    },
-    selectionConfig: {
-      "fill": styles["brand-light"],
-      "fill-opacity": 0.25
     },
     shapeConfig: {
       // ticks and/or button bg

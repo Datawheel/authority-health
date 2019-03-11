@@ -1,6 +1,7 @@
 import React from "react";
 import {connect} from "react-redux";
 import {Geomap} from "d3plus-react";
+import styles from "style.yml";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -38,7 +39,7 @@ class EmploymentGrowth extends SectionColumns {
           colorScale: "Percent Change in Employment",
           colorScaleConfig: {
             axisConfig: {tickFormat: d => `${d}%`},
-            color: ["red", "#ccc", "green"]
+            color: [styles["danger-dark"], styles["light-3"], styles["success-dark"]]
           },
           label: d => d.Zip,
           height: 400,

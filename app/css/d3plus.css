@@ -20,25 +20,6 @@ general hacks
 }
 
 /* -----------------------------------
-timeline enhancements
------------------------------------ */
-
-/* style timeline */
-.d3plus-viz-timeline {
-  /* enhance active tick handle */
-  & .handle {
-    /* fudge handle into position */
-    transform: translateX(-2px); /* offset width */
-    /* theming */
-    rx: 2px;
-    ry: 2px;
-    /* transitions */
-    will-change: x;
-    transition: x 0.333s ease-out;
-  }
-}
-
-/* -----------------------------------
 map zoom controls
 ----------------------------------- */
 

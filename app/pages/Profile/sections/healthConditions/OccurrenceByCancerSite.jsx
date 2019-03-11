@@ -20,9 +20,7 @@ class OccurrenceByCancerSite extends SectionColumns {
   constructor(props) {
     super(props);
     this.state = {
-      selectedItems: [
-        // {index: 0, title: "Digestive System"}
-      ]
+      selectedItems: []
     };
   }
 
@@ -30,7 +28,7 @@ class OccurrenceByCancerSite extends SectionColumns {
 
     const {sortedCancerTypes, occuranceRate} = this.props;
     const selectedItems = this.state.selectedItems;
-    const isSelectedItemsListEmpty = selectedItems.length === 0;
+    const isItemsListEmpty = selectedItems.length === 0;
 
     // Get top 2 recent year OccuranceRate data and find percent growth rate over last year.
     const mostRecentYearOccuranceRate = occuranceRate[0];
@@ -84,8 +82,8 @@ class OccurrenceByCancerSite extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Occurrence by Cancer Site</SectionTitle>
         <article>
-          <p>Click on the box to select a cancer type and display its data in the line chart to the right. You can select upto 5 types of cancer types.</p>
-          {isSelectedItemsListEmpty ? "" : <div className="disclaimer">Data only available for the Detroit-Warren-Dearborn, MI metro area.</div>}
+          <p>Click on the box to select a cancer type and display its data in the line chart to the right. You can select upto 5 types of cancer.</p>
+          {isItemsListEmpty ? "" : <div className="disclaimer">Data only available for the Detroit-Warren-Dearborn, MI metro area.</div>}
           <MultiSelect
             items={items}
             itemPredicate={filterItem}
@@ -100,16 +98,16 @@ class OccurrenceByCancerSite extends SectionColumns {
             <Button rightIcon="caret-down" />
           </MultiSelect>
           
-          {isSelectedItemsListEmpty ? null 
+          {isItemsListEmpty ? null 
             : <div>
-              <p>In {mostRecentYearOccuranceRate.Year}, the cancer rate in the {mostRecentYearOccuranceRate.MSA} was {formatPercentage(mostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])}. This represents a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "growth"} from the previous year ({formatPercentage(secondMostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])}).</p>
+              <p>In {mostRecentYearOccuranceRate.Year}, the cancer rate in the {mostRecentYearOccuranceRate.MSA} was {formatAbbreviate(mostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])} per 100,000 people. This represents a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "growth"} from the previous year ({formatAbbreviate(secondMostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])} per 100,000 people).</p>
               <p>The following chart shows the occurrence rate per 100,000 people in {mostRecentYearOccuranceRate.MSA} for the selected cancer site(s).</p>
             </div>}
           <Contact slug={this.props.slug} />
         </article>
 
         {/* Draw a LinePlot to show age adjusted data for the selected cancer types. */}
-        {isSelectedItemsListEmpty ? <div></div>
+        {isItemsListEmpty ? <div></div>
           : <LinePlot config={{
             data: `/api/data?measures=Age-Adjusted Cancer Rate,Age-Adjusted Cancer Rate Lower 95 Percent Confidence Interval,Age-Adjusted Cancer Rate Upper 95 Percent Confidence Interval&Cancer Site=${dropdownSelected}&drilldowns=MSA&Year=all`,
             discrete: "x",

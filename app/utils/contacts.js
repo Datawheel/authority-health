@@ -575,6 +575,22 @@ export default [
     phone: ["7347277101"]
   },
   {
+    slug: "occurrence-by-cancer-site",
+    agency: "Federally Qualified Health Care Center",
+    contact: "Amaal Haimout",
+    email: "ahaimout@waynecounty.com",
+    location: "16000US2636280",
+    phone: ["3138711926"]
+  },
+  {
+    slug: "occurrence-by-cancer-site",
+    agency: "Federally Qualified Health Care Center",
+    contact: "Amaal Haimout",
+    email: "ahaimout@waynecounty.com",
+    location: "16000US2684940",
+    phone: ["7347277101"]
+  },
+  {
     slug: "grandparent-caregivers",
     agency: "Senior Citizen Nutrition Program",
     contact: "Joan Siavarkas",

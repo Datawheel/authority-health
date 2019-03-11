@@ -75,9 +75,9 @@ layout
 ----------------------------------- */
 
 /* prevent horizontal scrollbars */
-.outer-container {
+/* .outer-container {
   overflow-x: hidden;
-}
+} */
 
 /* sections */
 .section-container {
@@ -108,6 +108,10 @@ layout
       @add-mixin font-xxl;
       color: var(--white);
       top: -0.125em; /* fudge baseline alignment */
+      margin-top: -5rem;
+      padding-top: 5rem;
+      display: block;
+      z-index: 0;
 
       /* icons */
       & .pt-icon-standard {
@@ -175,7 +179,7 @@ layout
 
     /* reset section title margin */
     & .section-title {
-      margin: 1em 0;
+      margin: 1em 0 1em 0;
 
       @add-mixin min-sm {
         margin-top: 2em;
@@ -183,8 +187,8 @@ layout
 
       & .anchor {
         @add-mixin font-xl;
-        margin-top: -2rem;
-        padding-top: 2rem;
+        margin-top: -5rem;
+        padding-top: 5rem;
         transition: color 0.2s ease-out;
 
         &:hover, &:focus {

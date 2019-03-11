@@ -13,7 +13,8 @@ import StoreAccessByDemographic from "./sections/foodAccess/StoreAccessByDemogra
 import PreventiveCare from "./sections/healthBehaviors/PreventiveCare";
 import RiskyBehaviors from "./sections/healthBehaviors/RiskyBehaviors";
 import PhysicalInactivity from "./sections/healthBehaviors/PhysicalInactivity";
-import Cancer from "./sections/healthConditions/Cancer";
+import CancerPrevalenceByDemographics from "./sections/healthConditions/CancerPrevalenceByDemographics";
+import OccurrenceByCancerSite from "./sections/healthConditions/OccurrenceByCancerSite";
 import ObesityAndDiabetes from "./sections/healthConditions/ObesityAndDiabetes";
 import ConditionsAndChronicDiseases from "./sections/healthConditions/ConditionsAndChronicDiseases";
 // import DentistsDemographic from "./sections/accessToCare/DentistsDemographic";
@@ -76,7 +77,8 @@ class Profile extends Component {
         <div className="section-container">
           <ConditionsAndChronicDiseases />
           <ObesityAndDiabetes />
-          <Cancer />
+          <CancerPrevalenceByDemographics />
+          <OccurrenceByCancerSite />
         </div>
 
         <TopicTitle slug="health-behaviors">
@@ -197,7 +199,8 @@ Profile.need = [
   FoodStamps,
   Insecurity,
   StoreAccessByDemographic,
-  Cancer,
+  CancerPrevalenceByDemographics,
+  OccurrenceByCancerSite,
   ConditionsAndChronicDiseases,
   ObesityAndDiabetes,
   PhysicalInactivity,

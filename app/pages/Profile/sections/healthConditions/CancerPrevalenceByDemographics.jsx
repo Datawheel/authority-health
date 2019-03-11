@@ -30,9 +30,6 @@ class CancerPrevalenceByDemographics extends SectionColumns {
     const selectedItems = this.state.selectedItems;
     const isItemsListEmpty = selectedItems.length === 0;
 
-    console.log("occuranceByGender: ", occuranceByGender);
-    console.log("occuranceByRaceAndEthnicity: ", occuranceByRaceAndEthnicity);
-
     const topOccuranceByRaceAndEthnicity = occuranceByRaceAndEthnicity.sort((a, b) => b["Age-Adjusted Cancer Rate"] - a["Age-Adjusted Cancer Rate"])[0];
 
     // Get data to pass to the Multiselect component.

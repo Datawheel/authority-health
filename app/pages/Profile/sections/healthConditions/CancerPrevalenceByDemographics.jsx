@@ -16,7 +16,7 @@ import growthCalculator from "utils/growthCalculator";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
-class Cancer extends SectionColumns {
+class CancerPrevalenceByDemographics extends SectionColumns {
 
   constructor(props) {
     super(props);
@@ -221,11 +221,11 @@ class Cancer extends SectionColumns {
   }
 }
 
-Cancer.defaultProps = {
+CancerPrevalenceByDemographics.defaultProps = {
   slug: "cancer-prevalence-by-demographic"
 };
 
-Cancer.need = [
+CancerPrevalenceByDemographics.need = [
   fetchData("sortedCancerTypes", "/api/data?measures=Cancer Diagnosis&drilldowns=Cancer Site&Year=all&order=Cancer Diagnosis&sort=desc", d => {
     const cancerList = [];
     nest().key(d => d["Cancer Site"]).entries(d.data).forEach(group => cancerList.push(group.key));
@@ -243,4 +243,4 @@ const mapStateToProps = state => ({
   occuranceRate: state.data.occuranceRate
 });
 
-export default connect(mapStateToProps)(Cancer);
+export default connect(mapStateToProps)(CancerPrevalenceByDemographics);

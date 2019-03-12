@@ -2,6 +2,7 @@ import React from "react";
 import {connect} from "react-redux";
 import {Geomap} from "d3plus-react";
 import styles from "style.yml";
+import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -24,10 +25,10 @@ class EmploymentGrowth extends SectionColumns {
             title={"Zip Code with the largest employment growth"}
             year={topEmploymentRateData.Year}
             value={topEmploymentRateData.Zip}
-            qualifier={`${topEmploymentRateData["Percent Change in Employment"]}%`}
+            qualifier={`${formatAbbreviate(topEmploymentRateData["Percent Change in Employment"])}%`}
           />
 
-          <p>In {topEmploymentRateData.Year}, the zip code in Wayne County with the largest employment growth was {topEmploymentRateData.Zip} ({topEmploymentRateData["Percent Change in Employment"]}%).</p>
+          <p>In {topEmploymentRateData.Year}, the zip code in Wayne County with the largest employment growth was {topEmploymentRateData.Zip} ({formatAbbreviate(topEmploymentRateData["Percent Change in Employment"])}%).</p>
           <p>The following map shows the employment growth for all zip codes in Wayne County.</p>
           <Contact slug={this.props.slug} />
         </article>
@@ -44,7 +45,7 @@ class EmploymentGrowth extends SectionColumns {
           label: d => d.Zip,
           height: 400,
           time: "Year",
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Employment Growth", d => `${d["Percent Change in Employment"]}%`]]},
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Employment Growth", d => `${formatAbbreviate(d["Percent Change in Employment"])}%`]]},
           topojson: "/topojson/zipcodes.json",
           topojsonFilter: d => zipcodes.includes(d.properties.ZCTA5CE10),
           topojsonId: d => d.properties.ZCTA5CE10

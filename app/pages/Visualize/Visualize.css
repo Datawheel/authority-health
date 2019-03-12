@@ -1,15 +1,30 @@
 .vizbuilder {
   padding: 0 var(--gutter-md);
+  min-height: 100vh;
+  height: auto;
+  flex-wrap: wrap;
+
+  & > * {
+    min-height: 100vh;
+    padding-top: var(--gutter-md);
+    padding-bottom: var(--gutter-md);
+  }
+
+  & .chart-wrapper {
+    height: auto;
+    min-height: 100vh;
+  }
 
   & .area-sidebar {
-    height: calc(100vh - var(--nav-height));
-    margin-top: var(--nav-height);
+    margin-right: var(--gutter-lg);
+    max-width: 100%;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
   & .area-chart {
-    height: calc(100vh - var(--nav-height));
-    margin-top: var(--nav-height);
+    height: auto;
+    overflow: auto;
+    display: block !important;
   }
   & .area-sidebar {
     & .label {
@@ -191,7 +206,6 @@
     }
   }
   & .area-chart {
-    padding: 25px 25px 25px 0;
     & .wrapper {
       padding: 0;
       & .chart-card {

@@ -79,7 +79,7 @@ class Introduction extends SectionColumns {
             </p>
             : null}
           <p>
-            Looking across {topStats.total} different health and socioeconomic indicators for {name}, here are the {socialDeterminants.length + healthTopics.length} values which represent the largest difference from the mean average of all other {level}s.
+          Social and economic factors, such as income, education, and access to health care, impact health outcomes for all Americans. For example, in many low income areas in the country, there are higher rates of chronic diseases, like high blood pressure and diabetes. The summary to the right highlights some of the social and health conditions for {population[0].Geography}.
           </p>
         </article>
         <div className="top-stats viz">

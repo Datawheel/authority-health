@@ -42,9 +42,9 @@ class WageDistribution extends SectionColumns {
           <Stat
             title="Wage GINI"
             year={wageGinidataAvailable ? wageGinidata[0].Year : ""}
-            value={wageGinidataAvailable ? wageGinidata[0]["Wage GINI"] : "N/A"}
+            value={wageGinidataAvailable ? formatAbbreviate(wageGinidata[0]["Wage GINI"]) : "N/A"}
           />
-          {wageGinidataAvailable ? <p>In {wageGinidata[0].Year}, the income inequality in {wageGinidata[0].Geography} was {wageGinidata[0]["Wage GINI"]}. The GINI coefficient is a measure of statistical dispersion intended to represent the equality of a distribution, and is the most commonly used measure of inequality. Values range from 0 to 1, with 0 being perfect equality.</p> : ""}
+          {wageGinidataAvailable ? <p>In {wageGinidata[0].Year}, the income inequality in {wageGinidata[0].Geography} was {formatAbbreviate(wageGinidata[0]["Wage GINI"])}. The GINI coefficient is a measure of statistical dispersion intended to represent the equality of a distribution, and is the most commonly used measure of inequality. Values range from 0 to 1, with 0 being perfect equality.</p> : ""}
           {wageDistributionDataAvailable ? <p>The following chart shows the household income bucket and share for each bucket in {wageDistributionData[0].Geography}.</p> : ""}
           <Contact slug={this.props.slug} />
         </article>

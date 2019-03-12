@@ -1,12 +1,15 @@
 .vizbuilder {
+  padding: 0 var(--gutter-md);
+
   & .area-sidebar {
-    height: calc(100vh - var(--home-nav-height));
-    margin-top: var(--home-nav-height);
-    overflow-y: scroll;
+    height: calc(100vh - var(--nav-height));
+    margin-top: var(--nav-height);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   & .area-chart {
-    height: calc(100vh - var(--home-nav-height));
-    margin-top: var(--home-nav-height);
+    height: calc(100vh - var(--nav-height));
+    margin-top: var(--nav-height);
   }
   & .area-sidebar {
     & .label {

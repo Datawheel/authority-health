@@ -114,9 +114,9 @@ export default {
   colorScaleConfig: {
     // default to green
     color: [
-      styles["success-dark"],
+      styles.white,
       styles["success-light"],
-      styles.white
+      styles["success-dark"]
     ],
     // the key itself
     rectConfig: {

@@ -108,8 +108,13 @@
   }
 
   & .pt-icon {
+    /* sizing */
     line-height: 1.25rem;
     padding: 0.5rem 0.25rem;
+    /* positioning */
+    left: 0;
+    /* prevent from obscuring input */
+    pointer-events: none;
   }
 
   & .pt-input {
@@ -129,7 +134,8 @@
     /* sizing */
     height: auto;
     max-height: 10rem;
-    overflow-y: scroll;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     /* positioning */
     position: absolute;
     top: 2.2rem; /* below input */

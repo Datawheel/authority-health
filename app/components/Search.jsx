@@ -141,11 +141,11 @@ class Search extends Component {
     const {active, results, userQuery} = this.state;
 
     return (
-      <div ref={comp => this.container = comp} className={ `search-container ${className} ${ active ? "active" : "" }` }>
+      <div ref={comp => this.container = comp} className={ `search-container ${className || ""} ${ active ? "active" : "" }` }>
         { InactiveComponent && <InactiveComponent active={ active } onClick={ this.onToggle.bind(this) } /> }
         <div className={ `pt-input-group pt-fill ${ active ? "active" : "" }` }>
-          { icon && <span className="pt-icon pt-icon-search"></span> }
-          <input id={id || "search"} type="text" className="pt-input" ref={ input => this.input = input } onChange={ this.onChange.bind(this) } onFocus={ this.onFocus.bind(this) } placeholder={placeholder} />
+          <input id={id || "search"} type="text" className="pt-input" ref={ input => this.input = input } onChange={ this.onChange.bind(this) } onFocus={ this.onFocus.bind(this) } placeholder={placeholder} autoComplete="off" />
+          { icon && <span className="pt-icon pt-icon-search" /> }
         </div>
         { searchEmpty || active && userQuery.length
           ? <ul className={ active ? "results active font-sm" : "results font-sm" }>

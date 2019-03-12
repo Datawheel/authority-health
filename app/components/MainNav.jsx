@@ -1,32 +1,42 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Link} from "react-router";
+import Search from "components/Search";
 import "./MainNav.css";
 
 class MainNav extends Component {
 
   render() {
     const {router} = this.context;
-    const search = false;
-    const dark = ["charts"].includes(router.location.pathname);
+    const search = router.location.pathname !== "/";
+    const vizbuilder = ["charts"].includes(router.location.pathname);
     return (
-      <nav className={ `main-nav ${ dark ? "dark" : "" }` } role="nav">
+      <nav className={ `main-nav ${ vizbuilder ? "vizbuilder-nav" : "" }` } role="nav">
         <div className="main-nav-inner">
           <Link className="main-nav-logo-link" to="/">
             <img className="main-nav-logo-img" src="/images/authority-health-logo.png" srcSet="/images/authority-health-logo.svg 1x" alt=""/>
             <span className="u-visually-hidden">AuthorityHealth</span>
           </Link>
 
-          {/* TODO: replace with actual search component */}
-          {search && <span>search</span>}
+          {search && <Search
+            className="nav-search u-hide-below-sm"
+            placeholder="Search locations&hellip;"
+            primary={true}
+            resultLink={ d => `/profile/${d.id}` }
+            resultRender={d =>
+              <a className="result-link" href={`/profile/${d.id}`}>
+                { d.name }
+              </a>}
+            url="/api/search/"
+          />}
 
           <ul className="main-nav-list u-list-reset font-xs">
             <li className="main-nav-item">
-              <Link to="/profiles/locations" className="main-nav-link">Locations</Link>
+              <Link to="/profile/16000US2622000" className="main-nav-link">Locations</Link>
             </li>
 
             <li className="main-nav-item">
-              <Link to="/charts" className="main-nav-link">Chart Builder</Link>
+              <Link to="/charts" className="main-nav-link">Charts</Link>
             </li>
 
             <li className="main-nav-item">

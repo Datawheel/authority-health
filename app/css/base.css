@@ -95,6 +95,43 @@ inverted color scheme
   }
 }
 
+/* -----------------------------------
+generic html content block typography
+----------------------------------- */
+.content {
+
+  /* headings */
+  & h2, & h3, & h4, & h5, & h6 {
+    margin-top: 2em;
+    margin-bottom: 1em;
+
+    &:first-child {
+      margin-top: 1em;
+    }
+  }
+
+  /* paragraphs */
+  & p {
+    @mixin font-md;
+    width: 40rem;
+    max-width: 100%;
+
+    & + p {
+      margin-top: 1em;
+    }
+  }
+
+  /* lists */
+  & ul, & ol {
+    padding-left: 1em;
+    margin-top: 1em;
+    margin-bottom: 2em;
+  }
+
+  & li + li {
+    margin-top: 0.75em;
+  }
+}
 
 /* -----------------------------------
 additional theme colors

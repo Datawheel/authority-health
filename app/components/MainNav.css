@@ -157,6 +157,9 @@
 .main-nav.compact .main-nav-inner {
   height: var(--nav-height);
 }
+.main-nav.compact + main {
+  padding-top: var(--nav-height);
+}
 .main-nav.solid {
   background: var(--dark-3);
 }

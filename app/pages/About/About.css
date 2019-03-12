@@ -1,0 +1,6 @@
+@import "../../css/mixins.css";
+
+.about-hero,
+.about-main {
+  @mixin centered-container;
+}

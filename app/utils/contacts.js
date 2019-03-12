@@ -1,6 +1,6 @@
 export default [
   {
-    slug: "health-centers",
+    slug: "health-center-demographics",
     agency: "Federally Qualified Health Care Center",
     contact: "Amaal Haimout",
     email: "ahaimout@waynecounty.com",
@@ -8,7 +8,7 @@ export default [
     phone: ["3138711926"]
   },
   {
-    slug: "health-centers",
+    slug: "health-center-demographics",
     agency: "Federally Qualified Health Care Center",
     contact: "Amaal Haimout",
     email: "ahaimout@waynecounty.com",
@@ -16,7 +16,7 @@ export default [
     phone: ["7347277101"]
   },
   {
-    slug: "health-centers",
+    slug: "health-center-demographics",
     agency: "Early On Program",
     contact: "Diane Rushlow",
     email: "Earlyonprogram@waynecounty.com",

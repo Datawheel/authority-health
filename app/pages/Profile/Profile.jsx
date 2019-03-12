@@ -20,7 +20,7 @@ import ObesityAndDiabetes from "./sections/healthConditions/ObesityAndDiabetes";
 import ConditionsAndChronicDiseases from "./sections/healthConditions/ConditionsAndChronicDiseases";
 // import DentistsDemographic from "./sections/accessToCare/DentistsDemographic";
 // import DentistsWorkStatus from "./sections/accessToCare/DentistsWorkStatus";
-import HealthCenters from "./sections/accessToCare/HealthCenters";
+import HealthCenterDemographics from "./sections/accessToCare/HealthCenterDemographics";
 import Coverage from "./sections/accessToCare/Coverage";
 // import GrandparentCaregivers from "./sections/specialPopulation/GrandparentCaregivers";
 import Veterans from "./sections/specialPopulation/Veterans";
@@ -102,7 +102,7 @@ class Profile extends Component {
           </div>
         </TopicTitle>
         <div className="section-container">
-          <HealthCenters />
+          <HealthCenterDemographics />
           {/* <DentistsDemographic /> */}
           {/* <DentistsWorkStatus /> */}
           <Coverage />
@@ -208,7 +208,7 @@ Profile.need = [
   PhysicalInactivity,
   PreventiveCare,
   RiskyBehaviors,
-  HealthCenters,
+  HealthCenterDemographics,
   // DentistsDemographic,
   // DentistsWorkStatus,
   Coverage,

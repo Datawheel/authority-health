@@ -73,6 +73,11 @@ layout
     display: none !important;
   }
 }
+.u-hide-below-sm {
+  @add-mixin max-sm {
+    display: none !important;
+  }
+}
 .u-hide-above-md {
   @add-mixin min-md {
     display: none !important;

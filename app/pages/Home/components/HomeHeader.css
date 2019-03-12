@@ -108,8 +108,13 @@
   }
 
   & .pt-icon {
+    /* sizing */
     line-height: 1.25rem;
     padding: 0.5rem 0.25rem;
+    /* positioning */
+    left: 0;
+    /* prevent from obscuring input */
+    pointer-events: none;
   }
 
   & .pt-input {

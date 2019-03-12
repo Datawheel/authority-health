@@ -1,13 +1,14 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Link} from "react-router";
+import Search from "components/Search";
 import "./MainNav.css";
 
 class MainNav extends Component {
 
   render() {
     const {router} = this.context;
-    const search = false;
+    const search = router.location.pathname !== "/";
     const dark = ["charts"].includes(router.location.pathname);
     return (
       <nav className={ `main-nav ${ dark ? "dark" : "" }` } role="nav">
@@ -17,8 +18,17 @@ class MainNav extends Component {
             <span className="u-visually-hidden">AuthorityHealth</span>
           </Link>
 
-          {/* TODO: replace with actual search component */}
-          {search && <span>search</span>}
+          {search && <Search
+            className="nav-search u-hide-below-sm"
+            placeholder="Search locations&hellip;"
+            primary={true}
+            resultLink={ d => `/profile/${d.id}` }
+            resultRender={d =>
+              <a className="result-link" href={`/profile/${d.id}`}>
+                { d.name }
+              </a>}
+            url="/api/search/"
+          />}
 
           <ul className="main-nav-list u-list-reset font-xs">
             <li className="main-nav-item">

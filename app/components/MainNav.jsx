@@ -7,11 +7,11 @@ import "./MainNav.css";
 class MainNav extends Component {
 
   render() {
+    const {bg, compact} = this.props;
     const {router} = this.context;
     const search = router.location.pathname !== "/";
-    const vizbuilder = ["charts"].includes(router.location.pathname);
     return (
-      <nav className={ `main-nav ${ vizbuilder ? "vizbuilder-nav" : "" }` } role="nav">
+      <nav className={ `main-nav${ compact ? " compact" : "" }${ bg ? " solid" : "" }` } role="nav">
         <div className="main-nav-inner">
           <Link className="main-nav-logo-link" to="/">
             <img className="main-nav-logo-img" src="/images/authority-health-logo.png" srcSet="/images/authority-health-logo.svg 1x" alt=""/>

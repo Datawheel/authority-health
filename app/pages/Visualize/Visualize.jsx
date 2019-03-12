@@ -2,7 +2,6 @@ import React from "react";
 import Vizbuilder from "@datawheel/canon-vizbuilder";
 import places from "../../utils/places";
 import zipcodes from "../../utils/zipcodes";
-import Footer from "components/Footer";
 import "./Visualize.css";
 
 export default class Visualize extends React.Component {
@@ -56,7 +55,6 @@ export default class Visualize extends React.Component {
           "stacked"
         ]}
       />
-      <Footer />
     </div>;
   }
 }

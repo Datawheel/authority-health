@@ -8,15 +8,6 @@
   right: 0;
   /* keep in front */
   z-index: 20;
-
-  /* vizbuilder */
-  &.vizbuilder-nav {
-    background: var(--dark-3);
-
-    & .main-nav-inner {
-      height: var(--nav-height);
-    }
-  }
 }
 
 .main-nav-inner {
@@ -160,4 +151,12 @@
       padding: 1em 1.75rem;
     }
   }
+}
+
+/* modifiers */
+.main-nav.compact .main-nav-inner {
+  height: var(--nav-height);
+}
+.main-nav.solid {
+  background: var(--dark-3);
 }

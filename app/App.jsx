@@ -13,17 +13,28 @@ export default class App extends Component {
   }
 
   render() {
-    const {children, router} = this.props;
+    const {children, location, router} = this.props;
+    const path = location.pathname;
+    // console.log(path);
 
-    const showFooter = !["charts"].includes(router.location.pathname);
+    // MainNav config
+    let compactNav = true;
+    let solidBackground = false;
+
+    if (path === "/") {
+      compactNav = false;
+    }
+    if (path === "charts" || path === "about") {
+      solidBackground = true;
+    }
 
     return (
       <div className="outer-container">
-        <MainNav />
+        <MainNav compact={compactNav} bg={solidBackground} />
         <main className="main-container" role="main">
           { children }
         </main>
-        { showFooter && <Footer /> }
+        <Footer />
       </div>
     );
   }

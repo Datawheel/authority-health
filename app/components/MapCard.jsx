@@ -5,7 +5,7 @@ import "./MapCard.css";
 
 class MapCard extends Component {
   render() {
-    const {classes, item, t} = this.props;
+    const {classes, item, link, t} = this.props;
 
     const labelId = item.icon;
 
@@ -15,7 +15,7 @@ class MapCard extends Component {
       <div className={`map-card ${classes || ""}`}>
         <Link
           className="cover-link"
-          to={item.url}
+          to={link || "/charts"}
           title={item.name}
           aria-labelledby={labelId}
         />

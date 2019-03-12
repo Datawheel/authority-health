@@ -8,8 +8,14 @@
   right: 0;
   /* keep in front */
   z-index: 20;
-  &.dark {
-    background: var(--brand-dark);
+
+  /* vizbuilder */
+  &.vizbuilder-nav {
+    background: var(--dark-3);
+
+    & .main-nav-inner {
+      height: var(--nav-height);
+    }
   }
 }
 
@@ -106,7 +112,8 @@
     /* sizing */
     height: auto;
     max-height: 10rem;
-    overflow-y: scroll;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     /* positioning */
     position: absolute;
     top: 2.2rem; /* below input */

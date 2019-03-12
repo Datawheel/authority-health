@@ -9,9 +9,9 @@ class MainNav extends Component {
   render() {
     const {router} = this.context;
     const search = router.location.pathname !== "/";
-    const dark = ["charts"].includes(router.location.pathname);
+    const vizbuilder = ["charts"].includes(router.location.pathname);
     return (
-      <nav className={ `main-nav ${ dark ? "dark" : "" }` } role="nav">
+      <nav className={ `main-nav ${ vizbuilder ? "vizbuilder-nav" : "" }` } role="nav">
         <div className="main-nav-inner">
           <Link className="main-nav-logo-link" to="/">
             <img className="main-nav-logo-img" src="/images/authority-health-logo.png" srcSet="/images/authority-health-logo.svg 1x" alt=""/>
@@ -32,11 +32,11 @@ class MainNav extends Component {
 
           <ul className="main-nav-list u-list-reset font-xs">
             <li className="main-nav-item">
-              <Link to="/profiles/locations" className="main-nav-link">Locations</Link>
+              <Link to="/profile/16000US2622000" className="main-nav-link">Locations</Link>
             </li>
 
             <li className="main-nav-item">
-              <Link to="/charts" className="main-nav-link">Chart Builder</Link>
+              <Link to="/charts" className="main-nav-link">Charts</Link>
             </li>
 
             <li className="main-nav-item">

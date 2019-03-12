@@ -4,7 +4,8 @@
     margin: 0;
     max-height: 60vh;
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   & .agency-list {
     list-style: none;

@@ -134,7 +134,8 @@
     /* sizing */
     height: auto;
     max-height: 10rem;
-    overflow-y: scroll;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     /* positioning */
     position: absolute;
     top: 2.2rem; /* below input */

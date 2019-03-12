@@ -13,7 +13,7 @@ export default class Home extends Component {
         <HomeHeader />
         <ProfileTileList />
         <MapCardList />
-        <ArticleList />
+        {/*<ArticleList />*/}
       </div>
     );
   }

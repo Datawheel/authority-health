@@ -81,15 +81,16 @@ class Search extends Component {
             S = 83,
             UP = 38;
 
-      if (primary && !active && key === S && !["input", "textarea"].includes(event.target.tagName.toLowerCase()) && !event.target.className.includes("ql-editor")) {
-        event.preventDefault();
-        this.onToggle.bind(this)();
-      }
-      else if (active && key === ESC && event.target === this.input) {
-        event.preventDefault();
-        this.onToggle.bind(this)();
-      }
-      else if (active && event.target === this.input) {
+      // override the built-in browser save dialog with a command to focus the search input?
+      // if (primary && !active && key === S && !["input", "textarea"].includes(event.target.tagName.toLowerCase()) && !event.target.className.includes("ql-editor")) {
+      //   event.preventDefault();
+      //   this.onToggle.bind(this)();
+      // }
+      // else if (active && key === ESC && event.target === this.input) {
+      //   event.preventDefault();
+      //   this.onToggle.bind(this)();
+      // }
+      if (active && event.target === this.input) {
 
         const highlighted = document.querySelector(".highlighted");
 

@@ -1,6 +1,26 @@
 @import "../../css/mixins.css";
 
+.about {
+  background-color: var(--light-1);
+}
+
 .about-hero,
 .about-main {
   @mixin centered-container;
+}
+
+.about-hero {
+  z-index: 1;
+  padding-top: 3.5rem;
+  padding-bottom: 3.5rem;
+
+  @media (min-height: 600px) {
+    padding-top: 15vh;
+    padding-bottom: 15vh;
+  }
+
+  &:before {
+    @mixin fullwidth-pseudo;
+    background-color: var(--black);
+  }
 }

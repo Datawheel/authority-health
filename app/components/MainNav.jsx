@@ -15,7 +15,7 @@ class MainNav extends Component {
         <div className="main-nav-inner">
           <Link className="main-nav-logo-link" to="/">
             <img className="main-nav-logo-img" src="/images/authority-health-logo.png" srcSet="/images/authority-health-logo.svg 1x" alt=""/>
-            <span className="u-visually-hidden">AuthorityHealth</span>
+            <span className="u-visually-hidden">Authority Health</span>
           </Link>
 
           {search && <Search

@@ -16,7 +16,7 @@ export default class Home extends Component {
 
           <p>Welcome to the Data Portal for Wayne County! We are pleased to present health and social determinant data for Wayne County and its component cities. On this site you will find profile pages for city and zip code level geographies to easily visualize health outcomes, as well as social, economic, and environmental factors.</p>
 
-          <p>Anyone who is interested idn using data to better match programs and services with specific populations, identify mismatches between resources and outcomes, and better serve population health needs in the interest of improving health equity can use this site.</p>
+          <p>Anyone who is interested in using data to better match programs and services with specific populations, identify mismatches between resources and outcomes, and better serve population health needs in the interest of improving health equity can use this site.</p>
 
           <h2>For example, the data portal can help:</h2>
 

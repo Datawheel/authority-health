@@ -11,7 +11,7 @@ import Stat from "components/Stat";
 
 const formatPercentage = (d, mutiplyBy100 = false) => mutiplyBy100 ? `${formatAbbreviate(d * 100)}%` : `${formatAbbreviate(d)}%`;
 
-const formatDropdownName = d => d === "Diabetes" || d === "Obesity" ? `${d} in Census Tracts` : `${d} in Zip Regions`;
+const formatDropdownName = d => d === "Diabetes" || d === "Obesity" ? `${d} by Census Tract` : `${d} by Zip Region`;
 
 class ObesityAndDiabetes extends SectionColumns {
 
@@ -32,7 +32,6 @@ class ObesityAndDiabetes extends SectionColumns {
     if (dropdownValue === "BMI Healthy Weight" ||
     dropdownValue === "BMI Obese" ||
     dropdownValue === "BMI Overweight" ||
-    dropdownValue === "BMI Underweight" ||
     dropdownValue === "Obesity") { 
       axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=latest`) // MiBRFS - All Years
         .then(resp => {
@@ -41,6 +40,24 @@ class ObesityAndDiabetes extends SectionColumns {
               this.setState({
                 obesityPrevalenceBySex: d.data.data,
                 BMIWeightedData: resp.data.data,
+                dropdownValue
+              });
+            });
+        });
+    }
+    else if (dropdownValue === "BMI Underweight") {
+      axios.get("/api/data?measures=BMI Underweight&drilldowns=Zip Region&Year=all") // MiBRFS - All Years
+        .then(resp => {
+          const data = resp.data.data;
+          const latestYear = data[0]["End Year"];
+          // find top value
+          const topRecentYearData = data.filter(d => d["End Year"] === latestYear).sort((a, b) => b["BMI Underweight"] - a["BMI Underweight"]);
+
+          axios.get(`/api/data?measures=Age-Adjusted Obesity Prevalence&drilldowns=Sex&Geography=${geoId}&Year=latest`) // CDC Wonder - Obesity Prevalence by Sex
+            .then(d => {
+              this.setState({
+                obesityPrevalenceBySex: d.data.data,
+                BMIWeightedData: topRecentYearData,
                 dropdownValue
               });
             });

@@ -18,9 +18,9 @@ const formatEthnicityName = d => d.replace("Not Hispanic or Latino", "non-Hispan
 class Introduction extends SectionColumns {
 
   render() {
-    const {meta, population, populationByAgeAndGender, populationByRaceAndEthnicity, lifeExpectancy, topStats} = this.props;
+    const {meta, population, populationByAgeAndGender, populationByRaceAndEthnicity, lifeExpectancy, topStats, medianHouseholdIncome} = this.props;
     const {healthTopics, socialDeterminants} = topStats;
-    const {level, name} = meta;
+    const {level} = meta;
 
     const populationByAgeAndGenderAvailable = populationByAgeAndGender.length !== 0;
     const populationByRaceAndEthnicityAvailable = populationByRaceAndEthnicity.length !== 0;
@@ -67,7 +67,7 @@ class Introduction extends SectionColumns {
           <p>
             {level === "zip" ? `Zip code ${population[0].Geography}` : population[0].Geography} has a population of {formatAbbreviate(population[0].Population)} people with life expectancy of {lifeExpectancyAvailable ? formatAbbreviate(lifeExpectancy[0]["Life Expectancy"]) : "N/A"} {lifeExpectancyAvailable ? onCityOrZipLevel ? <span>(in {lifeExpectancy[0].Geography})</span> : "" : ""}.
             The most common age group for male is {populationByAgeAndGenderAvailable ? getTopMaleData.Age.toLowerCase() : "N/A"} and for female it is {populationByAgeAndGenderAvailable ? getTopFemaleData.Age.toLowerCase() : "N/A"}.
-            Between 2015 and 2016 the population of {population[0].Geography} {populationGrowth < 0 ? "reduced" : "increased"} from {formatAbbreviate(population[1].Population)} to {formatAbbreviate(population[0].Population)},
+            Between {population[population.length - 1].Year} and {population[0].Year} the population of {population[0].Geography} {populationGrowth < 0 ? "reduced" : "increased"} from {formatAbbreviate(population[population.length - 1].Population)} to {formatAbbreviate(population[0].Population)},
             {} {populationGrowth < 0 ? "a decline" : "an increase"} of {populationGrowth < 0 ? `${populationGrowth * -1}%` : isNaN(populationGrowth) ? "N/A" : `${populationGrowth}%`}.
           </p>
           {populationByRaceAndEthnicityAvailable
@@ -78,8 +78,10 @@ class Introduction extends SectionColumns {
               ({formatAbbreviate(recentYearPopulationByRaceAndEthnicity.values[1].share)}%).
             </p>
             : null}
+          {/* TODO: Add comparison for median household income as described in feedback. */}
+          {/* <p>In {medianHouseholdIncome[0].Geography}, the median household income is {formatAbbreviate(medianHouseholdIncome[0]["Household Income"])}.</p> */}
           <p>
-          Social and economic factors, such as income, education, and access to health care, impact health outcomes for all Americans. For example, in many low income areas in the country, there are higher rates of chronic diseases, like high blood pressure and diabetes. The summary to the right highlights some of the social and health conditions for {population[0].Geography}.
+            Social and economic factors, such as income, education, and access to health care, impact health outcomes for all Americans. For example, in many low income areas in the country, there are higher rates of chronic diseases, like high blood pressure and diabetes. The summary to the right highlights some of the social and health conditions for {population[0].Geography}.
           </p>
         </article>
         <div className="top-stats viz">
@@ -110,7 +112,8 @@ Introduction.defaultProps = {
 };
 
 Introduction.need = [
-  fetchData("topStats", "/api/stats/<id>")
+  fetchData("topStats", "/api/stats/<id>"),
+  fetchData("medianHouseholdIncome", "https://acs.datausa.io/api/data?measures=Household Income&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
@@ -119,7 +122,8 @@ const mapStateToProps = state => ({
   populationByAgeAndGender: state.data.populationByAgeAndGender,
   populationByRaceAndEthnicity: state.data.populationByRaceAndEthnicity.data,
   lifeExpectancy: state.data.lifeExpectancy,
-  topStats: state.data.topStats
+  topStats: state.data.topStats,
+  medianHouseholdIncome: state.data.medianHouseholdIncome
 });
 
 export default connect(mapStateToProps)(Introduction);

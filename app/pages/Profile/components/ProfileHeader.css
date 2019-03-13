@@ -64,13 +64,9 @@
     background-image:
       linear-gradient(
         -180deg,
-        color(var(--dark-3) a(0)) 50%,
-        var(--dark-3) 100%),
-      linear-gradient(
-        -180deg,
-        color(var(--black) a(0.5)) 0%,
-        color(var(--black) a(0.25)) 93%,
-        color(var(--black) a(0.5)) 100%);
+        color(var(--dark-3) a(0.75)) 25%,
+        color(var(--dark-3) a(0.5)) 50%,
+        var(--dark-3) 100%);
   }
 
   /* cover-style background image */

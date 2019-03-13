@@ -18,19 +18,15 @@ export default class App extends Component {
     // console.log(path);
 
     // MainNav config
-    let compactNav = true;
     let solidBackground = false;
 
-    if (path === "/") {
-      compactNav = false;
-    }
-    if (path === "charts" || path === "about") {
+    if (path === "charts") {
       solidBackground = true;
     }
 
     return (
       <div className="outer-container">
-        <MainNav compact={compactNav} bg={solidBackground} />
+        <MainNav bg={solidBackground} />
         <main className="main-container" role="main">
           { children }
         </main>

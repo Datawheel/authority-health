@@ -5,6 +5,10 @@ import {nest} from "d3-collection";
 import "./Contact.css";
 
 import {Button, Dialog, Icon} from "@blueprintjs/core";
+import {Tooltip2} from "@blueprintjs/labs";
+
+const title = "Community Resources";
+const icon = "geosearch";
 
 const phoneParse = p => {
   const countryCode = p.indexOf("1") === 0 ? "1" : false;
@@ -33,8 +37,6 @@ class Contact extends Component {
 
     const {locations, slug} = this.props;
     const {open} = this.state;
-    const title = "Support Services";
-    const icon = "person";
     const toggle = this.toggleDialog.bind(this);
 
     const data = contacts.filter(d => d.slug === slug && (!d.location || locations.includes(d.location)));
@@ -45,9 +47,13 @@ class Contact extends Component {
       .key(d => d.agency)
       .entries(data);
 
+    console.log(this.props);
+
     return (
       <div className="contact">
-        <Button text={title} iconName={icon} onClick={toggle} />
+        <Tooltip2 className="contact-container" tooltipClassName="contact-tooltip" content={ `Community resources that relate to ${slug.replace(/\-/g, " ")} can be found here.` }>
+          <Button className="contact-button" text={title} iconName={icon} onClick={toggle} />
+        </Tooltip2>
         <Dialog className="contact-dialog" title={title} iconName={icon} isOpen={open} onClose={toggle}>
           <div className="pt-dialog-body">
             <ul className="agency-list">

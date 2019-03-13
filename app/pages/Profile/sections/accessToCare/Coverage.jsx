@@ -36,7 +36,7 @@ class Coverage extends SectionColumns {
 
   render() {
     const {meta, coverageData} = this.props;
-
+    
     const coverageDataAvailable = coverageData.data.length !== 0;
 
     // Check if the data is available for current profile or if it falls back to the parent geography.
@@ -68,13 +68,13 @@ class Coverage extends SectionColumns {
                 title="Most covered male group"
                 year={ageGroupYear}
                 value={topMaleAgeGroup}
-                qualifier={`${topMaleShare} of total population within this age group`}
+                qualifier={`${topMaleShare} of the population within this age group`}
               />
               <Stat
                 title="Most covered female group"
                 year={ageGroupYear}
                 value={topFemaleAgeGroup}
-                qualifier={`${topFemaleShare} of total population within this age group`}
+                qualifier={`${topFemaleShare} of the population within this age group`}
               />
             </div>
 

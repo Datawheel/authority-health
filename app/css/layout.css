@@ -93,7 +93,6 @@ layout
 /* canon overrides */
 /* NOTE: specificity increase needed to overwrite :/ */
 .profile {
-
   /* make topic headers prominent */
   & .topic-title {
     /* sizing */

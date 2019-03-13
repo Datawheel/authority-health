@@ -12,8 +12,10 @@
 
 .main-nav-inner {
   @add-mixin centered-container;
+  padding-top: 0;
+  padding-bottom: 0;
   /* sizing */
-  height: var(--home-nav-height);
+  height: var(--nav-height);
   /* layout */
   display: flex;
   align-items: center; /* vertically center */
@@ -81,7 +83,7 @@
       background-color 0.1s ease-out;
 
     &::placeholder {
-      color: var(--light-3);
+      color: var(--gray);
     }
 
     &:focus {
@@ -153,13 +155,12 @@
   }
 }
 
-/* modifiers */
-.main-nav.compact .main-nav-inner {
-  height: var(--nav-height);
-}
-.main-nav.compact + main {
-  padding-top: var(--nav-height);
-}
+/* solid navbar */
 .main-nav.solid {
   background: var(--dark-3);
+
+  /* position header below navbar */
+  & + main {
+    padding-top: var(--nav-height);
+  }
 }

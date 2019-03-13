@@ -72,25 +72,24 @@ class RiskyBehaviors extends SectionColumns {
 
           <Stat
             title={isSecondHandSmokeOrMonthlyAlcoholSelected ? "Zip region with highest prevalence" : "Tract with highest prevalence"}
-            value={isSecondHandSmokeOrMonthlyAlcoholSelected ? topSecondHandSmokeAndMonthlyAlcoholData["Zip Region"] : topTractSmokingDrinkingData.Year}
-            year={isSecondHandSmokeOrMonthlyAlcoholSelected ? topSecondHandSmokeAndMonthlyAlcoholData["End Year"] : topTractSmokingDrinkingData.Tract}
-            qualifier={isSecondHandSmokeOrMonthlyAlcoholSelected ? formatPercentage(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue], true) : formatPercentage(topTractSmokingDrinkingData[dropdownValue])}
+            value={isSecondHandSmokeOrMonthlyAlcoholSelected ? topSecondHandSmokeAndMonthlyAlcoholData["Zip Region"] : topTractSmokingDrinkingData.Tract}
+            year={isSecondHandSmokeOrMonthlyAlcoholSelected ? topSecondHandSmokeAndMonthlyAlcoholData["End Year"] : topTractSmokingDrinkingData.Year}
+            qualifier={isSecondHandSmokeOrMonthlyAlcoholSelected ? `${formatPercentage(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue], true)} population of this zip region` : `${formatPercentage(topTractSmokingDrinkingData[dropdownValue])} population of this census tract`}
           />
           {isSecondHandSmokeOrMonthlyAlcoholSelected
             ? <div>
-              <p>In {topSecondHandSmokeAndMonthlyAlcoholData["End Year"]}, {topSecondHandSmokeAndMonthlyAlcoholData["Zip Region"]} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatPercentage(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue], true)}).</p>
+              <p>In {topSecondHandSmokeAndMonthlyAlcoholData["End Year"]},  {formatPercentage(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue], true)} population of zip region {topSecondHandSmokeAndMonthlyAlcoholData["Zip Region"]} had the highest prevalence of {dropdownValue.toLowerCase()}.</p>
               <p>The map here shows the {dropdownValue.toLowerCase()} for zip regions in Wayne County.</p>
             </div>
             : <div>
-              <p>In {topTractSmokingDrinkingData.Year}, {topTractSmokingDrinkingData.Tract} had the highest prevalence of {dropdownValue.toLowerCase()} ({formatPercentage(topTractSmokingDrinkingData[dropdownValue])}) out of all Tracts in Wayne County.</p>
-              <p>The map here shows the {dropdownValue.toLowerCase()} for all tracts in Wayne County.</p>
+              <p>In {topTractSmokingDrinkingData.Year}, {formatPercentage(topTractSmokingDrinkingData[dropdownValue])} population of {topTractSmokingDrinkingData.Tract} had the highest prevalence of {dropdownValue.toLowerCase()} out of census tracts in Detroit, Livonia, Dearborn and Westland.</p>
+              <p>The map here shows the {dropdownValue.toLowerCase()} prevalence for tracts in Detroit, Livonia, Dearborn and Westland and the barchart shows the former, current and never smoking status in Wayne County.</p>
             </div>
           }
 
           {/* Draw a Treemap to show smoking status: former, current & never. */}
           {dropdownValue === drugTypes[0]
             ? <div>
-              <p>The chart here shows the former, current and never smoking status in Wayne County.</p>
               <Treemap config={{
                 data: `/api/data?measures=Smoking Status Current,Smoking Status Former,Smoking Status Never&drilldowns=End Year&Geography=${id}`, // MiBRFS - All Years
                 height: 250,

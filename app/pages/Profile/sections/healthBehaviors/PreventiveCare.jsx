@@ -81,13 +81,13 @@ class PreventiveCare extends SectionColumns {
             title={"Location with highest share"}
             year={isPreventativeCareWeightedValueSelected ? topDropdownData["End Year"] : topDropdownData.Year}
             value={isPreventativeCareWeightedValueSelected ? topDropdownData["Zip Region"] : topDropdownData.Tract}
-            qualifier={isPreventativeCareWeightedValueSelected ? `${formatPercentage(topDropdownData[dropdownValue], true)} of population of this zip region` : `${formatPercentage(topDropdownData[dropdownValue])} of population of this census tract`}
+            qualifier={isPreventativeCareWeightedValueSelected ? `${formatPercentage(topDropdownData[dropdownValue], true)} population of this zip region` : `${formatPercentage(topDropdownData[dropdownValue])} population of this census tract`}
           />
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           {isPreventativeCareWeightedValueSelected
-            ? <p>In {topDropdownData["End Year"]}, {formatPercentage(topDropdownData[dropdownValue], true)} of population of zip region {topDropdownData["Zip Region"]} had the highest share of {dropdownValue} out of all zip regions in Wayne County.</p>
-            : <p>In {topDropdownData.Year}, {formatPercentage(topDropdownData[dropdownValue])} of population of {topDropdownData.Tract} had the highest share of {dropdownValue.toLowerCase()} out of all tracts in Detroit, Livonia, Dearborn and Westland.</p>
+            ? <p>In {topDropdownData["End Year"]}, {formatPercentage(topDropdownData[dropdownValue], true)} population of zip region {topDropdownData["Zip Region"]} had the highest share of {dropdownValue} out of all zip regions in Wayne County.</p>
+            : <p>In {topDropdownData.Year}, {formatPercentage(topDropdownData[dropdownValue])} population of {topDropdownData.Tract} had the highest share of {dropdownValue.toLowerCase()} out of all tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
           {isPreventativeCareWeightedValueSelected
             ? <p>The map here shows the {dropdownValue.toLowerCase()} for zip regions in Wayne County.</p>

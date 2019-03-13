@@ -11,7 +11,11 @@ import Stat from "components/Stat";
 
 const formatPercentage = (d, mutiplyBy100 = false) => mutiplyBy100 ? `${formatAbbreviate(d * 100)}%` : `${formatAbbreviate(d)}%`;
 
-const formatDropdownName = d => d === "Diabetes" || d === "Obesity" ? `${d} by Census Tract` : `${d} by Zip Region`;
+const formatDropdownName = d => {
+  if (d === "Obesity") return `${d} by Census Tract`;
+  else if (d === "BMI Obese") return `${d} by Zip Region`;
+  return d;
+};
 
 class ObesityAndDiabetes extends SectionColumns {
 

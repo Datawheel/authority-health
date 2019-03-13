@@ -76,8 +76,8 @@ class StoreAccessByDemographic extends SectionColumns {
             qualifier={ageSelected ? `${formatPercentage(topFoodAccessData["Low-Access to Food by Age"])} of all ${topFoodAccessData["Age Group"].toLowerCase()} in ${topFoodAccessData.Geography} has low access` : `${formatPercentage(topFoodAccessData["Low-Access to Food by Race"])} of total population in ${topFoodAccessData.Geography} has low access`}
           />
           {/* Write a paragraph for top stats based on the dropdown choice. */}
-          <p>Low access to healthy food is defined as being far from a supermarket, supercenter, or large grocery store.</p>
           <p>In {topFoodAccessData.Year}, {ageSelected ? `between children and seniors age groups, ${topFoodAccessData["Age Group"].toLowerCase()}` : topFoodAccessData["Race Group"].toLowerCase()} were the largest {ageSelected ? "age" : "race"} group ({ageSelected ? `${formatPercentage(topFoodAccessData["Low-Access to Food by Age"])} of all ${topFoodAccessData["Age Group"].toLowerCase()}` : `${formatPercentage(topFoodAccessData["Low-Access to Food by Race"])} of the population`}) in {topFoodAccessData.Geography} with low access to food stores.</p>
+          <p>Low access to healthy food is defined as being far from a supermarket, supercenter, or large grocery store.</p>
           <p>The following map shows the low access rate for {dropdownValue.split(" ").length === 1 ? formatRaceText(dropdownValue).toLowerCase() : formatRaceText(dropdownValue)} with low access to food stores across all counties in Michigan.</p>
 
           {/* Create a BarChart based on the dropdown choice. */}

@@ -34,7 +34,7 @@ class PhysicalInactivity extends SectionColumns {
             title={"Location with highest prevalence"}
             year={topRecentYearData.Year}
             value={topRecentYearData.Tract}
-            qualifier={formatPercentage(topRecentYearData["Physical Inactivity"])}
+            qualifier={`${formatPercentage(topRecentYearData["Physical Inactivity"])} of population of this census tract`}
           />
 
           {/* Show top stats for the Male and Female Physical Inactivity data. */}
@@ -43,17 +43,18 @@ class PhysicalInactivity extends SectionColumns {
             title={"Male Prevalence"}
             year={topPhysicalInactivityMaleData.Year}
             value={formatPercentage(topPhysicalInactivityMaleData["Age-Adjusted Physical Inactivity"])}
+            qualifier={`of male population in ${topPhysicalInactivityMaleData.Geography}`}
           />
           <Stat
             title={"Female Prevalence"}
             year={topPhysicalInactivityFemaleData.Year}
             value={formatPercentage(topPhysicalInactivityFemaleData["Age-Adjusted Physical Inactivity"])}
+            qualifier={`of female population in ${topPhysicalInactivityFemaleData.Geography}`}
           />
-          <p>In {topRecentYearData.Year}, {topRecentYearData.Tract} had the highest prevalence of physical inactivity ({formatPercentage(topRecentYearData["Physical Inactivity"])}) out of all tracts in Wayne County.</p>
-          <p>In {topPhysicalInactivityFemaleData.Year}, physical inactivity rates for male and female residents of Wayne County were {formatPercentage(topPhysicalInactivityMaleData["Age-Adjusted Physical Inactivity"])} and {formatPercentage(topPhysicalInactivityFemaleData["Age-Adjusted Physical Inactivity"])} respectively in the {topPhysicalInactivityFemaleData.Geography}.</p>
-          <p>The barchart here shows the physical inactivity data for male and female in {topPhysicalInactivityFemaleData.Geography}.</p>
-
-          <p>The following map shows the physical inactivity for all tracts in Wayne County.</p>
+          <p>In {topRecentYearData.Year}, {formatPercentage(topRecentYearData["Physical Inactivity"])} of population of {topRecentYearData.Tract} had the highest prevalence of physical inactivity out of all census tracts in Detroit, Livonia, Dearborn and Westland.</p>
+          <p>In {topPhysicalInactivityFemaleData.Year}, {formatPercentage(topPhysicalInactivityMaleData["Age-Adjusted Physical Inactivity"])} of the male population in {topPhysicalInactivityFemaleData.Geography} were physically inactive as compared to the {formatPercentage(topPhysicalInactivityFemaleData["Age-Adjusted Physical Inactivity"])} of female population.</p>
+          
+          <p>Following barchart shows the physical inactivity rate for male and female in {topPhysicalInactivityFemaleData.Geography} and the map shows physical inactivity rate for census tracts in Detroit, Livonia, Dearborn and Westland.</p>
 
           {/* Draw a BarChart to show data for Physical Inactivity by Sex. */}
           <BarChart config={{

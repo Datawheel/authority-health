@@ -128,13 +128,13 @@ class ObesityAndDiabetes extends SectionColumns {
               title={isHealthyWeightSelected ? "Location with highest share" : "Location with highest prevalence"}
               year={topDropdownWeightedData["End Year"]}
               value={topDropdownWeightedData["Zip Region"]}
-              qualifier={`${formatPercentage(topDropdownWeightedData[dropdownValue], true)} of population in this zip region`}
+              qualifier={`${formatPercentage(topDropdownWeightedData[dropdownValue], true)} of population of this zip region`}
             />
             : <Stat
               title={"Location with highest prevalence"}
               year={topDropdownValueTract.Year}
               value={topDropdownValueTract.Tract}
-              qualifier={`${formatPercentage(topDropdownValueTract[dropdownValue])} of the population in this tract`}
+              qualifier={`${formatPercentage(topDropdownValueTract[dropdownValue])} of the population of this census tract`}
             />
           }
 
@@ -154,7 +154,7 @@ class ObesityAndDiabetes extends SectionColumns {
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           {isBMIWeightedDataValueSelected
-            ? <p>In {topDropdownWeightedData["End Year"]}, {formatPercentage(topDropdownWeightedData[dropdownValue], true)} of the population of {topDropdownWeightedData["Zip Region"]} had {dropdownValue.toLowerCase()}, the highest {isHealthyWeightSelected ? "share" : "prevalence"} out of all zip regions in Wayne County.</p>
+            ? <p>In {topDropdownWeightedData["End Year"]}, {formatPercentage(topDropdownWeightedData[dropdownValue], true)} of the population of zip region {topDropdownWeightedData["Zip Region"]} had {dropdownValue.toLowerCase()}, the highest {isHealthyWeightSelected ? "share" : "prevalence"} out of all zip regions in Wayne County.</p>
             : <p>In {topDropdownValueTract.Year}, {formatPercentage(topDropdownValueTract[dropdownValue])} of the population of {topDropdownValueTract.Tract} had {dropdownValue.toLowerCase()}, the highest prevalence out of all tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
 
@@ -163,8 +163,8 @@ class ObesityAndDiabetes extends SectionColumns {
             {topMaleData.Geography} {isDiabetesSelected ? "had diabetes" : "were obese"}, compared to {isDiabetesSelected ? formatPercentage(topFemaleData["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(topFemaleData["Age-Adjusted Obesity Prevalence"])} of the female population.</p>
 
           {isBMIWeightedDataValueSelected
-            ? <p>Following barchart shows male and female prevalence in {topMaleData.Geography} and the map shows the {isHealthyWeightSelected ? "share" : "prevalence"} of {dropdownValue.toLowerCase()} for all zip regions in Wayne County.</p>
-            : <p>Following barchart shows male and female prevalence in {topMaleData.Geography} and the map shows the prevalence of {dropdownValue.toLowerCase()} for all census tracts in Detroit, Livonia, Dearborn and Westland.</p>
+            ? <p>Following barchart shows male and female prevalence in {topMaleData.Geography} and the map shows the {isHealthyWeightSelected ? "share" : "prevalence"} of {dropdownValue.toLowerCase()} for zip regions in Wayne County.</p>
+            : <p>Following barchart shows male and female prevalence in {topMaleData.Geography} and the map shows the prevalence of {dropdownValue.toLowerCase()} for census tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
 
           {/* Draw a BarChart to show data for Obesity Rate by Sex. */}

@@ -16,7 +16,7 @@
 
   /* limit intro text width */
   & .home-header-intro {
-    max-width: 28rem;
+    max-width: 30rem;
   }
 
   /* take up remaining space and center */

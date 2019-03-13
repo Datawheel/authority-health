@@ -30,7 +30,7 @@ const formatHouseholdSnapData = householdSnapData => {
       const totalShare = sum(group.values, d => d.share);
       group.values.forEach(d => d.totalShare = totalShare);
     });
-  const topRecentYearTotalShareData = householdSnapData.sort((a, b) => b.totalShare - a.totalShare)[0];
+  const topRecentYearTotalShareData = filterSnapRecievedData.sort((a, b) => b.totalShare - a.totalShare)[0];
   const topRecentYearData = filterSnapRecievedData.filter(d => d.totalShare === topRecentYearTotalShareData.totalShare).sort((a, b) => b.share - a.share)[0];
   return [filterSnapRecievedData, topRecentYearData];
 };
@@ -119,7 +119,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
 }
 
 HouseholdIncomeFromPublicAssistance.defaultProps = {
-  slug: "household-income-from-public-assistance" 
+  slug: "household-income-from-public-assistance"
 };
 
 HouseholdIncomeFromPublicAssistance.need = [

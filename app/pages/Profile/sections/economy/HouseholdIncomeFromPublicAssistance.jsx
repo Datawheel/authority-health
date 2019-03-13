@@ -72,17 +72,17 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
             title={"Population With Cash Public Assistance Or Food Stamps/SNAP"}
             year={publicAssistanceDataAvailable ? topPublicAssistanceData.Year : ""}
             value={publicAssistanceDataAvailable ? `${formatPercentage(topPublicAssistanceData.share)}` : "N/A"}
-            qualifier={publicAssistanceDataAvailable ? `of the total population with food stamp in ${topPublicAssistanceData.Geography}` : "N/A"}
+            qualifier={publicAssistanceDataAvailable ? `of the population with food stamp in ${topPublicAssistanceData.Geography}` : "N/A"}
           />
           <Stat
             title={"most common number of workers per household"}
             year={householdSnapDataAvailable ? topRecentYearHouseholdSnapData.Year : ""}
             value={householdSnapDataAvailable ? topRecentYearHouseholdSnapData["Number of workers"] : "N/A"}
-            qualifier={householdSnapDataAvailable ? `(${formatPercentage(topRecentYearHouseholdSnapData.totalShare)} of the total population in ${topRecentYearHouseholdSnapData.Geography})` : ""}
+            qualifier={householdSnapDataAvailable ? `(${formatPercentage(topRecentYearHouseholdSnapData.totalShare)} of the population in ${topRecentYearHouseholdSnapData.Geography})` : ""}
           />
           <p>
             {publicAssistanceDataAvailable ? <span>In {topPublicAssistanceData.Year}, {formatPercentage(topPublicAssistanceData.share)} of total population in {topPublicAssistanceData.Geography} got public assistance or food stamps in cash. </span> : ""}
-            {householdSnapDataAvailable ? <span>The most common number of workers per household on public assistance is {topRecentYearHouseholdSnapData["Number of workers"].toLowerCase()} ({formatPercentage(topRecentYearHouseholdSnapData.totalShare)} of the total population in {topRecentYearHouseholdSnapData.Geography}).</span> : ""}
+            {householdSnapDataAvailable ? <span>The most common number of workers per household on public assistance is {topRecentYearHouseholdSnapData["Number of workers"].toLowerCase()} ({formatPercentage(topRecentYearHouseholdSnapData.totalShare)} of the population in {topRecentYearHouseholdSnapData.Geography}).</span> : ""}
           </p>
           {householdSnapDataAvailable ? <p>The following chart shows the number of workers per household on public assistance.</p> : ""}
           <Contact slug={this.props.slug} />

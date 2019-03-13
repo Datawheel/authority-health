@@ -108,6 +108,9 @@ export default {
       curve: "catmullRom",
       strokeLinecap: "round",
       strokeWidth: 2
+    },
+    Path: {
+      fillOpacity: 0.75
     }
   },
   // map color scale key

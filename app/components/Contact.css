@@ -1,3 +1,24 @@
+.contact-button:not([class*="pt-intent-"]) {
+  background-color: var(--brand-dark);
+  background-image: none;
+  color: white;
+  &:before {
+    color: white;
+  }
+  &:hover {
+    background-color: var(--brand-dark);
+  }
+}
+
+.contact-container {
+  float: right;
+}
+
+.contact-tooltip {
+  @mixin font-sm;
+  width: 300px;
+}
+
 .contact-dialog {
   padding-bottom: 0;
   & .pt-dialog-body {

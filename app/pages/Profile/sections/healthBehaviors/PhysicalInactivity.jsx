@@ -14,11 +14,11 @@ class PhysicalInactivity extends SectionColumns {
 
   render() {
 
-    const {meta, physicalInActivity, physicalInactivityPrevalenceBySex} = this.props;
+    const {meta, physicalInactivity, physicalInactivityPrevalenceBySex} = this.props;
     const isPhysicalInactivityBySexAvailableForCurrentlocation = physicalInactivityPrevalenceBySex.source[0].substitutions.length === 0;
 
     // We don't find latest year data here (as we usually do for other topics) since we have only 1 year data for physical inactivity and physical health.
-    const topRecentYearData = physicalInActivity.sort((a, b) => b["Physical Inactivity"] - a["Physical Inactivity"])[0];
+    const topRecentYearData = physicalInactivity.sort((a, b) => b["Physical Inactivity"] - a["Physical Inactivity"])[0];
 
     // Find recent year top data for physicalInactivityPrevalenceBySex.
     const topPhysicalInactivityMaleData = physicalInactivityPrevalenceBySex.data.filter(d => d.Sex === "Male")[0];
@@ -26,7 +26,7 @@ class PhysicalInactivity extends SectionColumns {
 
     return (
       <SectionColumns>
-        <SectionTitle>Physical Health and Inactivity</SectionTitle>
+        <SectionTitle>Physical Inactivity</SectionTitle>
         <article>
           {isPhysicalInactivityBySexAvailableForCurrentlocation ? <div></div> : <div className="disclaimer">Showing data for {physicalInactivityPrevalenceBySex.data[0].Geography}.</div>}
  
@@ -84,7 +84,7 @@ class PhysicalInactivity extends SectionColumns {
 
         {/* Geomap to show Physical health and physical Inactivity for tracts in the Wayne County. */}
         <Geomap config={{
-          data: physicalInActivity, // only 1 year data available.
+          data: physicalInactivity, // only 1 year data available.
           groupBy: "ID Tract",
           label: d => d.Tract,
           colorScale: d => d["Physical Inactivity"],
@@ -104,17 +104,17 @@ class PhysicalInactivity extends SectionColumns {
 }
 
 PhysicalInactivity.defaultProps = {
-  slug: "physical-health-and-inactivity"
+  slug: "physical-inactivity"
 };
 
 PhysicalInactivity.need = [
-  fetchData("physicalInActivity", "/api/data?measures=Physical Inactivity&drilldowns=Tract&Year=latest", d => d.data), // only 1 year data available
+  fetchData("physicalInactivity", "/api/data?measures=Physical Inactivity&drilldowns=Tract&Year=latest", d => d.data), // only 1 year data available
   fetchData("physicalInactivityPrevalenceBySex", "/api/data?measures=Age-Adjusted Physical Inactivity&drilldowns=Sex&Geography=<id>&Year=latest")
 ];
 
 const mapStateToProps = state => ({
   meta: state.data.meta,
-  physicalInActivity: state.data.physicalInActivity,
+  physicalInactivity: state.data.physicalInactivity,
   physicalInactivityPrevalenceBySex: state.data.physicalInactivityPrevalenceBySex
 });
 

@@ -34,7 +34,7 @@ class PhysicalInactivity extends SectionColumns {
             title={"Location with highest prevalence"}
             year={topRecentYearData.Year}
             value={topRecentYearData.Tract}
-            qualifier={`${formatPercentage(topRecentYearData["Physical Inactivity"])} of population of this census tract`}
+            qualifier={`${formatPercentage(topRecentYearData["Physical Inactivity"])} of the population of this census tract`}
           />
 
           {/* Show top stats for the Male and Female Physical Inactivity data. */}
@@ -51,7 +51,7 @@ class PhysicalInactivity extends SectionColumns {
             value={formatPercentage(topPhysicalInactivityFemaleData["Age-Adjusted Physical Inactivity"])}
             qualifier={`of female population in ${topPhysicalInactivityFemaleData.Geography}`}
           />
-          <p>In {topRecentYearData.Year}, {formatPercentage(topRecentYearData["Physical Inactivity"])} of population of {topRecentYearData.Tract} had the highest prevalence of physical inactivity out of all census tracts in Detroit, Livonia, Dearborn and Westland.</p>
+          <p>In {topRecentYearData.Year}, {formatPercentage(topRecentYearData["Physical Inactivity"])} of the population of {topRecentYearData.Tract} had the highest prevalence of physical inactivity out of all census tracts in Detroit, Livonia, Dearborn and Westland.</p>
           <p>In {topPhysicalInactivityFemaleData.Year}, {formatPercentage(topPhysicalInactivityMaleData["Age-Adjusted Physical Inactivity"])} of the male population in {topPhysicalInactivityFemaleData.Geography} were physically inactive as compared to the {formatPercentage(topPhysicalInactivityFemaleData["Age-Adjusted Physical Inactivity"])} of female population.</p>
           
           <p>Following barchart shows the physical inactivity rate for male and female in {topPhysicalInactivityFemaleData.Geography} and the map shows physical inactivity rate for census tracts in Detroit, Livonia, Dearborn and Westland.</p>

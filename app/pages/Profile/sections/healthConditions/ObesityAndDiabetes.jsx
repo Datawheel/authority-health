@@ -128,7 +128,7 @@ class ObesityAndDiabetes extends SectionColumns {
               title={isHealthyWeightSelected ? "Location with highest share" : "Location with highest prevalence"}
               year={topDropdownWeightedData["End Year"]}
               value={topDropdownWeightedData["Zip Region"]}
-              qualifier={`${formatPercentage(topDropdownWeightedData[dropdownValue], true)} of population of this zip region`}
+              qualifier={`${formatPercentage(topDropdownWeightedData[dropdownValue], true)} of the population of this zip region`}
             />
             : <Stat
               title={"Location with highest prevalence"}

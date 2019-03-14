@@ -101,7 +101,7 @@ class Homeless extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Homeless</SectionTitle>
         <article>
-          {isHomelessDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {typesOfShelteredHomeless[0].Geography}.</div>}
+          {isHomelessDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {typesOfShelteredHomeless[0].Geography}</div>}
           {/* Create a dropdown for sheltered and unsheltered choices. */}
           <label className="pt-label pt-inline" htmlFor="health-center-dropdown">
             Show data for

@@ -54,7 +54,7 @@ class DentistsDemographic extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Dentist Demographics</SectionTitle>
         <article>
-          {isDentistsByAgeAvailableForCurrentGeography && isDentistsByGenderAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {dentistsByAge.data[0].Geography}.</div>}
+          {isDentistsByAgeAvailableForCurrentGeography && isDentistsByGenderAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {dentistsByAge.data[0].Geography}</div>}
           <Stat
             title={"Common Age Group"}
             year={topDentistsAgeData.Year}

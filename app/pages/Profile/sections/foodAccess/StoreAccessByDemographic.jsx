@@ -58,7 +58,7 @@ class StoreAccessByDemographic extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Store Access by Demographic</SectionTitle>
         <article>
-          {isCurrentLocationDataAvailable ? <div></div> : <div className="disclaimer">Showing data for {ageSelected ? foodAccessByAge.data[0].Geography : foodAccessByRace.data[0].Geography}.</div>}
+          {isCurrentLocationDataAvailable ? <div></div> : <div className="disclaimer">Showing data for {ageSelected ? foodAccessByAge.data[0].Geography : foodAccessByRace.data[0].Geography}</div>}
           {/* Create a dropdown for each age and race type using raceAndAgeTypes array. */}
           <label className="pt-label pt-inline" htmlFor="store-access-dropdown">
             Show data for

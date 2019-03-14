@@ -18,7 +18,7 @@ class Insecurity extends SectionColumns {
         <SectionColumns>
           <SectionTitle>Insecurity</SectionTitle>
           <article>
-            {isInsecurityRateDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {location}.</div>}
+            {isInsecurityRateDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {location}</div>}
             <Stat
               title={"Child Insecurity"}
               year={childInsecurity.Year}

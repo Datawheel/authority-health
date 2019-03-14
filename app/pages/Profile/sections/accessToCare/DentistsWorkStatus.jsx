@@ -76,7 +76,7 @@ class DentistsWorkStatus extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Dentists Work Status</SectionTitle>
         <article>
-          {isDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {dentistsByWorkingHours.data[0].Geography}.</div>}
+          {isDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {dentistsByWorkingHours.data[0].Geography}</div>}
           <Stat
             title={"Private Practice"}
             year={topTypeOfActiveDentist.Year}

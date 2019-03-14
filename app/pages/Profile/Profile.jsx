@@ -198,6 +198,7 @@ class Profile extends Component {
 
 Profile.need = [
   Introduction,
+  FoodAvailability,
   FoodStamps,
   Insecurity,
   StoreAccessByDemographic,

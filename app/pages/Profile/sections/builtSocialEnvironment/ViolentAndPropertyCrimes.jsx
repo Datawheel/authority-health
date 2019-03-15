@@ -9,6 +9,7 @@ import {titleCase} from "d3plus-text";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
+import Glossary from "components/Glossary";
 import Stat from "components/Stat";
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -23,6 +24,15 @@ const formatCrimeData = crimeData => {
     });
   return crimeData;
 };
+
+const definitions = [
+  {term: "Larceny-Theft", definition: "Larceny is a theft crime that involves the unlawful taking and carrying away of the personal property of another person."},
+  {term: "Burglary", definition: "Burglary is the criminal offense of breaking and entering a building illegally for the purpose of committing a crime."},
+  {term: "Robbery", definition: "Robbery is the crime of taking or attempting to take anything of value by force, threat of force, or by putting the victim in fear."},
+  {term: "Rape", definition: "Rape is defined in most jurisdictions as sexual intercourse, or other forms of sexual penetration, committed by a perpetrator against a victim without their consent."},
+  {term: "Murder and Non-negligent Manslaughter", definition: "Murder and non-negligent manslaughter are described by UCR as the willful (non-negligent) killing of one human being by another or a death that results from the commission of another criminal act."},
+  {term: "Arson", definition: "Arson is the crime of willfully and maliciously burning of property (such as a building) especially with criminal or fraudulent intent."}
+];
 
 class ViolentAndPropertyCrimes extends SectionColumns {
 
@@ -46,10 +56,10 @@ class ViolentAndPropertyCrimes extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Violent and Property Crimes</SectionTitle>
         <article>
-          {isPlaceDataAvailable ? <div></div> : <div className="disclaimer">Data only available for cities. Showing data for overall cities in Wayne County</div>}
+          {isPlaceDataAvailable ? <div></div> : <div className="disclaimer">Showing data for overall cities in Wayne County</div>}
           {/* Show stats and short paragraph for each type of crime. */}
           <Stat
-            title= {isPlaceDataAvailable ? "Violent Crime" : "Most common Violent Crime"}
+            title= {"Most common Violent Crime"}
             year={topRecentYearViolentCrime.Year}
             value={titleCase(topRecentYearViolentCrime.Crime)}
             qualifier={formatPercentage(topRecentYearViolentCrime.share)}
@@ -62,6 +72,7 @@ class ViolentAndPropertyCrimes extends SectionColumns {
           />
           <p>In {topRecentYearViolentCrime.Year}, the most common violent crime{isPlaceDataAvailable ? ` in ${topRecentYearViolentCrime.Geography}` : ""} was {topRecentYearViolentCrime.Crime.toLowerCase()} ({formatPercentage(topRecentYearViolentCrime.share)}), and the most common property crime was {topRecentYearPropertyCrime.Crime.toLowerCase()} ({formatPercentage(topRecentYearPropertyCrime.share)}).</p>
           <p>The following chart shows the distribution for the different types of property and violent crimes{isPlaceDataAvailable ? ` in ${topRecentYearViolentCrime.Geography}` : ""}.</p>
+          <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
         </article>
 

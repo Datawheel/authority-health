@@ -9,9 +9,16 @@ import {titleCase} from "d3plus-text";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
+import Glossary from "components/Glossary";
 import Stat from "components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
+
+const definitions = [
+  {term: "Married-Couple Family", definition: " A family in which the householder and his or her spouse are listed as members of the same household."},
+  {term: "Male Householder, No Wife Present", definition: "A family with a male householder and no spouse of householder present."},
+  {term: "Female Householder, No Husband Present", definition: "A family with a female householder and no spouse of householder present."}
+];
 
 const formatHouseholdSnapData = householdSnapData => {
   // Find share for each data in householdSnapData.
@@ -84,14 +91,8 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
             {publicAssistanceDataAvailable ? <span>In {topPublicAssistanceData.Year}, {formatPercentage(topPublicAssistanceData.share)} of the population in {topPublicAssistanceData.Geography} got cash public assistance or food stamps.</span> : ""}
             {householdSnapDataAvailable ? <span>The most common number of workers per household on public assistance was {topRecentYearHouseholdSnapData["Number of workers"].toLowerCase()} ({formatPercentage(topRecentYearHouseholdSnapData.totalShare)} of the population in {topRecentYearHouseholdSnapData.Geography}).</span> : ""}
           </p>
-
-          <ul>
-            <li>Married-Couple Family – A family in which the householder and his or her spouse are listed as members of the same household.</li>
-            <li>Male Householder, No Wife Present – A family with a male householder and no spouse of householder present.</li>
-            <li>Female Householder, No Husband Present – A family with a female householder and no spouse of householder present.</li>
-          </ul>
-
           {householdSnapDataAvailable ? <p>The following chart shows the number of workers per household on public assistance.</p> : ""}
+          <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
         </article>
 

@@ -7,9 +7,15 @@ import {titleCase} from "d3plus-text";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
+import Glossary from "components/Glossary";
 import Stat from "components/Stat";
 
 const commas = format(",d");
+
+const definitions = [
+  {term: "Full Service Restaurants", definition: "Full service restaurants are establishments with a relatively broad menu along with table, counter and/or booth service and a wait staff. These establishments offer meals and snacks for immediate consumption primarily on-premise, though they may also offer takeout service."},
+  {term: "Fast-Food Restaurants", definition: "Fast-food restaurant are establishments whose patrons generally order or select items and pay before eating. Food and drink may be consumed on premises, taken out, or delivered to customers' locations."}
+];
 
 class FoodAvailability extends SectionColumns {
 
@@ -53,9 +59,8 @@ class FoodAvailability extends SectionColumns {
             qualifier={`${commas(topStore["Number of Food Stores"])} in ${topStore.Geography}`}
           />
           <p>In {topStore.Year}, the most available food stores in {topStore.Geography} were {topStore["Sub-category"].toLowerCase()} ({commas(topStore["Number of Food Stores"])}) out of all food store types.</p>
-          <p>Full Service Restaurants are establishments with a relatively broad menu along with table, counter and/or booth service and a wait staff. These establishments offer meals and snacks for immediate consumption primarily on-premise, though they may also offer takeout service.</p>
-          <p>Fast-Food Restaurant are establishments whose patrons generally order or select items and pay before eating. Food and drink may be consumed on premises, taken out, or delivered to customers' locations.</p>
           <p>The chart here shows the share of fast-food restaurants, full-service restaurants, convenience stores, grocery stores, specialized food stores, supercenters and farmers market in {meta.name}.</p>
+          <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
         </article>
 

@@ -1,0 +1,55 @@
+@import "../css/mixins.css";
+
+.glossary-button:not([class*="pt-intent-"]) {
+  background-color: var(--brand-dark);
+  background-image: none;
+  color: white;
+  &:before {
+    color: white;
+  }
+  &:hover {
+    background-color: var(--brand-dark);
+  }
+}
+
+.glossary-container {
+  float: left;
+}
+
+.glossary-tooltip {
+  @mixin font-sm;
+  width: 300px;
+}
+
+.glossary-dialog {
+  padding-bottom: 0;
+  & .pt-dialog-body {
+    margin: 0;
+    max-height: 60vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+    & .glossary-list {
+      list-style: none;
+      margin: 10px 0 25px;
+      padding-left: 0;
+      & .glossary {
+        margin-bottom: 10px;
+        & .glossary-subAgency, & .glossary-title {
+          line-height: 1.25;
+        }
+        & .glossary-definition {
+          line-height: 1.25;
+        }
+        & .has-icon {
+          align-items: center;
+          display: flex;
+          & .pt-icon-standard {
+            font-size: 10px;
+            margin-right: 8px;
+          }
+        }
+    }
+  }
+}

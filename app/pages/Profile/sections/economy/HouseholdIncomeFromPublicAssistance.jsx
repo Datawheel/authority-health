@@ -75,15 +75,22 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
             qualifier={publicAssistanceDataAvailable ? `of the population with food stamp in ${topPublicAssistanceData.Geography}` : "N/A"}
           />
           <Stat
-            title={"most common number of workers per household"}
+            title={"most common number of workers per household on public assistance"}
             year={householdSnapDataAvailable ? topRecentYearHouseholdSnapData.Year : ""}
             value={householdSnapDataAvailable ? topRecentYearHouseholdSnapData["Number of workers"] : "N/A"}
             qualifier={householdSnapDataAvailable ? `(${formatPercentage(topRecentYearHouseholdSnapData.totalShare)} of the population in ${topRecentYearHouseholdSnapData.Geography})` : ""}
           />
           <p>
-            {publicAssistanceDataAvailable ? <span>In {topPublicAssistanceData.Year}, {formatPercentage(topPublicAssistanceData.share)} of total population in {topPublicAssistanceData.Geography} got public assistance or food stamps in cash. </span> : ""}
-            {householdSnapDataAvailable ? <span>The most common number of workers per household on public assistance is {topRecentYearHouseholdSnapData["Number of workers"].toLowerCase()} ({formatPercentage(topRecentYearHouseholdSnapData.totalShare)} of the population in {topRecentYearHouseholdSnapData.Geography}).</span> : ""}
+            {publicAssistanceDataAvailable ? <span>In {topPublicAssistanceData.Year}, {formatPercentage(topPublicAssistanceData.share)} of the population in {topPublicAssistanceData.Geography} got cash public assistance or food stamps.</span> : ""}
+            {householdSnapDataAvailable ? <span>The most common number of workers per household on public assistance was {topRecentYearHouseholdSnapData["Number of workers"].toLowerCase()} ({formatPercentage(topRecentYearHouseholdSnapData.totalShare)} of the population in {topRecentYearHouseholdSnapData.Geography}).</span> : ""}
           </p>
+
+          <ul>
+            <li>Married-Couple Family – A family in which the householder and his or her spouse are listed as members of the same household.</li>
+            <li>Male Householder, No Wife Present – A family with a male householder and no spouse of householder present.</li>
+            <li>Female Householder, No Husband Present – A family with a female householder and no spouse of householder present.</li>
+          </ul>
+
           {householdSnapDataAvailable ? <p>The following chart shows the number of workers per household on public assistance.</p> : ""}
           <Contact slug={this.props.slug} />
         </article>

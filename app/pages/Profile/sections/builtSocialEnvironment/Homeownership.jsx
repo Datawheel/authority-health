@@ -57,7 +57,8 @@ class Homeownership extends SectionColumns {
             year={constructionDateDataAvailable ? `AS OF ${constructionDateData[0].Year}` : ""}
             value={constructionDateDataAvailable ? constructionDateData[0]["Construction Date"] : "N/A"}
           />
-          <p>{medianHousingUnitsValueForProfileAvailable ? <span>The median property value in {topMedianHousingUnitsValueForProfile.Geography}, as of {topMedianHousingUnitsValueForProfile.Year}, is ${commas(topMedianHousingUnitsValueForProfile["Property Value"])}.</span> : ""} {occupancyDataAvailable ? <span>{formatAbbreviate(topOccupancyData.share)}% of households in {topOccupancyData.Geography} were occupied in {topOccupancyData.Year}.</span> : ""}</p>
+          <p>{medianHousingUnitsValueForProfileAvailable ? <span>In {topMedianHousingUnitsValueForProfile.Year}, the median property value in {topMedianHousingUnitsValueForProfile.Geography}, was ${commas(topMedianHousingUnitsValueForProfile["Property Value"])}.</span> : ""} </p>
+          <p>{occupancyDataAvailable ? <span>{formatAbbreviate(topOccupancyData.share)}% of households in {topOccupancyData.Geography} were occupied in {topOccupancyData.Year}.</span> : ""}</p>
           <p>The following map shows the median property value for tracts in Wayne County.</p>
           <Contact slug={this.props.slug} />
         </article>

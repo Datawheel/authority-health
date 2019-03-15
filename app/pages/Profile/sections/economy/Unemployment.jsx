@@ -76,18 +76,20 @@ class Unemployment extends SectionColumns {
             title="Male Working Full Time"
             year={workExperienceAvailable ? getMaleFullTimeData[0].Year : ""}
             value={workExperienceAvailable ? formatPercentage(getMaleFullTimeData[0].share) : "N/A"}
+            qualifier={workExperienceAvailable ? `of the full-time working population in ${getMaleFullTimeData[0].Geography}` : ""}
           />
           <Stat
             title="Female Working Full Time"
             year={workExperienceAvailable ? getFemaleFullTimeData[0].Year : ""}
             value={workExperienceAvailable ? formatPercentage(getFemaleFullTimeData[0].share) : "N/A"}
+            qualifier={workExperienceAvailable ? `of the full-time working population in ${getFemaleFullTimeData[0].Geography}` : ""}
           />
           <p>
-            {workExperienceAvailable ? <span>In {getMaleFullTimeData[0].Year}, the percentage of the working population in {getMaleFullTimeData[0].Geography} that worked full-time for men and women was {formatPercentage(getMaleFullTimeData[0].share)} and {formatPercentage(getFemaleFullTimeData[0].share)}, respectively.</span> : ""}
+            {workExperienceAvailable ? <span>In {getMaleFullTimeData[0].Year}, the percentage of the working population in {getMaleFullTimeData[0].Geography} that worked full-time was {formatPercentage(getMaleFullTimeData[0].share)} for men and {formatPercentage(getFemaleFullTimeData[0].share)} for women.</span> : ""}
             {employmentStatusAvailable ? <span> The most common unemployed age group for men was {getTopMaleUnemploymemtData.Age.toLowerCase()} ({formatPercentage(getTopMaleUnemploymemtData.share)}), and the most common female unemployed age group for women was {getTopFemaleUnemploymemtData.Age.toLowerCase()} ({formatPercentage(getTopFemaleUnemploymemtData.share)}).</span> : ""}
-            In {recentYearUnemploymentRate.Year}, the overall unemploymemt rate in {recentYearUnemploymentRate.Geography} was {formatPercentage(recentYearUnemploymentRate["Unemployment Rate"])}.
+            {} In {recentYearUnemploymentRate.Year}, the overall unemploymemt rate in {recentYearUnemploymentRate.Geography} was {formatPercentage(recentYearUnemploymentRate["Unemployment Rate"])}.
           </p>
-          <p>The following charts show the unemployment rate over time both{workExperienceAvailable ? <span> overall and by age and gender.</span> : "."}</p>
+          <p>The following charts show the unemployment rate over time for Wayne County overall and {getTopMaleUnemploymemtData.Geography === "Wayne County" ? "by age and gender" : <span> for {getTopMaleUnemploymemtData.Geography} by age and gender</span>}.</p>
 
           {/* Barchart to show population by age and gender over the years for selected geography. */}
           {workExperienceAvailable
@@ -142,7 +144,7 @@ Unemployment.defaultProps = {
 };
 
 Unemployment.need = [
-  fetchData("unemploymentRate", "/api/data?measures=Unemployment Rate&Geography=<id>&Year=latest"),
+  fetchData("unemploymentRate", "/api/data?measures=Unemployment Rate&Geography=<id>&Year=latest"), // only county level data available.
   fetchData("employmentStatus", "/api/data?measures=Population by Employment Status&drilldowns=Employment Status,Age,Sex&Geography=<id>&Year=latest", d => d.data),
   fetchData("workExperience", "/api/data?measures=Poverty by Work Experience&drilldowns=Work Experience,Sex&Geography=<id>&Year=latest", d => d.data)
 ];

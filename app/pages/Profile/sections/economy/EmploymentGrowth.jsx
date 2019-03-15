@@ -25,7 +25,7 @@ class EmploymentGrowth extends SectionColumns {
             title={"Zip Code with the largest employment growth"}
             year={topEmploymentRateData.Year}
             value={topEmploymentRateData.Zip}
-            qualifier={`${formatAbbreviate(topEmploymentRateData["Percent Change in Employment"])}%`}
+            qualifier={`(${formatAbbreviate(topEmploymentRateData["Percent Change in Employment"])}%)`}
           />
 
           <p>In {topEmploymentRateData.Year}, the zip code in Wayne County with the largest employment growth was {topEmploymentRateData.Zip} ({formatAbbreviate(topEmploymentRateData["Percent Change in Employment"])}%).</p>

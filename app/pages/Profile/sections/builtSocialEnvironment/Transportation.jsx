@@ -14,6 +14,7 @@ import rangeFormatter from "utils/rangeFormatter";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 const filterTimeBucket = d => d.split(" ").filter(d => d !== "Minutes").join("");
+const formatMinutes = d => d.replace("Minutes", "minute");
 
 const formatCommuteTimeData = commuteTimeData => {
   nest()
@@ -88,7 +89,7 @@ class Transportation extends SectionColumns {
         <SectionTitle>Transportation</SectionTitle>
         <article>
           <Stat
-            title="Most common commute"
+            title="Most common commute time"
             year={commuteTimeDataAvailable ? topRecentYearCommuteTime.Year : ""}
             value={commuteTimeDataAvailable ? topRecentYearCommuteTime["Travel Time"] : "N/A"}
             qualifier={commuteTimeDataAvailable ? formatPercentage(topRecentYearCommuteTime.share) : ""}
@@ -106,10 +107,10 @@ class Transportation extends SectionColumns {
             qualifier={numberOfVehiclesDataAvailable ? formatPercentage(topAverageVehiclesPerHousehold) : ""}
           />
           <p>
-            {commuteTimeDataAvailable ? <span>As of {topRecentYearCommuteTime.Year}, most of the workforce living in {topRecentYearCommuteTime.Geography} has a {topRecentYearCommuteTime["Travel Time"].toLowerCase()} commute ({formatPercentage(topRecentYearCommuteTime.share)}). </span> : ""}
+            {commuteTimeDataAvailable ? <span>As of {topRecentYearCommuteTime.Year}, most of the workforce living in {topRecentYearCommuteTime.Geography} has a {formatMinutes(topRecentYearCommuteTime["Travel Time"])} commute ({formatPercentage(topRecentYearCommuteTime.share)}). </span> : ""}
             {transportationMeansAvailable ? <span>The majority of commuters {topRecentYearModeOfTransport["Transportation Means"].toLowerCase()} to work ({formatPercentage(topRecentYearModeOfTransport.share)}).</span> : ""}
           </p>
-          <p>The following charts show the distribution of commute times, access to cars by gender, and share of commute means.</p>
+          <p>The following charts show the distribution of commute times, access to cars by gender, and percentages of means of transportation.</p>
 
           {/* Draw a Barchart for Number of vehicles in each household. */}
           {numberOfVehiclesDataAvailable

@@ -47,8 +47,6 @@ class Contact extends Component {
       .key(d => d.agency)
       .entries(data);
 
-    console.log(this.props);
-
     return (
       <div className="contact">
         <Tooltip2 className="contact-container" tooltipClassName="contact-tooltip" content={ `Community resources that relate to ${slug.replace(/\-/g, " ")} can be found here.` }>

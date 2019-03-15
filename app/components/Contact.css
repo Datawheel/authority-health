@@ -1,3 +1,5 @@
+@import "../css/mixins.css";
+
 .contact-button:not([class*="pt-intent-"]) {
   background-color: var(--brand-dark);
   background-image: none;

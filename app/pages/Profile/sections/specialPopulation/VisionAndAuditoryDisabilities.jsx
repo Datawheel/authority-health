@@ -80,32 +80,32 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
 
           <h3>Vision Difficulty</h3>
           <Stat
-            title="Male majority"
+            title="Male majority age group"
             year={visionDifficultyDataAvailable ? topMaleVisionDifficultyData.Year : visionDifficultyDataAvailable}
             value={visionDifficultyDataAvailable ? rangeFormatter(topMaleVisionDifficultyData.Age) : "N/A"}
-            qualifier={visionDifficultyDataAvailable ? formatPopulation(topMaleVisionDifficultyData.share) : ""}
+            qualifier={visionDifficultyDataAvailable ? `(${formatPopulation(topMaleVisionDifficultyData.share)})` : ""}
             theme="terra-cotta-dark"
           />
           <Stat
-            title="Female majority"
+            title="Female majority age group"
             year={visionDifficultyDataAvailable ? topFemaleVisionDifficultyData.Year : ""}
             value={visionDifficultyDataAvailable ? rangeFormatter(topFemaleVisionDifficultyData.Age) : "N/A"}
-            qualifier={visionDifficultyDataAvailable ? formatPopulation(topFemaleVisionDifficultyData.share) : ""}
+            qualifier={visionDifficultyDataAvailable ? `(${formatPopulation(topFemaleVisionDifficultyData.share)})` : ""}
           />
 
           <h3>Hearing Difficulty</h3>
           <Stat
-            title="Male majority "
-            year={topMaleHearingDifficultyData.Year}
-            value={rangeFormatter(topMaleHearingDifficultyData.Age)}
-            qualifier={formatPopulation(topMaleHearingDifficultyData.share)}
+            title="Male majority age group"
+            year={hearingDifficultyDataAvailable ? topMaleHearingDifficultyData.Year : ""}
+            value={hearingDifficultyDataAvailable ? rangeFormatter(topMaleHearingDifficultyData.Age) : "N/A"}
+            qualifier={hearingDifficultyDataAvailable ? `(${formatPopulation(topMaleHearingDifficultyData.share)})` : ""}
             theme="terra-cotta-dark"
           />
           <Stat
-            title="Female majority"
+            title="Female majority age group"
             year={hearingDifficultyDataAvailable ? topFemaleHearingDifficultyData.Year : ""}
             value={hearingDifficultyDataAvailable ? rangeFormatter(topFemaleHearingDifficultyData.Age) : "N/A"}
-            qualifier={hearingDifficultyDataAvailable ? formatPopulation(topFemaleHearingDifficultyData.share) : ""}
+            qualifier={hearingDifficultyDataAvailable ? `(${formatPopulation(topFemaleHearingDifficultyData.share)})` : ""}
           />
 
           <p>

@@ -100,7 +100,7 @@ class Immigrants extends SectionColumns {
     const immigrantsDataForCurrentLocationAvailable = immigrantsDataForCurrentLocation.length !== 0;
     const immigrantsPovertyDataForCurrentLocationAvailable = immigrantsPovertyDataForCurrentLocation.length !== 0;
 
-    let getImmigrantsDataForCurrentLocation;
+    let immigrantsDataCurrentLocation;
     if (immigrantsDataForCurrentLocationAvailable) {
       nest()
         .key(d => d.Year)
@@ -109,10 +109,10 @@ class Immigrants extends SectionColumns {
           const total = sum(group.values, d => d["Poverty by Nativity"]);
           group.values.forEach(d => total !== 0 ? d.share = d["Poverty by Nativity"] / total * 100 : d.share = 0);
         });
-      getImmigrantsDataForCurrentLocation = immigrantsDataForCurrentLocation.filter(d => d.Nativity === "Foreign Born");
+      immigrantsDataCurrentLocation = immigrantsDataForCurrentLocation.filter(d => d.Nativity === "Foreign Born");
     }
 
-    let getImmigrantsPovertyDataForCurrentLocation;
+    let immigrantsPovertyDataCurrentLocation;
     if (immigrantsPovertyDataForCurrentLocationAvailable) {
       nest()
         .key(d => d.Year)
@@ -121,7 +121,7 @@ class Immigrants extends SectionColumns {
           const total = sum(group.values, d => d["Poverty by Nativity"]);
           group.values.forEach(d => total !== 0 ? d.share = d["Poverty by Nativity"] / total * 100 : d.share = 0);
         });
-      getImmigrantsPovertyDataForCurrentLocation = immigrantsPovertyDataForCurrentLocation.filter((d => d.Nativity === "Foreign Born") && (d => d["ID Poverty Status"] === 0));
+      immigrantsPovertyDataCurrentLocation = immigrantsPovertyDataForCurrentLocation.filter((d => d.Nativity === "Foreign Born") && (d => d["ID Poverty Status"] === 0));
     }
 
     const topStats = totalImmigrantsSelected ? formatImmigrantsData(immigrantsData)[1] : formatImmigrantsPovertyData(immigrantsPovertyData)[1];
@@ -145,8 +145,9 @@ class Immigrants extends SectionColumns {
             ? <div>
               <Stat
                 title={"Immigrant population"}
-                year={getImmigrantsDataForCurrentLocation ? getImmigrantsDataForCurrentLocation[0].Year : ""}
-                value={getImmigrantsDataForCurrentLocation ? formatPopulation(getImmigrantsDataForCurrentLocation[0].share) : "N/A"}
+                year={immigrantsDataForCurrentLocationAvailable ? immigrantsDataCurrentLocation[0].Year : ""}
+                value={immigrantsDataForCurrentLocationAvailable ? formatPopulation(immigrantsDataCurrentLocation[0].share) : "N/A"}
+                qualifier={immigrantsDataForCurrentLocationAvailable ? `of the population in ${immigrantsDataCurrentLocation[0].Geography}` : ""}
               />
               <Stat
                 title="City with most immigrants"
@@ -155,16 +156,17 @@ class Immigrants extends SectionColumns {
                 qualifier={formatPopulation(topStats.share)}
               />
               <p>
-                {getImmigrantsDataForCurrentLocation ? <span>In {getImmigrantsDataForCurrentLocation[0].Year}, {formatPopulation(getImmigrantsDataForCurrentLocation[0].share)} of the population in {getImmigrantsDataForCurrentLocation[0].Geography} was immigrants.</span> : ""} {" "} 
+                {immigrantsDataForCurrentLocationAvailable ? <span>In {immigrantsDataCurrentLocation[0].Year}, {formatPopulation(immigrantsDataCurrentLocation[0].share)} of the population in {immigrantsDataCurrentLocation[0].Geography} was immigrants.</span> : ""} {" "} 
                 The city with the highest immigrant population in Wayne County was {topStats.Place} ({formatPopulation(topStats.share)}).
               </p>
-              {getImmigrantsDataForCurrentLocation ? <p>The map here shows the cities in {getImmigrantsDataForCurrentLocation[0].Geography} by their percentage of immigrants.</p> : ""}
+              {immigrantsDataForCurrentLocationAvailable ? <p>The map here shows the cities in {immigrantsDataCurrentLocation[0].Geography} by their percentage of immigrants.</p> : ""}
             </div>
             : <div>
               <Stat
                 title={"Immigrants in poverty"}
-                year={getImmigrantsPovertyDataForCurrentLocation ? getImmigrantsPovertyDataForCurrentLocation[0].Year : ""}
-                value={getImmigrantsPovertyDataForCurrentLocation ? formatPopulation(getImmigrantsPovertyDataForCurrentLocation[0].share) : "N/A"}
+                year={immigrantsPovertyDataForCurrentLocationAvailable ? immigrantsPovertyDataCurrentLocation[0].Year : ""}
+                value={immigrantsPovertyDataForCurrentLocationAvailable ? formatPopulation(immigrantsPovertyDataCurrentLocation[0].share) : "N/A"}
+                qualifier={immigrantsDataForCurrentLocationAvailable ? `of the population in ${immigrantsPovertyDataCurrentLocation[0].Geography}` : ""}
               />
               <Stat
                 title="City with most immigrants in poverty"
@@ -173,10 +175,10 @@ class Immigrants extends SectionColumns {
                 qualifier={formatPopulation(topStats.share)}
               />
               <p>
-                {getImmigrantsPovertyDataForCurrentLocation ? <span>In {getImmigrantsDataForCurrentLocation[0].Year}, {formatPopulation(getImmigrantsDataForCurrentLocation[0].share)} of the population in {getImmigrantsDataForCurrentLocation[0].Geography} was immigrants.</span> : ""}{" "}
+                {immigrantsPovertyDataForCurrentLocationAvailable ? <span>In {immigrantsDataCurrentLocation[0].Year}, {formatPopulation(immigrantsDataCurrentLocation[0].share)} of the population in {immigrantsDataCurrentLocation[0].Geography} was immigrants.</span> : ""}{" "}
                 The city with the highest immigrants in poverty in Wayne County was {topStats.Place} ({formatPopulation(topStats.share)}).
               </p>
-              {getImmigrantsPovertyDataForCurrentLocation ? <p>The map here shows the cities in {getImmigrantsPovertyDataForCurrentLocation[0].Geography} by their percentage of immigrants in poverty.</p> : "" }
+              {immigrantsPovertyDataForCurrentLocationAvailable ? <p>The map here shows the cities in {immigrantsPovertyDataCurrentLocation[0].Geography} by their percentage of immigrants in poverty.</p> : "" }
             </div>
           }
 

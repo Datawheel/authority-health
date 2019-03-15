@@ -12,6 +12,8 @@ import Stat from "components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
+const formatName = d => d.replace("Incarceration", "");
+
 const formatIncarcerationData = incarcerationData => {
   // Format data for Incarceration data Barchart and stats.
   const data = [];
@@ -85,16 +87,16 @@ class Incarceration extends SectionColumns {
             title="Most common crime"
             year={topOffenceData.Year}
             value={`${topOffenceData.Offense}`}
-            qualifier={formatPercentage(topOffenceData.share)}
+            qualifier={`(${formatPercentage(topOffenceData.share)})`}
           />
           <Stat
             title="Most common punishment"
             year={topPunishmentData.Year}
-            value={`${topPunishmentData.Punishment}`}
-            qualifier={formatPercentage(topPunishmentData.share)}
+            value={`${formatName(topPunishmentData.Punishment)}`}
+            qualifier={`(${formatPercentage(topPunishmentData.share)})`}
           />
           <p>In {topIncarcerationData.Year}, the most common crime in {topIncarcerationData.Geography} was {topOffenceData.Offense.toLowerCase()} ({formatPercentage(topOffenceData.share)}) and the most common punishment was {topPunishmentData.Punishment.toLowerCase()} ({formatPercentage(topPunishmentData.share)}).</p>
-          <p>The chart here shows the types of offenses for each incarceration type.</p>
+          <p>This chart shows the percentages of punishments broken down by offense type for all convicted crimes in {topIncarcerationData.Geography}.</p>
           <Contact slug={this.props.slug} />
         </article>
 
@@ -106,7 +108,7 @@ class Incarceration extends SectionColumns {
           stacked: true,
           label: d => `${d.Offense}`,
           groupBy: "Offense",
-          x: "Punishment",
+          x: d => formatName(d.Punishment),
           y: "share",
           time: "Year",
           yConfig: {tickFormat: d => formatPercentage(d)},
@@ -114,7 +116,7 @@ class Incarceration extends SectionColumns {
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Punishment", d => d.Punishment], ["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["County", d => d.Geography]]}
+          tooltipConfig: {tbody: [["Punishment", d => formatName(d.Punishment)], ["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["County", d => d.Geography]]}
         }}
         dataFormat={resp => formatIncarcerationData(resp)[0]} // pass resp and not resp.data since we access .data in the formatIncarcerationData() function.
         />

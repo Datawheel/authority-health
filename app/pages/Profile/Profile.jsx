@@ -177,7 +177,7 @@ class Profile extends Component {
         <TopicTitle slug="special-population">
           <div className="section-container">
             <Icon iconName="people" />
-            Special Population
+            Special Populations
           </div>
         </TopicTitle>
         <div className="section-container">

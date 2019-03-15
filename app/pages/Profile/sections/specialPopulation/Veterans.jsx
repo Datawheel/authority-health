@@ -101,12 +101,12 @@ class Veterans extends SectionColumns {
             title={"Most common period of service"}
             year={periodOfServiceAvailable ? topPeriodOfService.Year : ""}
             value={periodOfServiceAvailable ? topPeriodOfService["Period of Service"] : "N/A"}
-            qualifier={periodOfServiceAvailable ? formatPercentage(topPeriodOfService.share) : ""}
+            qualifier={periodOfServiceAvailable ? `(${formatPercentage(topPeriodOfService.share)})` : ""}
           />
 
-          {periodOfServiceAvailable ? <p>In {topPeriodOfService.Year}, the most common period of service by {topPeriodOfService.Geography} veterans was served in {topPeriodOfService["Period of Service"]} ({formatPercentage(topPeriodOfService.share)}).</p> : ""}
-          <p>The unemployed veterans population was {veteransEmploymentStatusAvailable ? formatPercentage(topEmploymentStatus.share) : "N/A"}, while the impoverished population was {veteransPovertyStatusAvailable ? formatPercentage(veteransPovertyStatus[0].share) : ""} and the disabled veterans population was {veteransDisabilityStatusAvailable ? formatPercentage(veteransDisabilityStatus[0].share) : "N/A"}</p>
-          {periodOfServiceAvailable ? <p>The chart here shows the period of service by veterans.</p> : ""}
+          {periodOfServiceAvailable ? <p>In {topPeriodOfService.Year}, the most common period of service for veterans in {topPeriodOfService.Geography} was {topPeriodOfService["Period of Service"]} ({formatPercentage(topPeriodOfService.share)}).</p> : ""}
+          <p>In {topEmploymentStatus.Year}, the unemployed veterans population of {topEmploymentStatus.Geography} was {veteransEmploymentStatusAvailable ? formatPercentage(topEmploymentStatus.share) : "N/A"}, while the impoverished population was {veteransPovertyStatusAvailable ? formatPercentage(veteransPovertyStatus[0].share) : ""} and the disabled veterans population was {veteransDisabilityStatusAvailable ? formatPercentage(veteransDisabilityStatus[0].share) : "N/A"}</p>
+          {periodOfServiceAvailable ? <p>The chart here shows the percentages of veterans that served in each period of service.</p> : ""}
           <Contact slug={this.props.slug} />
         </article>
 

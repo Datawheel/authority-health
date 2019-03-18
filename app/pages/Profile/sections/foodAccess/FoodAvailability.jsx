@@ -1,7 +1,7 @@
 import React from "react";
 import {connect} from "react-redux";
 import {format} from "d3-format";
-import {Treemap} from "d3plus-react";
+import {Pie} from "d3plus-react";
 import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
@@ -64,13 +64,13 @@ class FoodAvailability extends SectionColumns {
           <Contact slug={this.props.slug} />
         </article>
 
-        {/* Draw a Treemap to show types of stores and restaurants. */}
-        <Treemap config={{
+        {/* Draw a Pie chart to show types of stores and restaurants. */}
+        <Pie config={{
           data,
           groupBy: ["Group", "Sub-category"],
           label: d => d["Sub-category"] instanceof Array ? titleCase(d.Group) : titleCase(d["Sub-category"]),
           height: 400,
-          sum: d => d["Number of Food Stores"],
+          value: d => d["Number of Food Stores"],
           tooltipConfig: {tbody: [["Count", d => `${commas(d["Number of Food Stores"])} in ${d.Year}`], ["County", d => d.Geography]]}
         }}
         />

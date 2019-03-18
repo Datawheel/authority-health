@@ -1,6 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
-import {Geomap, Treemap} from "d3plus-react";
+import {Geomap, Treemap, Pie} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 import axios from "axios";
 
@@ -90,10 +90,10 @@ class RiskyBehaviors extends SectionColumns {
           {/* Draw a Treemap to show smoking status: former, current & never. */}
           {dropdownValue === drugTypes[0]
             ? <div>
-              <Treemap config={{
+              <Pie config={{
                 data: `/api/data?measures=Smoking Status Current,Smoking Status Former,Smoking Status Never&drilldowns=End Year&Geography=${id}`, // MiBRFS - All Years
                 height: 250,
-                sum: d => d[d.SmokingType],
+                value: d => d[d.SmokingType],
                 legend: false,
                 groupBy: "SmokingType",
                 label: d => {

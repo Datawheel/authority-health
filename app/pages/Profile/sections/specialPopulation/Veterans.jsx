@@ -121,7 +121,7 @@ class Veterans extends SectionColumns {
             x: d => d["Period of Service"],
             y: "share",
             time: "Year",
-            xSort: (a, b) => a["ID Period of Service"] - b["ID Period of Service"],
+            xSort: (a, b) => b["ID Period of Service"] - a["ID Period of Service"],
             xConfig: {
               labelRotation: false,
               title: "Period of Service"

@@ -31,7 +31,7 @@ class Glossary extends Component {
         </Tooltip2>
         <Dialog className="glossary-dialog" title={title} iconName={icon} isOpen={open} onClose={toggle}>
           <div className="pt-dialog-body">
-            <ul className="agency-list">
+            <ul className="glossary-list">
               { definitions.map(d => {
                 const term = d.term;
                 const definition = d.definition;

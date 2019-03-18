@@ -30,10 +30,10 @@
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
-    & .glossary-list {
-      list-style: none;
-      margin: 10px 0 25px;
-      padding-left: 0;
+  & .glossary-list {
+    list-style: none;
+    margin: 25px;
+    padding-left: 0;
       & .glossary {
         margin-bottom: 10px;
         & .glossary-subAgency, & .glossary-title {
@@ -49,7 +49,7 @@
             font-size: 10px;
             margin-right: 8px;
           }
-        }
+      }
     }
   }
 }

@@ -1,0 +1,6 @@
+@import "../css/mixins.css";
+
+.definition-tooltip {
+  @mixin font-sm;
+  width: 300px;
+}

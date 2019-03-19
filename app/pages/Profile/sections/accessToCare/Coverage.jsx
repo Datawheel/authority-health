@@ -81,7 +81,6 @@ class Coverage extends SectionColumns {
             <p>In {ageGroupYear}, the age groups most likely to have health care coverage in {maleCoverageData[0].Geography} are {topMaleAgeGroup} and {topFemaleAgeGroup} years, for men and women respectively.</p>
             <p>The map here shows share of population with health insurance coverage for places in Wayne County.</p>
             <p>The following chart shows the male and female age groups with health insurance coverage in {maleCoverageData[0].Geography}.</p>
-            <Contact slug={this.props.slug} />
 
             <BarChart config={{
               data: `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status,Sex,Age&Geography=${geoId}&Year=all`,
@@ -105,6 +104,7 @@ class Coverage extends SectionColumns {
             }}
             dataFormat={resp => formatCoverageData(resp.data)}
             />
+            <Contact slug={this.props.slug} />
           </article>
 
           <Geomap config={{

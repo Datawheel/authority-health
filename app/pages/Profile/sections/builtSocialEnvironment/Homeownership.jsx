@@ -10,6 +10,8 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
 import Stat from "components/Stat";
+import CensusTractDefinition from "components/CensusTractDefinition";
+
 const formatPropertyValue = d => `$${formatAbbreviate(d)}`;
 const commas = format(",d");
 
@@ -59,7 +61,7 @@ class Homeownership extends SectionColumns {
           />
           <p>{medianHousingUnitsValueForProfileAvailable ? <span>In {topMedianHousingUnitsValueForProfile.Year}, the median property value in {topMedianHousingUnitsValueForProfile.Geography}, was ${commas(topMedianHousingUnitsValueForProfile["Property Value"])}.</span> : ""} </p>
           <p>{occupancyDataAvailable ? <span>{formatAbbreviate(topOccupancyData.share)}% of households in {topOccupancyData.Geography} were occupied in {topOccupancyData.Year}.</span> : ""}</p>
-          <p>The following map shows the median property value for tracts in Wayne County.</p>
+          <p>The following map shows the median property value for <CensusTractDefinition text="census tracts" /> in Wayne County.</p>
           <Contact slug={this.props.slug} />
         </article>
 

@@ -7,6 +7,7 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
 import Stat from "components/Stat";
+import CensusTractDefinition from "components/CensusTractDefinition";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -51,7 +52,7 @@ class PhysicalInactivity extends SectionColumns {
             value={formatPercentage(topPhysicalInactivityFemaleData["Age-Adjusted Physical Inactivity"])}
             qualifier={`of female population in ${topPhysicalInactivityFemaleData.Geography}`}
           />
-          <p>In {topRecentYearData.Year}, {formatPercentage(topRecentYearData["Physical Inactivity"])} of the population of {topRecentYearData.Tract} had the highest prevalence of physical inactivity out of all census tracts in Detroit, Livonia, Dearborn and Westland.</p>
+          <p>In {topRecentYearData.Year}, {formatPercentage(topRecentYearData["Physical Inactivity"])} of the population of <CensusTractDefinition text={topRecentYearData.Tract} /> had the highest prevalence of physical inactivity out of all census tracts in Detroit, Livonia, Dearborn and Westland.</p>
           <p>In {topPhysicalInactivityFemaleData.Year}, {formatPercentage(topPhysicalInactivityMaleData["Age-Adjusted Physical Inactivity"])} of the male population in {topPhysicalInactivityFemaleData.Geography} were physically inactive as compared to the {formatPercentage(topPhysicalInactivityFemaleData["Age-Adjusted Physical Inactivity"])} of female population.</p>
           
           <p>Following barchart shows the physical inactivity rate for male and female in {topPhysicalInactivityFemaleData.Geography} and the map shows physical inactivity rate for census tracts in Detroit, Livonia, Dearborn and Westland.</p>

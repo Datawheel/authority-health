@@ -8,6 +8,8 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
 import Stat from "components/Stat";
+import ZipRegionDefinition from "components/ZipRegionDefinition";
+import CensusTractDefinition from "components/CensusTractDefinition";
 
 const formatPercentage = (d, mutiplyBy100 = false) => mutiplyBy100 ? `${formatAbbreviate(d * 100)}%` : `${formatAbbreviate(d)}%`;
 
@@ -86,8 +88,8 @@ class PreventiveCare extends SectionColumns {
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           {isPreventativeCareWeightedValueSelected
-            ? <p>In {topDropdownData["End Year"]}, {formatPercentage(topDropdownData[dropdownValue], true)} of the population of zip region {topDropdownData["Zip Region"]} had the highest share of {dropdownValue} out of all zip regions in Wayne County.</p>
-            : <p>In {topDropdownData.Year}, {formatPercentage(topDropdownData[dropdownValue])} of the population of {topDropdownData.Tract} had the highest share of {dropdownValue.toLowerCase()} out of all tracts in Detroit, Livonia, Dearborn and Westland.</p>
+            ? <p>In {topDropdownData["End Year"]}, {formatPercentage(topDropdownData[dropdownValue], true)} of the population of <ZipRegionDefinition text="zip region" /> {topDropdownData["Zip Region"]} had the highest share of {dropdownValue} out of all zip regions in Wayne County.</p>
+            : <p>In {topDropdownData.Year}, {formatPercentage(topDropdownData[dropdownValue])} of the population of <CensusTractDefinition text={topDropdownData.Tract}/> had the highest share of {dropdownValue.toLowerCase()} out of all tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
           {isPreventativeCareWeightedValueSelected
             ? <p>The map here shows the {dropdownValue.toLowerCase()} for zip regions in Wayne County.</p>

@@ -6,8 +6,20 @@ import {formatAbbreviate} from "d3plus-format";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
+import Glossary from "components/Glossary";
 import Stat from "components/Stat";
 import zipcodes from "utils/zipcodes";
+
+const definitions = [
+  {term: "The Distressed Communities Index (DCI) combines seven complementary economic indicators into a single holistic and comparative measure of community well-being. The seven component metrics of the DCI are", definition: ""},
+  {term: "1. No high school diploma", definition: "Percent of the 25+ population without a high school diploma or equivalent."},
+  {term: "2. Housing vacancy rate", definition: "Percent of habitable housing that is unoccupied, excluding properties that are for seasonal, recreational, or occasional use."},
+  {term: "3. Adults not working", definition: "Percent of the prime-age population (25-64) not currently in work."},
+  {term: "4. Poverty rate", definition: "Percent of the population living under the poverty line."},
+  {term: "5. Median income ratio", definition: "Median household income as a percent of the state’s median household income (to account for cost of living differences across states)."},
+  {term: "6. Change in employment", definition: "Percent change in the number of jobs."},
+  {term: "7. Change in establishments", definition: "Percent change in the number of business establishments."}
+];
 
 class DistressScore extends SectionColumns {
 
@@ -29,18 +41,8 @@ class DistressScore extends SectionColumns {
             qualifier={`(${formatAbbreviate(topDistressScoreData["Distress Score"])} percentile)`}
           />
           <p>In {topDistressScoreData.Year}, the maximum distress score was observed in the zip code {topDistressScoreData.Zip} with {formatAbbreviate(topDistressScoreData["Distress Score"])} percentile with 0 percentile being least distressed (desired outcome) and 100 percentile being most distressed (unfavorable outcome).</p>
-          <p>The Distressed Communities Index (DCI) combines seven complementary economic indicators into a single holistic and comparative measure of community well-being. {}
-          The seven component metrics of the DCI are:</p>
-          <ol>
-            <li><b>No high school diploma:</b> Percent of the 25+ population without a high school diploma or equivalent</li>
-            <li><b>Housing vacancy rate:</b> Percent of habitable housing that is unoccupied, excluding properties that are for seasonal, recreational, or occasional use</li>
-            <li><b>Adults not working:</b> Percent of the prime-age population (25-64) not currently in work</li>
-            <li><b>Poverty rate:</b> Percent of the population living under the poverty line</li>
-            <li><b>Median income ratio:</b> Median household income as a percent of the state’s median household income (to account for cost of living differences across states)</li>
-            <li><b>Change in employment:</b> Percent change in the number of jobs</li>
-            <li><b>Change in establishments:</b> Percent change in the number of business establishments</li>
-          </ol>
           <p>The following map shows the distress score percentile for each zip code in Wayne County.</p>
+          <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
         </article>
 

@@ -72,7 +72,7 @@ class FoodStamps extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Food Stamps</SectionTitle>
         <article>
-          {isSnapWicDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing food stamps data for {snapWicData.data[0].Geography}.</div>}
+          {isSnapWicDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing food stamps data for {snapWicData.data[0].Geography}</div>}
           <Stat
             title="SNAP-authorized stores"
             year={snapLatestYear}

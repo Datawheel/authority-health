@@ -22,6 +22,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
     this.state = {
       dropdownValue: "Arthritis",
       healthConditionWeightedData: [],
+      countyLevelData: [],
       healthConditionData: this.props.healthConditionData
     };
   }
@@ -38,10 +39,14 @@ class ConditionsAndChronicDiseases extends SectionColumns {
     dropdownValue === "Gen Health Fair Or Poor") { 
       axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=latest`)
         .then(resp => {
-          this.setState({
-            healthConditionWeightedData: resp.data.data,
-            dropdownValue
-          });
+          axios.get(`/api/data?measures=${dropdownValue}&Geography=05000US26163&Year=latest`) // Get Wayne County data for comparison. Only available for MiBRFS cube and not 500 cities.
+            .then(d => {
+              this.setState({
+                healthConditionWeightedData: resp.data.data,
+                countyLevelData: d.data.data,
+                dropdownValue
+              });
+            });
         }); 
     }
     else {
@@ -57,7 +62,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
 
   render() {
     // Include all the measures in the dropdown list.
-    const {dropdownValue, healthConditionData, healthConditionWeightedData} = this.state;
+    const {dropdownValue, healthConditionData, healthConditionWeightedData, countyLevelData} = this.state;
     const dropdownList = ["Arthritis", "COPD", "Chronic Kidney Disease", "Coronary Heart Disease", "Current Asthma", "High Blood Pressure", "High Cholesterol", 
       "Mental Health", "Stroke", "Teeth Loss", "Cardiovascular Disease", "Ever Depressive", 
       "Ever Heart Attack", "Heart Disease", "Poor Mental Health 14 Or More Days", "Physical Health", "Gen Health Fair Or Poor"];
@@ -112,7 +117,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           { isHealthConditionWeightedValueSelected
-            ? <p>In {topDropdownWeightedData["End Year"]}, {formatPercentage(topDropdownWeightedData[dropdownValue], true)} of the population of <ZipRegionDefinition text="zip region" /> {topDropdownWeightedData["Zip Region"]} had the highest prevalence of {dropdownValue.toLowerCase()} out of all zip regions in Wayne County.</p>
+            ? <p>In {topDropdownWeightedData["End Year"]}, {formatPercentage(topDropdownWeightedData[dropdownValue], true)} of the population of <ZipRegionDefinition text="zip region" /> {topDropdownWeightedData["Zip Region"]} had the highest prevalence of {dropdownValue.toLowerCase()} out of all zip regions in Wayne County, as compared to {formatPercentage(countyLevelData[0][dropdownValue], true)} in Wayne County.</p>
             : <p>In {topDropdownValueTract.Year}, {formatPercentage(topDropdownValueTract[dropdownValue])} of the population of <CensusTractDefinition text={topDropdownValueTract.Tract} /> had the highest prevalence of {formatDropdownChoiceName(dropdownValue).toLowerCase()} out of all the tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
           { isHealthConditionWeightedValueSelected

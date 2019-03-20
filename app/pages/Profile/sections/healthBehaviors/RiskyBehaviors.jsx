@@ -20,6 +20,7 @@ class RiskyBehaviors extends SectionColumns {
     this.state = {
       dropdownValue: "Current Smoking",
       secondHandSmokeAndMonthlyAlcohol: [],
+      countyLevelData: [],
       allTractSmokingDrinkingData: this.props.allTractSmokingDrinkingData
     };
   }
@@ -30,10 +31,14 @@ class RiskyBehaviors extends SectionColumns {
     if (dropdownValue === "Secondhand Smoke Exposure" || dropdownValue === "Monthly Alcohol Consumption") { 
       axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=latest`)
         .then(resp => {
-          this.setState({
-            secondHandSmokeAndMonthlyAlcohol: resp.data.data,
-            dropdownValue
-          });
+          axios.get(`/api/data?measures=${dropdownValue}&Geography=05000US26163&Year=latest`) // Get Wayne County data for comparison. Only available for MiBRFS cube and not 500 cities.
+            .then(d => {
+              this.setState({
+                secondHandSmokeAndMonthlyAlcohol: resp.data.data,
+                countyLevelData: d.data.data,
+                dropdownValue
+              });
+            });
         });
     }
     else {
@@ -49,7 +54,7 @@ class RiskyBehaviors extends SectionColumns {
 
   render() {
     const {id} = this.props.meta;
-    const {dropdownValue, secondHandSmokeAndMonthlyAlcohol, allTractSmokingDrinkingData} = this.state;
+    const {dropdownValue, secondHandSmokeAndMonthlyAlcohol, allTractSmokingDrinkingData, countyLevelData} = this.state;
 
     const drugTypes = ["Current Smoking", "Binge Drinking", "Secondhand Smoke Exposure", "Monthly Alcohol Consumption"];
 
@@ -80,7 +85,7 @@ class RiskyBehaviors extends SectionColumns {
           />
           {isSecondHandSmokeOrMonthlyAlcoholSelected
             ? <div>
-              <p>In {topSecondHandSmokeAndMonthlyAlcoholData["End Year"]}, {formatPercentage(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue], true)} of the population of <ZipRegionDefinition text="zip region" /> {topSecondHandSmokeAndMonthlyAlcoholData["Zip Region"]} had the highest prevalence of {dropdownValue.toLowerCase()}.</p>
+              <p>In {topSecondHandSmokeAndMonthlyAlcoholData["End Year"]}, {formatPercentage(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue], true)} of the population of <ZipRegionDefinition text="zip region" /> {topSecondHandSmokeAndMonthlyAlcoholData["Zip Region"]} had the highest prevalence of {dropdownValue.toLowerCase()}, as compared to {formatPercentage(countyLevelData[0][dropdownValue], true)} in Wayne County.</p>
               <p>The map here shows the {dropdownValue.toLowerCase()} for zip regions in Wayne County.</p>
             </div>
             : <div>
@@ -88,6 +93,8 @@ class RiskyBehaviors extends SectionColumns {
               <p>The map here shows the {dropdownValue.toLowerCase()} prevalence for tracts in Detroit, Livonia, Dearborn and Westland and the barchart shows the former, current and never smoking status in Wayne County.</p>
             </div>
           }
+
+          {dropdownValue === drugTypes[0] ? <p>The pie chart here shows the percentage of former, current and never smoking status of the population in Wayne County.</p> : ""}
 
           {/* Draw a Treemap to show smoking status: former, current & never. */}
           {dropdownValue === drugTypes[0]

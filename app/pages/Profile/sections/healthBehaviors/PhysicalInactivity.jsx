@@ -15,7 +15,7 @@ class PhysicalInactivity extends SectionColumns {
 
   render() {
 
-    const {meta, physicalInactivity, physicalInactivityPrevalenceBySex} = this.props;
+    const {meta, physicalInactivity, physicalInactivityPrevalenceBySex, stateLevelDataBySex} = this.props;
     const isPhysicalInactivityBySexAvailableForCurrentlocation = physicalInactivityPrevalenceBySex.source[0].substitutions.length === 0;
 
     // We don't find latest year data here (as we usually do for other topics) since we have only 1 year data for physical inactivity and physical health.
@@ -24,6 +24,10 @@ class PhysicalInactivity extends SectionColumns {
     // Find recent year top data for physicalInactivityPrevalenceBySex.
     const topPhysicalInactivityMaleData = physicalInactivityPrevalenceBySex.data.filter(d => d.Sex === "Male")[0];
     const topPhysicalInactivityFemaleData = physicalInactivityPrevalenceBySex.data.filter(d => d.Sex === "Female")[0];
+
+    // Find recent year data for stateLevelDataBySex.
+    const stateLevelMaleData = stateLevelDataBySex.filter(d => d.Sex === "Male")[0];
+    const stateLevelFemaleData = stateLevelDataBySex.filter(d => d.Sex === "Female")[0];
 
     return (
       <SectionColumns>
@@ -53,8 +57,7 @@ class PhysicalInactivity extends SectionColumns {
             qualifier={`of female population in ${topPhysicalInactivityFemaleData.Geography}`}
           />
           <p>In {topRecentYearData.Year}, {formatPercentage(topRecentYearData["Physical Inactivity"])} of the population of <CensusTractDefinition text={topRecentYearData.Tract} /> had the highest prevalence of physical inactivity out of all census tracts in Detroit, Livonia, Dearborn and Westland.</p>
-          <p>In {topPhysicalInactivityFemaleData.Year}, {formatPercentage(topPhysicalInactivityMaleData["Age-Adjusted Physical Inactivity"])} of the male population in {topPhysicalInactivityFemaleData.Geography} were physically inactive as compared to the {formatPercentage(topPhysicalInactivityFemaleData["Age-Adjusted Physical Inactivity"])} of female population.</p>
-          
+          <p>In {topPhysicalInactivityFemaleData.Year}, {formatPercentage(topPhysicalInactivityMaleData["Age-Adjusted Physical Inactivity"])} of the male population and {formatPercentage(topPhysicalInactivityFemaleData["Age-Adjusted Physical Inactivity"])} of the female population in {topPhysicalInactivityFemaleData.Geography} were physically inactive as compared to {formatPercentage(stateLevelMaleData["Age-Adjusted Physical Inactivity"])} of male and {formatPercentage(stateLevelFemaleData["Age-Adjusted Physical Inactivity"])} female population in Michigan.</p>
           <p>Following barchart shows the physical inactivity rate for male and female in {topPhysicalInactivityFemaleData.Geography} and the map shows physical inactivity rate for census tracts in Detroit, Livonia, Dearborn and Westland.</p>
 
           {/* Draw a BarChart to show data for Physical Inactivity by Sex. */}
@@ -110,13 +113,15 @@ PhysicalInactivity.defaultProps = {
 
 PhysicalInactivity.need = [
   fetchData("physicalInactivity", "/api/data?measures=Physical Inactivity&drilldowns=Tract&Year=latest", d => d.data), // only 1 year data available
-  fetchData("physicalInactivityPrevalenceBySex", "/api/data?measures=Age-Adjusted Physical Inactivity&drilldowns=Sex&Geography=<id>&Year=latest")
+  fetchData("physicalInactivityPrevalenceBySex", "/api/data?measures=Age-Adjusted Physical Inactivity&drilldowns=Sex&Geography=<id>&Year=latest"),
+  fetchData("stateLevelDataBySex", "/api/data?measures=Age-Adjusted Physical Inactivity&drilldowns=Sex&State=04000US26&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   meta: state.data.meta,
   physicalInactivity: state.data.physicalInactivity,
-  physicalInactivityPrevalenceBySex: state.data.physicalInactivityPrevalenceBySex
+  physicalInactivityPrevalenceBySex: state.data.physicalInactivityPrevalenceBySex,
+  stateLevelDataBySex: state.data.stateLevelDataBySex
 });
 
 export default connect(mapStateToProps)(PhysicalInactivity);

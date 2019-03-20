@@ -20,6 +20,7 @@ class PreventiveCare extends SectionColumns {
     this.state = {
       dropdownValue: "Annual Checkup",
       preventiveCareWeightedData: [],
+      countyLevelData: [],
       preventiveCareData: this.props.preventiveCareData,
       isPreventativeCareWeightedValueSelected: false
     };
@@ -35,11 +36,15 @@ class PreventiveCare extends SectionColumns {
     dropdownValue === "HIV Tested") { 
       axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=latest`) // MiBRFS - All Years
         .then(resp => {
-          this.setState({
-            preventiveCareWeightedData: resp.data.data,
-            isPreventativeCareWeightedValueSelected: true,
-            dropdownValue
-          });
+          axios.get(`/api/data?measures=${dropdownValue}&Geography=05000US26163&Year=latest`) // Get Wayne County data for comparison. Only available for MiBRFS cube and not 500 cities.
+            .then(d => {
+              this.setState({
+                preventiveCareWeightedData: resp.data.data,
+                isPreventativeCareWeightedValueSelected: true,
+                countyLevelData: d.data.data,
+                dropdownValue
+              });
+            });
         }); 
     }
     else {
@@ -55,7 +60,7 @@ class PreventiveCare extends SectionColumns {
   }
 
   render() {
-    const {dropdownValue, preventiveCareData, preventiveCareWeightedData, isPreventativeCareWeightedValueSelected} = this.state;
+    const {dropdownValue, preventiveCareData, preventiveCareWeightedData, isPreventativeCareWeightedValueSelected, countyLevelData} = this.state;
     const dropdownList = ["Annual Checkup", "Core Preventive Services for Older Men", "Core Preventive Services for Older Women", 
       "Dental Visit", "Colorectal Cancer Screening", "Pap Smear Test", "Mammography", "Cholesterol Screening", "Taking Blood Pressure Medication", "Had Flu Vaccine", 
       "Sleep Less Than 7 Hours", "Had Pneumonia Vaccine", "Had Routine Checkup Last Year", "FOBT or Endoscopy", "HIV Tested"];
@@ -88,7 +93,7 @@ class PreventiveCare extends SectionColumns {
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           {isPreventativeCareWeightedValueSelected
-            ? <p>In {topDropdownData["End Year"]}, {formatPercentage(topDropdownData[dropdownValue], true)} of the population of <ZipRegionDefinition text="zip region" /> {topDropdownData["Zip Region"]} had the highest share of {dropdownValue} out of all zip regions in Wayne County.</p>
+            ? <p>In {topDropdownData["End Year"]}, {formatPercentage(topDropdownData[dropdownValue], true)} of the population of <ZipRegionDefinition text="zip region" /> {topDropdownData["Zip Region"]} had the highest share of {dropdownValue.toLowerCase()}, as compared to {formatPercentage(countyLevelData[0][dropdownValue], true)} in Wayne County.</p>
             : <p>In {topDropdownData.Year}, {formatPercentage(topDropdownData[dropdownValue])} of the population of <CensusTractDefinition text={topDropdownData.Tract}/> had the highest share of {dropdownValue.toLowerCase()} out of all tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
           {isPreventativeCareWeightedValueSelected

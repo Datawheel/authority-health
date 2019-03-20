@@ -27,7 +27,8 @@ class ObesityAndDiabetes extends SectionColumns {
       meta: this.props.meta,
       dropdownValue: "Diabetes",
       BMIWeightedData: [],
-      obesityPrevalenceBySex: []
+      obesityPrevalenceBySex: [],
+      stateLevelObesityPrevalenceBySex: []
     };
   }
 
@@ -43,11 +44,15 @@ class ObesityAndDiabetes extends SectionColumns {
         .then(resp => {
           axios.get(`/api/data?measures=Age-Adjusted Obesity Prevalence&drilldowns=Sex&Geography=${geoId}&Year=latest`) // CDC Wonder - Obesity Prevalence by Sex
             .then(d => {
-              this.setState({
-                obesityPrevalenceBySex: d.data.data,
-                BMIWeightedData: resp.data.data,
-                dropdownValue
-              });
+              axios.get("/api/data?measures=Age-Adjusted Obesity Prevalence&drilldowns=Sex&State=04000US26&Year=latest") // CDC Wonder - Obesity Prevalence by Sex
+                .then(stateData => {
+                  this.setState({
+                    stateLevelObesityPrevalenceBySex: stateData.data.data,
+                    obesityPrevalenceBySex: d.data.data,
+                    BMIWeightedData: resp.data.data,
+                    dropdownValue
+                  });
+                });
             });
         });
     }
@@ -61,11 +66,15 @@ class ObesityAndDiabetes extends SectionColumns {
 
           axios.get(`/api/data?measures=Age-Adjusted Obesity Prevalence&drilldowns=Sex&Geography=${geoId}&Year=latest`) // CDC Wonder - Obesity Prevalence by Sex
             .then(d => {
-              this.setState({
-                obesityPrevalenceBySex: d.data.data,
-                BMIWeightedData: topRecentYearData,
-                dropdownValue
-              });
+              axios.get("/api/data?measures=Age-Adjusted Obesity Prevalence&drilldowns=Sex&State=04000US26&Year=latest") // CDC Wonder - Obesity Prevalence by Sex (State data)
+                .then(stateData => {
+                  this.setState({
+                    stateLevelObesityPrevalenceBySex: stateData.data.data,
+                    obesityPrevalenceBySex: d.data.data,
+                    BMIWeightedData: topRecentYearData,
+                    dropdownValue
+                  });
+                });
             });
         });
     }
@@ -74,10 +83,10 @@ class ObesityAndDiabetes extends SectionColumns {
 
   render() {
 
-    const {obesityAndDibetesDataValue, diabetesPrevalenceBySex} = this.props;
+    const {obesityAndDibetesDataValue, diabetesPrevalenceBySex, stateLevelDiabetesPrevalenceBySex} = this.props;
 
     // Include all the measures from obesityAndDibetesDataValue and BMIWeightedData in the dropdown list.
-    const {meta, dropdownValue, obesityPrevalenceBySex, BMIWeightedData} = this.state;
+    const {meta, dropdownValue, obesityPrevalenceBySex, BMIWeightedData, stateLevelObesityPrevalenceBySex} = this.state;
     const dropdownList = ["Diabetes", "Obesity", "BMI Healthy Weight", "BMI Obese", "BMI Overweight", "BMI Underweight"];
 
     // Check if the selected dropdown value is from the BMIWeightedData.
@@ -97,14 +106,18 @@ class ObesityAndDiabetes extends SectionColumns {
     const topDropdownValueTract = obesityAndDibetesDataValue.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
 
     // Find top stats data.
-    let topDiabetesFemaleData, topDiabetesMaleData, topObesityFemaleData, topObesityMaleData;
+    let stateLevelFemaleDiabetes, stateLevelFemaleObesity, stateLevelMaleDiabetes, stateLevelMaleObesity, topDiabetesFemaleData, topDiabetesMaleData, topObesityFemaleData, topObesityMaleData;
     if (isDiabetesSelected) {
       topDiabetesMaleData = diabetesPrevalenceBySex.filter(d => d.Sex === "Male")[0];
       topDiabetesFemaleData = diabetesPrevalenceBySex.filter(d => d.Sex === "Female")[0];
+      stateLevelMaleDiabetes = stateLevelDiabetesPrevalenceBySex.filter(d => d.Sex === "Male")[0];
+      stateLevelFemaleDiabetes = stateLevelDiabetesPrevalenceBySex.filter(d => d.Sex === "Female")[0];
     }
     else {
       topObesityMaleData = obesityPrevalenceBySex.filter(d => d.Sex === "Male")[0];
       topObesityFemaleData = obesityPrevalenceBySex.filter(d => d.Sex === "Female")[0];
+      stateLevelMaleObesity = stateLevelObesityPrevalenceBySex.filter(d => d.Sex === "Male")[0];
+      stateLevelFemaleObesity = stateLevelObesityPrevalenceBySex.filter(d => d.Sex === "Female")[0];
     }
 
     const topMaleData = isDiabetesSelected ? topDiabetesMaleData : topObesityMaleData;
@@ -161,8 +174,10 @@ class ObesityAndDiabetes extends SectionColumns {
           }
 
           {/* Write short paragraphs explaining Barchart and top stats for the Diabetes/Obesity data. */}
-          <p>In {topMaleData.Year}, {isDiabetesSelected ? formatPercentage(topMaleData["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(topMaleData["Age-Adjusted Obesity Prevalence"])} of the male population in {}
-            {topMaleData.Geography} {isDiabetesSelected ? "had diabetes" : "were obese"}, compared to {isDiabetesSelected ? formatPercentage(topFemaleData["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(topFemaleData["Age-Adjusted Obesity Prevalence"])} of the female population.</p>
+          <p>In {topMaleData.Year}, {isDiabetesSelected ? formatPercentage(topMaleData["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(topMaleData["Age-Adjusted Obesity Prevalence"])} of the male {}
+          and {isDiabetesSelected ? formatPercentage(topFemaleData["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(topFemaleData["Age-Adjusted Obesity Prevalence"])} of the female population in {}
+            {topMaleData.Geography} {isDiabetesSelected ? "had diabetes" : "were obese"}, compared to {isDiabetesSelected ? formatPercentage(stateLevelMaleDiabetes["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(stateLevelMaleObesity["Age-Adjusted Obesity Prevalence"])} of the male {}
+            and {isDiabetesSelected ? formatPercentage(stateLevelFemaleDiabetes["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(stateLevelFemaleObesity["Age-Adjusted Obesity Prevalence"])} of the female population in Michigan.</p>
 
           {isBMIWeightedDataValueSelected
             ? <p>Following barchart shows male and female prevalence in {topMaleData.Geography} and the map shows the {isHealthyWeightSelected ? "share" : "prevalence"} of {dropdownValue.toLowerCase()} for zip regions in Wayne County.</p>
@@ -242,13 +257,15 @@ ObesityAndDiabetes.defaultProps = {
 
 ObesityAndDiabetes.need = [
   fetchData("obesityAndDibetesDataValue", "/api/data?measures=Obesity,Diabetes&drilldowns=Tract&Year=latest", d => d.data), // 500 Cities
-  fetchData("diabetesPrevalenceBySex", "/api/data?measures=Age-Adjusted Diabetes Prevalence&drilldowns=Sex&Geography=<id>&Year=latest", d => d.data) // CDC Wonder - Diabetes Prevalence by Sex
+  fetchData("diabetesPrevalenceBySex", "/api/data?measures=Age-Adjusted Diabetes Prevalence&drilldowns=Sex&Geography=<id>&Year=latest", d => d.data), // CDC Wonder - Diabetes Prevalence by Sex
+  fetchData("stateLevelDiabetesPrevalenceBySex", "/api/data?measures=Age-Adjusted Diabetes Prevalence&drilldowns=Sex&State=04000US26&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   meta: state.data.meta,
   obesityAndDibetesDataValue: state.data.obesityAndDibetesDataValue,
-  diabetesPrevalenceBySex: state.data.diabetesPrevalenceBySex
+  diabetesPrevalenceBySex: state.data.diabetesPrevalenceBySex,
+  stateLevelDiabetesPrevalenceBySex: state.data.stateLevelDiabetesPrevalenceBySex
 });
 
 export default connect(mapStateToProps)(ObesityAndDiabetes);

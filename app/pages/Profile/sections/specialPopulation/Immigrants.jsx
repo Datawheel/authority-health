@@ -59,7 +59,7 @@ const formatImmigrantsPovertyData = immigrantsPovertyData => {
 };
 
 const findTotalImmigrants = data => {
-  const total = data[0]["Poverty by Nativity"] + data[1]["Poverty by Nativity"];
+  const total = sum(data, d => d["Poverty by Nativity"]);
   const filteredData = data.filter(d => d.Nativity === "Foreign Born")[0];
   filteredData.share = filteredData["Poverty by Nativity"] / total * 100;
   return filteredData;
@@ -67,7 +67,7 @@ const findTotalImmigrants = data => {
 
 const findImmigrantsInPoverty = data => {
   const total = sum(data, d => d["Poverty by Nativity"]);
-  const filteredData = data.filter((d => d.Nativity === "Foreign Born") && (d => d["ID Poverty Status"] === 0))[0];
+  const filteredData = data.filter(d => d.Nativity === "Foreign Born" && d["ID Poverty Status"] === 0)[0];
   filteredData.share = filteredData["Poverty by Nativity"] / total * 100;
   return filteredData;
 };

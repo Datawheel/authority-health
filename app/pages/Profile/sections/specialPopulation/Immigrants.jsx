@@ -12,7 +12,7 @@ import Contact from "components/Contact";
 import Stat from "components/Stat";
 import places from "utils/places";
 
-const formatPopulation = d => `${formatAbbreviate(d)}%`;
+const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
 const formatImmigrantsData = immigrantsData => {
   // Find the percentage of immigrants for each city and add it to each immigrants object in immigrantsData array.
@@ -58,14 +58,30 @@ const formatImmigrantsPovertyData = immigrantsPovertyData => {
   return [filteredPovertyData, topPovertyData];
 };
 
-class Immigrants extends SectionColumns {
+const findTotalImmigrants = data => {
+  const total = data[0]["Poverty by Nativity"] + data[1]["Poverty by Nativity"];
+  const filteredData = data.filter(d => d.Nativity === "Foreign Born")[0];
+  filteredData.share = filteredData["Poverty by Nativity"] / total * 100;
+  return filteredData;
+};
 
+const findImmigrantsInPoverty = data => {
+  const total = sum(data, d => d["Poverty by Nativity"]);
+  const filteredData = data.filter((d => d.Nativity === "Foreign Born") && (d => d["ID Poverty Status"] === 0))[0];
+  filteredData.share = filteredData["Poverty by Nativity"] / total * 100;
+  return filteredData;
+};
+
+class Immigrants extends SectionColumns {
   constructor(props) {
     super(props);
     this.state = {
       meta: this.props.meta,
       dropdownValue: "Total Immigrants",
       immigrantsPovertyData: [],
+      immigrantsInPovertyNationData: [],
+      immigrantsInPovertyStateData: [],
+      immigrantsInPovertyCountyData: [],
       immigrantsPovertyDataForCurrentLocation: []
     };
   }
@@ -73,56 +89,68 @@ class Immigrants extends SectionColumns {
   // Handler function for dropdown onChange event.
   handleChange = event => {
     const dropdownValue =  event.target.value; // stores event value here to prevent "Synthetic Events" error.
+    const meta = this.state.meta;
     if (dropdownValue === "Immigrants in Poverty") {
-      axios.get("/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Poverty Status,Place&Year=latest")
-        .then(resp => {
-          axios.get(`/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Poverty Status&Geography=${this.state.meta.id}&Year=latest`)
-            .then(d => {
-              this.setState({
-                immigrantsPovertyDataForCurrentLocation: d.data.data,
-                immigrantsPovertyData: resp.data.data,
-                dropdownValue
-              });
-            });
+      const immigrantsPovertyData = axios.get("/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Poverty Status,Place&Year=latest"); // get all places data
+      const countyData = axios.get("/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Poverty Status&County=05000US26163&Year=latest"); // get Wayne County level data
+      const nationData = axios.get("/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Poverty Status&Nation=01000US&Year=latest"); // get United States data
+      const stateData = axios.get("/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Poverty Status&State=04000US26&Year=latest"); // get Michigan state data
+      let currentLevelData;
+      if (meta.name !== "county") {
+        currentLevelData = axios.get(`/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Poverty Status&Geography=${meta.id}&Year=latest`); // if current location is not county, then get current level data
+      } 
+      Promise.all([immigrantsPovertyData, countyData, nationData, stateData, currentLevelData]).then(values => {
+        this.setState({
+          immigrantsPovertyData: values[0].data.data,
+          immigrantsInPovertyCountyData: values[1].data.data,
+          immigrantsInPovertyNationData: values[2].data.data,
+          immigrantsInPovertyStateData: values[3].data.data,
+          immigrantsPovertyDataForCurrentLocation: values[4].data.data,
+          dropdownValue
         });
+      });
     }
     else this.setState({dropdownValue});
   }
 
   render() {
+    const {
+      meta, 
+      dropdownValue, 
+      immigrantsPovertyData, 
+      immigrantsInPovertyNationData,
+      immigrantsInPovertyStateData,
+      immigrantsInPovertyCountyData,
+      immigrantsPovertyDataForCurrentLocation
+    } = this.state;
 
-    const {dropdownValue, immigrantsPovertyData, immigrantsPovertyDataForCurrentLocation} = this.state;
-    const {immigrantsData, immigrantsDataForCurrentLocation} = this.props;
+    const {
+      immigrantsData, 
+      immigrantsDataForCurrentLocation, 
+      immigrantsDataForNation, 
+      immigrantsDataForState, 
+      immigrantsDataForWayneCounty
+    } = this.props;
 
     const dropdownList = ["Total Immigrants", "Immigrants in Poverty"];
     const totalImmigrantsSelected = dropdownValue === "Total Immigrants";
 
+    let USImmigrantsData, currentLevelImmigrantsData, michiganImmigrantsData, wayneCountyImmigrantsData;
+    if (totalImmigrantsSelected) {
+      USImmigrantsData = findTotalImmigrants(immigrantsDataForNation);
+      michiganImmigrantsData = findTotalImmigrants(immigrantsDataForState);
+      wayneCountyImmigrantsData = findTotalImmigrants(immigrantsDataForWayneCounty);
+      currentLevelImmigrantsData = meta.level !== "county" ? findTotalImmigrants(immigrantsDataForCurrentLocation) : wayneCountyImmigrantsData;
+    }
+    else {
+      USImmigrantsData = findImmigrantsInPoverty(immigrantsInPovertyNationData);
+      michiganImmigrantsData = findImmigrantsInPoverty(immigrantsInPovertyStateData);
+      wayneCountyImmigrantsData = findImmigrantsInPoverty(immigrantsInPovertyCountyData);
+      currentLevelImmigrantsData = meta.level !== "county" ? findImmigrantsInPoverty(immigrantsPovertyDataForCurrentLocation) : wayneCountyImmigrantsData;
+    }
+
     const immigrantsDataForCurrentLocationAvailable = immigrantsDataForCurrentLocation.length !== 0;
     const immigrantsPovertyDataForCurrentLocationAvailable = immigrantsPovertyDataForCurrentLocation.length !== 0;
-
-    let immigrantsDataCurrentLocation;
-    if (immigrantsDataForCurrentLocationAvailable) {
-      nest()
-        .key(d => d.Year)
-        .entries(immigrantsDataForCurrentLocation)
-        .forEach(group => {
-          const total = sum(group.values, d => d["Poverty by Nativity"]);
-          group.values.forEach(d => total !== 0 ? d.share = d["Poverty by Nativity"] / total * 100 : d.share = 0);
-        });
-      immigrantsDataCurrentLocation = immigrantsDataForCurrentLocation.filter(d => d.Nativity === "Foreign Born");
-    }
-
-    let immigrantsPovertyDataCurrentLocation;
-    if (immigrantsPovertyDataForCurrentLocationAvailable) {
-      nest()
-        .key(d => d.Year)
-        .entries(immigrantsPovertyDataForCurrentLocation)
-        .forEach(group => {
-          const total = sum(group.values, d => d["Poverty by Nativity"]);
-          group.values.forEach(d => total !== 0 ? d.share = d["Poverty by Nativity"] / total * 100 : d.share = 0);
-        });
-      immigrantsPovertyDataCurrentLocation = immigrantsPovertyDataForCurrentLocation.filter((d => d.Nativity === "Foreign Born") && (d => d["ID Poverty Status"] === 0));
-    }
 
     const topStats = totalImmigrantsSelected ? formatImmigrantsData(immigrantsData)[1] : formatImmigrantsPovertyData(immigrantsPovertyData)[1];
 
@@ -145,40 +173,40 @@ class Immigrants extends SectionColumns {
             ? <div>
               <Stat
                 title={"Immigrant population"}
-                year={immigrantsDataForCurrentLocationAvailable ? immigrantsDataCurrentLocation[0].Year : ""}
-                value={immigrantsDataForCurrentLocationAvailable ? formatPopulation(immigrantsDataCurrentLocation[0].share) : "N/A"}
-                qualifier={immigrantsDataForCurrentLocationAvailable ? `of the population in ${immigrantsDataCurrentLocation[0].Geography}` : ""}
+                year={immigrantsDataForCurrentLocationAvailable ? currentLevelImmigrantsData.Year : ""}
+                value={immigrantsDataForCurrentLocationAvailable ? formatPercentage(currentLevelImmigrantsData.share) : "N/A"}
+                qualifier={immigrantsDataForCurrentLocationAvailable ? `of the population in ${currentLevelImmigrantsData.Geography}` : ""}
               />
               <Stat
                 title="City with most immigrants"
                 year={topStats.Year}
                 value={topStats.Place}
-                qualifier={formatPopulation(topStats.share)}
+                qualifier={formatPercentage(topStats.share)}
               />
-              <p>
-                {immigrantsDataForCurrentLocationAvailable ? <span>In {immigrantsDataCurrentLocation[0].Year}, {formatPopulation(immigrantsDataCurrentLocation[0].share)} of the population in {immigrantsDataCurrentLocation[0].Geography} was immigrants.</span> : ""} {" "} 
-                The city with the highest immigrant population in Wayne County was {topStats.Place} ({formatPopulation(topStats.share)}).
-              </p>
-              {immigrantsDataForCurrentLocationAvailable ? <p>The map here shows the cities in {immigrantsDataCurrentLocation[0].Geography} by their percentage of immigrants.</p> : ""}
+              <p>In {USImmigrantsData.Year}, {formatPercentage(USImmigrantsData.share)} of the population in United States were immigrants, compared to {}
+                {formatPercentage(michiganImmigrantsData.share)} in Michigan{meta.level !== "county" ? "," : " and"} {formatPercentage(wayneCountyImmigrantsData.share)} {}
+                in Wayne County{meta.level !== "county" && immigrantsDataForCurrentLocationAvailable ? <span> and {formatPercentage(currentLevelImmigrantsData.share)} in {currentLevelImmigrantsData.Geography}.</span> : "."}</p>
+              <p>The city with the highest immigrant population in Wayne County was {topStats.Place} ({formatPercentage(topStats.share)}).</p>
+              {immigrantsDataForCurrentLocationAvailable ? <p>The map here shows the cities in {currentLevelImmigrantsData.Geography} by their percentage of immigrants.</p> : ""}
             </div>
             : <div>
               <Stat
                 title={"Immigrants in poverty"}
-                year={immigrantsPovertyDataForCurrentLocationAvailable ? immigrantsPovertyDataCurrentLocation[0].Year : ""}
-                value={immigrantsPovertyDataForCurrentLocationAvailable ? formatPopulation(immigrantsPovertyDataCurrentLocation[0].share) : "N/A"}
-                qualifier={immigrantsDataForCurrentLocationAvailable ? `of the population in ${immigrantsPovertyDataCurrentLocation[0].Geography}` : ""}
+                year={immigrantsPovertyDataForCurrentLocationAvailable ? currentLevelImmigrantsData.Year : ""}
+                value={immigrantsPovertyDataForCurrentLocationAvailable ? formatPercentage(currentLevelImmigrantsData.share) : "N/A"}
+                qualifier={immigrantsDataForCurrentLocationAvailable ? `of the population in ${currentLevelImmigrantsData.Geography}` : ""}
               />
               <Stat
                 title="City with most immigrants in poverty"
                 year={topStats.Year}
                 value={topStats.Place}
-                qualifier={formatPopulation(topStats.share)}
+                qualifier={formatPercentage(topStats.share)}
               />
-              <p>
-                {immigrantsPovertyDataForCurrentLocationAvailable ? <span>In {immigrantsDataCurrentLocation[0].Year}, {formatPopulation(immigrantsDataCurrentLocation[0].share)} of the population in {immigrantsDataCurrentLocation[0].Geography} was immigrants.</span> : ""}{" "}
-                The city with the highest immigrants in poverty in Wayne County was {topStats.Place} ({formatPopulation(topStats.share)}).
-              </p>
-              {immigrantsPovertyDataForCurrentLocationAvailable ? <p>The map here shows the cities in {immigrantsPovertyDataCurrentLocation[0].Geography} by their percentage of immigrants in poverty.</p> : "" }
+              <p>In {USImmigrantsData.Year}, {formatPercentage(USImmigrantsData.share)} of the population in United States were immigrants in poverty, compared to {formatPercentage(michiganImmigrantsData.share)} {}
+                in Michigan{meta.level !== "county" ? "," : " and"} {formatPercentage(wayneCountyImmigrantsData.share)} in Wayne County{meta.level !== "county" && immigrantsPovertyDataForCurrentLocationAvailable ? <span> and {formatPercentage(currentLevelImmigrantsData.share)} in {currentLevelImmigrantsData.Geography}.</span> : "."}</p>
+              <p>The city with the highest immigrants in poverty in Wayne County was {topStats.Place} ({formatPercentage(topStats.share)}).</p>
+              
+              {immigrantsPovertyDataForCurrentLocationAvailable ? <p>The map here shows the cities in {currentLevelImmigrantsData.Geography} by their percentage of immigrants in poverty.</p> : "" }
             </div>
           }
 
@@ -190,11 +218,11 @@ class Immigrants extends SectionColumns {
           groupBy: "ID Place",
           colorScale: "share",
           title: totalImmigrantsSelected ? "Immigrant Population" : "Immigrants in Poverty",
-          colorScaleConfig: {axisConfig: {tickFormat: d => formatPopulation(d)}},
+          colorScaleConfig: {axisConfig: {tickFormat: d => formatPercentage(d)}},
           time: "Year",
           label: d => d.Place,
           height: 400,
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Population", dropdownValue], ["Share", d => formatPopulation(d.share)]]},
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Population", dropdownValue], ["Share", d => formatPercentage(d.share)]]},
           topojson: "/topojson/place.json",
           topojsonFilter: d => places.includes(d.id)
         }}
@@ -211,12 +239,18 @@ Immigrants.defaultProps = {
 
 Immigrants.need = [
   fetchData("immigrantsData", "/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Place&Year=latest", d => d.data),
+  fetchData("immigrantsDataForNation", "/api/data?measures=Poverty by Nativity&drilldowns=Nativity&Nation=01000US&Year=latest", d => d.data),
+  fetchData("immigrantsDataForState", "/api/data?measures=Poverty by Nativity&drilldowns=Nativity&State=04000US26&Year=latest", d => d.data),
+  fetchData("immigrantsDataForWayneCounty", "/api/data?measures=Poverty by Nativity&drilldowns=Nativity&County=05000US26163&Year=latest", d => d.data),
   fetchData("immigrantsDataForCurrentLocation", "/api/data?measures=Poverty by Nativity&drilldowns=Nativity&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   meta: state.data.meta,
   immigrantsData: state.data.immigrantsData,
+  immigrantsDataForNation: state.data.immigrantsDataForNation,
+  immigrantsDataForState: state.data.immigrantsDataForState,
+  immigrantsDataForWayneCounty: state.data.immigrantsDataForWayneCounty,
   immigrantsDataForCurrentLocation: state.data.immigrantsDataForCurrentLocation
 });
 

@@ -3,6 +3,7 @@ const d3 = require("d3-scale");
 const {formatAbbreviate} = require("d3plus-format");
 const formatters = require("../app/utils/formatters");
 const {CANON_LOGICLAYER_CUBE} = process.env;
+const {titleCase} = require("d3plus-text");
 
 const regionLookup = {
   48236: "04",
@@ -117,7 +118,7 @@ function findParentGeoLevels(groupedObj) {
 
 module.exports = function(app) {
 
-  const {cache} = app.settings;
+  const {cache, db} = app.settings;
 
   app.get("/api/topstats", async(req, res) => {
     res.json(cache.stats);
@@ -189,6 +190,19 @@ module.exports = function(app) {
     currentLocationMeasureData.total = healthTopics.length + socialDeterminants.length;
     currentLocationMeasureData.locations = geoLevels;
 
+    // Get all Place/Tract/Zip level data that are in Wayne County.
+    const allLocations = await db.search.findAll().then(results => results.map(resp => resp.toJSON()));
+    const population = cache.pops;
+    const currLevel = titleCase(prefixMap[id.slice(0, 3)]);
+
+    const currentLevelLocations = allLocations.filter(d => d.hierarchy === currLevel);
+    currentLevelLocations.forEach(location => population.hasOwnProperty(location.id) ? location.population = population[location.id] : location.population = 0);
+    
+    // Sort and rank loctions based on their population.
+    currentLevelLocations.sort((a, b) => b.population - a.population);
+    currentLevelLocations.forEach((d, i) => d.populationRank = i + 1);
+
+    currentLocationMeasureData.currentLevelLocations = currentLevelLocations;
     res.json(currentLocationMeasureData);
   });
 };

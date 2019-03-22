@@ -15,11 +15,25 @@ const formatRaceName = d => {
 };
 const formatEthnicityName = d => d.replace("Not Hispanic or Latino", "non-Hispanic").replace("or Latino", "");
 
+const formatRankSuffix = d => {
+  if (d % 10 === 1 && d !== 11) return `${d}st`;
+  if (d % 10 === 2 && d !== 12) return `${d}nd`;
+  if (d % 10 === 3 && d !== 13) return `${d}rd`;
+  return `${d}th`;
+};
+
+const formatLevelNames = d => {
+  if (d === "place") return "cities";
+  if (d === "zip") return "zip codes";
+  if (d === "tract") return "tracts";
+  return d;
+};
+
 class Introduction extends SectionColumns {
 
   render() {
     const {meta, population, populationByAgeAndGender, populationByRaceAndEthnicity, lifeExpectancy, topStats, medianHouseholdIncome} = this.props;
-    const {healthTopics, socialDeterminants} = topStats;
+    const {healthTopics, socialDeterminants, rankData} = topStats;
     const {level} = meta;
 
     const populationByAgeAndGenderAvailable = populationByAgeAndGender.length !== 0;
@@ -29,6 +43,8 @@ class Introduction extends SectionColumns {
     const onCityOrZipLevel = level === "place" || level === "zip";
 
     const populationGrowth = formatAbbreviate(growthCalculator(population[0].Population, population[population.length - 1].Population));
+
+    const currentLocationRankData = rankData.filter(d => d.id === meta.id)[0];
 
     // Get recent year male and female population data by their age.
     const recentYearPopulationByAgeAndGender = {};
@@ -65,7 +81,8 @@ class Introduction extends SectionColumns {
         <SectionTitle>Introduction</SectionTitle>
         <article>
           <p>
-            {level === "zip" ? `Zip code ${population[0].Geography}` : population[0].Geography} has a population of {formatAbbreviate(population[0].Population)} people with life expectancy of {lifeExpectancyAvailable ? formatAbbreviate(lifeExpectancy[0]["Life Expectancy"]) : "N/A"} {lifeExpectancyAvailable ? onCityOrZipLevel ? <span>(in {lifeExpectancy[0].Geography})</span> : "" : ""}.
+            {level === "zip" ? `Zip code ${population[0].Geography}` : population[0].Geography} has a population of {formatAbbreviate(population[0].Population)} people{meta.level === "county" ? "" : <span> which makes it the {formatRankSuffix(currentLocationRankData.populationRank)} largest of {rankData.length} {formatLevelNames(meta.level)} in Wayne County</span>}
+            {}, with the life expectancy of {lifeExpectancyAvailable ? formatAbbreviate(lifeExpectancy[0]["Life Expectancy"]) : "N/A"} {lifeExpectancyAvailable ? onCityOrZipLevel ? <span>(in {lifeExpectancy[0].Geography})</span> : "" : ""}.
             The most common age group for male is {populationByAgeAndGenderAvailable ? getTopMaleData.Age.toLowerCase() : "N/A"} and for female it is {populationByAgeAndGenderAvailable ? getTopFemaleData.Age.toLowerCase() : "N/A"}.
             Between {population[population.length - 1].Year} and {population[0].Year} the population of {population[0].Geography} {populationGrowth < 0 ? "reduced" : "increased"} from {formatAbbreviate(population[population.length - 1].Population)} to {formatAbbreviate(population[0].Population)},
             {} {populationGrowth < 0 ? "a decline" : "an increase"} of {populationGrowth < 0 ? `${populationGrowth * -1}%` : isNaN(populationGrowth) ? "N/A" : `${populationGrowth}%`}.
@@ -78,8 +95,7 @@ class Introduction extends SectionColumns {
               ({formatAbbreviate(recentYearPopulationByRaceAndEthnicity.values[1].share)}%).
             </p>
             : null}
-          {/* TODO: Add comparison for median household income as described in feedback. */}
-          {/* <p>In {medianHouseholdIncome[0].Geography}, the median household income is {formatAbbreviate(medianHouseholdIncome[0]["Household Income"])}.</p> */}
+          <p>In {level === "zip" ? `Zip code ${currentLocationRankData.name}` : currentLocationRankData.name}, the median household income is {formatAbbreviate(currentLocationRankData.medianIncome)}{meta.level === "county" ? "." : <span>, which ranks it at {formatRankSuffix(currentLocationRankData.medianIncomeRank)} largest of all {formatLevelNames(meta.level)} in Wayne County.</span>}</p>
           <p>
             Social and economic factors, such as income, education, and access to health care, impact health outcomes for all Americans. For example, in many low income areas in the country, there are higher rates of chronic diseases, like high blood pressure and diabetes. The summary to the right highlights some of the social and health conditions for {population[0].Geography}.
           </p>

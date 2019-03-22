@@ -115,4 +115,4 @@ zipTopo.objects.mi_michigan_zip_codes_geo.geometries.forEach(d => {
 zipTopo.objects.mi_michigan_zip_codes_geo.geometries = zipTopo.objects.mi_michigan_zip_codes_geo.geometries.filter(d => d.properties.REGION);
 fs.writeFileSync(zipFile, JSON.stringify(zipTopo));
 
-console.log("topomerge regions=mi_michigan_zip_codes_geo -f 'd.properties.REGION !== undefined' -k 'd.properties.REGION' < static/topojson/zipcodes.json > static/topojson/zipregions.json");
+// console.log("topomerge regions=mi_michigan_zip_codes_geo -f 'd.properties.REGION !== undefined' -k 'd.properties.REGION' < static/topojson/zipcodes.json > static/topojson/zipregions.json");

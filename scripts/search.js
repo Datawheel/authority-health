@@ -8,9 +8,6 @@ const {Client} = require("mondrian-rest-client"),
 const zipCodes = require("../app/utils/zipcodes");
 const places = require("../app/utils/places");
 
-console.log("Places:", places.length);
-console.log("Zip Codes:", zipCodes.length);
-
 const geoFilter = {
   Place: id => places.includes(id),
   Tract: id => id.startsWith("14000US26163"),

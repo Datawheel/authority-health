@@ -7,7 +7,7 @@ import Subnav from "../../components/Subnav";
 import "./Profile.css";
 
 import Introduction from "./sections/about/Introduction";
-import Insecurity from "./sections/foodAccess/Insecurity";
+import FoodInsecurity from "./sections/foodAccess/FoodInsecurity";
 import FoodAvailability from "./sections/foodAccess/FoodAvailability";
 import FoodStamps from "./sections/foodAccess/FoodStamps";
 import StoreAccessByDemographic from "./sections/foodAccess/StoreAccessByDemographic";
@@ -21,7 +21,7 @@ import ConditionsAndChronicDiseases from "./sections/healthConditions/Conditions
 // import DentistsDemographic from "./sections/accessToCare/DentistsDemographic";
 // import DentistsWorkStatus from "./sections/accessToCare/DentistsWorkStatus";
 import HealthCenterDemographics from "./sections/accessToCare/HealthCenterDemographics";
-import Coverage from "./sections/accessToCare/Coverage";
+import HealthInsuranceCoverage from "./sections/accessToCare/HealthInsuranceCoverage";
 // import GrandparentCaregivers from "./sections/specialPopulation/GrandparentCaregivers";
 import Veterans from "./sections/specialPopulation/Veterans";
 import Immigrants from "./sections/specialPopulation/Immigrants";
@@ -105,7 +105,7 @@ class Profile extends Component {
           <HealthCenterDemographics />
           {/* <DentistsDemographic /> */}
           {/* <DentistsWorkStatus /> */}
-          <Coverage />
+          <HealthInsuranceCoverage />
         </div>
 
         <TopicTitle slug="food-access">
@@ -115,7 +115,7 @@ class Profile extends Component {
           </div>
         </TopicTitle>
         <div className="section-container">
-          <Insecurity />
+          <FoodInsecurity />
           <FoodAvailability />
           <FoodStamps />
           <StoreAccessByDemographic />
@@ -200,7 +200,7 @@ Profile.need = [
   Introduction,
   FoodAvailability,
   FoodStamps,
-  Insecurity,
+  FoodInsecurity,
   StoreAccessByDemographic,
   CancerPrevalenceByDemographics,
   OccurrenceByCancerSite,
@@ -212,7 +212,7 @@ Profile.need = [
   HealthCenterDemographics,
   // DentistsDemographic,
   // DentistsWorkStatus,
-  Coverage,
+  HealthInsuranceCoverage,
   // GrandparentCaregivers,
   Homeless,
   Immigrants,

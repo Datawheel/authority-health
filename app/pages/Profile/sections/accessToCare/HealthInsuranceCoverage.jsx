@@ -39,7 +39,7 @@ const findOverallCoverage = data => {
   return filteredData;
 };
 
-class Coverage extends SectionColumns {
+class HealthInsuranceCoverage extends SectionColumns {
 
   render() {
     const {meta, coverageData, nationOverallCoverage, stateOverallCoverage, wayneCountyOverallCoverage, currentLevelOverallCoverage} = this.props;
@@ -75,9 +75,9 @@ class Coverage extends SectionColumns {
     if (coverageDataAvailable) {
       return (
         <SectionColumns>
-          <SectionTitle>Coverage</SectionTitle>
+          <SectionTitle>Health Insurance Coverage</SectionTitle>
           <article>
-            {isCoverageDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {coverageData.data[0].Geography}</div>}
+            {isCoverageDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">data is shown for {coverageData.data[0].Geography}</div>}
             <div>
               <Stat
                 title="Most covered male group"
@@ -154,11 +154,11 @@ class Coverage extends SectionColumns {
   }
 }
 
-Coverage.defaultProps = {
-  slug: "coverage"
+HealthInsuranceCoverage.defaultProps = {
+  slug: "health-insurance-coverage"
 };
 
-Coverage.need = [
+HealthInsuranceCoverage.need = [
   fetchData("coverageData", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status,Sex,Age&Geography=<id>&Year=latest"),
   fetchData("nationOverallCoverage", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Nation=01000US&Year=latest", d => d.data),
   fetchData("stateOverallCoverage", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&State=04000US26&Year=latest", d => d.data),
@@ -175,4 +175,4 @@ const mapStateToProps = state => ({
   currentLevelOverallCoverage: state.data.currentLevelOverallCoverage
 });
 
-export default connect(mapStateToProps)(Coverage);
+export default connect(mapStateToProps)(HealthInsuranceCoverage);

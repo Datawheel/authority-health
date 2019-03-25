@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Stat from "components/Stat";
 
-class Insecurity extends SectionColumns {
+class FoodInsecurity extends SectionColumns {
 
   render() {
     const {insecurityRate} = this.props;
@@ -16,24 +16,35 @@ class Insecurity extends SectionColumns {
     return (
       <div className="section-title-stat-inner">
         <SectionColumns>
-          <SectionTitle>Insecurity</SectionTitle>
+          <SectionTitle>Food Insecurity</SectionTitle>
           <article>
-            {isInsecurityRateDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {location}</div>}
+            {isInsecurityRateDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">data is shown for {location}</div>}
             <Stat
               title={"Child Insecurity"}
               year={childInsecurity.Year}
               value={`${childInsecurity["Food Insecurity Rate"]}%`}
               qualifier={`of the children in ${location}`}
             />
-            <Stat
+            <p>In {childInsecurity.Year}, {childInsecurity["Food Insecurity Rate"]}% of the children and {adultInsecurityRate}% of the adults in {location} had food insecurity.</p>
+            <p>Food insecurity refers to <a href="https://www.ers.usda.gov/topics/food-nutrition-assistance/food-security-in-the-us.aspx">USDA’s measure</a> of lack of access, at times, to enough food for an active, healthy life for all household members and limited or uncertain availability of nutritionally adequate foods.</p>
+          </article>
+          {isInsecurityRateDataAvailableForCurrentGeography 
+            ? <Stat
               title={"Adult Insecurity"}
               year={adultInsecurity.Year}
               value={`${adultInsecurityRate}%`}
               qualifier={`of the adults in ${location}`}
             />
-            <p>In {childInsecurity.Year}, {childInsecurity["Food Insecurity Rate"]}% of the children and {adultInsecurityRate}% of the adults in {location} had food insecurity.</p>
-            <p>Food insecurity refers to <a href="https://www.ers.usda.gov/topics/food-nutrition-assistance/food-security-in-the-us.aspx">USDA’s measure</a> of lack of access, at times, to enough food for an active, healthy life for all household members and limited or uncertain availability of nutritionally adequate foods.</p>
-          </article>
+            : <article className="align-stats">
+              <Stat
+                title={"Adult Insecurity"}
+                year={adultInsecurity.Year}
+                value={`${adultInsecurityRate}%`}
+                qualifier={`of the adults in ${location}`}
+              />
+            </article>
+          }
+
           {/* adds empty div for proper alignment of above text  */}
           <div></div>
         </SectionColumns>
@@ -42,11 +53,11 @@ class Insecurity extends SectionColumns {
   }
 }
 
-Insecurity.defaultProps = {
-  slug: "insecurity"
+FoodInsecurity.defaultProps = {
+  slug: "food-insecurity"
 };
 
-Insecurity.need = [
+FoodInsecurity.need = [
   fetchData("insecurityRate", "/api/data?measures=Food Insecurity Rate&drilldowns=Category&Geography=<id>&Year=latest")
 ];
 
@@ -54,4 +65,4 @@ const mapStateToProps = state => ({
   insecurityRate: state.data.insecurityRate
 });
 
-export default connect(mapStateToProps)(Insecurity);
+export default connect(mapStateToProps)(FoodInsecurity);

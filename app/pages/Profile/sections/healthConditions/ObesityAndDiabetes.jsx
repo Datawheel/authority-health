@@ -202,13 +202,15 @@ class ObesityAndDiabetes extends SectionColumns {
             yConfig: {
               ticks: []
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", isDiabetesSelected ? "Diabetes" : "Obesity"], ["Share", d => isDiabetesSelected ? formatPercentage(d["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(d["Age-Adjusted Obesity Prevalence"])], ["County", d => d.Geography]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", isDiabetesSelected ? "Diabetes" : "Obesity"], 
+              ["Share", d => isDiabetesSelected ? formatPercentage(d["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(d["Age-Adjusted Obesity Prevalence"])], ["County", d => d.Geography]]}
           }}
           dataFormat={resp => resp.data}
           />
           <Contact slug={this.props.slug} />
         </article>
-
+        
+        {/* <div className="disclaimer">{isBMIWeightedDataValueSelected ? "data is shown at the zip region level" : "data is shown at the census tract level"}</div> */}
         {/* Geomap to show Obesity and Diabetes data based on the dropdown value. */}
         {isBMIWeightedDataValueSelected
           ? <Geomap config={{
@@ -221,7 +223,8 @@ class ObesityAndDiabetes extends SectionColumns {
             label: d => d["Zip Region"],
             height: 400,
             time: "End Year",
-            tooltipConfig: isHealthyWeightSelected ? {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Share", d => `${formatPercentage(d[dropdownValue], true)}`]]} : {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue], true)}`]]},
+            tooltipConfig: isHealthyWeightSelected ? {tbody: [["Year", d => d.Year], 
+              ["Condition", `${dropdownValue}`], ["Share", d => `${formatPercentage(d[dropdownValue], true)}`]]} : {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue], true)}`]]},
             topojson: "/topojson/zipregions.json",
             topojsonId: d => d.properties.REGION,
             topojsonFilter: () => true

@@ -83,14 +83,14 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             title="Male majority age group"
             year={visionDifficultyDataAvailable ? topMaleVisionDifficultyData.Year : visionDifficultyDataAvailable}
             value={visionDifficultyDataAvailable ? rangeFormatter(topMaleVisionDifficultyData.Age) : "N/A"}
-            qualifier={visionDifficultyDataAvailable ? `(${formatPopulation(topMaleVisionDifficultyData.share)})` : ""}
+            qualifier={visionDifficultyDataAvailable ? `${formatPopulation(topMaleVisionDifficultyData.share)} of the population in ${topMaleVisionDifficultyData.Geography}` : ""}
             theme="terra-cotta-dark"
           />
           <Stat
             title="Female majority age group"
             year={visionDifficultyDataAvailable ? topFemaleVisionDifficultyData.Year : ""}
             value={visionDifficultyDataAvailable ? rangeFormatter(topFemaleVisionDifficultyData.Age) : "N/A"}
-            qualifier={visionDifficultyDataAvailable ? `(${formatPopulation(topFemaleVisionDifficultyData.share)})` : ""}
+            qualifier={visionDifficultyDataAvailable ? `${formatPopulation(topFemaleVisionDifficultyData.share)} of the population in ${topFemaleVisionDifficultyData.Geography}` : ""}
           />
 
           <h3>Hearing Difficulty</h3>
@@ -98,22 +98,22 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             title="Male majority age group"
             year={hearingDifficultyDataAvailable ? topMaleHearingDifficultyData.Year : ""}
             value={hearingDifficultyDataAvailable ? rangeFormatter(topMaleHearingDifficultyData.Age) : "N/A"}
-            qualifier={hearingDifficultyDataAvailable ? `(${formatPopulation(topMaleHearingDifficultyData.share)})` : ""}
+            qualifier={hearingDifficultyDataAvailable ? `${formatPopulation(topMaleHearingDifficultyData.share)} of the population in ${topMaleHearingDifficultyData.Geography}` : ""}
             theme="terra-cotta-dark"
           />
           <Stat
             title="Female majority age group"
             year={hearingDifficultyDataAvailable ? topFemaleHearingDifficultyData.Year : ""}
             value={hearingDifficultyDataAvailable ? rangeFormatter(topFemaleHearingDifficultyData.Age) : "N/A"}
-            qualifier={hearingDifficultyDataAvailable ? `(${formatPopulation(topFemaleHearingDifficultyData.share)})` : ""}
+            qualifier={hearingDifficultyDataAvailable ? `${formatPopulation(topFemaleHearingDifficultyData.share)} of the population in ${topFemaleHearingDifficultyData.Geography}` : ""}
           />
 
           <p>
             {visionDifficultyDataAvailable ? <span>In {topMaleVisionDifficultyData.Year}, the age groups most likely to have difficulty in seeing in { }
-              {topMaleVisionDifficultyData.Geography} are {rangeFormatter(topMaleVisionDifficultyData.Age)} years and {rangeFormatter(topFemaleVisionDifficultyData.Age)} { }
-            years for men and women respectively.</span> : ""} In comparison, the age groups most likely to have difficulty in hearing are  { }
-            {hearingDifficultyDataAvailable ? rangeFormatter(topMaleHearingDifficultyData.Age) : "N/A"} years and  { }
-            {hearingDifficultyDataAvailable ? rangeFormatter(topFemaleHearingDifficultyData.Age) : ""} years for men and women respectively.
+              {topMaleVisionDifficultyData.Geography} were {rangeFormatter(topMaleVisionDifficultyData.Age)} years for men and {rangeFormatter(topFemaleVisionDifficultyData.Age)} { }
+            years for women,</span> : ""} while the age groups most likely to have difficulty in hearing were  { }
+            {hearingDifficultyDataAvailable ? rangeFormatter(topMaleHearingDifficultyData.Age) : "N/A"} years for men and  { }
+            {hearingDifficultyDataAvailable ? rangeFormatter(topFemaleHearingDifficultyData.Age) : ""} years for women.
           </p>
           <p>The chart here shows the share of each male and female age group with difficulty in hearing and seeing {visionDifficultyDataAvailable ? ` in ${topMaleVisionDifficultyData.Geography}` : "N/A"}.</p>
           <Contact slug={this.props.slug} />

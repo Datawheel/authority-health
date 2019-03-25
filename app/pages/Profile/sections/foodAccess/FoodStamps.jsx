@@ -5,6 +5,7 @@ import {sum} from "d3-array";
 import {nest} from "d3-collection";
 import {LinePlot} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
+import {titleCase} from "d3plus-text";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
@@ -72,16 +73,18 @@ class FoodStamps extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Food Stamps</SectionTitle>
         <article>
-          {isSnapWicDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing food stamps data for {snapWicData.data[0].Geography}</div>}
+          {/* {isSnapWicDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">snap and wic data is shown for {snapWicData.data[0].Geography}</div>} */}
           <Stat
             title="SNAP-authorized stores"
             year={snapLatestYear}
             value={commas(snapLatestYearValue)}
+            qualifier={`stores in ${county}`}
           />
           <Stat
             title="WIC-authorized stores"
             year={wicLatestYear}
             value={wicLatestYearValue}
+            qualifier={`stores in ${county}`}
           />
           <Stat
             title="Population with food stamps"
@@ -113,7 +116,7 @@ class FoodStamps extends SectionColumns {
               tickFormat: d => `${formatPercentage(d)}`,
               title: "Share"
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => `${formatPercentage(d.share)}`]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => `${formatPercentage(d.share)}`], [titleCase(meta.level), d => d.Geography]]}
           }}
           dataFormat={resp => formatPublicAssistanceData(resp.data)}
           /> : null

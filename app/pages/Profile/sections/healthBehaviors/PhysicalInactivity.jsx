@@ -6,8 +6,13 @@ import {formatAbbreviate} from "d3plus-format";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
+import Glossary from "components/Glossary";
 import Stat from "components/Stat";
 import CensusTractDefinition from "components/CensusTractDefinition";
+
+const definitions = [
+  {term: "Physical Inactivity", definition: "In the Diabetes Atlas application, a person is considered to be physically inactive if he or she reported not participating in physical activity or exercise in the past 30 days."}
+];
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -33,7 +38,7 @@ class PhysicalInactivity extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Physical Inactivity</SectionTitle>
         <article>
-          {isPhysicalInactivityBySexAvailableForCurrentlocation ? <div></div> : <div className="disclaimer">Showing data for {physicalInactivityPrevalenceBySex.data[0].Geography}</div>}
+          {isPhysicalInactivityBySexAvailableForCurrentlocation ? <div></div> : <div className="disclaimer">data is shown for {physicalInactivityPrevalenceBySex.data[0].Geography}</div>}
  
           <Stat
             title={"Location with highest prevalence"}
@@ -57,7 +62,8 @@ class PhysicalInactivity extends SectionColumns {
             qualifier={`of female population in ${topPhysicalInactivityFemaleData.Geography}`}
           />
           <p>In {topRecentYearData.Year}, {formatPercentage(topRecentYearData["Physical Inactivity"])} of the population of <CensusTractDefinition text={topRecentYearData.Tract} /> had the highest prevalence of physical inactivity out of all census tracts in Detroit, Livonia, Dearborn and Westland.</p>
-          <p>In {topPhysicalInactivityFemaleData.Year}, {formatPercentage(topPhysicalInactivityMaleData["Age-Adjusted Physical Inactivity"])} of the male population and {formatPercentage(topPhysicalInactivityFemaleData["Age-Adjusted Physical Inactivity"])} of the female population in {topPhysicalInactivityFemaleData.Geography} were physically inactive, as compared to {formatPercentage(stateLevelMaleData["Age-Adjusted Physical Inactivity"])} of the male and {formatPercentage(stateLevelFemaleData["Age-Adjusted Physical Inactivity"])} of the female population in Michigan.</p>
+          <p>In {topPhysicalInactivityFemaleData.Year}, {formatPercentage(topPhysicalInactivityMaleData["Age-Adjusted Physical Inactivity"])} of the male population and {formatPercentage(topPhysicalInactivityFemaleData["Age-Adjusted Physical Inactivity"])} of the female population in {}
+            {topPhysicalInactivityFemaleData.Geography} were physically inactive, as compared to {formatPercentage(stateLevelMaleData["Age-Adjusted Physical Inactivity"])} of the male and {formatPercentage(stateLevelFemaleData["Age-Adjusted Physical Inactivity"])} of the female population in Michigan.</p>
           <p>Following barchart shows the physical inactivity rate for male and female in {topPhysicalInactivityFemaleData.Geography} and the map shows physical inactivity rate for census tracts in Detroit, Livonia, Dearborn and Westland.</p>
 
           {/* Draw a BarChart to show data for Physical Inactivity by Sex. */}
@@ -83,6 +89,7 @@ class PhysicalInactivity extends SectionColumns {
           }}
           dataFormat={resp => resp.data}
           />
+          <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
         </article>
 

@@ -51,7 +51,7 @@ class FoodAvailability extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Food Availability</SectionTitle>
         <article>
-          {isFoodStoreDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {topStore.Geography}</div>}
+          {isFoodStoreDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">data is shown for {topStore.Geography}</div>}
           <Stat
             title={"most number of food store available"}
             year={topStore.Year}

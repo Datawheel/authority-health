@@ -80,7 +80,7 @@ class WaterQuality extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Water Quality</SectionTitle>
         <article>
-          {this.props.meta.level !== "tract" ? <div className="disclaimer">Data only available for tracts.</div> : <div></div>}
+          {this.props.meta.level !== "tract" ? <div className="disclaimer">Data is shown at the census tract level.</div> : <div></div>}
           {/* Create a dropdown for lead and mercury level in water. */}
           <label className="pt-label pt-inline" htmlFor="health-center-dropdown">
             Show data for

@@ -91,7 +91,7 @@ class Homeless extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Homeless</SectionTitle>
         <article>
-          {isHomelessDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {topShelteredHomelessTypes.Geography}</div>}
+          {isHomelessDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">data is shown for {topShelteredHomelessTypes.Geography}</div>}
           <Stat
             title={"Homeless rate"}
             year={totalHomelessData.data[0].Year}

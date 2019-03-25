@@ -82,7 +82,7 @@ class Incarceration extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Incarceration</SectionTitle>
         <article>
-          {isIncarcerationDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {incarcerationData.data[0].Geography}</div>}
+          {isIncarcerationDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">data is shown for {incarcerationData.data[0].Geography}</div>}
           <Stat
             title="Most common crime"
             year={topOffenceData.Year}

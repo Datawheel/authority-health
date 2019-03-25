@@ -96,7 +96,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
           {/* Show top stats for the dropdown selected. */}
           { isHealthConditionWeightedValueSelected
             ? <div>
-              <div className="disclaimer">Data only available for zip regions.</div>
+              <div className="disclaimer">data is shown at the zip region level</div>
               <Stat
                 title={"Location with highest prevalence"}
                 year={topDropdownWeightedData["End Year"]}
@@ -105,7 +105,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
               />
             </div>
             : <div>
-              <div className="disclaimer">Data only available for tracts.</div>
+              <div className="disclaimer">data is shown at the census tract level</div>
               <Stat
                 title={"Location with highest prevalence"}
                 year={topDropdownValueTract.Year}

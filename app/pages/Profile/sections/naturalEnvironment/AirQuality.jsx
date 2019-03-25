@@ -32,7 +32,7 @@ class AirQuality extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Air Quality</SectionTitle>
         <article>
-          {isAirQualityDaysAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">Showing data for {airQualityDays.data[0].Geography}</div>}
+          {isAirQualityDaysAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">data is shown for {airQualityDays.data[0].Geography}</div>}
           <Stat
             title={"Days with good quality"}
             year={topRecentYearAirQualityDays.Year}

@@ -84,7 +84,7 @@ class HealthCenterDemographics extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Health Center Demographics</SectionTitle>
         <article>
-          {isZipLevelDataAvailable ? <div></div> : meta.name === "" ? <div></div> : <div className="disclaimer">Showing data for Wayne County</div>}
+          {isZipLevelDataAvailable ? <div></div> : meta.name === "" ? <div></div> : <div className="disclaimer">data is shown for Wayne County</div>}
           {/* Create a dropdown list. */}
           {/* <label className="pt-label pt-inline" htmlFor="health-center-dropdown">
             Show data for

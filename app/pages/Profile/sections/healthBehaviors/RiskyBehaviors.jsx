@@ -67,6 +67,7 @@ class RiskyBehaviors extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Risky Behaviors</SectionTitle>
         <article>
+          {isSecondHandSmokeOrMonthlyAlcoholSelected ? <div className="disclaimer">data is shown at the zip region level</div> : <div className="disclaimer">data is shown at the census tract level</div>}
           {/* Create a dropdown for drug types. */}
           <label className="pt-label pt-inline" htmlFor="risky-behaviors-dropdown">
             Show data for

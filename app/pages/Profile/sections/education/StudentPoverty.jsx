@@ -64,13 +64,14 @@ class StudentPoverty extends SectionColumns {
             <Stat
               title="Most impoverished level"
               year={topLevelOfSchoolData.Year}
-              value={topLevelOfSchoolData["Level of School"]}
-              qualifier={formatPopulation(topLevelOfSchoolData.share)}
+              value={formatLabel(topLevelOfSchoolData["Level of School"])}
+              qualifier={`${formatPopulation(topLevelOfSchoolData.share)} of the population in ${topLevelOfSchoolData.Geography}`}
             />
             <Stat
               title={"Enrolled Population"}
               year={topLevelOfSchoolData.Year}
               value={formatPopulation(recentYearEnrolledInSchoolPercentage)}
+              qualifier={`of the population in ${topLevelOfSchoolData.Geography}`}
             />
             <p>In {topLevelOfSchoolData.Year}, the most common education level of students in {topLevelOfSchoolData.Geography} living in poverty were {topLevelOfSchoolData["Level of School"].toLowerCase()} ({formatPopulation(topLevelOfSchoolData.share)}) and {formatPopulation(recentYearEnrolledInSchoolPercentage)} of the total population was enrolled in school in {topLevelOfSchoolData.Geography}.</p>
             <p>The following chart shows the level of school and the share of students in poverty that were enrolled in school.</p>

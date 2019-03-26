@@ -76,19 +76,19 @@ class Poverty extends SectionColumns {
             title="Most common race"
             year={povertyByRaceAvailable ? topPovertyByRace.Year : ""}
             value={povertyByRaceAvailable ? topPovertyByRace.Race : "N/A"}
-            qualifier={povertyByRaceAvailable ? formatPopulation(topPovertyByRace.share) : ""}
+            qualifier={povertyByRaceAvailable ? `${formatPopulation(topPovertyByRace.share)} of the population in ${topPovertyByRace.Geography}` : ""}
           />
           <Stat
             title="Most common male age"
             year={povertyByAgeAndGenderAvailable ? topMalePovertyData.Year : ""}
             value={povertyByAgeAndGenderAvailable ? topMalePovertyData.Age : "N/A"}
-            qualifier={povertyByAgeAndGenderAvailable ? formatPopulation(topMalePovertyData.share) : ""}
+            qualifier={povertyByAgeAndGenderAvailable ? `${formatPopulation(topMalePovertyData.share)} of the population in ${topMalePovertyData.Geography}` : ""}
           />
           <Stat
             title="Most common female age"
             year={povertyByAgeAndGenderAvailable ? topFemalePovertyData.Year : ""}
             value={povertyByAgeAndGenderAvailable ? topFemalePovertyData.Age : "N/A"}
-            qualifier={povertyByAgeAndGenderAvailable ? formatPopulation(topFemalePovertyData.share) : ""}
+            qualifier={povertyByAgeAndGenderAvailable ? `${formatPopulation(topFemalePovertyData.share)} of the population in ${topFemalePovertyData.Geography}` : ""}
           />
           {povertyByAgeAndGenderAvailable ? <p>In {topMalePovertyData.Year}, most common male age in poverty was {topMalePovertyData.Age.toLowerCase()} ({formatPopulation(topMalePovertyData.share)}) while most common female age was {topFemalePovertyData.Age.toLowerCase()} ({formatPopulation(topFemalePovertyData.share)}) in {topFemalePovertyData.Geography}. The chart on the right shows male and female age distribution in poverty. </p> : ""}
           {povertyByRaceAvailable ? <p>In {topPovertyByRace.Year}, the majority race in poverty was {topPovertyByRace.Race} ({formatPopulation(topPovertyByRace.share)}) of the total population in {topPovertyByRace.Geography}. The following chart shows the population in poverty by race.</p> : ""}

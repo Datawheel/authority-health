@@ -58,7 +58,7 @@ class EducationalAttainment extends SectionColumns {
               title="Most common education level"
               year={topEducationalAttainment.Year}
               value={topEducationalAttainment["Educational Attainment"]}
-              qualifier={formatPopulation(topEducationalAttainment.share)}
+              qualifier={`${formatPopulation(topEducationalAttainment.share)} of the population in ${topEducationalAttainment.Geography}`}
             />
             <p>In {topEducationalAttainment.Year}, the most common education level attained in {topEducationalAttainment.Geography} was {topEducationalAttainment["Educational Attainment"].toLowerCase()} with a share of {formatPopulation(topEducationalAttainment.share)}.</p>
             <p>The following chart shows educational attainment of male and female in {topEducationalAttainment.Geography}.</p>

@@ -67,7 +67,7 @@ class Rentals extends SectionColumns {
 
           <p>{rentAmountDataAvailable ? <span>In {rentAmountData[0].Year}, the median price for a rental unit in {rentAmountData[0].Geography} was ${formatAbbreviate(rentAmountData[0]["Rent Amount"])}/month. This is a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "increase"} from the previous year (${formatAbbreviate(rentAmountData[1]["Rent Amount"])}/month).</span> : ""}</p>
           <p>{utilitiesDataAvailable ? <span>{formatPercentage(recentYearNoExtraUtilitiesPercentage)} of the rental properties in {utilitiesData[0].Geography} include utilities with the price of rent.</span> : ""}</p>
-          <p>{rentersByIncomePercentageAvailable ? <span> The average income bracket for renters in {topIncomeToPayMostRent.Geography} is {rangeFormatter(topIncomeToPayMostRent["Household Income"])} and the following bar chart shows the renter distribution across all income levels.</span> : ""}</p>
+          <p>{rentersByIncomePercentageAvailable ? <span> The average income bracket for renters in {topIncomeToPayMostRent.Geography} is {rangeFormatter(topIncomeToPayMostRent["Household Income"])}.</span> : ""}</p>
 
           {/* Create a LinePlot. */}
           {rentAmountDataAvailable
@@ -82,6 +82,7 @@ class Rentals extends SectionColumns {
                 tickFormat: d => `$${formatAbbreviate(d)}`,
                 title: "Rent Per Month"
               },
+              title: d => `Rentals Over Time in ${d[0].Geography}`,
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => `$${formatAbbreviate(d["Rent Amount"])}`]]}
             }}
             /> : <div></div>}
@@ -98,6 +99,7 @@ class Rentals extends SectionColumns {
             x: d => d["Household Income"],
             y: "share",
             time: "Year",
+            title: d => `Renter Distribution Across All Income Levels in ${d[0].Geography}`,
             xSort: (a, b) => a["ID Household Income"] - b["ID Household Income"],
             xConfig: {
               labelRotation: false,

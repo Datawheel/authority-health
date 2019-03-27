@@ -28,7 +28,7 @@ const formatEmploymentStatusData = employmentStatus => {
   const getTopMaleUnemploymemtData = getMaleUnemploymemtData.sort((a, b) => b.share - a.share)[0];
   const getFemaleUnemploymemtData = unemployedData.filter(d => d.Sex === "Female");
   const getTopFemaleUnemploymemtData = getFemaleUnemploymemtData.sort((a, b) => b.share - a.share)[0];
-  
+
   return [unemployedData, getTopMaleUnemploymemtData, getTopFemaleUnemploymemtData];
 };
 
@@ -66,7 +66,7 @@ class Unemployment extends SectionColumns {
     }
 
     const recentYearUnemploymentRate = unemploymentRate.data[0];
-    
+
     return (
       <SectionColumns>
         <SectionTitle>Unemployment</SectionTitle>
@@ -96,7 +96,7 @@ class Unemployment extends SectionColumns {
             ? <BarChart config={{
               data: `/api/data?measures=Population by Employment Status&drilldowns=Employment Status,Age,Sex&Geography=${meta.id}&Year=all`,
               discrete: "x",
-              height: 300,
+              height: 250,
               groupBy: ["Employment Status", "Sex"],
               x: "Age",
               y: "share",
@@ -124,14 +124,16 @@ class Unemployment extends SectionColumns {
         <LinePlot config={{
           data: `/api/data?measures=Unemployment Rate&Geography=${meta.id}&Year=all`,
           discrete: "x",
-          height: 300,
           baseline: 0,
           legend: false,
           groupBy: "Geography",
           x: "Year",
           y: "Unemployment Rate",
           title: d => `Unemployment Over Time in ${d[0].Geography}`,
-          yConfig: {tickFormat: d => formatPercentage(d)},
+          yConfig: {
+            tickFormat: d => formatPercentage(d),
+            title: "Unemployment Rate"
+          },
           tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d["Unemployment Rate"])]]}
         }}
         dataFormat={resp => resp.data}

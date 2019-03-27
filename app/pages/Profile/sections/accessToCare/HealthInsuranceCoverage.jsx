@@ -43,7 +43,7 @@ class HealthInsuranceCoverage extends SectionColumns {
 
   render() {
     const {meta, coverageData, nationOverallCoverage, stateOverallCoverage, wayneCountyOverallCoverage, currentLevelOverallCoverage} = this.props;
-    
+
     const coverageDataAvailable = coverageData.data.length !== 0;
 
     const nationCoverage = findOverallCoverage(nationOverallCoverage);
@@ -101,7 +101,7 @@ class HealthInsuranceCoverage extends SectionColumns {
             <BarChart config={{
               data: `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status,Sex,Age&Geography=${geoId}&Year=all`,
               discrete: "x",
-              height: 400,
+              height: 250,
               groupBy: "Sex",
               x: "Age",
               y: "share",
@@ -131,7 +131,6 @@ class HealthInsuranceCoverage extends SectionColumns {
             colorScaleConfig: {axisConfig: {tickFormat: d => formatPercentage(d)}},
             time: "Year",
             label: d => d.Place,
-            height: 400,
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]},
             topojson: "/topojson/place.json",
             topojsonFilter: d => places.includes(d.id)

@@ -27,7 +27,7 @@ class AirQuality extends SectionColumns {
 
     // Get top air polutants data.
     const topRecentYearAirPollutant = airPollutants.sort((a, b) => b["Air Pollutant Days"] - a["Air Pollutant Days"])[0];
-    
+
     return (
       <SectionColumns>
         <SectionTitle>Air Quality</SectionTitle>
@@ -99,7 +99,6 @@ class AirQuality extends SectionColumns {
         <LinePlot config={{
           data: `/api/data?measures=Air Quality Days&drilldowns=Category&Geography=${meta.id}&Year=all`,
           discrete: "x",
-          height: 400,
           title: "Air Quality Over Years",
           legend: false,
           label: d => titleCase(d.Category),

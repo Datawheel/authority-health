@@ -119,7 +119,6 @@ class Poverty extends SectionColumns {
           ? <BarChart config={{
             data: `https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Age,Gender&Geography=${meta.id}&Year=all`,
             discrete: "x",
-            height: 400,
             groupBy: "Gender",
             x: "Age",
             y: "share",

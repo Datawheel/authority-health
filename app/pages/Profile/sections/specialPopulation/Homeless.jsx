@@ -108,9 +108,9 @@ class Homeless extends SectionColumns {
             value={topUnshelteredHomelessTypes.Category}
             qualifier={formatPercentage(topUnshelteredHomelessTypes.share)}
           />
-          
-          <p>In {totalHomelessData.data[0].Year}, {formatPercentage(totalHomelessPopulation)} of the population in {totalHomelessData.data[0].Geography} was homeless. { } 
-          The most common sheltered demographic was {topShelteredHomelessTypes.Category.toLowerCase()} ({formatPercentage(topShelteredHomelessTypes.share)}) { } 
+
+          <p>In {totalHomelessData.data[0].Year}, {formatPercentage(totalHomelessPopulation)} of the population in {totalHomelessData.data[0].Geography} was homeless. { }
+          The most common sheltered demographic was {topShelteredHomelessTypes.Category.toLowerCase()} ({formatPercentage(topShelteredHomelessTypes.share)}) { }
           and unsheltered demographic was {topUnshelteredHomelessTypes.Category.toLowerCase()} ({formatPercentage(topUnshelteredHomelessTypes.share)}).</p>
 
           <p>Following charts shows different categories and types of sheltered and unsheltered homeless population in {totalHomelessData.data[0].Geography} and percentages for each one of them.</p>
@@ -142,7 +142,6 @@ class Homeless extends SectionColumns {
         <BarChart config={{
           data: `/api/data?measures=Sheltered Homeless Population,Unsheltered Homeless Population&drilldowns=Category&Geography=${meta.id}&Year=all`,
           discrete: "x",
-          height: 400,
           // stacked: true,
           legend: false,
           groupBy: "HomelessType",

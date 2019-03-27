@@ -39,7 +39,7 @@ class PhysicalInactivity extends SectionColumns {
         <SectionTitle>Physical Inactivity</SectionTitle>
         <article>
           {isPhysicalInactivityBySexAvailableForCurrentlocation ? <div></div> : <div className="disclaimer">data is shown for {physicalInactivityPrevalenceBySex.data[0].Geography}</div>}
- 
+
           <Stat
             title={"Location with highest prevalence"}
             year={topRecentYearData.Year}
@@ -70,7 +70,7 @@ class PhysicalInactivity extends SectionColumns {
           <BarChart config={{
             data: `/api/data?measures=Age-Adjusted Physical Inactivity&drilldowns=Sex&Geography=${meta.id}&Year=all`,
             discrete: "y",
-            height: 250,
+            height: 200,
             legend: false,
             groupBy: "Sex",
             label: d => d.Sex,
@@ -83,6 +83,7 @@ class PhysicalInactivity extends SectionColumns {
               title: "Physical Inactivity Rate"
             },
             yConfig: {
+              barConfig: {stroke: "transparent"},
               ticks: []
             },
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", "Physical Inactivity"],
@@ -103,7 +104,6 @@ class PhysicalInactivity extends SectionColumns {
           colorScaleConfig: {
             axisConfig: {tickFormat: d => formatPercentage(d)}
           },
-          height: 400,
           time: "Year",
           title: "Physical Inactivity for Census Tracts within Detroit, Livonia, Dearborn and Westland",
           tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", "Physical Inactivity"], ["Prevalence", d => `${formatPercentage(d["Physical Inactivity"])}`]]},

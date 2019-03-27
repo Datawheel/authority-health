@@ -31,7 +31,7 @@ class StoreAccessByDemographic extends SectionColumns {
   // Handler function for dropdown onChange event.
   handleChange = event => {
     const dropdownValue = event.target.value;
-    if (dropdownValue !== "Children" && dropdownValue !== "Seniors") { 
+    if (dropdownValue !== "Children" && dropdownValue !== "Seniors") {
       axios.get(`/api/data?measures=Low-Access to Food by Race&drilldowns=Race Group&Geography=${this.state.meta.id}&Year=latest`)
         .then(resp => {
           this.setState({
@@ -90,10 +90,13 @@ class StoreAccessByDemographic extends SectionColumns {
             x: ageSelected ? "Low-Access to Food by Age" : "Low-Access to Food by Race",
             y: ageSelected ? "Age Group" : "Race Group",
             xConfig: {
-              title: "Low Access To Food Stores",
+              title: "% of Population with Low Access To Food Stores",
               tickFormat: d => formatPercentage(d)
             },
-            yConfig: {ticks: []},
+            yConfig: {
+              barConfig: {stroke: "transparent"},
+              ticks: []
+            },
             time: "Year",
             title: d => `Low Access in ${d[0].Geography}`,
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", d => ageSelected ? `${d["Age Group"]}` : `${d["Race Group"]}`], ["Low-Access Rate", d => ageSelected ? formatPercentage(d["Low-Access to Food by Age"]) : formatPercentage(d["Low-Access to Food by Race"])], ["County", d => d.Geography]]}
@@ -112,7 +115,6 @@ class StoreAccessByDemographic extends SectionColumns {
             axisConfig: {tickFormat: d => formatPercentage(d)}
           },
           label: d => d.County,
-          height: 400,
           time: "Year",
           title: "Low Access for Counties in Michigan",
           tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", dropdownValue], ["Low-Access Rate", d => ageSelected ? formatPercentage(d["Low-Access to Food by Age"]) : formatPercentage(d["Low-Access to Food by Race"])]]},

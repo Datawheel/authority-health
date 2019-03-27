@@ -39,7 +39,7 @@ class ObesityAndDiabetes extends SectionColumns {
     if (dropdownValue === "BMI Healthy Weight" ||
     dropdownValue === "BMI Obese" ||
     dropdownValue === "BMI Overweight" ||
-    dropdownValue === "Obesity") { 
+    dropdownValue === "Obesity") {
       axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=latest`) // MiBRFS - All Years
         .then(resp => {
           axios.get(`/api/data?measures=Age-Adjusted Obesity Prevalence&drilldowns=Sex&Geography=${geoId}&Year=latest`) // CDC Wonder - Obesity Prevalence by Sex
@@ -188,7 +188,7 @@ class ObesityAndDiabetes extends SectionColumns {
           <BarChart config={{
             data: isDiabetesSelected ? `/api/data?measures=Age-Adjusted Diabetes Prevalence&drilldowns=Sex&Geography=${meta.id}&Year=all` : `/api/data?measures=Age-Adjusted Obesity Prevalence&drilldowns=Sex&Geography=${meta.id}&Year=all`,
             discrete: "y",
-            height: 250,
+            height: 200,
             legend: false,
             groupBy: "Sex",
             label: d => d.Sex,
@@ -201,16 +201,19 @@ class ObesityAndDiabetes extends SectionColumns {
               title: isDiabetesSelected ? "Diabetes Rate" : "Obesity Rate"
             },
             yConfig: {
+              barConfig: {
+                stroke: "transparent"
+              },
               ticks: []
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", isDiabetesSelected ? "Diabetes" : "Obesity"], 
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", isDiabetesSelected ? "Diabetes" : "Obesity"],
               ["Share", d => isDiabetesSelected ? formatPercentage(d["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(d["Age-Adjusted Obesity Prevalence"])], ["County", d => d.Geography]]}
           }}
           dataFormat={resp => resp.data}
           />
           <Contact slug={this.props.slug} />
         </article>
-        
+
         {/* <div className="disclaimer">{isBMIWeightedDataValueSelected ? "data is shown at the zip region level" : "data is shown at the census tract level"}</div> */}
         {/* Geomap to show Obesity and Diabetes data based on the dropdown value. */}
         {isBMIWeightedDataValueSelected
@@ -222,10 +225,9 @@ class ObesityAndDiabetes extends SectionColumns {
               axisConfig: {tickFormat: d => formatPercentage(d, true)}
             },
             label: d => d["Zip Region"],
-            height: 400,
             time: "End Year",
             title: `${dropdownValue} for Zip Regions in Wayne County`,
-            tooltipConfig: isHealthyWeightSelected ? {tbody: [["Year", d => d.Year], 
+            tooltipConfig: isHealthyWeightSelected ? {tbody: [["Year", d => d.Year],
               ["Condition", `${dropdownValue}`], ["Share", d => `${formatPercentage(d[dropdownValue], true)}`]]} : {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue], true)}`]]},
             topojson: "/topojson/zipregions.json",
             topojsonId: d => d.properties.REGION,
@@ -241,7 +243,6 @@ class ObesityAndDiabetes extends SectionColumns {
               axisConfig: {tickFormat: d => formatPercentage(d)}
             },
             label: d => d.Tract,
-            height: 400,
             time: "Year",
             title: `${dropdownValue} for Census Tracts within Detroit, Livonia, Dearborn and Westland`,
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue])}`]]},

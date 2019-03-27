@@ -86,7 +86,6 @@ const axisConfig = {
 
 // defaults
 export default {
-  height: 400,
   shapeConfig: {
     fill: colorLogic,
     fontFamily: () => typeface,
@@ -135,6 +134,22 @@ export default {
       // death to ticks
       tickSize: 0
     },
+    legendConfig: {
+      // labels are directly in the shape
+      shapeConfig: {
+        fontColor: headingFontColor,
+        fontFamily: () => typeface,
+        fontResize: false,
+        maxFont: fontSizeSm,
+        height: fontSizeSm,
+        width: fontSizeSm,
+        // legend icons
+        labelConfig: {
+          fontColor: defaultFontColor,
+          fontFamily: () => typeface
+        }
+      }
+    },
     // scale type
     scale: "jenks"
   },
@@ -155,6 +170,8 @@ export default {
       }
     }
   },
+  innerRadius: 1,
+  padPixel: 2,
   // timeline defaults
   timelineConfig: {
     brushing: false,
@@ -174,6 +191,11 @@ export default {
         fontColor: defaultFontColor
       }
     }
+  },
+  titleConfig: {
+    fontColor: defaultFontColor,
+    fontFamily: () => typeface,
+    padding: 0
   },
   // axis defaults (see line 8)
   xConfig: axisConfig,

@@ -123,7 +123,6 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
           ? <BarChart config={{
             data: visionAndHearingData,
             discrete: "x",
-            height: 400,
             stacked: true,
             label: d => d.disabilityType instanceof Array ? d.Sex : formatDisabilityName(d.disabilityType),
             groupBy: ["disabilityType", "Sex"],

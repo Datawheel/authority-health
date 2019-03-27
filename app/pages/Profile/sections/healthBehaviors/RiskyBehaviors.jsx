@@ -28,7 +28,7 @@ class RiskyBehaviors extends SectionColumns {
   // Handler function for dropdown onChange.
   handleChange = event => {
     const dropdownValue = event.target.value;
-    if (dropdownValue === "Secondhand Smoke Exposure" || dropdownValue === "Monthly Alcohol Consumption") { 
+    if (dropdownValue === "Secondhand Smoke Exposure" || dropdownValue === "Monthly Alcohol Consumption") {
       axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=latest`)
         .then(resp => {
           axios.get(`/api/data?measures=${dropdownValue}&Geography=05000US26163&Year=latest`) // Get Wayne County data for comparison. Only available for MiBRFS cube and not 500 cities.
@@ -140,7 +140,6 @@ class RiskyBehaviors extends SectionColumns {
               axisConfig: {tickFormat: d => formatPercentage(d, true)}
             },
             label: d => d["Zip Region"],
-            height: 400,
             time: "End Year",
             title: `${dropdownValue} for Zip Regions in Wayne County`,
             tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Behavior", `${dropdownValue}`], ["Prevalence", d => formatPercentage(d[dropdownValue], true)]]},
@@ -158,7 +157,6 @@ class RiskyBehaviors extends SectionColumns {
               axisConfig: {tickFormat: d => formatPercentage(d)}
             },
             label: d => d.Tract,
-            height: 400,
             time: "Year",
             title: `${dropdownValue} for Census Tracts within Detroit, Livonia, Dearborn and Westland`,
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Behavior", `${dropdownValue}`], ["Prevalence", d => formatPercentage(d[dropdownValue])]]},

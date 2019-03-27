@@ -93,7 +93,6 @@ class Rentals extends SectionColumns {
           ? <BarChart config={{
             data: `https://acs.datausa.io/api/data?measures=Renters by Income Percentage&drilldowns=Household Income&Geography=${meta.id}&Year=all`,
             discrete: "x",
-            height: 400,
             legend: false,
             groupBy: "Household Income",
             x: d => d["Household Income"],

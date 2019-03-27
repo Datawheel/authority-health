@@ -148,6 +148,10 @@ layout
         margin-left: 2rem;
       }
 
+      & article > .viz + .viz {
+        margin-left: 0;
+      }
+
       /* single column layout on smaller screens */
       @add-mixin max-md {
         display: block; /* stacked layout */

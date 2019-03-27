@@ -195,6 +195,7 @@ class ObesityAndDiabetes extends SectionColumns {
             x: isDiabetesSelected ? "Age-Adjusted Diabetes Prevalence" : "Age-Adjusted Obesity Prevalence",
             y: "Sex",
             time: "ID Year",
+            title: `${isDiabetesSelected ? "Diabetes" : "Obesity"} in Wayne County`,
             xConfig: {
               tickFormat: d => formatPercentage(d),
               title: isDiabetesSelected ? "Diabetes Rate" : "Obesity Rate"
@@ -223,6 +224,7 @@ class ObesityAndDiabetes extends SectionColumns {
             label: d => d["Zip Region"],
             height: 400,
             time: "End Year",
+            title: `${dropdownValue} for Zip Regions in Wayne County`,
             tooltipConfig: isHealthyWeightSelected ? {tbody: [["Year", d => d.Year], 
               ["Condition", `${dropdownValue}`], ["Share", d => `${formatPercentage(d[dropdownValue], true)}`]]} : {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue], true)}`]]},
             topojson: "/topojson/zipregions.json",
@@ -241,6 +243,7 @@ class ObesityAndDiabetes extends SectionColumns {
             label: d => d.Tract,
             height: 400,
             time: "Year",
+            title: `${dropdownValue} for Census Tracts within Detroit, Livonia, Dearborn and Westland`,
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue])}`]]},
             topojson: "/topojson/tract.json",
             topojsonId: d => d.id,

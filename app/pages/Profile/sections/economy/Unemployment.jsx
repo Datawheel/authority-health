@@ -112,6 +112,7 @@ class Unemployment extends SectionColumns {
               shapeConfig: {
                 label: false
               },
+              title: d => `Unemployment in ${d[0].Geography}`,
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => rangeFormatter(d.Age)], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}
             dataFormat={resp => formatEmploymentStatusData(resp.data)[0]}
@@ -129,6 +130,7 @@ class Unemployment extends SectionColumns {
           groupBy: "Geography",
           x: "Year",
           y: "Unemployment Rate",
+          title: d => `Unemployment Over Time in ${d[0].Geography}`,
           yConfig: {tickFormat: d => formatPercentage(d)},
           tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d["Unemployment Rate"])]]}
         }}

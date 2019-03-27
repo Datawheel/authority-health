@@ -111,7 +111,7 @@ class RiskyBehaviors extends SectionColumns {
                   return `${wordsArr[2]}`;
                 },
                 time: "End Year",
-                title: "Smoking Status",
+                title: d => `Smoking Status in ${d[0].Geography}`,
                 tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Prevalence", d => formatPercentage(d[d.SmokingType], true)], ["County", d => d.Geography]]}
               }}
               dataFormat={resp => {
@@ -142,6 +142,7 @@ class RiskyBehaviors extends SectionColumns {
             label: d => d["Zip Region"],
             height: 400,
             time: "End Year",
+            title: `${dropdownValue} for Zip Regions in Wayne County`,
             tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Behavior", `${dropdownValue}`], ["Prevalence", d => formatPercentage(d[dropdownValue], true)]]},
             topojson: "/topojson/zipregions.json",
             topojsonId: d => d.properties.REGION,
@@ -159,6 +160,7 @@ class RiskyBehaviors extends SectionColumns {
             label: d => d.Tract,
             height: 400,
             time: "Year",
+            title: `${dropdownValue} for Census Tracts within Detroit, Livonia, Dearborn and Westland`,
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Behavior", `${dropdownValue}`], ["Prevalence", d => formatPercentage(d[dropdownValue])]]},
             topojson: "/topojson/tract.json",
             topojsonId: d => d.id,

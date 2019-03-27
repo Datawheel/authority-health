@@ -4,7 +4,6 @@ import {sum} from "d3-array";
 import {nest} from "d3-collection";
 import {LinePlot, BarChart} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
-import {titleCase} from "d3plus-text";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -114,7 +113,7 @@ class Homeless extends SectionColumns {
           The most common sheltered demographic was {topShelteredHomelessTypes.Category.toLowerCase()} ({formatPercentage(topShelteredHomelessTypes.share)}) { } 
           and unsheltered demographic was {topUnshelteredHomelessTypes.Category.toLowerCase()} ({formatPercentage(topUnshelteredHomelessTypes.share)}).</p>
 
-          <p>Following charts shows different categories and types of sheltered and unsheltered homeless population in {totalHomelessData.data[0].Geography} and percentage for each one of them.</p>
+          <p>Following charts shows different categories and types of sheltered and unsheltered homeless population in {totalHomelessData.data[0].Geography} and percentages for each one of them.</p>
 
           {/* Draw a lineplot for sheltered homeless population. */}
           <LinePlot config={{
@@ -159,7 +158,7 @@ class Homeless extends SectionColumns {
           shapeConfig: {
             label: false
           },
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["County", d => d.Geography]]}
         }}
         dataFormat={resp => formatTypesOfHomeless(resp.data)}
         />

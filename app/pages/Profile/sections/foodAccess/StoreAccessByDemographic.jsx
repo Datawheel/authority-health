@@ -95,6 +95,7 @@ class StoreAccessByDemographic extends SectionColumns {
             },
             yConfig: {ticks: []},
             time: "Year",
+            title: d => `Low Access in ${d[0].Geography}`,
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", d => ageSelected ? `${d["Age Group"]}` : `${d["Race Group"]}`], ["Low-Access Rate", d => ageSelected ? formatPercentage(d["Low-Access to Food by Age"]) : formatPercentage(d["Low-Access to Food by Race"])], ["County", d => d.Geography]]}
           }}
           dataFormat={resp => resp.data}
@@ -113,6 +114,7 @@ class StoreAccessByDemographic extends SectionColumns {
           label: d => d.County,
           height: 400,
           time: "Year",
+          title: "Low Access for Counties in Michigan",
           tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", dropdownValue], ["Low-Access Rate", d => ageSelected ? formatPercentage(d["Low-Access to Food by Age"]) : formatPercentage(d["Low-Access to Food by Race"])]]},
           topojson: "/topojson/county.json",
           topojsonFilter: d => d.id.startsWith("05000US26")

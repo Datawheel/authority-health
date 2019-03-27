@@ -106,11 +106,11 @@ class HealthInsuranceCoverage extends SectionColumns {
               x: "Age",
               y: "share",
               time: "ID Year",
+              title: d => `Health Insurance Coverage in  ${d[0].Geography}`,
               xSort: (a, b) => a["ID Age"] - b["ID Age"],
               xConfig: {
                 labelRotation: false,
-                tickFormat: d => rangeFormatter(d),
-                title: "Population with Coverage"
+                tickFormat: d => rangeFormatter(d)
               },
               yConfig: {tickFormat: d => formatPercentage(d)},
               shapeConfig: {
@@ -127,7 +127,7 @@ class HealthInsuranceCoverage extends SectionColumns {
             data: "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status,Place&Geography=05000US26163:children&Year=all",
             groupBy: "ID Place",
             colorScale: "share",
-            title: "Population by Coverage",
+            title: "Health Insurance Coverage for Places in Wayne County",
             colorScaleConfig: {axisConfig: {tickFormat: d => formatPercentage(d)}},
             time: "Year",
             label: d => d.Place,

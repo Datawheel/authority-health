@@ -217,7 +217,7 @@ class Immigrants extends SectionColumns {
           data: totalImmigrantsSelected ? "/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Place&Year=all" : "/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Poverty Status,Place&Year=all",
           groupBy: "ID Place",
           colorScale: "share",
-          title: totalImmigrantsSelected ? "Immigrant Population" : "Immigrants in Poverty",
+          title: totalImmigrantsSelected ? "Total Immigrants for Places in Wayne County" : "Immigrants in Poverty for Places in Wayne County",
           colorScaleConfig: {axisConfig: {tickFormat: d => formatPercentage(d)}},
           time: "Year",
           label: d => d.Place,

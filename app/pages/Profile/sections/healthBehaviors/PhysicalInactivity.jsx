@@ -77,6 +77,7 @@ class PhysicalInactivity extends SectionColumns {
             x: "Age-Adjusted Physical Inactivity",
             y: "Sex",
             time: "Year",
+            title: d => `Physical Inactivity in ${d[0].Geography}`,
             xConfig: {
               tickFormat: d => formatPercentage(d),
               title: "Physical Inactivity Rate"
@@ -104,6 +105,7 @@ class PhysicalInactivity extends SectionColumns {
           },
           height: 400,
           time: "Year",
+          title: "Physical Inactivity for Census Tracts within Detroit, Livonia, Dearborn and Westland",
           tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", "Physical Inactivity"], ["Prevalence", d => `${formatPercentage(d["Physical Inactivity"])}`]]},
           topojson: "/topojson/tract.json",
           topojsonFilter: d => d.id.startsWith("14000US26163")

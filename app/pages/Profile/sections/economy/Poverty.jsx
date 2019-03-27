@@ -103,10 +103,7 @@ class Poverty extends SectionColumns {
               y: "Race",
               x: "share",
               time: "Year",
-              yConfig: {
-                ticks: [],
-                title: "Population Below Poverty by Race"
-              },
+              title: d => `Population Below Poverty by Race in ${d[0].Geography}`,
               xConfig: {
                 tickFormat: d => formatPopulation(d),
                 title: "Share"
@@ -127,11 +124,11 @@ class Poverty extends SectionColumns {
             x: "Age",
             y: "share",
             time: "Year",
+            title: d => `Population Below Poverty by Age and Gender in ${d[0].Geography}`,
             xSort: (a, b) => a["ID Age"] - b["ID Age"],
             xConfig: {
               labelRotation: false,
-              tickFormat: d => rangeFormatter(d),
-              title: "Population Below Poverty by Age and Gender"
+              tickFormat: d => rangeFormatter(d)
             },
             yConfig: {
               tickFormat: d => formatPopulation(d),

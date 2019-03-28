@@ -95,8 +95,6 @@ class HealthInsuranceCoverage extends SectionColumns {
 
             <p>In {nationCoverage.Year}, {formatPercentage(nationCoverage.share)} of the population in United States had health coverage, compared to {formatPercentage(stateCoverage.share)} in Michigan{meta.level !== "county" ? "," : " and"} {formatPercentage(countyCoverage.share)} in Wayne County{meta.level !== "county" ? <span> and {formatPercentage(currentLevelCoverage.share)} in {currentLevelCoverage.Geography}.</span> : "."}</p>
             <p>In {ageGroupYear}, the age groups most likely to have health care coverage in {maleCoverageData[0].Geography} were {topMaleAgeGroup} years for men and {topFemaleAgeGroup} years for women.</p>
-            <p>The map here shows the percentage of population with health insurance coverage for places in Wayne County.</p>
-            <p>The following chart shows the male and female age groups with health insurance coverage in {maleCoverageData[0].Geography}.</p>
 
             <BarChart config={{
               data: `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status,Sex,Age&Geography=${geoId}&Year=all`,
@@ -106,7 +104,7 @@ class HealthInsuranceCoverage extends SectionColumns {
               x: "Age",
               y: "share",
               time: "ID Year",
-              title: d => `Health Insurance Coverage in  ${d[0].Geography}`,
+              title: d => `Health Insurance Coverage by Age and Gender in ${d[0].Geography}`,
               xSort: (a, b) => a["ID Age"] - b["ID Age"],
               xConfig: {
                 labelRotation: false,

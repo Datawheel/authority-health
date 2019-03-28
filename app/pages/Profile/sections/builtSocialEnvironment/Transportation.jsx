@@ -92,25 +92,24 @@ class Transportation extends SectionColumns {
             title="Most common commute time"
             year={commuteTimeDataAvailable ? topRecentYearCommuteTime.Year : ""}
             value={commuteTimeDataAvailable ? topRecentYearCommuteTime["Travel Time"] : "N/A"}
-            qualifier={commuteTimeDataAvailable ? formatPercentage(topRecentYearCommuteTime.share) : ""}
+            qualifier={commuteTimeDataAvailable ? `(${formatPercentage(topRecentYearCommuteTime.share)})` : ""}
           />
           <Stat
             title="Most common means of transportation"
             year={transportationMeansAvailable ? topRecentYearModeOfTransport.Year : ""}
             value={transportationMeansAvailable ? topRecentYearModeOfTransport["Transportation Means"] : "N/A"}
-            qualifier={transportationMeansAvailable ? formatPercentage(topRecentYearModeOfTransport.share) : ""}
+            qualifier={transportationMeansAvailable ? `(${formatPercentage(topRecentYearModeOfTransport.share)})` : ""}
           />
           <Stat
             title="Average vehicles per household"
             year={numberOfVehiclesDataAvailable ? topRecentYearNumberOfVehicles.Year : ""}
             value={numberOfVehiclesDataAvailable ? rangeFormatter(topRecentYearNumberOfVehicles["Vehicles Available"]) : "N/A"}
-            qualifier={numberOfVehiclesDataAvailable ? formatPercentage(topAverageVehiclesPerHousehold) : ""}
+            qualifier={numberOfVehiclesDataAvailable ? `(${formatPercentage(topAverageVehiclesPerHousehold)})` : ""}
           />
           <p>
             {commuteTimeDataAvailable ? <span>As of {topRecentYearCommuteTime.Year}, most of the workforce living in {topRecentYearCommuteTime.Geography} has a {formatMinutes(topRecentYearCommuteTime["Travel Time"])} commute ({formatPercentage(topRecentYearCommuteTime.share)}). </span> : ""}
             {transportationMeansAvailable ? <span>The majority of commuters {topRecentYearModeOfTransport["Transportation Means"].toLowerCase()} to work ({formatPercentage(topRecentYearModeOfTransport.share)}).</span> : ""}
           </p>
-          <p>The following charts show the distribution of commute times, access to cars by gender, and percentages of means of transportation.</p>
 
           {/* Draw a Barchart for Number of vehicles in each household. */}
           {numberOfVehiclesDataAvailable
@@ -122,11 +121,11 @@ class Transportation extends SectionColumns {
               x: d => d["Vehicles Available"],
               y: "share",
               time: "Year",
+              title: d => `Access to Cars by Gender in ${d[0].Geography}`,
               xSort: (a, b) => a["ID Vehicles Available"] - b["ID Vehicles Available"],
               xConfig: {
                 labelRotation: false,
-                tickFormat: d => rangeFormatter(d),
-                title: "Number of Vehicles"
+                tickFormat: d => rangeFormatter(d)
               },
               yConfig: {
                 tickFormat: d => formatPercentage(d),
@@ -153,6 +152,7 @@ class Transportation extends SectionColumns {
             x: "Travel Time",
             y: "share",
             time: "Year",
+            title: d => `Distribution of Commute Time in ${d[0].Geography}`,
             xSort: (a, b) => a["ID Travel Time"] - b["ID Travel Time"],
             xConfig: {
               tickFormat: d => filterTimeBucket(d),
@@ -179,7 +179,7 @@ class Transportation extends SectionColumns {
             legend: false,
             groupBy: "Transportation Means",
             time: "Year",
-            title: "Means of Transportation",
+            title: d => `Means of Transportation in ${d[0].Geography}`,
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
           dataFormat={resp => formatTransportationMeans(resp.data)[0]}

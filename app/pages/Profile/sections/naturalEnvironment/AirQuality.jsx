@@ -52,14 +52,13 @@ class AirQuality extends SectionColumns {
           />
 
           <p>{topRecentYearAirQualityDays["Air Quality Days"]} of 90 days measured were good quality air in {topRecentYearAirQualityDays.Year}. The most common air pollutants was {topRecentYearAirPollutant.Pollutant} ({topRecentYearAirPollutant.Year}) and the median AQI was {airQualityMedianAQIs[0]["Median AQI"]} in {airQualityMedianAQIs[0].Geography}.</p>
-          <p>The following charts show the distribution of air quality days, air pollutants and median AQI over years.</p>
 
           {/* Lineplot to show air pollutants over the years. */}
           <LinePlot config={{
             data: `/api/data?measures=Air Pollutant Days&drilldowns=Pollutant&Geography=${meta.id}&Year=all`,
             discrete: "x",
             height: 200,
-            title: "Air Pollutants Over Years",
+            title: d => `Air Pollutants Over Years in ${d[0].Geography}`,
             legend: false,
             groupBy: "Pollutant",
             x: "Year",
@@ -77,13 +76,10 @@ class AirQuality extends SectionColumns {
             data: `/api/data?measures=Median AQI&Geography=${meta.id}&Year=all`,
             discrete: "x",
             height: 200,
-            title: "Median AQI Over Years",
+            title: d => `Median AQI Over Years in ${d[0].Geography}`,
             legend: false,
             groupBy: "Geography",
             x: "Year",
-            xConfig: {
-              title: "Year"
-            },
             y: "Median AQI",
             yConfig: {
               title: "Median AQI"
@@ -99,7 +95,7 @@ class AirQuality extends SectionColumns {
         <LinePlot config={{
           data: `/api/data?measures=Air Quality Days&drilldowns=Category&Geography=${meta.id}&Year=all`,
           discrete: "x",
-          title: "Air Quality Over Years",
+          title: d => `Air Quality Over Years in ${d[0].Geography}`,
           legend: false,
           label: d => titleCase(d.Category),
           groupBy: "Category",

@@ -85,19 +85,11 @@ class RiskyBehaviors extends SectionColumns {
             qualifier={isSecondHandSmokeOrMonthlyAlcoholSelected ? `${formatPercentage(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue], true)} of the population of this zip region` : `${formatPercentage(topTractSmokingDrinkingData[dropdownValue])} of the population of this census tract`}
           />
           {isSecondHandSmokeOrMonthlyAlcoholSelected
-            ? <div>
-              <p>In {topSecondHandSmokeAndMonthlyAlcoholData["End Year"]}, {formatPercentage(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue], true)} of the population of <ZipRegionDefinition text="zip region" /> {topSecondHandSmokeAndMonthlyAlcoholData["Zip Region"]} had the highest prevalence of {dropdownValue.toLowerCase()}, as compared to {formatPercentage(countyLevelData[0][dropdownValue], true)} in Wayne County.</p>
-              <p>The map here shows the {dropdownValue.toLowerCase()} for zip regions in Wayne County.</p>
-            </div>
-            : <div>
-              <p>In {topTractSmokingDrinkingData.Year}, {formatPercentage(topTractSmokingDrinkingData[dropdownValue])} of the population of <CensusTractDefinition text={topTractSmokingDrinkingData.Tract} /> had the highest prevalence of {dropdownValue.toLowerCase()} out of census tracts in Detroit, Livonia, Dearborn and Westland.</p>
-              <p>The map here shows the {dropdownValue.toLowerCase()} prevalence for tracts in Detroit, Livonia, Dearborn and Westland and the barchart shows the former, current and never smoking status in Wayne County.</p>
-            </div>
+            ? <p>In {topSecondHandSmokeAndMonthlyAlcoholData["End Year"]}, {formatPercentage(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue], true)} of the population of <ZipRegionDefinition text="zip region" /> {topSecondHandSmokeAndMonthlyAlcoholData["Zip Region"]} had the highest prevalence of {dropdownValue.toLowerCase()}, as compared to {formatPercentage(countyLevelData[0][dropdownValue], true)} in Wayne County.</p>
+            : <p>In {topTractSmokingDrinkingData.Year}, {formatPercentage(topTractSmokingDrinkingData[dropdownValue])} of the population of <CensusTractDefinition text={topTractSmokingDrinkingData.Tract} /> had the highest prevalence of {dropdownValue.toLowerCase()} out of census tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
 
-          {dropdownValue === drugTypes[0] ? <p>The pie chart here shows the percentage of former, current and never smoking status of the population in Wayne County.</p> : ""}
-
-          {/* Draw a Treemap to show smoking status: former, current & never. */}
+          {/* Draw a Pie chart to show smoking status: former, current & never. */}
           {dropdownValue === drugTypes[0]
             ? <div>
               <Pie config={{

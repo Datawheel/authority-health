@@ -90,8 +90,8 @@ class Poverty extends SectionColumns {
             value={povertyByAgeAndGenderAvailable ? topFemalePovertyData.Age : "N/A"}
             qualifier={povertyByAgeAndGenderAvailable ? `${formatPopulation(topFemalePovertyData.share)} of the population in ${topFemalePovertyData.Geography}` : ""}
           />
-          {povertyByAgeAndGenderAvailable ? <p>In {topMalePovertyData.Year}, most common male age in poverty was {topMalePovertyData.Age.toLowerCase()} ({formatPopulation(topMalePovertyData.share)}) while most common female age was {topFemalePovertyData.Age.toLowerCase()} ({formatPopulation(topFemalePovertyData.share)}) in {topFemalePovertyData.Geography}. The chart on the right shows male and female age distribution in poverty. </p> : ""}
-          {povertyByRaceAvailable ? <p>In {topPovertyByRace.Year}, the majority race in poverty was {topPovertyByRace.Race} ({formatPopulation(topPovertyByRace.share)}) of the total population in {topPovertyByRace.Geography}. The following chart shows the population in poverty by race.</p> : ""}
+          {povertyByAgeAndGenderAvailable ? <p>In {topMalePovertyData.Year}, most common male age in poverty was {topMalePovertyData.Age.toLowerCase()} ({formatPopulation(topMalePovertyData.share)}) while most common female age was {topFemalePovertyData.Age.toLowerCase()} ({formatPopulation(topFemalePovertyData.share)}) in {topFemalePovertyData.Geography}.</p> : ""}
+          {povertyByRaceAvailable ? <p>In {topPovertyByRace.Year}, the majority race in poverty was {topPovertyByRace.Race} ({formatPopulation(topPovertyByRace.share)}) of the population in {topPovertyByRace.Geography}.</p> : ""}
 
           {povertyByRaceAvailable
             ? <BarChart config={{

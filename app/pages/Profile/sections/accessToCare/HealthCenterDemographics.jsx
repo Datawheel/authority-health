@@ -149,7 +149,7 @@ class HealthCenterDemographics extends SectionColumns {
           height: 250,
           legend: false,
           groupBy: "RaceType",
-          label: d => formatRaceNames(d.RaceType),
+          label: false,
           x: d => d[d.RaceType],
           y: "RaceType",
           time: "Year",
@@ -157,8 +157,8 @@ class HealthCenterDemographics extends SectionColumns {
             tickFormat: d => formatPercentage(d),
             labelRotation: false
           },
-          yConfig: {ticks: []},
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d[d.RaceType])], ["Geography", d => isZipLevelDataAvailable ? d.Geography : "Wayne County"]]}
+          yConfig: {tickFormat: d => formatRaceNames(d)},
+          tooltipConfig: {title: d => d.RaceType, tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d[d.RaceType])], ["Geography", d => isZipLevelDataAvailable ? d.Geography : "Wayne County"]]}
         }}
         dataFormat={resp => formatRaceAndEthnicityData(resp)}
         />

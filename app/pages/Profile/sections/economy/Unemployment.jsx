@@ -89,7 +89,6 @@ class Unemployment extends SectionColumns {
             {employmentStatusAvailable ? <span> The most common unemployed age group for men was {getTopMaleUnemploymemtData.Age.toLowerCase()} ({formatPercentage(getTopMaleUnemploymemtData.share)}), and the most common female unemployed age group for women was {getTopFemaleUnemploymemtData.Age.toLowerCase()} ({formatPercentage(getTopFemaleUnemploymemtData.share)}).</span> : ""}
             {} In {recentYearUnemploymentRate.Year}, the overall unemploymemt rate in {recentYearUnemploymentRate.Geography} was {formatPercentage(recentYearUnemploymentRate["Unemployment Rate"])}.
           </p>
-          <p>The following charts show the unemployment rate over time for Wayne County overall and {getTopMaleUnemploymemtData.Geography === "Wayne County" ? "by age and gender" : <span> for {getTopMaleUnemploymemtData.Geography} by age and gender</span>}.</p>
 
           {/* Barchart to show population by age and gender over the years for selected geography. */}
           {workExperienceAvailable
@@ -112,7 +111,7 @@ class Unemployment extends SectionColumns {
               shapeConfig: {
                 label: false
               },
-              title: d => `Unemployment in ${d[0].Geography}`,
+              title: d => `Unemployment by Age and Gender in ${d[0].Geography}`,
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => rangeFormatter(d.Age)], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}
             dataFormat={resp => formatEmploymentStatusData(resp.data)[0]}

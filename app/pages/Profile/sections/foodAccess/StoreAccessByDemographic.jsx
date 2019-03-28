@@ -90,7 +90,6 @@ class StoreAccessByDemographic extends SectionColumns {
             x: ageSelected ? "Low-Access to Food by Age" : "Low-Access to Food by Race",
             y: ageSelected ? "Age Group" : "Race Group",
             xConfig: {
-              title: "% of Population with Low Access To Food Stores",
               tickFormat: d => formatPercentage(d)
             },
             yConfig: {
@@ -98,7 +97,7 @@ class StoreAccessByDemographic extends SectionColumns {
               ticks: []
             },
             time: "Year",
-            title: d => `Low Access in ${d[0].Geography}`,
+            title: d => `Low Access to Food Store in ${d[0].Geography}`,
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", d => ageSelected ? `${d["Age Group"]}` : `${d["Race Group"]}`], ["Low-Access Rate", d => ageSelected ? formatPercentage(d["Low-Access to Food by Age"]) : formatPercentage(d["Low-Access to Food by Race"])], ["County", d => d.Geography]]}
           }}
           dataFormat={resp => resp.data}
@@ -116,7 +115,7 @@ class StoreAccessByDemographic extends SectionColumns {
           },
           label: d => d.County,
           time: "Year",
-          title: "Low Access for Counties in Michigan",
+          title: "Low Access to Food Store for Counties in Michigan",
           tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", dropdownValue], ["Low-Access Rate", d => ageSelected ? formatPercentage(d["Low-Access to Food by Age"]) : formatPercentage(d["Low-Access to Food by Race"])]]},
           topojson: "/topojson/county.json",
           topojsonFilter: d => d.id.startsWith("05000US26")

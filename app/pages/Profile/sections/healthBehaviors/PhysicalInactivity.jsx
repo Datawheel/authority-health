@@ -64,7 +64,6 @@ class PhysicalInactivity extends SectionColumns {
           <p>In {topRecentYearData.Year}, {formatPercentage(topRecentYearData["Physical Inactivity"])} of the population of <CensusTractDefinition text={topRecentYearData.Tract} /> had the highest prevalence of physical inactivity out of all census tracts in Detroit, Livonia, Dearborn and Westland.</p>
           <p>In {topPhysicalInactivityFemaleData.Year}, {formatPercentage(topPhysicalInactivityMaleData["Age-Adjusted Physical Inactivity"])} of the male population and {formatPercentage(topPhysicalInactivityFemaleData["Age-Adjusted Physical Inactivity"])} of the female population in {}
             {topPhysicalInactivityFemaleData.Geography} were physically inactive, as compared to {formatPercentage(stateLevelMaleData["Age-Adjusted Physical Inactivity"])} of the male and {formatPercentage(stateLevelFemaleData["Age-Adjusted Physical Inactivity"])} of the female population in Michigan.</p>
-          <p>Following barchart shows the physical inactivity rate for male and female in {topPhysicalInactivityFemaleData.Geography} and the map shows physical inactivity rate for census tracts in Detroit, Livonia, Dearborn and Westland.</p>
 
           {/* Draw a BarChart to show data for Physical Inactivity by Sex. */}
           <BarChart config={{
@@ -77,7 +76,7 @@ class PhysicalInactivity extends SectionColumns {
             x: "Age-Adjusted Physical Inactivity",
             y: "Sex",
             time: "Year",
-            title: d => `Physical Inactivity in ${d[0].Geography}`,
+            title: d => `Physical Inactivity by Gender in ${d[0].Geography}`,
             xConfig: {
               tickFormat: d => formatPercentage(d),
               title: "Physical Inactivity Rate"

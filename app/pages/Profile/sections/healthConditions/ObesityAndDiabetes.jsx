@@ -179,11 +179,6 @@ class ObesityAndDiabetes extends SectionColumns {
             {topMaleData.Geography} {isDiabetesSelected ? "had diabetes" : "were obese"}, compared to {isDiabetesSelected ? formatPercentage(stateLevelMaleDiabetes["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(stateLevelMaleObesity["Age-Adjusted Obesity Prevalence"])} of the male {}
             and {isDiabetesSelected ? formatPercentage(stateLevelFemaleDiabetes["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(stateLevelFemaleObesity["Age-Adjusted Obesity Prevalence"])} of the female population in Michigan.</p>
 
-          {isBMIWeightedDataValueSelected
-            ? <p>Following barchart shows male and female prevalence in {topMaleData.Geography} and the map shows the {isHealthyWeightSelected ? "share" : "prevalence"} of {dropdownValue.toLowerCase()} for zip regions in Wayne County.</p>
-            : <p>Following barchart shows male and female prevalence in {topMaleData.Geography} and the map shows the prevalence of {dropdownValue.toLowerCase()} for census tracts in Detroit, Livonia, Dearborn and Westland.</p>
-          }
-
           {/* Draw a BarChart to show data for Obesity Rate by Sex. */}
           <BarChart config={{
             data: isDiabetesSelected ? `/api/data?measures=Age-Adjusted Diabetes Prevalence&drilldowns=Sex&Geography=${meta.id}&Year=all` : `/api/data?measures=Age-Adjusted Obesity Prevalence&drilldowns=Sex&Geography=${meta.id}&Year=all`,

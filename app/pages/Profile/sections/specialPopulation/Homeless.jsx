@@ -5,7 +5,7 @@ import {nest} from "d3-collection";
 import {LinePlot, BarChart} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
-import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
+import {fetchData, SectionColumns, SectionRows, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
 import Glossary from "components/Glossary";
@@ -119,8 +119,9 @@ class Homeless extends SectionColumns {
             y: "share",
             yConfig: {
               tickFormat: d => formatPercentage(d),
-              title: "Types of Sheltered & Unsheltered Population"
+              title: "Share"
             },
+            title: d => `Types of Homeless Population in ${d[0].Geography}`,
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["County", d => d.Geography]]}
           }}
           dataFormat={resp => formatTypesOfHomeless(resp.data)}
@@ -129,7 +130,7 @@ class Homeless extends SectionColumns {
           <Contact slug={this.props.slug} />
         </article>
 
-        {/* <div>  */}
+        {/* <SectionRows>  */}
         <BarChart config={{
           data: `/api/data?measures=Sheltered Homeless Population&drilldowns=Category&Geography=${meta.id}&Year=all`,
           discrete: "y",
@@ -179,7 +180,7 @@ class Homeless extends SectionColumns {
         }}
         dataFormat={resp => formatUnshelteredHomelessCategories(resp.data)[0]}
         />
-        {/* </div> */}
+        {/* </SectionRows> */}
       </SectionColumns>
     );
   }

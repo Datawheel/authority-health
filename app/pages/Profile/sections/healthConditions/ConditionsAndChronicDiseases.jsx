@@ -15,6 +15,12 @@ const formatPercentage = (d, mutiplyBy100 = false) => mutiplyBy100 ? `${formatAb
 
 const formatDropdownChoiceName = d => d === "Physical Health" ? "Poor General Health Days" : d;
 
+const getArticle = dropdownValue => {
+  const firstLetter = dropdownValue[0];
+  if (firstLetter === "A" || firstLetter === "E" || firstLetter === "I" || firstLetter === "O" || firstLetter === "U") return "an";
+  return "a";
+};
+
 class ConditionsAndChronicDiseases extends SectionColumns {
 
   constructor(props) {
@@ -117,12 +123,12 @@ class ConditionsAndChronicDiseases extends SectionColumns {
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           { isHealthConditionWeightedValueSelected
-            ? <p>In {topDropdownWeightedData["End Year"]}, {formatPercentage(topDropdownWeightedData[dropdownValue], true)} of the population of <ZipRegionDefinition text="zip region" /> {topDropdownWeightedData["Zip Region"]} had the highest prevalence of {dropdownValue.toLowerCase()} out of all zip regions in Wayne County, as compared to {formatPercentage(countyLevelData[0][dropdownValue], true)} in Wayne County.</p>
-            : <p>In {topDropdownValueTract.Year}, {formatPercentage(topDropdownValueTract[dropdownValue])} of the population of <CensusTractDefinition text={topDropdownValueTract.Tract} /> had the highest prevalence of {formatDropdownChoiceName(dropdownValue).toLowerCase()} out of all the tracts in Detroit, Livonia, Dearborn and Westland.</p>
+            ? <p>In {topDropdownWeightedData["End Year"]}, {formatPercentage(topDropdownWeightedData[dropdownValue], true)} of the population of the {topDropdownWeightedData["Zip Region"]} <ZipRegionDefinition text="zip region" /> had {getArticle(dropdownValue)} {dropdownValue.toLowerCase()} diagnosis, the highest prevelence of all zip regions in Wayne County, as compared to {formatPercentage(countyLevelData[0][dropdownValue], true)} overall in Wayne County.</p>
+            : <p>In {topDropdownValueTract.Year}, {formatPercentage(topDropdownValueTract[dropdownValue])} of the population of <CensusTractDefinition text={topDropdownValueTract.Tract} /> had {getArticle(dropdownValue)} {dropdownValue === "COPD" ? "COPD" : formatDropdownChoiceName(dropdownValue).toLowerCase()} diagnosis, the highest prevalence out of all tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
           { isHealthConditionWeightedValueSelected
-            ? <p>The map here shows the percentage of adults who have ever been diagnosed with {dropdownValue.toLowerCase()} within each zip regions in Wayne County.</p>
-            : <p>The map here shows the percentage of adults who have ever been diagnosed with {dropdownValue === "COPD" ? "COPD" : formatDropdownChoiceName(dropdownValue).toLowerCase()} within each census tracts in Detroit, Livonia, Dearborn and Westland.</p>
+            ? <p>The map here shows the percentage of adults who have ever been diagnosed with {dropdownValue.toLowerCase()} within each zip region in Wayne County.</p>
+            : <p>The map here shows the percentage of adults who have ever been diagnosed with {dropdownValue === "COPD" ? "COPD" : formatDropdownChoiceName(dropdownValue).toLowerCase()} within each census tract in Detroit, Livonia, Dearborn and Westland.</p>
           }
 
           <Contact slug={this.props.slug} />

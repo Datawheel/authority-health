@@ -130,7 +130,6 @@ class PreventiveCare extends SectionColumns {
               axisConfig: {tickFormat: d => formatPercentage(d)}
             },
             label: d => d.Tract,
-            height: 400,
             time: "Year",
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Preventive Care", `${dropdownValue}`], ["Share", d => `${formatPercentage(d[dropdownValue])}`]]},
             topojson: "/topojson/tract.json",

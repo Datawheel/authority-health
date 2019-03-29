@@ -49,7 +49,7 @@ class WageDistribution extends SectionColumns {
           <Contact slug={this.props.slug} />
         </article>
 
-        {/* Draw Geomap to show wage distribution for each place in the Wayne county. */}
+        {/* Draw Barcahrt to show wage distribution for each place in the Wayne county. */}
         {wageDistributionDataAvailable
           ? <BarChart config={{
             data: `https://acs.datausa.io/api/data?measures=Household Income&drilldowns=Household Income Bucket&Geography=${meta.id}&Year=all`,

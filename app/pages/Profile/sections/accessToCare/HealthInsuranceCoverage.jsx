@@ -93,8 +93,11 @@ class HealthInsuranceCoverage extends SectionColumns {
               />
             </div>
 
-            <p>In {nationCoverage.Year}, {formatPercentage(nationCoverage.share)} of the population in United States had health coverage, compared to {formatPercentage(stateCoverage.share)} in Michigan{meta.level !== "county" ? "," : " and"} {formatPercentage(countyCoverage.share)} in Wayne County{meta.level !== "county" ? <span> and {formatPercentage(currentLevelCoverage.share)} in {currentLevelCoverage.Geography}.</span> : "."}</p>
-            <p>In {ageGroupYear}, the age groups most likely to have health care coverage in {maleCoverageData[0].Geography} were {topMaleAgeGroup} years for men and {topFemaleAgeGroup} years for women.</p>
+            {meta.level !== "county" 
+              ? <p>In {nationCoverage.Year}, {formatPercentage(currentLevelCoverage.share)} of the population in {currentLevelCoverage.Geography} had health coverage, compared to {formatPercentage(countyCoverage.share)} in Wayne County, {formatPercentage(stateCoverage.share)} in Michigan and {formatPercentage(nationCoverage.share)} in the United States.</p>
+              : <p>In {nationCoverage.Year}, {formatPercentage(countyCoverage.share)} of the population in Wayne County had health coverage, compared to {formatPercentage(stateCoverage.share)} in Michigan and {formatPercentage(nationCoverage.share)} in the United States.</p> 
+            }
+            <p>The age groups for men and women most likely to have health care coverage in {maleCoverageData[0].Geography} were {topMaleAgeGroup} years for men and {topFemaleAgeGroup} years for women.</p>
 
             <BarChart config={{
               data: `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status,Sex,Age&Geography=${geoId}&Year=all`,

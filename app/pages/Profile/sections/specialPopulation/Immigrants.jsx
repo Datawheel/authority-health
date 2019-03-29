@@ -183,11 +183,15 @@ class Immigrants extends SectionColumns {
                 value={topStats.Place}
                 qualifier={formatPercentage(topStats.share)}
               />
-              <p>In {USImmigrantsData.Year}, {formatPercentage(USImmigrantsData.share)} of the population in United States were immigrants, compared to {}
-                {formatPercentage(michiganImmigrantsData.share)} in Michigan{meta.level !== "county" ? "," : " and"} {formatPercentage(wayneCountyImmigrantsData.share)} {}
-                in Wayne County{meta.level !== "county" && immigrantsDataForCurrentLocationAvailable ? <span> and {formatPercentage(currentLevelImmigrantsData.share)} in {currentLevelImmigrantsData.Geography}.</span> : "."}</p>
+              
+              {meta.level !== "county"
+                ? <p>In {currentLevelImmigrantsData.Year}, {formatPercentage(currentLevelImmigrantsData.share)} of the population in {currentLevelImmigrantsData.Geography} were immigrants, compared to {formatPercentage(wayneCountyImmigrantsData.share)} {}
+                in Wayne County, {formatPercentage(michiganImmigrantsData.share)} in Michigan, and {formatPercentage(USImmigrantsData.share)} in the United States.</p>
+                : <p>In {USImmigrantsData.Year}, {formatPercentage(wayneCountyImmigrantsData.share)} of the population in Wayne County were immigrants, compared to {}
+                  {formatPercentage(michiganImmigrantsData.share)} in Michigan, and {formatPercentage(USImmigrantsData.share)} in the United States.</p>
+              }
               <p>The city with the highest immigrant population in Wayne County was {topStats.Place} ({formatPercentage(topStats.share)}).</p>
-              {immigrantsDataForCurrentLocationAvailable ? <p>The map here shows the cities in {currentLevelImmigrantsData.Geography} by their percentage of immigrants.</p> : ""}
+              {immigrantsDataForCurrentLocationAvailable ? <p>The map here shows the cities in Wayne County by their percentage of immigrants.</p> : ""}
             </div>
             : <div>
               <Stat
@@ -202,11 +206,16 @@ class Immigrants extends SectionColumns {
                 value={topStats.Place}
                 qualifier={formatPercentage(topStats.share)}
               />
-              <p>In {USImmigrantsData.Year}, {formatPercentage(USImmigrantsData.share)} of the population in United States were immigrants in poverty, compared to {formatPercentage(michiganImmigrantsData.share)} {}
-                in Michigan{meta.level !== "county" ? "," : " and"} {formatPercentage(wayneCountyImmigrantsData.share)} in Wayne County{meta.level !== "county" && immigrantsPovertyDataForCurrentLocationAvailable ? <span> and {formatPercentage(currentLevelImmigrantsData.share)} in {currentLevelImmigrantsData.Geography}.</span> : "."}</p>
+              
+              {meta.level !== "county" 
+                ? <p>In {currentLevelImmigrantsData.Year}, {formatPercentage(currentLevelImmigrantsData.share)} of the population in {currentLevelImmigrantsData.Geography} were immigrants in poverty, compared to {}
+                  {formatPercentage(wayneCountyImmigrantsData.share)} in Wayne County, {formatPercentage(michiganImmigrantsData.share)} in Michigan and {formatPercentage(USImmigrantsData.share)} in the United States.</p>
+                : <p>In {wayneCountyImmigrantsData.Year}, {formatPercentage(wayneCountyImmigrantsData.share)} of the population in in Wayne County were immigrants in poverty, compared to {}
+                  {formatPercentage(michiganImmigrantsData.share)} in Michigan and {formatPercentage(USImmigrantsData.share)} in the United States.</p>
+              }
               <p>The city with the highest immigrants in poverty in Wayne County was {topStats.Place} ({formatPercentage(topStats.share)}).</p>
               
-              {immigrantsPovertyDataForCurrentLocationAvailable ? <p>The map here shows the cities in {currentLevelImmigrantsData.Geography} by their percentage of immigrants in poverty.</p> : "" }
+              {immigrantsPovertyDataForCurrentLocationAvailable ? <p>The map here shows the cities in Wayne County by their percentage of immigrants in poverty.</p> : "" }
             </div>
           }
 
@@ -217,11 +226,9 @@ class Immigrants extends SectionColumns {
           data: totalImmigrantsSelected ? "/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Place&Year=all" : "/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Poverty Status,Place&Year=all",
           groupBy: "ID Place",
           colorScale: "share",
-          title: totalImmigrantsSelected ? "Total Immigrants for Places in Wayne County" : "Immigrants in Poverty for Places in Wayne County",
           colorScaleConfig: {axisConfig: {tickFormat: d => formatPercentage(d)}},
           time: "Year",
           label: d => d.Place,
-          height: 400,
           tooltipConfig: {tbody: [["Year", d => d.Year], ["Population", dropdownValue], ["Share", d => formatPercentage(d.share)]]},
           topojson: "/topojson/place.json",
           topojsonFilter: d => places.includes(d.id)

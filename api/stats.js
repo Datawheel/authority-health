@@ -1,9 +1,10 @@
 const axios = require("axios");
 const d3 = require("d3-scale");
 const {formatAbbreviate} = require("d3plus-format");
+const {titleCase} = require("d3plus-text");
+
 const formatters = require("../app/utils/formatters");
 const {CANON_LOGICLAYER_CUBE} = process.env;
-const {titleCase} = require("d3plus-text");
 
 const regionLookup = {
   48236: "04",
@@ -190,7 +191,7 @@ module.exports = function(app) {
     currentLocationMeasureData.total = healthTopics.length + socialDeterminants.length;
     currentLocationMeasureData.locations = geoLevels;
 
-    // Get all Place/Tract/Zip level data which are in the Wayne County.
+    // Get all Place/Tract/Zip meta data which are in the Wayne County.
     const allLocations = await db.search.findAll().then(results => results.map(resp => resp.toJSON()));
 
     const population = cache.pops;
@@ -212,54 +213,7 @@ module.exports = function(app) {
     currentLevelLocations.forEach((d, i) => d.medianIncomeRank = i + 1);
 
     currentLocationMeasureData.rankData = currentLevelLocations;
-
-    // Find a place for each zip in Wayne County.
-    // currentLocationMeasureData.allLocations = allLocations;
-    // // const allZips = allLocations.filter(d => d.hierarchy === "Zip");
-    // Get the place for the each zip.
-    // // const zipToPlacePromises = [];
-    // // allZips.forEach(d => {
-    // //   zipToPlacePromises.push(axios.get(`${CANON_LOGICLAYER_CUBE}/geoservice-api/relations/intersects/${d.id}?targetLevels=place&overlapSize=true`));
-    // // });
-
-    // // const zipToPlace = {};
-    // // Promise.all(zipToPlacePromises).then(results => {
-    // //   allZips.forEach((d, i) => {
-    // //     const data = results[i].data;
-    // //     zipToPlace[d.id] = data.length !== 0 ? data.sort((a, b) => b.overlap_size - a.overlap_size)[0] : "";
-    // //   });
-
-    // Now find Zip for each tract in Wayne County & assign Place using above zipToPlace object.
-    // // const allTracts = allLocations.filter(d => d.hierarchy === "Tract");
-    // // const tractToPlacePromises = [];
-    // allTracts.forEach(d => {
-    //   tractToPlacePromises.push(axios.get(`${CANON_LOGICLAYER_CUBE}/geoservice-api/relations/intersects/${d.id}?targetLevels=zip&overlapSize=true`));
-    // });
-
-    // // tractToPlacePromises.push(axios.get(`${CANON_LOGICLAYER_CUBE}/geoservice-api/relations/intersects/${allTracts[0].id}?targetLevels=zip&overlapSize=true`));
-
-    // // console.log("tractToPlacePromises.size: ", tractToPlacePromises.length);
-    // // const tractToPlace = {};
-    // // Promise.all(tractToPlacePromises).then(results2 => {
-    // //   console.log("results2: ", results2[0].data);
-    // //   const d = allTracts[0];
-    // //   const data = results2[0].data;
-    // //   const zipId = data.length !== 0 ? data.sort((a, b) => b.overlap_size - a.overlap_size)[0].geoid : "";
-    // //   if (zipId) tractToPlace[d.id] = zipToPlace.hasOwnProperty(zipId) ? zipToPlace[zipId].name : "";
-        
-    // allTracts.forEach((d, i) => {
-    //   if (results2[i] !== undefined) {
-    //     console.log("results2: ", results2[i].data);
-    //     const data = results2[i].data;
-    //     const zipId = data.length !== 0 ? data.sort((a, b) => b.overlap_size - a.overlap_size)[0].geoid : "";
-    //     if (zipId) tractToPlace[d.id] = zipToPlace.hasOwnProperty(zipId) ? zipToPlace[zipId].name : "";
-    //   }
-    // });
-    // // console.log("tractToPlace: ", tractToPlace);
-    // //   })
-    // //     .catch(err => console.log(err));
-    // // })
-    // //   .catch(err => console.log(err));
+    currentLocationMeasureData.tractToPlace = cache.tractToPlace;
 
     res.json(currentLocationMeasureData);
   });

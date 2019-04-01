@@ -62,6 +62,11 @@ class RiskyBehaviors extends SectionColumns {
     const topSecondHandSmokeAndMonthlyAlcoholData = secondHandSmokeAndMonthlyAlcohol.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
 
     const topTractSmokingDrinkingData = allTractSmokingDrinkingData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
+    let topTractPlace;
+    const {tractToPlace} = this.props.topStats;
+    if (!isSecondHandSmokeOrMonthlyAlcoholSelected) {
+      topTractPlace = tractToPlace[topTractSmokingDrinkingData["ID Tract"]];
+    }
 
     return (
       <SectionColumns>
@@ -80,13 +85,13 @@ class RiskyBehaviors extends SectionColumns {
 
           <Stat
             title={isSecondHandSmokeOrMonthlyAlcoholSelected ? "Zip region with highest prevalence" : "Tract with highest prevalence"}
-            value={isSecondHandSmokeOrMonthlyAlcoholSelected ? topSecondHandSmokeAndMonthlyAlcoholData["Zip Region"] : topTractSmokingDrinkingData.Tract}
+            value={isSecondHandSmokeOrMonthlyAlcoholSelected ? topSecondHandSmokeAndMonthlyAlcoholData["Zip Region"] : `${topTractSmokingDrinkingData.Tract}, ${topTractPlace}`}
             year={isSecondHandSmokeOrMonthlyAlcoholSelected ? topSecondHandSmokeAndMonthlyAlcoholData["End Year"] : topTractSmokingDrinkingData.Year}
             qualifier={isSecondHandSmokeOrMonthlyAlcoholSelected ? `${formatPercentage(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue], true)} of the population of this zip region` : `${formatPercentage(topTractSmokingDrinkingData[dropdownValue])} of the population of this census tract`}
           />
           {isSecondHandSmokeOrMonthlyAlcoholSelected
             ? <p>In {topSecondHandSmokeAndMonthlyAlcoholData["End Year"]}, {formatPercentage(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue], true)} of the population of <ZipRegionDefinition text="zip region" /> {topSecondHandSmokeAndMonthlyAlcoholData["Zip Region"]} had the highest prevalence of {dropdownValue.toLowerCase()}, as compared to {formatPercentage(countyLevelData[0][dropdownValue], true)} in Wayne County.</p>
-            : <p>In {topTractSmokingDrinkingData.Year}, {formatPercentage(topTractSmokingDrinkingData[dropdownValue])} of the population of <CensusTractDefinition text={topTractSmokingDrinkingData.Tract} /> had the highest prevalence of {dropdownValue.toLowerCase()} out of census tracts in Detroit, Livonia, Dearborn and Westland.</p>
+            : <p>In {topTractSmokingDrinkingData.Year}, {formatPercentage(topTractSmokingDrinkingData[dropdownValue])} of the population of <CensusTractDefinition text={topTractSmokingDrinkingData.Tract} />{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} had the highest prevalence of {dropdownValue.toLowerCase()} out of census tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
 
           {/* Draw a Pie chart to show smoking status: former, current & never. */}
@@ -148,7 +153,7 @@ class RiskyBehaviors extends SectionColumns {
             colorScaleConfig: {
               axisConfig: {tickFormat: d => formatPercentage(d)}
             },
-            label: d => d.Tract,
+            label: d => `${d.Tract}, ${tractToPlace[d["ID Tract"]]}`,
             time: "Year",
             title: `${dropdownValue} for Census Tracts within Detroit, Livonia, Dearborn and Westland`,
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Behavior", `${dropdownValue}`], ["Prevalence", d => formatPercentage(d[dropdownValue])]]},
@@ -174,6 +179,7 @@ RiskyBehaviors.need = [
 
 const mapStateToProps = state => ({
   meta: state.data.meta,
+  topStats: state.data.topStats,
   allTractSmokingDrinkingData: state.data.allTractSmokingDrinkingData
 });
 

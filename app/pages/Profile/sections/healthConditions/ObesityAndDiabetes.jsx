@@ -82,8 +82,8 @@ class ObesityAndDiabetes extends SectionColumns {
   }
 
   render() {
-
     const {obesityAndDibetesDataValue, diabetesPrevalenceBySex, stateLevelDiabetesPrevalenceBySex} = this.props;
+    const {tractToPlace} = this.props.topStats;
 
     // Include all the measures from obesityAndDibetesDataValue and BMIWeightedData in the dropdown list.
     const {meta, dropdownValue, obesityPrevalenceBySex, BMIWeightedData, stateLevelObesityPrevalenceBySex} = this.state;
@@ -104,6 +104,7 @@ class ObesityAndDiabetes extends SectionColumns {
     const topDropdownWeightedData = BMIWeightedData[0];
 
     const topDropdownValueTract = obesityAndDibetesDataValue.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
+    const topTractPlace = tractToPlace[topDropdownValueTract["ID Tract"]];
 
     // Find top stats data.
     let stateLevelFemaleDiabetes, stateLevelFemaleObesity, stateLevelMaleDiabetes, stateLevelMaleObesity, topDiabetesFemaleData, topDiabetesMaleData, topObesityFemaleData, topObesityMaleData;
@@ -148,7 +149,7 @@ class ObesityAndDiabetes extends SectionColumns {
             : <Stat
               title={"Location with highest prevalence"}
               year={topDropdownValueTract.Year}
-              value={topDropdownValueTract.Tract}
+              value={`${topDropdownValueTract.Tract}, ${topTractPlace}`}
               qualifier={`${formatPercentage(topDropdownValueTract[dropdownValue])} of the population of this census tract`}
             />
           }
@@ -170,7 +171,7 @@ class ObesityAndDiabetes extends SectionColumns {
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           {isBMIWeightedDataValueSelected
             ? <p>In {topDropdownWeightedData["End Year"]}, {formatPercentage(topDropdownWeightedData[dropdownValue], true)} of the population of <ZipRegionDefinition text="zip region" /> {topDropdownWeightedData["Zip Region"]} had {dropdownValue.toLowerCase()}, the highest {isHealthyWeightSelected ? "share" : "prevalence"} out of all zip regions in Wayne County.</p>
-            : <p>In {topDropdownValueTract.Year}, {formatPercentage(topDropdownValueTract[dropdownValue])} of the population of <CensusTractDefinition text={topDropdownValueTract.Tract} /> had {dropdownValue.toLowerCase()}, the highest prevalence out of all tracts in Detroit, Livonia, Dearborn and Westland.</p>
+            : <p>In {topDropdownValueTract.Year}, {formatPercentage(topDropdownValueTract[dropdownValue])} of the population of <CensusTractDefinition text={topDropdownValueTract.Tract} />{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} had {dropdownValue.toLowerCase()}, the highest prevalence out of all tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
 
           {/* Write short paragraphs explaining Barchart and top stats for the Diabetes/Obesity data. */}
@@ -237,7 +238,7 @@ class ObesityAndDiabetes extends SectionColumns {
             colorScaleConfig: {
               axisConfig: {tickFormat: d => formatPercentage(d)}
             },
-            label: d => d.Tract,
+            label: d => `${d.Tract}, ${tractToPlace[d["ID Tract"]]}`,
             time: "Year",
             title: `${dropdownValue} for Census Tracts within Detroit, Livonia, Dearborn and Westland`,
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue])}`]]},
@@ -265,6 +266,7 @@ ObesityAndDiabetes.need = [
 
 const mapStateToProps = state => ({
   meta: state.data.meta,
+  topStats: state.data.topStats,
   obesityAndDibetesDataValue: state.data.obesityAndDibetesDataValue,
   diabetesPrevalenceBySex: state.data.diabetesPrevalenceBySex,
   stateLevelDiabetesPrevalenceBySex: state.data.stateLevelDiabetesPrevalenceBySex

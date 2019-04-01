@@ -68,6 +68,12 @@ class PreventiveCare extends SectionColumns {
     // Find recent year top data for the selected dropdown value.
     const topDropdownData = isPreventativeCareWeightedValueSelected ? preventiveCareWeightedData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0] : preventiveCareData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
 
+    const {tractToPlace} = this.props.topStats;
+    let topTractPlace;
+    if (!isPreventativeCareWeightedValueSelected) {
+      topTractPlace = tractToPlace[topDropdownData["ID Tract"]];
+    }
+
     return (
       <SectionColumns>
         <SectionTitle>Preventive Care</SectionTitle>
@@ -87,14 +93,14 @@ class PreventiveCare extends SectionColumns {
           <Stat
             title={"Location with highest share"}
             year={isPreventativeCareWeightedValueSelected ? topDropdownData["End Year"] : topDropdownData.Year}
-            value={isPreventativeCareWeightedValueSelected ? topDropdownData["Zip Region"] : topDropdownData.Tract}
+            value={isPreventativeCareWeightedValueSelected ? topDropdownData["Zip Region"] : `${topDropdownData.Tract}, ${topTractPlace}`}
             qualifier={isPreventativeCareWeightedValueSelected ? `${formatPercentage(topDropdownData[dropdownValue], true)} of the population of this zip region` : `${formatPercentage(topDropdownData[dropdownValue])} of the population of this census tract`}
           />
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           {isPreventativeCareWeightedValueSelected
             ? <p>In {topDropdownData["End Year"]}, {formatPercentage(topDropdownData[dropdownValue], true)} of the population of <ZipRegionDefinition text="zip region" /> {topDropdownData["Zip Region"]} had the highest share of {dropdownValue.toLowerCase()}, as compared to {formatPercentage(countyLevelData[0][dropdownValue], true)} in Wayne County.</p>
-            : <p>In {topDropdownData.Year}, {formatPercentage(topDropdownData[dropdownValue])} of the population of <CensusTractDefinition text={topDropdownData.Tract}/> had the highest share of {dropdownValue.toLowerCase()} out of all tracts in Detroit, Livonia, Dearborn and Westland.</p>
+            : <p>In {topDropdownData.Year}, {formatPercentage(topDropdownData[dropdownValue])} of the population of <CensusTractDefinition text={topDropdownData.Tract}/>{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} had the highest share of {dropdownValue.toLowerCase()} out of all tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
           {isPreventativeCareWeightedValueSelected
             ? <p>The map here shows the {dropdownValue.toLowerCase()} for zip regions in Wayne County.</p>
@@ -129,7 +135,7 @@ class PreventiveCare extends SectionColumns {
             colorScaleConfig: {
               axisConfig: {tickFormat: d => formatPercentage(d)}
             },
-            label: d => d.Tract,
+            label: d => `${d.Tract}, ${tractToPlace[d["ID Tract"]]}`,
             time: "Year",
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Preventive Care", `${dropdownValue}`], ["Share", d => `${formatPercentage(d[dropdownValue])}`]]},
             topojson: "/topojson/tract.json",
@@ -152,6 +158,7 @@ PreventiveCare.need = [
 ];
 
 const mapStateToProps = state => ({
+  topStats: state.data.topStats,
   preventiveCareData: state.data.preventiveCareData 
 });
 

@@ -17,7 +17,7 @@ const formatDropdownChoiceName = d => d === "Physical Health" ? "Poor General He
 
 const getArticle = dropdownValue => {
   const firstLetter = dropdownValue[0];
-  if (firstLetter === "A" || firstLetter === "E" || firstLetter === "I" || firstLetter === "O" || firstLetter === "U") return "an";
+  if (["A", "E", "I", "O", "U"].includes(firstLetter)) return "an";
   return "a";
 };
 
@@ -67,6 +67,8 @@ class ConditionsAndChronicDiseases extends SectionColumns {
   }
 
   render() {
+    const {tractToPlace} = this.props.topStats;
+
     // Include all the measures in the dropdown list.
     const {dropdownValue, healthConditionData, healthConditionWeightedData, countyLevelData} = this.state;
     const dropdownList = ["Arthritis", "COPD", "Chronic Kidney Disease", "Coronary Heart Disease", "Current Asthma", "High Blood Pressure", "High Cholesterol", 
@@ -83,6 +85,8 @@ class ConditionsAndChronicDiseases extends SectionColumns {
 
     // Get top stats for the most recent year data for the selected dropdown value.
     const topDropdownValueTract = healthConditionData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
+    const topTractPlace = tractToPlace[topDropdownValueTract["ID Tract"]];
+
     const topDropdownWeightedData = healthConditionWeightedData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
 
     return (
@@ -115,7 +119,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
               <Stat
                 title={"Location with highest prevalence"}
                 year={topDropdownValueTract.Year}
-                value={topDropdownValueTract.Tract}
+                value={`${topDropdownValueTract.Tract}, ${topTractPlace}`}
                 qualifier={`${formatPercentage(topDropdownValueTract[dropdownValue])} of the population in this tract`}
               />
             </div>
@@ -124,7 +128,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           { isHealthConditionWeightedValueSelected
             ? <p>In {topDropdownWeightedData["End Year"]}, {formatPercentage(topDropdownWeightedData[dropdownValue], true)} of the population of the {topDropdownWeightedData["Zip Region"]} <ZipRegionDefinition text="zip region" /> had {getArticle(dropdownValue)} {dropdownValue.toLowerCase()} diagnosis, the highest prevelence of all zip regions in Wayne County, as compared to {formatPercentage(countyLevelData[0][dropdownValue], true)} overall in Wayne County.</p>
-            : <p>In {topDropdownValueTract.Year}, {formatPercentage(topDropdownValueTract[dropdownValue])} of the population of <CensusTractDefinition text={topDropdownValueTract.Tract} /> had {getArticle(dropdownValue)} {dropdownValue === "COPD" ? "COPD" : formatDropdownChoiceName(dropdownValue).toLowerCase()} diagnosis, the highest prevalence out of all tracts in Detroit, Livonia, Dearborn and Westland.</p>
+            : <p>In {topDropdownValueTract.Year}, {formatPercentage(topDropdownValueTract[dropdownValue])} of the population of <CensusTractDefinition text={topDropdownValueTract.Tract} />{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} had {getArticle(dropdownValue)} {dropdownValue === "COPD" ? "COPD" : formatDropdownChoiceName(dropdownValue).toLowerCase()} diagnosis, the highest prevalence out of all tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
           { isHealthConditionWeightedValueSelected
             ? <p>The map here shows the percentage of adults who have ever been diagnosed with {dropdownValue.toLowerCase()} within each zip region in Wayne County.</p>
@@ -132,7 +136,6 @@ class ConditionsAndChronicDiseases extends SectionColumns {
           }
 
           <Contact slug={this.props.slug} />
-
         </article>
 
         {/* Geomap to show health condition data for selected dropdown value. */}
@@ -161,7 +164,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
             colorScaleConfig: {
               axisConfig: {tickFormat: d => formatPercentage(d)}
             },
-            label: d => d.Tract,
+            label: d => `${d.Tract}, ${tractToPlace[d["ID Tract"]]}`,
             height: 400,
             time: "Year",
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue])}`]]},
@@ -186,6 +189,7 @@ ConditionsAndChronicDiseases.need = [
 ];
 
 const mapStateToProps = state => ({
+  topStats: state.data.topStats,
   healthConditionData: state.data.healthConditionData
 });
 

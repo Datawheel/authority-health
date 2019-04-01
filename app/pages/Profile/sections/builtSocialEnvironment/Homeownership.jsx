@@ -13,12 +13,17 @@ import Stat from "components/Stat";
 import CensusTractDefinition from "components/CensusTractDefinition";
 
 const formatPropertyValue = d => `$${formatAbbreviate(d)}`;
+const formatTractName = (d, tractName) => {
+  if (tractName === undefined) return d;
+  else return `${d.replace(" Wayne County, MI", "")} ${tractName}`;
+};
 const commas = format(",d");
 
 class Homeownership extends SectionColumns {
 
   render() {
 
+    const {tractToPlace} = this.props.topStats;
     const {occupancyData, medianHousingUnitsValueForProfile, constructionDateData} = this.props;
 
     const occupancyDataAvailable = occupancyData.length !== 0;
@@ -69,7 +74,8 @@ class Homeownership extends SectionColumns {
         <Geomap config={{
           data: "https://acs.datausa.io/api/data?measures=Property Value&Geography=05000US26163:children&Year=all",
           groupBy: "ID Geography",
-          label: d => d.Geography,
+          // label: d => `${d.Geography}, ${tractToPlace[d["ID Geography"]]}`,
+          label: d => formatTractName(d.Geography, tractToPlace[d["ID Geography"]]),
           colorScale: "Property Value",
           colorScaleConfig: {
             axisConfig: {tickFormat: d => formatPropertyValue(d)}
@@ -98,6 +104,7 @@ Homeownership.need = [
 ];
 
 const mapStateToProps = state => ({
+  topStats: state.data.topStats,
   occupancyData: state.data.occupancyData,
   medianHousingUnitsValueForProfile: state.data.medianHousingUnitsValueForProfile,
   constructionDateData: state.data.constructionDateData

@@ -248,7 +248,6 @@ VisionAndAuditoryDisabilities.defaultProps = {
 };
 
 VisionAndAuditoryDisabilities.need = [
-  // both hearing and vision difficulty data are from different cubes. We need to combine these data for Stats. Hence, all Year data is fetched in need.
   fetchData("visionDifficulty", "/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status,Age,Sex&Geography=<id>&Year=latest", d => d.data)
 ];
 

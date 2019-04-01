@@ -25,6 +25,8 @@ class PhysicalInactivity extends SectionColumns {
 
     // We don't find latest year data here (as we usually do for other topics) since we have only 1 year data for physical inactivity and physical health.
     const topRecentYearData = physicalInactivity.sort((a, b) => b["Physical Inactivity"] - a["Physical Inactivity"])[0];
+    const {tractToPlace} = this.props.topStats;
+    const topTractPlace = tractToPlace[topRecentYearData["ID Tract"]];
 
     // Find recent year top data for physicalInactivityPrevalenceBySex.
     const topPhysicalInactivityMaleData = physicalInactivityPrevalenceBySex.data.filter(d => d.Sex === "Male")[0];
@@ -43,7 +45,7 @@ class PhysicalInactivity extends SectionColumns {
           <Stat
             title={"Location with highest prevalence"}
             year={topRecentYearData.Year}
-            value={topRecentYearData.Tract}
+            value={`${topRecentYearData.Tract}, ${topTractPlace}`}
             qualifier={`${formatPercentage(topRecentYearData["Physical Inactivity"])} of the population of this census tract`}
           />
 
@@ -61,7 +63,7 @@ class PhysicalInactivity extends SectionColumns {
             value={formatPercentage(topPhysicalInactivityFemaleData["Age-Adjusted Physical Inactivity"])}
             qualifier={`of the female population in ${topPhysicalInactivityFemaleData.Geography}`}
           />
-          <p>In {topRecentYearData.Year}, {formatPercentage(topRecentYearData["Physical Inactivity"])} of the population of <CensusTractDefinition text={topRecentYearData.Tract} /> were physically inactive out of all census tracts in Detroit, Livonia, Dearborn and Westland.</p>
+          <p>In {topRecentYearData.Year}, {formatPercentage(topRecentYearData["Physical Inactivity"])} of the population of <CensusTractDefinition text={topRecentYearData.Tract} />{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} were physically inactive out of all census tracts in Detroit, Livonia, Dearborn and Westland.</p>
           <p>In {topPhysicalInactivityFemaleData.Year}, {formatPercentage(topPhysicalInactivityMaleData["Age-Adjusted Physical Inactivity"])} of the male population and {formatPercentage(topPhysicalInactivityFemaleData["Age-Adjusted Physical Inactivity"])} of the female population in {}
             {topPhysicalInactivityFemaleData.Geography} were physically inactive, as compared to {formatPercentage(stateLevelMaleData["Age-Adjusted Physical Inactivity"])} of the male and {formatPercentage(stateLevelFemaleData["Age-Adjusted Physical Inactivity"])} of the female population in Michigan overall.</p>
 
@@ -98,7 +100,7 @@ class PhysicalInactivity extends SectionColumns {
         <Geomap config={{
           data: physicalInactivity, // only 1 year data available.
           groupBy: "ID Tract",
-          label: d => d.Tract,
+          label: d => `${d.Tract}, ${tractToPlace[d["ID Tract"]]}`,
           colorScale: d => d["Physical Inactivity"],
           colorScaleConfig: {
             axisConfig: {tickFormat: d => formatPercentage(d)}
@@ -127,6 +129,7 @@ PhysicalInactivity.need = [
 
 const mapStateToProps = state => ({
   meta: state.data.meta,
+  topStats: state.data.topStats,
   physicalInactivity: state.data.physicalInactivity,
   physicalInactivityPrevalenceBySex: state.data.physicalInactivityPrevalenceBySex,
   stateLevelDataBySex: state.data.stateLevelDataBySex

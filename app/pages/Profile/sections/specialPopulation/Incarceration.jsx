@@ -12,7 +12,10 @@ import Stat from "components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
-const formatName = d => d !== undefined || d !== null ? d.replace("Incarceration", "") : d;
+const formatName = data => {
+  if (Array.isArray(data)) return data.map(d => d.replace("Incarceration", "").trim());
+  return data.replace("Incarceration", "").trim();
+};
 
 const formatIncarcerationData = incarcerationData => {
   // Format data for Incarceration data Barchart and stats.

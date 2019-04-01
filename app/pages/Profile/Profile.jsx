@@ -190,14 +190,12 @@ class Profile extends Component {
           <Veterans />
           <Incarceration />
         </div>
-
       </div>
     );
   }
 }
 
 Profile.need = [
-  Introduction,
   FoodAvailability,
   FoodStamps,
   FoodInsecurity,
@@ -238,6 +236,7 @@ Profile.need = [
   StudentPoverty,
   // WaterQuality,
   AirQuality,
+  fetchData("topStats", "/api/stats/<id>"),
   fetchData("meta", "/api/search?id=<id>", resp => resp[0]),
   fetchData("population", "https://acs.datausa.io/api/data?measures=Population&Geography=<id>&year=all"),
   fetchData("populationByAgeAndGender", "/api/data?measures=Population by Sex and Age&drilldowns=Age,Sex&Geography=<id>&Year=all", d => d.data),

@@ -32,7 +32,7 @@ const formatLevelNames = d => {
 class Introduction extends SectionColumns {
 
   render() {
-    const {meta, population, populationByAgeAndGender, populationByRaceAndEthnicity, lifeExpectancy, topStats, medianHouseholdIncome} = this.props;
+    const {meta, population, populationByAgeAndGender, populationByRaceAndEthnicity, lifeExpectancy, topStats} = this.props;
     const {healthTopics, socialDeterminants, rankData} = topStats;
     const {level} = meta;
 
@@ -127,19 +127,13 @@ Introduction.defaultProps = {
   slug: "introduction"
 };
 
-Introduction.need = [
-  fetchData("topStats", "/api/stats/<id>"),
-  fetchData("medianHouseholdIncome", "https://acs.datausa.io/api/data?measures=Household Income&Geography=<id>&Year=latest", d => d.data)
-];
-
 const mapStateToProps = state => ({
   meta: state.data.meta,
   population: state.data.population.data,
   populationByAgeAndGender: state.data.populationByAgeAndGender,
   populationByRaceAndEthnicity: state.data.populationByRaceAndEthnicity.data,
   lifeExpectancy: state.data.lifeExpectancy,
-  topStats: state.data.topStats,
-  medianHouseholdIncome: state.data.medianHouseholdIncome
+  topStats: state.data.topStats
 });
 
 export default connect(mapStateToProps)(Introduction);

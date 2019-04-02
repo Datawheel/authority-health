@@ -74,7 +74,6 @@ class Homeownership extends SectionColumns {
         <Geomap config={{
           data: "https://acs.datausa.io/api/data?measures=Property Value&Geography=05000US26163:children&Year=all",
           groupBy: "ID Geography",
-          // label: d => `${d.Geography}, ${tractToPlace[d["ID Geography"]]}`,
           label: d => formatTractName(d.Geography, tractToPlace[d["ID Geography"]]),
           colorScale: "Property Value",
           colorScaleConfig: {

@@ -15,6 +15,7 @@ import Stat from "components/Stat";
 import places from "utils/places";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
+const formatTractName = (tractName, cityName) => cityName === undefined ? tractName : `${tractName}, ${cityName}`;
 
 const formatData = (data, disability = "Vision") => {
   nest()
@@ -42,15 +43,8 @@ const formatGeomapData = (data, disability = "Vision") => {
         total !== 0 ? d.share = d[`${disability} Disabilities`] / total * 100 : d.share = 0;
       });
     });
-  const filteredHearingDifficulty = data.filter(d => d[`ID ${disability} Disability Status`] === 0);
-  return filteredHearingDifficulty;
-};
-
-const getGeomapDataURL = (meta, disability = "Vision") => {
-  if (meta.level === "county") return `/api/data?measures=${disability} Disabilities&drilldowns=${disability} Disability Status,Place&Year=all`;
-  if (meta.level === "place") return `/api/data?measures=${disability} Disabilities&drilldowns=${disability} Disability Status,Tract&Geography=${meta.id}:children&Year=all`;
-  if (meta.level === "zip") return `/api/data?measures=${disability} Disabilities&drilldowns=${disability} Disability Status,Tract&Geography=${meta.id}:children&Year=all`;
-  return `/api/data?measures=${disability} Disabilities&drilldowns=${disability} Disability Status,Tract&Year=all`;
+  const filteredHearingDisability = data.filter(d => d[`ID ${disability} Disability Status`] === 0);
+  return filteredHearingDisability;
 };
 
 class VisionAndAuditoryDisabilities extends SectionColumns {
@@ -59,19 +53,19 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
     super(props);
     this.state = {
       meta: this.props.meta,
-      dropdownValue: "Vision Difficulty",
-      hearingDifficulty: []
+      dropdownValue: "Vision Disability",
+      hearingDisability: []
     };
   }
 
   // Handler function for dropdown onChange event.
   handleChange = event => {
     const dropdownValue = event.target.value;
-    if (dropdownValue === "Hearing Difficulty") {
+    if (dropdownValue === "Hearing Disability") {
       axios.get(`/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status,Age,Sex&Geography=${this.state.meta.id}&Year=latest`)
         .then(resp => {
           this.setState({
-            hearingDifficulty: resp.data.data,
+            hearingDisability: resp.data.data,
             dropdownValue
           });
         });
@@ -80,27 +74,28 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
   }
 
   render() {
-    const {meta, dropdownValue, hearingDifficulty} = this.state;
-    const {visionDifficulty} = this.props;
+    const {meta, dropdownValue, hearingDisability} = this.state;
+    const {childrenTractIds, visionDisability} = this.props;
+    const {tractToPlace} = this.props.topStats;
 
-    const dropdownList = ["Vision Difficulty", "Hearing Difficulty"];
+    const dropdownList = ["Vision Disability", "Hearing Disability"];
 
-    const isVisionDifficultySelected = dropdownValue === "Vision Difficulty";
-    const hearingDifficultyDataAvailable = hearingDifficulty.length !== 0;
-    const visionDifficultyDataAvailable = visionDifficulty.length !== 0;
+    const isVisionDisabilitySelected = dropdownValue === "Vision Disability";
+    const hearingDisabilityDataAvailable = hearingDisability.length !== 0;
+    const visionDisabilityDataAvailable = visionDisability.length !== 0;
 
-    let topFemaleVisionDifficultyData, topMaleVisionDifficultyData;
-    if (isVisionDifficultySelected && visionDifficultyDataAvailable) {
-      const topVisionDifficulty = formatData(visionDifficulty, "Vision");
-      topFemaleVisionDifficultyData = topVisionDifficulty[1];
-      topMaleVisionDifficultyData = topVisionDifficulty[2];
+    let topFemaleVisionDisabilityData, topMaleVisionDisabilityData;
+    if (isVisionDisabilitySelected && visionDisabilityDataAvailable) {
+      const topVisionDisability = formatData(visionDisability, "Vision");
+      topFemaleVisionDisabilityData = topVisionDisability[1];
+      topMaleVisionDisabilityData = topVisionDisability[2];
     }
 
-    let topFemaleHearingDifficultyData, topMaleHearingDifficultyData;
-    if (!isVisionDifficultySelected && hearingDifficultyDataAvailable) {
-      const topHearingDifficulty = formatData(hearingDifficulty, "Hearing");
-      topFemaleHearingDifficultyData = topHearingDifficulty[1];
-      topMaleHearingDifficultyData = topHearingDifficulty[2];
+    let topFemaleHearingDisabilityData, topMaleHearingDisabilityData;
+    if (!isVisionDisabilitySelected && hearingDisabilityDataAvailable) {
+      const topHearingDisability = formatData(hearingDisability, "Hearing");
+      topFemaleHearingDisabilityData = topHearingDisability[1];
+      topMaleHearingDisabilityData = topHearingDisability[2];
     }
 
     return (
@@ -117,53 +112,50 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             </div>
           </label>
 
-          {isVisionDifficultySelected 
+          {isVisionDisabilitySelected 
             ? <div>
               <Stat
                 title="Male majority age group"
-                year={visionDifficultyDataAvailable ? topMaleVisionDifficultyData.Year : "N/A"}
-                value={visionDifficultyDataAvailable ? rangeFormatter(topMaleVisionDifficultyData.Age) : "N/A"}
-                qualifier={visionDifficultyDataAvailable ? `${formatPercentage(topMaleVisionDifficultyData.share)} of the population in ${topMaleVisionDifficultyData.Geography}` : ""}
+                year={visionDisabilityDataAvailable ? topMaleVisionDisabilityData.Year : "N/A"}
+                value={visionDisabilityDataAvailable ? rangeFormatter(topMaleVisionDisabilityData.Age) : "N/A"}
+                qualifier={visionDisabilityDataAvailable ? `${formatPercentage(topMaleVisionDisabilityData.share)} of the population in ${topMaleVisionDisabilityData.Geography}` : ""}
               />
               <Stat
                 title="Female majority age group"
-                year={visionDifficultyDataAvailable ? topFemaleVisionDifficultyData.Year : ""}
-                value={visionDifficultyDataAvailable ? rangeFormatter(topFemaleVisionDifficultyData.Age) : "N/A"}
-                qualifier={visionDifficultyDataAvailable ? `${formatPercentage(topFemaleVisionDifficultyData.share)} of the population in ${topFemaleVisionDifficultyData.Geography}` : ""}
+                year={visionDisabilityDataAvailable ? topFemaleVisionDisabilityData.Year : ""}
+                value={visionDisabilityDataAvailable ? rangeFormatter(topFemaleVisionDisabilityData.Age) : "N/A"}
+                qualifier={visionDisabilityDataAvailable ? `${formatPercentage(topFemaleVisionDisabilityData.share)} of the population in ${topFemaleVisionDisabilityData.Geography}` : ""}
               />
             </div>
             : <div>
               <Stat
                 title="Male majority age group"
-                year={hearingDifficultyDataAvailable ? topMaleHearingDifficultyData.Year : ""}
-                value={hearingDifficultyDataAvailable ? rangeFormatter(topMaleHearingDifficultyData.Age) : "N/A"}
-                qualifier={hearingDifficultyDataAvailable ? `${formatPercentage(topMaleHearingDifficultyData.share)} of the population in ${topMaleHearingDifficultyData.Geography}` : ""}
+                year={hearingDisabilityDataAvailable ? topMaleHearingDisabilityData.Year : ""}
+                value={hearingDisabilityDataAvailable ? rangeFormatter(topMaleHearingDisabilityData.Age) : "N/A"}
+                qualifier={hearingDisabilityDataAvailable ? `${formatPercentage(topMaleHearingDisabilityData.share)} of the population in ${topMaleHearingDisabilityData.Geography}` : ""}
               />
               <Stat
                 title="Female majority age group"
-                year={hearingDifficultyDataAvailable ? topFemaleHearingDifficultyData.Year : ""}
-                value={hearingDifficultyDataAvailable ? rangeFormatter(topFemaleHearingDifficultyData.Age) : "N/A"}
-                qualifier={hearingDifficultyDataAvailable ? `${formatPercentage(topFemaleHearingDifficultyData.share)} of the population in ${topFemaleHearingDifficultyData.Geography}` : ""}
+                year={hearingDisabilityDataAvailable ? topFemaleHearingDisabilityData.Year : ""}
+                value={hearingDisabilityDataAvailable ? rangeFormatter(topFemaleHearingDisabilityData.Age) : "N/A"}
+                qualifier={hearingDisabilityDataAvailable ? `${formatPercentage(topFemaleHearingDisabilityData.share)} of the population in ${topFemaleHearingDisabilityData.Geography}` : ""}
               />
             </div>
           }
 
-          {isVisionDifficultySelected 
+          {isVisionDisabilitySelected 
             ? <p>
-              {visionDifficultyDataAvailable ? <span>In {topMaleVisionDifficultyData.Year}, the age groups most likely to have difficulty in seeing in { }
-                {topMaleVisionDifficultyData.Geography} were {rangeFormatter(topMaleVisionDifficultyData.Age)} years for men and {rangeFormatter(topFemaleVisionDifficultyData.Age)} { }
+              {visionDisabilityDataAvailable ? <span>In {topMaleVisionDisabilityData.Year}, the age groups most likely to have vision disability in { }
+                {topMaleVisionDisabilityData.Geography} were {rangeFormatter(topMaleVisionDisabilityData.Age)} years for men and {rangeFormatter(topFemaleVisionDisabilityData.Age)} { }
             years for women.</span> : ""}
             </p>
             : <p>
-              {hearingDifficultyDataAvailable ? <span>In {topMaleHearingDifficultyData.Year}, the age groups most likely to have difficulty in hearing in { }
-                {topMaleHearingDifficultyData.Geography} were {rangeFormatter(topMaleHearingDifficultyData.Age)} years for men and {rangeFormatter(topFemaleHearingDifficultyData.Age)} { }
+              {hearingDisabilityDataAvailable ? <span>In {topMaleHearingDisabilityData.Year}, the age groups most likely to have hearing disability in { }
+                {topMaleHearingDisabilityData.Geography} were {rangeFormatter(topMaleHearingDisabilityData.Age)} years for men and {rangeFormatter(topFemaleHearingDisabilityData.Age)} { }
            years for women.</span> : ""}
             </p>}
-          {isVisionDifficultySelected 
-            ? <p>The chart here shows the share of each male and female age group with difficulty in seeing {visionDifficultyDataAvailable ? ` in ${topMaleVisionDifficultyData.Geography}` : ""}.</p>
-            : <p>The chart here shows the share of each male and female age group with difficulty in hearing {hearingDifficultyDataAvailable ? ` in ${topMaleHearingDifficultyData.Geography}` : ""}.</p>
-          }
-          {isVisionDifficultySelected && visionDifficultyDataAvailable
+
+          {isVisionDisabilitySelected && visionDisabilityDataAvailable
             ? <BarChart config={{
               data: `/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status,Age,Sex&Geography=${meta.id}&Year=all`,
               height: 250,
@@ -172,6 +164,7 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
               x: d => d.Age,
               y: "share",
               time: "Year",
+              title: d => `${dropdownValue} by Age and Gender in ${d[0].Geography}`,
               xSort: (a, b) => a["ID Age"] - b["ID Age"],
               xConfig: {
                 labelRotation: false,
@@ -182,13 +175,13 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
               shapeConfig: {
                 label: false
               },
-              tooltipConfig: {tbody: [["Year", d => d.Year], ["Disability", "Vision Difficulty"], ["Age", d => d.Age], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Disability", "Vision Disability"], ["Age", d => d.Age], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}
             dataFormat={resp => formatData(resp.data, "Vision")[0]}
             /> 
             : <div></div>}
 
-          {!isVisionDifficultySelected && hearingDifficultyDataAvailable
+          {!isVisionDisabilitySelected && hearingDisabilityDataAvailable
             ? <BarChart config={{
               data: `/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status,Age,Sex&Geography=${meta.id}&Year=latest`,
               height: 250,
@@ -197,6 +190,7 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
               x: d => d.Age,
               y: "share",
               time: "Year",
+              title: d => `${dropdownValue} by Age and Gender in ${d[0].Geography}`,
               xSort: (a, b) => a["ID Age"] - b["ID Age"],
               xConfig: {
                 labelRotation: false,
@@ -207,7 +201,7 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
               shapeConfig: {
                 label: false
               },
-              tooltipConfig: {tbody: [["Year", d => d.Year], ["Disability", "Hearing Difficulty"], ["Age", d => d.Age], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Disability", "Hearing Disability"], ["Age", d => d.Age], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}
             dataFormat={resp => formatData(resp.data, "Hearing")[0]}
             /> 
@@ -215,29 +209,59 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
           <Contact slug={this.props.slug} />
         </article>
 
-        
-        <Geomap config={{
-          // data: isVisionDifficultySelected ? "/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status,Place&Year=all" : "/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status,Place&Year=all",
-          data: `/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status,Tract&Geography=${meta.id}:children&Year=all`,
-          groupBy: "ID Place",
-          colorScale: "share",
-          colorScaleConfig: {axisConfig: {tickFormat: d => formatPercentage(d)}},
-          title: `Population With ${isVisionDifficultySelected ? "Vision" : "Hearing"} Difficulty for Places in Wayne County`,
-          time: "Year",
-          // label: d => d.Place,
-          label: d => d.Tract,
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Population", dropdownValue], ["Share", d => formatPercentage(d.share)]]},
-          // topojson: "/topojson/place.json",
-          topojson: "/topojson/tract.json",
-          topojsonId: d => d.id,
-          topojsonFilter: d => d.id.startsWith("14000US26163")
-          // topojsonFilter: d => places.includes(d.id)
-        }}
-        dataFormat={resp => {
-          console.log(resp.data);
-          return isVisionDifficultySelected ? formatGeomapData(resp.data, "Vision") : formatGeomapData(resp.data, "Hearing"); 
-        }}
-        />
+        {meta.level === "county"
+          ? <Geomap config={{
+            data: isVisionDisabilitySelected ? "/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status,Place&Year=all" : "/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status,Place&Year=all",
+            groupBy: "ID Place",
+            colorScale: "share",
+            colorScaleConfig: {axisConfig: {tickFormat: d => formatPercentage(d)}},
+            title: `${dropdownValue} Population by Places in Wayne County`,
+            time: "Year",
+            label: d => d.Place,
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Disability", dropdownValue], ["Share", d => formatPercentage(d.share)]]},
+            topojson: "/topojson/place.json",
+            topojsonId: d => d.id,
+            topojsonFilter: d => places.includes(d.id)
+          }}
+          dataFormat={resp => isVisionDisabilitySelected ? formatGeomapData(resp.data, "Vision") : formatGeomapData(resp.data, "Hearing")}
+          />
+          : <div></div>}
+
+        {meta.level === "place" || meta.level === "zip"
+          ? <Geomap config={{
+            data: isVisionDisabilitySelected ? "/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status&Geography=05000US26163:tracts&Year=all" : "/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status&Geography=05000US26163:tracts&Year=all",
+            groupBy: "ID Geography",
+            label: d => `${d.Geography}, ${meta.name}`,
+            colorScale: "share",
+            colorScaleConfig: {axisConfig: {tickFormat: d => formatPercentage(d)}},
+            title: `${dropdownValue} Population by Tracts in ${meta.name}`,
+            time: "Year",
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Disability", dropdownValue], ["Share", d => formatPercentage(d.share)]]},
+            topojson: "/topojson/tract.json",
+            topojsonId: d => d.id,
+            topojsonFilter: d => childrenTractIds.includes(d.id)
+          }}
+          dataFormat={resp => isVisionDisabilitySelected ? formatGeomapData(resp.data, "Vision") : formatGeomapData(resp.data, "Hearing")}
+          />
+          : <div></div>}
+
+        {/* Geomap to show Property Values for all tracts in the Wayne County. */}
+        {meta.level === "tract" 
+          ? <Geomap config={{
+            data: isVisionDisabilitySelected ? "/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status&Geography=05000US26163:tracts&Year=all" : "/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status&Geography=05000US26163:tracts&Year=all",
+            groupBy: "ID Geography",
+            label: d => formatTractName(d.Geography, tractToPlace[d["ID Geography"]]),
+            title: `${dropdownValue} Population by Tracts in Wayne County`,
+            colorScale: "share",
+            time: "Year",
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Disability", dropdownValue], ["Share", d => formatPercentage(d.share)]]},
+            topojson: "/topojson/tract.json",
+            topojsonId: d => d.id,
+            topojsonFilter: d => d.id.startsWith("14000US26163")
+          }}
+          dataFormat={resp => isVisionDisabilitySelected ? formatGeomapData(resp.data, "Vision") : formatGeomapData(resp.data, "Hearing")}
+          /> 
+          : <div></div>}
       </SectionColumns>
     );
   }
@@ -248,12 +272,15 @@ VisionAndAuditoryDisabilities.defaultProps = {
 };
 
 VisionAndAuditoryDisabilities.need = [
-  fetchData("visionDifficulty", "/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status,Age,Sex&Geography=<id>&Year=latest", d => d.data)
+  fetchData("childrenTractIds", "/api/geo/children/<id>/?level=Tract"),
+  fetchData("visionDisability", "/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status,Age,Sex&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   meta: state.data.meta,
-  visionDifficulty: state.data.visionDifficulty
+  topStats: state.data.topStats,
+  childrenTractIds: state.data.childrenTractIds,
+  visionDisability: state.data.visionDisability
 });
 
 export default connect(mapStateToProps)(VisionAndAuditoryDisabilities);

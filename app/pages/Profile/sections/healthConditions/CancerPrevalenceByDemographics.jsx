@@ -12,8 +12,13 @@ import "@blueprintjs/labs/dist/blueprint-labs.css";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
+import Glossary from "components/Glossary";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
+
+const definitions = [
+  {term: "All Invasive Cancer Sites Combined", definition: "All invasive cancer sites combined are the summary or combined aggregate total for all invasive cancer sites, except urinary bladder, which includes invasive and in situ."}
+];
 
 class CancerPrevalenceByDemographics extends SectionColumns {
 
@@ -80,7 +85,7 @@ class CancerPrevalenceByDemographics extends SectionColumns {
         <SectionTitle>Cancer Prevalence by Demographic</SectionTitle>
         <article>
           <p>Click on the box to select a cancer type and display its data in the bar charts to the right. You can select upto 5 types of cancer.</p>
-          {isItemsListEmpty ? null : <div className="disclaimer">Data only available for the Detroit-Warren-Dearborn, MI metro area.</div>}
+          <div className="disclaimer">Data only available for the Detroit-Warren-Dearborn, MI metro area.</div>
           <MultiSelect
             items={items}
             itemPredicate={filterItem}
@@ -94,93 +99,91 @@ class CancerPrevalenceByDemographics extends SectionColumns {
             resetOnSelect={true}>
             <Button rightIcon="caret-down" />
           </MultiSelect>
-
-          {isItemsListEmpty ? null
-            : <div>
-              <p>In {occuranceByGender[0].Year}, the overall prevalence of cancer in the {occuranceByGender[0].MSA} for men and women was {formatAbbreviate(occuranceByGender[1]["Age-Adjusted Cancer Rate"])} and {formatAbbreviate(occuranceByGender[0]["Age-Adjusted Cancer Rate"])} per 100,000 people, respectively.</p>
-              <p>In {topOccuranceByRaceAndEthnicity.Year}, the race/ethnicity group in the {topOccuranceByRaceAndEthnicity.MSA} with the highest overall cancer rate was {topOccuranceByRaceAndEthnicity.Race} {topOccuranceByRaceAndEthnicity.Ethnicity} ({formatAbbreviate(topOccuranceByRaceAndEthnicity["Age-Adjusted Cancer Rate"])} per 100,000 people).</p>
-              <p>The following charts shows the gender breakdowns and the race and Ethnicity breakdowns for the selected cancer site(s).</p>
-            </div>
-          }
+          
+          {/* Added empty <p> element for some space between the dropdown choice and text*/}
+          <p></p>
+          <p>In {occuranceByGender[0].Year}, the overall prevalence of cancer in the {occuranceByGender[0].MSA} for men and women was {formatAbbreviate(occuranceByGender[1]["Age-Adjusted Cancer Rate"])} and {formatAbbreviate(occuranceByGender[0]["Age-Adjusted Cancer Rate"])} per 100,000 people, respectively.</p>
+          <p>In {topOccuranceByRaceAndEthnicity.Year}, the race/ethnicity group in the {topOccuranceByRaceAndEthnicity.MSA} with the highest overall cancer rate was {topOccuranceByRaceAndEthnicity.Race} {topOccuranceByRaceAndEthnicity.Ethnicity} ({formatAbbreviate(topOccuranceByRaceAndEthnicity["Age-Adjusted Cancer Rate"])} per 100,000 people).</p>
+          <p>The following charts shows the occurrence rate per 100,000 people in {topOccuranceByRaceAndEthnicity.MSA} with gender breakdown and the race and Ethnicity breakdowns for {isItemsListEmpty ? topOccuranceByRaceAndEthnicity["Cancer Site"].toLowerCase() : "the selected cancer site(s)"}.</p>
+          {/* <p>The following charts shows the gender breakdowns and the race and Ethnicity breakdowns for the selected cancer site(s).</p> */}
+          <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
         </article>
 
         {/* Draw a barchart to show Cancer by Sex for selected cancer type. */}
-        {isItemsListEmpty ? <div></div>
-          : <BarChart config={{
-            data: `/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Sex,MSA&Cancer Site=${dropdownSelected}&Year=all`,
-            discrete: "y",
-            height: 250,
-            legend: false,
-            groupBy: ["Cancer Site", "Sex"],
-            stacked: true,
-            x: "share",
-            y: "Cancer Site",
-            time: "Year",
-            xConfig: {
-              tickFormat: d => formatPercentage(d),
-              labelRotation: false
-            },
-            yConfig: {
-              tickFormat: d => d
-            },
-            tooltipConfig: {tbody: [["Cancer Type", d => d["Cancer Site"]], ["Year", d => d.Year], ["Prevalence", d => formatPercentage(d.share)],
-              ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
-          }}
-          dataFormat={resp => {
-            nest()
-              .key(d => d["Cancer Site"])
-              .entries(resp.data)
-              .forEach(cancerType => {
-                nest()
-                  .key(d => d.Year)
-                  .entries(cancerType.values)
-                  .forEach(group => {
-                    const total = sum(group.values, d => d["Cancer Diagnosis"]);
-                    group.values.forEach(d => d.share = d["Cancer Diagnosis"] / total * 100);
-                  });
-              });
-            return resp.data;
-          }}
-          />}
+        <BarChart config={{
+          data: isItemsListEmpty ? "/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Sex,MSA&Cancer Site=All Invasive Cancer Sites Combined&Year=all" : `/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Sex,MSA&Cancer Site=${dropdownSelected}&Year=all`,
+          discrete: "y",
+          height: 400,
+          legend: false,
+          groupBy: ["Cancer Site", "Sex"],
+          stacked: true,
+          x: "share",
+          y: "Cancer Site",
+          time: "Year",
+          xConfig: {
+            tickFormat: d => formatPercentage(d),
+            labelRotation: false
+          },
+          yConfig: {
+            tickFormat: d => d
+          },
+          tooltipConfig: {tbody: [["Cancer Type", d => d["Cancer Site"]], ["Year", d => d.Year], ["Prevalence", d => formatPercentage(d.share)],
+            ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
+        }}
+        dataFormat={resp => {
+          nest()
+            .key(d => d["Cancer Site"])
+            .entries(resp.data)
+            .forEach(cancerType => {
+              nest()
+                .key(d => d.Year)
+                .entries(cancerType.values)
+                .forEach(group => {
+                  const total = sum(group.values, d => d["Cancer Diagnosis"]);
+                  group.values.forEach(d => d.share = d["Cancer Diagnosis"] / total * 100);
+                });
+            });
+          return resp.data;
+        }}
+        />
 
         {/* Draw a barchart to show Cancer by Race and Ethnicity for selected cancer type. */}
-        {isItemsListEmpty ? <div></div>
-          : <BarChart config={{
-            data: `/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Race,Ethnicity,MSA&Cancer Site=${dropdownSelected}&Year=all`,
-            discrete: "y",
-            height: 250,
-            legend: false,
-            groupBy: ["Cancer Site", d => `${d.Ethnicity} ${d.Race}`],
-            stacked: true,
-            label: d => `${d.Ethnicity} ${d.Race}`,
-            x: "share",
-            y: "Cancer Site",
-            time: "Year",
-            xConfig: {
-              tickFormat: d => formatPercentage(d),
-              labelRotation: false
-            },
-            yConfig: {tickFormat: d => d},
-            tooltipConfig: {tbody: [["Cancer Type", d => d["Cancer Site"]], ["Year", d => d.Year], ["Prevalence", d => formatPercentage(d.share)],
-              ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
-          }}
-          dataFormat={resp => {
-            nest()
-              .key(d => d["Cancer Site"])
-              .entries(resp.data)
-              .forEach(cancerType => {
-                nest()
-                  .key(d => d.Year)
-                  .entries(cancerType.values)
-                  .forEach(group => {
-                    const total = sum(group.values, d => d["Cancer Diagnosis"]);
-                    group.values.forEach(d => d.share = d["Cancer Diagnosis"] / total * 100);
-                  });
-              });
-            return resp.data;
-          }}
-          />}
+        <BarChart config={{
+          data: isItemsListEmpty ? "/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Race,Ethnicity,MSA&Cancer Site=All Invasive Cancer Sites Combined&Year=all" : `/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Race,Ethnicity,MSA&Cancer Site=${dropdownSelected}&Year=all`,
+          discrete: "y",
+          height: 400,
+          legend: false,
+          groupBy: ["Cancer Site", d => `${d.Ethnicity} ${d.Race}`],
+          stacked: true,
+          label: d => `${d.Ethnicity} ${d.Race}`,
+          x: "share",
+          y: "Cancer Site",
+          time: "Year",
+          xConfig: {
+            tickFormat: d => formatPercentage(d),
+            labelRotation: false
+          },
+          yConfig: {tickFormat: d => d},
+          tooltipConfig: {tbody: [["Cancer Type", d => d["Cancer Site"]], ["Year", d => d.Year], ["Prevalence", d => formatPercentage(d.share)],
+            ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
+        }}
+        dataFormat={resp => {
+          nest()
+            .key(d => d["Cancer Site"])
+            .entries(resp.data)
+            .forEach(cancerType => {
+              nest()
+                .key(d => d.Year)
+                .entries(cancerType.values)
+                .forEach(group => {
+                  const total = sum(group.values, d => d["Cancer Diagnosis"]);
+                  group.values.forEach(d => d.share = d["Cancer Diagnosis"] / total * 100);
+                });
+            });
+          return resp.data;
+        }}
+        />
       </SectionColumns>
     );
   }
@@ -196,8 +199,8 @@ CancerPrevalenceByDemographics.need = [
     nest().key(d => d["Cancer Site"]).entries(d.data).forEach(group => cancerList.push(group.key));
     return cancerList;
   }),
-  fetchData("occuranceByGender", "/api/data?measures=Age-Adjusted Cancer Rate&drilldowns=Sex,MSA&Year=latest", d => d.data),
-  fetchData("occuranceByRaceAndEthnicity", "/api/data?measures=Age-Adjusted Cancer Rate&drilldowns=Race,Ethnicity,MSA&Year=latest", d => d.data)
+  fetchData("occuranceByGender", "/api/data?measures=Age-Adjusted Cancer Rate&drilldowns=Sex,MSA&Cancer Site=All Invasive Cancer Sites Combined&Year=latest", d => d.data),
+  fetchData("occuranceByRaceAndEthnicity", "/api/data?measures=Age-Adjusted Cancer Rate&drilldowns=Race,Ethnicity,MSA&Cancer Site=All Invasive Cancer Sites Combined&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({

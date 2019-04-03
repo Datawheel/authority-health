@@ -11,9 +11,14 @@ import "@blueprintjs/labs/dist/blueprint-labs.css";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
+import Glossary from "components/Glossary";
 import growthCalculator from "utils/growthCalculator";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
+
+const definitions = [
+  {term: "All Invasive Cancer Sites Combined", definition: "All invasive cancer sites combined are the summary or combined aggregate total for all invasive cancer sites, except urinary bladder, which includes invasive and in situ."}
+];
 
 class OccurrenceByCancerSite extends SectionColumns {
 
@@ -83,7 +88,7 @@ class OccurrenceByCancerSite extends SectionColumns {
         <SectionTitle>Occurrence by Cancer Site</SectionTitle>
         <article>
           <p>Click on the box to select a cancer type and display its data in the line chart to the right. You can select upto 5 types of cancer.</p>
-          {isItemsListEmpty ? "" : <div className="disclaimer">Data only available for the Detroit-Warren-Dearborn, MI metro area.</div>}
+          <div className="disclaimer">Data only available for the Detroit-Warren-Dearborn, MI metro area.</div>
           <MultiSelect
             items={items}
             itemPredicate={filterItem}
@@ -97,41 +102,38 @@ class OccurrenceByCancerSite extends SectionColumns {
             resetOnSelect={true}>
             <Button rightIcon="caret-down" />
           </MultiSelect>
-          
-          {isItemsListEmpty ? null 
-            : <div>
-              <p>In {mostRecentYearOccuranceRate.Year}, the cancer rate in the {mostRecentYearOccuranceRate.MSA} was {formatAbbreviate(mostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])} per 100,000 people. This represents a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "growth"} from the previous year ({formatAbbreviate(secondMostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])} per 100,000 people).</p>
-              <p>The following chart shows the occurrence rate per 100,000 people in {mostRecentYearOccuranceRate.MSA} for the selected cancer site(s).</p>
-            </div>}
+
+          {/* Added empty <p> element for some space between the dropdown choice and text*/}
+          <p></p>
+          <p>In {mostRecentYearOccuranceRate.Year}, the cancer rate in the {mostRecentYearOccuranceRate.MSA} was {formatAbbreviate(mostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])} per 100,000 people. This represents a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "growth"} from the previous year ({formatAbbreviate(secondMostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])} per 100,000 people).</p>
+          <p>The following chart shows the occurrence rate per 100,000 people in {mostRecentYearOccuranceRate.MSA} for {isItemsListEmpty ? mostRecentYearOccuranceRate["Cancer Site"].toLowerCase() : "the selected cancer site(s)"}.</p>
+          <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
         </article>
 
         {/* Draw a LinePlot to show age adjusted data for the selected cancer types. */}
-        {isItemsListEmpty ? <div></div>
-          : <LinePlot config={{
-            data: `/api/data?measures=Age-Adjusted Cancer Rate,Age-Adjusted Cancer Rate Lower 95 Percent Confidence Interval,Age-Adjusted Cancer Rate Upper 95 Percent Confidence Interval&Cancer Site=${dropdownSelected}&drilldowns=MSA&Year=all`,
-            discrete: "x",
-            height: 400,
-            groupBy: "Cancer Site",
-            legend: false,
-            x: "Year",
-            y: "Age-Adjusted Cancer Rate",
-            xConfig: {
-              labelRotation: false
-            },
-            yConfig: {
-              tickFormat: d => d,
-              title: "Occurrence per 100,000 People"
-            },
-            confidence: [d => d["Age-Adjusted Cancer Rate Lower 95 Percent Confidence Interval"], d => d["Age-Adjusted Cancer Rate Upper 95 Percent Confidence Interval"]],
-            confidenceConfig: {
-              fillOpacity: 0.2
-            },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
-          }}
-          dataFormat={resp => resp.data}
-          />
-        }
+        <LinePlot config={{
+          data: isItemsListEmpty ? "/api/data?measures=Age-Adjusted Cancer Rate,Age-Adjusted Cancer Rate Lower 95 Percent Confidence Interval,Age-Adjusted Cancer Rate Upper 95 Percent Confidence Interval&Cancer Site=All Invasive Cancer Sites Combined&drilldowns=MSA&Year=all" : `/api/data?measures=Age-Adjusted Cancer Rate,Age-Adjusted Cancer Rate Lower 95 Percent Confidence Interval,Age-Adjusted Cancer Rate Upper 95 Percent Confidence Interval&Cancer Site=${dropdownSelected}&drilldowns=MSA&Year=all`,
+          discrete: "x",
+          groupBy: "Cancer Site",
+          legend: false,
+          x: "Year",
+          y: "Age-Adjusted Cancer Rate",
+          xConfig: {
+            labelRotation: false
+          },
+          yConfig: {
+            tickFormat: d => d,
+            title: "Occurrence per 100,000 People"
+          },
+          confidence: [d => d["Age-Adjusted Cancer Rate Lower 95 Percent Confidence Interval"], d => d["Age-Adjusted Cancer Rate Upper 95 Percent Confidence Interval"]],
+          confidenceConfig: {
+            fillOpacity: 0.2
+          },
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
+        }}
+        dataFormat={resp => resp.data}
+        />
       </SectionColumns>
     );
   }
@@ -147,7 +149,7 @@ OccurrenceByCancerSite.need = [
     nest().key(d => d["Cancer Site"]).entries(d.data).forEach(group => cancerList.push(group.key));
     return cancerList;
   }),
-  fetchData("occuranceRate", "/api/data?measures=Age-Adjusted Cancer Rate&drilldowns=MSA&Year=all", d => d.data) // getting all year data to find growthRate.
+  fetchData("occuranceRate", "/api/data?measures=Age-Adjusted Cancer Rate&drilldowns=MSA&Cancer Site=All Invasive Cancer Sites Combined&Year=all", d => d.data) // getting all year data to find growthRate.
 ];
 
 const mapStateToProps = state => ({

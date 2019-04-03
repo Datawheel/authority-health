@@ -92,7 +92,7 @@ class CancerPrevalenceByDemographics extends SectionColumns {
             selectedItems={selectedItems}
             resetOnClose={true}
             resetOnSelect={true}>
-            <Button rightIcon="caret-down" />
+            <Button rightIcon="caret-down pt-minimal" />
           </MultiSelect>
 
           {isItemsListEmpty ? null

@@ -1,6 +1,6 @@
 @import "../css/mixins.css";
 
-.contact-button:not([class*="pt-intent-"]) {
+/* .contact-button:not([class*="pt-intent-"]) {
   background-color: var(--brand-dark);
   background-image: none;
   color: white;
@@ -10,11 +10,7 @@
   &:hover {
     background-color: var(--brand-dark);
   }
-}
-
-.contact-container {
-  float: right;
-}
+} */
 
 .contact-tooltip {
   @mixin font-sm;

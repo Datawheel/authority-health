@@ -13,6 +13,17 @@ import CensusTractDefinition from "components/CensusTractDefinition";
 
 const formatPercentage = (d, mutiplyBy100 = false) => mutiplyBy100 ? `${formatAbbreviate(d * 100)}%` : `${formatAbbreviate(d)}%`;
 
+const formatDropdownNames = d => d.replace("Had", "");
+
+const getArticle = dropdownValue => {
+  const firstLetter = dropdownValue[0];
+  if (["A", "E", "I", "O", "U"].includes(firstLetter)) return "an";
+  const firstWord = dropdownValue.split(" ")[0];
+  if (firstWord === "Taking") return "been";
+  if (firstWord === "Sleep" || firstWord === "HIV") return "";
+  return "a";
+};
+
 class PreventiveCare extends SectionColumns {
 
   constructor(props) {
@@ -84,7 +95,7 @@ class PreventiveCare extends SectionColumns {
             Show data for
             <div className="pt-select">
               <select id="preventive-care-dropdown" onChange={this.handleChange}>
-                {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
+                {dropdownList.map(item => <option key={item} value={item}>{formatDropdownNames(item)}</option>)}
               </select>
             </div>
           </label>
@@ -99,12 +110,12 @@ class PreventiveCare extends SectionColumns {
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           {isPreventativeCareWeightedValueSelected
-            ? <p>In {topDropdownData["End Year"]}, {formatPercentage(topDropdownData[dropdownValue], true)} of the population of <ZipRegionDefinition text="zip region" /> {topDropdownData["Zip Region"]} had the highest share of {dropdownValue.toLowerCase()}, as compared to {formatPercentage(countyLevelData[0][dropdownValue], true)} in Wayne County.</p>
-            : <p>In {topDropdownData.Year}, {formatPercentage(topDropdownData[dropdownValue])} of the population of <CensusTractDefinition text={topDropdownData.Tract}/>{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} had the highest share of {dropdownValue.toLowerCase()} out of all tracts in Detroit, Livonia, Dearborn and Westland.</p>
+            ? <p>In {topDropdownData["End Year"]}, {formatPercentage(topDropdownData[dropdownValue], true)} of the population of the {topDropdownData["Zip Region"]} <ZipRegionDefinition text="zip region" /> had {getArticle(dropdownValue)} {formatDropdownNames(dropdownValue).toLowerCase()}, as compared to {formatPercentage(countyLevelData[0][dropdownValue], true)} overall for Wayne County.</p>
+            : <p>In {topDropdownData.Year}, {formatPercentage(topDropdownData[dropdownValue])} of the population of <CensusTractDefinition text={topDropdownData.Tract}/>{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} had {getArticle(dropdownValue)} {formatDropdownNames(dropdownValue).toLowerCase()} out of all tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
           {isPreventativeCareWeightedValueSelected
-            ? <p>The map here shows the {dropdownValue.toLowerCase()} for zip regions in Wayne County.</p>
-            : <p>The map here shows the {dropdownValue.toLowerCase()} for census tracts in Detroit, Livonia, Dearborn and Westland.</p>
+            ? <p>The map here shows {formatDropdownNames(dropdownValue).toLowerCase()} for zip regions in Wayne County.</p>
+            : <p>The map here shows {formatDropdownNames(dropdownValue).toLowerCase()} for census tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
           <Contact slug={this.props.slug} />
         </article>
@@ -121,7 +132,7 @@ class PreventiveCare extends SectionColumns {
             label: d => d["Zip Region"],
             height: 400,
             time: "End Year",
-            tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Preventive Care", `${dropdownValue}`], ["Share", d => `${formatPercentage(d[dropdownValue], true)}`]]},
+            tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Preventive Care", `${formatDropdownNames(dropdownValue)}`], ["Share", d => `${formatPercentage(d[dropdownValue], true)}`]]},
             topojson: "/topojson/zipregions.json",
             topojsonId: d => d.properties.REGION,
             topojsonFilter: () => true
@@ -137,7 +148,7 @@ class PreventiveCare extends SectionColumns {
             },
             label: d => `${d.Tract}, ${tractToPlace[d["ID Tract"]]}`,
             time: "Year",
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Preventive Care", `${dropdownValue}`], ["Share", d => `${formatPercentage(d[dropdownValue])}`]]},
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Preventive Care", `${formatDropdownNames(dropdownValue)}`], ["Share", d => `${formatPercentage(d[dropdownValue])}`]]},
             topojson: "/topojson/tract.json",
             topojsonId: d => d.id,
             topojsonFilter: d => d.id.startsWith("14000US26163")

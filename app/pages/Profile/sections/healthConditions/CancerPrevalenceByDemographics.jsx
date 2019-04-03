@@ -127,6 +127,7 @@ class CancerPrevalenceByDemographics extends SectionColumns {
           },
           yConfig: {
             tickFormat: d => d
+            // labelRotation: true
           },
           tooltipConfig: {tbody: [["Cancer Type", d => d["Cancer Site"]], ["Year", d => d.Year], ["Prevalence", d => formatPercentage(d.share)],
             ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
@@ -164,7 +165,10 @@ class CancerPrevalenceByDemographics extends SectionColumns {
             tickFormat: d => formatPercentage(d),
             labelRotation: false
           },
-          yConfig: {tickFormat: d => d},
+          yConfig: {
+            tickFormat: d => d
+            // labelRotation: true
+          },
           tooltipConfig: {tbody: [["Cancer Type", d => d["Cancer Site"]], ["Year", d => d.Year], ["Prevalence", d => formatPercentage(d.share)],
             ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
         }}

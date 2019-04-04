@@ -1,0 +1,14 @@
+@import '../css/mixins';
+
+/* this data is from another castle */
+.disclaimer {
+  /* theming */
+  color: var(--caution-dark);
+  /* positioning */
+  margin-bottom: 2em;
+}
+
+.disclaimer-icon {
+  display: inline-block;
+  margin-right: 0.25em;
+}

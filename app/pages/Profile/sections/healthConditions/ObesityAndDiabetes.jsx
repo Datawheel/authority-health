@@ -210,7 +210,7 @@ class ObesityAndDiabetes extends SectionColumns {
           <Contact slug={this.props.slug} />
         </article>
 
-        {/* <div className="disclaimer">{isBMIWeightedDataValueSelected ? "data is shown at the zip region level" : "data is shown at the census tract level"}</div> */}
+        {/* <Disclaimer>{isBMIWeightedDataValueSelected ? "data is shown at the zip region level" : "data is shown at the census tract level"}</Disclaimer> */}
         {/* Geomap to show Obesity and Diabetes data based on the dropdown value. */}
         {isBMIWeightedDataValueSelected
           ? <Geomap config={{
@@ -273,4 +273,3 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(ObesityAndDiabetes);
-

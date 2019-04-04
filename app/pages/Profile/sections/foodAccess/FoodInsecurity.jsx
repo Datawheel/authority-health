@@ -1,6 +1,8 @@
 import React from "react";
 import {connect} from "react-redux";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
+
+import Disclaimer from "components/Disclaimer";
 import Stat from "components/Stat";
 
 class FoodInsecurity extends SectionColumns {
@@ -18,7 +20,7 @@ class FoodInsecurity extends SectionColumns {
         <SectionColumns>
           <SectionTitle>Food Insecurity</SectionTitle>
           <article>
-            {isInsecurityRateDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">data is shown for {location}</div>}
+            {isInsecurityRateDataAvailableForCurrentGeography ? <div></div> : <Disclaimer>data is shown for {location}</Disclaimer>}
             <Stat
               title={"Child Insecurity"}
               year={childInsecurity.Year}
@@ -28,7 +30,7 @@ class FoodInsecurity extends SectionColumns {
             <p>In {childInsecurity.Year}, {childInsecurity["Food Insecurity Rate"]}% of the children and {adultInsecurityRate}% of the adults in {location} had food insecurity.</p>
             <p>Food insecurity refers to <a href="https://www.ers.usda.gov/topics/food-nutrition-assistance/food-security-in-the-us.aspx">USDA’s measure</a> of lack of access, at times, to enough food for an active, healthy life for all household members and limited or uncertain availability of nutritionally adequate foods.</p>
           </article>
-          {isInsecurityRateDataAvailableForCurrentGeography 
+          {isInsecurityRateDataAvailableForCurrentGeography
             ? <Stat
               title={"Adult Insecurity"}
               year={adultInsecurity.Year}

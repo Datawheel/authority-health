@@ -9,6 +9,7 @@ import {titleCase} from "d3plus-text";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
+import Disclaimer from "components/Disclaimer";
 import Stat from "components/Stat";
 import rangeFormatter from "utils/rangeFormatter";
 
@@ -71,7 +72,7 @@ class Unemployment extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Unemployment</SectionTitle>
         <article>
-          {isUnemploymentRateAvailableForCurrentLocation ? <div></div> : <div className="disclaimer">unemployment rate data is shown for {unemploymentRate.data[0].Geography}</div>}
+          {isUnemploymentRateAvailableForCurrentLocation ? <div></div> : <Disclaimer>unemployment rate data is shown for {unemploymentRate.data[0].Geography}</Disclaimer>}
           <Stat
             title="Male Working Full Time"
             year={workExperienceAvailable ? getMaleFullTimeData[0].Year : ""}

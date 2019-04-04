@@ -8,6 +8,7 @@ import {titleCase} from "d3plus-text";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
+import Disclaimer from "components/Disclaimer";
 import rangeFormatter from "utils/rangeFormatter";
 import places from "utils/places";
 import Stat from "components/Stat";
@@ -77,7 +78,7 @@ class HealthInsuranceCoverage extends SectionColumns {
         <SectionColumns>
           <SectionTitle>Health Insurance Coverage</SectionTitle>
           <article>
-            {isCoverageDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">data is shown for {coverageData.data[0].Geography}</div>}
+            {isCoverageDataAvailableForCurrentGeography ? <div></div> : <Disclaimer>data is shown for {coverageData.data[0].Geography}</Disclaimer>}
             <div>
               <Stat
                 title="Most covered male group"
@@ -93,9 +94,9 @@ class HealthInsuranceCoverage extends SectionColumns {
               />
             </div>
 
-            {meta.level !== "county" 
+            {meta.level !== "county"
               ? <p>In {nationCoverage.Year}, {formatPercentage(currentLevelCoverage.share)} of the population in {currentLevelCoverage.Geography} had health coverage, compared to {formatPercentage(countyCoverage.share)} in Wayne County, {formatPercentage(stateCoverage.share)} in Michigan and {formatPercentage(nationCoverage.share)} in the United States.</p>
-              : <p>In {nationCoverage.Year}, {formatPercentage(countyCoverage.share)} of the population in Wayne County had health coverage, compared to {formatPercentage(stateCoverage.share)} in Michigan and {formatPercentage(nationCoverage.share)} in the United States.</p> 
+              : <p>In {nationCoverage.Year}, {formatPercentage(countyCoverage.share)} of the population in Wayne County had health coverage, compared to {formatPercentage(stateCoverage.share)} in Michigan and {formatPercentage(nationCoverage.share)} in the United States.</p>
             }
             <p>The age groups for men and women most likely to have health care coverage in {maleCoverageData[0].Geography} were {topMaleAgeGroup} years for men and {topFemaleAgeGroup} years for women.</p>
 

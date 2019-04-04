@@ -8,6 +8,7 @@ import {formatAbbreviate} from "d3plus-format";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
+import Disclaimer from "components/Disclaimer";
 import Stat from "components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
@@ -51,7 +52,7 @@ class Incarceration extends SectionColumns {
     const isIncarcerationDataAvailableForCurrentGeography = incarcerationData.source[0].substitutions.length === 0;
 
     const topIncarcerationData = formatIncarcerationData(incarcerationData)[1];
-    
+
     // Find top most offence for recent year.
     nest()
       .key(d => d.Year)
@@ -85,7 +86,7 @@ class Incarceration extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Incarceration</SectionTitle>
         <article>
-          {isIncarcerationDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">data is shown for {incarcerationData.data[0].Geography}</div>}
+          {isIncarcerationDataAvailableForCurrentGeography ? <div></div> : <Disclaimer>data is shown for {incarcerationData.data[0].Geography}</Disclaimer>}
           <Stat
             title="Most common crime"
             year={topOffenceData.Year}

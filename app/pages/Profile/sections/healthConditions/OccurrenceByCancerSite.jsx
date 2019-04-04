@@ -11,6 +11,7 @@ import "@blueprintjs/labs/dist/blueprint-labs.css";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
+import Disclaimer from "components/Disclaimer";
 import growthCalculator from "utils/growthCalculator";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
@@ -83,7 +84,7 @@ class OccurrenceByCancerSite extends SectionColumns {
         <SectionTitle>Occurrence by Cancer Site</SectionTitle>
         <article>
           <p>Click on the box to select a cancer type and display its data in the line chart to the right. You can select up to 5 types of cancer.</p>
-          {isItemsListEmpty ? "" : <div className="disclaimer">Data only available for the Detroit-Warren-Dearborn, MI metro area.</div>}
+          {isItemsListEmpty ? "" : <Disclaimer>Data only available for the Detroit-Warren-Dearborn, MI metro area.</Disclaimer>}
           <div className="field-container">
             <MultiSelect
               items={items}

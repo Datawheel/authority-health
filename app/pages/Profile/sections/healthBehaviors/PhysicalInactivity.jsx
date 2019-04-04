@@ -6,6 +6,7 @@ import {formatAbbreviate} from "d3plus-format";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
+import Disclaimer from "components/Disclaimer";
 import Glossary from "components/Glossary";
 import Stat from "components/Stat";
 import CensusTractDefinition from "components/CensusTractDefinition";
@@ -40,7 +41,7 @@ class PhysicalInactivity extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Physical Inactivity</SectionTitle>
         <article>
-          {isPhysicalInactivityBySexAvailableForCurrentlocation ? <div></div> : <div className="disclaimer">data is shown for {physicalInactivityPrevalenceBySex.data[0].Geography}</div>}
+          {isPhysicalInactivityBySexAvailableForCurrentlocation ? <div></div> : <Disclaimer>data is shown for {physicalInactivityPrevalenceBySex.data[0].Geography}</Disclaimer>}
 
           <Stat
             title={"Location with highest prevalence"}

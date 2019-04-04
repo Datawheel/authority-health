@@ -210,34 +210,12 @@ layout
       font-family: inherit;
       color: inherit;
 
-      /* this data is from another castle */
-      & .disclaimer {
-        /* typography */
-        @add-mixin font-xxs;
-        /* theming */
-        color: var(--caution-dark);
-        /* positioning */
-        margin-bottom: 2em;
-
-        &:before {
-          /* ⚠️ */
-          content: "\E647";
-          font-family: "Icons20";
-          /* sizing */
-          width: 1em;
-          height: 1em;
-          /* positioning */
-          display: inline-block;
-          vertical-align: top;
-          margin-right: 0.25em;
-        }
-      }
-
       & .pt-select {
         margin-bottom: 0.5em;
       }
 
-      & p {
+      /* style direct child paragraphs only */
+      & > p {
         @add-mixin font-sm;
         margin-bottom: 0.75em; /* override blueprint */
 

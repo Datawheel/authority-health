@@ -7,6 +7,7 @@ import axios from "axios";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
+import Disclaimer from "components/Disclaimer";
 import Stat from "components/Stat";
 import ZipRegionDefinition from "components/ZipRegionDefinition";
 import CensusTractDefinition from "components/CensusTractDefinition";
@@ -72,7 +73,7 @@ class RiskyBehaviors extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Risky Behaviors</SectionTitle>
         <article>
-          {isSecondHandSmokeOrMonthlyAlcoholSelected ? <div className="disclaimer">data is shown at the zip region level</div> : <div className="disclaimer">data is shown at the census tract level</div>}
+          {isSecondHandSmokeOrMonthlyAlcoholSelected ? <Disclaimer>data is shown at the zip region level</Disclaimer> : <Disclaimer>data is shown at the census tract level</Disclaimer>}
           {/* Create a dropdown for drug types. */}
           <label className="pt-label pt-inline" htmlFor="risky-behaviors-dropdown">
             Show data for

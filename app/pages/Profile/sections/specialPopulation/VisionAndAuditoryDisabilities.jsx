@@ -112,7 +112,7 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             </div>
           </label>
 
-          {isVisionDisabilitySelected 
+          {isVisionDisabilitySelected
             ? <div>
               <Stat
                 title="Male majority age group"
@@ -143,7 +143,7 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             </div>
           }
 
-          {isVisionDisabilitySelected 
+          {isVisionDisabilitySelected
             ? <p>
               {visionDisabilityDataAvailable ? <span>In {topMaleVisionDisabilityData.Year}, the age groups most likely to have vision disability in { }
                 {topMaleVisionDisabilityData.Geography} were {rangeFormatter(topMaleVisionDisabilityData.Age)} years for men and {rangeFormatter(topFemaleVisionDisabilityData.Age)} { }
@@ -155,8 +155,8 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
            years for women.</span> : ""}
             </p>}
 
-          {isVisionDisabilitySelected && visionDisabilityDataAvailable
-            ? <BarChart config={{
+          {(isVisionDisabilitySelected && visionDisabilityDataAvailable) &&
+            <BarChart config={{
               data: `/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status,Age,Sex&Geography=${meta.id}&Year=all`,
               height: 250,
               discrete: "x",
@@ -178,11 +178,10 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Disability", "Vision Disability"], ["Age", d => d.Age], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}
             dataFormat={resp => formatData(resp.data, "Vision")[0]}
-            /> 
-            : <div></div>}
+            /> }
 
-          {!isVisionDisabilitySelected && hearingDisabilityDataAvailable
-            ? <BarChart config={{
+          {(!isVisionDisabilitySelected && hearingDisabilityDataAvailable) &&
+            <BarChart config={{
               data: `/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status,Age,Sex&Geography=${meta.id}&Year=latest`,
               height: 250,
               discrete: "x",
@@ -204,13 +203,12 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Disability", "Hearing Disability"], ["Age", d => d.Age], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}
             dataFormat={resp => formatData(resp.data, "Hearing")[0]}
-            /> 
-            : <div></div>}
+            /> }
           <Contact slug={this.props.slug} />
         </article>
 
-        {meta.level === "county"
-          ? <Geomap config={{
+        {meta.level === "county" &&
+          <Geomap config={{
             data: isVisionDisabilitySelected ? "/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status,Place&Year=all" : "/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status,Place&Year=all",
             groupBy: "ID Place",
             colorScale: "share",
@@ -224,11 +222,10 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             topojsonFilter: d => places.includes(d.id)
           }}
           dataFormat={resp => isVisionDisabilitySelected ? formatGeomapData(resp.data, "Vision") : formatGeomapData(resp.data, "Hearing")}
-          />
-          : <div></div>}
+          />}
 
-        {meta.level === "place" || meta.level === "zip"
-          ? <Geomap config={{
+        {(meta.level === "place" || meta.level === "zip") &&
+          <Geomap config={{
             data: isVisionDisabilitySelected ? "/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status&Geography=05000US26163:tracts&Year=all" : "/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status&Geography=05000US26163:tracts&Year=all",
             groupBy: "ID Geography",
             label: d => `${d.Geography}, ${meta.name}`,
@@ -242,12 +239,11 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             topojsonFilter: d => childrenTractIds.includes(d.id)
           }}
           dataFormat={resp => isVisionDisabilitySelected ? formatGeomapData(resp.data, "Vision") : formatGeomapData(resp.data, "Hearing")}
-          />
-          : <div></div>}
+          />}
 
         {/* Geomap to show Property Values for all tracts in the Wayne County. */}
-        {meta.level === "tract" 
-          ? <Geomap config={{
+        {meta.level === "tract" &&
+          <Geomap config={{
             data: isVisionDisabilitySelected ? "/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status&Geography=05000US26163:tracts&Year=all" : "/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status&Geography=05000US26163:tracts&Year=all",
             groupBy: "ID Geography",
             label: d => formatTractName(d.Geography, tractToPlace[d["ID Geography"]]),
@@ -260,8 +256,7 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             topojsonFilter: d => d.id.startsWith("14000US26163")
           }}
           dataFormat={resp => isVisionDisabilitySelected ? formatGeomapData(resp.data, "Vision") : formatGeomapData(resp.data, "Hearing")}
-          /> 
-          : <div></div>}
+          /> }
       </SectionColumns>
     );
   }

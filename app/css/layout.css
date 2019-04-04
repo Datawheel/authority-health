@@ -281,6 +281,12 @@ layout
 
 /* form fields */
 .field-container {
+
+  /* position fields in front of following titles */
+  & > * {
+    z-index: 1;
+  }
+
   &:not(:last-child) {
     margin-bottom: 0.75rem;
   }
@@ -290,6 +296,11 @@ layout
     display: block;
     width: 100%;
     margin-top: 0.25em;
+  }
+
+  /* multiselect wrapper */
+  & .pt-popover-target {
+    display: block;
   }
 }
 

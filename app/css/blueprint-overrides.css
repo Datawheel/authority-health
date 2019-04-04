@@ -59,3 +59,11 @@ overlays/dialogs
 .pt-overlay-scroll-container .pt-overlay-content {
   position: relative;
 }
+
+/* -----------------------------------
+multiselect
+----------------------------------- */
+
+.pt-multi-select-popover {
+  @mixin font-sm;
+}

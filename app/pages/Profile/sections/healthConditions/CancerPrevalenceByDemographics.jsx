@@ -79,21 +79,24 @@ class CancerPrevalenceByDemographics extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Cancer Prevalence by Demographic</SectionTitle>
         <article>
-          <p>Click on the box to select a cancer type and display its data in the bar charts to the right. You can select upto 5 types of cancer.</p>
+          <p>Click on the box to select a cancer type and display its data in the bar charts to the right. You can select up to 5 types of cancer.</p>
           {isItemsListEmpty ? null : <div className="disclaimer">Data only available for the Detroit-Warren-Dearborn, MI metro area.</div>}
-          <MultiSelect
-            items={items}
-            itemPredicate={filterItem}
-            itemRenderer={renderItem}
-            noResults={<MenuItem disabled text="No results." />}
-            onItemSelect={handleItemSelect}
-            tagInputProps={{onRemove: deleteTag, placeholder: "Add a cancer type", inputProps: {placeholder: "Add a cancer type"}}}
-            tagRenderer={renderTag}
-            selectedItems={selectedItems}
-            resetOnClose={true}
-            resetOnSelect={true}>
-            <Button rightIcon="caret-down pt-minimal" />
-          </MultiSelect>
+          <div className="field-container">
+            <MultiSelect
+              items={items}
+              itemPredicate={filterItem}
+              itemRenderer={renderItem}
+              noResults={<MenuItem disabled text="No results." />}
+              onItemSelect={handleItemSelect}
+              tagInputProps={{onRemove: deleteTag, placeholder: "Add a cancer type", inputProps: {placeholder: "Add a cancer type"}}}
+              tagRenderer={renderTag}
+              selectedItems={selectedItems}
+              resetOnClose={true}
+              resetOnSelect={true}>
+              <Button rightIcon="caret-down pt-minimal" />
+            </MultiSelect>
+          </div>
+
 
           {isItemsListEmpty ? null
             : <div>

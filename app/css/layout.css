@@ -210,16 +210,31 @@ layout
       font-family: inherit;
       color: inherit;
 
+      /* this data is from another castle */
       & .disclaimer {
-        @add-mixin font-xs;
-        @add-mixin font-uppercase;
-        color: var(--majorelle-dark);
-        font-weight: 700;
-        margin-bottom: 10px;
+        /* typography */
+        @add-mixin font-xxs;
+        /* theming */
+        color: var(--caution-dark);
+        /* positioning */
+        margin-bottom: 2em;
+
+        &:before {
+          /* ⚠️ */
+          content: "\E647";
+          font-family: "Icons20";
+          /* sizing */
+          width: 1em;
+          height: 1em;
+          /* positioning */
+          display: inline-block;
+          vertical-align: top;
+          margin-right: 0.25em;
+        }
       }
 
       & .pt-select {
-        margin-bottom: 10px;
+        margin-bottom: 0.5em;
       }
 
       & p {

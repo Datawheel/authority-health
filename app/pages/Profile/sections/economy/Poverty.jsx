@@ -9,8 +9,13 @@ import {titleCase} from "d3plus-text";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
+import Glossary from "components/Glossary";
 import Stat from "components/Stat";
 import rangeFormatter from "utils/rangeFormatter";
+
+const definitions = [
+  {term: "Poverty", definition: "The Census Bureau uses a set of money income thresholds that vary by family size and composition to determine who is in poverty. If a family's total income is less than the family's threshold, then that family and every individual in it is considered in poverty. The official poverty thresholds do not vary geographically, but they are updated for inflation using Consumer Price Index (CPI-U). The official poverty definition uses money income before taxes and does not include capital gains or noncash benefits (such as public housing, Medicaid, and food stamps)."}
+];
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
@@ -49,17 +54,18 @@ class Poverty extends SectionColumns {
 
   render() {
 
-    const {meta, povertyByRace, povertyByAgeAndGender} = this.props;
+    const {meta, povertyByRace, povertyByAgeAndGender, immigrantsInPoverty} = this.props;
 
     const povertyByRaceAvailable = povertyByRace.length !== 0;
     const povertyByAgeAndGenderAvailable = povertyByAgeAndGender.length !== 0;
+    const immigrantsInPovertyAvailable = immigrantsInPoverty.length !== 0;
 
     // Get the Poverty by Race data.
     let topPovertyByRace;
     if (povertyByRaceAvailable) {
       topPovertyByRace = formatPovertyByRaceData(povertyByRace)[1];
     }
-
+ 
     // Get data for Poverty by Age and Gender.
     let topFemalePovertyData, topMalePovertyData;
     if (povertyByAgeAndGenderAvailable) {
@@ -68,30 +74,45 @@ class Poverty extends SectionColumns {
       topFemalePovertyData = getPovertyByGenderData[2];
     }
 
+    // Find immigrants in poverty for current location.
+    let immigrantsInPovertyData;
+    if (immigrantsInPovertyAvailable) {
+      const totalPopulation = sum(immigrantsInPoverty, d => d["Poverty by Nativity"]);
+      immigrantsInPovertyData = immigrantsInPoverty.filter(d => d.Nativity === "Foreign Born" && d["ID Poverty Status"] === 0)[0];
+      immigrantsInPovertyData.share = totalPopulation !== 0 ? immigrantsInPovertyData["Poverty by Nativity"] / totalPopulation * 100 : 0;
+    }
+
     return (
       <SectionColumns>
         <SectionTitle>Poverty</SectionTitle>
         <article>
           <Stat
-            title="Most common race"
+            title="race most impacted by poverty"
             year={povertyByRaceAvailable ? topPovertyByRace.Year : ""}
             value={povertyByRaceAvailable ? topPovertyByRace.Race : "N/A"}
-            qualifier={povertyByRaceAvailable ? `${formatPopulation(topPovertyByRace.share)} of the population in ${topPovertyByRace.Geography}` : ""}
+            qualifier={povertyByRaceAvailable ? `${formatPopulation(topPovertyByRace.share)} of the total population in ${topPovertyByRace.Geography}` : ""}
           />
           <Stat
-            title="Most common male age"
+            title="male age most impacted by poverty"
             year={povertyByAgeAndGenderAvailable ? topMalePovertyData.Year : ""}
             value={povertyByAgeAndGenderAvailable ? topMalePovertyData.Age : "N/A"}
-            qualifier={povertyByAgeAndGenderAvailable ? `${formatPopulation(topMalePovertyData.share)} of the population in ${topMalePovertyData.Geography}` : ""}
+            qualifier={povertyByAgeAndGenderAvailable ? `${formatPopulation(topMalePovertyData.share)} of the male population in ${topMalePovertyData.Geography}` : ""}
           />
           <Stat
-            title="Most common female age"
+            title="female age most impacted by poverty"
             year={povertyByAgeAndGenderAvailable ? topFemalePovertyData.Year : ""}
             value={povertyByAgeAndGenderAvailable ? topFemalePovertyData.Age : "N/A"}
-            qualifier={povertyByAgeAndGenderAvailable ? `${formatPopulation(topFemalePovertyData.share)} of the population in ${topFemalePovertyData.Geography}` : ""}
+            qualifier={povertyByAgeAndGenderAvailable ? `${formatPopulation(topFemalePovertyData.share)} of the female population in ${topFemalePovertyData.Geography}` : ""}
           />
-          {povertyByAgeAndGenderAvailable ? <p>In {topMalePovertyData.Year}, most common male age in poverty was {topMalePovertyData.Age.toLowerCase()} ({formatPopulation(topMalePovertyData.share)}) while most common female age was {topFemalePovertyData.Age.toLowerCase()} ({formatPopulation(topFemalePovertyData.share)}) in {topFemalePovertyData.Geography}.</p> : ""}
-          {povertyByRaceAvailable ? <p>In {topPovertyByRace.Year}, the majority race in poverty was {topPovertyByRace.Race} ({formatPopulation(topPovertyByRace.share)}) of the population in {topPovertyByRace.Geography}.</p> : ""}
+          <Stat
+            title="immigrants most impacted by poverty"
+            year={immigrantsInPovertyAvailable ? immigrantsInPovertyData.Year : ""}
+            value={immigrantsInPovertyAvailable ? formatPopulation(immigrantsInPovertyData.share) : "N/A"}
+            qualifier={immigrantsInPovertyAvailable ? `of the total population in ${immigrantsInPovertyData.Geography}` : ""}
+          />
+
+          {povertyByAgeAndGenderAvailable ? <p>In {topMalePovertyData.Year}, most common male age in poverty was {topMalePovertyData.Age.toLowerCase()} ({formatPopulation(topMalePovertyData.share)} of the male population) while most common female age was {topFemalePovertyData.Age.toLowerCase()} ({formatPopulation(topFemalePovertyData.share)} of the female population) in {topFemalePovertyData.Geography}.</p> : ""}
+          {povertyByRaceAvailable ? <p>In {topPovertyByRace.Year}, the majority race in poverty was {topPovertyByRace.Race} ({formatPopulation(topPovertyByRace.share)} of the total population in {topPovertyByRace.Geography}).</p> : ""}
 
           {povertyByRaceAvailable
             ? <BarChart config={{
@@ -112,6 +133,7 @@ class Poverty extends SectionColumns {
             }}
             dataFormat={resp => formatPovertyByRaceData(resp.data)[0]}
             /> : <div></div>}
+          <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
         </article>
 
@@ -151,13 +173,15 @@ Poverty.defaultProps = {
 
 Poverty.need = [
   fetchData("povertyByRace", "https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Race&Geography=<id>&Year=latest", d => d.data),
-  fetchData("povertyByAgeAndGender", "https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Age,Gender&Geography=<id>&Year=latest", d => d.data)
+  fetchData("povertyByAgeAndGender", "https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Age,Gender&Geography=<id>&Year=latest", d => d.data),
+  fetchData("immigrantsInPoverty", "/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Poverty Status&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   meta: state.data.meta,
   povertyByRace: state.data.povertyByRace,
-  povertyByAgeAndGender: state.data.povertyByAgeAndGender
+  povertyByAgeAndGender: state.data.povertyByAgeAndGender,
+  immigrantsInPoverty: state.data.immigrantsInPoverty
 });
 
 export default connect(mapStateToProps)(Poverty);

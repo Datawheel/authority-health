@@ -61,14 +61,14 @@ const formatImmigrantsPovertyData = immigrantsPovertyData => {
 const findTotalImmigrants = data => {
   const total = sum(data, d => d["Poverty by Nativity"]);
   const filteredData = data.filter(d => d.Nativity === "Foreign Born")[0];
-  filteredData.share = filteredData["Poverty by Nativity"] / total * 100;
+  filteredData.share = total !== 0 ? filteredData["Poverty by Nativity"] / total * 100 : 0;
   return filteredData;
 };
 
 const findImmigrantsInPoverty = data => {
   const total = sum(data, d => d["Poverty by Nativity"]);
   const filteredData = data.filter(d => d.Nativity === "Foreign Born" && d["ID Poverty Status"] === 0)[0];
-  filteredData.share = filteredData["Poverty by Nativity"] / total * 100;
+  filteredData.share = total !== 0 ? filteredData["Poverty by Nativity"] / total * 100 : 0;
   return filteredData;
 };
 
@@ -175,7 +175,7 @@ class Immigrants extends SectionColumns {
                 title={"Immigrant population"}
                 year={immigrantsDataForCurrentLocationAvailable ? currentLevelImmigrantsData.Year : ""}
                 value={immigrantsDataForCurrentLocationAvailable ? formatPercentage(currentLevelImmigrantsData.share) : "N/A"}
-                qualifier={immigrantsDataForCurrentLocationAvailable ? `of the population in ${currentLevelImmigrantsData.Geography}` : ""}
+                qualifier={immigrantsDataForCurrentLocationAvailable ? `of the population in ${meta.level !== "county" ? currentLevelImmigrantsData.Geography : "Wayne County"}` : ""}
               />
               <Stat
                 title="City with most immigrants"
@@ -198,7 +198,7 @@ class Immigrants extends SectionColumns {
                 title={"Immigrants in poverty"}
                 year={immigrantsPovertyDataForCurrentLocationAvailable ? currentLevelImmigrantsData.Year : ""}
                 value={immigrantsPovertyDataForCurrentLocationAvailable ? formatPercentage(currentLevelImmigrantsData.share) : "N/A"}
-                qualifier={immigrantsDataForCurrentLocationAvailable ? `of the population in ${currentLevelImmigrantsData.Geography}` : ""}
+                qualifier={immigrantsDataForCurrentLocationAvailable ? `of the population in ${meta.level !== "county" ? currentLevelImmigrantsData.Geography : "Wayne County"}` : ""}
               />
               <Stat
                 title="City with most immigrants in poverty"

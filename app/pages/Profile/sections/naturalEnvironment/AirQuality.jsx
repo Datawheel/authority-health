@@ -10,8 +10,15 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 import Contact from "components/Contact";
 import Stat from "components/Stat";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 class AirQuality extends SectionColumns {
+
+  constructor(props) {
+    super(props);
+    this.state = {sources: []};
+  }
 
   render() {
 
@@ -68,7 +75,10 @@ class AirQuality extends SectionColumns {
             },
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Air Pollutant Days", d => d["Air Pollutant Days"]], ["County", d => d.Geography]]}
           }}
-          dataFormat={resp => resp.data}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return resp.data;
+          }}
           />
 
           {/* Lineplot to show Median AQI stats over the years in the Waye county. */}
@@ -86,9 +96,13 @@ class AirQuality extends SectionColumns {
             },
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Median AQI", d => d["Median AQI"]], ["County", d => d.Geography]]}
           }}
-          dataFormat={resp => resp.data}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return resp.data;
+          }}
           />
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* Lineplot to show air quality days over the years. */}
@@ -106,7 +120,10 @@ class AirQuality extends SectionColumns {
           },
           tooltipConfig: {tbody: [["Year", d => d.Year], ["Air Quality Days", d => d["Air Quality Days"]], ["County", d => d.Geography]]}
         }}
-        dataFormat={resp => resp.data}
+        dataFormat={resp => {
+          this.setState({sources: updateSource(resp.source, this.state.sources)});
+          return resp.data;
+        }}
         />
       </SectionColumns>
     );

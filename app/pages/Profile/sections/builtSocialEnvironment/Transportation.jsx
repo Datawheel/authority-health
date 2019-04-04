@@ -11,6 +11,8 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Contact from "components/Contact";
 import Stat from "components/Stat";
 import rangeFormatter from "utils/rangeFormatter";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 const filterTimeBucket = d => d.split(" ").filter(d => d !== "Minutes").join("");
@@ -55,6 +57,10 @@ const formatTransportationMeans = transportationMeans => {
 };
 
 class Transportation extends SectionColumns {
+  constructor(props) {
+    super(props);
+    this.state = {sources: []};
+  }
 
   render() {
 
@@ -136,8 +142,12 @@ class Transportation extends SectionColumns {
               },
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Number of Vehicles", d => rangeFormatter(d["Vehicles Available"])], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}
-            dataFormat={resp => formatNumberOfVehiclesData(resp.data)[0]}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return  formatNumberOfVehiclesData(resp.data)[0]; 
+            }}
             /> : <div></div>}
+          <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
         </article>
 
@@ -167,7 +177,10 @@ class Transportation extends SectionColumns {
             },
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
-          dataFormat={resp => formatCommuteTimeData(resp.data)[0]}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return formatCommuteTimeData(resp.data)[0];
+          }}
           /> : <div></div>}
 
         {/* Draw a Treemap for Modes of tranportation. */}
@@ -182,7 +195,10 @@ class Transportation extends SectionColumns {
             title: d => `Means of Transportation in ${d[0].Geography}`,
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
-          dataFormat={resp => formatTransportationMeans(resp.data)[0]}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return formatTransportationMeans(resp.data)[0];
+          }}
           /> : <div></div>}
       </SectionColumns>
     );

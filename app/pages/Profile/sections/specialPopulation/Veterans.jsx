@@ -10,6 +10,8 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
 import Stat from "components/Stat";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -27,6 +29,10 @@ const formatPeriodOfService = periodOfService => {
 };
 
 class Veterans extends SectionColumns {
+  constructor(props) {
+    super(props);
+    this.state = {sources: []};
+  }
 
   render() {
 
@@ -108,6 +114,7 @@ class Veterans extends SectionColumns {
           <p>In {topEmploymentStatus.Year}, the unemployed veterans population of {topEmploymentStatus.Geography} was {veteransEmploymentStatusAvailable ? formatPercentage(topEmploymentStatus.share) : "N/A"}, while the impoverished population was {veteransPovertyStatusAvailable ? formatPercentage(veteransPovertyStatus[0].share) : ""} and the disabled veterans population was {veteransDisabilityStatusAvailable ? formatPercentage(veteransDisabilityStatus[0].share) : "N/A"}</p>
           {periodOfServiceAvailable ? <p>The chart here shows the percentages of veterans that served in each period of service.</p> : ""}
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* Draw a BarChart for Veterans Period of Service. */}
@@ -133,7 +140,10 @@ class Veterans extends SectionColumns {
             shapeConfig: {label: false},
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
-          dataFormat={resp => formatPeriodOfService(resp.data)[0]}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return formatPeriodOfService(resp.data)[0];
+          }}
           /> : <div></div>}
       </SectionColumns>
     );

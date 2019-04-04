@@ -13,6 +13,8 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Contact from "components/Contact";
 import Glossary from "components/Glossary";
 import growthCalculator from "utils/growthCalculator";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -25,7 +27,8 @@ class OccurrenceByCancerSite extends SectionColumns {
   constructor(props) {
     super(props);
     this.state = {
-      selectedItems: []
+      selectedItems: [],
+      sources: []
     };
   }
 
@@ -103,12 +106,13 @@ class OccurrenceByCancerSite extends SectionColumns {
             <Button rightIcon="caret-down" />
           </MultiSelect>
 
-          {/* Added empty <p> element for some space between the dropdown choice and text*/}
+          {/* Added empty <p> element for some space between the dropdown choice and text. */}
           <p></p>
           <p>In {mostRecentYearOccuranceRate.Year}, the cancer rate in the {mostRecentYearOccuranceRate.MSA} was {formatAbbreviate(mostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])} per 100,000 people. This represents a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "growth"} from the previous year ({formatAbbreviate(secondMostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])} per 100,000 people).</p>
           <p>The following chart shows the occurrence rate per 100,000 people in {mostRecentYearOccuranceRate.MSA} for {isItemsListEmpty ? mostRecentYearOccuranceRate["Cancer Site"].toLowerCase() : "the selected cancer site(s)"}.</p>
           <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* Draw a LinePlot to show age adjusted data for the selected cancer types. */}
@@ -132,7 +136,10 @@ class OccurrenceByCancerSite extends SectionColumns {
           },
           tooltipConfig: {tbody: [["Year", d => d.Year], ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
         }}
-        dataFormat={resp => resp.data}
+        dataFormat={resp => {
+          this.setState({sources: updateSource(resp.source, this.state.sources)});
+          return resp.data;
+        }}
         />
       </SectionColumns>
     );

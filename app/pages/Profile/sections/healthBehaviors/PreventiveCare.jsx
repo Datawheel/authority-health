@@ -10,6 +10,8 @@ import Contact from "components/Contact";
 import Stat from "components/Stat";
 import ZipRegionDefinition from "components/ZipRegionDefinition";
 import CensusTractDefinition from "components/CensusTractDefinition";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const formatPercentage = (d, mutiplyBy100 = false) => mutiplyBy100 ? `${formatAbbreviate(d * 100)}%` : `${formatAbbreviate(d)}%`;
 
@@ -33,7 +35,8 @@ class PreventiveCare extends SectionColumns {
       preventiveCareWeightedData: [],
       countyLevelData: [],
       preventiveCareData: this.props.preventiveCareData,
-      isPreventativeCareWeightedValueSelected: false
+      isPreventativeCareWeightedValueSelected: false,
+      sources: []
     };
   }
 
@@ -118,6 +121,7 @@ class PreventiveCare extends SectionColumns {
             : <p>The map here shows {formatDropdownNames(dropdownValue).toLowerCase()} for census tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* Geomap to show Preventive care data for selected dropdown Value. */}
@@ -137,7 +141,10 @@ class PreventiveCare extends SectionColumns {
             topojsonId: d => d.properties.REGION,
             topojsonFilter: () => true
           }}
-          dataFormat={resp => resp.data}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return resp.data;
+          }}
           />
           : <Geomap config={{
             data: `/api/data?measures=${dropdownValue}&drilldowns=Tract&Year=all`,
@@ -153,7 +160,10 @@ class PreventiveCare extends SectionColumns {
             topojsonId: d => d.id,
             topojsonFilter: d => d.id.startsWith("14000US26163")
           }}
-          dataFormat={resp => resp.data}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return resp.data;
+          }}
           />}
       </SectionColumns>
     );

@@ -11,6 +11,8 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Contact from "components/Contact";
 import Stat from "components/Stat";
 import rangeFormatter from "utils/rangeFormatter";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
@@ -42,6 +44,11 @@ const formatDisabilityStatus = disabilityStatus => {
 };
 
 class DisabilityStatus extends SectionColumns {
+
+  constructor(props) {
+    super(props);
+    this.state = {sources: []};
+  }
 
   render() {
 
@@ -77,6 +84,7 @@ class DisabilityStatus extends SectionColumns {
           {disabilityStatusAvailable ? <p>In {topDisabilityStatus.Year}, the most common disabled age group was {rangeFormatter(topDisabilityStatus.Age)} years making up {formatPopulation(topDisabilityStatus.share)} of all disabled citizens within this age group in {topDisabilityStatus.Geography}.</p> : ""}
           {healthCoverageTypeAvailable ? <p>The chart here shows the health coverage breakdown of the disabled population in {filteredHealthCoverageType[0].Geography}.</p> : ""}
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* Show barchart for each age group type with public, private and no health insurance coverage*/}
@@ -103,7 +111,10 @@ class DisabilityStatus extends SectionColumns {
             },
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
-          dataFormat={resp => formatHealthCoverageTypeData(resp.data)}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return formatHealthCoverageTypeData(resp.data);
+          }}
           /> : <div></div>}
       </SectionColumns>
     );

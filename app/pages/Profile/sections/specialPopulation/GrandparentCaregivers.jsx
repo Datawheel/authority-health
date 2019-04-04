@@ -11,6 +11,8 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Contact from "components/Contact";
 import Stat from "components/Stat";
 import rangeFormatter from "utils/rangeFormatter";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 const formatAge = d => rangeFormatter(d) === "< 6" || rangeFormatter(d) === "6 - 11" ? `${rangeFormatter(d)} months` : `${rangeFormatter(d)} years`;
@@ -34,6 +36,11 @@ const formatResponsibilityData = responsibilityData => {
 };
 
 class GrandparentCaregivers extends SectionColumns {
+
+  constructor(props) {
+    super(props);
+    this.state = {sources: []};
+  }
 
   render() {
 
@@ -61,7 +68,7 @@ class GrandparentCaregivers extends SectionColumns {
             <p>The chart here shows the breakdown by age of grandchildren and the percentage of grandparents responsible for them.</p>
 
             <Contact slug={this.props.slug} />
-
+            <SourceGroup sources={this.state.sources} />
           </article>
 
           {/* Draw a BarChart */}
@@ -83,12 +90,15 @@ class GrandparentCaregivers extends SectionColumns {
             shapeConfig: {label: false},
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
-          dataFormat={resp => formatResponsibilityData(resp.data)[0]}
+          dataFormat={resp =>  {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return formatResponsibilityData(resp.data)[0];
+          }}
           />
         </SectionColumns>
       );
     }
-    else return <div></div>;
+    else return null;
   }
 }
 

@@ -79,7 +79,7 @@ class DomesticPartners extends SectionColumns {
         </SectionColumns>
       );
     }
-    else return <div></div>;
+    else return null;
   }
 }
 

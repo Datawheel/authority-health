@@ -28,14 +28,16 @@ export default class SourceGroup extends Component {
           { i && i === sources.length - 1 ? <span> and</span> : null }
           { org && <span>&nbsp;</span> }
           { org && <Tooltip content={orgDesc} className={orgDesc ? "active" : ""} tooltipClassName="SourceGroup-tooltip" disabled={!orgDesc}>
-            { orgLink ? <a href={orgLink} target="_blank" rel="noopener noreferrer" dangerouslySetInnerHTML={{__html: orgName}} /> : <span dangerouslySetInnerHTML={{__html: orgName}} /> }
+            {/* { orgLink ? <a href={orgLink} target="_blank" rel="noopener noreferrer" dangerouslySetInnerHTML={{__html: orgName}} /> : <span dangerouslySetInnerHTML={{__html: orgName}} /> } */}
+            { datasetLink ? <a href={datasetLink} target="_blank" rel="noopener noreferrer" dangerouslySetInnerHTML={{__html: orgName}} /> : <span dangerouslySetInnerHTML={{__html: orgName}} /> }
+            {/* { datasetLink ? <a href={datasetLink} target="_blank" rel="noopener noreferrer" dangerouslySetInnerHTML={{__html: datasetName}} /> : <span dangerouslySetInnerHTML={{__html: datasetName}} /> } */}
           </Tooltip> }
-          { dataset && <span>&nbsp;</span> }
+          {/* { dataset && <span>&nbsp;</span> }
           { dataset && <Tooltip content={datasetDesc} className={datasetDesc ? "active" : ""} disabled={!datasetDesc}>
             { datasetLink ? <a href={datasetLink} target="_blank" rel="noopener noreferrer" dangerouslySetInnerHTML={{__html: datasetName}} /> : <span dangerouslySetInnerHTML={{__html: datasetName}} /> }
-          </Tooltip> }
+          </Tooltip> } */}
           { i < sources.length - 1 && <span>,</span> }
-          <span>.</span>
+          {i === sources.length - 1 && <span>.</span>}
         </span>;
       })}
     </div>;

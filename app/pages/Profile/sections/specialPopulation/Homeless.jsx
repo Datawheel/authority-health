@@ -5,11 +5,13 @@ import {nest} from "d3-collection";
 import {LinePlot, BarChart} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
-import {fetchData, SectionColumns, SectionRows, SectionTitle} from "@datawheel/canon-core";
+import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
 import Glossary from "components/Glossary";
 import Stat from "components/Stat";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const definitions = [
   {term: "Sheltered Homeless", definition: "According to U.S. Department of Housing and Urban Development, a person is considered sheltered homeless when he/she resides in a an emergency shelter or in transitional housing or supportive housing for homeless persons who originally came from the streets or emergency shelters."},
@@ -64,6 +66,11 @@ const formatTypesOfHomeless = typesOfHomeless => {
 };
 
 class Homeless extends SectionColumns {
+
+  constructor(props) {
+    super(props);
+    this.state = {sources: []};
+  }
 
   render() {
 
@@ -124,10 +131,14 @@ class Homeless extends SectionColumns {
             title: d => `Types of Homeless Population in ${d[0].Geography}`,
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["County", d => d.Geography]]}
           }}
-          dataFormat={resp => formatTypesOfHomeless(resp.data)}
+          dataFormat={resp =>  {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return formatTypesOfHomeless(resp.data);
+          }}
           />
           <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* <SectionRows>  */}

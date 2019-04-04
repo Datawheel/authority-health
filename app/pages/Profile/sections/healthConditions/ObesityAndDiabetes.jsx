@@ -10,6 +10,8 @@ import Contact from "components/Contact";
 import Stat from "components/Stat";
 import ZipRegionDefinition from "components/ZipRegionDefinition";
 import CensusTractDefinition from "components/CensusTractDefinition";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const formatPercentage = (d, mutiplyBy100 = false) => mutiplyBy100 ? `${formatAbbreviate(d * 100)}%` : `${formatAbbreviate(d)}%`;
 
@@ -28,7 +30,8 @@ class ObesityAndDiabetes extends SectionColumns {
       dropdownValue: "Diabetes",
       BMIWeightedData: [],
       obesityPrevalenceBySex: [],
-      stateLevelObesityPrevalenceBySex: []
+      stateLevelObesityPrevalenceBySex: [],
+      sources: []
     };
   }
 
@@ -205,9 +208,13 @@ class ObesityAndDiabetes extends SectionColumns {
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", isDiabetesSelected ? "Diabetes" : "Obesity"],
               ["Share", d => isDiabetesSelected ? formatPercentage(d["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(d["Age-Adjusted Obesity Prevalence"])], ["County", d => d.Geography]]}
           }}
-          dataFormat={resp => resp.data}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return resp.data;
+          }}
           />
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* <div className="disclaimer">{isBMIWeightedDataValueSelected ? "data is shown at the zip region level" : "data is shown at the census tract level"}</div> */}
@@ -229,7 +236,10 @@ class ObesityAndDiabetes extends SectionColumns {
             topojsonId: d => d.properties.REGION,
             topojsonFilter: () => true
           }}
-          dataFormat={resp => resp.data}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return resp.data;
+          }}
           />
           : <Geomap config={{
             data: `/api/data?measures=${dropdownValue}&drilldowns=Tract&Year=all`,
@@ -246,7 +256,10 @@ class ObesityAndDiabetes extends SectionColumns {
             topojsonId: d => d.id,
             topojsonFilter: d => d.id.startsWith("14000US26163")
           }}
-          dataFormat={resp => resp.data}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return resp.data;
+          }}
           />
         }
       </SectionColumns>

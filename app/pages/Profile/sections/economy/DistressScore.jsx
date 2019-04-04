@@ -9,6 +9,8 @@ import Contact from "components/Contact";
 import Glossary from "components/Glossary";
 import Stat from "components/Stat";
 import zipcodes from "utils/zipcodes";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const definitions = [
   {term: "The Distressed Communities Index (DCI) combines seven complementary economic indicators into a single holistic and comparative measure of community well-being. The seven component metrics of the DCI are", definition: ""},
@@ -22,6 +24,11 @@ const definitions = [
 ];
 
 class DistressScore extends SectionColumns {
+
+  constructor(props) {
+    super(props);
+    this.state = {sources: []};
+  }
 
   render() {
 
@@ -44,6 +51,7 @@ class DistressScore extends SectionColumns {
           <p>The following map shows the distress score percentile for each zip code in Wayne County.</p>
           <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* Draw Geomap to show distress scores for each zip code in the Wayne county. */}
@@ -58,7 +66,10 @@ class DistressScore extends SectionColumns {
           topojsonFilter: d => zipcodes.includes(d.properties.ZCTA5CE10),
           topojsonId: d => d.properties.ZCTA5CE10
         }}
-        dataFormat={resp => resp.data}
+        dataFormat={resp => {
+          this.setState({sources: updateSource(resp.source, this.state.sources)});
+          return resp.data;
+        }}
         />
       </SectionColumns>
     );

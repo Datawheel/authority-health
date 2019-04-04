@@ -9,6 +9,8 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
 import Stat from "components/Stat";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -43,6 +45,11 @@ const formatIncarcerationData = incarcerationData => {
 };
 
 class Incarceration extends SectionColumns {
+
+  constructor(props) {
+    super(props);
+    this.state = {sources: []};
+  }
 
   render() {
     const {meta, incarcerationData, allOffenceData, allPunishmentData} = this.props;
@@ -101,6 +108,7 @@ class Incarceration extends SectionColumns {
           <p>In {topIncarcerationData.Year}, the most common crime in {topIncarcerationData.Geography} was {topOffenceData.Offense.toLowerCase()} ({formatPercentage(topOffenceData.share)}) and the most common punishment was {topPunishmentData.Punishment.toLowerCase()} ({formatPercentage(topPunishmentData.share)}).</p>
           <p>This chart shows the percentages of punishments broken down by offense type for all convicted crimes in {topIncarcerationData.Geography}.</p>
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* Draw a Barchart to show Incarceration data. */}
@@ -121,7 +129,10 @@ class Incarceration extends SectionColumns {
           },
           tooltipConfig: {tbody: [["Punishment", d => formatName(d.Punishment)], ["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["County", d => d.Geography]]}
         }}
-        dataFormat={resp => formatIncarcerationData(resp)[0]} // pass resp and not resp.data since we access .data in the formatIncarcerationData() function.
+        dataFormat={resp => {
+          this.setState({sources: updateSource(resp.source, this.state.sources)});
+          return formatIncarcerationData(resp)[0]; // pass resp and not resp.data since we access .data in the formatIncarcerationData() function.
+        }}
         />
       </SectionColumns>
     );

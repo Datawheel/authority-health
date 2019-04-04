@@ -13,6 +13,8 @@ import Contact from "components/Contact";
 import rangeFormatter from "utils/rangeFormatter";
 import Stat from "components/Stat";
 import places from "utils/places";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 const formatTractName = (tractName, cityName) => cityName === undefined ? tractName : `${tractName}, ${cityName}`;
@@ -54,7 +56,8 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
     this.state = {
       meta: this.props.meta,
       dropdownValue: "Vision Disability",
-      hearingDisability: []
+      hearingDisability: [],
+      sources: []
     };
   }
 
@@ -177,7 +180,10 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
               },
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Disability", "Vision Disability"], ["Age", d => d.Age], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}
-            dataFormat={resp => formatData(resp.data, "Vision")[0]}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return formatData(resp.data, "Vision")[0];
+            }}
             /> 
             : <div></div>}
 
@@ -203,10 +209,14 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
               },
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Disability", "Hearing Disability"], ["Age", d => d.Age], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}
-            dataFormat={resp => formatData(resp.data, "Hearing")[0]}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return formatData(resp.data, "Hearing")[0];
+            }}
             /> 
             : <div></div>}
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {meta.level === "county"
@@ -223,7 +233,10 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             topojsonId: d => d.id,
             topojsonFilter: d => places.includes(d.id)
           }}
-          dataFormat={resp => isVisionDisabilitySelected ? formatGeomapData(resp.data, "Vision") : formatGeomapData(resp.data, "Hearing")}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return isVisionDisabilitySelected ? formatGeomapData(resp.data, "Vision") : formatGeomapData(resp.data, "Hearing");
+          }}
           />
           : <div></div>}
 
@@ -241,7 +254,10 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             topojsonId: d => d.id,
             topojsonFilter: d => childrenTractIds.includes(d.id)
           }}
-          dataFormat={resp => isVisionDisabilitySelected ? formatGeomapData(resp.data, "Vision") : formatGeomapData(resp.data, "Hearing")}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return isVisionDisabilitySelected ? formatGeomapData(resp.data, "Vision") : formatGeomapData(resp.data, "Hearing");
+          }}
           />
           : <div></div>}
 
@@ -259,7 +275,10 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             topojsonId: d => d.id,
             topojsonFilter: d => d.id.startsWith("14000US26163")
           }}
-          dataFormat={resp => isVisionDisabilitySelected ? formatGeomapData(resp.data, "Vision") : formatGeomapData(resp.data, "Hearing")}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return isVisionDisabilitySelected ? formatGeomapData(resp.data, "Vision") : formatGeomapData(resp.data, "Hearing");
+          }}
           /> 
           : <div></div>}
       </SectionColumns>

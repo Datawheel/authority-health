@@ -13,6 +13,8 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
 import Glossary from "components/Glossary";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -25,7 +27,8 @@ class CancerPrevalenceByDemographics extends SectionColumns {
   constructor(props) {
     super(props);
     this.state = {
-      selectedItems: []
+      selectedItems: [],
+      sources: []
     };
   }
 
@@ -105,9 +108,9 @@ class CancerPrevalenceByDemographics extends SectionColumns {
           <p>In {occuranceByGender[0].Year}, the overall prevalence of cancer in the {occuranceByGender[0].MSA} for men and women was {formatAbbreviate(occuranceByGender[1]["Age-Adjusted Cancer Rate"])} and {formatAbbreviate(occuranceByGender[0]["Age-Adjusted Cancer Rate"])} per 100,000 people, respectively.</p>
           <p>In {topOccuranceByRaceAndEthnicity.Year}, the race/ethnicity group in the {topOccuranceByRaceAndEthnicity.MSA} with the highest overall cancer rate was {topOccuranceByRaceAndEthnicity.Race} {topOccuranceByRaceAndEthnicity.Ethnicity} ({formatAbbreviate(topOccuranceByRaceAndEthnicity["Age-Adjusted Cancer Rate"])} per 100,000 people).</p>
           <p>The following charts shows the occurrence rate per 100,000 people in {topOccuranceByRaceAndEthnicity.MSA} with gender breakdown and the race and Ethnicity breakdowns for {isItemsListEmpty ? topOccuranceByRaceAndEthnicity["Cancer Site"].toLowerCase() : "the selected cancer site(s)"}.</p>
-          {/* <p>The following charts shows the gender breakdowns and the race and Ethnicity breakdowns for the selected cancer site(s).</p> */}
           <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* Draw a barchart to show Cancer by Sex for selected cancer type. */}
@@ -133,6 +136,7 @@ class CancerPrevalenceByDemographics extends SectionColumns {
             ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
         }}
         dataFormat={resp => {
+          this.setState({sources: updateSource(resp.source, this.state.sources)});
           nest()
             .key(d => d["Cancer Site"])
             .entries(resp.data)
@@ -173,6 +177,7 @@ class CancerPrevalenceByDemographics extends SectionColumns {
             ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
         }}
         dataFormat={resp => {
+          this.setState({sources: updateSource(resp.source, this.state.sources)});
           nest()
             .key(d => d["Cancer Site"])
             .entries(resp.data)

@@ -11,6 +11,8 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Contact from "components/Contact";
 import Stat from "components/Stat";
 import places from "utils/places";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -82,7 +84,8 @@ class Immigrants extends SectionColumns {
       immigrantsInPovertyNationData: [],
       immigrantsInPovertyStateData: [],
       immigrantsInPovertyCountyData: [],
-      immigrantsPovertyDataForCurrentLocation: []
+      immigrantsPovertyDataForCurrentLocation: [],
+      sources: []
     };
   }
 
@@ -220,6 +223,7 @@ class Immigrants extends SectionColumns {
           }
 
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         <Geomap config={{
@@ -233,7 +237,10 @@ class Immigrants extends SectionColumns {
           topojson: "/topojson/place.json",
           topojsonFilter: d => places.includes(d.id)
         }}
-        dataFormat={resp => totalImmigrantsSelected ? formatImmigrantsData(resp.data)[0] : formatImmigrantsPovertyData(resp.data)[0]}
+        dataFormat={resp =>  {
+          this.setState({sources: updateSource(resp.source, this.state.sources)});
+          return totalImmigrantsSelected ? formatImmigrantsData(resp.data)[0] : formatImmigrantsPovertyData(resp.data)[0];
+        }}
         />
       </SectionColumns>
     );

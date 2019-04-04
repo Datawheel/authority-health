@@ -29,7 +29,7 @@ export default class Stat extends Component {
             <span className="stat-label-year"> {year}</span>
           }
         </dt>
-        <dd className={`stat-value title ${ value.length > 30 ? "font-md" : "font-lg" } ${ themeClass }`}>
+        <dd className={`stat-value title ${ value.length > 30 ? "font-sm" : "font-md" } ${ themeClass }`}>
           { value }{" "}
           { qualifier &&
             <span className={`stat-value-qualifier ${

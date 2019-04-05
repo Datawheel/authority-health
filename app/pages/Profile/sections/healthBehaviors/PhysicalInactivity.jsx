@@ -9,6 +9,8 @@ import Contact from "components/Contact";
 import Glossary from "components/Glossary";
 import Stat from "components/Stat";
 import CensusTractDefinition from "components/CensusTractDefinition";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const definitions = [
   {term: "Physical Inactivity", definition: "In the Diabetes Atlas application, a person is considered to be physically inactive if he or she reported not participating in physical activity or exercise in the past 30 days."}
@@ -18,13 +20,25 @@ const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
 class PhysicalInactivity extends SectionColumns {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      sources: [],
+      physicalInactivity: this.props.physicalInactivity
+    };
+  }
+
+  componentDidMount() {
+    this.setState({sources: updateSource(this.state.physicalInactivity.source, this.state.sources)});
+  }
+
   render() {
 
     const {meta, physicalInactivity, physicalInactivityPrevalenceBySex, stateLevelDataBySex} = this.props;
     const isPhysicalInactivityBySexAvailableForCurrentlocation = physicalInactivityPrevalenceBySex.source[0].substitutions.length === 0;
 
     // We don't find latest year data here (as we usually do for other topics) since we have only 1 year data for physical inactivity and physical health.
-    const topRecentYearData = physicalInactivity.sort((a, b) => b["Physical Inactivity"] - a["Physical Inactivity"])[0];
+    const topRecentYearData = physicalInactivity.data.sort((a, b) => b["Physical Inactivity"] - a["Physical Inactivity"])[0];
     const {tractToPlace} = this.props.topStats;
     const topTractPlace = tractToPlace[topRecentYearData["ID Tract"]];
 
@@ -90,15 +104,19 @@ class PhysicalInactivity extends SectionColumns {
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", "Physical Inactivity"],
               ["Prevalence", d => formatPercentage(d["Age-Adjusted Physical Inactivity"])], ["County", d => d.Geography]]}
           }}
-          dataFormat={resp => resp.data}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return resp.data;
+          }}
           />
           <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* Geomap to show Physical health and physical Inactivity for tracts in the Wayne County. */}
         <Geomap config={{
-          data: physicalInactivity, // only 1 year data available.
+          data: physicalInactivity.data, // only 1 year data available.
           groupBy: "ID Tract",
           label: d => `${d.Tract}, ${tractToPlace[d["ID Tract"]]}`,
           colorScale: d => d["Physical Inactivity"],
@@ -122,7 +140,7 @@ PhysicalInactivity.defaultProps = {
 };
 
 PhysicalInactivity.need = [
-  fetchData("physicalInactivity", "/api/data?measures=Physical Inactivity&drilldowns=Tract&Year=latest", d => d.data), // only 1 year data available
+  fetchData("physicalInactivity", "/api/data?measures=Physical Inactivity&drilldowns=Tract&Year=latest"), // only 1 year data available
   fetchData("physicalInactivityPrevalenceBySex", "/api/data?measures=Age-Adjusted Physical Inactivity&drilldowns=Sex&Geography=<id>&Year=latest"),
   fetchData("stateLevelDataBySex", "/api/data?measures=Age-Adjusted Physical Inactivity&drilldowns=Sex&State=04000US26&Year=latest", d => d.data)
 ];

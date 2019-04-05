@@ -7,6 +7,8 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
 import Stat from "components/Stat";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const formatOverallData = (readingScoresByNation, readingScoresByCity) => {
   const readingScoresData = [];
@@ -31,7 +33,8 @@ class ReadingAssessment extends SectionColumns {
     const readingScoresData = formatOverallData(this.props.readingScoresByNation, this.props.readingScoresByCity)[1];
     this.state = {
       dropdownValue: "Overall",
-      readingScoresData
+      readingScoresData,
+      sources: []
     };
   }
 
@@ -147,6 +150,7 @@ class ReadingAssessment extends SectionColumns {
               />
             </div>}
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         <LinePlot config={{
@@ -164,7 +168,10 @@ class ReadingAssessment extends SectionColumns {
           },
           tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => isOverallSelected ? d["Average Reading Score"] : d[`Average Reading Score by ${dropdownValue}`]], ["Place", d => isOverallSelected ? d.Geography === "Nation" ? "United States" : "Detroit" : "Detroit"]]}
         }}
-        dataFormat={resp => isOverallSelected ? formatOverallData(this.props.readingScoresByNation, resp.data)[0] : resp.data}
+        dataFormat={resp => {
+          this.setState({sources: updateSource(resp.source, this.state.sources)});
+          return isOverallSelected ? formatOverallData(this.props.readingScoresByNation, resp.data)[0] : resp.data;
+        }}
         />
       </SectionColumns>
     );

@@ -8,10 +8,17 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Contact from "components/Contact";
 import Stat from "components/Stat";
 import zipcodes from "utils/zipcodes";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const formatPercentage = d => `${formatAbbreviate(d * 100)}%`;
 
 class DropoutRate extends SectionColumns {
+
+  constructor(props) {
+    super(props);
+    this.state = {sources: []};
+  }
 
   render() {
 
@@ -35,6 +42,7 @@ class DropoutRate extends SectionColumns {
           <p>In {topDropoutRate.Year}, zip code {topDropoutRate.Zip} had the highest dropout rate ({formatPercentage(topDropoutRate["High School Dropout Rate"])}).</p>
           <p>The following map shows the dropout rate for areas by zip code in Wayne County.</p>
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* Draw Geomap to show dropout rate for each zip code in the Wayne county */}
@@ -53,7 +61,10 @@ class DropoutRate extends SectionColumns {
           topojsonFilter: d => zipcodes.includes(d.properties.ZCTA5CE10),
           topojsonId: d => d.properties.ZCTA5CE10
         }}
-        dataFormat={resp => resp.data}
+        dataFormat={resp => {
+          this.setState({sources: updateSource(resp.source, this.state.sources)});
+          return resp.data;
+        }}
         />
       </SectionColumns>
     );

@@ -10,6 +10,8 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
 import Stat from "components/Stat";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
@@ -39,6 +41,11 @@ const formatEducationalAttainmentData = educationalAttainmentData => {
 
 class EducationalAttainment extends SectionColumns {
 
+  constructor(props) {
+    super(props);
+    this.state = {sources: []};
+  }
+
   render() {
 
     const {meta, educationalAttainmentData} = this.props;
@@ -63,6 +70,7 @@ class EducationalAttainment extends SectionColumns {
             <p>In {topEducationalAttainment.Year}, the most common education level attained in {topEducationalAttainment.Geography} was {topEducationalAttainment["Educational Attainment"].toLowerCase()} with a share of {formatPopulation(topEducationalAttainment.share)}.</p>
             <p>The following chart shows educational attainment of male and female in {topEducationalAttainment.Geography}.</p>
             <Contact slug={this.props.slug} />
+            <SourceGroup sources={this.state.sources} />
           </article>
 
           {/* Draw a Barchart to show Educational Attainment for all types of education buckets. */}
@@ -90,7 +98,10 @@ class EducationalAttainment extends SectionColumns {
             },
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Educational Attainment", d => formatLabels(d["Educational Attainment"])], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
-          dataFormat={resp => formatEducationalAttainmentData(resp.data)[0]}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return formatEducationalAttainmentData(resp.data)[0];
+          }}
           />
         </SectionColumns>
       );

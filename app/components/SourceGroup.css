@@ -1,23 +1,29 @@
 @import "../css/mixins.css";
 
-.SourceGroup {
-  & .bp3-popover-target {
-    display: inline;
-    &.active span {
-      text-decoration: underline;
-      &:hover {
-        cursor: help;
-      }
-    }
-    &.active a {
-      &:hover {
-        cursor: help;
-      }
-    }
+/* info icon */
+.source-group .source-group-icon {
+  /* sizing */
+  font-size: 0.875em;
+  /* positioning */
+  margin-right: 0.25em;
+  top: -1px;
+  /* theming */
+  color: var(--dark-1);
+}
+
+/* tooltip trigger */
+.source-group .pt-popover-target {
+  cursor: help;
+  vertical-align: baseline; /* override blueprint ¯\_(ツ)_/¯ */
+
+  /* add dotted border to non-links */
+  & > span {
+    border-bottom: 1px dotted var(--gray);
   }
 }
 
-.SourceGroup-tooltip {
+/* tooltip */
+.source-group-tooltip {
   @mixin font-sm;
   width: 300px;
 }

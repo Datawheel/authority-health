@@ -12,6 +12,8 @@ import Contact from "components/Contact";
 import Disclaimer from "components/Disclaimer";
 import Stat from "components/Stat";
 import rangeFormatter from "utils/rangeFormatter";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -34,6 +36,11 @@ const formatEmploymentStatusData = employmentStatus => {
 };
 
 class Unemployment extends SectionColumns {
+
+  constructor(props) {
+    super(props);
+    this.state = {sources: []};
+  }
 
   render() {
 
@@ -115,9 +122,13 @@ class Unemployment extends SectionColumns {
               title: d => `Unemployment by Age and Gender in ${d[0].Geography}`,
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => rangeFormatter(d.Age)], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}
-            dataFormat={resp => formatEmploymentStatusData(resp.data)[0]}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return formatEmploymentStatusData(resp.data)[0];
+            }}
             /> : <div></div>}
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* Lineplot to show total population over the years for selected geography. */}
@@ -136,7 +147,10 @@ class Unemployment extends SectionColumns {
           },
           tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d["Unemployment Rate"])]]}
         }}
-        dataFormat={resp => resp.data}
+        dataFormat={resp => {
+          this.setState({sources: updateSource(resp.source, this.state.sources)});
+          return resp.data;
+        }}
         />
       </SectionColumns>
     );

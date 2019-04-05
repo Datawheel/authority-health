@@ -11,6 +11,8 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Contact from "components/Contact";
 import Stat from "components/Stat";
 import rangeFormatter from "utils/rangeFormatter";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
@@ -26,6 +28,11 @@ const formatWageDistributionData = wageDistributionData => {
 };
 
 class WageDistribution extends SectionColumns {
+
+  constructor(props) {
+    super(props);
+    this.state = {sources: []};
+  }
 
   render() {
 
@@ -47,6 +54,7 @@ class WageDistribution extends SectionColumns {
           {wageGinidataAvailable ? <p>In {wageGinidata[0].Year}, the income inequality in {wageGinidata[0].Geography} was {wageGinidata[0]["Wage GINI"]}, using the GINI coefficient. The GINI index measures the extent to which the distribution of income among individuals or households within an economy deviates from a perfectly equal distribution. Values range from 0 to 1, with 0 being perfect equality (every household earns equal income), and 1 being absolute inequality (one household earns all the income).</p> : ""}
           {wageDistributionDataAvailable ? <p>The following chart shows the household income buckets and share for each bucket in {wageDistributionData[0].Geography}.</p> : ""}
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* Draw Barcahrt to show wage distribution for each place in the Wayne county. */}
@@ -74,8 +82,11 @@ class WageDistribution extends SectionColumns {
             },
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
-          dataFormat={resp => formatWageDistributionData(resp.data)}
-          /> : <div></div>}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return formatWageDistributionData(resp.data);
+          }}
+          /> : null}
       </SectionColumns>
     );
   }

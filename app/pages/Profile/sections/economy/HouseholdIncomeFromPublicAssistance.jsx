@@ -11,6 +11,8 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Contact from "components/Contact";
 import Glossary from "components/Glossary";
 import Stat from "components/Stat";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -43,6 +45,13 @@ const formatHouseholdSnapData = householdSnapData => {
 };
 
 class HouseholdIncomeFromPublicAssistance extends SectionColumns {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      sources: []
+    };
+  }
 
   render() {
 
@@ -94,6 +103,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
           {householdSnapDataAvailable ? <p>The following chart shows the number of workers per household on public assistance.</p> : ""}
           <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {householdSnapDataAvailable
@@ -119,7 +129,10 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
             },
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Workers", d => d["Number of workers"]], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
-          dataFormat={resp => formatHouseholdSnapData(resp.data)[0]}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return formatHouseholdSnapData(resp.data)[0];
+          }}
           /> : <div></div>}
       </SectionColumns>
     );

@@ -12,6 +12,8 @@ import Contact from "components/Contact";
 import Glossary from "components/Glossary";
 import Stat from "components/Stat";
 import rangeFormatter from "utils/rangeFormatter";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const definitions = [
   {term: "Poverty", definition: "The Census Bureau uses a set of money income thresholds that vary by family size and composition to determine who is in poverty. If a family's total income is less than the family's threshold, then that family and every individual in it is considered in poverty. The official poverty thresholds do not vary geographically, but they are updated for inflation using Consumer Price Index (CPI-U). The official poverty definition uses money income before taxes and does not include capital gains or noncash benefits (such as public housing, Medicaid, and food stamps)."}
@@ -51,6 +53,11 @@ const formatPovertyByAgeAndGender = povertyByAgeAndGender => {
 };
 
 class Poverty extends SectionColumns {
+
+  constructor(props) {
+    super(props);
+    this.state = {sources: []};
+  }
 
   render() {
 
@@ -131,10 +138,14 @@ class Poverty extends SectionColumns {
               },
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}
-            dataFormat={resp => formatPovertyByRaceData(resp.data)[0]}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return formatPovertyByRaceData(resp.data)[0];
+            }}
             /> : <div></div>}
           <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {povertyByAgeAndGenderAvailable
@@ -160,7 +171,10 @@ class Poverty extends SectionColumns {
             },
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
-          dataFormat={resp => formatPovertyByAgeAndGender(resp.data)[0]}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return formatPovertyByAgeAndGender(resp.data)[0];
+          }}
           /> : <div></div>}
       </SectionColumns>
     );

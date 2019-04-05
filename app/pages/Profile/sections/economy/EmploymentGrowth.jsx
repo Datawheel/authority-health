@@ -9,8 +9,15 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Contact from "components/Contact";
 import Stat from "components/Stat";
 import zipcodes from "utils/zipcodes";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 class EmploymentGrowth extends SectionColumns {
+
+  constructor(props) {
+    super(props);
+    this.state = {sources: []};
+  }
 
   render() {
 
@@ -31,6 +38,7 @@ class EmploymentGrowth extends SectionColumns {
           <p>In {topEmploymentRateData.Year}, the zip code in Wayne County with the largest employment growth was {topEmploymentRateData.Zip} ({formatAbbreviate(topEmploymentRateData["Percent Change in Employment"])}%).</p>
           <p>The following map shows the employment growth for all zip codes in Wayne County.</p>
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* Draw Geomap to show health center count for each zip code in the Wayne county */}
@@ -50,7 +58,10 @@ class EmploymentGrowth extends SectionColumns {
           topojsonFilter: d => zipcodes.includes(d.properties.ZCTA5CE10),
           topojsonId: d => d.properties.ZCTA5CE10
         }}
-        dataFormat={resp => resp.data}
+        dataFormat={resp => {
+          this.setState({sources: updateSource(resp.source, this.state.sources)});
+          return resp.data;
+        }}
         />
       </SectionColumns>
     );

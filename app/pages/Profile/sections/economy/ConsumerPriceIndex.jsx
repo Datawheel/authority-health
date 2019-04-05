@@ -10,10 +10,24 @@ import styles from "style.yml";
 import Contact from "components/Contact";
 import Stat from "components/Stat";
 import growthCalculator from "utils/growthCalculator";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const commas = format(".2f");
 
 class ConsumerPriceIndex extends SectionColumns {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      sources: [],
+      consumerPriceIndexData: this.props.consumerPriceIndexData
+    };
+  }
+
+  componentDidMount() {
+    this.setState({sources: updateSource(this.state.consumerPriceIndexData.source, this.state.sources)});
+  }
 
   render() {
 
@@ -58,6 +72,7 @@ class ConsumerPriceIndex extends SectionColumns {
           </p>
           <p>The following chart shows the average consumer price index for the Detroit-Warren-Dearborn, MI metro area compared to the midwest region and nation.</p>
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* Create a LinePlot. */}

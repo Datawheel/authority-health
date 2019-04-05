@@ -41,7 +41,14 @@ class FoodStamps extends SectionColumns {
 
   constructor(props) {
     super(props);
-    this.state = {sources: []};
+    this.state = {
+      sources: [],
+      snapWicData: this.props.snapWicData
+    };
+  }
+
+  componentDidMount() {
+    this.setState({sources: updateSource(this.state.snapWicData.source, this.state.sources)});
   }
 
   render() {

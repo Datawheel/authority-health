@@ -11,6 +11,8 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Contact from "components/Contact";
 import Disclaimer from "components/Disclaimer";
 import Stat from "components/Stat";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const commas = format(",d");
 
@@ -36,6 +38,11 @@ const formatPublicAssistanceData = publicAssistanceData => {
 };
 
 class FoodStamps extends SectionColumns {
+
+  constructor(props) {
+    super(props);
+    this.state = {sources: []};
+  }
 
   render() {
 
@@ -74,7 +81,7 @@ class FoodStamps extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Food Stamps</SectionTitle>
         <article>
-          {/* {isSnapWicDataAvailableForCurrentGeography ? <div></div> : <Disclaimer>snap and wic data is shown for {snapWicData.data[0].Geography}</Disclaimer>} */}
+          {isSnapWicDataAvailableForCurrentGeography ? <div></div> : <Disclaimer>snap and wic data is shown for {snapWicData.data[0].Geography}</Disclaimer>}
           <Stat
             title="SNAP-authorized stores"
             year={snapLatestYear}
@@ -103,6 +110,7 @@ class FoodStamps extends SectionColumns {
           <p>In {topPublicAssistanceData.Year}, {shareOfPopulationWithFoodStamps} of the population in {topPublicAssistanceData.Geography} had food stamps, out of which {formatPercentage(topPublicAssistanceData.share)} of the population were given food stamps in cash.</p>
           <p>The chart here shows the share of population who gets food stamps in cash out of the population with food stamps.</p>
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {publicAssistanceDataAvailable
@@ -119,7 +127,10 @@ class FoodStamps extends SectionColumns {
             },
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => `${formatPercentage(d.share)}`], [titleCase(meta.level), d => d.Geography]]}
           }}
-          dataFormat={resp => formatPublicAssistanceData(resp.data)}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return formatPublicAssistanceData(resp.data);
+          }}
           /> : null
         }
       </SectionColumns>

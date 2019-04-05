@@ -10,6 +10,8 @@ import Contact from "components/Contact";
 import Disclaimer from "components/Disclaimer";
 import Glossary from "components/Glossary";
 import Stat from "components/Stat";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const commas = format(",d");
 
@@ -19,6 +21,18 @@ const definitions = [
 ];
 
 class FoodAvailability extends SectionColumns {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      sources: [],
+      foodStores: this.props.foodStores
+    };
+  }
+  
+  componentDidMount() {
+    this.setState({sources: updateSource(this.state.foodStores.source, this.state.sources)});
+  }
 
   render() {
     const {meta, foodStores} = this.props;
@@ -63,6 +77,7 @@ class FoodAvailability extends SectionColumns {
           <p>The chart here shows the share of fast-food restaurants, full-service restaurants, convenience stores, grocery stores, specialized food stores, supercenters and farmers market in {meta.name}.</p>
           <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* Draw a Pie chart to show types of stores and restaurants. */}

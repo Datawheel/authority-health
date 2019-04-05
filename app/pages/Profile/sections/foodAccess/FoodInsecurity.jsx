@@ -4,8 +4,22 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Disclaimer from "components/Disclaimer";
 import Stat from "components/Stat";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 class FoodInsecurity extends SectionColumns {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      sources: [],
+      insecurityRate: this.props.insecurityRate
+    };
+  }
+
+  componentDidMount() {
+    this.setState({sources: updateSource(this.state.insecurityRate.source, this.state.sources)});
+  }
 
   render() {
     const {insecurityRate} = this.props;
@@ -29,6 +43,7 @@ class FoodInsecurity extends SectionColumns {
             />
             <p>In {childInsecurity.Year}, {childInsecurity["Food Insecurity Rate"]}% of the children and {adultInsecurityRate}% of the adults in {location} had food insecurity.</p>
             <p>Food insecurity refers to <a href="https://www.ers.usda.gov/topics/food-nutrition-assistance/food-security-in-the-us.aspx">USDA’s measure</a> of lack of access, at times, to enough food for an active, healthy life for all household members and limited or uncertain availability of nutritionally adequate foods.</p>
+            <SourceGroup sources={this.state.sources} />
           </article>
           {isInsecurityRateDataAvailableForCurrentGeography
             ? <Stat

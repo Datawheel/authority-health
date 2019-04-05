@@ -8,6 +8,8 @@ import axios from "axios";
 import Contact from "components/Contact";
 import Disclaimer from "components/Disclaimer";
 import Stat from "components/Stat";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -25,7 +27,8 @@ class StoreAccessByDemographic extends SectionColumns {
     this.state = {
       meta: this.props.meta,
       dropdownValue: "Children",
-      foodAccessByRace: []
+      foodAccessByRace: [],
+      sources: []
     };
   }
 
@@ -101,9 +104,13 @@ class StoreAccessByDemographic extends SectionColumns {
             title: d => `Low Access to Food Store in ${d[0].Geography}`,
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", d => ageSelected ? `${d["Age Group"]}` : `${d["Race Group"]}`], ["Low-Access Rate", d => ageSelected ? formatPercentage(d["Low-Access to Food by Age"]) : formatPercentage(d["Low-Access to Food by Race"])], ["County", d => d.Geography]]}
           }}
-          dataFormat={resp => resp.data}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return resp.data;
+          }}
           />
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* Create a Geomap based on dropdown choice for all the counties in Michigan. */}
@@ -121,7 +128,10 @@ class StoreAccessByDemographic extends SectionColumns {
           topojson: "/topojson/county.json",
           topojsonFilter: d => d.id.startsWith("05000US26")
         }}
-        dataFormat={resp => resp.data}
+        dataFormat={resp => {
+          this.setState({sources: updateSource(resp.source, this.state.sources)});
+          return resp.data;
+        }}
         />
       </SectionColumns>
     );

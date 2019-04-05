@@ -9,6 +9,7 @@ import {titleCase} from "d3plus-text";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
+import Disclaimer from "components/Disclaimer";
 import Glossary from "components/Glossary";
 import Stat from "components/Stat";
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
@@ -56,7 +57,7 @@ class ViolentAndPropertyCrimes extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Violent and Property Crimes</SectionTitle>
         <article>
-          {isPlaceDataAvailable ? <div></div> : <div className="disclaimer">data is shown for Wayne County</div>}
+          {isPlaceDataAvailable ? <div></div> : <Disclaimer>data is shown for Wayne County</Disclaimer>}
           {/* Show stats and short paragraph for each type of crime. */}
           <Stat
             title= {"Most common Violent Crime"}

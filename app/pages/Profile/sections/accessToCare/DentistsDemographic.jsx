@@ -8,6 +8,7 @@ import {formatAbbreviate} from "d3plus-format";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
+import Disclaimer from "components/Disclaimer";
 import Stat from "components/Stat";
 import rangeFormatter from "utils/rangeFormatter";
 
@@ -54,7 +55,7 @@ class DentistsDemographic extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Dentist Demographics</SectionTitle>
         <article>
-          {isDentistsByAgeAvailableForCurrentGeography && isDentistsByGenderAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">data is shown for {dentistsByAge.data[0].Geography}</div>}
+          {isDentistsByAgeAvailableForCurrentGeography && isDentistsByGenderAvailableForCurrentGeography ? <div></div> : <Disclaimer>data is shown for {dentistsByAge.data[0].Geography}</Disclaimer>}
           <Stat
             title={"Common Age Group"}
             year={topDentistsAgeData.Year}

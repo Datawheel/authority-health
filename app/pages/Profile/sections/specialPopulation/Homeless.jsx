@@ -8,6 +8,7 @@ import {formatAbbreviate} from "d3plus-format";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
+import Disclaimer from "components/Disclaimer";
 import Glossary from "components/Glossary";
 import Stat from "components/Stat";
 import {updateSource} from "utils/helper";
@@ -87,7 +88,7 @@ class Homeless extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Homeless</SectionTitle>
         <article>
-          {isHomelessDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">data is shown for {topShelteredHomelessCategory.Geography}</div>}
+          {isHomelessDataAvailableForCurrentGeography ? <div></div> : <Disclaimer>data is shown for {topShelteredHomelessCategory.Geography}</Disclaimer>}
           <Stat
             title={"Homeless rate"}
             year={totalHomelessData.data[0].Year}
@@ -166,7 +167,7 @@ class Homeless extends SectionColumns {
         }}
         dataFormat={resp => formatShelteredHomelessCategories(resp.data)[0]}
         />
-        
+
         <BarChart config={{
           data: `/api/data?measures=Unsheltered Homeless Population&drilldowns=Category&Geography=${meta.id}&Year=all`,
           discrete: "y",

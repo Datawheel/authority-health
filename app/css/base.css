@@ -32,6 +32,7 @@ h2, .font-lg  { @add-mixin font-lg;  }
 h3, .font-md  { @add-mixin font-md;  }
 h4, .font-sm  { @add-mixin font-sm;  }
 h5, .font-xs  { @add-mixin font-xs;  }
+.font-xxs     { @add-mixin font-xxs; }
 
 /* default link style */
 p > a,

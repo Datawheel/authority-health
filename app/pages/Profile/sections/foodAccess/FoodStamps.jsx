@@ -9,6 +9,7 @@ import {titleCase} from "d3plus-text";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
+import Disclaimer from "components/Disclaimer";
 import Stat from "components/Stat";
 
 const commas = format(",d");
@@ -26,7 +27,7 @@ const formatPublicAssistanceData = publicAssistanceData => {
         if (total !== 0) {
           d.total = total; // save total to later calculate total population with stamps.
           d.share = d["Food-Stamp Population"] / total * 100;
-        } 
+        }
         else d.share = 0;
       });
     });
@@ -73,7 +74,7 @@ class FoodStamps extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Food Stamps</SectionTitle>
         <article>
-          {/* {isSnapWicDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">snap and wic data is shown for {snapWicData.data[0].Geography}</div>} */}
+          {/* {isSnapWicDataAvailableForCurrentGeography ? <div></div> : <Disclaimer>snap and wic data is shown for {snapWicData.data[0].Geography}</Disclaimer>} */}
           <Stat
             title="SNAP-authorized stores"
             year={snapLatestYear}
@@ -104,7 +105,7 @@ class FoodStamps extends SectionColumns {
           <Contact slug={this.props.slug} />
         </article>
 
-        {publicAssistanceDataAvailable 
+        {publicAssistanceDataAvailable
           ? <LinePlot config={{
             data: `/api/data?measures=Food-Stamp Population&drilldowns=Public Assistance or Snap&Geography=${meta.id}&Year=all`,
             discrete: "x",

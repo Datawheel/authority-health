@@ -6,6 +6,7 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import axios from "axios";
 
 import Contact from "components/Contact";
+import Disclaimer from "components/Disclaimer";
 import Stat from "components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
@@ -58,7 +59,7 @@ class StoreAccessByDemographic extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Store Access by Demographic</SectionTitle>
         <article>
-          {isCurrentLocationDataAvailable ? <div></div> : <div className="disclaimer">data is shown for {ageSelected ? foodAccessByAge.data[0].Geography : foodAccessByRace.data[0].Geography}</div>}
+          {isCurrentLocationDataAvailable ? <div></div> : <Disclaimer>data is shown for {ageSelected ? foodAccessByAge.data[0].Geography : foodAccessByRace.data[0].Geography}</Disclaimer>}
           {/* Create a dropdown for each age and race type using raceAndAgeTypes array. */}
           <label className="pt-label pt-inline" htmlFor="store-access-dropdown">
             Show data for

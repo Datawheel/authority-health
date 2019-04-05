@@ -7,6 +7,7 @@ import axios from "axios";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
+import Disclaimer from "components/Disclaimer";
 import Stat from "components/Stat";
 import ZipRegionDefinition from "components/ZipRegionDefinition";
 import CensusTractDefinition from "components/CensusTractDefinition";
@@ -47,7 +48,7 @@ class PreventiveCare extends SectionColumns {
     dropdownValue === "Had Pneumonia Vaccine" ||
     dropdownValue === "Had Routine Checkup Last Year" ||
     dropdownValue === "FOBT or Endoscopy" ||
-    dropdownValue === "HIV Tested") { 
+    dropdownValue === "HIV Tested") {
       axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=latest`) // MiBRFS - All Years
         .then(resp => {
           axios.get(`/api/data?measures=${dropdownValue}&Geography=05000US26163&Year=latest`) // Get Wayne County data for comparison. Only available for MiBRFS cube and not 500 cities.
@@ -59,7 +60,7 @@ class PreventiveCare extends SectionColumns {
                 dropdownValue
               });
             });
-        }); 
+        });
     }
     else {
       axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Tract&Year=latest`)
@@ -75,8 +76,8 @@ class PreventiveCare extends SectionColumns {
 
   render() {
     const {dropdownValue, preventiveCareData, preventiveCareWeightedData, isPreventativeCareWeightedValueSelected, countyLevelData} = this.state;
-    const dropdownList = ["Annual Checkup", "Core Preventive Services for Older Men", "Core Preventive Services for Older Women", 
-      "Dental Visit", "Colorectal Cancer Screening", "Pap Smear Test", "Mammography", "Cholesterol Screening", "Taking Blood Pressure Medication", "Had Flu Vaccine", 
+    const dropdownList = ["Annual Checkup", "Core Preventive Services for Older Men", "Core Preventive Services for Older Women",
+      "Dental Visit", "Colorectal Cancer Screening", "Pap Smear Test", "Mammography", "Cholesterol Screening", "Taking Blood Pressure Medication", "Had Flu Vaccine",
       "Sleep Less Than 7 Hours", "Had Pneumonia Vaccine", "Had Routine Checkup Last Year", "FOBT or Endoscopy", "HIV Tested"];
 
     // Find recent year top data for the selected dropdown value.
@@ -92,7 +93,7 @@ class PreventiveCare extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Preventive Care</SectionTitle>
         <article>
-          {isPreventativeCareWeightedValueSelected ? <div className="disclaimer">data is shown at the zip region level</div> : <div className="disclaimer">data is shown at the census tract level</div>}
+          {isPreventativeCareWeightedValueSelected ? <Disclaimer>data is shown at the zip region level</Disclaimer> : <Disclaimer>data is shown at the census tract level</Disclaimer>}
           {/* Create a dropdown for different types of preventive care. */}
           <label className="pt-label pt-inline" htmlFor="preventive-care-dropdown">
             Show data for
@@ -180,7 +181,7 @@ PreventiveCare.need = [
 
 const mapStateToProps = state => ({
   topStats: state.data.topStats,
-  preventiveCareData: state.data.preventiveCareData 
+  preventiveCareData: state.data.preventiveCareData
 });
 
 export default connect(mapStateToProps)(PreventiveCare);

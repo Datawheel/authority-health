@@ -1,6 +1,32 @@
 @import './mixins';
 
 /* -----------------------------------
+buttons
+----------------------------------- */
+
+.pt-button.pt-minimal {
+  background-color: var(--white);
+  border: 1px solid var(--brand-light);
+  color: var(--brand-dark);
+  /* transitions */
+  transition:
+    background 0.1s ease-out,
+    border 0.1s ease-out,
+    color 0.1s ease-out;
+
+  /* icon */
+  &:before {
+    color: currentColor;
+  }
+
+  &:hover, &:focus {
+    background-color: var(--brand-dark);
+    border-color: var(--brand-dark);
+    color: var(--white);
+  }
+}
+
+/* -----------------------------------
 tabs
 ----------------------------------- */
 
@@ -32,4 +58,12 @@ overlays/dialogs
 .pt-overlay-inline .pt-overlay-content,
 .pt-overlay-scroll-container .pt-overlay-content {
   position: relative;
+}
+
+/* -----------------------------------
+multiselect
+----------------------------------- */
+
+.pt-multi-select-popover {
+  @mixin font-sm;
 }

@@ -15,6 +15,7 @@ import Contact from "components/Contact";
 import Glossary from "components/Glossary";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Disclaimer from "components/Disclaimer";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -88,7 +89,7 @@ class CancerPrevalenceByDemographics extends SectionColumns {
         <SectionTitle>Cancer Prevalence by Demographic</SectionTitle>
         <article>
           <p>Click on the box to select a cancer type and display its data in the bar charts to the right. You can select upto 5 types of cancer.</p>
-          <div className="disclaimer">Data only available for the Detroit-Warren-Dearborn, MI metro area.</div>
+          <Disclaimer>Data only available for the Detroit-Warren-Dearborn, MI metro area.</Disclaimer>
           <MultiSelect
             items={items}
             itemPredicate={filterItem}

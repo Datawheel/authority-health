@@ -197,6 +197,7 @@ layout
         margin-top: -5rem;
         padding-top: 5rem;
         transition: color 0.2s ease-out;
+        z-index: 0;
 
         &:hover, &:focus {
           color: var(--brand-dark);
@@ -209,19 +210,12 @@ layout
       font-family: inherit;
       color: inherit;
 
-      & .disclaimer {
-        @add-mixin font-xs;
-        @add-mixin font-uppercase;
-        color: var(--majorelle-dark);
-        font-weight: 700;
-        margin-bottom: 10px;
-      }
-
       & .pt-select {
-        margin-bottom: 10px;
+        margin-bottom: 0.5em;
       }
 
-      & p {
+      /* style direct child paragraphs only */
+      & > p {
         @add-mixin font-sm;
         margin-bottom: 0.75em; /* override blueprint */
 
@@ -280,6 +274,12 @@ layout
 
 /* form fields */
 .field-container {
+
+  /* position fields in front of following titles */
+  & > * {
+    z-index: 1;
+  }
+
   &:not(:last-child) {
     margin-bottom: 0.75rem;
   }
@@ -289,6 +289,11 @@ layout
     display: block;
     width: 100%;
     margin-top: 0.25em;
+  }
+
+  /* multiselect wrapper */
+  & .pt-popover-target {
+    display: block;
   }
 }
 

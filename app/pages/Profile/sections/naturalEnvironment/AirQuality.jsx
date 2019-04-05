@@ -8,7 +8,9 @@ import {titleCase} from "d3plus-text";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
+
 import Contact from "components/Contact";
+import Disclaimer from "components/Disclaimer";
 import Stat from "components/Stat";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
@@ -39,7 +41,7 @@ class AirQuality extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Air Quality</SectionTitle>
         <article>
-          {isAirQualityDaysAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">data is shown for {airQualityDays.data[0].Geography}</div>}
+          {isAirQualityDaysAvailableForCurrentGeography ? <div></div> : <Disclaimer>data is shown for {airQualityDays.data[0].Geography}</Disclaimer>}
           <Stat
             title={"Days with good quality"}
             year={topRecentYearAirQualityDays.Year}

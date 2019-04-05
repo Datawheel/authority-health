@@ -7,6 +7,7 @@ import axios from "axios";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
+import Disclaimer from "components/Disclaimer";
 import Stat from "components/Stat";
 import ZipRegionDefinition from "components/ZipRegionDefinition";
 import CensusTractDefinition from "components/CensusTractDefinition";
@@ -45,7 +46,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
     dropdownValue === "Heart Disease" ||
     dropdownValue === "HIV Tested" ||
     dropdownValue === "Poor Mental Health 14 Or More Days" ||
-    dropdownValue === "Gen Health Fair Or Poor") { 
+    dropdownValue === "Gen Health Fair Or Poor") {
       axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=latest`)
         .then(resp => {
           axios.get(`/api/data?measures=${dropdownValue}&Geography=05000US26163&Year=latest`) // Get Wayne County data for comparison. Only available for MiBRFS cube and not 500 cities.
@@ -56,7 +57,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
                 dropdownValue
               });
             });
-        }); 
+        });
     }
     else {
       axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Tract&Year=latest`)
@@ -74,8 +75,8 @@ class ConditionsAndChronicDiseases extends SectionColumns {
 
     // Include all the measures in the dropdown list.
     const {dropdownValue, healthConditionData, healthConditionWeightedData, countyLevelData} = this.state;
-    const dropdownList = ["Arthritis", "COPD", "Chronic Kidney Disease", "Coronary Heart Disease", "Current Asthma", "High Blood Pressure", "High Cholesterol", 
-      "Mental Health", "Stroke", "Teeth Loss", "Cardiovascular Disease", "Ever Depressive", 
+    const dropdownList = ["Arthritis", "COPD", "Chronic Kidney Disease", "Coronary Heart Disease", "Current Asthma", "High Blood Pressure", "High Cholesterol",
+      "Mental Health", "Stroke", "Teeth Loss", "Cardiovascular Disease", "Ever Depressive",
       "Ever Heart Attack", "Heart Disease", "Poor Mental Health 14 Or More Days", "Physical Health", "Gen Health Fair Or Poor"];
 
     // Check if the selected dropdown values are from the healthConditionWeightedData.
@@ -109,7 +110,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
           {/* Show top stats for the dropdown selected. */}
           { isHealthConditionWeightedValueSelected
             ? <div>
-              <div className="disclaimer">data is shown at the zip region level</div>
+              <Disclaimer>data is shown at the zip region level</Disclaimer>
               <Stat
                 title={"Location with highest prevalence"}
                 year={topDropdownWeightedData["End Year"]}
@@ -118,7 +119,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
               />
             </div>
             : <div>
-              <div className="disclaimer">data is shown at the census tract level</div>
+              <Disclaimer>data is shown at the census tract level</Disclaimer>
               <Stat
                 title={"Location with highest prevalence"}
                 year={topDropdownValueTract.Year}

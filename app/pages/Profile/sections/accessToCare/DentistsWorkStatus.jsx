@@ -8,6 +8,7 @@ import {formatAbbreviate} from "d3plus-format";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
+import Disclaimer from "components/Disclaimer";
 import Stat from "components/Stat";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
@@ -76,7 +77,7 @@ class DentistsWorkStatus extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Dentists Work Status</SectionTitle>
         <article>
-          {isDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">data is shown for {dentistsByWorkingHours.data[0].Geography}</div>}
+          {isDataAvailableForCurrentGeography ? <div></div> : <Disclaimer>data is shown for {dentistsByWorkingHours.data[0].Geography}</Disclaimer>}
           <Stat
             title={"Private Practice"}
             year={topTypeOfActiveDentist.Year}
@@ -150,4 +151,3 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(DentistsWorkStatus);
-

@@ -48,9 +48,9 @@ class Contact extends Component {
       .entries(data);
 
     return (
-      <div className="contact">
+      <div className="contact section-popover-button">
         <Tooltip2 className="contact-container" tooltipClassName="contact-tooltip" content={ `Community resources that relate to ${slug.replace(/\-/g, " ")} can be found here.` }>
-          <Button className="contact-button" text={title} iconName={icon} onClick={toggle} />
+          <Button className="contact-button pt-minimal" text={title} iconName={icon} onClick={toggle} />
         </Tooltip2>
         <Dialog className="contact-dialog" title={title} iconName={icon} isOpen={open} onClose={toggle}>
           <div className="pt-dialog-body">

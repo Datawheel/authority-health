@@ -1,6 +1,6 @@
 @import "../css/mixins.css";
 
-.glossary-button:not([class*="pt-intent-"]) {
+/* .glossary-button:not([class*="pt-intent-"]) {
   background-color: var(--brand-dark);
   background-image: none;
   color: white;
@@ -9,6 +9,16 @@
   }
   &:hover {
     background-color: var(--brand-dark);
+  }
+} */
+
+.section-popover-button {
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 0.5em;
+
+  &:not(:last-child) {
+    margin-right: 1em;
   }
 }
 

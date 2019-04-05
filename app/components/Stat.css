@@ -34,5 +34,16 @@
   & .stat-value-qualifier {
     @add-mixin font-smoothing;
     letter-spacing: normal;
+
+    /* but, like, it's a really long one */
+    &.font-xs {
+      /* new line */
+      display: inline-block;
+      color: var(--dark-2);
+      /* reset typography */
+      font-weight: 400;
+      -moz-osx-font-smoothing: auto;
+      -webkit-font-smoothing: auto;
+    }
   }
 }

@@ -12,6 +12,7 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
 import Glossary from "components/Glossary";
+import Disclaimer from "components/Disclaimer";
 import growthCalculator from "utils/growthCalculator";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
@@ -91,7 +92,7 @@ class OccurrenceByCancerSite extends SectionColumns {
         <SectionTitle>Occurrence by Cancer Site</SectionTitle>
         <article>
           <p>Click on the box to select a cancer type and display its data in the line chart to the right. You can select upto 5 types of cancer.</p>
-          <div className="disclaimer">Data only available for the Detroit-Warren-Dearborn, MI metro area.</div>
+          <Disclaimer>Data only available for the Detroit-Warren-Dearborn, MI metro area.</Disclaimer>
           <MultiSelect
             items={items}
             itemPredicate={filterItem}

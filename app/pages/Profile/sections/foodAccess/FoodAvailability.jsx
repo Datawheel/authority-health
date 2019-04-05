@@ -7,6 +7,7 @@ import {titleCase} from "d3plus-text";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
+import Disclaimer from "components/Disclaimer";
 import Glossary from "components/Glossary";
 import Stat from "components/Stat";
 
@@ -51,7 +52,7 @@ class FoodAvailability extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Food Availability</SectionTitle>
         <article>
-          {isFoodStoreDataAvailableForCurrentGeography ? <div></div> : <div className="disclaimer">data is shown for {topStore.Geography}</div>}
+          {isFoodStoreDataAvailableForCurrentGeography ? <div></div> : <Disclaimer>data is shown for {topStore.Geography}</Disclaimer>}
           <Stat
             title={"most number of food store available"}
             year={topStore.Year}

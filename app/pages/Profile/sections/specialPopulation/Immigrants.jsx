@@ -101,7 +101,7 @@ class Immigrants extends SectionColumns {
       let currentLevelData;
       if (meta.name !== "county") {
         currentLevelData = axios.get(`/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Poverty Status&Geography=${meta.id}&Year=latest`); // if current location is not county, then get current level data
-      } 
+      }
       Promise.all([immigrantsPovertyData, countyData, nationData, stateData, currentLevelData]).then(values => {
         this.setState({
           immigrantsPovertyData: values[0].data.data,
@@ -118,9 +118,9 @@ class Immigrants extends SectionColumns {
 
   render() {
     const {
-      meta, 
-      dropdownValue, 
-      immigrantsPovertyData, 
+      meta,
+      dropdownValue,
+      immigrantsPovertyData,
       immigrantsInPovertyNationData,
       immigrantsInPovertyStateData,
       immigrantsInPovertyCountyData,
@@ -128,10 +128,10 @@ class Immigrants extends SectionColumns {
     } = this.state;
 
     const {
-      immigrantsData, 
-      immigrantsDataForCurrentLocation, 
-      immigrantsDataForNation, 
-      immigrantsDataForState, 
+      immigrantsData,
+      immigrantsDataForCurrentLocation,
+      immigrantsDataForNation,
+      immigrantsDataForState,
       immigrantsDataForWayneCounty
     } = this.props;
 
@@ -186,7 +186,7 @@ class Immigrants extends SectionColumns {
                 value={topStats.Place}
                 qualifier={formatPercentage(topStats.share)}
               />
-              
+
               {meta.level !== "county"
                 ? <p>In {currentLevelImmigrantsData.Year}, {formatPercentage(currentLevelImmigrantsData.share)} of the population in {currentLevelImmigrantsData.Geography} were immigrants, compared to {formatPercentage(wayneCountyImmigrantsData.share)} {}
                 in Wayne County, {formatPercentage(michiganImmigrantsData.share)} in Michigan, and {formatPercentage(USImmigrantsData.share)} in the United States.</p>
@@ -209,21 +209,21 @@ class Immigrants extends SectionColumns {
                 value={topStats.Place}
                 qualifier={formatPercentage(topStats.share)}
               />
-              
-              {meta.level !== "county" 
+
+              {meta.level !== "county"
                 ? <p>In {currentLevelImmigrantsData.Year}, {formatPercentage(currentLevelImmigrantsData.share)} of the population in {currentLevelImmigrantsData.Geography} were immigrants in poverty, compared to {}
                   {formatPercentage(wayneCountyImmigrantsData.share)} in Wayne County, {formatPercentage(michiganImmigrantsData.share)} in Michigan and {formatPercentage(USImmigrantsData.share)} in the United States.</p>
                 : <p>In {wayneCountyImmigrantsData.Year}, {formatPercentage(wayneCountyImmigrantsData.share)} of the population in in Wayne County were immigrants in poverty, compared to {}
                   {formatPercentage(michiganImmigrantsData.share)} in Michigan and {formatPercentage(USImmigrantsData.share)} in the United States.</p>
               }
               <p>The city with the highest immigrants in poverty in Wayne County was {topStats.Place} ({formatPercentage(topStats.share)}).</p>
-              
+
               {immigrantsPovertyDataForCurrentLocationAvailable ? <p>The map here shows the cities in Wayne County by their percentage of immigrants in poverty.</p> : "" }
             </div>
           }
 
-          <Contact slug={this.props.slug} />
           <SourceGroup sources={this.state.sources} />
+          <Contact slug={this.props.slug} />
         </article>
 
         <Geomap config={{

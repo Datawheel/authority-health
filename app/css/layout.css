@@ -152,6 +152,12 @@ layout
         margin-left: 0;
       }
 
+      /* space out awkward left column visualizations */
+      & p + .viz,
+      & .section-popover-button + .viz {
+        margin-top: var(--gutter-md);
+      }
+
       /* single column layout on smaller screens */
       @add-mixin max-md {
         display: block; /* stacked layout */

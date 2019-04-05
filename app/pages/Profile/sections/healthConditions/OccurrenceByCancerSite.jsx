@@ -91,29 +91,30 @@ class OccurrenceByCancerSite extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Occurrence by Cancer Site</SectionTitle>
         <article>
-          <p>Click on the box to select a cancer type and display its data in the line chart to the right. You can select upto 5 types of cancer.</p>
-          <Disclaimer>Data only available for the Detroit-Warren-Dearborn, MI metro area.</Disclaimer>
-          <MultiSelect
-            items={items}
-            itemPredicate={filterItem}
-            itemRenderer={renderItem}
-            noResults={<MenuItem disabled text="No results." />}
-            onItemSelect={handleItemSelect}
-            tagInputProps={{onRemove: deleteTag, placeholder: "Add a cancer type", inputProps: {placeholder: "Add a cancer type"}}}
-            tagRenderer={renderTag}
-            selectedItems={selectedItems}
-            resetOnClose={true}
-            resetOnSelect={true}>
-            <Button rightIcon="caret-down" />
-          </MultiSelect>
+          <p>Click on the box to select a cancer type and display its data in the line chart to the right. You can select up to 5 types of cancer.</p>
+          <div className="field-container">
+            <MultiSelect
+              items={items}
+              itemPredicate={filterItem}
+              itemRenderer={renderItem}
+              noResults={<MenuItem disabled text="No results." />}
+              onItemSelect={handleItemSelect}
+              tagInputProps={{onRemove: deleteTag, placeholder: "Add a cancer type", inputProps: {placeholder: "Add a cancer type"}}}
+              tagRenderer={renderTag}
+              selectedItems={selectedItems}
+              resetOnClose={true}
+              resetOnSelect={true}>
+              <Button rightIcon="caret-down" />
+            </MultiSelect>
+          </div>
 
-          {/* Added empty <p> element for some space between the dropdown choice and text. */}
-          <p></p>
-          <p>In {mostRecentYearOccuranceRate.Year}, the cancer rate in the {mostRecentYearOccuranceRate.MSA} was {formatAbbreviate(mostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])} per 100,000 people. This represents a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "growth"} from the previous year ({formatAbbreviate(secondMostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])} per 100,000 people).</p>
+          <p className="u-margin-top-sm">In {mostRecentYearOccuranceRate.Year}, the cancer rate in the {mostRecentYearOccuranceRate.MSA} was {formatAbbreviate(mostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])} per 100,000 people. This represents a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "growth"} from the previous year ({formatAbbreviate(secondMostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])} per 100,000 people).</p>
           <p>The following chart shows the occurrence rate per 100,000 people in {mostRecentYearOccuranceRate.MSA} for {isItemsListEmpty ? mostRecentYearOccuranceRate["Cancer Site"].toLowerCase() : "the selected cancer site(s)"}.</p>
+
+          <Disclaimer>Data only available for the Detroit-Warren-Dearborn, MI metro area.</Disclaimer>
+          <SourceGroup sources={this.state.sources} />
           <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
-          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* Draw a LinePlot to show age adjusted data for the selected cancer types. */}

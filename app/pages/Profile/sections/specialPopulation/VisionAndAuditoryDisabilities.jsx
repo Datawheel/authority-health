@@ -158,6 +158,9 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
            years for women.</span> : ""}
             </p>}
 
+          <SourceGroup sources={this.state.sources} />
+          <Contact slug={this.props.slug} />
+
           {isVisionDisabilitySelected && visionDisabilityDataAvailable &&
             <BarChart config={{
               data: `/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status,Age,Sex&Geography=${meta.id}&Year=all`,
@@ -213,8 +216,6 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
               return formatData(resp.data, "Hearing")[0];
             }}
             /> }
-          <Contact slug={this.props.slug} />
-          <SourceGroup sources={this.state.sources} />
         </article>
 
         {meta.level === "county" &&

@@ -74,8 +74,9 @@ class Homeownership extends SectionColumns {
           <p>{medianHousingUnitsValueForProfileAvailable ? <span>In {topMedianHousingUnitsValueForProfile.Year}, the median property value in {topMedianHousingUnitsValueForProfile.Geography}, was ${commas(topMedianHousingUnitsValueForProfile["Property Value"])}.</span> : ""} </p>
           <p>{occupancyDataAvailable ? <span>{formatAbbreviate(topOccupancyData.share)}% of households in {topOccupancyData.Geography} were occupied in {topOccupancyData.Year}.</span> : ""}</p>
           <p>The following map shows the median property value for <CensusTractDefinition text="census tracts" /> in Wayne County.</p>
-          <Contact slug={this.props.slug} />
+          
           <SourceGroup sources={this.state.sources} />
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Geomap to show Property Values for all tracts in the Wayne County. */}

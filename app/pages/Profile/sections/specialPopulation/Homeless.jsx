@@ -88,7 +88,6 @@ class Homeless extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Homeless</SectionTitle>
         <article>
-          {isHomelessDataAvailableForCurrentGeography ? <div></div> : <Disclaimer>data is shown for {topShelteredHomelessCategory.Geography}</Disclaimer>}
           <Stat
             title={"Homeless rate"}
             year={totalHomelessData.data[0].Year}
@@ -112,6 +111,13 @@ class Homeless extends SectionColumns {
           and unsheltered demographic was {topUnshelteredHomelessCategory.Category.toLowerCase()} ({formatPercentage(topUnshelteredHomelessCategory.unshelteredShare)}).</p>
 
           <p>Following charts shows different categories and types of sheltered and unsheltered homeless population in {totalHomelessData.data[0].Geography} and percentages for each one of them.</p>
+
+          {!isHomelessDataAvailableForCurrentGeography &&
+            <Disclaimer>data is shown for {topShelteredHomelessCategory.Geography}</Disclaimer>
+          }
+          <SourceGroup sources={this.state.sources} />
+          <Glossary definitions={definitions} />
+          <Contact slug={this.props.slug} />
 
           {/* Draw a lineplot for sheltered homeless population. */}
           <LinePlot config={{
@@ -137,9 +143,6 @@ class Homeless extends SectionColumns {
             return formatTypesOfHomeless(resp.data);
           }}
           />
-          <Glossary definitions={definitions} />
-          <Contact slug={this.props.slug} />
-          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* <SectionRows>  */}

@@ -79,7 +79,6 @@ class Unemployment extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Unemployment</SectionTitle>
         <article>
-          {isUnemploymentRateAvailableForCurrentLocation ? <div></div> : <Disclaimer>unemployment rate data is shown for {unemploymentRate.data[0].Geography}</Disclaimer>}
           <Stat
             title="Male Working Full Time"
             year={workExperienceAvailable ? getMaleFullTimeData[0].Year : ""}
@@ -98,9 +97,15 @@ class Unemployment extends SectionColumns {
             {} In {recentYearUnemploymentRate.Year}, the overall unemploymemt rate in {recentYearUnemploymentRate.Geography} was {formatPercentage(recentYearUnemploymentRate["Unemployment Rate"])}.
           </p>
 
+          {!isUnemploymentRateAvailableForCurrentLocation &&
+            <Disclaimer>unemployment rate data is shown for {unemploymentRate.data[0].Geography}</Disclaimer>
+          }
+          <SourceGroup sources={this.state.sources} />
+          <Contact slug={this.props.slug} />
+
           {/* Barchart to show population by age and gender over the years for selected geography. */}
-          {workExperienceAvailable
-            ? <BarChart config={{
+          {workExperienceAvailable &&
+            <BarChart config={{
               data: `/api/data?measures=Population by Employment Status&drilldowns=Employment Status,Age,Sex&Geography=${meta.id}&Year=all`,
               discrete: "x",
               height: 250,
@@ -126,9 +131,8 @@ class Unemployment extends SectionColumns {
               this.setState({sources: updateSource(resp.source, this.state.sources)});
               return formatEmploymentStatusData(resp.data)[0];
             }}
-            /> : <div></div>}
-          <Contact slug={this.props.slug} />
-          <SourceGroup sources={this.state.sources} />
+            />
+          }
         </article>
 
         {/* Lineplot to show total population over the years for selected geography. */}

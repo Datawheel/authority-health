@@ -93,7 +93,6 @@ class PreventiveCare extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Preventive Care</SectionTitle>
         <article>
-          {isPreventativeCareWeightedValueSelected ? <Disclaimer>data is shown at the zip region level</Disclaimer> : <Disclaimer>data is shown at the census tract level</Disclaimer>}
           {/* Create a dropdown for different types of preventive care. */}
           <label className="pt-label pt-inline" htmlFor="preventive-care-dropdown">
             Show data for
@@ -121,8 +120,13 @@ class PreventiveCare extends SectionColumns {
             ? <p>The map here shows {formatDropdownNames(dropdownValue).toLowerCase()} for zip regions in Wayne County.</p>
             : <p>The map here shows {formatDropdownNames(dropdownValue).toLowerCase()} for census tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
-          <Contact slug={this.props.slug} />
+
+          {isPreventativeCareWeightedValueSelected
+            ? <Disclaimer>data is shown at the zip region level</Disclaimer>
+            : <Disclaimer>data is shown at the census tract level</Disclaimer>
+          }
           <SourceGroup sources={this.state.sources} />
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Geomap to show Preventive care data for selected dropdown Value. */}

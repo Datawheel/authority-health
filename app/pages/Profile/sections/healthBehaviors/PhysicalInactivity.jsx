@@ -55,8 +55,6 @@ class PhysicalInactivity extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Physical Inactivity</SectionTitle>
         <article>
-          {isPhysicalInactivityBySexAvailableForCurrentlocation ? <div></div> : <Disclaimer>data is shown for {physicalInactivityPrevalenceBySex.data[0].Geography}</Disclaimer>}
-
           <Stat
             title={"Location with highest prevalence"}
             year={topRecentYearData.Year}
@@ -82,8 +80,15 @@ class PhysicalInactivity extends SectionColumns {
           <p>In {topPhysicalInactivityFemaleData.Year}, {formatPercentage(topPhysicalInactivityMaleData["Age-Adjusted Physical Inactivity"])} of the male population and {formatPercentage(topPhysicalInactivityFemaleData["Age-Adjusted Physical Inactivity"])} of the female population in {}
             {topPhysicalInactivityFemaleData.Geography} were physically inactive, as compared to {formatPercentage(stateLevelMaleData["Age-Adjusted Physical Inactivity"])} of the male and {formatPercentage(stateLevelFemaleData["Age-Adjusted Physical Inactivity"])} of the female population in Michigan overall.</p>
 
+          {!isPhysicalInactivityBySexAvailableForCurrentlocation &&
+            <Disclaimer>data is shown for {physicalInactivityPrevalenceBySex.data[0].Geography}</Disclaimer>
+          }
+          <SourceGroup sources={this.state.sources} />
+          <Glossary definitions={definitions} />
+          <Contact slug={this.props.slug} />
+
           {/* Draw a BarChart to show data for Physical Inactivity by Sex. */}
-          <BarChart config={{
+          {/* <BarChart config={{
             data: `/api/data?measures=Age-Adjusted Physical Inactivity&drilldowns=Sex&Geography=${meta.id}&Year=all`,
             discrete: "y",
             height: 200,
@@ -109,10 +114,7 @@ class PhysicalInactivity extends SectionColumns {
             this.setState({sources: updateSource(resp.source, this.state.sources)});
             return resp.data;
           }}
-          />
-          <Glossary definitions={definitions} />
-          <Contact slug={this.props.slug} />
-          <SourceGroup sources={this.state.sources} />
+          />*/}
         </article>
 
         {/* Geomap to show Physical health and physical Inactivity for tracts in the Wayne County. */}

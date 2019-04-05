@@ -37,8 +37,9 @@ class EmploymentGrowth extends SectionColumns {
 
           <p>In {topEmploymentRateData.Year}, the zip code in Wayne County with the largest employment growth was {topEmploymentRateData.Zip} ({formatAbbreviate(topEmploymentRateData["Percent Change in Employment"])}%).</p>
           <p>The following map shows the employment growth for all zip codes in Wayne County.</p>
-          <Contact slug={this.props.slug} />
+          
           <SourceGroup sources={this.state.sources} />
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Draw Geomap to show health center count for each zip code in the Wayne county */}

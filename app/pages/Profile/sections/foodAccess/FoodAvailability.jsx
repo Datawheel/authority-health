@@ -29,7 +29,7 @@ class FoodAvailability extends SectionColumns {
       foodStores: this.props.foodStores
     };
   }
-  
+
   componentDidMount() {
     this.setState({sources: updateSource(this.state.foodStores.source, this.state.sources)});
   }
@@ -66,7 +66,6 @@ class FoodAvailability extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Food Availability</SectionTitle>
         <article>
-          {isFoodStoreDataAvailableForCurrentGeography ? <div></div> : <Disclaimer>data is shown for {topStore.Geography}</Disclaimer>}
           <Stat
             title={"most number of food store available"}
             year={topStore.Year}
@@ -75,9 +74,13 @@ class FoodAvailability extends SectionColumns {
           />
           <p>In {topStore.Year}, the most available food stores in {topStore.Geography} were {topStore["Sub-category"].toLowerCase()} ({commas(topStore["Number of Food Stores"])}) out of all food store types.</p>
           <p>The chart here shows the share of fast-food restaurants, full-service restaurants, convenience stores, grocery stores, specialized food stores, supercenters and farmers market in {meta.name}.</p>
+
+          {!isFoodStoreDataAvailableForCurrentGeography &&
+            <Disclaimer>data is shown for {topStore.Geography}</Disclaimer>
+          }
+          <SourceGroup sources={this.state.sources} />
           <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
-          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* Draw a Pie chart to show types of stores and restaurants. */}

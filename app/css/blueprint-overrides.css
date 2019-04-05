@@ -69,9 +69,15 @@ inline label groups
 ----------------------------------- */
 .pt-label.pt-inline {
   display: flex;
+  /* typography */
+  @mixin font-sm;
 
-  /* this should always be the field */
-  & > *:last-child {
-    flex: 1 0 50%;
+  & * {
+    font-size: inherit;
+
+    /* this should always be the field */
+    &:last-child {
+      flex: 1 0 50%;
+    }
   }
 }

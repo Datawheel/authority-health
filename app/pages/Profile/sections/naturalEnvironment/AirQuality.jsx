@@ -41,7 +41,6 @@ class AirQuality extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Air Quality</SectionTitle>
         <article>
-          {isAirQualityDaysAvailableForCurrentGeography ? <div></div> : <Disclaimer>data is shown for {airQualityDays.data[0].Geography}</Disclaimer>}
           <Stat
             title={"Days with good quality"}
             year={topRecentYearAirQualityDays.Year}
@@ -61,6 +60,12 @@ class AirQuality extends SectionColumns {
           />
 
           <p>{topRecentYearAirQualityDays["Air Quality Days"]} of 90 days measured were good quality air in {topRecentYearAirQualityDays.Year}. The most common air pollutants was {topRecentYearAirPollutant.Pollutant} ({topRecentYearAirPollutant.Year}) and the median AQI was {airQualityMedianAQIs[0]["Median AQI"]} in {airQualityMedianAQIs[0].Geography}.</p>
+
+          {!isAirQualityDaysAvailableForCurrentGeography &&
+            <Disclaimer>data is shown for {airQualityDays.data[0].Geography}</Disclaimer>
+          }
+          <SourceGroup sources={this.state.sources} />
+          <Contact slug={this.props.slug} />
 
           {/* Lineplot to show air pollutants over the years. */}
           <LinePlot config={{
@@ -103,8 +108,6 @@ class AirQuality extends SectionColumns {
             return resp.data;
           }}
           />
-          <Contact slug={this.props.slug} />
-          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* Lineplot to show air quality days over the years. */}

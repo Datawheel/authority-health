@@ -195,6 +195,12 @@ class ObesityAndDiabetes extends SectionColumns {
             {topMaleData.Geography} {isDiabetesSelected ? "had diabetes" : "were obese"}, compared to {isDiabetesSelected ? formatPercentage(stateLevelMaleDiabetes["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(stateLevelMaleObesity["Age-Adjusted Obesity Prevalence"])} of the male {}
             and {isDiabetesSelected ? formatPercentage(stateLevelFemaleDiabetes["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(stateLevelFemaleObesity["Age-Adjusted Obesity Prevalence"])} of the female population in Michigan.</p>
 
+          {/* <Disclaimer>
+            {isBMIWeightedDataValueSelected ? "data is shown at the zip region level" : "data is shown at the census tract level" }
+          </Disclaimer> */}
+          <SourceGroup sources={this.state.sources} />
+          <Contact slug={this.props.slug} />
+
           {/* Draw a BarChart to show data for Obesity Rate by Sex. */}
           <BarChart config={{
             data: isDiabetesSelected ? `/api/data?measures=Age-Adjusted Diabetes Prevalence&drilldowns=Sex&Geography=${meta.id}&Year=all` : `/api/data?measures=Age-Adjusted Obesity Prevalence&drilldowns=Sex&Geography=${meta.id}&Year=all`,
@@ -225,11 +231,9 @@ class ObesityAndDiabetes extends SectionColumns {
             return resp.data;
           }}
           />
-          <Contact slug={this.props.slug} />
-          <SourceGroup sources={this.state.sources} />
         </article>
 
-        {/* <Disclaimer>{isBMIWeightedDataValueSelected ? "data is shown at the zip region level" : "data is shown at the census tract level"}</Disclaimer> */}
+
         {/* Geomap to show Obesity and Diabetes data based on the dropdown value. */}
         {isBMIWeightedDataValueSelected
           ? <Geomap config={{

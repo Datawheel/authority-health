@@ -109,24 +109,18 @@ class ConditionsAndChronicDiseases extends SectionColumns {
 
           {/* Show top stats for the dropdown selected. */}
           { isHealthConditionWeightedValueSelected
-            ? <div>
-              <Disclaimer>data is shown at the zip region level</Disclaimer>
-              <Stat
-                title={"Location with highest prevalence"}
-                year={topDropdownWeightedData["End Year"]}
-                value={topDropdownWeightedData["Zip Region"]}
-                qualifier={`${formatPercentage(topDropdownWeightedData[dropdownValue], true)} of the population in this zip region`}
-              />
-            </div>
-            : <div>
-              <Disclaimer>data is shown at the census tract level</Disclaimer>
-              <Stat
-                title={"Location with highest prevalence"}
-                year={topDropdownValueTract.Year}
-                value={`${topDropdownValueTract.Tract}, ${topTractPlace}`}
-                qualifier={`${formatPercentage(topDropdownValueTract[dropdownValue])} of the population in this tract`}
-              />
-            </div>
+            ? <Stat
+              title={"Location with highest prevalence"}
+              year={topDropdownWeightedData["End Year"]}
+              value={topDropdownWeightedData["Zip Region"]}
+              qualifier={`${formatPercentage(topDropdownWeightedData[dropdownValue], true)} of the population in this zip region`}
+            />
+            : <Stat
+              title={"Location with highest prevalence"}
+              year={topDropdownValueTract.Year}
+              value={`${topDropdownValueTract.Tract}, ${topTractPlace}`}
+              qualifier={`${formatPercentage(topDropdownValueTract[dropdownValue])} of the population in this tract`}
+            />
           }
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
@@ -139,8 +133,12 @@ class ConditionsAndChronicDiseases extends SectionColumns {
             : <p>The map here shows the percentage of adults who have ever been diagnosed with {dropdownValue === "COPD" ? "COPD" : formatDropdownChoiceName(dropdownValue).toLowerCase()} within each census tract in Detroit, Livonia, Dearborn and Westland.</p>
           }
 
-          <Contact slug={this.props.slug} />
+          {isHealthConditionWeightedValueSelected
+            ? <Disclaimer>data is shown at the zip region level</Disclaimer>
+            : <Disclaimer>data is shown at the census tract level</Disclaimer>
+          }
           <SourceGroup sources={this.state.sources} />
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Geomap to show health condition data for selected dropdown value. */}

@@ -3,7 +3,6 @@
 /* -----------------------------------
 buttons
 ----------------------------------- */
-
 .pt-button.pt-minimal {
   background-color: var(--white);
   border: 1px solid var(--brand-light);
@@ -29,7 +28,6 @@ buttons
 /* -----------------------------------
 tabs
 ----------------------------------- */
-
 .pt-tab {
   @add-mixin font-uppercase;
   @add-mixin font-xs;
@@ -54,7 +52,6 @@ tabs
 /* -----------------------------------
 overlays/dialogs
 ----------------------------------- */
-
 .pt-overlay-inline .pt-overlay-content,
 .pt-overlay-scroll-container .pt-overlay-content {
   position: relative;
@@ -63,7 +60,18 @@ overlays/dialogs
 /* -----------------------------------
 multiselect
 ----------------------------------- */
-
 .pt-multi-select-popover {
   @mixin font-sm;
+}
+
+/* -----------------------------------
+inline label groups
+----------------------------------- */
+.pt-label.pt-inline {
+  display: flex;
+
+  /* this should always be the field */
+  & > *:last-child {
+    flex: 1 0 50%;
+  }
 }

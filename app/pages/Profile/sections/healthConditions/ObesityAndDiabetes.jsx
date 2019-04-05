@@ -169,7 +169,7 @@ class ObesityAndDiabetes extends SectionColumns {
                 value: isDiabetesSelected
                   ? formatPercentage(topFemaleData["Age-Adjusted Diabetes Prevalence"])
                   : formatPercentage(topFemaleData["Age-Adjusted Obesity Prevalence"]),
-                qualifier: `of population in ${topFemaleData.Geography}`
+                qualifier: `of the population in ${topFemaleData.Geography}`
               },
               {
                 title: "Male",
@@ -177,7 +177,7 @@ class ObesityAndDiabetes extends SectionColumns {
                 value: isDiabetesSelected
                   ? formatPercentage(topMaleData["Age-Adjusted Diabetes Prevalence"])
                   : formatPercentage(topMaleData["Age-Adjusted Obesity Prevalence"]),
-                qualifier: `of population in ${topMaleData.Geography}`,
+                qualifier: `of the population in ${topMaleData.Geography}`,
                 color: "terra-cotta"
               }
             ]}

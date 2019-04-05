@@ -11,6 +11,8 @@ import Contact from "components/Contact";
 import Disclaimer from "components/Disclaimer";
 import Stat from "components/Stat";
 // import zipcodes from "utils/zipcodes";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const formatRaceNames = d => d.replace("Health Center Patients", "");
 const lowerCaseRaceName = d => d.trim() === "Black" || d.trim() === "White" ? d.toLowerCase() : d;
@@ -44,6 +46,12 @@ const formatRaceAndEthnicityData = raceAndEthnicityData => {
 };
 
 class HealthCenterDemographics extends SectionColumns {
+
+  constructor(props) {
+    super(props);
+    this.state = {sources: []};
+  }
+
   // constructor(props) {
   //   super(props);
   //   this.state = {
@@ -140,7 +148,7 @@ class HealthCenterDemographics extends SectionColumns {
           <p> The following chart shows the health center visitors breakdown across all race/ethnicity groups in {isZipLevelDataAvailable ? topZipLevelData.Geography : "Wayne County"}.</p>
 
           <Contact slug={this.props.slug} />
-
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* Draw a BarChart to show data for health center data by race */}
@@ -161,7 +169,10 @@ class HealthCenterDemographics extends SectionColumns {
           yConfig: {tickFormat: d => formatRaceNames(d)},
           tooltipConfig: {title: d => d.RaceType, tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d[d.RaceType])], ["Geography", d => isZipLevelDataAvailable ? d.Geography : "Wayne County"]]}
         }}
-        dataFormat={resp => formatRaceAndEthnicityData(resp)}
+        dataFormat={resp => {
+          this.setState({sources: updateSource(resp.source, this.state.sources)});
+          return formatRaceAndEthnicityData(resp);
+        }}
         />
 
         {/* Draw Geomap to show health center count for each zip code in the Wayne county */}

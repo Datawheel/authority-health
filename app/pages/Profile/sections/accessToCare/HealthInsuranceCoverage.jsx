@@ -12,6 +12,8 @@ import Disclaimer from "components/Disclaimer";
 import rangeFormatter from "utils/rangeFormatter";
 import places from "utils/places";
 import Stat from "components/Stat";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -41,6 +43,11 @@ const findOverallCoverage = data => {
 };
 
 class HealthInsuranceCoverage extends SectionColumns {
+
+  constructor(props) {
+    super(props);
+    this.state = {sources: []};
+  }
 
   render() {
     const {meta, coverageData, nationOverallCoverage, stateOverallCoverage, wayneCountyOverallCoverage, currentLevelOverallCoverage} = this.props;
@@ -120,9 +127,13 @@ class HealthInsuranceCoverage extends SectionColumns {
               },
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}
-            dataFormat={resp => formatCoverageData(resp.data)}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return formatCoverageData(resp.data);
+            }}
             />
             <Contact slug={this.props.slug} />
+            <SourceGroup sources={this.state.sources} />
           </article>
 
           <Geomap config={{
@@ -138,6 +149,7 @@ class HealthInsuranceCoverage extends SectionColumns {
             topojsonFilter: d => places.includes(d.id)
           }}
           dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
             nest()
               .key(d => d.Year)
               .entries(resp.data)

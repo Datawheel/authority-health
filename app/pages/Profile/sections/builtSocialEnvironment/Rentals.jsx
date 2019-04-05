@@ -12,6 +12,8 @@ import Contact from "components/Contact";
 import Stat from "components/Stat";
 import rangeFormatter from "utils/rangeFormatter";
 import growthCalculator from "utils/growthCalculator";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -27,6 +29,11 @@ const formatRentersByIncomePercentage = rentersByIncomePercentage => {
 };
 
 class Rentals extends SectionColumns {
+
+  constructor(props) {
+    super(props);
+    this.state = {sources: []};
+  }
 
   render() {
 
@@ -87,6 +94,7 @@ class Rentals extends SectionColumns {
             }}
             /> : <div></div>}
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {rentersByIncomePercentageAvailable
@@ -112,7 +120,10 @@ class Rentals extends SectionColumns {
             shapeConfig: {label: false},
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
-          dataFormat={resp => formatRentersByIncomePercentage(resp.data)}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return formatRentersByIncomePercentage(resp.data);
+          }}
           /> : <div></div>}
       </SectionColumns>
     );

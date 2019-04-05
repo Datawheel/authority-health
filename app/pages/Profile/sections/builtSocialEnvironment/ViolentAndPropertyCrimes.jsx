@@ -12,6 +12,9 @@ import Contact from "components/Contact";
 import Disclaimer from "components/Disclaimer";
 import Glossary from "components/Glossary";
 import Stat from "components/Stat";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
+
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
 const formatCrimeData = crimeData => {
@@ -36,6 +39,11 @@ const definitions = [
 ];
 
 class ViolentAndPropertyCrimes extends SectionColumns {
+
+  constructor(props) {
+    super(props);
+    this.state = {sources: []};
+  }
 
   render() {
     const {meta, crimeDataOverall, crimeDataForPlace} = this.props;
@@ -75,6 +83,7 @@ class ViolentAndPropertyCrimes extends SectionColumns {
           <p>The following chart shows the distribution for the different types of property and violent crimes{isPlaceDataAvailable ? ` in ${topRecentYearViolentCrime.Geography}` : ""}.</p>
           <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* Draw a Barchart for each type of crime. */}
@@ -101,8 +110,10 @@ class ViolentAndPropertyCrimes extends SectionColumns {
           },
           tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [isPlaceDataAvailable ? "Place" : "County", d => isPlaceDataAvailable ? d.Geography : "Wayne County"]]}
         }}
-        dataFormat={resp => formatCrimeData(resp.data)
-        }
+        dataFormat={resp => {
+          this.setState({sources: updateSource(resp.source, this.state.sources)});
+          return formatCrimeData(resp.data);
+        }}
         />
       </SectionColumns>
     );

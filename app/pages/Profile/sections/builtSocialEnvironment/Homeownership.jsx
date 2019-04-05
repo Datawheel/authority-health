@@ -11,6 +11,8 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Contact from "components/Contact";
 import Stat from "components/Stat";
 import CensusTractDefinition from "components/CensusTractDefinition";
+import {updateSource} from "utils/helper";
+import SourceGroup from "components/SourceGroup";
 
 const formatPropertyValue = d => `$${formatAbbreviate(d)}`;
 const formatTractName = (d, tractName) => {
@@ -20,6 +22,11 @@ const formatTractName = (d, tractName) => {
 const commas = format(",d");
 
 class Homeownership extends SectionColumns {
+
+  constructor(props) {
+    super(props);
+    this.state = {sources: []};
+  }
 
   render() {
 
@@ -68,6 +75,7 @@ class Homeownership extends SectionColumns {
           <p>{occupancyDataAvailable ? <span>{formatAbbreviate(topOccupancyData.share)}% of households in {topOccupancyData.Geography} were occupied in {topOccupancyData.Year}.</span> : ""}</p>
           <p>The following map shows the median property value for <CensusTractDefinition text="census tracts" /> in Wayne County.</p>
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* Geomap to show Property Values for all tracts in the Wayne County. */}
@@ -85,7 +93,10 @@ class Homeownership extends SectionColumns {
           topojson: "/topojson/tract.json",
           topojsonFilter: d => d.id.startsWith("14000US26163")
         }}
-        dataFormat={resp => resp.data}
+        dataFormat={resp => {
+          this.setState({sources: updateSource(resp.source, this.state.sources)});
+          return resp.data;
+        }}
         />
       </SectionColumns>
     );

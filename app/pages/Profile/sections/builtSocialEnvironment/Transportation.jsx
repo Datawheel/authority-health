@@ -147,8 +147,8 @@ class Transportation extends SectionColumns {
               return  formatNumberOfVehiclesData(resp.data)[0]; 
             }}
             /> : <div></div>}
-          <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
+          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* Draw a Barchart for commute time. */}

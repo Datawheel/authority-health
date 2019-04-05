@@ -110,7 +110,7 @@ layout
       margin-top: -5rem;
       padding-top: 5rem;
       display: block;
-      z-index: 0;
+      z-index: 0; /* keep behind subnav */
 
       /* icons */
       & .pt-icon-standard {
@@ -275,11 +275,6 @@ layout
 /* form fields */
 .field-container {
 
-  /* position fields in front of following titles */
-  & > * {
-    z-index: 1;
-  }
-
   &:not(:last-child) {
     margin-bottom: 0.75rem;
   }
@@ -299,4 +294,10 @@ layout
 
 .align-stats {
   padding-top: 1.35rem;
+}
+
+/* prevent heading anchors from prevent clicks on previous section */
+.topic-title,
+.section-title {
+  overflow: hidden;
 }

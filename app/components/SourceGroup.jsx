@@ -8,7 +8,7 @@ export default class SourceGroup extends Component {
     const {sources} = this.props;
     if (!sources || !sources.length) return null;
 
-    return <div className="SourceGroup">
+    return <p className="SourceGroup">
       Data provided by
       { sources.map((source, i) => {
 
@@ -40,7 +40,7 @@ export default class SourceGroup extends Component {
           {i === sources.length - 1 && <span>.</span>}
         </span>;
       })}
-    </div>;
+    </p>;
   }
 
 }

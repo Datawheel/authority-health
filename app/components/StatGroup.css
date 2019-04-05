@@ -1,0 +1,21 @@
+@import "../css/mixins.css";
+
+/* NOTE: styles inherited from .stat component */
+
+.stat-group-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.stat-group-item {
+  display: inline-block;
+  flex: 1 0 auto;
+  min-width: 10rem;
+  max-width: 100%;
+
+  /* override .stat-value */
+  &:not(:last-child) {
+    margin-bottom: 0;
+    margin-right: auto;
+  }
+}

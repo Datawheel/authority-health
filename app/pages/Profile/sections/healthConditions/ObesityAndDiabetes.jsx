@@ -8,6 +8,7 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
 import Stat from "components/Stat";
+import StatGroup from "components/StatGroup";
 import ZipRegionDefinition from "components/ZipRegionDefinition";
 import CensusTractDefinition from "components/CensusTractDefinition";
 import {updateSource} from "utils/helper";
@@ -158,17 +159,28 @@ class ObesityAndDiabetes extends SectionColumns {
           }
 
           {/* Show top stats for the Male and Female Diabetes/Obesity data. */}
-          <Stat
-            title={"Male prevalence"}
-            year={topMaleData.Year}
-            value={isDiabetesSelected ? formatPercentage(topMaleData["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(topMaleData["Age-Adjusted Obesity Prevalence"])}
-            qualifier={`of the male population in ${topMaleData.Geography}`}
-          />
-          <Stat
-            title={"Female prevalence"}
-            year={topFemaleData.Year}
-            value={isDiabetesSelected ? formatPercentage(topFemaleData["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(topFemaleData["Age-Adjusted Obesity Prevalence"])}
-            qualifier={`of the female population in ${topFemaleData.Geography}`}
+          <StatGroup
+            title={`${dropdownValue} prevelance by gender`}
+            year={topDropdownValueTract.Year}
+            stats={[
+              {
+                title: "Female",
+                year: topFemaleData.Year,
+                value: isDiabetesSelected
+                  ? formatPercentage(topFemaleData["Age-Adjusted Diabetes Prevalence"])
+                  : formatPercentage(topFemaleData["Age-Adjusted Obesity Prevalence"]),
+                qualifier: `of population in ${topFemaleData.Geography}`
+              },
+              {
+                title: "Male",
+                year: topMaleData.Year,
+                value: isDiabetesSelected
+                  ? formatPercentage(topMaleData["Age-Adjusted Diabetes Prevalence"])
+                  : formatPercentage(topMaleData["Age-Adjusted Obesity Prevalence"]),
+                qualifier: `of population in ${topMaleData.Geography}`,
+                color: "terra-cotta"
+              }
+            ]}
           />
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}

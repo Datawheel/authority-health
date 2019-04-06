@@ -12,6 +12,7 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Contact from "components/Contact";
 import rangeFormatter from "utils/rangeFormatter";
 import Stat from "components/Stat";
+import StatGroup from "components/StatGroup";
 import places from "utils/places";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
@@ -117,31 +118,45 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
 
           {isVisionDisabilitySelected
             ? <div>
-              <Stat
-                title="Male majority age group"
-                year={visionDisabilityDataAvailable ? topMaleVisionDisabilityData.Year : "N/A"}
-                value={visionDisabilityDataAvailable ? rangeFormatter(topMaleVisionDisabilityData.Age) : "N/A"}
-                qualifier={visionDisabilityDataAvailable ? `${formatPercentage(topMaleVisionDisabilityData.share)} of the population in ${topMaleVisionDisabilityData.Geography}` : ""}
-              />
-              <Stat
-                title="Female majority age group"
-                year={visionDisabilityDataAvailable ? topFemaleVisionDisabilityData.Year : ""}
-                value={visionDisabilityDataAvailable ? rangeFormatter(topFemaleVisionDisabilityData.Age) : "N/A"}
-                qualifier={visionDisabilityDataAvailable ? `${formatPercentage(topFemaleVisionDisabilityData.share)} of the population in ${topFemaleVisionDisabilityData.Geography}` : ""}
+              <StatGroup
+                title={"age groups with vision disability by gender"}
+                year={visionDisabilityDataAvailable ? topMaleVisionDisabilityData.Year : ""}
+                stats={[
+                  {
+                    title: "Female",
+                    year: visionDisabilityDataAvailable ? topFemaleVisionDisabilityData.Year : "",
+                    value: visionDisabilityDataAvailable ? rangeFormatter(topFemaleVisionDisabilityData.Age) : "N/A",
+                    qualifier: visionDisabilityDataAvailable ? `${formatPercentage(topFemaleVisionDisabilityData.share)} of the population in ${topFemaleVisionDisabilityData.Geography}` : ""
+                  },
+                  {
+                    title: "Male",
+                    year: visionDisabilityDataAvailable ? topMaleVisionDisabilityData.Year : "N/A",
+                    value: visionDisabilityDataAvailable ? rangeFormatter(topMaleVisionDisabilityData.Age) : "N/A",
+                    qualifier: visionDisabilityDataAvailable ? `${formatPercentage(topMaleVisionDisabilityData.share)} of the population in ${topMaleVisionDisabilityData.Geography}` : "",
+                    color: "terra-cotta"
+                  }
+                ]}
               />
             </div>
             : <div>
-              <Stat
-                title="Male majority age group"
+              <StatGroup
+                title={"age groups with hearing disability by gender"}
                 year={hearingDisabilityDataAvailable ? topMaleHearingDisabilityData.Year : ""}
-                value={hearingDisabilityDataAvailable ? rangeFormatter(topMaleHearingDisabilityData.Age) : "N/A"}
-                qualifier={hearingDisabilityDataAvailable ? `${formatPercentage(topMaleHearingDisabilityData.share)} of the population in ${topMaleHearingDisabilityData.Geography}` : ""}
-              />
-              <Stat
-                title="Female majority age group"
-                year={hearingDisabilityDataAvailable ? topFemaleHearingDisabilityData.Year : ""}
-                value={hearingDisabilityDataAvailable ? rangeFormatter(topFemaleHearingDisabilityData.Age) : "N/A"}
-                qualifier={hearingDisabilityDataAvailable ? `${formatPercentage(topFemaleHearingDisabilityData.share)} of the population in ${topFemaleHearingDisabilityData.Geography}` : ""}
+                stats={[
+                  {
+                    title: "Female",
+                    year: hearingDisabilityDataAvailable ? topFemaleHearingDisabilityData.Year : "",
+                    value: hearingDisabilityDataAvailable ? rangeFormatter(topFemaleHearingDisabilityData.Age) : "N/A",
+                    qualifier: hearingDisabilityDataAvailable ? `${formatPercentage(topFemaleHearingDisabilityData.share)} of the population in ${topFemaleHearingDisabilityData.Geography}` : ""
+                  },
+                  {
+                    title: "Male",
+                    year: hearingDisabilityDataAvailable ? topMaleHearingDisabilityData.Year : "",
+                    value: hearingDisabilityDataAvailable ? rangeFormatter(topMaleHearingDisabilityData.Age) : "N/A",
+                    qualifier: hearingDisabilityDataAvailable ? `${formatPercentage(topMaleHearingDisabilityData.share)} of the population in ${topMaleHearingDisabilityData.Geography}` : "",
+                    color: "terra-cotta"
+                  }
+                ]}
               />
             </div>
           }

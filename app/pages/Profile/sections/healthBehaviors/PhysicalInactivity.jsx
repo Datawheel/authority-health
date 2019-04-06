@@ -9,6 +9,7 @@ import Contact from "components/Contact";
 import Disclaimer from "components/Disclaimer";
 import Glossary from "components/Glossary";
 import Stat from "components/Stat";
+import StatGroup from "components/StatGroup";
 import CensusTractDefinition from "components/CensusTractDefinition";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
@@ -66,17 +67,24 @@ class PhysicalInactivity extends SectionColumns {
 
           {/* Show top stats for the Male and Female Physical Inactivity data. */}
           {/* And write short paragraphs explaining Barchart and top stats for the Physical Inactivity data. */}
-          <Stat
-            title={"Male Prevalence"}
+          <StatGroup
+            title={"prevelance by gender"}
             year={topPhysicalInactivityMaleData.Year}
-            value={formatPercentage(topPhysicalInactivityMaleData["Age-Adjusted Physical Inactivity"])}
-            qualifier={`of the male population in ${topPhysicalInactivityMaleData.Geography}`}
-          />
-          <Stat
-            title={"Female Prevalence"}
-            year={topPhysicalInactivityFemaleData.Year}
-            value={formatPercentage(topPhysicalInactivityFemaleData["Age-Adjusted Physical Inactivity"])}
-            qualifier={`of the female population in ${topPhysicalInactivityFemaleData.Geography}`}
+            stats={[
+              {
+                title: "Female",
+                year: topPhysicalInactivityFemaleData.Year,
+                value: formatPercentage(topPhysicalInactivityFemaleData["Age-Adjusted Physical Inactivity"]),
+                qualifier: `of the population in ${topPhysicalInactivityFemaleData.Geography}`
+              },
+              {
+                title: "Male",
+                year: topPhysicalInactivityMaleData.Year,
+                value: formatPercentage(topPhysicalInactivityMaleData["Age-Adjusted Physical Inactivity"]),
+                qualifier: `of the population in ${topPhysicalInactivityMaleData.Geography}`,
+                color: "terra-cotta"
+              }
+            ]}
           />
           <p>In {topRecentYearData.Year}, {formatPercentage(topRecentYearData["Physical Inactivity"])} of the population of <CensusTractDefinition text={topRecentYearData.Tract} />{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} were physically inactive out of all census tracts in Detroit, Livonia, Dearborn and Westland.</p>
           <p>In {topPhysicalInactivityFemaleData.Year}, {formatPercentage(topPhysicalInactivityMaleData["Age-Adjusted Physical Inactivity"])} of the male population and {formatPercentage(topPhysicalInactivityFemaleData["Age-Adjusted Physical Inactivity"])} of the female population in {}

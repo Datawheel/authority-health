@@ -10,7 +10,7 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
 import Disclaimer from "components/Disclaimer";
-import Stat from "components/Stat";
+import StatGroup from "components/StatGroup";
 import rangeFormatter from "utils/rangeFormatter";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
@@ -80,17 +80,24 @@ class Unemployment extends SectionColumns {
         <SectionTitle>Unemployment</SectionTitle>
         <article>
           {isUnemploymentRateAvailableForCurrentLocation ? <div></div> : <Disclaimer>unemployment rate data is shown for {unemploymentRate.data[0].Geography}</Disclaimer>}
-          <Stat
-            title="Male Working Full Time"
+          <StatGroup
+            title={"working full-time by gender"}
             year={workExperienceAvailable ? getMaleFullTimeData[0].Year : ""}
-            value={workExperienceAvailable ? formatPercentage(getMaleFullTimeData[0].share) : "N/A"}
-            qualifier={workExperienceAvailable ? `of the full-time working population in ${getMaleFullTimeData[0].Geography}` : ""}
-          />
-          <Stat
-            title="Female Working Full Time"
-            year={workExperienceAvailable ? getFemaleFullTimeData[0].Year : ""}
-            value={workExperienceAvailable ? formatPercentage(getFemaleFullTimeData[0].share) : "N/A"}
-            qualifier={workExperienceAvailable ? `of the full-time working population in ${getFemaleFullTimeData[0].Geography}` : ""}
+            stats={[
+              {
+                title: "Female",
+                year: workExperienceAvailable ? getFemaleFullTimeData[0].Year : "",
+                value: workExperienceAvailable ? formatPercentage(getFemaleFullTimeData[0].share) : "N/A",
+                qualifier: workExperienceAvailable ? `of the full-time working population in ${getFemaleFullTimeData[0].Geography}` : ""
+              },
+              {
+                title: "Male",
+                year: workExperienceAvailable ? getMaleFullTimeData[0].Year : "",
+                value: workExperienceAvailable ? formatPercentage(getMaleFullTimeData[0].share) : "N/A",
+                qualifier: workExperienceAvailable ? `of the full-time working population in ${getMaleFullTimeData[0].Geography}` : "",
+                color: "terra-cotta"
+              }
+            ]}
           />
           <p>
             {workExperienceAvailable ? <span>In {getMaleFullTimeData[0].Year}, the percentage of the working population in {getMaleFullTimeData[0].Geography} that worked full-time was {formatPercentage(getMaleFullTimeData[0].share)} for men and {formatPercentage(getFemaleFullTimeData[0].share)} for women.</span> : ""}

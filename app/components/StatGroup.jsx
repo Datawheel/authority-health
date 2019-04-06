@@ -11,7 +11,7 @@ export default class StatGroup extends Component {
       statsList = stats.map(stat =>
         <li
           className={`stat-group-item stat-value title font-md ${ stat.color || "majorelle" }-dark-color` }
-          key={stat.value}
+          key={stat.title}
         >
           <span className="stat-prepend font-xs u-uppercase">{ stat.title }: </span>
           { stat.value }{" "}

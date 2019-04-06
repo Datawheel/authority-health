@@ -11,7 +11,7 @@ import Contact from "components/Contact";
 import Disclaimer from "components/Disclaimer";
 import rangeFormatter from "utils/rangeFormatter";
 import places from "utils/places";
-import Stat from "components/Stat";
+import StatGroup from "components/StatGroup";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
 
@@ -66,7 +66,7 @@ class HealthInsuranceCoverage extends SectionColumns {
     const isCoverageDataAvailableForCurrentGeography = coverageData.source[0].substitutions.length === 0;
 
     // Find top stats data.
-    let ageGroupYear, geoId, maleCoverageData, topFemaleAgeGroup, topFemaleShare, topMaleAgeGroup, topMaleShare;
+    let ageGroupYear, geoId, geography, maleCoverageData, topFemaleAgeGroup, topFemaleShare, topMaleAgeGroup, topMaleShare;
     if (coverageDataAvailable) {
       const recentYearCoverageData = formatCoverageData(coverageData.data);
       const femaleCoverageData = recentYearCoverageData.filter(d => d.Sex === "Female").sort((a, b) => b.share - a.share);
@@ -78,6 +78,7 @@ class HealthInsuranceCoverage extends SectionColumns {
       ageGroupYear = maleCoverageData[0].Year;
       topMaleShare = formatPercentage(maleCoverageData[0].share);
       geoId = maleCoverageData[0]["ID Geography"];
+      geography = femaleCoverageData[0].Geography;
     }
 
     if (coverageDataAvailable) {
@@ -87,17 +88,24 @@ class HealthInsuranceCoverage extends SectionColumns {
           <article>
             {isCoverageDataAvailableForCurrentGeography ? <div></div> : <Disclaimer>data is shown for {coverageData.data[0].Geography}</Disclaimer>}
             <div>
-              <Stat
-                title="Most covered male group"
+              <StatGroup
+                title={"most covered age group by gender"}
                 year={ageGroupYear}
-                value={topMaleAgeGroup}
-                qualifier={`${topMaleShare} of the population within this age group`}
-              />
-              <Stat
-                title="Most covered female group"
-                year={ageGroupYear}
-                value={topFemaleAgeGroup}
-                qualifier={`${topFemaleShare} of the population within this age group`}
+                stats={[
+                  {
+                    title: "Female",
+                    year: ageGroupYear,
+                    value: topFemaleAgeGroup,
+                    qualifier: `${topFemaleShare} of the population in ${geography} within this age group`
+                  },
+                  {
+                    title: "Male",
+                    year: ageGroupYear,
+                    value: topMaleAgeGroup,
+                    qualifier: `${topMaleShare} of the population in ${geography} within this age group`,
+                    color: "terra-cotta"
+                  }
+                ]}
               />
             </div>
 

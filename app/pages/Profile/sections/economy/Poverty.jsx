@@ -11,6 +11,7 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Contact from "components/Contact";
 import Glossary from "components/Glossary";
 import Stat from "components/Stat";
+import StatGroup from "components/StatGroup";
 import rangeFormatter from "utils/rangeFormatter";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
@@ -99,17 +100,24 @@ class Poverty extends SectionColumns {
             value={povertyByRaceAvailable ? topPovertyByRace.Race : "N/A"}
             qualifier={povertyByRaceAvailable ? `${formatPopulation(topPovertyByRace.share)} of the total population in ${topPovertyByRace.Geography}` : ""}
           />
-          <Stat
-            title="male age most impacted by poverty"
+          <StatGroup
+            title={"age most impacted by gender"}
             year={povertyByAgeAndGenderAvailable ? topMalePovertyData.Year : ""}
-            value={povertyByAgeAndGenderAvailable ? topMalePovertyData.Age : "N/A"}
-            qualifier={povertyByAgeAndGenderAvailable ? `${formatPopulation(topMalePovertyData.share)} of the male population in ${topMalePovertyData.Geography}` : ""}
-          />
-          <Stat
-            title="female age most impacted by poverty"
-            year={povertyByAgeAndGenderAvailable ? topFemalePovertyData.Year : ""}
-            value={povertyByAgeAndGenderAvailable ? topFemalePovertyData.Age : "N/A"}
-            qualifier={povertyByAgeAndGenderAvailable ? `${formatPopulation(topFemalePovertyData.share)} of the female population in ${topFemalePovertyData.Geography}` : ""}
+            stats={[
+              {
+                title: "Female",
+                year: povertyByAgeAndGenderAvailable ? topFemalePovertyData.Year : "",
+                value: povertyByAgeAndGenderAvailable ? topFemalePovertyData.Age : "N/A",
+                qualifier: povertyByAgeAndGenderAvailable ? `${formatPopulation(topFemalePovertyData.share)} of the female population in ${topFemalePovertyData.Geography}` : ""
+              },
+              {
+                title: "Male",
+                year: povertyByAgeAndGenderAvailable ? topMalePovertyData.Year : "",
+                value: povertyByAgeAndGenderAvailable ? topMalePovertyData.Age : "N/A",
+                qualifier: povertyByAgeAndGenderAvailable ? `${formatPopulation(topMalePovertyData.share)} of the male population in ${topMalePovertyData.Geography}` : "",
+                color: "terra-cotta"
+              }
+            ]}
           />
           <Stat
             title="immigrants most impacted by poverty"

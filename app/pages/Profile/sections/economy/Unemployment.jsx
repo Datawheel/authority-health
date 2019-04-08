@@ -79,7 +79,6 @@ class Unemployment extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Unemployment</SectionTitle>
         <article>
-          {isUnemploymentRateAvailableForCurrentLocation ? <div></div> : <Disclaimer>unemployment rate data is shown for {unemploymentRate.data[0].Geography}</Disclaimer>}
           <StatGroup
             title={"working full-time by gender"}
             year={workExperienceAvailable ? getMaleFullTimeData[0].Year : ""}

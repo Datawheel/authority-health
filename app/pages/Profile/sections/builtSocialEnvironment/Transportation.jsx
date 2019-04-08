@@ -183,7 +183,7 @@ class Transportation extends SectionColumns {
             this.setState({sources: updateSource(resp.source, this.state.sources)});
             return formatCommuteTimeData(resp.data)[0];
           }}
-          /> : <div></div>}
+          /> : null}
 
         {/* Draw a Treemap for Modes of tranportation. */}
         {transportationMeansAvailable
@@ -201,7 +201,7 @@ class Transportation extends SectionColumns {
             this.setState({sources: updateSource(resp.source, this.state.sources)});
             return formatTransportationMeans(resp.data)[0];
           }}
-          /> : <div></div>}
+          /> : null}
       </SectionColumns>
     );
   }

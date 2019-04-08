@@ -134,7 +134,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
             this.setState({sources: updateSource(resp.source, this.state.sources)});
             return formatHouseholdSnapData(resp.data)[0];
           }}
-          /> : <div></div>}
+          /> : null}
       </SectionColumns>
     );
   }

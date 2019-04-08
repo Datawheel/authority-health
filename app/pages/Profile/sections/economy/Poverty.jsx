@@ -101,19 +101,19 @@ class Poverty extends SectionColumns {
             qualifier={povertyByRaceAvailable ? `${formatPopulation(topPovertyByRace.share)} of the total population in ${topPovertyByRace.Geography}` : ""}
           />
           <StatGroup
-            title={"age most impacted by gender"}
+            title={"age and gender most impacted by poverty"}
             year={povertyByAgeAndGenderAvailable ? topMalePovertyData.Year : ""}
             stats={[
               {
                 title: "Female",
                 year: povertyByAgeAndGenderAvailable ? topFemalePovertyData.Year : "",
-                value: povertyByAgeAndGenderAvailable ? topFemalePovertyData.Age : "N/A",
+                value: povertyByAgeAndGenderAvailable ? `${rangeFormatter(topFemalePovertyData.Age)} Years` : "N/A",
                 qualifier: povertyByAgeAndGenderAvailable ? `${formatPopulation(topFemalePovertyData.share)} of the female population in ${topFemalePovertyData.Geography}` : ""
               },
               {
                 title: "Male",
                 year: povertyByAgeAndGenderAvailable ? topMalePovertyData.Year : "",
-                value: povertyByAgeAndGenderAvailable ? topMalePovertyData.Age : "N/A",
+                value: povertyByAgeAndGenderAvailable ? `${rangeFormatter(topMalePovertyData.Age)} Years` : "N/A",
                 qualifier: povertyByAgeAndGenderAvailable ? `${formatPopulation(topMalePovertyData.share)} of the male population in ${topMalePovertyData.Geography}` : "",
                 color: "terra-cotta"
               }
@@ -185,7 +185,7 @@ class Poverty extends SectionColumns {
             this.setState({sources: updateSource(resp.source, this.state.sources)});
             return formatPovertyByAgeAndGender(resp.data)[0];
           }}
-          /> : <div></div>}
+          /> : null}
       </SectionColumns>
     );
   }

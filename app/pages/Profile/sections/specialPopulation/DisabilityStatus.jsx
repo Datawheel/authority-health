@@ -116,7 +116,7 @@ class DisabilityStatus extends SectionColumns {
             this.setState({sources: updateSource(resp.source, this.state.sources)});
             return formatHealthCoverageTypeData(resp.data);
           }}
-          /> : <div></div>}
+          /> : null}
       </SectionColumns>
     );
   }

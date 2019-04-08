@@ -145,7 +145,7 @@ class Veterans extends SectionColumns {
             this.setState({sources: updateSource(resp.source, this.state.sources)});
             return formatPeriodOfService(resp.data)[0];
           }}
-          /> : <div></div>}
+          /> : null}
       </SectionColumns>
     );
   }

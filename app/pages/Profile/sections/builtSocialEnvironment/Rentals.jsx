@@ -126,7 +126,7 @@ class Rentals extends SectionColumns {
             this.setState({sources: updateSource(resp.source, this.state.sources)});
             return formatRentersByIncomePercentage(resp.data);
           }}
-          /> : <div></div>}
+          /> : null}
       </SectionColumns>
     );
   }

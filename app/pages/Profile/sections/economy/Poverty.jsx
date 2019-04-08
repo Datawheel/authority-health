@@ -38,17 +38,15 @@ const formatPovertyByRaceData = povertyByRace => {
 };
 
 const formatPovertyByAgeAndGender = povertyByAgeAndGender => {
-  const belowPovertyLevelByAgeAndGender = povertyByAgeAndGender.filter(d => d["ID Poverty Status"] === 0);
   nest()
     .key(d => d.Year)
-    .entries(belowPovertyLevelByAgeAndGender)
+    .entries(povertyByAgeAndGender)
     .forEach(group => {
       const total = sum(group.values, d => d["Poverty Population"]);
       group.values.forEach(d => total !== 0 ? d.share = d["Poverty Population"] / total * 100 : d.share = 0);
     });
-  // Find top male poverty data.
+  const belowPovertyLevelByAgeAndGender = povertyByAgeAndGender.filter(d => d["ID Poverty Status"] === 0);
   const topMalePovertyData = belowPovertyLevelByAgeAndGender.filter(d => d.Gender === "Male").sort((a, b) => b.share - a.share)[0];
-  // Find top female poverty data.
   const topFemalePovertyData = belowPovertyLevelByAgeAndGender.filter(d => d.Gender === "Female").sort((a, b) => b.share - a.share)[0];
   return [belowPovertyLevelByAgeAndGender, topMalePovertyData, topFemalePovertyData];
 };
@@ -143,7 +141,7 @@ class Poverty extends SectionColumns {
               y: "Race",
               x: "share",
               time: "Year",
-              title: d => `Population Below Poverty by Race in ${d[0].Geography}`,
+              title: d => `Population in Poverty by Race in ${d[0].Geography}`,
               xConfig: {
                 tickFormat: d => formatPopulation(d),
                 title: "Share"
@@ -166,7 +164,7 @@ class Poverty extends SectionColumns {
             x: "Age",
             y: "share",
             time: "Year",
-            title: d => `Population Below Poverty by Age and Gender in ${d[0].Geography}`,
+            title: d => `Population in Poverty by Age and Gender in ${d[0].Geography}`,
             xSort: (a, b) => a["ID Age"] - b["ID Age"],
             xConfig: {
               labelRotation: false,

@@ -20,7 +20,7 @@ const formatOverallData = (readingScoresByNation, readingScoresByCity) => {
     d.Geography = "City";
     readingScoresData.push(d);
   });
-  
+
   // Get recent year data.
   const recentYear = readingScoresData[0].Year;
   const recentYearData = readingScoresData.filter(d => d.Year === recentYear);
@@ -149,8 +149,9 @@ class ReadingAssessment extends SectionColumns {
                 value={isOverallSelected ? stat2EighthGrade["Average Reading Score"] : stat2EighthGrade[`Average Reading Score by ${dropdownValue}`]}
               />
             </div>}
-          <Contact slug={this.props.slug} />
+            
           <SourceGroup sources={this.state.sources} />
+          <Contact slug={this.props.slug} />
         </article>
 
         <LinePlot config={{

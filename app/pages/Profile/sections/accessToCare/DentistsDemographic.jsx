@@ -1,3 +1,4 @@
+/* eslint no-extra-parens: 0 */ // extra parens needed for && conditional
 import React from "react";
 import {connect} from "react-redux";
 import {sum} from "d3-array";
@@ -55,7 +56,6 @@ class DentistsDemographic extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Dentist Demographics</SectionTitle>
         <article>
-          {isDentistsByAgeAvailableForCurrentGeography && isDentistsByGenderAvailableForCurrentGeography ? <div></div> : <Disclaimer>data is shown for {dentistsByAge.data[0].Geography}</Disclaimer>}
           <Stat
             title={"Common Age Group"}
             year={topDentistsAgeData.Year}
@@ -86,6 +86,9 @@ class DentistsDemographic extends SectionColumns {
           dataFormat={resp => formatDentistsByGender(resp.data)[0]}
           />
 
+          {(!isDentistsByAgeAvailableForCurrentGeography && !isDentistsByGenderAvailableForCurrentGeography) &&
+            <Disclaimer>data is shown for {dentistsByAge.data[0].Geography}</Disclaimer>
+          }
           <Contact slug={this.props.slug} />
 
         </article>

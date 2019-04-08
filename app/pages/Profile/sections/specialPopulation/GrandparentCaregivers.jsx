@@ -67,8 +67,8 @@ class GrandparentCaregivers extends SectionColumns {
             <p>In {topRecentYearData.Year}, {formatPercentage(overallGrandparentsResponsible)} of grandparents in {topRecentYearData.Geography} were the primary care givers to their grandchildren. The most common age group of grandchildren is {formatAge(topRecentYearData["Responsibility Length"])}.</p>
             <p>The chart here shows the breakdown by age of grandchildren and the percentage of grandparents responsible for them.</p>
 
-            <Contact slug={this.props.slug} />
             <SourceGroup sources={this.state.sources} />
+            <Contact slug={this.props.slug} />
           </article>
 
           {/* Draw a BarChart */}

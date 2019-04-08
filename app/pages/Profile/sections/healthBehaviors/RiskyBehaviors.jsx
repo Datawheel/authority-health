@@ -76,7 +76,6 @@ class RiskyBehaviors extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Risky Behaviors</SectionTitle>
         <article>
-          {isSecondHandSmokeOrMonthlyAlcoholSelected ? <Disclaimer>data is shown at the zip region level</Disclaimer> : <Disclaimer>data is shown at the census tract level</Disclaimer>}
           {/* Create a dropdown for drug types. */}
           <label className="pt-label pt-inline" htmlFor="risky-behaviors-dropdown">
             Show data for
@@ -98,7 +97,15 @@ class RiskyBehaviors extends SectionColumns {
             : <p>In {topTractSmokingDrinkingData.Year}, {formatPercentage(topTractSmokingDrinkingData[dropdownValue])} of the population of <CensusTractDefinition text={topTractSmokingDrinkingData.Tract} />{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} had the highest prevalence of {dropdownValue.toLowerCase()} out of census tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
 
+          {isSecondHandSmokeOrMonthlyAlcoholSelected
+            ? <Disclaimer>data is shown at the zip region level</Disclaimer>
+            : <Disclaimer>data is shown at the census tract level</Disclaimer>
+          }
+          <SourceGroup sources={this.state.sources} />
+          <Contact slug={this.props.slug} />
+
           {/* Draw a Pie chart to show smoking status: former, current & never. */}
+          {/* TODO: distribution bar */}
           {dropdownValue === drugTypes[0]
             ? <div>
               <Pie config={{
@@ -129,8 +136,6 @@ class RiskyBehaviors extends SectionColumns {
               }}
               />
             </div> : null }
-          <Contact slug={this.props.slug} />
-          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* Create a Geomap based on the dropdown choice. */}

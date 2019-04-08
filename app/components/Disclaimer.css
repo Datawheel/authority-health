@@ -4,8 +4,6 @@
 .disclaimer {
   /* theming */
   color: var(--caution-dark);
-  /* positioning */
-  margin-bottom: 2em;
 }
 
 .disclaimer-icon {

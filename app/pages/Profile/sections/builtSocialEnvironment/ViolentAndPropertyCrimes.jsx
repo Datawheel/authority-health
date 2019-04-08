@@ -65,7 +65,6 @@ class ViolentAndPropertyCrimes extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Violent and Property Crimes</SectionTitle>
         <article>
-          {isPlaceDataAvailable ? <div></div> : <Disclaimer>data is shown for Wayne County</Disclaimer>}
           {/* Show stats and short paragraph for each type of crime. */}
           <Stat
             title= {"Most common Violent Crime"}
@@ -81,9 +80,13 @@ class ViolentAndPropertyCrimes extends SectionColumns {
           />
           <p>In {topRecentYearViolentCrime.Year}, the most common violent crime{isPlaceDataAvailable ? ` in ${topRecentYearViolentCrime.Geography}` : ""} was {topRecentYearViolentCrime.Crime.toLowerCase()} ({formatPercentage(topRecentYearViolentCrime.share)}), and the most common property crime was {topRecentYearPropertyCrime.Crime.toLowerCase()} ({formatPercentage(topRecentYearPropertyCrime.share)}).</p>
           <p>The following chart shows the distribution for the different types of property and violent crimes{isPlaceDataAvailable ? ` in ${topRecentYearViolentCrime.Geography}` : ""}.</p>
+
+          {!isPlaceDataAvailable &&
+            <Disclaimer>data is shown for Wayne County</Disclaimer>
+          }
+          <SourceGroup sources={this.state.sources} />
           <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
-          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* Draw a Barchart for each type of crime. */}

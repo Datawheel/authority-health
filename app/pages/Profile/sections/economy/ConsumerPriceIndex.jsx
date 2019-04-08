@@ -71,8 +71,9 @@ class ConsumerPriceIndex extends SectionColumns {
             {cpiGrowth < 0 ? " a decline" : " an increase"} of {cpiGrowth < 0 ? cpiGrowth * -1 : cpiGrowth}%.
           </p>
           <p>The following chart shows the average consumer price index for the Detroit-Warren-Dearborn, MI metro area compared to the midwest region and nation.</p>
-          <Contact slug={this.props.slug} />
+          
           <SourceGroup sources={this.state.sources} />
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Create a LinePlot. */}

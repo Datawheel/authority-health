@@ -62,7 +62,6 @@ class StoreAccessByDemographic extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Store Access by Demographic</SectionTitle>
         <article>
-          {isCurrentLocationDataAvailable ? <div></div> : <Disclaimer>data is shown for {ageSelected ? foodAccessByAge.data[0].Geography : foodAccessByRace.data[0].Geography}</Disclaimer>}
           {/* Create a dropdown for each age and race type using raceAndAgeTypes array. */}
           <label className="pt-label pt-inline" htmlFor="store-access-dropdown">
             Show data for
@@ -83,6 +82,14 @@ class StoreAccessByDemographic extends SectionColumns {
           <p>In {topFoodAccessData.Year}, {ageSelected ? `between children and seniors age groups, ${topFoodAccessData["Age Group"].toLowerCase()}` : topFoodAccessData["Race Group"].toLowerCase()} were the largest {ageSelected ? "age" : "race"} group ({ageSelected ? `${formatPercentage(topFoodAccessData["Low-Access to Food by Age"])} of all ${topFoodAccessData["Age Group"].toLowerCase()}` : `${formatPercentage(topFoodAccessData["Low-Access to Food by Race"])} of the population`}) in {topFoodAccessData.Geography} with low access to food stores.</p>
           <p>Low access to healthy food is defined as being far from a supermarket, supercenter, or large grocery store.</p>
           <p>The following map shows the low access rate for {dropdownValue.split(" ").length === 1 ? formatRaceText(dropdownValue).toLowerCase() : formatRaceText(dropdownValue)} with low access to food stores across all counties in Michigan.</p>
+
+          {!isCurrentLocationDataAvailable &&
+            <Disclaimer>
+              data is shown for { ageSelected ? foodAccessByAge.data[0].Geography : foodAccessByRace.data[0].Geography }
+            </Disclaimer>
+          }
+          <SourceGroup sources={this.state.sources} />
+          <Contact slug={this.props.slug} />
 
           {/* Create a BarChart based on the dropdown choice. */}
           <BarChart config={{
@@ -109,8 +116,6 @@ class StoreAccessByDemographic extends SectionColumns {
             return resp.data;
           }}
           />
-          <Contact slug={this.props.slug} />
-          <SourceGroup sources={this.state.sources} />
         </article>
 
         {/* Create a Geomap based on dropdown choice for all the counties in Michigan. */}

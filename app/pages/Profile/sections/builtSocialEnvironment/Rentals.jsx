@@ -76,9 +76,12 @@ class Rentals extends SectionColumns {
           <p>{utilitiesDataAvailable ? <span>{formatPercentage(recentYearNoExtraUtilitiesPercentage)} of the rental properties in {utilitiesData[0].Geography} include utilities with the price of rent.</span> : ""}</p>
           <p>{rentersByIncomePercentageAvailable ? <span> The average income bracket of renters in {topIncomeToPayMostRent.Geography} is {rangeFormatter(topIncomeToPayMostRent["Household Income"])}.</span> : ""}</p>
 
+          <SourceGroup sources={this.state.sources} />
+          <Contact slug={this.props.slug} />
+
           {/* Create a LinePlot. */}
-          {rentAmountDataAvailable
-            ? <LinePlot config={{
+          {rentAmountDataAvailable &&
+            <LinePlot config={{
               data: rentAmountData,
               discrete: "x",
               height: 175,
@@ -92,9 +95,8 @@ class Rentals extends SectionColumns {
               title: d => `Median Rent Over Time in ${d[0].Geography}`,
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => `$${formatAbbreviate(d["Rent Amount"])}`]]}
             }}
-            /> : <div></div>}
-          <Contact slug={this.props.slug} />
-          <SourceGroup sources={this.state.sources} />
+            />
+          }
         </article>
 
         {rentersByIncomePercentageAvailable

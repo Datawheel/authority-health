@@ -73,7 +73,7 @@ class Poverty extends SectionColumns {
     if (povertyByRaceAvailable) {
       topPovertyByRace = formatPovertyByRaceData(povertyByRace)[1];
     }
- 
+
     // Get data for Poverty by Age and Gender.
     let topFemalePovertyData, topMalePovertyData;
     if (povertyByAgeAndGenderAvailable) {
@@ -129,8 +129,12 @@ class Poverty extends SectionColumns {
           {povertyByAgeAndGenderAvailable ? <p>In {topMalePovertyData.Year}, most common male age in poverty was {topMalePovertyData.Age.toLowerCase()} ({formatPopulation(topMalePovertyData.share)} of the male population) while most common female age was {topFemalePovertyData.Age.toLowerCase()} ({formatPopulation(topFemalePovertyData.share)} of the female population) in {topFemalePovertyData.Geography}.</p> : ""}
           {povertyByRaceAvailable ? <p>In {topPovertyByRace.Year}, the majority race in poverty was {topPovertyByRace.Race} ({formatPopulation(topPovertyByRace.share)} of the total population in {topPovertyByRace.Geography}).</p> : ""}
 
-          {povertyByRaceAvailable
-            ? <BarChart config={{
+          <SourceGroup sources={this.state.sources} />
+          <Glossary definitions={definitions} />
+          <Contact slug={this.props.slug} />
+
+          {povertyByRaceAvailable &&
+            <BarChart config={{
               data: `https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Race&Geography=${meta.id}&Year=all`,
               discrete: "y",
               height: 300,
@@ -150,10 +154,8 @@ class Poverty extends SectionColumns {
               this.setState({sources: updateSource(resp.source, this.state.sources)});
               return formatPovertyByRaceData(resp.data)[0];
             }}
-            /> : <div></div>}
-          <Glossary definitions={definitions} />
-          <Contact slug={this.props.slug} />
-          <SourceGroup sources={this.state.sources} />
+            />
+          }
         </article>
 
         {povertyByAgeAndGenderAvailable

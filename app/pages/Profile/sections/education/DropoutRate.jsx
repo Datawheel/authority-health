@@ -41,8 +41,9 @@ class DropoutRate extends SectionColumns {
           />
           <p>In {topDropoutRate.Year}, zip code {topDropoutRate.Zip} had the highest dropout rate ({formatPercentage(topDropoutRate["High School Dropout Rate"])}).</p>
           <p>The following map shows the dropout rate for areas by zip code in Wayne County.</p>
-          <Contact slug={this.props.slug} />
+
           <SourceGroup sources={this.state.sources} />
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Draw Geomap to show dropout rate for each zip code in the Wayne county */}

@@ -88,7 +88,6 @@ class FoodStamps extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Food Stamps</SectionTitle>
         <article>
-          {isSnapWicDataAvailableForCurrentGeography ? <div></div> : <Disclaimer>snap and wic data is shown for {snapWicData.data[0].Geography}</Disclaimer>}
           <Stat
             title="SNAP-authorized stores"
             year={snapLatestYear}
@@ -116,8 +115,12 @@ class FoodStamps extends SectionColumns {
           <p>The monthly average number of SNAP-authorized stores in {county} in {snapLatestYear} was {commas(snapLatestYearValue)} and there were {commas(wicLatestYearValue)} WIC-authorized stores in {wicLatestYear}.</p>
           <p>In {topPublicAssistanceData.Year}, {shareOfPopulationWithFoodStamps} of the population in {topPublicAssistanceData.Geography} had food stamps, out of which {formatPercentage(topPublicAssistanceData.share)} of the population were given food stamps in cash.</p>
           <p>The chart here shows the share of population who gets food stamps in cash out of the population with food stamps.</p>
-          <Contact slug={this.props.slug} />
+
+          {!isSnapWicDataAvailableForCurrentGeography &&
+            <Disclaimer>snap and wic data is shown for {snapWicData.data[0].Geography}</Disclaimer>
+          }
           <SourceGroup sources={this.state.sources} />
+          <Contact slug={this.props.slug} />
         </article>
 
         {publicAssistanceDataAvailable

@@ -27,7 +27,7 @@ class Glossary extends Component {
     return (
       <div className="glossary section-popover-button">
         <Tooltip2 className="glossary-container" tooltipClassName="glossary-tooltip" content={ "Definitions of some of the terms used here." }>
-          <Button className="glossary-button pt-minimal" text={title} iconName={icon} onClick={toggle} />
+          <Button className="glossary-button pt-minimal font-xs" text={title} iconName={icon} onClick={toggle} />
         </Tooltip2>
         <Dialog className="glossary-dialog" title={title} iconName={icon} isOpen={open} onClose={toggle}>
           <div className="pt-dialog-body">

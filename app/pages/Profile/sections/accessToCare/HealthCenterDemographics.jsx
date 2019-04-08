@@ -1,3 +1,4 @@
+/* eslint no-extra-parens: 0 */ // extra parens needed for && conditional
 import React from "react";
 import {connect} from "react-redux";
 import {nest} from "d3-collection";
@@ -93,7 +94,6 @@ class HealthCenterDemographics extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Health Center Demographics</SectionTitle>
         <article>
-          {isZipLevelDataAvailable ? <div></div> : meta.name === "" ? <div></div> : <Disclaimer>data is shown for Wayne County</Disclaimer>}
           {/* Create a dropdown list. */}
           {/* <label className="pt-label pt-inline" htmlFor="health-center-dropdown">
             Show data for
@@ -147,8 +147,11 @@ class HealthCenterDemographics extends SectionColumns {
 
           <p> The following chart shows the health center visitors breakdown across all race/ethnicity groups in {isZipLevelDataAvailable ? topZipLevelData.Geography : "Wayne County"}.</p>
 
-          <Contact slug={this.props.slug} />
+          {(!isZipLevelDataAvailable && meta.name !== "") &&
+            <Disclaimer>data is shown for Wayne County</Disclaimer>
+          }
           <SourceGroup sources={this.state.sources} />
+          <Contact slug={this.props.slug} />
         </article>
 
         {/* Draw a BarChart to show data for health center data by race */}

@@ -117,9 +117,12 @@ class Transportation extends SectionColumns {
             {transportationMeansAvailable ? <span>The majority of commuters {topRecentYearModeOfTransport["Transportation Means"].toLowerCase()} to work ({formatPercentage(topRecentYearModeOfTransport.share)}).</span> : ""}
           </p>
 
+          <SourceGroup sources={this.state.sources} />
+          <Contact slug={this.props.slug} />
+
           {/* Draw a Barchart for Number of vehicles in each household. */}
-          {numberOfVehiclesDataAvailable
-            ? <BarChart config={{
+          {numberOfVehiclesDataAvailable &&
+            <BarChart config={{
               data: `https://acs.datausa.io/api/data?measures=Commute Means by Gender&drilldowns=Vehicles Available,Gender&Geography=${meta.id}&Year=all`,
               discrete: "x",
               height: 300,
@@ -144,11 +147,10 @@ class Transportation extends SectionColumns {
             }}
             dataFormat={resp => {
               this.setState({sources: updateSource(resp.source, this.state.sources)});
-              return  formatNumberOfVehiclesData(resp.data)[0]; 
+              return  formatNumberOfVehiclesData(resp.data)[0];
             }}
-            /> : <div></div>}
-          <Contact slug={this.props.slug} />
-          <SourceGroup sources={this.state.sources} />
+            />
+          }
         </article>
 
         {/* Draw a Barchart for commute time. */}

@@ -35,7 +35,7 @@ const formatEducationalAttainmentData = educationalAttainmentData => {
     });
   // Find top recent year Educational attainment stats
   const topEducationalAttainment = educationalAttainmentData.sort((a, b) => b.share - a.share)[0];
-  
+
   return [educationalAttainmentData, topEducationalAttainment];
 };
 
@@ -69,8 +69,9 @@ class EducationalAttainment extends SectionColumns {
             />
             <p>In {topEducationalAttainment.Year}, the most common education level attained in {topEducationalAttainment.Geography} was {topEducationalAttainment["Educational Attainment"].toLowerCase()} with a share of {formatPopulation(topEducationalAttainment.share)}.</p>
             <p>The following chart shows educational attainment of male and female in {topEducationalAttainment.Geography}.</p>
-            <Contact slug={this.props.slug} />
+
             <SourceGroup sources={this.state.sources} />
+            <Contact slug={this.props.slug} />
           </article>
 
           {/* Draw a Barchart to show Educational Attainment for all types of education buckets. */}

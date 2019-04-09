@@ -25,14 +25,21 @@ module.exports = function(app) {
     else if (level === "Tract" && prefix === "County") {
       res.json({cut: "05000US26163", drilldown: level});
     }
+    else if (prefix === level) {
+      res.json({cut: "05000US26163", drilldown: level});
+    }
+    else if (targetLevel) {
+      const cuts = await axios.get(`${CANON_LOGICLAYER_CUBE}/geoservice-api/relations/intersects/${id}?targetLevels=${targetLevel}`)
+        .then(resp => resp.data)
+        .then(arr => arr.map(d => d.geoid))
+        .catch(() => []);
+      res.json(cuts || []);
+    }
+    else if (prefix === "County") {
+      res.json({cut: "04000US26", drilldown: "Place"});
+    }
     else {
-      if (prefix === level) res.json({cut: "05000US26163", drilldown: level});
-      else {
-        const cuts = await axios.get(`${CANON_LOGICLAYER_CUBE}/geoservice-api/relations/intersects/${id}?targetLevels=${targetLevel}`)
-          .then(resp => resp.data)
-          .then(arr => arr.map(d => d.geoid));
-        res.json(cuts || []);
-      }
+      res.json({cut: "05000US26163", drilldown: "Tract"});
     }
 
   });

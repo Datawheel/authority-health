@@ -18,6 +18,9 @@ module.exports = {
     ],
     relations: {
       Geography: {
+        children: {
+          url: id => `${CANON_API}/api/geo/children/${id}/`
+        },
         tracts: {
           url: id => `${CANON_API}/api/geo/children/${id}/?level=Tract`
         },

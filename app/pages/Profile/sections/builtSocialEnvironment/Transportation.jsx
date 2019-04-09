@@ -73,9 +73,9 @@ class Transportation extends SectionColumns {
     // Get data for number of vehicles.
     let topAverageVehiclesPerHousehold, topRecentYearNumberOfVehicles;
     if (numberOfVehiclesDataAvailable) {
-      const getRecentYeraNumberOfVehiclesData = formatNumberOfVehiclesData(numberOfVehiclesData);
-      topRecentYearNumberOfVehicles = getRecentYeraNumberOfVehiclesData[1];
-      topAverageVehiclesPerHousehold = getRecentYeraNumberOfVehiclesData[2];
+      const getRecentYearNumberOfVehiclesData = formatNumberOfVehiclesData(numberOfVehiclesData);
+      topRecentYearNumberOfVehicles = getRecentYearNumberOfVehiclesData[1];
+      topAverageVehiclesPerHousehold = getRecentYearNumberOfVehiclesData[2];
     }
 
     // Get data for commute time.

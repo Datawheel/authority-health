@@ -302,7 +302,6 @@ VisionAndAuditoryDisabilities.defaultProps = {
 };
 
 VisionAndAuditoryDisabilities.need = [
-  fetchData("childrenTractIds", "/api/geo/children/<id>/?level=Tract"),
   fetchData("visionDisability", "/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status,Age,Sex&Geography=<id>&Year=latest", d => d.data)
 ];
 

@@ -57,35 +57,31 @@ const findOverallCoverage = data => {
 };
 
 const formatGeomapCoverageData = (data, meta, childrenTractIds) => {
+  let filteredChildrenGeography = [];
+  if (meta.level === "tract") {
+    filteredChildrenGeography = data;
+  }
+  else if (meta.level === "county") {
+    data.forEach(d => {
+      if (places.includes(d["ID Place"])) filteredChildrenGeography.push(d);
+    });
+  }
+  else {
+    data.forEach(d => {
+      if (childrenTractIds.includes(d["ID Geography"])) filteredChildrenGeography.push(d);
+    });
+  }
   nest()
     .key(d => d.Year)
-    .entries(data)
+    .entries(filteredChildrenGeography)
     .forEach(group => {
       const total = sum(group.values, d => d["Population by Insurance Coverage"]);
       group.values.forEach(d => total !== 0 ? d.share = d["Population by Insurance Coverage"] / total * 100 : d.share = 0);
     });
-  const filteredData = data.filter(d => d["ID Health Insurance Coverage Status"] === 0);
-  const recentYear = filteredData[0].Year;
-  const recentYearFilteredData = filteredData.filter(d => d.Year === recentYear);
-  let topRecentYearData;
-  if (meta.level === "tract") {
-    topRecentYearData = recentYearFilteredData.sort((a, b) => b.share - a.share)[0];
-  }
-  else if (meta.level === "county") {
-    const placesInWayneCounty = [];
-    recentYearFilteredData.forEach(d => {
-      if (places.includes(d["ID Place"])) placesInWayneCounty.push(d);
-    });
-    topRecentYearData = placesInWayneCounty.sort((a, b) => b.share - a.share)[0];
-  }
-  else {
-    const tractsInCurrentGeography = [];
-    recentYearFilteredData.forEach(d => {
-      if (childrenTractIds.includes(d["ID Geography"])) tractsInCurrentGeography.push(d);
-    });
-    topRecentYearData = tractsInCurrentGeography.sort((a, b) => b.share - a.share)[0];
-  }
-  return [filteredData, topRecentYearData];
+  const filteredWithCoverageData = filteredChildrenGeography.filter(d => d["ID Health Insurance Coverage Status"] === 0);
+  console.log("filteredWithCoverageData: ", filteredWithCoverageData);
+  const topRecentYearData = filteredChildrenGeography.sort((a, b) => b.share - a.share)[0];
+  return [filteredWithCoverageData, topRecentYearData];
 };
 
 const getGeomapTitle = meta => {
@@ -105,13 +101,8 @@ class HealthInsuranceCoverage extends SectionColumns {
   constructor(props) {
     super(props);
     this.state = {
-      sources: [],
-      coverageDataForChildrenGeography: this.props.coverageDataForChildrenGeography
+      sources: []
     };
-  }
-
-  componentDidMount() {
-    this.setState({sources: updateSource(this.state.coverageDataForChildrenGeography.source, this.state.sources)});
   }
 
   render() {
@@ -122,10 +113,9 @@ class HealthInsuranceCoverage extends SectionColumns {
       nationOverallCoverage, 
       stateOverallCoverage, 
       wayneCountyOverallCoverage, 
-      currentLevelOverallCoverage
+      currentLevelOverallCoverage,
+      coverageDataForChildrenGeography
     } = this.props;
-
-    const {coverageDataForChildrenGeography} = this.state;
 
     const {tractToPlace} = this.props.topStats;
     const coverageDataAvailable = coverageData.data.length !== 0;
@@ -232,7 +222,7 @@ class HealthInsuranceCoverage extends SectionColumns {
           </article>
 
           <Geomap config={{
-            data: formatGeomapCoverageData(coverageDataForChildrenGeography.data, meta, childrenTractIds)[0],
+            data: `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=${meta.id}:children&Year=latest`,
             groupBy: meta.level === "county" ? "ID Place" : "ID Geography",
             colorScale: "share",
             title: `Health Insurance Coverage for ${meta.level === "county" ? "Places" : "Tracts"} in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`,
@@ -242,6 +232,10 @@ class HealthInsuranceCoverage extends SectionColumns {
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]},
             topojson: meta.level === "county" ? "/topojson/place.json" : "/topojson/tract.json",
             topojsonFilter: d => formatTopojsonFilter(d, meta, childrenTractIds)
+          }}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return formatGeomapCoverageData(resp.data, meta, childrenTractIds)[0];
           }}
           />
         </SectionColumns>
@@ -261,7 +255,7 @@ HealthInsuranceCoverage.need = [
   fetchData("stateOverallCoverage", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&State=04000US26&Year=latest", d => d.data),
   fetchData("wayneCountyOverallCoverage", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=05000US26163&Year=latest", d => d.data),
   fetchData("currentLevelOverallCoverage", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=<id>&Year=latest", d => d.data),
-  fetchData("coverageDataForChildrenGeography", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=<id>:children&Year=all")
+  fetchData("coverageDataForChildrenGeography", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=<id>:children&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({

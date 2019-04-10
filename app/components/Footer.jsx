@@ -8,15 +8,13 @@ export default class Footer extends Component {
 
     // explore link array
     const exploreLinks = [
-      {title: "Locations", link: "/profile/16000US2622000"},
+      {title: "Locations", link: "/profile/05000US26163"},
       {title: "Charts", link: "/charts"}
     ];
     // about link array
     const aboutLinks = [
-      {title: "Background", link: "/about/background"},
-      {title: "Data sources", link: "/about/data-sources"},
-      {title: "Glossary", link: "/about/glossary"},
-      {title: "Terms of use", link: "/about/terms-of-use"}
+      {title: "Background", link: "/about"}
+      // {title: "Glossary", link: "/glossary"}
     ];
 
     // loop through arrays and create corresponding list items

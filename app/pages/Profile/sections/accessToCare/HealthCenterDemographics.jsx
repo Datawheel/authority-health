@@ -158,7 +158,6 @@ class HealthCenterDemographics extends SectionColumns {
         <BarChart config={{
           data: isZipLevelDataAvailable ? `/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Geography=${meta.id}&Year=all` : "/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Year=all",
           discrete: "y",
-          height: 250,
           legend: false,
           groupBy: "RaceType",
           label: false,

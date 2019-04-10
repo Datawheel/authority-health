@@ -79,7 +79,6 @@ const formatGeomapCoverageData = (data, meta, childrenTractIds) => {
       group.values.forEach(d => total !== 0 ? d.share = d["Population by Insurance Coverage"] / total * 100 : d.share = 0);
     });
   const filteredWithCoverageData = filteredChildrenGeography.filter(d => d["ID Health Insurance Coverage Status"] === 0);
-  console.log("filteredWithCoverageData: ", filteredWithCoverageData);
   const topRecentYearData = filteredChildrenGeography.sort((a, b) => b.share - a.share)[0];
   return [filteredWithCoverageData, topRecentYearData];
 };
@@ -147,7 +146,7 @@ class HealthInsuranceCoverage extends SectionColumns {
       geography = femaleCoverageData[0].Geography;
     }
 
-    const topRecentYearData = formatGeomapCoverageData(coverageDataForChildrenGeography.data, meta, childrenTractIds)[1];
+    const topRecentYearChildrenGeographyData = formatGeomapCoverageData(coverageDataForChildrenGeography, meta, childrenTractIds)[1];
 
     if (coverageDataAvailable) {
       return (
@@ -176,9 +175,9 @@ class HealthInsuranceCoverage extends SectionColumns {
               />
               <Stat
                 title={getGeomapTitle(meta)}
-                year={topRecentYearData.Year}
-                value={formatGeomapLabel(topRecentYearData, meta, tractToPlace)}
-                qualifier={getGeomapQualifier(topRecentYearData, meta)}
+                year={topRecentYearChildrenGeographyData.Year}
+                value={formatGeomapLabel(topRecentYearChildrenGeographyData, meta, tractToPlace)}
+                qualifier={getGeomapQualifier(topRecentYearChildrenGeographyData, meta)}
               />
             </div>
 

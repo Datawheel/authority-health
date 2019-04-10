@@ -13,16 +13,12 @@ export default class App extends Component {
   }
 
   render() {
-    const {children, location, router} = this.props;
+    const {children, location} = this.props;
     const path = location.pathname;
     // console.log(path);
 
     // MainNav config
-    let solidBackground = false;
-
-    if (path === "charts") {
-      solidBackground = true;
-    }
+    const solidBackground = ["charts"].includes(path);
 
     return (
       <div className="outer-container">

@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import HomeHeader from "./components/HomeHeader";
 import ProfileTileList from "../../components/ProfileTileList";
 import MapCardList from "../../components/MapCardList";
-import ArticleList from "../../components/ArticleList";
 import "./Home.css";
 
 export default class Home extends Component {
@@ -13,7 +12,6 @@ export default class Home extends Component {
         <HomeHeader />
         <ProfileTileList />
         <MapCardList />
-        {/*<ArticleList />*/}
       </div>
     );
   }

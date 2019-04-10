@@ -18,7 +18,7 @@ const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
 const formatTractName = (tractName, cityName) => cityName === undefined ? tractName : `${tractName}, ${cityName}`;
 const formatGeomapLabel = (d, meta, tractToPlace) => {
-  if (meta.level === "county") return d.Place; 
+  if (meta.level === "county") return d.Place;
   if (meta.level === "tract") return formatTractName(d.Geography, tractToPlace[d["ID Geography"]]);
   else return `${d.Geography}, ${meta.name}`;
 };
@@ -80,7 +80,7 @@ const formatGeomapData = (data, meta, childrenTractIds, totalImmigrantsSelected 
         });
       });
   }
-  
+
   // Find the top immigrant data for the recent year.
   const filteredImmigrantsData = totalImmigrantsSelected ? filteredChildrenGeography.filter(d => d["ID Nativity"] === 1) : filteredChildrenGeography.filter(d => d["ID Nativity"] === 1 && d["ID Poverty Status"] === 1);
   const topImmigrantsData = filteredImmigrantsData.sort((a, b) => b.share - a.share)[0];
@@ -200,7 +200,7 @@ class Immigrants extends SectionColumns {
 
           {/* Show top stats and a short paragraph about it for each Nativity. */}
           {totalImmigrantsSelected
-            ? <div>
+            ? <div className="font-sm">
               <Stat
                 title={"Immigrant population"}
                 year={immigrantsDataForCurrentLocationAvailable ? currentLevelImmigrantsData.Year : ""}
@@ -223,7 +223,8 @@ class Immigrants extends SectionColumns {
               <p>{`${getGeomapTitle(meta)} was ${formatGeomapLabel(topStats, meta, tractToPlace)} (${getGeomapQualifier(topStats, meta)}).`}</p>
               {immigrantsDataForCurrentLocationAvailable ? <p>The map here shows the {meta.level === "county" ? "cities" : "tracts"} in {meta.level === "county" || meta.level === "tracts" ? "Wayne County" : `${meta.name}`} by their percentage of immigrants.</p> : ""}
             </div>
-            : <div>
+
+            : <div className="font-sm">
               <Stat
                 title={"Immigrants in poverty"}
                 year={immigrantsPovertyDataForCurrentLocationAvailable ? currentLevelImmigrantsData.Year : ""}

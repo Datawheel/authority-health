@@ -118,15 +118,13 @@ class ReadingAssessment extends SectionColumns {
           </label>
           <p>The following chart shows the average reading assessment score {isParentsEducationSelected ? "for 8th grade students" : ""} in Detroit {isOverallSelected ? "compared to the United States" : isParentsEducationSelected ? `by their ${dropdownValue.toLowerCase()}` : `by ${dropdownValue.toLowerCase()}`} over time.</p>
           {isParentsEducationSelected
-            ? <div>
-              {readingScoresData.map(item =>
-                <Stat key={item.measure}
-                  title={`${item["Parents Education"]} (DETROIT)`}
-                  year={item.Year}
-                  value={item["Average Reading Score by Parents Education"]}
-                />
-              )}
-            </div>
+            ? readingScoresData.map(item =>
+              <Stat key={item.measure}
+                title={`${item["Parents Education"]} (DETROIT)`}
+                year={item.Year}
+                value={item["Average Reading Score by Parents Education"]}
+              />
+            )
             : <div>
               <Stat
                 title={isOverallSelected ? "4TH grade Score (United States)" : `4TH GRADE ${stat1Value} ${isStatValueYesOrNo ? dropdownValue : ""} (DETROIT)`}
@@ -149,7 +147,7 @@ class ReadingAssessment extends SectionColumns {
                 value={isOverallSelected ? stat2EighthGrade["Average Reading Score"] : stat2EighthGrade[`Average Reading Score by ${dropdownValue}`]}
               />
             </div>}
-            
+
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
         </article>

@@ -10,6 +10,7 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
 import Stat from "components/Stat";
+import StatGroup from "components/StatGroup";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
 
@@ -33,10 +34,13 @@ const formatEducationalAttainmentData = educationalAttainmentData => {
       const total = sum(group.values, d => d["Population by Education Level"]);
       group.values.forEach(d => total !== 0 ? d.share = d["Population by Education Level"] / total * 100 :  d.share = 0);
     });
-  // Find top recent year Educational attainment stats
-  const topEducationalAttainment = educationalAttainmentData.sort((a, b) => b.share - a.share)[0];
 
-  return [educationalAttainmentData, topEducationalAttainment];
+  const femaleData = educationalAttainmentData.filter(d => d.Sex === "Female");
+  const topFemaleData = femaleData.sort((a, b) => b.share - a.share)[0];
+
+  const maleData = educationalAttainmentData.filter(d => d.Sex === "Male");
+  const topMaleData = maleData.sort((a, b) => b.share - a.share)[0];
+  return [educationalAttainmentData, topFemaleData, topMaleData];
 };
 
 class EducationalAttainment extends SectionColumns {
@@ -54,21 +58,38 @@ class EducationalAttainment extends SectionColumns {
 
     if (educationalAttainmentDataAvailable) {
     // Find share for topEducationalAttainment data.
-      const  topEducationalAttainment = formatEducationalAttainmentData(educationalAttainmentData)[1];
+      const topData = formatEducationalAttainmentData(educationalAttainmentData);
+      const topFemaleData = topData[1];
+      const topMaleData = topData[2];
+
+      console.log("topData: ", topData);
 
       return (
         <SectionColumns>
           <SectionTitle>Educational Attainment</SectionTitle>
           <article>
-            {/* Stats about top Educational Attainment. */}
-            <Stat
-              title="Most common education level"
-              year={topEducationalAttainment.Year}
-              value={topEducationalAttainment["Educational Attainment"]}
-              qualifier={`${formatPopulation(topEducationalAttainment.share)} of the population in ${topEducationalAttainment.Geography}`}
+            <StatGroup
+              title={"Most common education level by gender"}
+              year={topFemaleData.Year}
+              stats={[
+                {
+                  title: "Female",
+                  year: topFemaleData.Year,
+                  value: formatLabels(topFemaleData["Educational Attainment"]),
+                  qualifier: `${formatPopulation(topFemaleData.share)} of the population in ${topFemaleData.Geography}`
+                },
+                {
+                  title: "Male",
+                  year: topMaleData.Year,
+                  value: formatLabels(topMaleData["Educational Attainment"]),
+                  qualifier: `${formatPopulation(topMaleData.share)} of the population in ${topMaleData.Geography}`,
+                  color: "terra-cotta"
+                }
+              ]}
             />
-            <p>In {topEducationalAttainment.Year}, the most common education level attained in {topEducationalAttainment.Geography} was {topEducationalAttainment["Educational Attainment"].toLowerCase()} with a share of {formatPopulation(topEducationalAttainment.share)}.</p>
-            <p>The following chart shows educational attainment of male and female in {topEducationalAttainment.Geography}.</p>
+            <p>In {topFemaleData.Year}, the most common education level attained in {topFemaleData.Geography} by female was {formatLabels(topFemaleData["Educational Attainment"]).toLowerCase()} ({formatPopulation(topFemaleData.share)}) {}
+             and for male it was {formatLabels(topMaleData["Educational Attainment"]).toLowerCase()} ({formatPopulation(topMaleData.share)}).</p>
+            <p>The following chart shows educational attainment of male and female in {topMaleData.Geography}.</p>
 
             <SourceGroup sources={this.state.sources} />
             <Contact slug={this.props.slug} />

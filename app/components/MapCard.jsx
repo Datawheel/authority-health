@@ -5,7 +5,7 @@ import "./MapCard.css";
 
 class MapCard extends Component {
   render() {
-    const {classes, item, link, t} = this.props;
+    const {classes, item, link} = this.props;
 
     const labelId = item.icon;
 

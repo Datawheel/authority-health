@@ -7,43 +7,42 @@ export default class MapCardList extends Component {
 
   render() {
 
-    // TODO: use real data
     const maps = [
       {
         name: "Economy",
         icon: "economy",
-        subtitle: "Income per capita",
-        link: "/charts"
+        subtitle: "Child food insecurity",
+        link: "/charts?enlarged=c-geomap-1Fhy7q-2iY6oK-Child&groups=0-1Fhy7q&groups=1-2iY6oK-Child&measure=Z20M7DB"
       },
       {
         name: "Demographics",
         icon: "demographics",
-        subtitle: "Population",
-        link: "/charts"
+        subtitle: "Grandparent caregivers",
+        link: "/charts?groups=0-11TnWl-05000US26163&groups=1-Z2hp8qX&measure=1FaqjD"
       },
       {
         name: "Poverty",
         icon: "poverty",
-        subtitle: "Public assistance",
-        link: "/charts"
+        subtitle: "Poverty by school attainment",
+        link: "/charts?groups=0-26N2qd-05000US26163&groups=1-1H1u08&groups=2-oBXTS-0&measure=1S4Nnj"
       },
       {
         name: "Education",
         icon: "education",
         subtitle: "Educational attainment",
-        link: "/charts"
+        link: "/charts?groups=0-Z2oELM1-05000US26163&groups=1-1Pts5o&measure=Z1D4vNo"
       },
       {
         name: "Housing & transportation",
         icon: "housing",
-        subtitle: "Occupancy status",
-        link: "/charts"
+        subtitle: "Michigan county rent prices",
+        link: "/charts?groups=0-ZcdIId&measure=Q87wG"
       },
       {
         name: "Environment, health & safety",
         icon: "environment",
-        subtitle: "Median household income",
-        link: "/charts"
+        subtitle: "Air quality over time",
+        link: "/charts?groups=0-MTObb&measure=SPl5w"
       }
     ];
 
@@ -57,9 +56,9 @@ export default class MapCardList extends Component {
 
         <div className="profile-tile-header">
           <h2>Custom charts</h2>
-          {/* explore map link */}
+          {/* vizbuilder link */}
           <Link className="profile-tile-link link font-xs u-uppercase" to="/charts">
-            Explore map data
+            Make custom charts
             <span className="profile-tile-link-icon pt-icon pt-icon-compass" />
           </Link>
         </div>

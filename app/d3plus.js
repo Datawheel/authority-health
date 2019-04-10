@@ -117,9 +117,9 @@ export default {
     // default to green
     color: [
       styles.white,
-      styles["success-light"],
-      styles.success,
-      styles["success-dark"]
+      styles["majorelle-light"],
+      styles.majorelle,
+      styles["majorelle-dark"]
     ],
     // the key itself
     rectConfig: {

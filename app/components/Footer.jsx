@@ -8,7 +8,7 @@ export default class Footer extends Component {
 
     // explore link array
     const exploreLinks = [
-      {title: "Locations", link: "/profile/05000US26163"},
+      {title: "Locations", link: "/profile"},
       {title: "Charts", link: "/charts"}
     ];
     // about link array

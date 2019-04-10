@@ -32,7 +32,7 @@ class MainNav extends Component {
 
           <ul className="main-nav-list u-list-reset font-xs">
             <li className="main-nav-item">
-              <Link to="/profile/05000US26163" className="main-nav-link">Locations</Link>
+              <Link to="/profile" className="main-nav-link">Locations</Link>
             </li>
 
             <li className="main-nav-item">

@@ -113,7 +113,7 @@ class Veterans extends SectionColumns {
           {periodOfServiceAvailable ? <p>In {topPeriodOfService.Year}, the most common period of service for veterans in {topPeriodOfService.Geography} was {topPeriodOfService["Period of Service"]} ({formatPercentage(topPeriodOfService.share)}).</p> : ""}
           <p>In {topEmploymentStatus.Year}, the unemployed veterans population of {topEmploymentStatus.Geography} was {veteransEmploymentStatusAvailable ? formatPercentage(topEmploymentStatus.share) : "N/A"}, while the impoverished population was {veteransPovertyStatusAvailable ? formatPercentage(veteransPovertyStatus[0].share) : ""} and the disabled veterans population was {veteransDisabilityStatusAvailable ? formatPercentage(veteransDisabilityStatus[0].share) : "N/A"}</p>
           {periodOfServiceAvailable ? <p>The chart here shows the percentages of veterans that served in each period of service.</p> : ""}
-          
+
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
         </article>

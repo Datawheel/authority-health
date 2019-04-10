@@ -108,7 +108,7 @@ tooltip
 
 .d3plus-tooltip {
 	& .d3plus-tooltip-title {
-		color: var(--majorelle-dark);
+		color: var(--dark-3);
 		font-family: var(--body-font);
 		padding: 7px 5px;
 	}

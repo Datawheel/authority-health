@@ -5,6 +5,8 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
+import styles from "style.yml";
+
 import Contact from "components/Contact";
 import Glossary from "components/Glossary";
 import Stat from "components/Stat";
@@ -49,7 +51,7 @@ class DistressScore extends SectionColumns {
           />
           <p>In {topDistressScoreData.Year}, the maximum distress score was observed in the zip code {topDistressScoreData.Zip} with {formatAbbreviate(topDistressScoreData["Distress Score"])} percentile with 0 percentile being least distressed (desired outcome) and 100 percentile being most distressed (unfavorable outcome).</p>
           <p>The following map shows the distress score percentile for each zip code in Wayne County.</p>
-          
+
           <SourceGroup sources={this.state.sources} />
           <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
@@ -60,6 +62,15 @@ class DistressScore extends SectionColumns {
           data: "/api/data?measures=Distress Score&drilldowns=Zip&Year=all",
           groupBy: "ID Zip",
           colorScale: "Distress Score",
+          colorScaleConfig: {
+            // having a high distress score is bad
+            color: [
+              styles.success,
+              styles["danger-light"],
+              styles.danger,
+              styles["danger-dark"]
+            ]
+          },
           height: 400,
           time: "Year",
           tooltipConfig: {tbody: [["Year", d => d.Year], ["Distress Score", d => `${formatAbbreviate(d["Distress Score"])} percentile`]]},

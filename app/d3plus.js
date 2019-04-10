@@ -19,13 +19,29 @@ const groupings = [
   "Sex of Partner",
   "Responsibility Length",
   "Offense",
-  "Rent Amount"
+  "Rent Amount",
+  "Household Income Bucket",
+  "Household Income",
+  "Level of School",
+  "Family type",
+  "Period of Service",
+  "Type of Crime",
+  // Health center demographics
+  "American Indian/Alaska Native Health Center Patients",
+  "Black Health Center Patients",
+  "Hispanic Health Center Patients",
+  "Non-white Health Center Patients",
+  "White Health Center Patients",
+  // smoking status
+  "Smoking Status Current",
+  "Smoking Status Former",
+  "Smoking Status Never"
 ];
 
 /** function to lookup & assign color scheme */
 function colorLogic(d) {
 
-  // console.log("Coverage Type", ":", d["Coverage Type"]);
+  // console.log(d["Period of Service"]);
 
   // lookup grouping color schemes in style.yml
   for (const grouping of groupings) {
@@ -104,10 +120,13 @@ export default {
       strokeLinecap: "round",
       strokeWidth: 2
     },
+    // keep map locations visible; override in pie charts
     Path: {
       fillOpacity: 0.75
     }
   },
+  // prevent map scrolljacking
+  zoomScroll: false,
   // map color scale key
   colorScaleConfig: {
     // default to green

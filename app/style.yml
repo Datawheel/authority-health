@@ -110,6 +110,10 @@ color-Seniors: "#D45D59"
 color-Female: "#6F59D4"
 color-Male: "#D45D59"
 
+# violent & property crimes
+color-Property crime: "#6F59D4"
+color-Violent crime: "#D45D59"
+
 # domestic partners
 "color-Female Householder & Female Partner": "#8842A6"
 "color-Female Householder & Male Partner": "#6F59D4"
@@ -129,15 +133,25 @@ color-Male: "#D45D59"
 "color-Hawaiian or Pacific Islander": "#C99C20"
 "color-Multiracial": "#B5A604"
 
+# health center demographics
+"color-American Indian/Alaska Native Health Center Patients": "#6F59D4"
+"color-Black Health Center Patients": "#A64281"
+"color-Hispanic Health Center Patients": "#D45D59"
+"color-Non-white Health Center Patients": "#B5A604"
+"color-White Health Center Patients": "#CF7A1F"
+
 # smoking
+"color-Smoking Status Current": "#D45D59"
 "color-Smoking Status Current Weighted Percent": "#D45D59"
+"color-Smoking Status Former": "#C99C20"
 "color-Smoking Status Former Weighted Percent": "#C99C20"
+"color-Smoking Status Never": "#53A355"
 "color-Smoking Status Never Weighted Percent": "#53A355"
 
 # insurance
 "color-No Health Insurance Coverage": "#D45D59"
+"color-With Private Health Insurance Coverage": "#A64281"
 "color-With Public Health Coverage": "#6F59D4"
-"color-With Private Health Insurance Coverage": "#5673CC"
 
 # ethnicity
 "color-Grandparent Responsible Less Than 6 Months": "#5673CC"
@@ -146,7 +160,56 @@ color-Male: "#D45D59"
 "color-Grandparent Responsible 3 Or 4 Years": "#A64281"
 "color-Grandparent Responsible 5 Years Or More": "#D45D59"
 
+# rentals
+"color-Less Than $10,000": "#5673CC"
+"color-$10,000 to $19,999": "#6F59D4"
+"color-$20,000 to $34,999": "#8842A6"
+"color-$35,000 to $49,999": "#A64281"
+"color-$50,000 to $74,999": "#D45D59"
+"color-$75,000 to $99,999": "#CF7A1F"
+"color-$100,000 or More": "#C99C20"
+
+# wage distribution
+"color-< $10,000": "#5673CC"
+"color-$10,000-$14,999": "#6266D0"
+"color-$15,000-$19,999": "#6F59D4"
+"color-$20,000-$24,999": "#7B4DBD"
+"color-$25,000-$29,999": "#8842A6"
+"color-$30,000-$34,999": "#974293"
+"color-$35,000-$39,999": "#A64281"
+"color-$40,000-$44,999": "#BD4F6D"
+"color-$45,000-$49,999": "#D45D59"
+"color-$50,000-$59,999": "#D16B3C"
+"color-$60,000-$74,999": "#CF7A1F"
+"color-$75,000-$99,999": "#CC8B1F"
+"color-$100,000-$124,999": "#C99C20"
+"color-$125,000-$149,999": "#BFA112"
+"color-$150,000-$199,999": "#B5A604"
+"color-$200,000+": "#A09F06"
+
 # incarceration
 "color-Assaultive Offenses": "#D45D59"
 "color-Drug Offenses": "#A64281"
 "Non-Assaultive Offenses": "#8842A6"
+
+# student poverty / level of school
+"color-Enrolled In Nursery School, Preschool": "#5673CC"
+"color-Enrolled In Kindergarten": "#6F59D4"
+"color-Enrolled In Grade 1 To Grade 4": "#8842A6"
+"color-Enrolled In Grade 5 To Grade 8": "#A64281"
+"color-Enrolled In Grade 9 To Grade 12": "#D45D59"
+"color-Enrolled In College Undergraduate Years": "#CF7A1F"
+"color-Enrolled In Graduate Or Professional School": "#C99C20"
+
+# household income from public assistance
+"color-Female Householder, No Husband Present": "#D45D59"
+"color-Male Householder, No Wife Present": "#8842A6"
+"color-Married-couple Family": "#6F59D4"
+
+# veterans
+"color-World War II": "#5673CC"
+"color-Korea": "#6F59D4"
+"color-Vietnam": "#8842A6"
+"color-Gulf War (1990s)": "#A64281"
+"color-Gulf War (2001-)": "#D45D59"
+"color-Other": "#869299"

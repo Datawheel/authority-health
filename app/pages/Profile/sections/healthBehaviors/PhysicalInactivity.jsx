@@ -89,7 +89,7 @@ class PhysicalInactivity extends SectionColumns {
             {topPhysicalInactivityFemaleData.Geography} were physically inactive, as compared to {formatPercentage(stateLevelMaleData["Age-Adjusted Physical Inactivity"])} of the male and {formatPercentage(stateLevelFemaleData["Age-Adjusted Physical Inactivity"])} of the female population in Michigan overall.</p>
 
           {!isPhysicalInactivityBySexAvailableForCurrentlocation &&
-            <Disclaimer>data is shown for {physicalInactivityPrevalenceBySex.data[0].Geography}</Disclaimer>
+            <Disclaimer>Data is shown for {physicalInactivityPrevalenceBySex.data[0].Geography}</Disclaimer>
           }
           <SourceGroup sources={this.state.sources} />
           <Glossary definitions={definitions} />

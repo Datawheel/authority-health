@@ -82,7 +82,7 @@ class ViolentAndPropertyCrimes extends SectionColumns {
           <p>The following chart shows the distribution for the different types of property and violent crimes{isPlaceDataAvailable ? ` in ${topRecentYearViolentCrime.Geography}` : ""}.</p>
 
           {!isPlaceDataAvailable &&
-            <Disclaimer>data is shown for Wayne County</Disclaimer>
+            <Disclaimer>Data is shown for Wayne County</Disclaimer>
           }
           <SourceGroup sources={this.state.sources} />
           <Glossary definitions={definitions} />

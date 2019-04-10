@@ -87,7 +87,7 @@ class DentistsDemographic extends SectionColumns {
           />
 
           {(!isDentistsByAgeAvailableForCurrentGeography && !isDentistsByGenderAvailableForCurrentGeography) &&
-            <Disclaimer>data is shown for {dentistsByAge.data[0].Geography}</Disclaimer>
+            <Disclaimer>Data is shown for {dentistsByAge.data[0].Geography}</Disclaimer>
           }
           <Contact slug={this.props.slug} />
 

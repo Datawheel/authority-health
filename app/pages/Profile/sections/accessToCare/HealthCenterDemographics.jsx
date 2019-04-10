@@ -148,7 +148,7 @@ class HealthCenterDemographics extends SectionColumns {
           <p> The following chart shows the health center visitors breakdown across all race/ethnicity groups in {isZipLevelDataAvailable ? topZipLevelData.Geography : "Wayne County"}.</p>
 
           {(!isZipLevelDataAvailable && meta.name !== "") &&
-            <Disclaimer>data is shown for Wayne County</Disclaimer>
+            <Disclaimer>Data is shown for Wayne County</Disclaimer>
           }
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />

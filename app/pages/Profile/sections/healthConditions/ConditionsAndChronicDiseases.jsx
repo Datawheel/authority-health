@@ -134,8 +134,8 @@ class ConditionsAndChronicDiseases extends SectionColumns {
           }
 
           {isHealthConditionWeightedValueSelected
-            ? <Disclaimer>data is shown at the zip region level</Disclaimer>
-            : <Disclaimer>data is shown at the census tract level</Disclaimer>
+            ? <Disclaimer>Data is shown at the zip region level</Disclaimer>
+            : <Disclaimer>Data is shown at the census tract level</Disclaimer>
           }
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />

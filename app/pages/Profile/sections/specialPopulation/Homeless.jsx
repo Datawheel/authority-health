@@ -113,7 +113,7 @@ class Homeless extends SectionColumns {
           <p>Following charts shows different categories and types of sheltered and unsheltered homeless population in {totalHomelessData.data[0].Geography} and percentages for each one of them.</p>
 
           {!isHomelessDataAvailableForCurrentGeography &&
-            <Disclaimer>data is shown for {topShelteredHomelessCategory.Geography}</Disclaimer>
+            <Disclaimer>Data is shown for {topShelteredHomelessCategory.Geography}</Disclaimer>
           }
           <SourceGroup sources={this.state.sources} />
           <Glossary definitions={definitions} />

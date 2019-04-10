@@ -108,8 +108,8 @@ class Incarceration extends SectionColumns {
           <p>In {topIncarcerationData.Year}, the most common crime in {topIncarcerationData.Geography} was {topOffenceData.Offense.toLowerCase()} ({formatPercentage(topOffenceData.share)}) and the most common punishment was {topPunishmentData.Punishment.toLowerCase()} ({formatPercentage(topPunishmentData.share)}).</p>
           <p>This chart shows the percentages of punishments broken down by offense type for all convicted crimes in {topIncarcerationData.Geography}.</p>
 
-          {!isIncarcerationDataAvailableForCurrentGeography && 
-            <Disclaimer>data is shown for {incarcerationData.data[0].Geography}</Disclaimer>
+          {!isIncarcerationDataAvailableForCurrentGeography &&
+            <Disclaimer>Data is shown for {incarcerationData.data[0].Geography}</Disclaimer>
           }
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />

@@ -62,7 +62,7 @@ class AirQuality extends SectionColumns {
           <p>{topRecentYearAirQualityDays["Air Quality Days"]} of 90 days measured were good quality air in {topRecentYearAirQualityDays.Year}. The most common air pollutants was {topRecentYearAirPollutant.Pollutant} ({topRecentYearAirPollutant.Year}) and the median AQI was {airQualityMedianAQIs[0]["Median AQI"]} in {airQualityMedianAQIs[0].Geography}.</p>
 
           {!isAirQualityDaysAvailableForCurrentGeography &&
-            <Disclaimer>data is shown for {airQualityDays.data[0].Geography}</Disclaimer>
+            <Disclaimer>Data is shown for {airQualityDays.data[0].Geography}</Disclaimer>
           }
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />

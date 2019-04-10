@@ -115,7 +115,7 @@ class HealthInsuranceCoverage extends SectionColumns {
             <p>The age groups for men and women most likely to have health care coverage in {maleCoverageData[0].Geography} were {topMaleAgeGroup} years for men and {topFemaleAgeGroup} years for women.</p>
 
             {!isCoverageDataAvailableForCurrentGeography &&
-              <Disclaimer>data is shown for {coverageData.data[0].Geography}</Disclaimer>
+              <Disclaimer>Data is shown for {coverageData.data[0].Geography}</Disclaimer>
             }
             <SourceGroup sources={this.state.sources} />
             <Contact slug={this.props.slug} />

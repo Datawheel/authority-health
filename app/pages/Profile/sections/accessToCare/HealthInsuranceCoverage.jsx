@@ -26,7 +26,7 @@ const formatTopojsonFilter = (d, meta, childrenTractIds) => {
 
 const formatTractName = (tractName, cityName) => cityName === undefined ? tractName : `${tractName}, ${cityName}`;
 const formatGeomapLabel = (d, meta, tractToPlace) => {
-  if (meta.level === "county") return d.Place; 
+  if (meta.level === "county") return d.Place;
   if (meta.level === "tract") return formatTractName(d.Geography, tractToPlace[d["ID Geography"]]);
   else return `${d.Geography}, ${meta.name}`;
 };
@@ -107,11 +107,11 @@ class HealthInsuranceCoverage extends SectionColumns {
   render() {
     const {
       meta,
-      childrenTractIds, 
-      coverageData, 
-      nationOverallCoverage, 
-      stateOverallCoverage, 
-      wayneCountyOverallCoverage, 
+      childrenTractIds,
+      coverageData,
+      nationOverallCoverage,
+      stateOverallCoverage,
+      wayneCountyOverallCoverage,
       currentLevelOverallCoverage,
       coverageDataForChildrenGeography
     } = this.props;

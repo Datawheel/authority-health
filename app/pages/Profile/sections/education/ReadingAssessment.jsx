@@ -195,7 +195,7 @@ class ReadingAssessment extends SectionColumns {
           y: isOverallSelected ? "Average Reading Score" : `Average Reading Score by ${dropdownValue}`,
           yConfig: {
             title: `Average Reading Score by ${dropdownValue}`,
-            domain: [0, 300]
+            domain: [100, 300]
           },
           tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => isOverallSelected ? d["Average Reading Score"] : d[`Average Reading Score by ${dropdownValue}`]], ["Place", d => isOverallSelected ? d.Geography === "Nation" ? "United States" : "Detroit" : "Detroit"]]}
         }}

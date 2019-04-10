@@ -13,6 +13,7 @@ const groupings = [
   "RaceType",
   "SmokingType",
   "Health Insurance coverage:type",
+  "Coverage Type",
   "Sex",
   "Gender",
   "Sex of Partner",
@@ -21,10 +22,10 @@ const groupings = [
   "Rent Amount"
 ];
 
-// function to lookup & assign color scheme
+/** function to lookup & assign color scheme */
 function colorLogic(d) {
 
-  // console.log("Rent Amount" + ":", d["Rent Amount"]);
+  // console.log("Coverage Type", ":", d["Coverage Type"]);
 
   // lookup grouping color schemes in style.yml
   for (const grouping of groupings) {
@@ -36,11 +37,6 @@ function colorLogic(d) {
         : styles["majorelle-dark"];
     }
   }
-
-  // assign consistent year color to everything except for phenotypes and states
-  // if ((d["ID Year"] || d["ID Event Year"]) && !d["ID Phenotype"] && !d["ID State"]) {
-  //   return styles["majorelle-dark"];
-  // }
 
   // if a visualization is totally purple, it probably doesn't yet have a color scheme assigned
   // else {

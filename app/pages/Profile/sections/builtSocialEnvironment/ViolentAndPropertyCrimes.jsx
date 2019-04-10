@@ -2,7 +2,7 @@ import React from "react";
 import {connect} from "react-redux";
 import {sum} from "d3-array";
 import {nest} from "d3-collection";
-import {BarChart} from "d3plus-react";
+import {Treemap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 import {titleCase} from "d3plus-text";
 
@@ -67,16 +67,17 @@ class ViolentAndPropertyCrimes extends SectionColumns {
         <article>
           {/* Show stats and short paragraph for each type of crime. */}
           <Stat
-            title= {"Most common Violent Crime"}
-            year={topRecentYearViolentCrime.Year}
-            value={titleCase(topRecentYearViolentCrime.Crime)}
-            qualifier={formatPercentage(topRecentYearViolentCrime.share)}
-          />
-          <Stat
             title="Most common Property Crime"
             year={topRecentYearPropertyCrime.Year}
             value={titleCase(topRecentYearPropertyCrime.Crime)}
             qualifier={formatPercentage(topRecentYearPropertyCrime.share)}
+          />
+          <Stat
+            title= {"Most common Violent Crime"}
+            year={topRecentYearViolentCrime.Year}
+            value={titleCase(topRecentYearViolentCrime.Crime)}
+            qualifier={formatPercentage(topRecentYearViolentCrime.share)}
+            theme="terra-cotta-dark"
           />
           <p>In {topRecentYearViolentCrime.Year}, the most common violent crime{isPlaceDataAvailable ? ` in ${topRecentYearViolentCrime.Geography}` : ""} was {topRecentYearViolentCrime.Crime.toLowerCase()} ({formatPercentage(topRecentYearViolentCrime.share)}), and the most common property crime was {topRecentYearPropertyCrime.Crime.toLowerCase()} ({formatPercentage(topRecentYearPropertyCrime.share)}).</p>
           <p>The following chart shows the distribution for the different types of property and violent crimes{isPlaceDataAvailable ? ` in ${topRecentYearViolentCrime.Geography}` : ""}.</p>
@@ -90,27 +91,28 @@ class ViolentAndPropertyCrimes extends SectionColumns {
         </article>
 
         {/* Draw a Barchart for each type of crime. */}
-        <BarChart config={{
+        <Treemap config={{
           data: isPlaceDataAvailable ? `/api/data?measures=Number of Crimes&drilldowns=Type of Crime,Crime&Geography=${meta.id}&Year=all` : "/api/data?measures=Number of Crimes&drilldowns=Type of Crime,Crime&Year=all",
-          discrete: "x",
+          // discrete: "x",
           height: 400,
-          legend: false,
-          groupBy: d => `${d["Type of Crime"]}: ${d.Crime}`,
-          x: "Crime",
-          y: "share",
+          // legend: false,
+          // groupBy: d => `${d["Type of Crime"]}: ${d.Crime}`,
+          sum: d => d["Number of Crimes"],
+          groupBy: ["Type of Crime", "Crime"],
+          // y: "share",
           time: "Year",
-          xConfig: {
-            tickFormat: d => titleCase(d),
-            labelRotation: false
-          },
-          yConfig: {
-            tickFormat: d => formatPercentage(d),
-            title: "Crime Rate"
-          },
-          xSort: (a, b) => a.share - b.share,
-          shapeConfig: {
-            label: false
-          },
+          // xConfig: {
+          //   tickFormat: d => titleCase(d),
+          //   labelRotation: false
+          // },
+          // yConfig: {
+          //   tickFormat: d => formatPercentage(d),
+          //   title: "Crime Rate"
+          // },
+          // xSort: (a, b) => a.share - b.share,
+          // shapeConfig: {
+          //   label: false
+          // },
           tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [isPlaceDataAvailable ? "Place" : "County", d => isPlaceDataAvailable ? d.Geography : "Wayne County"]]}
         }}
         dataFormat={resp => {

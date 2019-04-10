@@ -2,7 +2,7 @@
 import React from "react";
 import {connect} from "react-redux";
 import {nest} from "d3-collection";
-import {BarChart, Geomap} from "d3plus-react";
+import {Pie} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 // import axios from "axios";
 
@@ -155,20 +155,17 @@ class HealthCenterDemographics extends SectionColumns {
         </article>
 
         {/* Draw a BarChart to show data for health center data by race */}
-        <BarChart config={{
+        <Pie config={{
           data: isZipLevelDataAvailable ? `/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Geography=${meta.id}&Year=all` : "/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Year=all",
-          discrete: "y",
-          legend: false,
           groupBy: "RaceType",
-          label: false,
-          x: d => d[d.RaceType],
-          y: "RaceType",
+          value: d => d[d.RaceType],
+          label: d => d.RaceType.replace(" Health Center Patients", ""),
           time: "Year",
-          xConfig: {
-            tickFormat: d => formatPercentage(d),
-            labelRotation: false
+          shapeConfig: {
+            Path: {
+              fillOpacity: 1
+            }
           },
-          yConfig: {tickFormat: d => formatRaceNames(d)},
           tooltipConfig: {title: d => d.RaceType, tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d[d.RaceType])], ["Geography", d => isZipLevelDataAvailable ? d.Geography : "Wayne County"]]}
         }}
         dataFormat={resp => {

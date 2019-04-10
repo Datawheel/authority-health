@@ -101,7 +101,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
             {householdSnapDataAvailable ? <span>The most common number of workers per household on public assistance was {topRecentYearHouseholdSnapData["Number of workers"].toLowerCase()} ({formatPercentage(topRecentYearHouseholdSnapData.totalShare)} of the population in {topRecentYearHouseholdSnapData.Geography}).</span> : ""}
           </p>
           {householdSnapDataAvailable ? <p>The following chart shows the number of workers per household on public assistance.</p> : ""}
-          
+
           <SourceGroup sources={this.state.sources} />
           <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />

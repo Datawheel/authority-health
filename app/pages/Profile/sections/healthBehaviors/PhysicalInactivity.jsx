@@ -5,6 +5,8 @@ import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
+import styles from "style.yml";
+
 import Contact from "components/Contact";
 import Disclaimer from "components/Disclaimer";
 import Glossary from "components/Glossary";
@@ -132,7 +134,14 @@ class PhysicalInactivity extends SectionColumns {
           label: d => `${d.Tract}, ${tractToPlace[d["ID Tract"]]}`,
           colorScale: d => d["Physical Inactivity"],
           colorScaleConfig: {
-            axisConfig: {tickFormat: d => formatPercentage(d)}
+            axisConfig: {tickFormat: d => formatPercentage(d)},
+            // not exercising is bad
+            color: [
+              styles.white,
+              styles["danger-light"],
+              styles.danger,
+              styles["danger-dark"]
+            ]
           },
           time: "Year",
           title: "Physical Inactivity for Census Tracts within Detroit, Livonia, Dearborn and Westland",

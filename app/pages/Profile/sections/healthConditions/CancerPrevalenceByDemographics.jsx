@@ -117,86 +117,91 @@ class CancerPrevalenceByDemographics extends SectionColumns {
           <Contact slug={this.props.slug} />
         </article>
 
-        {/* Draw a barchart to show Cancer by Sex for selected cancer type. */}
-        <BarChart config={{
-          data: isItemsListEmpty ? "/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Sex,MSA&Cancer Site=All Invasive Cancer Sites Combined&Year=all" : `/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Sex,MSA&Cancer Site=${dropdownSelected}&Year=all`,
-          discrete: "y",
-          height: 400,
-          legend: false,
-          groupBy: ["Cancer Site", "Sex"],
-          stacked: true,
-          x: "share",
-          y: "Cancer Site",
-          time: "Year",
-          xConfig: {
-            tickFormat: d => formatPercentage(d),
-            labelRotation: false
-          },
-          yConfig: {
-            tickFormat: d => d
-            // labelRotation: true
-          },
-          tooltipConfig: {tbody: [["Cancer Type", d => d["Cancer Site"]], ["Year", d => d.Year], ["Prevalence", d => formatPercentage(d.share)],
-            ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
-        }}
-        dataFormat={resp => {
-          this.setState({sources: updateSource(resp.source, this.state.sources)});
-          nest()
-            .key(d => d["Cancer Site"])
-            .entries(resp.data)
-            .forEach(cancerType => {
-              nest()
-                .key(d => d.Year)
-                .entries(cancerType.values)
-                .forEach(group => {
-                  const total = sum(group.values, d => d["Cancer Diagnosis"]);
-                  group.values.forEach(d => d.share = d["Cancer Diagnosis"] / total * 100);
-                });
-            });
-          return resp.data;
-        }}
-        />
+        <div className="viz">
 
-        {/* Draw a barchart to show Cancer by Race and Ethnicity for selected cancer type. */}
-        <BarChart config={{
-          data: isItemsListEmpty ? "/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Race,Ethnicity,MSA&Cancer Site=All Invasive Cancer Sites Combined&Year=all" : `/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Race,Ethnicity,MSA&Cancer Site=${dropdownSelected}&Year=all`,
-          discrete: "y",
-          height: 400,
-          legend: false,
-          groupBy: ["Cancer Site", d => `${d.Ethnicity} ${d.Race}`],
-          stacked: true,
-          label: d => `${d.Ethnicity} ${d.Race}`,
-          x: "share",
-          y: "Cancer Site",
-          time: "Year",
-          xConfig: {
-            tickFormat: d => formatPercentage(d),
-            labelRotation: false
-          },
-          yConfig: {
-            tickFormat: d => d
-            // labelRotation: true
-          },
-          tooltipConfig: {tbody: [["Cancer Type", d => d["Cancer Site"]], ["Year", d => d.Year], ["Prevalence", d => formatPercentage(d.share)],
-            ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
-        }}
-        dataFormat={resp => {
-          this.setState({sources: updateSource(resp.source, this.state.sources)});
-          nest()
-            .key(d => d["Cancer Site"])
-            .entries(resp.data)
-            .forEach(cancerType => {
-              nest()
-                .key(d => d.Year)
-                .entries(cancerType.values)
-                .forEach(group => {
-                  const total = sum(group.values, d => d["Cancer Diagnosis"]);
-                  group.values.forEach(d => d.share = d["Cancer Diagnosis"] / total * 100);
-                });
-            });
-          return resp.data;
-        }}
-        />
+          {/* Draw a barchart to show Cancer by Sex for selected cancer type. */}
+          <BarChart config={{
+            data: isItemsListEmpty ? "/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Sex,MSA&Cancer Site=All Invasive Cancer Sites Combined&Year=all" : `/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Sex,MSA&Cancer Site=${dropdownSelected}&Year=all`,
+            discrete: "y",
+            height: 200,
+            legend: false,
+            groupBy: ["Cancer Site", "Sex"],
+            stacked: true,
+            x: "share",
+            y: "Cancer Site",
+            time: "Year",
+            xConfig: {
+              tickFormat: d => formatPercentage(d),
+              labelRotation: false
+            },
+            yConfig: {
+              tickFormat: d => d
+              // labelRotation: true
+            },
+            tooltipConfig: {tbody: [["Cancer Type", d => d["Cancer Site"]], ["Year", d => d.Year], ["Prevalence", d => formatPercentage(d.share)],
+              ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
+          }}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            nest()
+              .key(d => d["Cancer Site"])
+              .entries(resp.data)
+              .forEach(cancerType => {
+                nest()
+                  .key(d => d.Year)
+                  .entries(cancerType.values)
+                  .forEach(group => {
+                    const total = sum(group.values, d => d["Cancer Diagnosis"]);
+                    group.values.forEach(d => d.share = d["Cancer Diagnosis"] / total * 100);
+                  });
+              });
+            return resp.data;
+          }}
+          />
+
+          {/* Draw a barchart to show Cancer by Race and Ethnicity for selected cancer type. */}
+          <BarChart config={{
+            data: isItemsListEmpty ? "/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Race,Ethnicity,MSA&Cancer Site=All Invasive Cancer Sites Combined&Year=all" : `/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Race,Ethnicity,MSA&Cancer Site=${dropdownSelected}&Year=all`,
+            discrete: "y",
+            height: 200,
+            legend: false,
+            groupBy: ["Cancer Site", d => `${d.Ethnicity} ${d.Race}`],
+            stacked: true,
+            label: d => `${d.Ethnicity} ${d.Race}`,
+            x: "share",
+            y: "Cancer Site",
+            time: "Year",
+            xConfig: {
+              tickFormat: d => formatPercentage(d),
+              labelRotation: false
+            },
+            yConfig: {
+              tickFormat: d => d
+              // labelRotation: true
+            },
+            tooltipConfig: {tbody: [["Cancer Type", d => d["Cancer Site"]], ["Year", d => d.Year], ["Prevalence", d => formatPercentage(d.share)],
+              ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
+          }}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            nest()
+              .key(d => d["Cancer Site"])
+              .entries(resp.data)
+              .forEach(cancerType => {
+                nest()
+                  .key(d => d.Year)
+                  .entries(cancerType.values)
+                  .forEach(group => {
+                    const total = sum(group.values, d => d["Cancer Diagnosis"]);
+                    group.values.forEach(d => d.share = d["Cancer Diagnosis"] / total * 100);
+                  });
+              });
+            return resp.data;
+          }}
+          />
+
+        </div>
+
       </SectionColumns>
     );
   }

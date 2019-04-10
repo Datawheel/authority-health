@@ -7,6 +7,7 @@ import {formatAbbreviate} from "d3plus-format";
 import axios from "axios";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
+import styles from "style.yml";
 
 import Contact from "components/Contact";
 import Stat from "components/Stat";
@@ -258,7 +259,22 @@ class Immigrants extends SectionColumns {
           groupBy: meta.level === "county" ? "ID Place" : "ID Geography",
           colorScale: "share",
           title: `Immigrants by ${meta.level === "county" ? "Places" : "Tracts"} in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`,
-          colorScaleConfig: {axisConfig: {tickFormat: d => formatPercentage(d)}},
+          colorScaleConfig: {
+            axisConfig: {tickFormat: d => formatPercentage(d)},
+            color: dropdownValue === "Immigrants in Poverty"
+              ? [
+                styles.white,
+                styles["danger-light"],
+                styles.danger,
+                styles["danger-dark"]
+              ]
+              : [
+                styles.white,
+                styles["majorelle-light"],
+                styles.majorelle,
+                styles["majorelle-dark"]
+              ]
+          },
           time: "Year",
           label: d => formatGeomapLabel(d, meta, tractToPlace),
           tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]},

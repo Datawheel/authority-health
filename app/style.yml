@@ -167,6 +167,7 @@ color-Violent crime: "#D45D59"
 "color-$35,000 to $49,999": "#A64281"
 "color-$50,000 to $74,999": "#D45D59"
 "color-$75,000 to $99,999": "#CF7A1F"
+"color-$75,000 or More": "#CF7A1F"
 "color-$100,000 or More": "#C99C20"
 
 # wage distribution

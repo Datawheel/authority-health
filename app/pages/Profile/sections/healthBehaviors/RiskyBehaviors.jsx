@@ -118,6 +118,11 @@ class RiskyBehaviors extends SectionColumns {
                   const wordsArr = d.SmokingType.split(" ");
                   return `${wordsArr[2]}`;
                 },
+                shapeConfig: {
+                  Path: {
+                    fillOpacity: 1
+                  }
+                },
                 time: "End Year",
                 title: d => `Smoking Status in ${d[0].Geography}`,
                 tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Prevalence", d => formatPercentage(d[d.SmokingType], true)], ["County", d => d.Geography]]}

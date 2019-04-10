@@ -90,9 +90,9 @@ const getGeomapTitle = meta => {
 };
 
 const getGeomapQualifier = (data, meta) => {
-  if (meta.level === "county") return `${formatPercentage(data.share)} of all places in Wayne County`;
-  else if (meta.level === "tract") return `${formatPercentage(data.share)} of all tracts in Wayne County`;
-  else return `${formatPercentage(data.share)} of all tracts in ${meta.name}`;
+  if (meta.level === "county") return `${formatPercentage(data.share)} of all the places in Wayne County`;
+  else if (meta.level === "tract") return `${formatPercentage(data.share)} of all the tracts in Wayne County`;
+  else return `${formatPercentage(data.share)} of all the tracts in ${meta.name}`;
 };
 
 class HealthInsuranceCoverage extends SectionColumns {

@@ -76,7 +76,7 @@ class FoodAvailability extends SectionColumns {
           <p>The chart here shows the share of fast-food restaurants, full-service restaurants, convenience stores, grocery stores, specialized food stores, supercenters and farmers market in {meta.name}.</p>
 
           {!isFoodStoreDataAvailableForCurrentGeography &&
-            <Disclaimer>data is shown for {topStore.Geography}</Disclaimer>
+            <Disclaimer>Data is shown for {topStore.Geography}</Disclaimer>
           }
           <SourceGroup sources={this.state.sources} />
           <Glossary definitions={definitions} />
@@ -89,6 +89,11 @@ class FoodAvailability extends SectionColumns {
           groupBy: ["Group", "Sub-category"],
           label: d => d["Sub-category"] instanceof Array ? titleCase(d.Group) : titleCase(d["Sub-category"]),
           height: 400,
+          shapeConfig: {
+            Path: {
+              fillOpacity: 1
+            }
+          },
           value: d => d["Number of Food Stores"],
           tooltipConfig: {tbody: [["Count", d => `${commas(d["Number of Food Stores"])} in ${d.Year}`], ["County", d => d.Geography]]}
         }}

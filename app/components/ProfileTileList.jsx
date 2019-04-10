@@ -1,14 +1,12 @@
 import React, {Component} from "react";
 import ProfileTile from "./ProfileTile";
 import {Link} from "react-router";
-import {Tabs2, Tab2} from "@blueprintjs/core";
 import "./ProfileTileList.css";
 
 export default class ProfileTileList extends Component {
 
   render() {
 
-    // TODO: use real data
     const profiles = [
       {
         name: "Detroit",
@@ -32,16 +30,9 @@ export default class ProfileTileList extends Component {
       <div className="profile-tile-section section-container u-padding-top-off">
 
         <div className="profile-tile-header">
-          <h2>Location profiles</h2>
-          {/* TODO: make tabs update tiles */}
-          {/*<Tabs2>
-            <Tab2 title="places" id="profile-tile-places" />
-            <Tab2 title="zip codes" id="profile-tile-zip-codes" />
-            <Tab2 title="tracts" id="profile-tile-tracts" />
-          </Tabs2>*/}
+          <h2>Location profiles (714 total)</h2>
           {/* random location link */}
-          {/* TODO: make it functional */}
-          <Link className="profile-tile-link link font-xs u-uppercase" to="/profile/16000US2622000">
+          <Link className="profile-tile-link link font-xs u-uppercase" to="/profile">
             Random location
             <span className="profile-tile-link-icon pt-icon pt-icon-random" />
           </Link>

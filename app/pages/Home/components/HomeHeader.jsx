@@ -38,7 +38,6 @@ export default class HomeHeader extends Component {
           {/* map */}
           <div className="home-header-map">
             {/* Wayne county map */}
-            {/* TODO: replace with d3plus map */}
             <img className="home-header-wayne-map"
               src="/images/wayne-county-map/wayne-map-pacific.png"
               srcSet="/images/wayne-county-map/wayne-map-pacific.png 1x, /images/wayne-county-map/wayne-map-pacific@2x.png 2x"

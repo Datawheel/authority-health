@@ -158,6 +158,11 @@ layout
         margin-top: var(--gutter-md);
       }
 
+      /* stacked viz hack */
+      & .viz .viz {
+        margin: 16px;
+      }
+
       /* single column layout on smaller screens */
       @add-mixin max-md {
         display: block; /* stacked layout */

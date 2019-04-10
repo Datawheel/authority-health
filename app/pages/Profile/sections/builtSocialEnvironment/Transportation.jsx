@@ -153,55 +153,60 @@ class Transportation extends SectionColumns {
           }
         </article>
 
-        {/* Draw a Barchart for commute time. */}
-        {commuteTimeDataAvailable
-          ? <BarChart config={{
-            data: `https://acs.datausa.io/api/data?measures=Commuter Population&drilldowns=Travel Time&Geography=${meta.id}&Year=all`,
-            discrete: "x",
-            height: 400,
-            legend: false,
-            groupBy: "Travel Time",
-            x: "Travel Time",
-            y: "share",
-            time: "Year",
-            title: d => `Distribution of Commute Time in ${d[0].Geography}`,
-            xSort: (a, b) => a["ID Travel Time"] - b["ID Travel Time"],
-            xConfig: {
-              tickFormat: d => filterTimeBucket(d),
-              title: "Commute Time in Minutes"
-            },
-            yConfig: {
-              tickFormat: d => formatPercentage(d),
-              title: "Share"
-            },
-            shapeConfig: {
-              label: false
-            },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
-          }}
-          dataFormat={resp => {
-            this.setState({sources: updateSource(resp.source, this.state.sources)});
-            return formatCommuteTimeData(resp.data)[0];
-          }}
-          /> : null}
+        <div className="viz">
 
-        {/* Draw a Treemap for Modes of tranportation. */}
-        {transportationMeansAvailable
-          ? <Treemap config={{
-            data: `https://acs.datausa.io/api/data?measures=Commute Means&drilldowns=Transportation Means&Geography=${meta.id}&Year=all`,
-            height: 400,
-            sum: d => d["Commute Means"],
-            legend: false,
-            groupBy: "Transportation Means",
-            time: "Year",
-            title: d => `Means of Transportation in ${d[0].Geography}`,
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
-          }}
-          dataFormat={resp => {
-            this.setState({sources: updateSource(resp.source, this.state.sources)});
-            return formatTransportationMeans(resp.data)[0];
-          }}
-          /> : null}
+          {/* Draw a Barchart for commute time. */}
+          {commuteTimeDataAvailable
+            ? <BarChart config={{
+              data: `https://acs.datausa.io/api/data?measures=Commuter Population&drilldowns=Travel Time&Geography=${meta.id}&Year=all`,
+              discrete: "x",
+              height: 300,
+              legend: false,
+              groupBy: "Travel Time",
+              x: "Travel Time",
+              y: "share",
+              time: "Year",
+              title: d => `Distribution of Commute Time in ${d[0].Geography}`,
+              xSort: (a, b) => a["ID Travel Time"] - b["ID Travel Time"],
+              xConfig: {
+                tickFormat: d => filterTimeBucket(d),
+                title: "Commute Time in Minutes"
+              },
+              yConfig: {
+                tickFormat: d => formatPercentage(d),
+                title: "Share"
+              },
+              shapeConfig: {
+                label: false
+              },
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
+            }}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return formatCommuteTimeData(resp.data)[0];
+            }}
+            /> : null}
+
+          {/* Draw a Treemap for Modes of tranportation. */}
+          {transportationMeansAvailable
+            ? <Treemap config={{
+              data: `https://acs.datausa.io/api/data?measures=Commute Means&drilldowns=Transportation Means&Geography=${meta.id}&Year=all`,
+              height: 300,
+              sum: d => d["Commute Means"],
+              legend: false,
+              groupBy: "Transportation Means",
+              time: "Year",
+              title: d => `Means of Transportation in ${d[0].Geography}`,
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
+            }}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return formatTransportationMeans(resp.data)[0];
+            }}
+            /> : null}
+
+        </div>
+
       </SectionColumns>
     );
   }

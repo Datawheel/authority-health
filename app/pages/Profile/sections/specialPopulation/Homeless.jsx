@@ -113,7 +113,7 @@ class Homeless extends SectionColumns {
           <p>Following charts shows different categories and types of sheltered and unsheltered homeless population in {totalHomelessData.data[0].Geography} and percentages for each one of them.</p>
 
           {!isHomelessDataAvailableForCurrentGeography &&
-            <Disclaimer>data is shown for {topShelteredHomelessCategory.Geography}</Disclaimer>
+            <Disclaimer>Data is shown for {topShelteredHomelessCategory.Geography}</Disclaimer>
           }
           <SourceGroup sources={this.state.sources} />
           <Glossary definitions={definitions} />
@@ -124,7 +124,7 @@ class Homeless extends SectionColumns {
             data: `/api/data?measures=Sheltered Homeless Population,Unsheltered Homeless Population&drilldowns=Sub-group&Geography=${meta.id}&Year=all`,
             discrete: "x",
             height: 200,
-            groupBy: d => ` ${d.HomelessType}: ${d["Sub-group"]}`,
+            groupBy: d => `${d["Sub-group"]} (${d.HomelessType.split(" ")[0]})`,
             legend: false,
             x: "Year",
             xConfig: {
@@ -135,7 +135,7 @@ class Homeless extends SectionColumns {
               tickFormat: d => formatPercentage(d),
               title: "Share"
             },
-            title: d => `Types of Homeless Population in ${d[0].Geography}`,
+            title: d => `Homeless Individuals vs Families in ${d[0].Geography}`,
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["County", d => d.Geography]]}
           }}
           dataFormat={resp =>  {
@@ -144,58 +144,51 @@ class Homeless extends SectionColumns {
           }}
           />
         </article>
+        <div className="viz">
+          <BarChart config={{
+            data: `/api/data?measures=Sheltered Homeless Population&drilldowns=Category&Geography=${meta.id}&Year=all`,
+            height: 300,
+            groupBy: "Category",
+            label: d => `${d.Category} (Sheltered)`,
+            y: "shelteredShare",
+            x: "Category",
+            time: "Year",
+            xSort: (a, b) => a.Category.localeCompare(b.Category),
+            yConfig: {
+              tickFormat: d => formatPercentage(d),
+              title: "Share"
+            },
+            title: d => `Sheltered Homeless Demographics in ${d[0].Geography}`,
+            shapeConfig: {
+              label: false
+            },
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.shelteredShare)], ["County", d => d.Geography]]}
+          }}
+          dataFormat={resp => formatShelteredHomelessCategories(resp.data)[0]}
+          />
 
-        {/* <SectionRows>  */}
-        <BarChart config={{
-          data: `/api/data?measures=Sheltered Homeless Population&drilldowns=Category&Geography=${meta.id}&Year=all`,
-          discrete: "y",
-          legend: false,
-          groupBy: "Category",
-          label: d => `Sheltered Homeless: ${d.Category}`,
-          x: "shelteredShare",
-          y: "Category",
-          time: "Year",
-          xConfig: {
-            tickFormat: d => formatPercentage(d),
-            title: "Share"
-          },
-          yConfig: {
-            labelRotation: false
-          },
-          title: d => `Categories in Sheltered Homeless Population in ${d[0].Geography}`,
-          shapeConfig: {
-            label: false
-          },
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.shelteredShare)], ["County", d => d.Geography]]}
-        }}
-        dataFormat={resp => formatShelteredHomelessCategories(resp.data)[0]}
-        />
-
-        <BarChart config={{
-          data: `/api/data?measures=Unsheltered Homeless Population&drilldowns=Category&Geography=${meta.id}&Year=all`,
-          discrete: "y",
-          legend: false,
-          groupBy: "Category",
-          label: d => `Unsheltered Homeless: ${d.Category}`,
-          x: "unshelteredShare",
-          y: "Category",
-          time: "Year",
-          xConfig: {
-            tickFormat: d => formatPercentage(d),
-            title: "Share"
-          },
-          yConfig: {
-            labelRotation: false
-          },
-          title: d => `Categories in Unsheltered Homeless Population in ${d[0].Geography}`,
-          shapeConfig: {
-            label: false
-          },
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.unshelteredShare)], ["County", d => d.Geography]]}
-        }}
-        dataFormat={resp => formatUnshelteredHomelessCategories(resp.data)[0]}
-        />
-        {/* </SectionRows> */}
+          <BarChart config={{
+            data: `/api/data?measures=Unsheltered Homeless Population&drilldowns=Category&Geography=${meta.id}&Year=all`,
+            groupBy: "Category",
+            height: 300,
+            label: d => `${d.Category} (Unsheltered)`,
+            y: "unshelteredShare",
+            x: "Category",
+            time: "Year",
+            xSort: (a, b) => a.Category.localeCompare(b.Category),
+            yConfig: {
+              tickFormat: d => formatPercentage(d),
+              title: "Share"
+            },
+            title: d => `Unsheltered Homeless Demographics in ${d[0].Geography}`,
+            shapeConfig: {
+              label: false
+            },
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.unshelteredShare)], ["County", d => d.Geography]]}
+          }}
+          dataFormat={resp => formatUnshelteredHomelessCategories(resp.data)[0]}
+          />
+        </div>
       </SectionColumns>
     );
   }

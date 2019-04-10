@@ -8,48 +8,53 @@ module.exports = function(app) {
 
   const {db} = app.settings;
 
-  app.get("/api/image/:id/:size", (req, res) => {
+  app.get("/api/image/:id/:size", async(req, res) => {
     const {id, size} = req.params;
 
     /** Sends the finally found image, and includes fallbacks */
-    function sendImage(image) {
+    async function sendImage(image) {
 
       const id = image || "76";
-      if (size === "json") db.images.findOne({where: {id}}).then(resp => res.json(resp));
-      else res.sendFile(`${process.cwd()}/static/images/profile/${size}/${id}.jpg`);
+      if (size === "json") {
+        const resp = await db.images.findOne({where: {id}});
+        res.json(resp);
+      }
+      else {
+        res.sendFile(`${process.cwd()}/static/images/profile/${size}/${id}.jpg`, err => {
+          if (err) res.status(err.status);
+          res.end();
+        });
+      }
 
     }
 
-    db.search.findOne({where: {[sequelize.Op.or]: {id, slug: id}}})
-      .then(attr => {
+    const attr = await db.search.findOne({where: {[sequelize.Op.or]: {id, slug: id}}});
 
-        if (!attr) sendImage(false);
-        else {
+    if (!attr) sendImage(false);
+    else {
 
-          const {imageId} = attr;
+      const {imageId} = attr;
 
-          if (!imageId) {
+      if (!imageId) {
 
-            axios.get(url.resolve(CANON_LOGICLAYER_CUBE, `/geoservice-api/relations/parents/${attr.id}`))
-              .then(d => d.data.reverse())
-              .then(d => d.map(p => p.geoid))
-              .then(d => {
-                const attrs = db.search.findAll({where: {id: d}});
-                return Promise.all([d, attrs]);
-              })
-              .then(([ids, parentAttrs]) => {
-                const parentImage = parentAttrs
-                  .sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id))
-                  .find(p => p.imageId).imageId;
-                sendImage(parentImage);
-              });
+        const ids = axios
+          .get(url.resolve(CANON_LOGICLAYER_CUBE, `/geoservice-api/relations/parents/${attr.id}?targetLevels=county,place,zip`))
+          .then(d => d.data.reverse())
+          .then(d => d.map(p => p.geoid))
+          .catch(() => []);
 
-          }
-          else sendImage(imageId);
+        const parentAttrs = await db.search.findAll({where: {id: ids}}).catch(() => []);
 
-        }
+        const parentImage = parentAttrs
+          .sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id))
+          .find(p => p.imageId);
 
-      });
+        sendImage(parentImage ? parentImage.imageId : false);
+
+      }
+      else sendImage(imageId);
+
+    }
   });
 
 };

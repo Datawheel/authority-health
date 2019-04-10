@@ -103,7 +103,7 @@ class DentistsWorkStatus extends SectionColumns {
           <p>The following chart shows the breakdown of dentists who do not work in a private practice.</p>
 
           {!isDataAvailableForCurrentGeography &&
-            <Disclaimer>data is shown for {dentistsByWorkingHours.data[0].Geography}</Disclaimer>
+            <Disclaimer>Data is shown for {dentistsByWorkingHours.data[0].Geography}</Disclaimer>
           }
           <Contact slug={this.props.slug} />
         </article>

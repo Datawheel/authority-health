@@ -44,7 +44,7 @@ class FoodInsecurity extends SectionColumns {
             <p>Food insecurity refers to <a href="https://www.ers.usda.gov/topics/food-nutrition-assistance/food-security-in-the-us.aspx">USDA’s measure</a> of lack of access, at times, to enough food for an active, healthy life for all household members and limited or uncertain availability of nutritionally adequate foods.</p>
 
             {!isInsecurityRateDataAvailableForCurrentGeography &&
-              <Disclaimer>data is shown for {location}</Disclaimer>
+              <Disclaimer>Data is shown for {location}</Disclaimer>
             }
             <SourceGroup sources={this.state.sources} />
           </article>

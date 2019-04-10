@@ -148,7 +148,7 @@ class HealthCenterDemographics extends SectionColumns {
           <p> The following chart shows the health center visitors breakdown across all race/ethnicity groups in {isZipLevelDataAvailable ? topZipLevelData.Geography : "Wayne County"}.</p>
 
           {(!isZipLevelDataAvailable && meta.name !== "") &&
-            <Disclaimer>data is shown for Wayne County</Disclaimer>
+            <Disclaimer>Data is shown for Wayne County</Disclaimer>
           }
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
@@ -158,7 +158,6 @@ class HealthCenterDemographics extends SectionColumns {
         <BarChart config={{
           data: isZipLevelDataAvailable ? `/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Geography=${meta.id}&Year=all` : "/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Year=all",
           discrete: "y",
-          height: 250,
           legend: false,
           groupBy: "RaceType",
           label: false,

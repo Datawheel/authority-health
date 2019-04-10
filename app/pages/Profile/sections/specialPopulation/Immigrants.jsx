@@ -208,7 +208,7 @@ class Immigrants extends SectionColumns {
                 qualifier={immigrantsDataForCurrentLocationAvailable ? `of the population in ${meta.level !== "county" ? currentLevelImmigrantsData.Geography : "Wayne County"}` : ""}
               />
               <Stat
-                title={getGeomapTitle(meta)}
+                title={getGeomapTitle(meta, dropdownValue)}
                 year={topStats.Year}
                 value={formatGeomapLabel(topStats, meta, tractToPlace)}
                 qualifier={getGeomapQualifier(topStats, meta)}
@@ -220,7 +220,7 @@ class Immigrants extends SectionColumns {
                 : <p>In {USImmigrantsData.Year}, {formatPercentage(wayneCountyImmigrantsData.share)} of the population in Wayne County were immigrants, compared to {}
                   {formatPercentage(michiganImmigrantsData.share)} in Michigan, and {formatPercentage(USImmigrantsData.share)} in the United States.</p>
               }
-              <p>{`${getGeomapTitle(meta)} was ${formatGeomapLabel(topStats, meta, tractToPlace)} (${getGeomapQualifier(topStats, meta)}).`}</p>
+              <p>{`${getGeomapTitle(meta, dropdownValue)} was ${formatGeomapLabel(topStats, meta, tractToPlace)} (${getGeomapQualifier(topStats, meta)}).`}</p>
               {immigrantsDataForCurrentLocationAvailable ? <p>The map here shows the {meta.level === "county" ? "cities" : "tracts"} in {meta.level === "county" || meta.level === "tracts" ? "Wayne County" : `${meta.name}`} by their percentage of immigrants.</p> : ""}
             </div>
 
@@ -232,7 +232,7 @@ class Immigrants extends SectionColumns {
                 qualifier={immigrantsDataForCurrentLocationAvailable ? `of the population in ${meta.level !== "county" ? currentLevelImmigrantsData.Geography : "Wayne County"}` : ""}
               />
               <Stat
-                title={getGeomapTitle(meta)}
+                title={getGeomapTitle(meta, dropdownValue)}
                 year={topStats.Year}
                 value={formatGeomapLabel(topStats, meta, tractToPlace)}
                 qualifier={getGeomapQualifier(topStats, meta)}
@@ -244,7 +244,7 @@ class Immigrants extends SectionColumns {
                 : <p>In {wayneCountyImmigrantsData.Year}, {formatPercentage(wayneCountyImmigrantsData.share)} of the population in in Wayne County were immigrants in poverty, compared to {}
                   {formatPercentage(michiganImmigrantsData.share)} in Michigan and {formatPercentage(USImmigrantsData.share)} in the United States.</p>
               }
-              <p>{`${getGeomapTitle(meta)} was ${formatGeomapLabel(topStats, meta, tractToPlace)} (${getGeomapQualifier(topStats, meta)}).`}</p>
+              <p>{`${getGeomapTitle(meta, dropdownValue)} was ${formatGeomapLabel(topStats, meta, tractToPlace)} (${getGeomapQualifier(topStats, meta)}).`}</p>
               {immigrantsDataForCurrentLocationAvailable ? <p>The map here shows the {meta.level === "county" ? "cities" : "tracts"} in {meta.level === "county" || meta.level === "tracts" ? "Wayne County" : `${meta.name}`} by their percentage of immigrants in poverty.</p> : ""}
             </div>
           }

@@ -7,6 +7,7 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
 import Stat from "components/Stat";
+import StatGroup from "components/StatGroup";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
 
@@ -64,12 +65,12 @@ class ReadingAssessment extends SectionColumns {
     const isOverallSelected = dropdownValue === "Overall";
     const isParentsEducationSelected = dropdownValue === "Parents Education";
 
-    let stat1Value = "Nation";
-    let stat2Value = "City";
+    let stat1Value = "City";
+    let stat2Value = "Nation";
 
     if (dropdownValue === "Gender") {
-      stat1Value = "Male";
-      stat2Value = "Female";
+      stat1Value = "Female";
+      stat2Value = "Male";
     }
     if (dropdownValue === "ELL" || dropdownValue === "NSLP" || dropdownValue ===  "Disability") {
       stat1Value = "No";
@@ -118,33 +119,64 @@ class ReadingAssessment extends SectionColumns {
           </label>
           <p>The following chart shows the average reading assessment score {isParentsEducationSelected ? "for 8th grade students" : ""} in Detroit {isOverallSelected ? "compared to the United States" : isParentsEducationSelected ? `by their ${dropdownValue.toLowerCase()}` : `by ${dropdownValue.toLowerCase()}`} over time.</p>
           {isParentsEducationSelected
-            ? readingScoresData.map(item =>
-              <Stat key={item.measure}
-                title={`${item["Parents Education"]} (DETROIT)`}
-                year={item.Year}
-                value={item["Average Reading Score by Parents Education"]}
-              />
-            )
+            ? <StatGroup
+              title="Parental education level (Detroit)"
+              year={readingScoresData[0].Year}
+              stats={readingScoresData.map(stat => ({
+                key: stat.measure,
+                title: stat["Parents Education"],
+                value: stat["Average Reading Score by Parents Education"]
+              }))}
+            />
+
             : <div>
-              <Stat
-                title={isOverallSelected ? "4TH grade Score (United States)" : `4TH GRADE ${stat1Value} ${isStatValueYesOrNo ? dropdownValue : ""} (DETROIT)`}
+              {/* fourth grade stats */}
+              <StatGroup
+                title={`4th grade average score${ !isOverallSelected ? ` by ${dropdownValue}` : "" }`}
                 year={stat1FourthGrade.Year}
-                value={isOverallSelected ? stat1FourthGrade["Average Reading Score"] : stat1FourthGrade[`Average Reading Score by ${dropdownValue}`]}
+                stats={[
+                  {
+                    title: isOverallSelected
+                      ? "Detroit"
+                      : `${stat1Value} ${isStatValueYesOrNo ? dropdownValue : ""} (Detroit)`,
+                    value: isOverallSelected
+                      ? stat1FourthGrade["Average Reading Score"]
+                      : stat1FourthGrade[`Average Reading Score by ${dropdownValue}`]
+                  },
+                  {
+                    title: isOverallSelected
+                      ? "United States"
+                      : `${ stat2Value !== "Yes" ? stat2Value : "" } ${isStatValueYesOrNo ? dropdownValue : ""} (Detroit)`,
+                    value: isOverallSelected
+                      ? stat2FourthGrade["Average Reading Score"]
+                      : stat2FourthGrade[`Average Reading Score by ${dropdownValue}`],
+                    color: dropdownValue === "Gender" ? "terra-cotta" : null
+                  }
+                ]}
               />
-              <Stat
-                title={isOverallSelected ? "4TH grade Score (DETROIT)" : `4TH GRADE  ${isStatValueYesOrNo ? `with ${dropdownValue}` : stat2Value} (DETROIT)`}
-                year={stat2FourthGrade.Year}
-                value={isOverallSelected ? stat2FourthGrade["Average Reading Score"] : stat2FourthGrade[`Average Reading Score by ${dropdownValue}`]}
-              />
-              <Stat
-                title={isOverallSelected ? "8TH grade Score (United States)" : `8TH GRADE ${stat1Value} ${isStatValueYesOrNo ? dropdownValue : ""} (DETROIT)`}
+              {/* eighth grade stats */}
+              <StatGroup
+                title={`8th grade average score${ !isOverallSelected ? ` by ${dropdownValue}` : "" }`}
                 year={stat1EighthGrade.Year}
-                value={isOverallSelected ? stat1EighthGrade["Average Reading Score"] : stat1EighthGrade[`Average Reading Score by ${dropdownValue}`]}
-              />
-              <Stat
-                title={isOverallSelected ? "8TH grade Score (DETROIT)" : `8TH GRADE ${isStatValueYesOrNo ? `with ${dropdownValue}` : stat2Value} (DETROIT)`}
-                year={stat2EighthGrade.Year}
-                value={isOverallSelected ? stat2EighthGrade["Average Reading Score"] : stat2EighthGrade[`Average Reading Score by ${dropdownValue}`]}
+                stats={[
+                  {
+                    title: isOverallSelected
+                      ? "Detroit"
+                      : `${stat1Value} ${isStatValueYesOrNo ? dropdownValue : ""} (Detroit)`,
+                    value: isOverallSelected
+                      ? stat1EighthGrade["Average Reading Score"]
+                      : stat1EighthGrade[`Average Reading Score by ${dropdownValue}`]
+                  },
+                  {
+                    title: isOverallSelected
+                      ? "United States"
+                      : `${ stat2Value !== "Yes" ? stat2Value : "" } ${isStatValueYesOrNo ? dropdownValue : ""} (Detroit)`,
+                    value: isOverallSelected
+                      ? stat2EighthGrade["Average Reading Score"]
+                      : stat2EighthGrade[`Average Reading Score by ${dropdownValue}`],
+                    color: dropdownValue === "Gender" ? "terra-cotta" : null
+                  }
+                ]}
               />
             </div>}
 

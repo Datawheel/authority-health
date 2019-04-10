@@ -21,7 +21,18 @@ export default class Visualize extends React.Component {
           "Age.Age"
         ]}
         defaultMeasure="Number of Food Stores"
-        measureConfig={{}}
+        tableLogic={cubes => {
+          const cube = cubes.find(d => d.name.match(/_5/));
+          return cube || cubes[0];
+        }}
+        config={{
+          colorScalePosition: "bottom",
+          detectResizeDelay: 100,
+          shapeConfig: {
+            hoverOpacity: 1
+          },
+          zoomScroll: true
+        }}
         topojson={{
           "County": {
             topojson: "/topojson/county.json",

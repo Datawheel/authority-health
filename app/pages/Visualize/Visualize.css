@@ -1,34 +1,51 @@
+@import "../../css/mixins.css";
+
 .vizbuilder {
+  @add-mixin font-xs;
   padding: 0 var(--gutter-md);
-  min-height: 100vh;
   height: auto;
   flex-wrap: wrap;
 
+  & .virtlist-wrapper {
+    & li {
+      list-style: none;
+    }
+  }
+
+  & .pt-overlay-content {
+    transform: none !important;
+  }
+
   & > * {
-    min-height: 100vh;
     padding-top: var(--gutter-md);
     padding-bottom: var(--gutter-md);
   }
 
   & .chart-wrapper {
     height: auto;
-    min-height: 100vh;
   }
 
   & .area-sidebar {
     margin-right: var(--gutter-lg);
     max-width: 100%;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+  }
+  & .area-middle {
+    display: none;
   }
   & .area-chart {
     height: auto;
-    overflow: auto;
     display: block !important;
   }
   & .area-sidebar {
+    & .sources p {
+      @add-mixin font-xs;
+      margin-top: 0;
+      &:first-child {
+        margin-top: 0.5rem;
+      }
+    }
     & .label {
-      font-size: 10px;
+      @add-mixin font-xs;
       margin-bottom: 5px;
     }
     & .select-target-wrapper, & .select-wrapper {
@@ -39,14 +56,14 @@
       }
     }
     & .select-option {
-      font-size: 13px;
-      & .dims {
-        & .pt-tag {
-          font-size: 10px;
-          margin: 1px 2px 0 0;
-          opacity: 0.5;
-          padding: 0px 3px 1px;
-        }
+      @add-mixin font-xs;
+    }
+    & .dims {
+      display: none !important;
+      & .pt-tag {
+        @add-mixin font-xxs;
+        margin: 1px 2px 0 0;
+        padding: 2px 4px 2px;
       }
     }
     & .select-measure {
@@ -63,7 +80,7 @@
               padding: 0;
               & .topic  {
                 color: var(--black);
-                font-size: 14px;
+                @add-mixin font-xs;
                 padding: 7px 7px 0;
                 &:last-child {
                   padding-bottom: 7px;
@@ -76,7 +93,7 @@
             & .pt-button {
               margin-right: 5px;
               &:before {
-                font-size: 14px;
+                @add-mixin font-xs;
                 margin-right: 5px;
               }
               &:hover {
@@ -86,6 +103,11 @@
           }
         }
       }
+    }
+    & .select-label {
+      display: inline-block;
+      padding: 3px 5px 3px 8px;
+      white-space: normal;
     }
     & .grouping-items, & .filter-items {
       & .pt-popover-content {
@@ -100,15 +122,11 @@
         & .padded {
           padding-left: 15px;
         }
-        & .select-label {
-          display: inline-block;
-          padding: 3px 5px;
-        }
       }
       & .grouping-item, & .filter-item {
         background-color: white;
         border: 1px solid #bbb;
-        font-size: 13px;
+        @add-mixin font-xs;
         padding: 10px;
         &.editing {
           & .grouping-members {
@@ -125,7 +143,7 @@
                 border: 0;
                 border-radius: 0;
                 & .pt-input-ghost {
-                  font-size: 13px;
+                  @add-mixin font-xs;
                   margin-bottom: 3px;
                   padding: 0 8px;
                 }
@@ -139,7 +157,7 @@
               background-color: #eee;
               border-radius: 3px;
               display: inline-block;
-              font-size: 12px;
+              @add-mixin font-xs;
               font-weight: 800;
               margin: 5px 5px 0 0;
               padding: 2px 5px 3px;
@@ -155,7 +173,7 @@
         }
         & .filter-name, & .filter-operator, & .filter-value {
           display: inline-block;
-          font-size: 13px;
+          @add-mixin font-xs;
           margin-right: 0;
           margin-bottom: 3px;
           text-transform: none;
@@ -167,7 +185,7 @@
           background-color: #eee;
           border-radius: 3px;
           display: inline-block;
-          font-size: 12px;
+          @add-mixin font-xs;
           font-weight: 800;
           padding: 2px 5px 3px;
         }
@@ -191,7 +209,7 @@
     }
     & .ranking {
       & ol {
-        font-size: 12px;
+        @add-mixin font-xs;
         line-height: 16px;
         margin-bottom: 20px;
         padding-left: 30px;
@@ -210,6 +228,9 @@
       padding: 0;
       & .chart-card {
         min-width: 400px;
+        &:only-child {
+          height: calc(100vh - var(--nav-height) - var(--gutter-md) - var(--gutter-md));
+        }
       }
     }
   }

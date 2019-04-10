@@ -118,6 +118,7 @@ export default {
     color: [
       styles.white,
       styles["success-light"],
+      styles.success,
       styles["success-dark"]
     ],
     // the key itself
@@ -196,6 +197,11 @@ export default {
     fontColor: defaultFontColor,
     fontFamily: () => typeface,
     padding: 0
+  },
+  totalConfig: {
+    fontColor: defaultFontColor,
+    fontFamily: () => typeface,
+    fontSize: () => fontSizeSm
   },
   // axis defaults (see line 8)
   xConfig: axisConfig,

@@ -65,11 +65,9 @@ class StoreAccessByDemographic extends SectionColumns {
           {/* Create a dropdown for each age and race type using raceAndAgeTypes array. */}
           <label className="pt-label pt-inline" htmlFor="store-access-dropdown">
             Show data for
-            <div className="pt-select">
-              <select id="store-access-dropdown" onChange={this.handleChange}>
-                {raceAndAgeTypes.map(item => <option key={item} value={item}>{item}</option>)}
-              </select>
-            </div>
+            <select id="store-access-dropdown" onChange={this.handleChange}>
+              {raceAndAgeTypes.map(item => <option key={item} value={item}>{item}</option>)}
+            </select>
           </label>
           {/* Show top stats for Age and Race groups based on the drilldown value. */}
           <Stat

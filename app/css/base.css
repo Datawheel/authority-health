@@ -150,3 +150,46 @@ additional theme colors
     color: var(--$(theme)-light);
   } */
 }
+
+/* -----------------------------------
+form fields
+----------------------------------- */
+select {
+	/* sizing */
+	display: block;
+	width: 100%;
+	padding: 0.2em 1.25em 0.25em 0.5em;
+	/* chevron */
+	background-image: url("/images/icons/chevron-down.svg");
+	background-size: 0.875em;
+	background-repeat: no-repeat;
+	background-position: calc(100% - 0.5em) center;
+	/* strip default select styles */
+  -webkit-appearance: none;
+	/* theming */
+	border: 1px solid var(--gray);
+  border-radius: var(--radius-sm);
+  background-color: color(var(--light-2) a(0.25));
+	color: var(--dark-3);
+	/* transitions */
+	transition:
+		color 0.2s ease-out,
+    background 0.2s ease-out,
+		border-color 0.2s ease-out;
+
+  /* IE fix */
+  &::-ms-expand {
+    opacity: 0.01;
+  }
+
+	/* interactions */
+  &:hover {
+    border-color: var(--brand-dark);
+  }
+	&:focus,
+	&:active {
+    background-color: var(--white);
+		border-color: var(--dark-3);
+		color: var(--black);
+	}
+}

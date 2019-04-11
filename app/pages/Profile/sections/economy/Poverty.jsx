@@ -92,12 +92,6 @@ class Poverty extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Poverty</SectionTitle>
         <article>
-          <Stat
-            title="race most impacted by poverty"
-            year={povertyByRaceAvailable ? topPovertyByRace.Year : ""}
-            value={povertyByRaceAvailable ? topPovertyByRace.Race : "N/A"}
-            qualifier={povertyByRaceAvailable ? `${formatPopulation(topPovertyByRace.share)} of the total population in ${topPovertyByRace.Geography}` : ""}
-          />
           <StatGroup
             title={"age and gender most impacted by poverty"}
             year={povertyByAgeAndGenderAvailable ? topMalePovertyData.Year : ""}
@@ -118,11 +112,20 @@ class Poverty extends SectionColumns {
             ]}
           />
           <Stat
-            title="immigrants most impacted by poverty"
-            year={immigrantsInPovertyAvailable ? immigrantsInPovertyData.Year : ""}
-            value={immigrantsInPovertyAvailable ? formatPopulation(immigrantsInPovertyData.share) : "N/A"}
-            qualifier={immigrantsInPovertyAvailable ? `of the total population in ${immigrantsInPovertyData.Geography}` : ""}
+            title="race most impacted by poverty"
+            year={povertyByRaceAvailable ? topPovertyByRace.Year : ""}
+            value={povertyByRaceAvailable ? topPovertyByRace.Race : "N/A"}
+            qualifier={povertyByRaceAvailable ? `${formatPopulation(topPovertyByRace.share)} of the total population in ${topPovertyByRace.Geography}` : ""}
           />
+          {immigrantsInPovertyAvailable && formatPopulation(immigrantsInPovertyData.share) !== "0%"
+            ? <Stat
+              title="immigrants most impacted by poverty"
+              year={immigrantsInPovertyAvailable ? immigrantsInPovertyData.Year : ""}
+              value={immigrantsInPovertyAvailable ? formatPopulation(immigrantsInPovertyData.share) : "N/A"}
+              qualifier={immigrantsInPovertyAvailable ? `of the total population in ${immigrantsInPovertyData.Geography}` : ""}
+            />
+            : null
+          }
 
           {povertyByAgeAndGenderAvailable ? <p>In {topMalePovertyData.Year}, most common male age in poverty was {topMalePovertyData.Age.toLowerCase()} ({formatPopulation(topMalePovertyData.share)} of the male population) while most common female age was {topFemalePovertyData.Age.toLowerCase()} ({formatPopulation(topFemalePovertyData.share)} of the female population) in {topFemalePovertyData.Geography}.</p> : ""}
           {povertyByRaceAvailable ? <p>In {topPovertyByRace.Year}, the majority race in poverty was {topPovertyByRace.Race} ({formatPopulation(topPovertyByRace.share)} of the total population in {topPovertyByRace.Geography}).</p> : ""}

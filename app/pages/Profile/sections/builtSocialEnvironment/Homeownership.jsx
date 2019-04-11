@@ -10,16 +10,52 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
 import Stat from "components/Stat";
+import places from "utils/places";
 import CensusTractDefinition from "components/CensusTractDefinition";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
 
 const formatPropertyValue = d => `$${formatAbbreviate(d)}`;
-const formatTractName = (d, tractName) => {
-  if (tractName === undefined) return d;
-  else return `${d.replace(" Wayne County, MI", "")} ${tractName}`;
-};
+
 const commas = format(",d");
+
+const formatTopojsonFilter = (d, meta, childrenTractIds) => {
+  if (meta.level === "county") return places.includes(d.id);
+  else if (meta.level === "tract") return d.id.startsWith("14000US26163");
+  else return childrenTractIds.includes(d.id);
+};
+
+const formatTractName = (tractName, cityName) => cityName === undefined ? tractName : `${tractName.replace(", Wayne County, MI", "")}, ${cityName}`;
+const formatGeomapLabel = (d, meta, tractToPlace) => {
+  if (meta.level === "county") return d.Geography;
+  if (meta.level === "tract") return formatTractName(d.Geography, tractToPlace[d["ID Geography"]]);
+  else return `${d.Geography.replace(", Wayne County, MI", "")}, ${meta.name}`;
+};
+
+const getGeomapTitle = meta => {
+  if (meta.level === "county") return "Highest median property value within places in Wayne County";
+  else if (meta.level === "tract") return "Highest median property value within census tracts in Wayne County";
+  else return `Highest median property value within tracts in ${meta.name}`;
+};
+
+const formatGeomapPropertyValueData = (data, meta, childrenTractIds) => {
+  let filteredChildrenGeography = [];
+  if (meta.level === "tract") {
+    filteredChildrenGeography = data;
+  }
+  else if (meta.level === "county") {
+    data.forEach(d => {
+      if (places.includes(d["ID Geography"])) filteredChildrenGeography.push(d);
+    });
+  }
+  else {
+    data.forEach(d => {
+      if (childrenTractIds.includes(d["ID Geography"])) filteredChildrenGeography.push(d);
+    });
+  }
+  const topRecentYearData = filteredChildrenGeography.sort((a, b) => b["Property Value"] - a["Property Value"])[0];
+  return [filteredChildrenGeography, topRecentYearData];
+};
 
 class Homeownership extends SectionColumns {
 
@@ -31,10 +67,18 @@ class Homeownership extends SectionColumns {
   render() {
 
     const {tractToPlace} = this.props.topStats;
-    const {occupancyData, medianHousingUnitsValueForProfile, constructionDateData} = this.props;
+    const {
+      meta,
+      childrenTractIds,
+      occupancyData,
+      medianHousingValueForCurrentProfile,
+      medianHousingValueForAllPlaces,
+      medianHousingValueForAllTracts,
+      constructionDateData
+    } = this.props;
 
     const occupancyDataAvailable = occupancyData.length !== 0;
-    const medianHousingUnitsValueForProfileAvailable = medianHousingUnitsValueForProfile.length !== 0;
+    const medianHousingValueForCurrentProfileAvailable = medianHousingValueForCurrentProfile.length !== 0;
     const constructionDateDataAvailable = constructionDateData.length !== 0;
 
     // Get topOccupancyData data data for latest year.
@@ -53,8 +97,16 @@ class Homeownership extends SectionColumns {
 
     // Find top Median Housing Units value for most recent year.
     let topMedianHousingUnitsValueForProfile;
-    if (medianHousingUnitsValueForProfileAvailable) {
-      topMedianHousingUnitsValueForProfile = medianHousingUnitsValueForProfile[0];
+    if (medianHousingValueForCurrentProfileAvailable) {
+      topMedianHousingUnitsValueForProfile = medianHousingValueForCurrentProfile[0];
+    }
+
+    let topChildrenGeographyData;
+    if (meta.level === "county") {
+      topChildrenGeographyData = formatGeomapPropertyValueData(medianHousingValueForAllPlaces, meta, childrenTractIds)[1]; 
+    } 
+    else {
+      topChildrenGeographyData = formatGeomapPropertyValueData(medianHousingValueForAllTracts, meta, childrenTractIds)[1]; 
     }
 
     return (
@@ -63,15 +115,21 @@ class Homeownership extends SectionColumns {
         <article>
           <Stat
             title="Median property value"
-            year={medianHousingUnitsValueForProfileAvailable ? topMedianHousingUnitsValueForProfile.Year : ""}
-            value={medianHousingUnitsValueForProfileAvailable ? `$${commas(topMedianHousingUnitsValueForProfile["Property Value"])}` : "N/A"}
+            year={medianHousingValueForCurrentProfileAvailable ? topMedianHousingUnitsValueForProfile.Year : ""}
+            value={medianHousingValueForCurrentProfileAvailable ? `$${commas(topMedianHousingUnitsValueForProfile["Property Value"])}` : "N/A"}
+          />
+          <Stat
+            title={getGeomapTitle(meta)}
+            year={topChildrenGeographyData.Year}
+            value={`$${commas(topChildrenGeographyData["Property Value"])}`}
+            qualifier={formatGeomapLabel(topChildrenGeographyData, meta, tractToPlace)}
           />
           <Stat
             title="Median construction year"
             year={constructionDateDataAvailable ? `AS OF ${constructionDateData[0].Year}` : ""}
             value={constructionDateDataAvailable ? constructionDateData[0]["Construction Date"] : "N/A"}
           />
-          <p>{medianHousingUnitsValueForProfileAvailable ? <span>In {topMedianHousingUnitsValueForProfile.Year}, the median property value in {topMedianHousingUnitsValueForProfile.Geography}, was ${commas(topMedianHousingUnitsValueForProfile["Property Value"])}.</span> : ""} </p>
+          <p>{medianHousingValueForCurrentProfileAvailable ? <span>In {topMedianHousingUnitsValueForProfile.Year}, the median property value in {topMedianHousingUnitsValueForProfile.Geography}, was ${commas(topMedianHousingUnitsValueForProfile["Property Value"])}.</span> : ""} </p>
           <p>{occupancyDataAvailable ? <span>{formatAbbreviate(topOccupancyData.share)}% of households in {topOccupancyData.Geography} were occupied in {topOccupancyData.Year}.</span> : ""}</p>
           <p>The following map shows the median property value for <CensusTractDefinition text="census tracts" /> in Wayne County.</p>
           
@@ -79,20 +137,18 @@ class Homeownership extends SectionColumns {
           <Contact slug={this.props.slug} />
         </article>
 
-        {/* Geomap to show Property Values for all tracts in the Wayne County. */}
         <Geomap config={{
-          data: "https://acs.datausa.io/api/data?measures=Property Value&Geography=05000US26163:children&Year=all",
+          data: meta.level === "county" ? "https://acs.datausa.io/api/data?measures=Property Value&Geography=04000US26:places&Year=all" : "https://acs.datausa.io/api/data?measures=Property Value&Geography=05000US26163:children&Year=all",
           groupBy: "ID Geography",
-          label: d => formatTractName(d.Geography, tractToPlace[d["ID Geography"]]),
+          label: d => formatGeomapLabel(d, meta, tractToPlace),
           colorScale: "Property Value",
           colorScaleConfig: {
             axisConfig: {tickFormat: d => formatPropertyValue(d)}
           },
-          height: 400,
           time: "Year",
           tooltipConfig: {tbody: [["Year", d => d.Year], ["Median Property Value", d => `$${formatAbbreviate(d["Property Value"])}`]]},
-          topojson: "/topojson/tract.json",
-          topojsonFilter: d => d.id.startsWith("14000US26163")
+          topojson: meta.level === "county" ? "/topojson/place.json" : "/topojson/tract.json",
+          topojsonFilter: d => formatTopojsonFilter(d, meta, childrenTractIds)
         }}
         dataFormat={resp => {
           this.setState({sources: updateSource(resp.source, this.state.sources)});
@@ -110,14 +166,20 @@ Homeownership.defaultProps = {
 
 Homeownership.need = [
   fetchData("occupancyData", "/api/data?measures=Housing Units&drilldowns=Occupancy Status&Geography=<id>&Year=latest", d => d.data),
-  fetchData("medianHousingUnitsValueForProfile", "https://acs.datausa.io/api/data?measures=Property Value&Geography=<id>&Year=latest", d => d.data),
+  fetchData("medianHousingValueForCurrentProfile", "https://acs.datausa.io/api/data?measures=Property Value&Geography=<id>&Year=latest", d => d.data),
+  fetchData("medianHousingValueForAllPlaces", "https://acs.datausa.io/api/data?measures=Property Value&Geography=04000US26:places&Year=latest", d => d.data),
+  fetchData("medianHousingValueForAllTracts", "https://acs.datausa.io/api/data?measures=Property Value&Geography=05000US26163:children&Year=latest", d => d.data),
   fetchData("constructionDateData", "/api/data?measures=Construction Date&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
   topStats: state.data.topStats,
+  childrenTractIds: state.data.childrenTractIds,
   occupancyData: state.data.occupancyData,
-  medianHousingUnitsValueForProfile: state.data.medianHousingUnitsValueForProfile,
+  medianHousingValueForCurrentProfile: state.data.medianHousingValueForCurrentProfile,
+  medianHousingValueForAllPlaces: state.data.medianHousingValueForAllPlaces,
+  medianHousingValueForAllTracts: state.data.medianHousingValueForAllTracts,
   constructionDateData: state.data.constructionDateData
 });
 

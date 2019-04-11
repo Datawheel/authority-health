@@ -62,8 +62,6 @@ class EducationalAttainment extends SectionColumns {
       const topFemaleData = topData[1];
       const topMaleData = topData[2];
 
-      console.log("topData: ", topData);
-
       return (
         <SectionColumns>
           <SectionTitle>Educational Attainment</SectionTitle>

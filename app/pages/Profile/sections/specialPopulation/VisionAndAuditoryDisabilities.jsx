@@ -49,7 +49,6 @@ const formatData = (data, disability = "Vision") => {
 };
 
 const formatGeomapData = (data, meta, childrenTractIds, disability = "Vision") => {
-  console.log("data:", data);
   let filteredChildrenGeography = [];
   if (meta.level === "tract") {
     filteredChildrenGeography = data;
@@ -64,7 +63,6 @@ const formatGeomapData = (data, meta, childrenTractIds, disability = "Vision") =
       if (childrenTractIds.includes(d["ID Geography"])) filteredChildrenGeography.push(d);
     });
   }
-  console.log("filteredChildrenGeography:", filteredChildrenGeography);
   nest()
     .key(d => d.Year)
     .entries(filteredChildrenGeography)

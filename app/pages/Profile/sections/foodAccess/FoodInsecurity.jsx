@@ -55,7 +55,7 @@ class FoodInsecurity extends SectionColumns {
             qualifier={`of the adults in ${location}`}
           />
 
-          {/* adds empty div for proper alignment of above text  */}
+          {/* added empty div for proper alignment of above text  */}
           <div></div>
         </SectionColumns>
       </div>

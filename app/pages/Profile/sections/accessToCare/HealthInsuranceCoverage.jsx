@@ -85,14 +85,13 @@ const formatGeomapCoverageData = (data, meta, childrenTractIds) => {
 
 const getGeomapTitle = meta => {
   if (meta.level === "county") return "Most covered population within places in Wayne County";
-  else if (meta.level === "tract") return "Most covered population within tracts in Wayne County";
+  else if (meta.level === "tract") return "Most covered population within census tracts in Wayne County";
   else return `Most covered population within tracts in ${meta.name}`;
 };
 
 const getGeomapQualifier = (data, meta) => {
-  if (meta.level === "county") return `${formatPercentage(data.share)} of all the places in Wayne County`;
-  else if (meta.level === "tract") return `${formatPercentage(data.share)} of all the tracts in Wayne County`;
-  else return `${formatPercentage(data.share)} of all the tracts in ${meta.name}`;
+  if (meta.level === "county") return `${formatPercentage(data.share)} of the population in this city`;
+  return `${formatPercentage(data.share)} of the population in this census tract`;
 };
 
 class HealthInsuranceCoverage extends SectionColumns {
@@ -224,7 +223,7 @@ class HealthInsuranceCoverage extends SectionColumns {
             data: `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=${meta.id}:children&Year=latest`,
             groupBy: meta.level === "county" ? "ID Place" : "ID Geography",
             colorScale: "share",
-            title: `Health Insurance Coverage for ${meta.level === "county" ? "Places" : "Tracts"} in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`,
+            title: `Health Insurance Coverage for ${meta.level === "county" ? "Places" : "Census Tracts"} in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`,
             colorScaleConfig: {axisConfig: {tickFormat: d => formatPercentage(d)}},
             time: "Year",
             label: d => formatGeomapLabel(d, meta, tractToPlace),

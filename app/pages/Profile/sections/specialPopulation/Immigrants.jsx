@@ -89,14 +89,13 @@ const formatGeomapData = (data, meta, childrenTractIds, totalImmigrantsSelected 
 
 const getGeomapTitle = (meta, dropdownValue) => {
   if (meta.level === "county") return `City with most immigrtants ${dropdownValue === "Total Immigrants" ? "" : "in poverty"} in Wayne County`;
-  else if (meta.level === "tract") return `Tract with most immigrtants ${dropdownValue === "Total Immigrants" ? "" : "in poverty"} in Wayne County`;
-  else return `Tract with most immigrtants ${dropdownValue === "Total Immigrants" ? "" : "in poverty"} in ${meta.name}`;
+  else if (meta.level === "tract") return `Census tract with most immigrtants ${dropdownValue === "Total Immigrants" ? "" : "in poverty"} in Wayne County`;
+  else return `Census tract with most immigrtants ${dropdownValue === "Total Immigrants" ? "" : "in poverty"} in ${meta.name}`;
 };
 
 const getGeomapQualifier = (data, meta) => {
-  if (meta.level === "county") return `${formatPercentage(data.share)} of all the cities in Wayne County`;
-  else if (meta.level === "tract") return `${formatPercentage(data.share)} of all the tracts in Wayne County`;
-  else return `${formatPercentage(data.share)} of all the tracts in ${meta.name}`;
+  if (meta.level === "county") return `${formatPercentage(data.share)} of the total population in this city`;
+  return `${formatPercentage(data.share)} of the population in this census tract`;
 };
 
 class Immigrants extends SectionColumns {
@@ -257,7 +256,7 @@ class Immigrants extends SectionColumns {
           data: totalImmigrantsSelected ? `/api/data?measures=Poverty by Nativity&drilldowns=Nativity&Geography=${meta.id}:children&Year=latest` : `/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Poverty Status&Geography=${meta.id}:children&Year=latest`,
           groupBy: meta.level === "county" ? "ID Place" : "ID Geography",
           colorScale: "share",
-          title: `Immigrants by ${meta.level === "county" ? "Places" : "Tracts"} in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`,
+          title: `Immigrants by ${meta.level === "county" ? "Places" : "Census Tracts"} in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`,
           colorScaleConfig: {axisConfig: {tickFormat: d => formatPercentage(d)}},
           time: "Year",
           label: d => formatGeomapLabel(d, meta, tractToPlace),

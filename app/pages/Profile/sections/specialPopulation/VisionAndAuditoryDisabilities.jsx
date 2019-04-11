@@ -19,7 +19,18 @@ import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
+const formatTopojsonFilter = (d, meta, childrenTractIds) => {
+  if (meta.level === "county") return places.includes(d.id);
+  else if (meta.level === "tract") return d.id.startsWith("14000US26163");
+  else return childrenTractIds.includes(d.id);
+};
+
 const formatTractName = (tractName, cityName) => cityName === undefined ? tractName : `${tractName}, ${cityName}`;
+const formatGeomapLabel = (d, meta, tractToPlace) => {
+  if (meta.level === "county") return d.Place;
+  if (meta.level === "tract") return formatTractName(d.Geography, tractToPlace[d["ID Geography"]]);
+  else return `${d.Geography}, ${meta.name}`;
+};
 
 const formatData = (data, disability = "Vision") => {
   nest()
@@ -37,18 +48,46 @@ const formatData = (data, disability = "Vision") => {
   return [filteredData, topFemaleData, topMaleData];
 };
 
-const formatGeomapData = (data, disability = "Vision") => {
+const formatGeomapData = (data, meta, childrenTractIds, disability = "Vision") => {
+  console.log("data:", data);
+  let filteredChildrenGeography = [];
+  if (meta.level === "tract") {
+    filteredChildrenGeography = data;
+  }
+  else if (meta.level === "county") {
+    data.forEach(d => {
+      if (places.includes(d["ID Place"])) filteredChildrenGeography.push(d);
+    });
+  }
+  else {
+    data.forEach(d => {
+      if (childrenTractIds.includes(d["ID Geography"])) filteredChildrenGeography.push(d);
+    });
+  }
+  console.log("filteredChildrenGeography:", filteredChildrenGeography);
   nest()
     .key(d => d.Year)
-    .entries(data)
+    .entries(filteredChildrenGeography)
     .forEach(group => {
       const total = sum(group.values, d => d[`${disability} Disabilities`]);
       group.values.forEach(d => {
         total !== 0 ? d.share = d[`${disability} Disabilities`] / total * 100 : d.share = 0;
       });
     });
-  const filteredHearingDisability = data.filter(d => d[`ID ${disability} Disability Status`] === 0);
-  return filteredHearingDisability;
+  const filteredHearingDisability = filteredChildrenGeography.filter(d => d[`ID ${disability} Disability Status`] === 0);
+  const topRecentYearData = filteredHearingDisability.sort((a, b) => b.share - a.share)[0];
+  return [filteredHearingDisability, topRecentYearData];
+};
+
+const getGeomapTitle = (meta, disability) => {
+  if (meta.level === "county") return `City with most ${disability} disability in Wayne County`;
+  else if (meta.level === "tract") return `Census Tract with most ${disability} disability in Wayne County`;
+  else return `Census Tract with most ${disability} disability in ${meta.name}`;
+};
+
+const getGeomapQualifier = (data, meta) => {
+  if (meta.level === "county") return `${formatPercentage(data.share)} of the population in this city`;
+  return `${formatPercentage(data.share)} of the population in this census tract`;
 };
 
 class VisionAndAuditoryDisabilities extends SectionColumns {
@@ -59,6 +98,7 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
       meta: this.props.meta,
       dropdownValue: "Vision Disability",
       hearingDisability: [],
+      hearingDisabilityForChildrenGeography: [],
       sources: []
     };
   }
@@ -66,21 +106,26 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
   // Handler function for dropdown onChange event.
   handleChange = event => {
     const dropdownValue = event.target.value;
+    const {meta} = this.state;
     if (dropdownValue === "Hearing Disability") {
-      axios.get(`/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status,Age,Sex&Geography=${this.state.meta.id}&Year=latest`)
+      axios.get(`/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status,Age,Sex&Geography=${meta.id}&Year=latest`)
         .then(resp => {
-          this.setState({
-            hearingDisability: resp.data.data,
-            dropdownValue
-          });
+          axios.get(`/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status&Geography=${meta.id}:children&Year=latest`)
+            .then(d => {
+              this.setState({
+                hearingDisability: resp.data.data,
+                hearingDisabilityForChildrenGeography: d.data.data,
+                dropdownValue
+              });
+            });
         });
     }
     else this.setState({dropdownValue});
   }
 
   render() {
-    const {meta, dropdownValue, hearingDisability} = this.state;
-    const {childrenTractIds, visionDisability} = this.props;
+    const {meta, dropdownValue, hearingDisability, hearingDisabilityForChildrenGeography} = this.state;
+    const {childrenTractIds, visionDisability, visionDisabilityForChildrenGeography} = this.props;
     const {tractToPlace} = this.props.topStats;
 
     const dropdownList = ["Vision Disability", "Hearing Disability"];
@@ -102,6 +147,10 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
       topFemaleHearingDisabilityData = topHearingDisability[1];
       topMaleHearingDisabilityData = topHearingDisability[2];
     }
+
+    const topChildrenGeographyStats = isVisionDisabilitySelected
+      ? formatGeomapData(visionDisabilityForChildrenGeography, meta, childrenTractIds, "Vision")[1] 
+      : formatGeomapData(hearingDisabilityForChildrenGeography, meta, childrenTractIds, "Hearing")[1];
 
     return (
       <SectionColumns>
@@ -136,6 +185,12 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
                   }
                 ]}
               />
+              <Stat
+                title={getGeomapTitle(meta, "Vision")}
+                year={topChildrenGeographyStats.Year}
+                value={formatGeomapLabel(topChildrenGeographyStats, meta, tractToPlace)}
+                qualifier={getGeomapQualifier(topChildrenGeographyStats, meta)}
+              />
             </div>
             : <div>
               <StatGroup
@@ -156,6 +211,12 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
                     color: "terra-cotta"
                   }
                 ]}
+              />
+              <Stat
+                title={getGeomapTitle(meta, "Hearing")}
+                year={topChildrenGeographyStats.Year}
+                value={formatGeomapLabel(topChildrenGeographyStats, meta, tractToPlace)}
+                qualifier={getGeomapQualifier(topChildrenGeographyStats, meta)}
               />
             </div>
           }
@@ -232,83 +293,29 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             /> }
         </article>
 
-        {meta.level === "county" &&
-          <Geomap config={{
-            data: isVisionDisabilitySelected ? "/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status,Place&Year=all" : "/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status,Place&Year=all",
-            groupBy: "ID Place",
-            colorScale: "share",
-            colorScaleConfig: {
-              axisConfig: {tickFormat: d => formatPercentage(d)},
-              color: [
-                styles.white,
-                styles["danger-light"]
-              ]
-            },
-            title: `${dropdownValue} Population by Places in Wayne County`,
-            time: "Year",
-            label: d => d.Place,
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Disability", dropdownValue], ["Share", d => formatPercentage(d.share)]]},
-            topojson: "/topojson/place.json",
-            topojsonId: d => d.id,
-            topojsonFilter: d => places.includes(d.id)
-          }}
-          dataFormat={resp => {
-            this.setState({sources: updateSource(resp.source, this.state.sources)});
-            return isVisionDisabilitySelected ? formatGeomapData(resp.data, "Vision") : formatGeomapData(resp.data, "Hearing");
-          }}
-          />}
-
-        {(meta.level === "place" || meta.level === "zip") &&
-          <Geomap config={{
-            data: isVisionDisabilitySelected ? "/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status&Geography=05000US26163:tracts&Year=all" : "/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status&Geography=05000US26163:tracts&Year=all",
-            groupBy: "ID Geography",
-            label: d => `${d.Geography}, ${meta.name}`,
-            colorScale: "share",
-            colorScaleConfig: {
-              axisConfig: {tickFormat: d => formatPercentage(d)},
-              color: [
-                styles.white,
-                styles["danger-light"]
-              ]
-            },
-            title: `${dropdownValue} Population by Tracts in ${meta.name}`,
-            time: "Year",
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Disability", dropdownValue], ["Share", d => formatPercentage(d.share)]]},
-            topojson: "/topojson/tract.json",
-            topojsonId: d => d.id,
-            topojsonFilter: d => childrenTractIds.includes(d.id)
-          }}
-          dataFormat={resp => {
-            this.setState({sources: updateSource(resp.source, this.state.sources)});
-            return isVisionDisabilitySelected ? formatGeomapData(resp.data, "Vision") : formatGeomapData(resp.data, "Hearing");
-          }}
-          />}
-
-        {/* Geomap to show Property Values for all tracts in the Wayne County. */}
-        {meta.level === "tract" &&
-          <Geomap config={{
-            data: isVisionDisabilitySelected ? "/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status&Geography=05000US26163:tracts&Year=all" : "/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status&Geography=05000US26163:tracts&Year=all",
-            groupBy: "ID Geography",
-            label: d => formatTractName(d.Geography, tractToPlace[d["ID Geography"]]),
-            title: `${dropdownValue} Population by Tracts in Wayne County`,
-            colorScale: "share",
-            colorScaleConfig: {
-              color: [
-                styles.white,
-                styles["danger-light"]
-              ]
-            },
-            time: "Year",
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Disability", dropdownValue], ["Share", d => formatPercentage(d.share)]]},
-            topojson: "/topojson/tract.json",
-            topojsonId: d => d.id,
-            topojsonFilter: d => d.id.startsWith("14000US26163")
-          }}
-          dataFormat={resp => {
-            this.setState({sources: updateSource(resp.source, this.state.sources)});
-            return isVisionDisabilitySelected ? formatGeomapData(resp.data, "Vision") : formatGeomapData(resp.data, "Hearing");
-          }}
-          /> }
+        <Geomap config={{
+          data: isVisionDisabilitySelected ? `/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status&Geography=${meta.id}:children&Year=all` : `/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status&Geography=${meta.id}:children&Year=all`,
+          groupBy: meta.level === "county" ? "ID Place" : "ID Geography",
+          colorScale: "share",
+          colorScaleConfig: {
+            axisConfig: {tickFormat: d => formatPercentage(d)},
+            color: [
+              styles.white,
+              styles["danger-light"]
+            ]
+          },
+          title: `${dropdownValue} Population by ${meta.level === "county" ? "Places" : "Census Tracts"} in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`,
+          time: "Year",
+          label: d => formatGeomapLabel(d, meta, tractToPlace),
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Disability", dropdownValue], ["Share", d => formatPercentage(d.share)]]},
+          topojson: meta.level === "county" ? "/topojson/place.json" : "/topojson/tract.json",
+          topojsonFilter: d => formatTopojsonFilter(d, meta, childrenTractIds)
+        }}
+        dataFormat={resp => {
+          this.setState({sources: updateSource(resp.source, this.state.sources)});
+          return isVisionDisabilitySelected ? formatGeomapData(resp.data, meta, childrenTractIds, "Vision")[0] : formatGeomapData(resp.data, meta, childrenTractIds, "Hearing")[0];
+        }}
+        />
       </SectionColumns>
     );
   }
@@ -319,14 +326,16 @@ VisionAndAuditoryDisabilities.defaultProps = {
 };
 
 VisionAndAuditoryDisabilities.need = [
-  fetchData("visionDisability", "/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status,Age,Sex&Geography=<id>&Year=latest", d => d.data)
+  fetchData("visionDisability", "/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status,Age,Sex&Geography=<id>&Year=latest", d => d.data),
+  fetchData("visionDisabilityForChildrenGeography", "/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status&Geography=<id>:children&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   meta: state.data.meta,
   topStats: state.data.topStats,
   childrenTractIds: state.data.childrenTractIds,
-  visionDisability: state.data.visionDisability
+  visionDisability: state.data.visionDisability,
+  visionDisabilityForChildrenGeography: state.data.visionDisabilityForChildrenGeography
 });
 
 export default connect(mapStateToProps)(VisionAndAuditoryDisabilities);

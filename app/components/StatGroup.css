@@ -12,10 +12,17 @@
   flex: 1 0 auto;
   min-width: 10rem;
   max-width: 100%;
+  margin-top: 0.25em;
+  line-height: 0;
+
+  /* always be line breaking */
+  @mixin min-md {
+    width: 100%;
+  }
 
   /* override .stat-value */
   &:not(:last-child) {
-    margin-bottom: 0;
+    margin-bottom: 0.125em;
     margin-right: auto;
   }
 }

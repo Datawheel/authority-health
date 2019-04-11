@@ -81,11 +81,9 @@ class RiskyBehaviors extends SectionColumns {
           {/* Create a dropdown for drug types. */}
           <label className="pt-label pt-inline" htmlFor="risky-behaviors-dropdown">
             Show data for
-            <div className="pt-select">
-              <select id="risky-behaviors-dropdown" onChange={this.handleChange}>
-                {drugTypes.map(item => <option key={item} value={item}>{item}</option>)}
-              </select>
-            </div>
+            <select id="risky-behaviors-dropdown" onChange={this.handleChange}>
+              {drugTypes.map(item => <option key={item} value={item}>{item}</option>)}
+            </select>
           </label>
 
           <Stat

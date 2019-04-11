@@ -111,11 +111,9 @@ class ReadingAssessment extends SectionColumns {
           {/* Create a dropdown for all categoeries of reading assessment. */}
           <label className="pt-label pt-inline" htmlFor="reading-assessment-dropdown">
             Show data for
-            <div className="pt-select">
-              <select id="reading-assessment-dropdown" onChange={this.handleChange}>
-                {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
-              </select>
-            </div>
+            <select id="reading-assessment-dropdown" onChange={this.handleChange}>
+              {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
+            </select>
           </label>
           <p>The following chart shows the average reading assessment score {isParentsEducationSelected ? "for 8th grade students" : ""} in Detroit {isOverallSelected ? "compared to the United States" : isParentsEducationSelected ? `by their ${dropdownValue.toLowerCase()}` : `by ${dropdownValue.toLowerCase()}`} over time.</p>
           {isParentsEducationSelected
@@ -195,7 +193,7 @@ class ReadingAssessment extends SectionColumns {
           y: isOverallSelected ? "Average Reading Score" : `Average Reading Score by ${dropdownValue}`,
           yConfig: {
             title: `Average Reading Score by ${dropdownValue}`,
-            domain: [100, 300]
+            domain: [150, 300]
           },
           tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => isOverallSelected ? d["Average Reading Score"] : d[`Average Reading Score by ${dropdownValue}`]], ["Place", d => isOverallSelected ? d.Geography === "Nation" ? "United States" : "Detroit" : "Detroit"]]}
         }}

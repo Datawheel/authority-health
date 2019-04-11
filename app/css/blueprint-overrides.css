@@ -69,6 +69,8 @@ inline label groups
 ----------------------------------- */
 .pt-label.pt-inline {
   display: flex;
+  align-items: baseline;
+  line-height: 1.5em !important; /* thanks blueprint */
   /* typography */
   @mixin font-sm;
 
@@ -78,6 +80,7 @@ inline label groups
     /* this should always be the field */
     &:last-child {
       flex: 1 0 50%;
+      margin-left: 0.375em;
     }
   }
 }

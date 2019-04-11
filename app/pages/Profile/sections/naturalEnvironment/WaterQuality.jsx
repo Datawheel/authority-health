@@ -84,11 +84,9 @@ class WaterQuality extends SectionColumns {
           {/* Create a dropdown for lead and mercury level in water. */}
           <label className="pt-label pt-inline" htmlFor="health-center-dropdown">
             Show data for
-            <div className="pt-select">
-              <select id="health-center-dropdown" onChange={this.handleChange}>
-                {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
-              </select>
-            </div>
+            <select id="health-center-dropdown" onChange={this.handleChange}>
+              {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
+            </select>
           </label>
           {getStats}
         </article>

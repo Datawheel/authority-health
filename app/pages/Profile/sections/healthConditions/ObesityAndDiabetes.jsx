@@ -136,11 +136,9 @@ class ObesityAndDiabetes extends SectionColumns {
           {/* Create a dropdown for different types of health conditions. */}
           <label className="pt-label pt-inline" htmlFor="obesity-diabetes-dropdown">
             Show data for
-            <div className="pt-select">
-              <select id="obesity-diabetes-dropdown" onChange={this.handleChange}>
-                {dropdownList.map(item => <option key={item} value={item}>{formatDropdownName(item)}</option>)}
-              </select>
-            </div>
+            <select id="obesity-diabetes-dropdown" onChange={this.handleChange}>
+              {dropdownList.map(item => <option key={item} value={item}>{formatDropdownName(item)}</option>)}
+            </select>
           </label>
 
           {/* Show top stats for the dropdown selected. */}

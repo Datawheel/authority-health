@@ -11,6 +11,7 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import Contact from "components/Contact";
 import Disclaimer from "components/Disclaimer";
 import Stat from "components/Stat";
+import StatGroup from "components/StatGroup";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
 
@@ -88,29 +89,40 @@ class FoodStamps extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Food Stamps</SectionTitle>
         <article>
-          <Stat
-            title="SNAP-authorized stores"
-            year={snapLatestYear}
-            value={commas(snapLatestYearValue)}
-            qualifier={`stores in ${county}`}
+          <StatGroup
+            title="authorized stores by program"
+            stats={[
+              {
+                title: "SNAP",
+                value: commas(snapLatestYearValue),
+                qualifier: `stores in ${county}, ${snapLatestYear}`
+              },
+              {
+                title: "WIC",
+                value: wicLatestYearValue,
+                qualifier: `stores in ${county}, ${wicLatestYear}`
+              }
+            ]}
           />
-          <Stat
-            title="WIC-authorized stores"
-            year={wicLatestYear}
-            value={wicLatestYearValue}
-            qualifier={`stores in ${county}`}
-          />
-          <Stat
-            title="Population with food stamps"
-            year={topPublicAssistanceData.Year}
-            value={shareOfPopulationWithFoodStamps}
-            qualifier={`of the population in ${meta.name}`}
-          />
-          <Stat
-            title={"Population With Cash Public Assistance Or Food Stamps/SNAP"}
-            year={publicAssistanceDataAvailable ? topPublicAssistanceData.Year : ""}
-            value={publicAssistanceDataAvailable ? `${formatPercentage(topPublicAssistanceData.share)}` : "N/A"}
-            qualifier={publicAssistanceDataAvailable ? `of the population with food stamps in ${meta.name}` : ""}
+          <StatGroup
+            title="population with public assistance"
+            year={topPublicAssistanceData ? topPublicAssistanceData.Year : null}
+            stats={[
+              {
+                title: "Food stamps",
+                value: shareOfPopulationWithFoodStamps,
+                qualifier: `of the population in ${meta.name}`
+              },
+              {
+                title: "Cash assistance",
+                value: publicAssistanceDataAvailable
+                  ? `${formatPercentage(topPublicAssistanceData.share)}`
+                  : null,
+                qualifier: publicAssistanceDataAvailable
+                  ? `of the population with food stamps in ${meta.name}`
+                  : null
+              }
+            ]}
           />
           <p>The monthly average number of SNAP-authorized stores in {county} in {snapLatestYear} was {commas(snapLatestYearValue)} and there were {commas(wicLatestYearValue)} WIC-authorized stores in {wicLatestYear}.</p>
           <p>In {topPublicAssistanceData.Year}, {shareOfPopulationWithFoodStamps} of the population in {topPublicAssistanceData.Geography} had food stamps, out of which {formatPercentage(topPublicAssistanceData.share)} of the population were given food stamps in cash.</p>

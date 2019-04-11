@@ -101,11 +101,9 @@ class ConditionsAndChronicDiseases extends SectionColumns {
           {/* Create a dropdown for different types of health conditions. */}
           <label className="pt-label pt-inline" htmlFor="health-conditions-dropdown">
             Show data for
-            <div className="pt-select">
-              <select id="health-conditions-dropdown" onChange={this.handleChange}>
-                {dropdownList.map(item => <option key={item} value={item}>{formatDropdownChoiceName(item)}</option>)}
-              </select>
-            </div>
+            <select id="health-conditions-dropdown" onChange={this.handleChange}>
+              {dropdownList.map(item => <option key={item} value={item}>{formatDropdownChoiceName(item)}</option>)}
+            </select>
           </label>
 
           {/* Show top stats for the dropdown selected. */}

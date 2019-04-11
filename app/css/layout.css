@@ -221,10 +221,6 @@ layout
       font-family: inherit;
       color: inherit;
 
-      & .pt-select {
-        margin-bottom: 0.5em;
-      }
-
       /* style direct child paragraphs only */
       & > p {
         @add-mixin font-sm;

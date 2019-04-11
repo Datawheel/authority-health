@@ -96,11 +96,9 @@ class PreventiveCare extends SectionColumns {
           {/* Create a dropdown for different types of preventive care. */}
           <label className="pt-label pt-inline" htmlFor="preventive-care-dropdown">
             Show data for
-            <div className="pt-select">
-              <select id="preventive-care-dropdown" onChange={this.handleChange}>
-                {dropdownList.map(item => <option key={item} value={item}>{formatDropdownNames(item)}</option>)}
-              </select>
-            </div>
+            <select id="preventive-care-dropdown" onChange={this.handleChange}>
+              {dropdownList.map(item => <option key={item} value={item}>{formatDropdownNames(item)}</option>)}
+            </select>
           </label>
 
           {/* Show top stats for the dropdown selected. */}

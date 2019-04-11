@@ -9,16 +9,18 @@ export default class StatGroup extends Component {
     let statsList = stats;
     if (stats) {
       statsList = stats.map(stat =>
-        <li
-          className={`stat-group-item stat-value title font-md ${ stat.color || "majorelle" }-dark-color` }
-          key={stat.title}
-        >
-          <span className="stat-prepend font-xs u-uppercase">{ stat.title }: </span>
-          { stat.value }{" "}
-          { stat.qualifier &&
-            <span className="stat-value-qualifier font-xs"> {stat.qualifier}</span>
-          }
-        </li>
+        stat.title && stat.value
+          ? <li
+            className={`stat-group-item stat-value title font-md ${ stat.color || "majorelle" }-dark-color` }
+            key={stat.title}
+          >
+            <span className="stat-prepend font-xs u-uppercase">{ stat.title }: </span>
+            { stat.value }{" "}
+            { stat.qualifier &&
+              <span className="stat-value-qualifier font-xs"> {stat.qualifier}</span>
+            }
+          </li>
+          : null
       );
     }
 

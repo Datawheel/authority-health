@@ -5,6 +5,7 @@ import {formatAbbreviate} from "d3plus-format";
 import axios from "axios";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
+import styles from "style.yml";
 
 import Contact from "components/Contact";
 import Stat from "components/Stat";
@@ -153,7 +154,7 @@ class ObesityAndDiabetes extends SectionColumns {
             : <Stat
               title={"Location with highest prevalence"}
               year={topDropdownValueTract.Year}
-              value={`${topDropdownValueTract.Tract}, ${topTractPlace}`}
+              value={`${topDropdownValueTract.Tract}${ topTractPlace ? `, ${topTractPlace}` : "" }`}
               qualifier={`${formatPercentage(topDropdownValueTract[dropdownValue])} of the population of this census tract`}
             />
           }
@@ -241,7 +242,13 @@ class ObesityAndDiabetes extends SectionColumns {
             groupBy: "ID Zip Region",
             colorScale: dropdownValue,
             colorScaleConfig: {
-              axisConfig: {tickFormat: d => formatPercentage(d, true)}
+              axisConfig: {tickFormat: d => formatPercentage(d, true)},
+              // having high disease prevalency is bad
+              color: [
+                styles["danger-light"],
+                styles.danger,
+                styles["danger-dark"]
+              ]
             },
             label: d => d["Zip Region"],
             time: "End Year",
@@ -262,7 +269,13 @@ class ObesityAndDiabetes extends SectionColumns {
             groupBy: "ID Tract",
             colorScale: dropdownValue,
             colorScaleConfig: {
-              axisConfig: {tickFormat: d => formatPercentage(d)}
+              axisConfig: {tickFormat: d => formatPercentage(d)},
+              // having high disease prevalency is bad
+              color: [
+                styles["danger-light"],
+                styles.danger,
+                styles["danger-dark"]
+              ]
             },
             label: d => `${d.Tract}, ${tractToPlace[d["ID Tract"]]}`,
             time: "Year",

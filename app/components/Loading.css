@@ -1,14 +1,39 @@
+@import "../css/mixins.css";
+
 .loading {
-  background: white;
+  background: var(--dark-3);
+  color: var(--white);
   height: 100vh;
+  font-family: var(--body-font);
   left: 0;
   max-width: none;
   position: absolute;
   top: 0;
   width: 100%;
   z-index: 100;
+  & .pt-non-ideal-state-title {
+    color: var(--white);
+    font-family: var(--body-font);
+    margin-top: 15px;
+  }
   & .pt-non-ideal-state-visual {
-    max-width: 200px;
+    max-width: 250px;
+    text-align: center;
     width: 100%;
+    & .loading-logo-img {
+      margin-bottom: 15px;
+    }
+    & .powered-by {
+      @mixin font-sm;
+      color: var(--curry-light);
+      margin-top: 15px;
+      & .loading-datawheel-img {
+        display: inline-block;
+        margin-bottom: 2px;
+        margin-left: 2px;
+        width: 110px;
+        vertical-align: middle;
+      }
+    }
   }
 }

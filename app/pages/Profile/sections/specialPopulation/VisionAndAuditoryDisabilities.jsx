@@ -8,6 +8,7 @@ import {titleCase} from "d3plus-text";
 import axios from "axios";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
+import styles from "style.yml";
 
 import Contact from "components/Contact";
 import rangeFormatter from "utils/rangeFormatter";
@@ -238,7 +239,13 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             data: isVisionDisabilitySelected ? "/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status,Place&Year=all" : "/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status,Place&Year=all",
             groupBy: "ID Place",
             colorScale: "share",
-            colorScaleConfig: {axisConfig: {tickFormat: d => formatPercentage(d)}},
+            colorScaleConfig: {
+              axisConfig: {tickFormat: d => formatPercentage(d)},
+              color: [
+                styles.white,
+                styles["danger-light"]
+              ]
+            },
             title: `${dropdownValue} Population by Places in Wayne County`,
             time: "Year",
             label: d => d.Place,
@@ -259,7 +266,13 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             groupBy: "ID Geography",
             label: d => `${d.Geography}, ${meta.name}`,
             colorScale: "share",
-            colorScaleConfig: {axisConfig: {tickFormat: d => formatPercentage(d)}},
+            colorScaleConfig: {
+              axisConfig: {tickFormat: d => formatPercentage(d)},
+              color: [
+                styles.white,
+                styles["danger-light"]
+              ]
+            },
             title: `${dropdownValue} Population by Tracts in ${meta.name}`,
             time: "Year",
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Disability", dropdownValue], ["Share", d => formatPercentage(d.share)]]},
@@ -281,6 +294,12 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             label: d => formatTractName(d.Geography, tractToPlace[d["ID Geography"]]),
             title: `${dropdownValue} Population by Tracts in Wayne County`,
             colorScale: "share",
+            colorScaleConfig: {
+              color: [
+                styles.white,
+                styles["danger-light"]
+              ]
+            },
             time: "Year",
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Disability", dropdownValue], ["Share", d => formatPercentage(d.share)]]},
             topojson: "/topojson/tract.json",

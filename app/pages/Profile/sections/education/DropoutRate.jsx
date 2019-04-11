@@ -4,6 +4,7 @@ import {Geomap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
+import styles from "style.yml";
 
 import Contact from "components/Contact";
 import Stat from "components/Stat";
@@ -52,7 +53,13 @@ class DropoutRate extends SectionColumns {
           groupBy: "ID Zip",
           colorScale: "High School Dropout Rate",
           colorScaleConfig: {
-            axisConfig: {tickFormat: d => formatPercentage(d)}
+            axisConfig: {tickFormat: d => formatPercentage(d)},
+            // dropping out is bad
+            color: [
+              styles["danger-light"],
+              styles.danger,
+              styles["danger-dark"]
+            ]
           },
           label: d => d.Zip,
           height: 400,

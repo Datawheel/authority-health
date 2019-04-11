@@ -6,6 +6,8 @@ import axios from "axios";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
+import styles from "style.yml";
+
 import Contact from "components/Contact";
 import Disclaimer from "components/Disclaimer";
 import Stat from "components/Stat";
@@ -118,13 +120,13 @@ class RiskyBehaviors extends SectionColumns {
                   const wordsArr = d.SmokingType.split(" ");
                   return `${wordsArr[2]}`;
                 },
+                time: "End Year",
+                title: d => `Smoking Status in ${d[0].Geography}`,
                 shapeConfig: {
                   Path: {
                     fillOpacity: 1
                   }
                 },
-                time: "End Year",
-                title: d => `Smoking Status in ${d[0].Geography}`,
                 tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Prevalence", d => formatPercentage(d[d.SmokingType], true)], ["County", d => d.Geography]]}
               }}
               dataFormat={resp => {
@@ -150,7 +152,14 @@ class RiskyBehaviors extends SectionColumns {
             groupBy: "ID Zip Region",
             colorScale: dropdownValue,
             colorScaleConfig: {
-              axisConfig: {tickFormat: d => formatPercentage(d, true)}
+              axisConfig: {tickFormat: d => formatPercentage(d, true)},
+              // smoking is bad
+              color: [
+                styles.white,
+                styles["danger-light"],
+                styles.danger,
+                styles["danger-dark"]
+              ]
             },
             label: d => d["Zip Region"],
             time: "End Year",
@@ -170,7 +179,14 @@ class RiskyBehaviors extends SectionColumns {
             groupBy: "ID Tract",
             colorScale: dropdownValue,
             colorScaleConfig: {
-              axisConfig: {tickFormat: d => formatPercentage(d)}
+              axisConfig: {tickFormat: d => formatPercentage(d)},
+              // smoking is bad
+              color: [
+                styles.white,
+                styles["danger-light"],
+                styles.danger,
+                styles["danger-dark"]
+              ]
             },
             label: d => `${d.Tract}, ${tractToPlace[d["ID Tract"]]}`,
             time: "Year",

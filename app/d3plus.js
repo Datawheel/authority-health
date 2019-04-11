@@ -13,18 +13,35 @@ const groupings = [
   "RaceType",
   "SmokingType",
   "Health Insurance coverage:type",
+  "Coverage Type",
   "Sex",
   "Gender",
   "Sex of Partner",
   "Responsibility Length",
   "Offense",
-  "Rent Amount"
+  "Rent Amount",
+  "Household Income Bucket",
+  "Household Income",
+  "Level of School",
+  "Family type",
+  "Period of Service",
+  "Type of Crime",
+  // Health center demographics
+  "American Indian/Alaska Native Health Center Patients",
+  "Black Health Center Patients",
+  "Hispanic Health Center Patients",
+  "Non-white Health Center Patients",
+  "White Health Center Patients",
+  // smoking status
+  "Smoking Status Current",
+  "Smoking Status Former",
+  "Smoking Status Never"
 ];
 
-// function to lookup & assign color scheme
+/** function to lookup & assign color scheme */
 function colorLogic(d) {
 
-  // console.log("Rent Amount" + ":", d["Rent Amount"]);
+  // console.log(d["Period of Service"]);
 
   // lookup grouping color schemes in style.yml
   for (const grouping of groupings) {
@@ -36,11 +53,6 @@ function colorLogic(d) {
         : styles["majorelle-dark"];
     }
   }
-
-  // assign consistent year color to everything except for phenotypes and states
-  // if ((d["ID Year"] || d["ID Event Year"]) && !d["ID Phenotype"] && !d["ID State"]) {
-  //   return styles["majorelle-dark"];
-  // }
 
   // if a visualization is totally purple, it probably doesn't yet have a color scheme assigned
   // else {
@@ -108,18 +120,21 @@ export default {
       strokeLinecap: "round",
       strokeWidth: 2
     },
+    // keep map locations visible; override in pie charts
     Path: {
       fillOpacity: 0.75
     }
   },
+  // prevent map scrolljacking
+  zoomScroll: false,
   // map color scale key
   colorScaleConfig: {
     // default to green
     color: [
       styles.white,
-      styles["success-light"],
-      styles.success,
-      styles["success-dark"]
+      styles["majorelle-light"],
+      styles.majorelle,
+      styles["majorelle-dark"]
     ],
     // the key itself
     rectConfig: {

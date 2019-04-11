@@ -23,7 +23,8 @@ export default class SourceGroup extends Component {
               source_name: org
             } = source;
 
-            const orgName = org && `${org.replace(/^(T|t)he\s/g, "")}`;
+            let orgName = org && `the ${org.replace(/^(T|t)he\s/g, "")}`;
+            orgName = orgName.replace("the Feeding America", "Feeding America");
 
             return <span key={i} className="source-item">
               { i && i === sources.length - 1 ? <span> and</span> : null }

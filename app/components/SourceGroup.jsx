@@ -11,7 +11,7 @@ export default class SourceGroup extends Component {
       <span className="source-group-icon pt-icon pt-icon-info-sign" />
       <span className="source-group-text font-xxs">
         {sources && sources.length
-          ? "Data provided by"
+          ? "Data provided by "
           : "Loading sources..."
         }
         {sources && sources.length
@@ -23,11 +23,10 @@ export default class SourceGroup extends Component {
               source_name: org
             } = source;
 
-            const orgName = org && `the ${org.replace(/^(T|t)he\s/g, "")}`;
+            const orgName = org && `${org.replace(/^(T|t)he\s/g, "")}`;
 
             return <span key={i} className="source-item">
               { i && i === sources.length - 1 ? <span> and</span> : null }
-              { org && <span>&nbsp;</span> }
               { org && <Tooltip content={orgDesc} className={orgDesc ? "active" : ""} tooltipClassName="source-group-tooltip" disabled={!orgDesc}>
                 { datasetLink && orgName ? <a className="link" href={datasetLink} target="_blank" rel="noopener noreferrer" dangerouslySetInnerHTML={{__html: orgName}} /> : <span dangerouslySetInnerHTML={{__html: orgName}} /> }
               </Tooltip> }

@@ -90,7 +90,7 @@ class ViolentAndPropertyCrimes extends SectionColumns {
           <Contact slug={this.props.slug} />
         </article>
 
-        {/* Draw a Barchart for each type of crime. */}
+        {/* Draw a Treemap for each type of crime. */}
         <Treemap config={{
           data: isPlaceDataAvailable ? `/api/data?measures=Number of Crimes&drilldowns=Type of Crime,Crime&Geography=${meta.id}&Year=all` : "/api/data?measures=Number of Crimes&drilldowns=Type of Crime,Crime&Year=all",
           // discrete: "x",

@@ -1,40 +1,66 @@
 import React from "react";
 import {connect} from "react-redux";
-import {LinePlot} from "d3plus-react";
+import {BarChart} from "d3plus-react";
 import axios from "axios";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
+import Glossary from "components/Glossary";
 import Stat from "components/Stat";
 import StatGroup from "components/StatGroup";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
 
-const formatOverallData = (readingScoresByNation, readingScoresByCity) => {
+const formatOverallData = (readingScoresByNation, readingScoresByState, readingScoresByCity) => {
   const readingScoresData = [];
   readingScoresByNation.forEach(d => {
     d.Geography = "Nation";
+    readingScoresData.push(d);
+  });
+  readingScoresByState.forEach(d => {
+    d.Geography = "State";
     readingScoresData.push(d);
   });
   readingScoresByCity.forEach(d => {
     d.Geography = "City";
     readingScoresData.push(d);
   });
-
   // Get recent year data.
   const recentYear = readingScoresData[0].Year;
   const recentYearData = readingScoresData.filter(d => d.Year === recentYear);
   return [readingScoresData, recentYearData];
 };
 
+const getLabel = (d, isOverallSelected = true, dropdownValue) => {
+  if (isOverallSelected) {
+    if (d.Geography === "Nation") return `${d.Grade}th Grade, United States`;
+    if (d.Geography === "State") return `${d.Grade}th Grade, Michigan`;
+    return `${d.Grade}th Grade, Detroit`;
+  } 
+  else {
+    if (d[dropdownValue] === "Yes") return `${d.Grade}th Grade, With ${dropdownValue}`;
+    if (d[dropdownValue] === "No") return `${d.Grade}th Grade, No ${dropdownValue}`;
+    return `${d.Grade}th Grade, ${d[dropdownValue]}`;
+  } 
+};
+
+const definitions = [
+  {term: "ELL", definition: "English-language learners, or ELLs, are students who are unable to communicate fluently or learn effectively in English, who often come from non-English-speaking homes and backgrounds, and who typically require specialized or modified instruction in both the English language and in their academic courses."},
+  {term: "NSLP", definition: "The National School Lunch Program is a federally assisted meal program operating in public and nonprofit private schools and residential child care institutions. It provides nutritionally balanced, low-cost or free lunches to children each school day."},
+  {term: "Disability", definition: "A student with a disability may need specially designed instruction to meet his or her learning goals. A student with a disability will usually have an Individualized Education Plan (IEP), which guides his or her special education instruction. Students with disabilities are often referred to as special education students and may be classified by their school as learning disabled (LD) or emotionally disturbed (ED)."}
+];
+
 class ReadingAssessment extends SectionColumns {
   constructor(props) {
     super(props);
-    const readingScoresData = formatOverallData(this.props.readingScoresByNation, this.props.readingScoresByCity)[1];
+    const readingScoresData = formatOverallData(this.props.readingScoresByNation, this.props.readingScoresByState, this.props.readingScoresByCity)[1];
     this.state = {
       dropdownValue: "Overall",
       readingScoresData,
+      readingScoresByNation: this.props.readingScoresByNation,
+      readingScoresByState: this.props.readingScoresByState,
+      readingScoresByCity: this.props.readingScoresByCity,
       sources: []
     };
   }
@@ -42,6 +68,7 @@ class ReadingAssessment extends SectionColumns {
   // Handler function for dropdown onChange event.
   handleChange = event => {
     const dropdownValue = event.target.value;
+    const {readingScoresByNation, readingScoresByState, readingScoresByCity} = this.state;
     if (dropdownValue !== "Overall") {
       axios.get(`/api/data?measures=Average Reading Score by ${dropdownValue}&drilldowns=Grade,${dropdownValue},Place&Year=latest`)
         .then(resp => {
@@ -53,14 +80,14 @@ class ReadingAssessment extends SectionColumns {
     }
     else {
       this.setState({
-        readingScoresData: formatOverallData(this.props.readingScoresByNation, this.props.readingScoresByCity)[1],
+        readingScoresData: formatOverallData(readingScoresByNation, readingScoresByState, readingScoresByCity)[1],
         dropdownValue
       });
     }
   }
 
   render() {
-    const {dropdownValue, readingScoresData} = this.state;
+    const {dropdownValue, readingScoresData, readingScoresByNation, readingScoresByState} = this.state;
     const dropdownList = ["Overall", "Gender", "Race", "ELL", "NSLP", "Disability", "Parents Education"];
     const isOverallSelected = dropdownValue === "Overall";
     const isParentsEducationSelected = dropdownValue === "Parents Education";
@@ -82,10 +109,6 @@ class ReadingAssessment extends SectionColumns {
     }
 
     const isStatValueYesOrNo = stat1Value === "No" && stat2Value === "Yes";
-
-    // Get recent year data.
-    // const recentYear = readingScoresData[0].Year;
-    // const recentYearData = readingScoresData.filter(d => d.Year === recentYear);
 
     let stat1EighthGrade, stat1FourthGrade, stat2EighthGrade, stat2FourthGrade;
     if (!isParentsEducationSelected) {
@@ -179,27 +202,32 @@ class ReadingAssessment extends SectionColumns {
             </div>}
 
           <SourceGroup sources={this.state.sources} />
+          <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
         </article>
 
-        <LinePlot config={{
+        <BarChart config={{
           data: isOverallSelected ? "/api/data?measures=Average Reading Score&drilldowns=Grade,Place&Year=all" : `/api/data?measures=Average Reading Score by ${dropdownValue}&drilldowns=Grade,${dropdownValue},Place&Year=all`,
           discrete: "x",
-          groupBy: d => isOverallSelected ? `${d.Grade} ${d.Geography === "Nation" ? "United States" : "Detroit"}` : `${d.Grade} ${d[dropdownValue]}`,
-          label: d => isOverallSelected ? `${d.Grade}th Grade ${d.Geography === "Nation" ? "United States" : "Detroit"}` : `${d.Grade}th Grade ${d[dropdownValue]}`,
-          baseline: 0,
+          groupBy: d => isOverallSelected ? `${d.Geography}` : `${d[dropdownValue]}`,
+          label: d => isOverallSelected ? getLabel(d) : getLabel(d, false, dropdownValue),
           legend: false,
-          x: "Year",
+          x: "Grade",
+          xConfig: {
+            title: "Grade"
+          },
           y: isOverallSelected ? "Average Reading Score" : `Average Reading Score by ${dropdownValue}`,
           yConfig: {
-            title: `Average Reading Score by ${dropdownValue}`,
-            domain: [150, 300]
+            title: `Average Reading Score by ${dropdownValue}`
           },
+          groupPadding: 25,
+          barPadding: 3,
+          time: "Year",
           tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => isOverallSelected ? d["Average Reading Score"] : d[`Average Reading Score by ${dropdownValue}`]], ["Place", d => isOverallSelected ? d.Geography === "Nation" ? "United States" : "Detroit" : "Detroit"]]}
         }}
         dataFormat={resp => {
           this.setState({sources: updateSource(resp.source, this.state.sources)});
-          return isOverallSelected ? formatOverallData(this.props.readingScoresByNation, resp.data)[0] : resp.data;
+          return isOverallSelected ? formatOverallData(readingScoresByNation, readingScoresByState, resp.data)[0] : resp.data;
         }}
         />
       </SectionColumns>
@@ -212,13 +240,15 @@ ReadingAssessment.defaultProps = {
 };
 
 ReadingAssessment.need = [
-  // Default dropdown value "Overall" needs data from 2 APIs, and merge them into one array. Hence all year data is fetched.
+  // Default dropdown value "Overall" needs data from 3 APIs, and merge them into one array. Hence all year data is fetched.
   fetchData("readingScoresByNation", "/api/data?measures=Average Reading Score&drilldowns=Grade,Nation&Year=all", d => d.data),
+  fetchData("readingScoresByState", "/api/data?measures=Average Reading Score&drilldowns=Grade,State&Year=all", d => d.data),
   fetchData("readingScoresByCity", "/api/data?measures=Average Reading Score&drilldowns=Grade,Place&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   readingScoresByNation: state.data.readingScoresByNation,
+  readingScoresByState: state.data.readingScoresByState,
   readingScoresByCity: state.data.readingScoresByCity
 });
 

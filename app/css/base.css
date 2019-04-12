@@ -165,7 +165,7 @@ select {
 	background-repeat: no-repeat;
 	background-position: calc(100% - 0.5em) center;
 	/* strip default select styles */
-  -webkit-appearance: none;
+  appearance: none;
 	/* theming */
 	border: 1px solid var(--gray);
   border-radius: var(--radius-sm);

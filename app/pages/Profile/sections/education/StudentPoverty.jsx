@@ -28,21 +28,31 @@ const formatLevelOfSchoolData = levelOfSchoolData => {
     .key(d => d.Year)
     .entries(levelOfSchoolData)
     .forEach(group => {
-      const total = sum(group.values, d => d["Poverty by Schooling"]);
-      group.values.forEach(d => total !== 0 ? d.share = d["Poverty by Schooling"] / total * 100 : d.share = 0);
+      nest()
+        .key(d => d["ID Level of School"])
+        .entries(group.values)
+        .forEach(grade => {
+          const total = sum(grade.values, d => d["Poverty by Schooling"]);
+          grade.values.forEach(d => total !== 0 ? d.share = d["Poverty by Schooling"] / total * 100 : d.share = 0);
+        });
     });
-
   // Filter out Not Enrolled In School and above Poverty level data.
-  const filteredLevelOfSchoolData = levelOfSchoolData.filter(d => d["ID Level of School"] !== 7 && d["ID Poverty Status"] !== 1);
-
-  // Find top recent year Level of School Data.
+  const filteredLevelOfSchoolData = levelOfSchoolData.filter(d => d["ID Level of School"] !== 7 && d["ID Poverty Status"] === 0);
   const topLevelOfSchoolData = filteredLevelOfSchoolData.sort((a, b) => b.share - a.share)[0];
+  return [filteredLevelOfSchoolData, topLevelOfSchoolData];
+};
 
-  // Find percentage of population that were enrolled in school for the most recent year.
-  const recentYearNotEnrolledInSchool = levelOfSchoolData.filter(d => d["ID Level of School"] === 7);
-  const recentYearEnrolledInSchoolPercentage = 100 - recentYearNotEnrolledInSchool[0].share - recentYearNotEnrolledInSchool[1].share;
-
-  return [filteredLevelOfSchoolData, topLevelOfSchoolData, recentYearEnrolledInSchoolPercentage];
+// Find percentage of population that were enrolled in school for the most recent year.
+const findEnrolledInSchoolPercentage = data => {
+  nest()
+    .key(d => d.Year)
+    .entries(data)
+    .forEach(group => {
+      const total = sum(group.values, d => d["Poverty by Schooling"]);
+      group.values.forEach(d => total !== 0 ? d.enrolledShare = d["Poverty by Schooling"] / total * 100 : d.enrolledShare = 0);
+    });
+  const notEnrolledInSchool = data.filter(d => d["ID Level of School"] === 7);
+  return 100 - notEnrolledInSchool[0].enrolledShare - notEnrolledInSchool[1].enrolledShare;
 };
 
 class StudentPoverty extends SectionColumns {
@@ -58,10 +68,8 @@ class StudentPoverty extends SectionColumns {
     const levelOfSchoolDataAvailable = levelOfSchoolData.length !== 0;
 
     if (levelOfSchoolDataAvailable) {
-      // Format data for Level Of School.
-      const formattedLevelOfSchoolData = formatLevelOfSchoolData(levelOfSchoolData);
-      const topLevelOfSchoolData = formattedLevelOfSchoolData[1];
-      const recentYearEnrolledInSchoolPercentage = formattedLevelOfSchoolData[2];
+      const topLevelOfSchoolData = formatLevelOfSchoolData(levelOfSchoolData)[1];
+      const enrolledInSchoolPercentage = findEnrolledInSchoolPercentage(levelOfSchoolData);
 
       return (
         <SectionColumns>
@@ -72,15 +80,15 @@ class StudentPoverty extends SectionColumns {
               title="Most impoverished level"
               year={topLevelOfSchoolData.Year}
               value={formatLabel(topLevelOfSchoolData["Level of School"])}
-              qualifier={`${formatPopulation(topLevelOfSchoolData.share)} of the population in ${topLevelOfSchoolData.Geography}`}
+              qualifier={`${formatPopulation(topLevelOfSchoolData.share)} of the population enrolled in this grade in ${topLevelOfSchoolData.Geography}`}
             />
             <Stat
               title={"Enrolled Population"}
-              year={topLevelOfSchoolData.Year}
-              value={formatPopulation(recentYearEnrolledInSchoolPercentage)}
+              year={topLevelOfSchoolData.Year} // topLevelOfSchoolData share same data as enrolledInSchoolPercentage, hence topLevelOfSchoolData can be used here to get Year, etc.
+              value={formatPopulation(enrolledInSchoolPercentage)}
               qualifier={`of the population in ${topLevelOfSchoolData.Geography}`}
             />
-            <p>In {topLevelOfSchoolData.Year}, the most common education level of students in {topLevelOfSchoolData.Geography} living in poverty were {topLevelOfSchoolData["Level of School"].toLowerCase()} ({formatPopulation(topLevelOfSchoolData.share)}) and {formatPopulation(recentYearEnrolledInSchoolPercentage)} of the total population was enrolled in school in {topLevelOfSchoolData.Geography}.</p>
+            <p>In {topLevelOfSchoolData.Year}, the most common education level of students in {topLevelOfSchoolData.Geography} living in poverty were {topLevelOfSchoolData["Level of School"].toLowerCase()} ({formatPopulation(topLevelOfSchoolData.share)} of the population enrolled in this grade) and {formatPopulation(enrolledInSchoolPercentage)} of the total population was enrolled in school in {topLevelOfSchoolData.Geography}.</p>
             <p>The following chart shows the level of school and the share of students in poverty that were enrolled in school.</p>
 
             <SourceGroup sources={this.state.sources} />

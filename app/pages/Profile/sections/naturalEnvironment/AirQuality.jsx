@@ -89,7 +89,7 @@ class AirQuality extends SectionColumns {
               value={formatPercentage(topRecentYearAirQualityDays.share)}
               qualifier={`${topRecentYearAirQualityDays["Air Quality Days"]} of 90 days measured`}
             />
-            <p>{topRecentYearAirQualityDays["Air Quality Days"]} of 90 days measured were good quality air in {topRecentYearAirQualityDays.Year}.</p>
+            <p>In {topRecentYearAirQualityDays.Year}, {topRecentYearAirQualityDays["Air Quality Days"]} of 90 days measured were good quality air in {topRecentYearAirQualityDays.Geography}.</p>
           </div>}
 
           {dropdownValue === "Air Pollutants" &&
@@ -100,7 +100,7 @@ class AirQuality extends SectionColumns {
               value={topRecentYearAirPollutant.Pollutant}
               qualifier={`${topRecentYearAirPollutant["Air Pollutant Days"]} days`}
             />
-            <p>The most common air pollutants was {topRecentYearAirPollutant.Pollutant} in {topRecentYearAirPollutant.Year}.</p>
+            <p>In {topRecentYearAirPollutant.Year}, the most common air pollutants was {topRecentYearAirPollutant.Pollutant} in {topRecentYearAirPollutant.Geography}.</p>
           </div>}
           {dropdownValue === "Median Air Quality Index" &&
           <div>
@@ -109,10 +109,10 @@ class AirQuality extends SectionColumns {
               year={airQualityMedianAQIs[0].Year}
               value={airQualityMedianAQIs[0]["Median AQI"]}
             />
-            <p>The median air quality index was {airQualityMedianAQIs[0]["Median AQI"]} in {airQualityMedianAQIs[0].Geography}.</p>
+            <p>In {airQualityMedianAQIs[0].Year}, the median air quality index was {airQualityMedianAQIs[0]["Median AQI"]} in {airQualityMedianAQIs[0].Geography}.</p>
           </div>}
 
-          <p>The chart here shows the {dropdownValue.toLocaleLowerCase()} over years in Wayne County.</p>
+          <p>The chart here shows the {dropdownValue.toLocaleLowerCase()} over years in {airQualityDays.data[0].Geography}.</p>
 
           {!isAirQualityDaysAvailableForCurrentGeography &&
             <Disclaimer>Data is shown for {airQualityDays.data[0].Geography}</Disclaimer>
@@ -127,7 +127,6 @@ class AirQuality extends SectionColumns {
           data: `/api/data?measures=Air Quality Days&drilldowns=Category&Geography=${meta.id}&Year=all`,
           discrete: "x",
           height: 400,
-          title: d => `Air Quality Over Years in ${d[0].Geography}`,
           legend: false,
           label: d => titleCase(d.Category),
           groupBy: "Category",
@@ -150,7 +149,6 @@ class AirQuality extends SectionColumns {
             data: `/api/data?measures=Air Pollutant Days&drilldowns=Pollutant&Geography=${meta.id}&Year=all`,
             discrete: "x",
             height: 400,
-            title: d => `Air Pollutants Over Years in ${d[0].Geography}`,
             legend: false,
             groupBy: "Pollutant",
             x: "Year",
@@ -172,7 +170,6 @@ class AirQuality extends SectionColumns {
           data: `/api/data?measures=Median AQI&Geography=${meta.id}&Year=all`,
           discrete: "x",
           height: 400,
-          title: d => `Median AQI Over Years in ${d[0].Geography}`,
           legend: false,
           groupBy: "Geography",
           x: "Year",

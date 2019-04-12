@@ -7,6 +7,7 @@ import axios from "axios";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
+import Glossary from "components/Glossary";
 import Disclaimer from "components/Disclaimer";
 import Stat from "components/Stat";
 import ZipRegionDefinition from "components/ZipRegionDefinition";
@@ -16,7 +17,10 @@ import SourceGroup from "components/SourceGroup";
 
 const formatPercentage = (d, mutiplyBy100 = false) => mutiplyBy100 ? `${formatAbbreviate(d * 100)}%` : `${formatAbbreviate(d)}%`;
 
-const formatDropdownNames = d => d.replace("Had", "");
+const formatDropdownNames = d => {
+  if (d === "FOBT or Endoscopy") return "Appropriate Colorectal Cancer Screening";
+  return d.replace("Had", "");
+};
 
 const getArticle = dropdownValue => {
   const firstLetter = dropdownValue[0];
@@ -26,6 +30,24 @@ const getArticle = dropdownValue => {
   if (firstWord === "Sleep" || firstWord === "HIV") return "";
   return "a";
 };
+
+const definitions = [
+  {term: "Annual Checkup", definition: "Visits to doctor for routine checkup within the past year among adults aged ≥18 years."},
+  {term: "Core Preventive Services for Older Men", definition: "Older adults aged ≥65 years who are up to date on a core set of clinical preventive services by age and sex (Number of men aged ≥65 years reporting having received all of the following: an influenza vaccination in the past year; a PPV ever; and either a fecal occult blood test (FOBT) within the past year, a sigmoidoscopy within the past 5 years and a FOBT within the past 3 years, or a colonoscopy within the past 10 years)."},
+  {term: "Core Preventive Services for Older Women", definition: "Older adults aged ≥65 years who are up to date on a core set of clinical preventive services by age and sex (Number of women aged ≥65 years reporting having received all of the following: an influenza vaccination in the past year; a pneumococcal vaccination (PPV) ever; either a fecal occult blood test (FOBT) within the past year, a sigmoidoscopy within the past 5 years and a FOBT within the past 3 years, or a colonoscopy within the previous 10 years; and a mammogram in the past 2 years)."},
+  {term: "Dental Visit", definition: "Visits to dentist or dental clinic among adults aged ≥18 years."},
+  {term: "Colorectal Cancer Screening", definition: "Fecal occult blood test, sigmoidoscopy, or colonoscopy among adults aged 50–75 years."},
+  {term: "Pap Smear Test", definition: "Papanicolaou smear use among adult women aged 21–65 years."},
+  {term: "Mammography", definition: "Mammography use among women aged 50–74 years."},
+  {term: "Cholesterol Screening", definition: "Cholesterol screening among adults aged ≥18 years."},
+  {term: "Taking Blood Pressure Medication", definition: "Taking medicine for high blood pressure control among adults aged ≥18 years with high blood pressure."},
+  {term: "Sleep Less Than 7 Hours", definition: "Sleeping less than 7 hours among adults aged ≥18 years."},
+  {term: "Flu Vaccine", definition: "Among adults aged 65 years and older, the proportion who reported that they had a flu vaccine, either by an injection in the arm or sprayed in the nose during the past 12 months."},
+  {term: "Pneumonia Vaccine", definition: "Among adults aged 65 years and older, the proportion who reported that they ever had a pneumococcal vaccine."},
+  {term: "Routine Checkup Last Year", definition: "The proportion of adults who reported that they did not have a routine checkup in the past year."},
+  {term: "Appropriate Colorectal Cancer Screening", definition: "Among adults aged 50 years and older, the proportion who had either a fecal occult blood test within the past year, a sigmoidoscopy within the past five years, or a colonoscopy within the past ten years."},
+  {term: "HIV Tested", definition: "Among adults aged 18 - 64 years, the proportion who reported that they ever had been tested for HIV, apart from tests that were part of a blood donation."}
+];
 
 class PreventiveCare extends SectionColumns {
 
@@ -77,8 +99,8 @@ class PreventiveCare extends SectionColumns {
   render() {
     const {dropdownValue, preventiveCareData, preventiveCareWeightedData, isPreventativeCareWeightedValueSelected, countyLevelData} = this.state;
     const dropdownList = ["Annual Checkup", "Core Preventive Services for Older Men", "Core Preventive Services for Older Women",
-      "Dental Visit", "Colorectal Cancer Screening", "Pap Smear Test", "Mammography", "Cholesterol Screening", "Taking Blood Pressure Medication", "Had Flu Vaccine",
-      "Sleep Less Than 7 Hours", "Had Pneumonia Vaccine", "Had Routine Checkup Last Year", "FOBT or Endoscopy", "HIV Tested"];
+      "Dental Visit", "Colorectal Cancer Screening", "Pap Smear Test", "Mammography", "Cholesterol Screening", "Taking Blood Pressure Medication", "Sleep Less Than 7 Hours",
+      "Had Flu Vaccine", "Had Pneumonia Vaccine", "Had Routine Checkup Last Year", "FOBT or Endoscopy", "HIV Tested"];
 
     // Find recent year top data for the selected dropdown value.
     const topDropdownData = isPreventativeCareWeightedValueSelected ? preventiveCareWeightedData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0] : preventiveCareData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
@@ -124,6 +146,7 @@ class PreventiveCare extends SectionColumns {
             : <Disclaimer>Data is shown at the census tract level</Disclaimer>
           }
           <SourceGroup sources={this.state.sources} />
+          <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
         </article>
 

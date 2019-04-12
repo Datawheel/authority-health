@@ -27,6 +27,7 @@ const formatTopojsonFilter = (d, meta, childrenTractIds) => {
 
 const formatTractName = (tractName, cityName) => cityName === undefined ? tractName : `${tractName.replace(", Wayne County, MI", "")}, ${cityName}`;
 const formatGeomapLabel = (d, meta, tractToPlace) => {
+  if (d.Geography === undefined) return d;
   if (meta.level === "county") return d.Geography;
   if (meta.level === "tract") return formatTractName(d.Geography, tractToPlace[d["ID Geography"]]);
   else return `${d.Geography.replace(", Wayne County, MI", "")}, ${meta.name}`;

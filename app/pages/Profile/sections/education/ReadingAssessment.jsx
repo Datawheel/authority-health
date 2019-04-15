@@ -136,7 +136,7 @@ class ReadingAssessment extends SectionColumns {
 
     let stat3EighthGrade, stat3FourthGrade;
     if (isOverallSelected) {
-      const stat3Data = isOverallSelected ? readingScoresData.filter(d => d.Geography === stat3Value) : null;
+      const stat3Data = readingScoresData.filter(d => d.Geography === stat3Value);
       stat3FourthGrade = stat3Data.filter(d => d.Grade === "4")[0];
 
       // Find top stat3 8th grade data.

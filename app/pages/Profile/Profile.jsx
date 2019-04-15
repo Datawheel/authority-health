@@ -239,19 +239,23 @@ Profile.need = [
   fetchData("topStats", "/api/stats/<id>"),
   fetchData("meta", "/api/search?id=<id>", resp => resp[0]),
   fetchData("childrenTractIds", "/api/geo/children/<id>/?level=Tract"),
+  fetchData("childrenZipIds", "/api/geo/children/<id>/?level=Zip"),
   fetchData("population", "https://acs.datausa.io/api/data?measures=Population&Geography=<id>&year=all"),
   fetchData("populationByAgeAndGender", "/api/data?measures=Population by Sex and Age&drilldowns=Age,Sex&Geography=<id>&Year=all", d => d.data),
   fetchData("lifeExpectancy", "/api/data?measures=Life Expectancy&Geography=<id>", d => d.data), // Year data not available
-  fetchData("populationByRaceAndEthnicity", "https://acs.datausa.io/api/data?measures=Hispanic Population&drilldowns=Race,Ethnicity&Geography=<id>&Year=all")
+  fetchData("populationByRaceAndEthnicity", "https://acs.datausa.io/api/data?measures=Hispanic Population&drilldowns=Race,Ethnicity&Geography=<id>&Year=all"),
+  fetchData("currentLevelOverallCoverage", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   meta: state.data.meta,
   childrenTractIds: state.data.childrenTractIds,
+  childrenZipIds: state.data.childrenZipIds,
   population: state.data.population,
   populationByAgeAndGender: state.data.populationByAgeAndGender,
   populationByRaceAndEthnicity: state.data.populationByRaceAndEthnicity,
-  lifeExpectancy: state.data.lifeExpectancy
+  lifeExpectancy: state.data.lifeExpectancy,
+  currentLevelOverallCoverage: state.data.currentLevelOverallCoverage
 });
 
 export default connect(mapStateToProps)(Profile);

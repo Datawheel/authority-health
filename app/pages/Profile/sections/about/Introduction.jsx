@@ -2,10 +2,13 @@ import React from "react";
 import {connect} from "react-redux";
 import {nest} from "d3-collection";
 import {sum} from "d3-array";
-import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import {formatAbbreviate} from "d3plus-format";
+import {Geomap} from "d3plus-react";
+import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
+
 import growthCalculator from "utils/growthCalculator";
 import Stat from "components/Stat";
+import styles from "style.yml";
 
 const formatRaceName = d => {
   d = d.replace("Alone", "").replace("Black", "black").replace("White", "white").replace("Asian", "asian");
@@ -29,11 +32,24 @@ const formatLevelNames = d => {
   return d;
 };
 
+const formatTractName = (tractName, cityName) => cityName === undefined ? tractName : `${tractName}, ${cityName}`;
+const formatGeomapLabel = (d, meta, tractToPlace) => {
+  if (meta.level === "tract" || meta.level === "county") return formatTractName(d.Geography, tractToPlace[d["ID Geography"]]);
+  else return `${d.Geography}, ${meta.name}`;
+};
+
+const formatTopojsonFilter = (d, meta, childrenTractIds) => {
+  if (meta.level === "tract" || meta.level === "county") return d.id.startsWith("14000US26163");
+  else return childrenTractIds.includes(d.id);
+};
+
+const formatPercentage = (d, mutiplyBy100 = false) => mutiplyBy100 ? `${formatAbbreviate(d * 100)}%` : `${formatAbbreviate(d)}%`;
+
 class Introduction extends SectionColumns {
 
   render() {
-    const {meta, population, populationByAgeAndGender, populationByRaceAndEthnicity, lifeExpectancy, topStats} = this.props;
-    const {healthTopics, socialDeterminants, rankData} = topStats;
+    const {meta, population, populationByAgeAndGender, populationByRaceAndEthnicity, lifeExpectancy, topStats, childrenTractIds} = this.props;
+    const {healthTopics, socialDeterminants, rankData, tractToPlace} = topStats;
     const {level} = meta;
 
     const populationByAgeAndGenderAvailable = populationByAgeAndGender.length !== 0;
@@ -110,13 +126,82 @@ class Introduction extends SectionColumns {
           )}
         </div>
         <div className="top-stats viz">
-          {healthTopics.map(item =>
-            <Stat key={item.measure}
-              title={item.measure}
-              year={item.latestYear}
-              value={item.value}
-            />
-          )}
+          <Geomap config={{
+            data: "/api/data?measures=Life Expectancy&Geography=14000US26163561300:children&Year=all",
+            height: 250,
+            groupBy: "ID Geography",
+            colorScale: "Life Expectancy",
+            legend: false,
+            label: d => formatGeomapLabel(d, meta, tractToPlace),
+            time: "End Year",
+            title: `Life Expectancy by Census Tracts in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`,
+            tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Life Expectancy", d => d["Life Expectancy"]]]},
+            topojson: "/topojson/tract.json",
+            topojsonFilter: d => formatTopojsonFilter(d, meta, childrenTractIds)
+          }}
+          dataFormat={resp => {
+            let filteredChildrenGeography = [];
+            if (meta.level === "county" || meta.level === "tract") {
+              filteredChildrenGeography = resp.data;
+            }
+            else {
+              resp.data.forEach(d => {
+                if (childrenTractIds.includes(d["ID Geography"])) filteredChildrenGeography.push(d);
+              });
+            }
+            return filteredChildrenGeography;
+          }}
+          />
+
+          <Geomap config={{
+            data: "/api/data?measures=Poor Mental Health 14 Or More Days&drilldowns=Zip Region&Year=all",
+            height: 250,
+            groupBy: "ID Zip Region",
+            colorScale: "Poor Mental Health 14 Or More Days",
+            colorScaleConfig: {
+              axisConfig: {tickFormat: d => formatPercentage(d, true)},
+              // having high disease prevalency is bad
+              color: [
+                styles["danger-light"],
+                styles.danger,
+                styles["danger-dark"]
+              ]
+            },
+            label: d => d["Zip Region"],
+            time: "End Year",
+            title: "Poor Mental Health by Zip Regions in Wayne County",
+            tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Condition", "Poor Mental Health 14 Or More Days"], ["Prevalence", d => `${formatPercentage(d["Poor Mental Health 14 Or More Days"], true)}`]]},
+            topojson: "/topojson/zipregions.json",
+            topojsonId: d => d.properties.REGION,
+            topojsonFilter: () => true
+          }}
+          dataFormat={resp => resp.data}
+          />
+
+          <Geomap config={{
+            data: "/api/data?measures=Poor Physical Health 14 Or More Days&drilldowns=Zip Region&Year=all",
+            height: 250,
+            groupBy: "ID Zip Region",
+            colorScale: "Poor Physical Health 14 Or More Days",
+            colorScaleConfig: {
+              axisConfig: {tickFormat: d => formatPercentage(d, true)},
+              // having high disease prevalency is bad
+              color: [
+                styles["danger-light"],
+                styles.danger,
+                styles["danger-dark"]
+              ]
+            },
+            label: d => d["Zip Region"],
+            time: "End Year",
+            title: "Poor Physical Health by Zip Regions in Wayne County",
+            tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Condition", "Poor Physical Health 14 Or More Days"], ["Prevalence", d => `${formatPercentage(d["Poor Physical Health 14 Or More Days"], true)}`]]},
+            topojson: "/topojson/zipregions.json",
+            topojsonId: d => d.properties.REGION,
+            topojsonFilter: () => true
+          }}
+          dataFormat={resp => resp.data}
+          />
         </div>
       </SectionColumns>
     );
@@ -129,6 +214,7 @@ Introduction.defaultProps = {
 
 const mapStateToProps = state => ({
   meta: state.data.meta,
+  childrenTractIds: state.data.childrenTractIds,
   population: state.data.population.data,
   populationByAgeAndGender: state.data.populationByAgeAndGender,
   populationByRaceAndEthnicity: state.data.populationByRaceAndEthnicity.data,

@@ -264,7 +264,7 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
 
           {!isVisionDisabilitySelected && hearingDisabilityDataAvailable &&
             <BarChart config={{
-              data: `/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status,Age,Sex&Geography=${meta.id}&Year=latest`,
+              data: `/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status,Age,Sex&Geography=${meta.id}&Year=all`,
               height: 250,
               discrete: "x",
               groupBy: "Sex",

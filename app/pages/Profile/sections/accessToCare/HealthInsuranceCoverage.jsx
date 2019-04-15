@@ -220,7 +220,7 @@ class HealthInsuranceCoverage extends SectionColumns {
           </article>
 
           <Geomap config={{
-            data: `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=${meta.id}:children&Year=latest`,
+            data: `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=${meta.id}:children&Year=all`,
             groupBy: meta.level === "county" ? "ID Place" : "ID Geography",
             colorScale: "share",
             title: `Health Insurance Coverage for ${meta.level === "county" ? "Places" : "Census Tracts"} in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`,

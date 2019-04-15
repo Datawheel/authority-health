@@ -252,7 +252,7 @@ class Immigrants extends SectionColumns {
         </article>
 
         <Geomap config={{
-          data: totalImmigrantsSelected ? `/api/data?measures=Poverty by Nativity&drilldowns=Nativity&Geography=${meta.id}:children&Year=latest` : `/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Poverty Status&Geography=${meta.id}:children&Year=latest`,
+          data: totalImmigrantsSelected ? `/api/data?measures=Poverty by Nativity&drilldowns=Nativity&Geography=${meta.id}:children&Year=all` : `/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Poverty Status&Geography=${meta.id}:children&Year=all`,
           groupBy: meta.level === "county" ? "ID Place" : "ID Geography",
           colorScale: "share",
           title: `Immigrants by ${meta.level === "county" ? "Places" : "Census Tracts"} in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`,

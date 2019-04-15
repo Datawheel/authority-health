@@ -45,9 +45,15 @@ const getLabel = (d, isOverallSelected = true, dropdownValue) => {
   } 
 };
 
+const formatGeographyName = d => {
+  if (d === "Nation") return "United States";
+  if (d === "State") return "Michigan";
+  return "Detroit";
+};
+
 const definitions = [
   {term: "ELL", definition: "English-language learners, or ELLs, are students who are unable to communicate fluently or learn effectively in English, who often come from non-English-speaking homes and backgrounds, and who typically require specialized or modified instruction in both the English language and in their academic courses."},
-  {term: "NSLP", definition: "The National School Lunch Program is a federally assisted meal program operating in public and nonprofit private schools and residential child care institutions. It provides nutritionally balanced, low-cost or free lunches to children each school day."},
+  {term: "NSLP", definition: "The National School Lunch Program, or NSLP, is a federally assisted meal program operating in public and nonprofit private schools and residential child care institutions. It provides nutritionally balanced, low-cost or free lunches to children each school day."},
   {term: "Disability", definition: "A student with a disability may need specially designed instruction to meet his or her learning goals. A student with a disability will usually have an Individualized Education Plan (IEP), which guides his or her special education instruction. Students with disabilities are often referred to as special education students and may be classified by their school as learning disabled (LD) or emotionally disturbed (ED)."}
 ];
 
@@ -93,7 +99,8 @@ class ReadingAssessment extends SectionColumns {
     const isParentsEducationSelected = dropdownValue === "Parents Education";
 
     let stat1Value = "City";
-    let stat2Value = "Nation";
+    let stat2Value = "State";
+    const stat3Value = "Nation";
 
     if (dropdownValue === "Gender") {
       stat1Value = "Female";
@@ -125,6 +132,15 @@ class ReadingAssessment extends SectionColumns {
 
       // Find top stat2 8th grade data.
       stat2EighthGrade = stat2Data.filter(d => d.Grade === "8")[0];
+    }
+
+    let stat3EighthGrade, stat3FourthGrade;
+    if (isOverallSelected) {
+      const stat3Data = isOverallSelected ? readingScoresData.filter(d => d.Geography === stat3Value) : null;
+      stat3FourthGrade = stat3Data.filter(d => d.Grade === "4")[0];
+
+      // Find top stat3 8th grade data.
+      stat3EighthGrade = stat3Data.filter(d => d.Grade === "8")[0];
     }
 
     return (
@@ -166,12 +182,20 @@ class ReadingAssessment extends SectionColumns {
                   },
                   {
                     title: isOverallSelected
-                      ? "United States"
+                      ? "Michigan"
                       : `${ stat2Value !== "Yes" ? stat2Value : "" } ${isStatValueYesOrNo ? dropdownValue : ""} (Detroit)`,
                     value: isOverallSelected
                       ? stat2FourthGrade["Average Reading Score"]
                       : stat2FourthGrade[`Average Reading Score by ${dropdownValue}`],
                     color: dropdownValue === "Gender" ? "terra-cotta" : null
+                  },
+                  {
+                    title: isOverallSelected
+                      ? "United States"
+                      : null,
+                    value: isOverallSelected
+                      ? stat3FourthGrade["Average Reading Score"]
+                      : null
                   }
                 ]}
               />
@@ -190,12 +214,20 @@ class ReadingAssessment extends SectionColumns {
                   },
                   {
                     title: isOverallSelected
-                      ? "United States"
+                      ? "Michigan"
                       : `${ stat2Value !== "Yes" ? stat2Value : "" } ${isStatValueYesOrNo ? dropdownValue : ""} (Detroit)`,
                     value: isOverallSelected
                       ? stat2EighthGrade["Average Reading Score"]
                       : stat2EighthGrade[`Average Reading Score by ${dropdownValue}`],
                     color: dropdownValue === "Gender" ? "terra-cotta" : null
+                  },
+                  {
+                    title: isOverallSelected
+                      ? "United States"
+                      : null,
+                    value: isOverallSelected
+                      ? stat3EighthGrade["Average Reading Score"]
+                      : null
                   }
                 ]}
               />
@@ -223,7 +255,7 @@ class ReadingAssessment extends SectionColumns {
           groupPadding: 25,
           barPadding: 3,
           time: "Year",
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => isOverallSelected ? d["Average Reading Score"] : d[`Average Reading Score by ${dropdownValue}`]], ["Place", d => isOverallSelected ? d.Geography === "Nation" ? "United States" : "Detroit" : "Detroit"]]}
+          tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => isOverallSelected ? d["Average Reading Score"] : d[`Average Reading Score by ${dropdownValue}`]], ["Place", d => isOverallSelected ? formatGeographyName(d.Geography) : "Detroit"]]}
         }}
         dataFormat={resp => {
           this.setState({sources: updateSource(resp.source, this.state.sources)});

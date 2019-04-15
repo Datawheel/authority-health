@@ -22,12 +22,14 @@ module.exports = async function(app) {
     zipToPlacePromises.push(axios.get(`${CANON_LOGICLAYER_CUBE}/geoservice-api/relations/intersects/${d.id}?targetLevels=place&overlapSize=true`));
   });
 
+  const zipToPlaceObjs = {};
   const zipToPlace = {};
   const tractToPlace = {};
   Promise.all(zipToPlacePromises).then(results => {
     allZips.forEach((d, i) => {
       const data = results[i].data;
-      zipToPlace[d.id] = data.length !== 0 ? data.sort((a, b) => b.overlap_size - a.overlap_size)[0] : "";
+      zipToPlaceObjs[d.id] = data.length !== 0 ? data.sort((a, b) => b.overlap_size - a.overlap_size)[0] : "";
+      zipToPlace[d.id] = zipToPlaceObjs.hasOwnProperty(d.id) ? zipToPlaceObjs[d.id].name : "";
     });
 
     // Now find Zip for each tract in Wayne County & assign Place using above zipToPlace object.
@@ -42,7 +44,7 @@ module.exports = async function(app) {
         if (results2[i] !== undefined) {
           const data = results2[i].data;
           const zipId = data.length !== 0 ? data.sort((a, b) => b.overlap_size - a.overlap_size)[0].geoid : "";
-          if (zipId) tractToPlace[d.id] = zipToPlace.hasOwnProperty(zipId) ? zipToPlace[zipId].name : "";
+          if (zipId) tractToPlace[d.id] = zipToPlaceObjs.hasOwnProperty(zipId) ? zipToPlaceObjs[zipId].name : "";
         }
       });
     })
@@ -50,5 +52,9 @@ module.exports = async function(app) {
   })
     .catch(err => console.log(err));
 
-  return tractToPlace;
+  const zipAndTractToPlace = {};
+  zipAndTractToPlace.zipToPlace = zipToPlace;
+  zipAndTractToPlace.tractToPlace = tractToPlace;
+
+  return zipAndTractToPlace;
 };

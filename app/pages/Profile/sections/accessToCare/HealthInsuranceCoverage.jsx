@@ -252,7 +252,6 @@ HealthInsuranceCoverage.need = [
   fetchData("nationOverallCoverage", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Nation=01000US&Year=latest", d => d.data),
   fetchData("stateOverallCoverage", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&State=04000US26&Year=latest", d => d.data),
   fetchData("wayneCountyOverallCoverage", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=05000US26163&Year=latest", d => d.data),
-  fetchData("currentLevelOverallCoverage", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=<id>&Year=latest", d => d.data),
   fetchData("coverageDataForChildrenGeography", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=<id>:children&Year=latest", d => d.data)
 ];
 

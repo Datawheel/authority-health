@@ -1,8 +1,8 @@
 @import "../css/mixins.css";
 
 .Options {
-  display: flex;
-  justify-content: flex-end;
+  /* display: flex;
+  justify-content: flex-end; */
   margin-bottom: 5px;
   & .option {
     display: inline-block;

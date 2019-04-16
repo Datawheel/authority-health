@@ -153,8 +153,7 @@ layout
       }
 
       /* space out awkward left column visualizations */
-      & p + .viz,
-      & .section-popover-button + .viz {
+      & p + .viz {
         margin-top: var(--gutter-md);
       }
 

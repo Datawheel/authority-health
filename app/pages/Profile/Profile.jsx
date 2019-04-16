@@ -243,7 +243,7 @@ Profile.need = [
   fetchData("population", "https://acs.datausa.io/api/data?measures=Population&Geography=<id>&year=all"),
   fetchData("populationByAgeAndGender", "/api/data?measures=Population by Sex and Age&drilldowns=Age,Sex&Geography=<id>&Year=all", d => d.data),
   fetchData("lifeExpectancy", "/api/data?measures=Life Expectancy&Geography=<id>", d => d.data), // Year data not available
-  fetchData("populationByRaceAndEthnicity", "https://acs.datausa.io/api/data?measures=Hispanic Population&drilldowns=Race,Ethnicity&Geography=<id>&Year=all"),
+  fetchData("populationByRaceAndEthnicity", "https://acs.datausa.io/api/data?measures=Hispanic Population&drilldowns=Race,Ethnicity&Geography=<id>&Year=latest"),
   fetchData("currentLevelOverallCoverage", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=<id>&Year=latest", d => d.data)
 ];
 

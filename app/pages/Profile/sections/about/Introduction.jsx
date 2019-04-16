@@ -2,11 +2,13 @@ import React from "react";
 import {connect} from "react-redux";
 import {nest} from "d3-collection";
 import {sum} from "d3-array";
+import {titleCase} from "d3plus-text";
 import {formatAbbreviate} from "d3plus-format";
-import {Geomap} from "d3plus-react";
+import {Geomap, Pie, Treemap} from "d3plus-react";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import growthCalculator from "utils/growthCalculator";
+import zipcodes from "utils/zipcodes";
 import Stat from "components/Stat";
 import styles from "style.yml";
 
@@ -32,10 +34,20 @@ const formatLevelNames = d => {
   return d;
 };
 
-const formatTractName = (tractName, cityName) => cityName === undefined ? tractName : `${tractName}, ${cityName}`;
-const formatGeomapLabel = (d, meta, tractToPlace) => {
-  if (meta.level === "tract" || meta.level === "county") return formatTractName(d.Geography, tractToPlace[d["ID Geography"]]);
+const formatGeomapTractLabel = (d, meta, tractToPlace) => {
+  if (meta.level === "tract" || meta.level === "county") {
+    const cityName = tractToPlace[d["ID Geography"]];
+    return cityName === undefined ? d.Geography : `${d.Geography}, ${cityName}`;
+  }
   else return `${d.Geography}, ${meta.name}`;
+};
+
+const formatGeomapZipLabel = (d, meta, zipToPlace) => {
+  if (meta.level === "tract" || meta.level === "county") {
+    const cityName = zipToPlace[d["ID Zip"]];
+    return cityName === undefined ? d.Zip : `${d.Zip}, ${cityName}`;
+  }
+  else return `${d.Zip}, ${meta.name}`;
 };
 
 const formatTopojsonFilter = (d, meta, childrenTractIds) => {
@@ -45,11 +57,34 @@ const formatTopojsonFilter = (d, meta, childrenTractIds) => {
 
 const formatPercentage = (d, mutiplyBy100 = false) => mutiplyBy100 ? `${formatAbbreviate(d * 100)}%` : `${formatAbbreviate(d)}%`;
 
+const formatRaceAndEthnicityData = data => {
+  nest()
+    .key(d => d.Year)
+    .entries(data)
+    .forEach(group => {
+      const total = sum(group.values, d => d["Hispanic Population"]);
+      group.values.forEach(d => total !== 0 ? d.share = d["Hispanic Population"] / total * 100 : d.share = 0);
+    });
+  const topRaceAndEthnicity = data.sort((a, b) => b.share - a.share);
+  return [data, topRaceAndEthnicity];
+};
+
 class Introduction extends SectionColumns {
 
   render() {
-    const {meta, population, populationByAgeAndGender, populationByRaceAndEthnicity, lifeExpectancy, topStats, childrenTractIds} = this.props;
-    const {healthTopics, socialDeterminants, rankData, tractToPlace} = topStats;
+    const {
+      meta,
+      population,
+      populationByAgeAndGender,
+      populationByRaceAndEthnicity,
+      lifeExpectancy,
+      topStats,
+      childrenTractIds,
+      childrenZipIds,
+      currentLevelOverallCoverage
+    } = this.props; 
+    console.log("populationByRaceAndEthnicity: ", populationByRaceAndEthnicity);
+    const {rankData, tractToPlace, zipToPlace} = topStats;
     const {level} = meta;
 
     const populationByAgeAndGenderAvailable = populationByAgeAndGender.length !== 0;
@@ -79,18 +114,19 @@ class Introduction extends SectionColumns {
     }
 
     // Get recent year race and ethnicity population data.
-    const recentYearPopulationByRaceAndEthnicity = {};
+    let topRaceAndEthnicity;
     if (populationByRaceAndEthnicityAvailable) {
-      nest()
-        .key(d => d.Year)
-        .entries(populationByRaceAndEthnicity)
-        .forEach(group => {
-          const total = sum(group.values, d => d["Hispanic Population"]);
-          group.values.forEach(d => total !== 0 ? d.share = d["Hispanic Population"] / total * 100 : d.share = 0);
-          group.key >= populationByRaceAndEthnicity[0].Year ? Object.assign(recentYearPopulationByRaceAndEthnicity, group) : {};
-        });
-      recentYearPopulationByRaceAndEthnicity.values.sort((a, b) => b.share - a.share);
+      topRaceAndEthnicity = formatRaceAndEthnicityData(populationByRaceAndEthnicity)[1];
     }
+
+    const total = currentLevelOverallCoverage[0]["Population by Insurance Coverage"] + currentLevelOverallCoverage[1]["Population by Insurance Coverage"];
+    const topOverallCoverage = currentLevelOverallCoverage.filter(d => d["Health Insurance Coverage Status"] === "With Health Insurance Coverage")[0];
+    topOverallCoverage.share = topOverallCoverage["Population by Insurance Coverage"] / total * 100;
+
+    // Filter zips for Geomap based on the profile you are on.
+    let filteredZips = [];
+    if (meta.level === "county" || meta.level === "zip") filteredZips = zipcodes;
+    else childrenZipIds.forEach(d => filteredZips.push(d.substring(7, 12)));
 
     return (
       <SectionColumns>
@@ -105,10 +141,10 @@ class Introduction extends SectionColumns {
           </p>
           {populationByRaceAndEthnicityAvailable
             ? <p>
-              Most of the population in {recentYearPopulationByRaceAndEthnicity.values[0].Geography} is {formatEthnicityName(recentYearPopulationByRaceAndEthnicity.values[0].Ethnicity)} {}
-              {formatRaceName(recentYearPopulationByRaceAndEthnicity.values[0].Race)} ({formatAbbreviate(recentYearPopulationByRaceAndEthnicity.values[0].share)}%), followed by {}
-              {formatEthnicityName(recentYearPopulationByRaceAndEthnicity.values[1].Ethnicity)} {formatRaceName(recentYearPopulationByRaceAndEthnicity.values[1].Race)}
-              ({formatAbbreviate(recentYearPopulationByRaceAndEthnicity.values[1].share)}%).
+              Most of the population in {topRaceAndEthnicity[0].Geography} is {formatEthnicityName(topRaceAndEthnicity[0].Ethnicity)} {}
+              {formatRaceName(topRaceAndEthnicity[0].Race)} ({formatAbbreviate(topRaceAndEthnicity[0].share)}%), followed by {}
+              {formatEthnicityName(topRaceAndEthnicity[1].Ethnicity)} {formatRaceName(topRaceAndEthnicity[1].Race)}
+              ({formatAbbreviate(topRaceAndEthnicity[1].share)}%).
             </p>
             : null}
           <p>In {level === "zip" ? `Zip code ${currentLocationRankData.name}` : currentLocationRankData.name}, the median household income is {formatAbbreviate(currentLocationRankData.medianIncome)}{meta.level === "county" ? "." : <span>, which ranks it at {formatRankSuffix(currentLocationRankData.medianIncomeRank)} largest of all {formatLevelNames(meta.level)} in Wayne County.</span>}</p>
@@ -117,14 +153,53 @@ class Introduction extends SectionColumns {
           </p>
         </article>
         <div className="top-stats viz">
-          {socialDeterminants.map(item =>
-            <Stat key={item.measure}
-              title={item.measure}
-              year={item.latestYear}
-              value={item.value}
-            />
-          )}
+          <Stat
+            title={"Health Insurance Coverage"}
+            year={topOverallCoverage.Year}
+            value={formatPercentage(topOverallCoverage.share)}
+            qualifier={`of the population in ${meta.name} had coverage`}
+          />
+
+          <Treemap config={{
+            data: `https://acs.datausa.io/api/data?measures=Hispanic Population&drilldowns=Race,Ethnicity&Geography=${meta.id}&Year=all`,
+            height: 250, 
+            sum: "Hispanic Population",
+            groupBy: ["Race", "Ethnicity"],
+            label: d => `${formatEthnicityName(d.Ethnicity)}, ${d.Race.replace("Alone", "")}`,
+            time: "Year",
+            title: d => `Population by Race and Ethnicity in ${d[0].Geography}`,
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
+          }}
+          dataFormat={resp => formatRaceAndEthnicityData(resp.data)[0]}
+          />
+
+          <Geomap config={{
+            data: "/api/data?measures=Distress Score&drilldowns=Zip&Year=all",
+            height: 250,
+            groupBy: "ID Zip",
+            colorScale: "Distress Score",
+            colorScaleConfig: {
+              // having a high distress score is bad
+              color: [
+                styles.success,
+                styles["danger-light"],
+                styles.danger,
+                styles["danger-dark"]
+              ]
+            },
+            legend: false,
+            label: d => formatGeomapZipLabel(d, meta, zipToPlace),
+            time: "Year",
+            title: `Distress Score by Zip Codes in ${meta.name}`,
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Distress Score", d => d["Distress Score"]]]},
+            topojson: "/topojson/zipcodes.json",
+            topojsonId: d => d.properties.ZCTA5CE10,
+            topojsonFilter: d => filteredZips.includes(d.properties.ZCTA5CE10)
+          }}
+          dataFormat={resp => resp.data}
+          />
         </div>
+
         <div className="top-stats viz">
           <Geomap config={{
             data: "/api/data?measures=Life Expectancy&Geography=14000US26163561300:children&Year=all",
@@ -132,7 +207,7 @@ class Introduction extends SectionColumns {
             groupBy: "ID Geography",
             colorScale: "Life Expectancy",
             legend: false,
-            label: d => formatGeomapLabel(d, meta, tractToPlace),
+            label: d => formatGeomapTractLabel(d, meta, tractToPlace),
             time: "End Year",
             title: `Life Expectancy by Census Tracts in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`,
             tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Life Expectancy", d => d["Life Expectancy"]]]},
@@ -215,11 +290,13 @@ Introduction.defaultProps = {
 const mapStateToProps = state => ({
   meta: state.data.meta,
   childrenTractIds: state.data.childrenTractIds,
+  childrenZipIds: state.data.childrenZipIds,
   population: state.data.population.data,
   populationByAgeAndGender: state.data.populationByAgeAndGender,
   populationByRaceAndEthnicity: state.data.populationByRaceAndEthnicity.data,
   lifeExpectancy: state.data.lifeExpectancy,
-  topStats: state.data.topStats
+  topStats: state.data.topStats,
+  currentLevelOverallCoverage: state.data.currentLevelOverallCoverage
 });
 
 export default connect(mapStateToProps)(Introduction);

@@ -4,7 +4,7 @@ import {nest} from "d3-collection";
 import {sum} from "d3-array";
 import {titleCase} from "d3plus-text";
 import {formatAbbreviate} from "d3plus-format";
-import {Geomap, Pie, Treemap} from "d3plus-react";
+import {Geomap, Treemap} from "d3plus-react";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import growthCalculator from "utils/growthCalculator";
@@ -43,11 +43,9 @@ const formatGeomapTractLabel = (d, meta, tractToPlace) => {
 };
 
 const formatGeomapZipLabel = (d, meta, zipToPlace) => {
-  if (meta.level === "tract" || meta.level === "county") {
-    const cityName = zipToPlace[d["ID Zip"]];
-    return cityName === undefined ? d.Zip : `${d.Zip}, ${cityName}`;
-  }
-  else return `${d.Zip}, ${meta.name}`;
+  if (meta.level === "place") return `${d.Zip}, ${meta.name}`;
+  const cityName = zipToPlace[d["ID Zip"]];
+  return cityName === undefined ? d.Zip : `${d.Zip}, ${cityName}`;
 };
 
 const formatTopojsonFilter = (d, meta, childrenTractIds) => {
@@ -70,7 +68,6 @@ const formatRaceAndEthnicityData = data => {
 };
 
 class Introduction extends SectionColumns {
-
   render() {
     const {
       meta,
@@ -82,8 +79,7 @@ class Introduction extends SectionColumns {
       childrenTractIds,
       childrenZipIds,
       currentLevelOverallCoverage
-    } = this.props; 
-    console.log("populationByRaceAndEthnicity: ", populationByRaceAndEthnicity);
+    } = this.props;
     const {rankData, tractToPlace, zipToPlace} = topStats;
     const {level} = meta;
 
@@ -98,16 +94,9 @@ class Introduction extends SectionColumns {
     const currentLocationRankData = rankData.filter(d => d.id === meta.id)[0];
 
     // Get recent year male and female population data by their age.
-    const recentYearPopulationByAgeAndGender = {};
     let getFemaleData, getMaleData, getTopFemaleData, getTopMaleData;
     if (populationByAgeAndGenderAvailable) {
-      nest()
-        .key(d => d.Year)
-        .entries(populationByAgeAndGender)
-        .forEach(group => {
-          group.key >= populationByAgeAndGender[0].Year ? Object.assign(recentYearPopulationByAgeAndGender, group) : {};
-        });
-      getMaleData = recentYearPopulationByAgeAndGender.values.filter(d => d.Sex === "Male");
+      getMaleData = populationByAgeAndGender.filter(d => d.Sex === "Male");
       getTopMaleData = getMaleData.sort((a, b) => b["Population by Sex and Age"] - a["Population by Sex and Age"])[0];
       getFemaleData = populationByAgeAndGender.filter(d => d.Sex === "Female");
       getTopFemaleData = getFemaleData.sort((a, b) => b["Population by Sex and Age"] - a["Population by Sex and Age"])[0];
@@ -176,7 +165,7 @@ class Introduction extends SectionColumns {
           <Geomap config={{
             data: "/api/data?measures=Distress Score&drilldowns=Zip&Year=all",
             height: 250,
-            groupBy: "ID Zip",
+            groupBy: "Zip",
             colorScale: "Distress Score",
             colorScaleConfig: {
               // having a high distress score is bad
@@ -191,7 +180,7 @@ class Introduction extends SectionColumns {
             label: d => formatGeomapZipLabel(d, meta, zipToPlace),
             time: "Year",
             title: `Distress Score by Zip Codes in ${meta.name}`,
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Distress Score", d => d["Distress Score"]]]},
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Distress Score", d => `${formatAbbreviate(d["Distress Score"])} percentile`]]},
             topojson: "/topojson/zipcodes.json",
             topojsonId: d => d.properties.ZCTA5CE10,
             topojsonFilter: d => filteredZips.includes(d.properties.ZCTA5CE10)
@@ -202,6 +191,8 @@ class Introduction extends SectionColumns {
 
         <div className="top-stats viz">
           <Geomap config={{
+            // Getting data fo a particular tract ID so that we get all tracts data in Wayne County. 
+            // We cannot use meta.id here because we do not get tracts when on Wayne County.
             data: "/api/data?measures=Life Expectancy&Geography=14000US26163561300:children&Year=all",
             height: 250,
             groupBy: "ID Geography",
@@ -287,15 +278,21 @@ Introduction.defaultProps = {
   slug: "introduction"
 };
 
+Introduction.need = [
+  fetchData("lifeExpectancy", "/api/data?measures=Life Expectancy&Geography=<id>&Year=latest", d => d.data), // Year data not available
+  fetchData("populationByAgeAndGender", "/api/data?measures=Population by Sex and Age&drilldowns=Age,Sex&Geography=<id>&Year=latest", d => d.data),
+  fetchData("populationByRaceAndEthnicity", "https://acs.datausa.io/api/data?measures=Hispanic Population&drilldowns=Race,Ethnicity&Geography=<id>&Year=latest")
+];
+
 const mapStateToProps = state => ({
   meta: state.data.meta,
-  childrenTractIds: state.data.childrenTractIds,
+  topStats: state.data.topStats,
   childrenZipIds: state.data.childrenZipIds,
+  childrenTractIds: state.data.childrenTractIds,
   population: state.data.population.data,
+  lifeExpectancy: state.data.lifeExpectancy,
   populationByAgeAndGender: state.data.populationByAgeAndGender,
   populationByRaceAndEthnicity: state.data.populationByRaceAndEthnicity.data,
-  lifeExpectancy: state.data.lifeExpectancy,
-  topStats: state.data.topStats,
   currentLevelOverallCoverage: state.data.currentLevelOverallCoverage
 });
 

@@ -152,7 +152,7 @@ class HealthCenterDemographics extends SectionColumns {
           <Contact slug={this.props.slug} />
         </article>
 
-        {/* Draw a BarChart to show data for health center data by race */}
+        {/* Draw a Pie chart to show data for health center data by race */}
         <Pie config={{
           data: isZipLevelDataAvailable ? `/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Geography=${meta.id}&Year=all` : "/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Year=all",
           groupBy: "RaceType",

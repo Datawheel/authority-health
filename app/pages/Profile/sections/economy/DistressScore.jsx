@@ -25,8 +25,13 @@ const definitions = [
   {term: "7. Change in establishments", definition: "Percent change in the number of business establishments."}
 ];
 
-class DistressScore extends SectionColumns {
+const formatGeomapZipLabel = (d, meta, zipToPlace) => {
+  if (meta.level === "place") return `${d.Zip}, ${meta.name}`;
+  const cityName = zipToPlace[d["ID Zip"]];
+  return cityName === undefined ? d.Zip : `${d.Zip}, ${cityName}`;
+};
 
+class DistressScore extends SectionColumns {
   constructor(props) {
     super(props);
     this.state = {sources: []};
@@ -34,7 +39,8 @@ class DistressScore extends SectionColumns {
 
   render() {
 
-    const {distressScoreData} = this.props;
+    const {meta, distressScoreData, topStats} = this.props;
+    const {zipToPlace} = topStats;
 
     distressScoreData.sort((a, b) => b["Distress Score"] - a["Distress Score"]);
     const topDistressScoreData = distressScoreData[0];
@@ -60,7 +66,8 @@ class DistressScore extends SectionColumns {
         {/* Draw Geomap to show distress scores for each zip code in the Wayne county. */}
         <Geomap config={{
           data: "/api/data?measures=Distress Score&drilldowns=Zip&Year=all",
-          groupBy: "ID Zip",
+          groupBy: "Zip",
+          label: d => formatGeomapZipLabel(d, meta, zipToPlace),
           colorScale: "Distress Score",
           colorScaleConfig: {
             // having a high distress score is bad
@@ -97,6 +104,8 @@ DistressScore.need = [
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
+  topStats: state.data.topStats,
   distressScoreData: state.data.distressScoreData
 });
 

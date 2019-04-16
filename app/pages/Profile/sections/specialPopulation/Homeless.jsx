@@ -144,7 +144,8 @@ class Homeless extends SectionColumns {
           }}
           />
         </article>
-        <div className="viz">
+        
+        <div className="viz u-text-right">
           <BarChart config={{
             data: `/api/data?measures=Sheltered Homeless Population&drilldowns=Category&Geography=${meta.id}&Year=all`,
             height: 300,

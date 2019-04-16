@@ -13,6 +13,7 @@ import Glossary from "components/Glossary";
 import Stat from "components/Stat";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -107,34 +108,44 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
           <Contact slug={this.props.slug} />
         </article>
 
-        {householdSnapDataAvailable
-          ? <BarChart config={{
-            data: `/api/data?measures=SNAP Receipts&drilldowns=Snap Receipt,Family type,Number of workers&Geography=${meta.id}&Year=all`,
-            discrete: "x",
-            height: 400,
-            stacked: true,
-            legend: false,
-            label: d => `${d["Family type"]}`,
-            groupBy: d => `${d["Family type"]}`,
-            x: d => d["Number of workers"],
-            y: "share",
-            time: "Year",
-            xSort: (a, b) => a["ID Number of workers"] - b["ID Number of workers"],
-            xConfig: {labelRotation: false},
-            yConfig: {
-              tickFormat: d => formatPercentage(d),
-              title: "Share"
-            },
-            shapeConfig: {
-              label: false
-            },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Workers", d => d["Number of workers"]], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
-          }}
-          dataFormat={resp => {
-            this.setState({sources: updateSource(resp.source, this.state.sources)});
-            return formatHouseholdSnapData(resp.data)[0];
-          }}
-          /> : null}
+        <div className="viz u-text-right">
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ `/api/data?measures=SNAP Receipts&drilldowns=Snap Receipt,Family type,Number of workers&Geography=${meta.id}&Year=all` }
+            title="Chart of Household Income From Public Assistance" />
+            
+          {householdSnapDataAvailable
+            ? <BarChart ref={comp => this.viz = comp } config={{
+              data: `/api/data?measures=SNAP Receipts&drilldowns=Snap Receipt,Family type,Number of workers&Geography=${meta.id}&Year=all`,
+              discrete: "x",
+              height: 400,
+              stacked: true,
+              legend: false,
+              label: d => `${d["Family type"]}`,
+              groupBy: d => `${d["Family type"]}`,
+              x: d => d["Number of workers"],
+              y: "share",
+              time: "Year",
+              xSort: (a, b) => a["ID Number of workers"] - b["ID Number of workers"],
+              xConfig: {labelRotation: false},
+              yConfig: {
+                tickFormat: d => formatPercentage(d),
+                title: "Share"
+              },
+              shapeConfig: {
+                label: false
+              },
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Workers", d => d["Number of workers"]], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
+            }}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return formatHouseholdSnapData(resp.data)[0];
+            }}
+            /> : null}
+        </div>
       </SectionColumns>
     );
   }

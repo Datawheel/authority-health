@@ -7,10 +7,10 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
 import Glossary from "components/Glossary";
-import Stat from "components/Stat";
 import StatGroup from "components/StatGroup";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const formatOverallData = (readingScoresByNation, readingScoresByState, readingScoresByCity) => {
   const readingScoresData = [];
@@ -154,7 +154,7 @@ class ReadingAssessment extends SectionColumns {
               {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
             </select>
           </label>
-          <p>The following chart shows the average reading assessment score {isParentsEducationSelected ? "for 8th grade students" : ""} in Detroit {isOverallSelected ? "compared to the United States" : isParentsEducationSelected ? `by their ${dropdownValue.toLowerCase()}` : `by ${dropdownValue.toLowerCase()}`} over time.</p>
+          <p>The following chart shows the average reading assessment score {isParentsEducationSelected ? "for 8th grade students" : ""} in Detroit {isOverallSelected ? "compared to Michigan and the United States" : isParentsEducationSelected ? `by their ${dropdownValue.toLowerCase()}` : `by ${dropdownValue === "ELL" || dropdownValue === "NSLP" ? dropdownValue : dropdownValue.toLowerCase()}`}.</p>
           {isParentsEducationSelected
             ? <StatGroup
               title="Parental education level (Detroit)"
@@ -238,30 +238,40 @@ class ReadingAssessment extends SectionColumns {
           <Contact slug={this.props.slug} />
         </article>
 
-        <BarChart config={{
-          data: isOverallSelected ? "/api/data?measures=Average Reading Score&drilldowns=Grade,Place&Year=all" : `/api/data?measures=Average Reading Score by ${dropdownValue}&drilldowns=Grade,${dropdownValue},Place&Year=all`,
-          discrete: "x",
-          groupBy: d => isOverallSelected ? `${d.Geography}` : `${d[dropdownValue]}`,
-          label: d => isOverallSelected ? getLabel(d) : getLabel(d, false, dropdownValue),
-          legend: false,
-          x: "Grade",
-          xConfig: {
-            title: "Grade"
-          },
-          y: isOverallSelected ? "Average Reading Score" : `Average Reading Score by ${dropdownValue}`,
-          yConfig: {
-            title: `Average Reading Score by ${dropdownValue}`
-          },
-          groupPadding: 25,
-          barPadding: 3,
-          time: "Year",
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => isOverallSelected ? d["Average Reading Score"] : d[`Average Reading Score by ${dropdownValue}`]], ["Place", d => isOverallSelected ? formatGeographyName(d.Geography) : "Detroit"]]}
-        }}
-        dataFormat={resp => {
-          this.setState({sources: updateSource(resp.source, this.state.sources)});
-          return isOverallSelected ? formatOverallData(readingScoresByNation, readingScoresByState, resp.data)[0] : resp.data;
-        }}
-        />
+        <div className="viz u-text-right">
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ isOverallSelected ? "/api/data?measures=Average Reading Score&drilldowns=Grade,Place&Year=all" : `/api/data?measures=Average Reading Score by ${dropdownValue}&drilldowns=Grade,${dropdownValue},Place&Year=all` }
+            title="Chart of Reading Assessment" />
+            
+          <BarChart config={{
+            data: isOverallSelected ? "/api/data?measures=Average Reading Score&drilldowns=Grade,Place&Year=all" : `/api/data?measures=Average Reading Score by ${dropdownValue}&drilldowns=Grade,${dropdownValue},Place&Year=all`,
+            discrete: "x",
+            groupBy: d => isOverallSelected ? `${d.Geography}` : `${d[dropdownValue]}`,
+            label: d => isOverallSelected ? getLabel(d) : getLabel(d, false, dropdownValue),
+            legend: false,
+            x: "Grade",
+            xConfig: {
+              title: "Grade"
+            },
+            y: isOverallSelected ? "Average Reading Score" : `Average Reading Score by ${dropdownValue}`,
+            yConfig: {
+              title: `Average Reading Score by ${dropdownValue}`
+            },
+            groupPadding: 25,
+            barPadding: 3,
+            time: "Year",
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => isOverallSelected ? d["Average Reading Score"] : d[`Average Reading Score by ${dropdownValue}`]], ["Place", d => isOverallSelected ? formatGeographyName(d.Geography) : "Detroit"]]}
+          }}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return isOverallSelected ? formatOverallData(readingScoresByNation, readingScoresByState, resp.data)[0] : resp.data;
+          }}
+          />
+        </div>
       </SectionColumns>
     );
   }

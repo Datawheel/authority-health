@@ -14,6 +14,7 @@ import ZipRegionDefinition from "components/ZipRegionDefinition";
 import CensusTractDefinition from "components/CensusTractDefinition";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const formatPercentage = (d, mutiplyBy100 = false) => mutiplyBy100 ? `${formatAbbreviate(d * 100)}%` : `${formatAbbreviate(d)}%`;
 
@@ -202,13 +203,13 @@ class ObesityAndDiabetes extends SectionColumns {
 
           {/* Draw a BarChart to show data for Obesity Rate by Sex. */}
           <BarChart config={{
-            data: isDiabetesSelected ? `/api/data?measures=Age-Adjusted Diabetes Prevalence&drilldowns=Sex&Geography=${meta.id}&Year=all` : `/api/data?measures=Age-Adjusted Obesity Prevalence&drilldowns=Sex&Geography=${meta.id}&Year=all`,
+            data: `/api/data?measures=Age-Adjusted ${isDiabetesSelected ? "Diabetes" : "Obesity"} Prevalence&drilldowns=Sex&Geography=${meta.id}&Year=all`,
             discrete: "y",
             height: 200,
             legend: false,
             groupBy: "Sex",
             label: d => d.Sex,
-            x: isDiabetesSelected ? "Age-Adjusted Diabetes Prevalence" : "Age-Adjusted Obesity Prevalence",
+            x: `Age-Adjusted ${isDiabetesSelected ? "Diabetes" : "Obesity"} Prevalence`,
             y: "Sex",
             time: "ID Year",
             title: `${isDiabetesSelected ? "Diabetes" : "Obesity"} in Wayne County`,
@@ -232,63 +233,72 @@ class ObesityAndDiabetes extends SectionColumns {
           />
         </article>
 
+        <div className="viz u-text-right">
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ `/api/data?measures=${dropdownValue}&drilldowns=${ isBMIWeightedDataValueSelected ? "Zip Region" : "Tract" }&Year=all` }
+            title="Map of Obesity and Diabetes" />
 
-        {/* Geomap to show Obesity and Diabetes data based on the dropdown value. */}
-        {isBMIWeightedDataValueSelected
-          ? <Geomap config={{
-            data: `/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=all`,
-            groupBy: "ID Zip Region",
-            colorScale: dropdownValue,
-            colorScaleConfig: {
-              axisConfig: {tickFormat: d => formatPercentage(d, true)},
-              // having high disease prevalency is bad
-              color: [
-                styles["danger-light"],
-                styles.danger,
-                styles["danger-dark"]
-              ]
-            },
-            label: d => d["Zip Region"],
-            time: "End Year",
-            title: `${dropdownValue} for Zip Regions in Wayne County`,
-            tooltipConfig: isHealthyWeightSelected ? {tbody: [["Year", d => d.Year],
-              ["Condition", `${dropdownValue}`], ["Share", d => `${formatPercentage(d[dropdownValue], true)}`]]} : {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue], true)}`]]},
-            topojson: "/topojson/zipregions.json",
-            topojsonId: d => d.properties.REGION,
-            topojsonFilter: () => true
-          }}
-          dataFormat={resp => {
-            this.setState({sources: updateSource(resp.source, this.state.sources)});
-            return resp.data;
-          }}
-          />
-          : <Geomap config={{
-            data: `/api/data?measures=${dropdownValue}&drilldowns=Tract&Year=all`,
-            groupBy: "ID Tract",
-            colorScale: dropdownValue,
-            colorScaleConfig: {
-              axisConfig: {tickFormat: d => formatPercentage(d)},
-              // having high disease prevalency is bad
-              color: [
-                styles["danger-light"],
-                styles.danger,
-                styles["danger-dark"]
-              ]
-            },
-            label: d => `${d.Tract}, ${tractToPlace[d["ID Tract"]]}`,
-            time: "Year",
-            title: `${dropdownValue} for Census Tracts within Detroit, Livonia, Dearborn and Westland`,
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue])}`]]},
-            topojson: "/topojson/tract.json",
-            topojsonId: d => d.id,
-            topojsonFilter: d => d.id.startsWith("14000US26163")
-          }}
-          dataFormat={resp => {
-            this.setState({sources: updateSource(resp.source, this.state.sources)});
-            return resp.data;
-          }}
-          />
-        }
+          {/* Geomap to show Obesity and Diabetes data based on the dropdown value. */}
+          {isBMIWeightedDataValueSelected
+            ? <Geomap ref={comp => this.viz = comp } config={{
+              data: `/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=all`,
+              groupBy: "ID Zip Region",
+              colorScale: dropdownValue,
+              colorScaleConfig: {
+                axisConfig: {tickFormat: d => formatPercentage(d, true)},
+                // having high disease prevalency is bad
+                color: [
+                  styles["danger-light"],
+                  styles.danger,
+                  styles["danger-dark"]
+                ]
+              },
+              label: d => d["Zip Region"],
+              time: "End Year",
+              title: `${dropdownValue} for Zip Regions in Wayne County`,
+              tooltipConfig: isHealthyWeightSelected ? {tbody: [["Year", d => d.Year],
+                ["Condition", `${dropdownValue}`], ["Share", d => `${formatPercentage(d[dropdownValue], true)}`]]} : {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue], true)}`]]},
+              topojson: "/topojson/zipregions.json",
+              topojsonId: d => d.properties.REGION,
+              topojsonFilter: () => true
+            }}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return resp.data;
+            }}
+            />
+            : <Geomap ref={comp => this.viz = comp } config={{
+              data: `/api/data?measures=${dropdownValue}&drilldowns=Tract&Year=all`,
+              groupBy: "ID Tract",
+              colorScale: dropdownValue,
+              colorScaleConfig: {
+                axisConfig: {tickFormat: d => formatPercentage(d)},
+                // having high disease prevalency is bad
+                color: [
+                  styles["danger-light"],
+                  styles.danger,
+                  styles["danger-dark"]
+                ]
+              },
+              label: d => `${d.Tract}, ${tractToPlace[d["ID Tract"]]}`,
+              time: "Year",
+              title: `${dropdownValue} for Census Tracts within Detroit, Livonia, Dearborn and Westland`,
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue])}`]]},
+              topojson: "/topojson/tract.json",
+              topojsonId: d => d.id,
+              topojsonFilter: d => d.id.startsWith("14000US26163")
+            }}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return resp.data;
+            }}
+            />
+          }
+        </div>
       </SectionColumns>
     );
   }

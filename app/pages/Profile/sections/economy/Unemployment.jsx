@@ -14,6 +14,7 @@ import StatGroup from "components/StatGroup";
 import rangeFormatter from "utils/rangeFormatter";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -142,27 +143,37 @@ class Unemployment extends SectionColumns {
           }
         </article>
 
-        {/* Lineplot to show total population over the years for selected geography. */}
-        <LinePlot config={{
-          data: `/api/data?measures=Unemployment Rate&Geography=${meta.id}&Year=all`,
-          discrete: "x",
-          baseline: 0,
-          legend: false,
-          groupBy: "Geography",
-          x: "Year",
-          y: "Unemployment Rate",
-          title: d => `Unemployment Over Time in ${d[0].Geography}`,
-          yConfig: {
-            tickFormat: d => formatPercentage(d),
-            title: "Unemployment Rate"
-          },
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d["Unemployment Rate"])]]}
-        }}
-        dataFormat={resp => {
-          this.setState({sources: updateSource(resp.source, this.state.sources)});
-          return resp.data;
-        }}
-        />
+        <div className="viz u-text-right">
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ `/api/data?measures=Unemployment Rate&Geography=${meta.id}&Year=all` }
+            title="Chart of Umemployment" />
+
+          {/* Lineplot to show total population over the years for selected geography. */}
+          <LinePlot ref={comp => this.viz = comp } config={{
+            data: `/api/data?measures=Unemployment Rate&Geography=${meta.id}&Year=all`,
+            discrete: "x",
+            baseline: 0,
+            legend: false,
+            groupBy: "Geography",
+            x: "Year",
+            y: "Unemployment Rate",
+            title: d => `Unemployment Over Time in ${d[0].Geography}`,
+            yConfig: {
+              tickFormat: d => formatPercentage(d),
+              title: "Unemployment Rate"
+            },
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d["Unemployment Rate"])]]}
+          }}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return resp.data;
+          }}
+          />
+        </div>
       </SectionColumns>
     );
   }

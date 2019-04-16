@@ -15,6 +15,7 @@ import ZipRegionDefinition from "components/ZipRegionDefinition";
 import CensusTractDefinition from "components/CensusTractDefinition";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const formatPercentage = (d, mutiplyBy100 = false) => mutiplyBy100 ? `${formatAbbreviate(d * 100)}%` : `${formatAbbreviate(d)}%`;
 
@@ -143,63 +144,72 @@ class RiskyBehaviors extends SectionColumns {
             </div> : null }
         </article>
 
-        {/* Create a Geomap based on the dropdown choice. */}
-        {isSecondHandSmokeOrMonthlyAlcoholSelected
-          ? <Geomap config={{
-            data: `/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=all`,
-            groupBy: "ID Zip Region",
-            colorScale: dropdownValue,
-            colorScaleConfig: {
-              axisConfig: {tickFormat: d => formatPercentage(d, true)},
-              // smoking is bad
-              color: [
-                styles.white,
-                styles["danger-light"],
-                styles.danger,
-                styles["danger-dark"]
-              ]
-            },
-            label: d => d["Zip Region"],
-            time: "End Year",
-            title: `${dropdownValue} for Zip Regions in Wayne County`,
-            tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Behavior", `${dropdownValue}`], ["Prevalence", d => formatPercentage(d[dropdownValue], true)]]},
-            topojson: "/topojson/zipregions.json",
-            topojsonId: d => d.properties.REGION,
-            topojsonFilter: () => true
-          }}
-          dataFormat={resp => {
-            this.setState({sources: updateSource(resp.source, this.state.sources)});
-            return resp.data;
-          }}
-          />
-          : <Geomap config={{
-            data: `/api/data?measures=${dropdownValue}&drilldowns=Tract&Year=all`,
-            groupBy: "ID Tract",
-            colorScale: dropdownValue,
-            colorScaleConfig: {
-              axisConfig: {tickFormat: d => formatPercentage(d)},
-              // smoking is bad
-              color: [
-                styles.white,
-                styles["danger-light"],
-                styles.danger,
-                styles["danger-dark"]
-              ]
-            },
-            label: d => `${d.Tract}, ${tractToPlace[d["ID Tract"]]}`,
-            time: "Year",
-            title: `${dropdownValue} for Census Tracts within Detroit, Livonia, Dearborn and Westland`,
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Behavior", `${dropdownValue}`], ["Prevalence", d => formatPercentage(d[dropdownValue])]]},
-            topojson: "/topojson/tract.json",
-            topojsonId: d => d.id,
-            topojsonFilter: d => d.id.startsWith("14000US26163")
-          }}
-          dataFormat={resp => {
-            this.setState({sources: updateSource(resp.source, this.state.sources)});
-            return resp.data;
-          }}
-          />
-        }
+        <div className="viz u-text-right">
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ `/api/data?measures=${dropdownValue}&drilldowns=${ isSecondHandSmokeOrMonthlyAlcoholSelected ? "Zip Region" : "Tract" }&Year=all` }
+            title="Map of Risky Behaviors" />
+          {/* Create a Geomap based on the dropdown choice. */}
+          {isSecondHandSmokeOrMonthlyAlcoholSelected
+            ? <Geomap ref={comp => this.viz = comp } config={{
+              data: `/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=all`,
+              groupBy: "ID Zip Region",
+              colorScale: dropdownValue,
+              colorScaleConfig: {
+                axisConfig: {tickFormat: d => formatPercentage(d, true)},
+                // smoking is bad
+                color: [
+                  styles.white,
+                  styles["danger-light"],
+                  styles.danger,
+                  styles["danger-dark"]
+                ]
+              },
+              label: d => d["Zip Region"],
+              time: "End Year",
+              title: `${dropdownValue} for Zip Regions in Wayne County`,
+              tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Behavior", `${dropdownValue}`], ["Prevalence", d => formatPercentage(d[dropdownValue], true)]]},
+              topojson: "/topojson/zipregions.json",
+              topojsonId: d => d.properties.REGION,
+              topojsonFilter: () => true
+            }}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return resp.data;
+            }}
+            />
+            : <Geomap ref={comp => this.viz = comp } config={{
+              data: `/api/data?measures=${dropdownValue}&drilldowns=Tract&Year=all`,
+              groupBy: "ID Tract",
+              colorScale: dropdownValue,
+              colorScaleConfig: {
+                axisConfig: {tickFormat: d => formatPercentage(d)},
+                // smoking is bad
+                color: [
+                  styles.white,
+                  styles["danger-light"],
+                  styles.danger,
+                  styles["danger-dark"]
+                ]
+              },
+              label: d => `${d.Tract}, ${tractToPlace[d["ID Tract"]]}`,
+              time: "Year",
+              title: `${dropdownValue} for Census Tracts within Detroit, Livonia, Dearborn and Westland`,
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Behavior", `${dropdownValue}`], ["Prevalence", d => formatPercentage(d[dropdownValue])]]},
+              topojson: "/topojson/tract.json",
+              topojsonId: d => d.id,
+              topojsonFilter: d => d.id.startsWith("14000US26163")
+            }}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return resp.data;
+            }}
+            />
+          }
+        </div>
       </SectionColumns>
     );
   }

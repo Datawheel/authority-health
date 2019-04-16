@@ -14,6 +14,7 @@ import Glossary from "components/Glossary";
 import Stat from "components/Stat";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -90,36 +91,46 @@ class ViolentAndPropertyCrimes extends SectionColumns {
           <Contact slug={this.props.slug} />
         </article>
 
-        {/* Draw a Treemap for each type of crime. */}
-        <Treemap config={{
-          data: isPlaceDataAvailable ? `/api/data?measures=Number of Crimes&drilldowns=Type of Crime,Crime&Geography=${meta.id}&Year=all` : "/api/data?measures=Number of Crimes&drilldowns=Type of Crime,Crime&Year=all",
-          // discrete: "x",
-          height: 400,
-          // legend: false,
-          // groupBy: d => `${d["Type of Crime"]}: ${d.Crime}`,
-          sum: d => d["Number of Crimes"],
-          groupBy: ["Type of Crime", "Crime"],
-          // y: "share",
-          time: "Year",
-          // xConfig: {
-          //   tickFormat: d => titleCase(d),
-          //   labelRotation: false
-          // },
-          // yConfig: {
-          //   tickFormat: d => formatPercentage(d),
-          //   title: "Crime Rate"
-          // },
-          // xSort: (a, b) => a.share - b.share,
-          // shapeConfig: {
-          //   label: false
-          // },
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [isPlaceDataAvailable ? "Place" : "County", d => isPlaceDataAvailable ? d.Geography : "Wayne County"]]}
-        }}
-        dataFormat={resp => {
-          this.setState({sources: updateSource(resp.source, this.state.sources)});
-          return formatCrimeData(resp.data);
-        }}
-        />
+        <div className="viz u-text-right">
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ isPlaceDataAvailable ? `/api/data?measures=Number of Crimes&drilldowns=Type of Crime,Crime&Geography=${meta.id}&Year=all` : "/api/data?measures=Number of Crimes&drilldowns=Type of Crime,Crime&Year=all" }
+            title="Chart of Violent and Property Crime" />
+            
+          {/* Draw a Treemap for each type of crime. */}
+          <Treemap config={{
+            data: isPlaceDataAvailable ? `/api/data?measures=Number of Crimes&drilldowns=Type of Crime,Crime&Geography=${meta.id}&Year=all` : "/api/data?measures=Number of Crimes&drilldowns=Type of Crime,Crime&Year=all",
+            // discrete: "x",
+            height: 400,
+            // legend: false,
+            // groupBy: d => `${d["Type of Crime"]}: ${d.Crime}`,
+            sum: d => d["Number of Crimes"],
+            groupBy: ["Type of Crime", "Crime"],
+            // y: "share",
+            time: "Year",
+            // xConfig: {
+            //   tickFormat: d => titleCase(d),
+            //   labelRotation: false
+            // },
+            // yConfig: {
+            //   tickFormat: d => formatPercentage(d),
+            //   title: "Crime Rate"
+            // },
+            // xSort: (a, b) => a.share - b.share,
+            // shapeConfig: {
+            //   label: false
+            // },
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [isPlaceDataAvailable ? "Place" : "County", d => isPlaceDataAvailable ? d.Geography : "Wayne County"]]}
+          }}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return formatCrimeData(resp.data);
+          }}
+          />
+        </div>
       </SectionColumns>
     );
   }

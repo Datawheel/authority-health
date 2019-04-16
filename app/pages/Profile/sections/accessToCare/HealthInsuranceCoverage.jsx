@@ -15,6 +15,7 @@ import Stat from "components/Stat";
 import StatGroup from "components/StatGroup";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -219,23 +220,33 @@ class HealthInsuranceCoverage extends SectionColumns {
             />
           </article>
 
-          <Geomap config={{
-            data: `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=${meta.id}:children&Year=all`,
-            groupBy: meta.level === "county" ? "ID Place" : "ID Geography",
-            colorScale: "share",
-            title: `Health Insurance Coverage for ${meta.level === "county" ? "Places" : "Census Tracts"} in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`,
-            colorScaleConfig: {axisConfig: {tickFormat: d => formatPercentage(d)}},
-            time: "Year",
-            label: d => formatGeomapLabel(d, meta, tractToPlace),
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]},
-            topojson: meta.level === "county" ? "/topojson/place.json" : "/topojson/tract.json",
-            topojsonFilter: d => formatTopojsonFilter(d, meta, childrenTractIds)
-          }}
-          dataFormat={resp => {
-            this.setState({sources: updateSource(resp.source, this.state.sources)});
-            return formatGeomapCoverageData(resp.data, meta, childrenTractIds)[0];
-          }}
-          />
+          <div className="viz u-text-right">
+            <Options
+              component={this}
+              componentKey="viz"
+              dataFormat={resp => resp.data}
+              slug={this.props.slug}
+              data={ `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=${meta.id}:children&Year=all` }
+              title="Map of Health Insurance Coverage" />
+
+            <Geomap ref={comp => this.viz = comp } config={{
+              data: `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=${meta.id}:children&Year=all`,
+              groupBy: meta.level === "county" ? "ID Place" : "ID Geography",
+              colorScale: "share",
+              title: `Health Insurance Coverage for ${meta.level === "county" ? "Places" : "Census Tracts"} in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`,
+              colorScaleConfig: {axisConfig: {tickFormat: d => formatPercentage(d)}},
+              time: "Year",
+              label: d => formatGeomapLabel(d, meta, tractToPlace),
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]},
+              topojson: meta.level === "county" ? "/topojson/place.json" : "/topojson/tract.json",
+              topojsonFilter: d => formatTopojsonFilter(d, meta, childrenTractIds)
+            }}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return formatGeomapCoverageData(resp.data, meta, childrenTractIds)[0];
+            }}
+            />
+          </div>
         </SectionColumns>
       );
     }

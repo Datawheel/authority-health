@@ -14,6 +14,7 @@ import ZipRegionDefinition from "components/ZipRegionDefinition";
 import CensusTractDefinition from "components/CensusTractDefinition";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const formatPercentage = (d, mutiplyBy100 = false) => mutiplyBy100 ? `${formatAbbreviate(d * 100)}%` : `${formatAbbreviate(d)}%`;
 
@@ -150,47 +151,56 @@ class PreventiveCare extends SectionColumns {
           <Contact slug={this.props.slug} />
         </article>
 
-        {/* Geomap to show Preventive care data for selected dropdown Value. */}
-        {isPreventativeCareWeightedValueSelected
-          ? <Geomap config={{
-            data: `/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=all`,
-            groupBy: "ID Zip Region",
-            colorScale: dropdownValue,
-            colorScaleConfig: {
-              axisConfig: {tickFormat: d => formatPercentage(d, true)}
-            },
-            label: d => d["Zip Region"],
-            height: 400,
-            time: "End Year",
-            tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Preventive Care", `${formatDropdownNames(dropdownValue)}`], ["Share", d => `${formatPercentage(d[dropdownValue], true)}`]]},
-            topojson: "/topojson/zipregions.json",
-            topojsonId: d => d.properties.REGION,
-            topojsonFilter: () => true
-          }}
-          dataFormat={resp => {
-            this.setState({sources: updateSource(resp.source, this.state.sources)});
-            return resp.data;
-          }}
-          />
-          : <Geomap config={{
-            data: `/api/data?measures=${dropdownValue}&drilldowns=Tract&Year=all`,
-            groupBy: "ID Tract",
-            colorScale: dropdownValue,
-            colorScaleConfig: {
-              axisConfig: {tickFormat: d => formatPercentage(d)}
-            },
-            label: d => `${d.Tract}, ${tractToPlace[d["ID Tract"]]}`,
-            time: "Year",
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Preventive Care", `${formatDropdownNames(dropdownValue)}`], ["Share", d => `${formatPercentage(d[dropdownValue])}`]]},
-            topojson: "/topojson/tract.json",
-            topojsonId: d => d.id,
-            topojsonFilter: d => d.id.startsWith("14000US26163")
-          }}
-          dataFormat={resp => {
-            this.setState({sources: updateSource(resp.source, this.state.sources)});
-            return resp.data;
-          }}
-          />}
+        <div className="viz u-text-right">
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ `/api/data?measures=${dropdownValue}&drilldowns=${ isPreventativeCareWeightedValueSelected ? "Zip Region" : "Tract" }&Year=all` }
+            title="Map of Preventive Care" />
+          {/* Geomap to show Preventive care data for selected dropdown Value. */}
+          {isPreventativeCareWeightedValueSelected
+            ? <Geomap ref={comp => this.viz = comp } config={{
+              data: `/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=all`,
+              groupBy: "ID Zip Region",
+              colorScale: dropdownValue,
+              colorScaleConfig: {
+                axisConfig: {tickFormat: d => formatPercentage(d, true)}
+              },
+              label: d => d["Zip Region"],
+              height: 400,
+              time: "End Year",
+              tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Preventive Care", `${formatDropdownNames(dropdownValue)}`], ["Share", d => `${formatPercentage(d[dropdownValue], true)}`]]},
+              topojson: "/topojson/zipregions.json",
+              topojsonId: d => d.properties.REGION,
+              topojsonFilter: () => true
+            }}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return resp.data;
+            }}
+            />
+            : <Geomap ref={comp => this.viz = comp } config={{
+              data: `/api/data?measures=${dropdownValue}&drilldowns=Tract&Year=all`,
+              groupBy: "ID Tract",
+              colorScale: dropdownValue,
+              colorScaleConfig: {
+                axisConfig: {tickFormat: d => formatPercentage(d)}
+              },
+              label: d => `${d.Tract}, ${tractToPlace[d["ID Tract"]]}`,
+              time: "Year",
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Preventive Care", `${formatDropdownNames(dropdownValue)}`], ["Share", d => `${formatPercentage(d[dropdownValue])}`]]},
+              topojson: "/topojson/tract.json",
+              topojsonId: d => d.id,
+              topojsonFilter: d => d.id.startsWith("14000US26163")
+            }}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return resp.data;
+            }}
+            />}
+        </div>
       </SectionColumns>
     );
   }

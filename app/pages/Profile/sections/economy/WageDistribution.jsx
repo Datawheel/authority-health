@@ -13,6 +13,7 @@ import Stat from "components/Stat";
 import rangeFormatter from "utils/rangeFormatter";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
@@ -58,36 +59,46 @@ class WageDistribution extends SectionColumns {
           <Contact slug={this.props.slug} />
         </article>
 
-        {/* Draw Barcahrt to show wage distribution for each place in the Wayne county. */}
-        {wageDistributionDataAvailable
-          ? <BarChart config={{
-            data: `https://acs.datausa.io/api/data?measures=Household Income&drilldowns=Household Income Bucket&Geography=${meta.id}&Year=all`,
-            discrete: "x",
-            height: 400,
-            legend: false,
-            groupBy: "Household Income Bucket",
-            x: "Household Income Bucket",
-            y: "share",
-            time: "Year",
-            xSort: (a, b) => a["ID Household Income Bucket"] - b["ID Household Income Bucket"],
-            xConfig: {
-              tickFormat: d => rangeFormatter(d),
-              title: "Household Income Bucket"
-            },
-            yConfig: {
-              tickFormat: d => formatPopulation(d),
-              title: "Share"
-            },
-            shapeConfig: {
-              label: false
-            },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
-          }}
-          dataFormat={resp => {
-            this.setState({sources: updateSource(resp.source, this.state.sources)});
-            return formatWageDistributionData(resp.data);
-          }}
-          /> : null}
+        <div className="viz u-text-right">
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ `https://acs.datausa.io/api/data?measures=Household Income&drilldowns=Household Income Bucket&Geography=${meta.id}&Year=all` }
+            title="Chart of Wage Distribution" />
+            
+          {/* Draw Barcahrt to show wage distribution for each place in the Wayne county. */}
+          {wageDistributionDataAvailable
+            ? <BarChart config={{
+              data: `https://acs.datausa.io/api/data?measures=Household Income&drilldowns=Household Income Bucket&Geography=${meta.id}&Year=all`,
+              discrete: "x",
+              height: 400,
+              legend: false,
+              groupBy: "Household Income Bucket",
+              x: "Household Income Bucket",
+              y: "share",
+              time: "Year",
+              xSort: (a, b) => a["ID Household Income Bucket"] - b["ID Household Income Bucket"],
+              xConfig: {
+                tickFormat: d => rangeFormatter(d),
+                title: "Household Income Bucket"
+              },
+              yConfig: {
+                tickFormat: d => formatPopulation(d),
+                title: "Share"
+              },
+              shapeConfig: {
+                label: false
+              },
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
+            }}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return formatWageDistributionData(resp.data);
+            }}
+            /> : null}
+        </div>
       </SectionColumns>
     );
   }

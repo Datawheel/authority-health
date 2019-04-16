@@ -142,7 +142,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
           <Contact slug={this.props.slug} />
         </article>
 
-        <div className="viz">
+        <div className="viz u-text-right">
           <Options
             component={this}
             componentKey="viz"

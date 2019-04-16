@@ -13,6 +13,7 @@ import Stat from "components/Stat";
 import rangeFormatter from "utils/rangeFormatter";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 const filterTimeBucket = d => d.split(" ").filter(d => d !== "Minutes").join("");
@@ -120,9 +121,20 @@ class Transportation extends SectionColumns {
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
 
-          {/* Draw a Barchart for Number of vehicles in each household. */}
-          {numberOfVehiclesDataAvailable &&
-            <BarChart config={{
+          <div className="viz">
+            {numberOfVehiclesDataAvailable &&
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ `https://acs.datausa.io/api/data?measures=Commute Means by Gender&drilldowns=Vehicles Available,Gender&Geography=${meta.id}&Year=all` }
+            title="Chart of Access to Car by Gender" />
+            }
+
+            {/* Draw a Barchart for Number of vehicles in each household. */}
+            {numberOfVehiclesDataAvailable &&
+            <BarChart ref={comp => this.viz = comp } config={{
               data: `https://acs.datausa.io/api/data?measures=Commute Means by Gender&drilldowns=Vehicles Available,Gender&Geography=${meta.id}&Year=all`,
               discrete: "x",
               height: 300,
@@ -150,14 +162,23 @@ class Transportation extends SectionColumns {
               return  formatNumberOfVehiclesData(resp.data)[0];
             }}
             />
-          }
+            }
+          </div>
         </article>
 
-        <div className="viz">
-
+        <div className="viz u-text-right">
+          {commuteTimeDataAvailable &&
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ `https://acs.datausa.io/api/data?measures=Commuter Population&drilldowns=Travel Time&Geography=${meta.id}&Year=all` }
+            title="Chart of Distribution of Commute Time" />
+          }
           {/* Draw a Barchart for commute time. */}
           {commuteTimeDataAvailable
-            ? <BarChart config={{
+            ? <BarChart ref={comp => this.viz = comp } config={{
               data: `https://acs.datausa.io/api/data?measures=Commuter Population&drilldowns=Travel Time&Geography=${meta.id}&Year=all`,
               discrete: "x",
               height: 300,
@@ -187,9 +208,18 @@ class Transportation extends SectionColumns {
             }}
             /> : null}
 
+          {transportationMeansAvailable &&
+              <Options
+                component={this}
+                componentKey="viz"
+                dataFormat={resp => resp.data}
+                slug={this.props.slug}
+                data={ `https://acs.datausa.io/api/data?measures=Commute Means&drilldowns=Transportation Means&Geography=${meta.id}&Year=all` }
+                title="Chart of Means of Transportation" />
+          }
           {/* Draw a Treemap for Modes of tranportation. */}
           {transportationMeansAvailable
-            ? <Treemap config={{
+            ? <Treemap ref={comp => this.viz = comp } config={{
               data: `https://acs.datausa.io/api/data?measures=Commute Means&drilldowns=Transportation Means&Geography=${meta.id}&Year=all`,
               height: 300,
               sum: d => d["Commute Means"],

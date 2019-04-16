@@ -15,6 +15,7 @@ import StatGroup from "components/StatGroup";
 import CensusTractDefinition from "components/CensusTractDefinition";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const definitions = [
   {term: "Physical Inactivity", definition: "In the Diabetes Atlas application, a person is considered to be physically inactive if he or she reported not participating in physical activity or exercise in the past 30 days."}
@@ -127,29 +128,39 @@ class PhysicalInactivity extends SectionColumns {
           />*/}
         </article>
 
-        {/* Geomap to show Physical health and physical Inactivity for tracts in the Wayne County. */}
-        <Geomap config={{
-          data: physicalInactivity.data, // only 1 year data available.
-          groupBy: "ID Tract",
-          label: d => `${d.Tract}, ${tractToPlace[d["ID Tract"]]}`,
-          colorScale: d => d["Physical Inactivity"],
-          colorScaleConfig: {
-            axisConfig: {tickFormat: d => formatPercentage(d)},
-            // not exercising is bad
-            color: [
-              styles.white,
-              styles["danger-light"],
-              styles.danger,
-              styles["danger-dark"]
-            ]
-          },
-          time: "Year",
-          title: "Physical Inactivity for Census Tracts within Detroit, Livonia, Dearborn and Westland",
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", "Physical Inactivity"], ["Prevalence", d => `${formatPercentage(d["Physical Inactivity"])}`]]},
-          topojson: "/topojson/tract.json",
-          topojsonFilter: d => d.id.startsWith("14000US26163")
-        }}
-        />
+        <div className="viz u-text-right">
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ physicalInactivity.data }
+            title="Map of Physical Inactivity" />
+            
+          {/* Geomap to show Physical health and physical Inactivity for tracts in the Wayne County. */}
+          <Geomap ref={comp => this.viz = comp } config={{
+            data: physicalInactivity.data, // only 1 year data available.
+            groupBy: "ID Tract",
+            label: d => `${d.Tract}, ${tractToPlace[d["ID Tract"]]}`,
+            colorScale: d => d["Physical Inactivity"],
+            colorScaleConfig: {
+              axisConfig: {tickFormat: d => formatPercentage(d)},
+              // not exercising is bad
+              color: [
+                styles.white,
+                styles["danger-light"],
+                styles.danger,
+                styles["danger-dark"]
+              ]
+            },
+            time: "Year",
+            title: "Physical Inactivity for Census Tracts within Detroit, Livonia, Dearborn and Westland",
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", "Physical Inactivity"], ["Prevalence", d => `${formatPercentage(d["Physical Inactivity"])}`]]},
+            topojson: "/topojson/tract.json",
+            topojsonFilter: d => d.id.startsWith("14000US26163")
+          }}
+          />
+        </div>
       </SectionColumns>
     );
   }

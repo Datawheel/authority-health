@@ -11,6 +11,13 @@ import Stat from "components/Stat";
 import zipcodes from "utils/zipcodes";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
+
+const formatGeomapZipLabel = (d, meta, zipToPlace) => {
+  if (meta.level === "place") return `${d.Zip}, ${meta.name}`;
+  const cityName = zipToPlace[d["ID Zip"]];
+  return cityName === undefined ? d.Zip : `${d.Zip}, ${cityName}`;
+};
 
 class EmploymentGrowth extends SectionColumns {
 
@@ -21,7 +28,8 @@ class EmploymentGrowth extends SectionColumns {
 
   render() {
 
-    const {percentChangeInEmploymemt} = this.props;
+    const {meta, topStats, percentChangeInEmploymemt} = this.props;
+    const {zipToPlace} = topStats;
     const topEmploymentRateData = percentChangeInEmploymemt.sort((a, b) => b["Percent Change in Employment"] - a["Percent Change in Employment"])[0];
 
     return (
@@ -42,28 +50,38 @@ class EmploymentGrowth extends SectionColumns {
           <Contact slug={this.props.slug} />
         </article>
 
-        {/* Draw Geomap to show health center count for each zip code in the Wayne county */}
-        <Geomap config={{
-          data: "/api/data?measures=Percent Change in Employment&drilldowns=Zip&Year=all",
-          groupBy: "ID Zip",
-          colorScale: "Percent Change in Employment",
-          colorScaleConfig: {
-            axisConfig: {tickFormat: d => `${d}%`},
-            color: [styles["danger-dark"], styles["light-3"], styles["success-dark"]]
-          },
-          label: d => d.Zip,
-          height: 400,
-          time: "Year",
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Employment Growth", d => `${formatAbbreviate(d["Percent Change in Employment"])}%`]]},
-          topojson: "/topojson/zipcodes.json",
-          topojsonFilter: d => zipcodes.includes(d.properties.ZCTA5CE10),
-          topojsonId: d => d.properties.ZCTA5CE10
-        }}
-        dataFormat={resp => {
-          this.setState({sources: updateSource(resp.source, this.state.sources)});
-          return resp.data;
-        }}
-        />
+        <div className="viz u-text-right">
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ "/api/data?measures=Percent Change in Employment&drilldowns=Zip&Year=all" }
+            title="Map of Employment Growth" />
+            
+          {/* Draw Geomap to show health center count for each zip code in the Wayne county */}
+          <Geomap ref={comp => this.viz = comp } config={{
+            data: "/api/data?measures=Percent Change in Employment&drilldowns=Zip&Year=all",
+            groupBy: "Zip",
+            label: d => formatGeomapZipLabel(d, meta, zipToPlace),
+            colorScale: "Percent Change in Employment",
+            colorScaleConfig: {
+              axisConfig: {tickFormat: d => `${d}%`},
+              color: [styles["danger-dark"], styles["light-3"], styles["success-dark"]]
+            },
+            height: 400,
+            time: "Year",
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Employment Growth", d => `${formatAbbreviate(d["Percent Change in Employment"])}%`]]},
+            topojson: "/topojson/zipcodes.json",
+            topojsonFilter: d => zipcodes.includes(d.properties.ZCTA5CE10),
+            topojsonId: d => d.properties.ZCTA5CE10
+          }}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return resp.data;
+          }}
+          />
+        </div>
       </SectionColumns>
     );
   }
@@ -78,6 +96,8 @@ EmploymentGrowth.need = [
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
+  topStats: state.data.topStats,
   percentChangeInEmploymemt: state.data.percentChangeInEmploymemt
 });
 

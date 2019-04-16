@@ -15,6 +15,7 @@ import Disclaimer from "components/Disclaimer";
 import Stat from "components/Stat";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 class AirQuality extends SectionColumns {
 
@@ -121,9 +122,19 @@ class AirQuality extends SectionColumns {
           <Contact slug={this.props.slug} />
         </article>
 
-        {/* Lineplot to show air quality days over the years. */}
-        {dropdownValue === "Air Quality" && 
-        <LinePlot config={{
+        <div className="viz u-text-right">
+          {dropdownValue === "Air Quality" && 
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ `/api/data?measures=Air Quality Days&drilldowns=Category&Geography=${meta.id}&Year=all` }
+            title="Chart of Air Quality" />
+          }
+          {/* Lineplot to show air quality days over the years. */}
+          {dropdownValue === "Air Quality" && 
+        <LinePlot ref={comp => this.viz = comp } config={{
           data: `/api/data?measures=Air Quality Days&drilldowns=Category&Geography=${meta.id}&Year=all`,
           discrete: "x",
           height: 400,
@@ -143,9 +154,18 @@ class AirQuality extends SectionColumns {
         }}
         />}
 
-        {/* Lineplot to show air pollutants over the years. */}
-        {dropdownValue === "Air Pollutants" && 
-          <LinePlot config={{
+          {dropdownValue === "Air Pollutants" && 
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ `/api/data?measures=Air Pollutant Days&drilldowns=Pollutant&Geography=${meta.id}&Year=all` }
+            title="Chart of Air Pollutants" />
+          }
+          {/* Lineplot to show air pollutants over the years. */}
+          {dropdownValue === "Air Pollutants" && 
+          <LinePlot ref={comp => this.viz = comp } config={{
             data: `/api/data?measures=Air Pollutant Days&drilldowns=Pollutant&Geography=${meta.id}&Year=all`,
             discrete: "x",
             height: 400,
@@ -164,9 +184,18 @@ class AirQuality extends SectionColumns {
           }}
           />}
 
-        {/* Lineplot to show Median AQI stats over the years in the Waye county. */}
-        {dropdownValue === "Median Air Quality Index" && 
-        <LinePlot config={{
+          {dropdownValue === "Median Air Quality Index" && 
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ `/api/data?measures=Median AQI&Geography=${meta.id}&Year=all` }
+            title="Chart of Median Air Quality Index" />
+          }
+          {/* Lineplot to show Median AQI stats over the years in the Waye county. */}
+          {dropdownValue === "Median Air Quality Index" && 
+        <LinePlot ref={comp => this.viz = comp } config={{
           data: `/api/data?measures=Median AQI&Geography=${meta.id}&Year=all`,
           discrete: "x",
           height: 400,
@@ -183,8 +212,8 @@ class AirQuality extends SectionColumns {
           this.setState({sources: updateSource(resp.source, this.state.sources)});
           return resp.data;
         }}
-        />
-        }
+        />}
+        </div>
       </SectionColumns>
     );
   }

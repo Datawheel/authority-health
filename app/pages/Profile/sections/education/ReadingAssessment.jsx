@@ -37,12 +37,12 @@ const getLabel = (d, isOverallSelected = true, dropdownValue) => {
     if (d.Geography === "Nation") return `${d.Grade}th Grade, United States`;
     if (d.Geography === "State") return `${d.Grade}th Grade, Michigan`;
     return `${d.Grade}th Grade, Detroit`;
-  } 
+  }
   else {
     if (d[dropdownValue] === "Yes") return `${d.Grade}th Grade, With ${dropdownValue}`;
     if (d[dropdownValue] === "No") return `${d.Grade}th Grade, No ${dropdownValue}`;
     return `${d.Grade}th Grade, ${d[dropdownValue]}`;
-  } 
+  }
 };
 
 const formatGeographyName = d => {
@@ -246,8 +246,8 @@ class ReadingAssessment extends SectionColumns {
             slug={this.props.slug}
             data={ isOverallSelected ? "/api/data?measures=Average Reading Score&drilldowns=Grade,Place&Year=all" : `/api/data?measures=Average Reading Score by ${dropdownValue}&drilldowns=Grade,${dropdownValue},Place&Year=all` }
             title="Chart of Reading Assessment" />
-            
-          <BarChart config={{
+
+          <BarChart ref={comp => this.viz = comp} config={{
             data: isOverallSelected ? "/api/data?measures=Average Reading Score&drilldowns=Grade,Place&Year=all" : `/api/data?measures=Average Reading Score by ${dropdownValue}&drilldowns=Grade,${dropdownValue},Place&Year=all`,
             discrete: "x",
             groupBy: d => isOverallSelected ? `${d.Geography}` : `${d[dropdownValue]}`,

@@ -105,10 +105,10 @@ class Homeownership extends SectionColumns {
 
     let topChildrenGeographyData;
     if (meta.level === "county") {
-      topChildrenGeographyData = formatGeomapPropertyValueData(medianHousingValueForAllPlaces, meta, childrenTractIds)[1]; 
-    } 
+      topChildrenGeographyData = formatGeomapPropertyValueData(medianHousingValueForAllPlaces, meta, childrenTractIds)[1];
+    }
     else {
-      topChildrenGeographyData = formatGeomapPropertyValueData(medianHousingValueForAllTracts, meta, childrenTractIds)[1]; 
+      topChildrenGeographyData = formatGeomapPropertyValueData(medianHousingValueForAllTracts, meta, childrenTractIds)[1];
     }
 
     return (
@@ -134,7 +134,7 @@ class Homeownership extends SectionColumns {
           <p>{medianHousingValueForCurrentProfileAvailable ? <span>In {topMedianHousingUnitsValueForProfile.Year}, the median property value in {topMedianHousingUnitsValueForProfile.Geography}, was ${commas(topMedianHousingUnitsValueForProfile["Property Value"])}.</span> : ""} </p>
           <p>{occupancyDataAvailable ? <span>{formatAbbreviate(topOccupancyData.share)}% of households in {topOccupancyData.Geography} were occupied in {topOccupancyData.Year}.</span> : ""}</p>
           <p>The following map shows the median property value for <CensusTractDefinition text="census tracts" /> in Wayne County.</p>
-          
+
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
         </article>
@@ -148,7 +148,7 @@ class Homeownership extends SectionColumns {
             data={ meta.level === "county" ? "https://acs.datausa.io/api/data?measures=Property Value&Geography=04000US26:places&Year=all" : "https://acs.datausa.io/api/data?measures=Property Value&Geography=05000US26163:children&Year=all" }
             title="Map of Homeownership" />
 
-          <Geomap config={{
+          <Geomap ref={comp => this.viz = comp} config={{
             data: meta.level === "county" ? "https://acs.datausa.io/api/data?measures=Property Value&Geography=04000US26:places&Year=all" : "https://acs.datausa.io/api/data?measures=Property Value&Geography=05000US26163:children&Year=all",
             groupBy: "ID Geography",
             label: d => formatGeomapLabel(d, meta, tractToPlace),

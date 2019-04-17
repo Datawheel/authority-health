@@ -106,7 +106,7 @@ class StudentPoverty extends SectionColumns {
               title="Chart of Student Poverty" />
 
             {/* Draw a Barchart to show Level Of School for students in poverty. */}
-            <BarChart config={{
+            <BarChart ref={comp => this.viz = comp} config={{
               data: `/api/data?measures=Poverty by Schooling&drilldowns=Level of School,Poverty Status&Geography=${meta.id}&Year=all`,
               discrete: "x",
               height: 400,

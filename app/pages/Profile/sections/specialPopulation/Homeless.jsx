@@ -13,6 +13,7 @@ import Glossary from "components/Glossary";
 import Stat from "components/Stat";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const definitions = [
   {term: "Sheltered Homeless", definition: "According to U.S. Department of Housing and Urban Development, a person is considered sheltered homeless when he/she resides in a an emergency shelter or in transitional housing or supportive housing for homeless persons who originally came from the streets or emergency shelters."},
@@ -119,34 +120,50 @@ class Homeless extends SectionColumns {
           <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
 
-          {/* Draw a lineplot for sheltered homeless population. */}
-          <LinePlot config={{
-            data: `/api/data?measures=Sheltered Homeless Population,Unsheltered Homeless Population&drilldowns=Sub-group&Geography=${meta.id}&Year=all`,
-            discrete: "x",
-            height: 200,
-            groupBy: d => `${d["Sub-group"]} (${d.HomelessType.split(" ")[0]})`,
-            legend: false,
-            x: "Year",
-            xConfig: {
-              labelRotation: false
-            },
-            y: "share",
-            yConfig: {
-              tickFormat: d => formatPercentage(d),
-              title: "Share"
-            },
-            title: d => `Homeless Individuals vs Families in ${d[0].Geography}`,
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["County", d => d.Geography]]}
-          }}
-          dataFormat={resp =>  {
-            this.setState({sources: updateSource(resp.source, this.state.sources)});
-            return formatTypesOfHomeless(resp.data);
-          }}
-          />
+          <div className="viz">
+            <Options
+              component={this}
+              componentKey="viz"
+              dataFormat={resp => resp.data}
+              slug={this.props.slug}
+              data={ `/api/data?measures=Sheltered Homeless Population,Unsheltered Homeless Population&drilldowns=Sub-group&Geography=${meta.id}&Year=all` }
+              title={ "Chart of Homeless Individuals vs Families" } />
+            {/* Draw a lineplot for sheltered homeless population. */}
+            <LinePlot ref={comp => this.viz = comp} config={{
+              data: `/api/data?measures=Sheltered Homeless Population,Unsheltered Homeless Population&drilldowns=Sub-group&Geography=${meta.id}&Year=all`,
+              discrete: "x",
+              height: 200,
+              groupBy: d => `${d["Sub-group"]} (${d.HomelessType.split(" ")[0]})`,
+              legend: false,
+              x: "Year",
+              xConfig: {
+                labelRotation: false
+              },
+              y: "share",
+              yConfig: {
+                tickFormat: d => formatPercentage(d),
+                title: "Share"
+              },
+              title: d => `Homeless Individuals vs Families in ${d[0].Geography}`,
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["County", d => d.Geography]]}
+            }}
+            dataFormat={resp =>  {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return formatTypesOfHomeless(resp.data);
+            }}
+            />
+          </div>
         </article>
-        
+
         <div className="viz u-text-right">
-          <BarChart config={{
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ `/api/data?measures=Sheltered Homeless Population&drilldowns=Category&Geography=${meta.id}&Year=all` }
+            title="Chart of Sheltered Homeless Demographics" />
+          <BarChart ref={comp => this.viz = comp} config={{
             data: `/api/data?measures=Sheltered Homeless Population&drilldowns=Category&Geography=${meta.id}&Year=all`,
             height: 300,
             groupBy: "Category",
@@ -168,7 +185,14 @@ class Homeless extends SectionColumns {
           dataFormat={resp => formatShelteredHomelessCategories(resp.data)[0]}
           />
 
-          <BarChart config={{
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ `/api/data?measures=Unsheltered Homeless Population&drilldowns=Category&Geography=${meta.id}&Year=all` }
+            title="Chart of Unsheltered Homeless Demographics" />
+          <BarChart ref={comp => this.viz = comp} config={{
             data: `/api/data?measures=Unsheltered Homeless Population&drilldowns=Category&Geography=${meta.id}&Year=all`,
             groupBy: "Category",
             height: 300,

@@ -14,6 +14,7 @@ import Stat from "components/Stat";
 import places from "utils/places";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -251,38 +252,48 @@ class Immigrants extends SectionColumns {
           <Contact slug={this.props.slug} />
         </article>
 
-        <Geomap config={{
-          data: totalImmigrantsSelected ? `/api/data?measures=Poverty by Nativity&drilldowns=Nativity&Geography=${meta.id}:children&Year=all` : `/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Poverty Status&Geography=${meta.id}:children&Year=all`,
-          groupBy: meta.level === "county" ? "ID Place" : "ID Geography",
-          colorScale: "share",
-          title: `Immigrants by ${meta.level === "county" ? "Places" : "Census Tracts"} in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`,
-          colorScaleConfig: {
-            axisConfig: {tickFormat: d => formatPercentage(d)},
-            color: dropdownValue === "Immigrants in Poverty"
-              ? [
-                styles.white,
-                styles["danger-light"],
-                styles.danger,
-                styles["danger-dark"]
-              ]
-              : [
-                styles.white,
-                styles["majorelle-light"],
-                styles.majorelle,
-                styles["majorelle-dark"]
-              ]
-          },
-          time: "Year",
-          label: d => formatGeomapLabel(d, meta, tractToPlace),
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]},
-          topojson: meta.level === "county" ? "/topojson/place.json" : "/topojson/tract.json",
-          topojsonFilter: d => formatTopojsonFilter(d, meta, childrenTractIds)
-        }}
-        dataFormat={resp => {
-          this.setState({sources: updateSource(resp.source, this.state.sources)});
-          return totalImmigrantsSelected ? formatGeomapData(resp.data, meta, childrenTractIds, true)[0] : formatGeomapData(resp.data, meta, childrenTractIds, false)[0];
-        }}
-        />
+        <div className="viz u-text-right">
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ totalImmigrantsSelected ? `/api/data?measures=Poverty by Nativity&drilldowns=Nativity&Geography=${meta.id}:children&Year=all` : `/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Poverty Status&Geography=${meta.id}:children&Year=all` }
+            title={ `Map of ${dropdownValue} by ${meta.level === "county" ? "Places" : "Census Tracts"} in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}` } />
+          
+          <Geomap ref={comp => this.viz = comp } config={{
+            data: totalImmigrantsSelected ? `/api/data?measures=Poverty by Nativity&drilldowns=Nativity&Geography=${meta.id}:children&Year=all` : `/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Poverty Status&Geography=${meta.id}:children&Year=all`,
+            groupBy: meta.level === "county" ? "ID Place" : "ID Geography",
+            colorScale: "share",
+            title: `${dropdownValue} by ${meta.level === "county" ? "Places" : "Census Tracts"} in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`,
+            colorScaleConfig: {
+              axisConfig: {tickFormat: d => formatPercentage(d)},
+              color: dropdownValue === "Immigrants in Poverty"
+                ? [
+                  styles.white,
+                  styles["danger-light"],
+                  styles.danger,
+                  styles["danger-dark"]
+                ]
+                : [
+                  styles.white,
+                  styles["majorelle-light"],
+                  styles.majorelle,
+                  styles["majorelle-dark"]
+                ]
+            },
+            time: "Year",
+            label: d => formatGeomapLabel(d, meta, tractToPlace),
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]},
+            topojson: meta.level === "county" ? "/topojson/place.json" : "/topojson/tract.json",
+            topojsonFilter: d => formatTopojsonFilter(d, meta, childrenTractIds)
+          }}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return totalImmigrantsSelected ? formatGeomapData(resp.data, meta, childrenTractIds, true)[0] : formatGeomapData(resp.data, meta, childrenTractIds, false)[0];
+          }}
+          />
+        </div>
       </SectionColumns>
     );
   }

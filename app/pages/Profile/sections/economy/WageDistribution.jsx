@@ -67,10 +67,10 @@ class WageDistribution extends SectionColumns {
             slug={this.props.slug}
             data={ `https://acs.datausa.io/api/data?measures=Household Income&drilldowns=Household Income Bucket&Geography=${meta.id}&Year=all` }
             title="Chart of Wage Distribution" />
-            
+
           {/* Draw Barcahrt to show wage distribution for each place in the Wayne county. */}
           {wageDistributionDataAvailable
-            ? <BarChart config={{
+            ? <BarChart ref={comp => this.viz = comp} config={{
               data: `https://acs.datausa.io/api/data?measures=Household Income&drilldowns=Household Income Bucket&Geography=${meta.id}&Year=all`,
               discrete: "x",
               height: 400,

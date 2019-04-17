@@ -178,7 +178,7 @@ class Transportation extends SectionColumns {
           }
           {/* Draw a Barchart for commute time. */}
           {commuteTimeDataAvailable
-            ? <BarChart ref={comp => this.viz = comp } config={{
+            ? <BarChart ref={comp => this.viz = comp} config={{
               data: `https://acs.datausa.io/api/data?measures=Commuter Population&drilldowns=Travel Time&Geography=${meta.id}&Year=all`,
               discrete: "x",
               height: 300,
@@ -219,7 +219,7 @@ class Transportation extends SectionColumns {
           }
           {/* Draw a Treemap for Modes of tranportation. */}
           {transportationMeansAvailable
-            ? <Treemap ref={comp => this.viz = comp } config={{
+            ? <Treemap ref={comp => this.viz = comp} config={{
               data: `https://acs.datausa.io/api/data?measures=Commute Means&drilldowns=Transportation Means&Geography=${meta.id}&Year=all`,
               height: 300,
               sum: d => d["Commute Means"],

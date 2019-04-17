@@ -193,31 +193,40 @@ class HealthInsuranceCoverage extends SectionColumns {
             <SourceGroup sources={this.state.sources} />
             <Contact slug={this.props.slug} />
 
-            <BarChart config={{
-              data: `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status,Sex,Age&Geography=${geoId}&Year=all`,
-              discrete: "x",
-              height: 250,
-              groupBy: "Sex",
-              x: "Age",
-              y: "share",
-              time: "ID Year",
-              title: d => `Health Insurance Coverage by Age and Gender in ${d[0].Geography}`,
-              xSort: (a, b) => a["ID Age"] - b["ID Age"],
-              xConfig: {
-                labelRotation: false,
-                tickFormat: d => rangeFormatter(d)
-              },
-              yConfig: {tickFormat: d => formatPercentage(d)},
-              shapeConfig: {
-                label: false
-              },
-              tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
-            }}
-            dataFormat={resp => {
-              this.setState({sources: updateSource(resp.source, this.state.sources)});
-              return formatCoverageData(resp.data);
-            }}
-            />
+            <div className="viz">
+              <Options
+                component={this}
+                componentKey="viz"
+                dataFormat={resp => resp.data}
+                slug={this.props.slug}
+                data={ `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status,Sex,Age&Geography=${geoId}&Year=all` }
+                title="Chart of Health Insurance Coverage" />
+              <BarChart ref={comp => this.viz = comp} config={{
+                data: `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status,Sex,Age&Geography=${geoId}&Year=all`,
+                discrete: "x",
+                height: 250,
+                groupBy: "Sex",
+                x: "Age",
+                y: "share",
+                time: "ID Year",
+                title: d => `Health Insurance Coverage by Age and Gender in ${d[0].Geography}`,
+                xSort: (a, b) => a["ID Age"] - b["ID Age"],
+                xConfig: {
+                  labelRotation: false,
+                  tickFormat: d => rangeFormatter(d)
+                },
+                yConfig: {tickFormat: d => formatPercentage(d)},
+                shapeConfig: {
+                  label: false
+                },
+                tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
+              }}
+              dataFormat={resp => {
+                this.setState({sources: updateSource(resp.source, this.state.sources)});
+                return formatCoverageData(resp.data);
+              }}
+              />
+            </div>
           </article>
 
           <div className="viz u-text-right">

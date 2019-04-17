@@ -201,36 +201,45 @@ class ObesityAndDiabetes extends SectionColumns {
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
 
-          {/* Draw a BarChart to show data for Obesity Rate by Sex. */}
-          <BarChart config={{
-            data: `/api/data?measures=Age-Adjusted ${isDiabetesSelected ? "Diabetes" : "Obesity"} Prevalence&drilldowns=Sex&Geography=${meta.id}&Year=all`,
-            discrete: "y",
-            height: 200,
-            legend: false,
-            groupBy: "Sex",
-            label: d => d.Sex,
-            x: `Age-Adjusted ${isDiabetesSelected ? "Diabetes" : "Obesity"} Prevalence`,
-            y: "Sex",
-            time: "ID Year",
-            title: `${isDiabetesSelected ? "Diabetes" : "Obesity"} in Wayne County`,
-            xConfig: {
-              tickFormat: d => formatPercentage(d),
-              title: isDiabetesSelected ? "Diabetes Rate" : "Obesity Rate"
-            },
-            yConfig: {
-              barConfig: {
-                stroke: "transparent"
+          <div className="viz">
+            <Options
+              component={this}
+              componentKey="viz"
+              dataFormat={resp => resp.data}
+              slug={this.props.slug}
+              data={ `/api/data?measures=Age-Adjusted ${isDiabetesSelected ? "Diabetes" : "Obesity"} Prevalence&drilldowns=Sex&Geography=${meta.id}&Year=all` }
+              title= { `${isDiabetesSelected ? "Diabetes Rate" : "Obesity Rate"}` } />
+            {/* Draw a BarChart to show data for Obesity Rate by Sex. */}
+            <BarChart ref={comp => this.viz = comp} config={{
+              data: `/api/data?measures=Age-Adjusted ${isDiabetesSelected ? "Diabetes" : "Obesity"} Prevalence&drilldowns=Sex&Geography=${meta.id}&Year=all`,
+              discrete: "y",
+              height: 200,
+              legend: false,
+              groupBy: "Sex",
+              label: d => d.Sex,
+              x: `Age-Adjusted ${isDiabetesSelected ? "Diabetes" : "Obesity"} Prevalence`,
+              y: "Sex",
+              time: "ID Year",
+              title: `${isDiabetesSelected ? "Diabetes" : "Obesity"} in Wayne County`,
+              xConfig: {
+                tickFormat: d => formatPercentage(d),
+                title: isDiabetesSelected ? "Diabetes Rate" : "Obesity Rate"
               },
-              ticks: []
-            },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", isDiabetesSelected ? "Diabetes" : "Obesity"],
-              ["Share", d => isDiabetesSelected ? formatPercentage(d["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(d["Age-Adjusted Obesity Prevalence"])], ["County", d => d.Geography]]}
-          }}
-          dataFormat={resp => {
-            this.setState({sources: updateSource(resp.source, this.state.sources)});
-            return resp.data;
-          }}
-          />
+              yConfig: {
+                barConfig: {
+                  stroke: "transparent"
+                },
+                ticks: []
+              },
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", isDiabetesSelected ? "Diabetes" : "Obesity"],
+                ["Share", d => isDiabetesSelected ? formatPercentage(d["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(d["Age-Adjusted Obesity Prevalence"])], ["County", d => d.Geography]]}
+            }}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return resp.data;
+            }}
+            />
+          </div>
         </article>
 
         <div className="viz u-text-right">

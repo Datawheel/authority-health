@@ -12,6 +12,7 @@ import Disclaimer from "components/Disclaimer";
 import Stat from "components/Stat";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -115,29 +116,39 @@ class Incarceration extends SectionColumns {
           <Contact slug={this.props.slug} />
         </article>
 
-        {/* Draw a Barchart to show Incarceration data. */}
-        <BarChart config={{
-          data: `/api/data?measures=Total Incarcerations,Prison Incarceration,Jail Incarceration,Jail/Probation Incarceration,Probation Incarceration,Other Incarceration&drilldowns=Offense&Geography=${meta.id}&Year=all`,
-          discrete: "x",
-          height: 400,
-          stacked: true,
-          label: d => `${d.Offense}`,
-          groupBy: "Offense",
-          x: d => formatName(d.Punishment),
-          y: "share",
-          time: "Year",
-          yConfig: {tickFormat: d => formatPercentage(d)},
-          xConfig: {labelRotation: false},
-          shapeConfig: {
-            label: false
-          },
-          tooltipConfig: {tbody: [["Punishment", d => formatName(d.Punishment)], ["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["County", d => d.Geography]]}
-        }}
-        dataFormat={resp => {
-          this.setState({sources: updateSource(resp.source, this.state.sources)});
-          return formatIncarcerationData(resp)[0]; // pass resp and not resp.data since we access .data in the formatIncarcerationData() function.
-        }}
-        />
+        <div className="viz u-text-right">
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ `/api/data?measures=Total Incarcerations,Prison Incarceration,Jail Incarceration,Jail/Probation Incarceration,Probation Incarceration,Other Incarceration&drilldowns=Offense&Geography=${meta.id}&Year=all` }
+            title="Chart of Incarceration" />
+
+          {/* Draw a Barchart to show Incarceration data. */}
+          <BarChart ref={comp => this.viz = comp} config={{
+            data: `/api/data?measures=Total Incarcerations,Prison Incarceration,Jail Incarceration,Jail/Probation Incarceration,Probation Incarceration,Other Incarceration&drilldowns=Offense&Geography=${meta.id}&Year=all`,
+            discrete: "x",
+            height: 400,
+            stacked: true,
+            label: d => `${d.Offense}`,
+            groupBy: "Offense",
+            x: d => formatName(d.Punishment),
+            y: "share",
+            time: "Year",
+            yConfig: {tickFormat: d => formatPercentage(d)},
+            xConfig: {labelRotation: false},
+            shapeConfig: {
+              label: false
+            },
+            tooltipConfig: {tbody: [["Punishment", d => formatName(d.Punishment)], ["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], ["County", d => d.Geography]]}
+          }}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return formatIncarcerationData(resp)[0]; // pass resp and not resp.data since we access .data in the formatIncarcerationData() function.
+          }}
+          />
+        </div>
       </SectionColumns>
     );
   }

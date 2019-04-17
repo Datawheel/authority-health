@@ -99,9 +99,9 @@ class ViolentAndPropertyCrimes extends SectionColumns {
             slug={this.props.slug}
             data={ isPlaceDataAvailable ? `/api/data?measures=Number of Crimes&drilldowns=Type of Crime,Crime&Geography=${meta.id}&Year=all` : "/api/data?measures=Number of Crimes&drilldowns=Type of Crime,Crime&Year=all" }
             title="Chart of Violent and Property Crime" />
-            
+
           {/* Draw a Treemap for each type of crime. */}
-          <Treemap config={{
+          <Treemap ref={comp => this.viz = comp} config={{
             data: isPlaceDataAvailable ? `/api/data?measures=Number of Crimes&drilldowns=Type of Crime,Crime&Geography=${meta.id}&Year=all` : "/api/data?measures=Number of Crimes&drilldowns=Type of Crime,Crime&Year=all",
             // discrete: "x",
             height: 400,

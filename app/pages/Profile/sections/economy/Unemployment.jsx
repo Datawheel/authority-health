@@ -111,9 +111,19 @@ class Unemployment extends SectionColumns {
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
 
-          {/* Barchart to show population by age and gender over the years for selected geography. */}
-          {workExperienceAvailable &&
-            <BarChart config={{
+          <div className="viz">
+            {workExperienceAvailable &&
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ `/api/data?measures=Population by Employment Status&drilldowns=Employment Status,Age,Sex&Geography=${meta.id}&Year=all` }
+            title="Chart of Umemployment by Age and Gender" />
+            }
+            {/* Barchart to show population by age and gender over the years for selected geography. */}
+            {workExperienceAvailable &&
+            <BarChart ref={comp => this.viz = comp} config={{
               data: `/api/data?measures=Population by Employment Status&drilldowns=Employment Status,Age,Sex&Geography=${meta.id}&Year=all`,
               discrete: "x",
               height: 250,
@@ -140,7 +150,8 @@ class Unemployment extends SectionColumns {
               return formatEmploymentStatusData(resp.data)[0];
             }}
             />
-          }
+            }
+          </div>
         </article>
 
         <div className="viz u-text-right">

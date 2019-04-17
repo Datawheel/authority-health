@@ -12,6 +12,7 @@ import Contact from "components/Contact";
 import Stat from "components/Stat";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -118,34 +119,45 @@ class Veterans extends SectionColumns {
           <Contact slug={this.props.slug} />
         </article>
 
-        {/* Draw a BarChart for Veterans Period of Service. */}
-        {periodOfServiceAvailable
-          ? <BarChart config={{
-            data: `https://acs.datausa.io/api/data?measures=Veterans&drilldowns=Period of Service&Geography=${meta.id}&Year=all`,
-            discrete: "x",
-            height: 400,
-            groupBy: "Period of Service",
-            legend: false,
-            x: d => d["Period of Service"],
-            y: "share",
-            time: "Year",
-            xSort: (a, b) => b["ID Period of Service"] - a["ID Period of Service"],
-            xConfig: {
-              labelRotation: false,
-              title: "Period of Service"
-            },
-            yConfig: {
-              tickFormat: d => formatPercentage(d),
-              title: "Share"
-            },
-            shapeConfig: {label: false},
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
-          }}
-          dataFormat={resp => {
-            this.setState({sources: updateSource(resp.source, this.state.sources)});
-            return formatPeriodOfService(resp.data)[0];
-          }}
-          /> : null}
+        <div className="viz u-text-right">
+          {periodOfServiceAvailable &&
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ `https://acs.datausa.io/api/data?measures=Veterans&drilldowns=Period of Service&Geography=${meta.id}&Year=all` }
+            title="Chart of Veterans Period of Service" />
+          }
+          {/* Draw a BarChart for Veterans Period of Service. */}
+          {periodOfServiceAvailable
+            ? <BarChart ref={comp => this.viz = comp} config={{
+              data: `https://acs.datausa.io/api/data?measures=Veterans&drilldowns=Period of Service&Geography=${meta.id}&Year=all`,
+              discrete: "x",
+              height: 400,
+              groupBy: "Period of Service",
+              legend: false,
+              x: d => d["Period of Service"],
+              y: "share",
+              time: "Year",
+              xSort: (a, b) => b["ID Period of Service"] - a["ID Period of Service"],
+              xConfig: {
+                labelRotation: false,
+                title: "Period of Service"
+              },
+              yConfig: {
+                tickFormat: d => formatPercentage(d),
+                title: "Share"
+              },
+              shapeConfig: {label: false},
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
+            }}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return formatPeriodOfService(resp.data)[0];
+            }}
+            /> : null}
+        </div>
       </SectionColumns>
     );
   }

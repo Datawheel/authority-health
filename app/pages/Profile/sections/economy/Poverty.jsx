@@ -145,7 +145,6 @@ class Poverty extends SectionColumns {
               data={ `https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Race&Geography=${meta.id}&Year=all` }
               title="Chart of Poverty by Race" />
             }
-            
             {povertyByRaceAvailable &&
             <BarChart ref={comp => this.viz = comp } config={{
               data: `https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Race&Geography=${meta.id}&Year=all`,
@@ -182,11 +181,11 @@ class Poverty extends SectionColumns {
             data={ `https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Age,Gender&Geography=${meta.id}&Year=all` }
             title="Chart of Poverty by Age and Gender" />
           }
-          
           {povertyByAgeAndGenderAvailable
             ? <BarChart ref={comp => this.viz = comp } config={{
               data: `https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Age,Gender&Geography=${meta.id}&Year=all`,
               discrete: "x",
+              height: 400,
               groupBy: "Gender",
               x: "Age",
               y: "share",

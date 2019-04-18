@@ -84,7 +84,7 @@ class Rentals extends SectionColumns {
             {rentAmountDataAvailable &&
           <Options
             component={this}
-            componentKey="viz"
+            componentKey="viz1"
             dataFormat={resp => resp.data}
             slug={this.props.slug}
             data={ rentAmountData }
@@ -93,7 +93,7 @@ class Rentals extends SectionColumns {
 
             {/* Create a LinePlot. */}
             {rentAmountDataAvailable &&
-            <LinePlot ref={comp => this.viz = comp } config={{
+            <LinePlot ref={comp => this.viz1 = comp } config={{
               data: rentAmountData,
               discrete: "x",
               height: 175,
@@ -116,7 +116,7 @@ class Rentals extends SectionColumns {
           {rentersByIncomePercentageAvailable &&
           <Options
             component={this}
-            componentKey="viz"
+            componentKey="viz2"
             dataFormat={resp => resp.data}
             slug={this.props.slug}
             data={ `https://acs.datausa.io/api/data?measures=Renters by Income Percentage&drilldowns=Household Income&Geography=${meta.id}&Year=all` }
@@ -124,7 +124,7 @@ class Rentals extends SectionColumns {
           }
 
           {rentersByIncomePercentageAvailable
-            ? <BarChart ref={comp => this.viz = comp } config={{
+            ? <BarChart ref={comp => this.viz2 = comp } config={{
               data: `https://acs.datausa.io/api/data?measures=Renters by Income Percentage&drilldowns=Household Income&Geography=${meta.id}&Year=all`,
               discrete: "x",
               legend: false,

@@ -204,13 +204,13 @@ class ObesityAndDiabetes extends SectionColumns {
           <div className="viz">
             <Options
               component={this}
-              componentKey="viz"
+              componentKey="viz1"
               dataFormat={resp => resp.data}
               slug={this.props.slug}
               data={ `/api/data?measures=Age-Adjusted ${isDiabetesSelected ? "Diabetes" : "Obesity"} Prevalence&drilldowns=Sex&Geography=${meta.id}&Year=all` }
-              title= { `${isDiabetesSelected ? "Diabetes Rate" : "Obesity Rate"}` } />
+              title= { `Chart of ${isDiabetesSelected ? "Diabetes Rate" : "Obesity Rate"} by Gender` } />
             {/* Draw a BarChart to show data for Obesity Rate by Sex. */}
-            <BarChart ref={comp => this.viz = comp} config={{
+            <BarChart ref={comp => this.viz1 = comp} config={{
               data: `/api/data?measures=Age-Adjusted ${isDiabetesSelected ? "Diabetes" : "Obesity"} Prevalence&drilldowns=Sex&Geography=${meta.id}&Year=all`,
               discrete: "y",
               height: 200,
@@ -220,7 +220,7 @@ class ObesityAndDiabetes extends SectionColumns {
               x: `Age-Adjusted ${isDiabetesSelected ? "Diabetes" : "Obesity"} Prevalence`,
               y: "Sex",
               time: "ID Year",
-              title: `${isDiabetesSelected ? "Diabetes" : "Obesity"} in Wayne County`,
+              title: `${isDiabetesSelected ? "Diabetes" : "Obesity"} Rate by Gender in Wayne County`,
               xConfig: {
                 tickFormat: d => formatPercentage(d),
                 title: isDiabetesSelected ? "Diabetes Rate" : "Obesity Rate"
@@ -245,7 +245,7 @@ class ObesityAndDiabetes extends SectionColumns {
         <div className="viz u-text-right">
           <Options
             component={this}
-            componentKey="viz"
+            componentKey="viz2"
             dataFormat={resp => resp.data}
             slug={this.props.slug}
             data={ `/api/data?measures=${dropdownValue}&drilldowns=${ isBMIWeightedDataValueSelected ? "Zip Region" : "Tract" }&Year=all` }
@@ -253,7 +253,7 @@ class ObesityAndDiabetes extends SectionColumns {
 
           {/* Geomap to show Obesity and Diabetes data based on the dropdown value. */}
           {isBMIWeightedDataValueSelected
-            ? <Geomap ref={comp => this.viz = comp } config={{
+            ? <Geomap ref={comp => this.viz2 = comp } config={{
               data: `/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=all`,
               groupBy: "ID Zip Region",
               colorScale: dropdownValue,
@@ -280,7 +280,7 @@ class ObesityAndDiabetes extends SectionColumns {
               return resp.data;
             }}
             />
-            : <Geomap ref={comp => this.viz = comp } config={{
+            : <Geomap ref={comp => this.viz2 = comp } config={{
               data: `/api/data?measures=${dropdownValue}&drilldowns=Tract&Year=all`,
               groupBy: "ID Tract",
               colorScale: dropdownValue,

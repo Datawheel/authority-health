@@ -115,15 +115,15 @@ class Unemployment extends SectionColumns {
             {workExperienceAvailable &&
           <Options
             component={this}
-            componentKey="viz"
+            componentKey="viz1"
             dataFormat={resp => resp.data}
             slug={this.props.slug}
             data={ `/api/data?measures=Population by Employment Status&drilldowns=Employment Status,Age,Sex&Geography=${meta.id}&Year=all` }
-            title="Chart of Umemployment by Age and Gender" />
+            title="Chart of Umemployment Rate by Age and Gender" />
             }
             {/* Barchart to show population by age and gender over the years for selected geography. */}
             {workExperienceAvailable &&
-            <BarChart ref={comp => this.viz = comp} config={{
+            <BarChart ref={comp => this.viz1 = comp} config={{
               data: `/api/data?measures=Population by Employment Status&drilldowns=Employment Status,Age,Sex&Geography=${meta.id}&Year=all`,
               discrete: "x",
               height: 250,
@@ -142,7 +142,7 @@ class Unemployment extends SectionColumns {
               shapeConfig: {
                 label: false
               },
-              title: d => `Unemployment by Age and Gender in ${d[0].Geography}`,
+              title: d => `Unemployment Rate by Age and Gender in ${d[0].Geography}`,
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => rangeFormatter(d.Age)], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}
             dataFormat={resp => {
@@ -157,14 +157,14 @@ class Unemployment extends SectionColumns {
         <div className="viz u-text-right">
           <Options
             component={this}
-            componentKey="viz"
+            componentKey="viz2"
             dataFormat={resp => resp.data}
             slug={this.props.slug}
             data={ `/api/data?measures=Unemployment Rate&Geography=${meta.id}&Year=all` }
             title="Chart of Umemployment" />
 
           {/* Lineplot to show total population over the years for selected geography. */}
-          <LinePlot ref={comp => this.viz = comp } config={{
+          <LinePlot ref={comp => this.viz2 = comp } config={{
             data: `/api/data?measures=Unemployment Rate&Geography=${meta.id}&Year=all`,
             discrete: "x",
             baseline: 0,

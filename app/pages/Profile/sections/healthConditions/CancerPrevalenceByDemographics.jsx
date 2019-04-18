@@ -121,13 +121,13 @@ class CancerPrevalenceByDemographics extends SectionColumns {
         <div className="viz u-text-right">
           <Options
             component={this}
-            componentKey="viz"
+            componentKey="viz1"
             dataFormat={resp => resp.data}
             slug={this.props.slug}
             data={ isItemsListEmpty ? "/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Sex,MSA&Cancer Site=All Invasive Cancer Sites Combined&Year=all" : `/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Sex,MSA&Cancer Site=${dropdownSelected}&Year=all` }
             title="Chart of Cancer Prevalence By Gender" />
           {/* Draw a barchart to show Cancer by Sex for selected cancer type. */}
-          <BarChart ref={comp => this.viz = comp } config={{
+          <BarChart ref={comp => this.viz1 = comp } config={{
             data: isItemsListEmpty ? "/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Sex,MSA&Cancer Site=All Invasive Cancer Sites Combined&Year=all" : `/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Sex,MSA&Cancer Site=${dropdownSelected}&Year=all`,
             discrete: "y",
             height: 200,
@@ -165,16 +165,16 @@ class CancerPrevalenceByDemographics extends SectionColumns {
             return resp.data;
           }}
           />
-          
+
           <Options
             component={this}
-            componentKey="viz"
+            componentKey="viz2"
             dataFormat={resp => resp.data}
             slug={this.props.slug}
             data={ isItemsListEmpty ? "/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Race,Ethnicity,MSA&Cancer Site=All Invasive Cancer Sites Combined&Year=all" : `/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Race,Ethnicity,MSA&Cancer Site=${dropdownSelected}&Year=all` }
             title="Chart of Cancer Prevalence By Race and Ethnicty" />
           {/* Draw a barchart to show Cancer by Race and Ethnicity for selected cancer type. */}
-          <BarChart ref={comp => this.viz = comp } config={{
+          <BarChart ref={comp => this.viz2 = comp } config={{
             data: isItemsListEmpty ? "/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Race,Ethnicity,MSA&Cancer Site=All Invasive Cancer Sites Combined&Year=all" : `/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Race,Ethnicity,MSA&Cancer Site=${dropdownSelected}&Year=all`,
             discrete: "y",
             height: 200,

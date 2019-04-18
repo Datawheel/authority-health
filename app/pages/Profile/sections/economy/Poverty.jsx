@@ -139,14 +139,14 @@ class Poverty extends SectionColumns {
             {povertyByRaceAvailable &&
             <Options
               component={this}
-              componentKey="viz"
+              componentKey="viz1"
               dataFormat={resp => resp.data}
               slug={this.props.slug}
               data={ `https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Race&Geography=${meta.id}&Year=all` }
               title="Chart of Poverty by Race" />
             }
             {povertyByRaceAvailable &&
-            <BarChart ref={comp => this.viz = comp } config={{
+            <BarChart ref={comp => this.viz1 = comp } config={{
               data: `https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Race&Geography=${meta.id}&Year=all`,
               discrete: "y",
               height: 300,
@@ -175,14 +175,14 @@ class Poverty extends SectionColumns {
           {povertyByAgeAndGenderAvailable &&
           <Options
             component={this}
-            componentKey="viz"
+            componentKey="viz2"
             dataFormat={resp => resp.data}
             slug={this.props.slug}
             data={ `https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Age,Gender&Geography=${meta.id}&Year=all` }
             title="Chart of Poverty by Age and Gender" />
           }
           {povertyByAgeAndGenderAvailable
-            ? <BarChart ref={comp => this.viz = comp } config={{
+            ? <BarChart ref={comp => this.viz2 = comp } config={{
               data: `https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Age,Gender&Geography=${meta.id}&Year=all`,
               discrete: "x",
               height: 400,

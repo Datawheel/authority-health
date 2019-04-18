@@ -196,12 +196,12 @@ class HealthInsuranceCoverage extends SectionColumns {
             <div className="viz">
               <Options
                 component={this}
-                componentKey="viz"
+                componentKey="viz1"
                 dataFormat={resp => resp.data}
                 slug={this.props.slug}
                 data={ `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status,Sex,Age&Geography=${geoId}&Year=all` }
                 title="Chart of Health Insurance Coverage" />
-              <BarChart ref={comp => this.viz = comp} config={{
+              <BarChart ref={comp => this.viz1 = comp} config={{
                 data: `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status,Sex,Age&Geography=${geoId}&Year=all`,
                 discrete: "x",
                 height: 250,
@@ -232,13 +232,13 @@ class HealthInsuranceCoverage extends SectionColumns {
           <div className="viz u-text-right">
             <Options
               component={this}
-              componentKey="viz"
+              componentKey="viz2"
               dataFormat={resp => resp.data}
               slug={this.props.slug}
               data={ `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=${meta.id}:children&Year=all` }
               title="Map of Health Insurance Coverage" />
 
-            <Geomap ref={comp => this.viz = comp } config={{
+            <Geomap ref={comp => this.viz2 = comp } config={{
               data: `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=${meta.id}:children&Year=all`,
               groupBy: meta.level === "county" ? "ID Place" : "ID Geography",
               colorScale: "share",

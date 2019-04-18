@@ -125,7 +125,7 @@ class Transportation extends SectionColumns {
             {numberOfVehiclesDataAvailable &&
           <Options
             component={this}
-            componentKey="viz"
+            componentKey="viz1"
             dataFormat={resp => resp.data}
             slug={this.props.slug}
             data={ `https://acs.datausa.io/api/data?measures=Commute Means by Gender&drilldowns=Vehicles Available,Gender&Geography=${meta.id}&Year=all` }
@@ -134,7 +134,7 @@ class Transportation extends SectionColumns {
 
             {/* Draw a Barchart for Number of vehicles in each household. */}
             {numberOfVehiclesDataAvailable &&
-            <BarChart ref={comp => this.viz = comp } config={{
+            <BarChart ref={comp => this.viz1 = comp } config={{
               data: `https://acs.datausa.io/api/data?measures=Commute Means by Gender&drilldowns=Vehicles Available,Gender&Geography=${meta.id}&Year=all`,
               discrete: "x",
               height: 300,
@@ -170,7 +170,7 @@ class Transportation extends SectionColumns {
           {commuteTimeDataAvailable &&
           <Options
             component={this}
-            componentKey="viz"
+            componentKey="viz2"
             dataFormat={resp => resp.data}
             slug={this.props.slug}
             data={ `https://acs.datausa.io/api/data?measures=Commuter Population&drilldowns=Travel Time&Geography=${meta.id}&Year=all` }
@@ -178,7 +178,7 @@ class Transportation extends SectionColumns {
           }
           {/* Draw a Barchart for commute time. */}
           {commuteTimeDataAvailable
-            ? <BarChart ref={comp => this.viz = comp} config={{
+            ? <BarChart ref={comp => this.viz2 = comp} config={{
               data: `https://acs.datausa.io/api/data?measures=Commuter Population&drilldowns=Travel Time&Geography=${meta.id}&Year=all`,
               discrete: "x",
               height: 300,
@@ -211,7 +211,7 @@ class Transportation extends SectionColumns {
           {transportationMeansAvailable &&
               <Options
                 component={this}
-                componentKey="viz"
+                componentKey="viz3"
                 dataFormat={resp => resp.data}
                 slug={this.props.slug}
                 data={ `https://acs.datausa.io/api/data?measures=Commute Means&drilldowns=Transportation Means&Geography=${meta.id}&Year=all` }
@@ -219,7 +219,7 @@ class Transportation extends SectionColumns {
           }
           {/* Draw a Treemap for Modes of tranportation. */}
           {transportationMeansAvailable
-            ? <Treemap ref={comp => this.viz = comp} config={{
+            ? <Treemap ref={comp => this.viz3 = comp} config={{
               data: `https://acs.datausa.io/api/data?measures=Commute Means&drilldowns=Transportation Means&Geography=${meta.id}&Year=all`,
               height: 300,
               sum: d => d["Commute Means"],

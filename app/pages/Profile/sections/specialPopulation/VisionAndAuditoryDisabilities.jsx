@@ -148,7 +148,7 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
     }
 
     const topChildrenGeographyStats = isVisionDisabilitySelected
-      ? formatGeomapData(visionDisabilityForChildrenGeography, meta, childrenTractIds, "Vision")[1] 
+      ? formatGeomapData(visionDisabilityForChildrenGeography, meta, childrenTractIds, "Vision")[1]
       : formatGeomapData(hearingDisabilityForChildrenGeography, meta, childrenTractIds, "Hearing")[1];
 
     return (
@@ -239,14 +239,14 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             {isVisionDisabilitySelected && visionDisabilityDataAvailable &&
           <Options
             component={this}
-            componentKey="viz"
+            componentKey="viz1"
             dataFormat={resp => resp.data}
             slug={this.props.slug}
             data={ `/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status,Age,Sex&Geography=${meta.id}&Year=all` }
             title= {"Chart of Vision Disability by Age and Gender"} />
             }
             {isVisionDisabilitySelected && visionDisabilityDataAvailable &&
-            <BarChart ref={comp => this.viz = comp } config={{
+            <BarChart ref={comp => this.viz1 = comp } config={{
               data: `/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status,Age,Sex&Geography=${meta.id}&Year=all`,
               height: 250,
               discrete: "x",
@@ -276,14 +276,14 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             {!isVisionDisabilitySelected && hearingDisabilityDataAvailable &&
               <Options
                 component={this}
-                componentKey="viz"
+                componentKey="viz2"
                 dataFormat={resp => resp.data}
                 slug={this.props.slug}
                 data={ `/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status,Age,Sex&Geography=${meta.id}&Year=all` }
                 title= {"Chart of Hearing Disability by Age and Gender"} />
             }
             {!isVisionDisabilitySelected && hearingDisabilityDataAvailable &&
-            <BarChart ref={comp => this.viz = comp } config={{
+            <BarChart ref={comp => this.viz2 = comp } config={{
               data: `/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status,Age,Sex&Geography=${meta.id}&Year=all`,
               height: 250,
               discrete: "x",
@@ -315,13 +315,13 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
         <div className="viz u-text-right">
           <Options
             component={this}
-            componentKey="viz"
+            componentKey="viz3"
             dataFormat={resp => resp.data}
             slug={this.props.slug}
             data={ isVisionDisabilitySelected ? `/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status&Geography=${meta.id}:children&Year=all` : `/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status&Geography=${meta.id}:children&Year=all` }
             title= {`Map of ${dropdownValue}`} />
 
-          <Geomap ref={comp => this.viz = comp } config={{
+          <Geomap ref={comp => this.viz3 = comp } config={{
             data: isVisionDisabilitySelected ? `/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status&Geography=${meta.id}:children&Year=all` : `/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status&Geography=${meta.id}:children&Year=all`,
             groupBy: meta.level === "county" ? "ID Place" : "ID Geography",
             colorScale: "share",

@@ -93,13 +93,13 @@ class StoreAccessByDemographic extends SectionColumns {
           <div className="viz">
             <Options
               component={this}
-              componentKey="viz"
+              componentKey="viz2"
               dataFormat={resp => resp.data}
               slug={this.props.slug}
               data={ ageSelected ? `/api/data?measures=Low-Access to Food by Age&drilldowns=Age Group&Geography=${meta.id}&Year=all` : `/api/data?measures=Low-Access to Food by Race&drilldowns=Race Group&Geography=${meta.id}&Year=all` }
               title="Chart of Low Access to Food by Age" />
             {/* Create a BarChart based on the dropdown choice. */}
-            <BarChart ref={comp => this.viz = comp} config={{
+            <BarChart ref={comp => this.viz2 = comp} config={{
               data: ageSelected ? `/api/data?measures=Low-Access to Food by Age&drilldowns=Age Group&Geography=${meta.id}&Year=all` : `/api/data?measures=Low-Access to Food by Race&drilldowns=Race Group&Geography=${meta.id}&Year=all`,
               discrete: "y",
               height: 200,
@@ -129,14 +129,14 @@ class StoreAccessByDemographic extends SectionColumns {
         <div className="viz u-text-right">
           <Options
             component={this}
-            componentKey="viz"
+            componentKey="viz1"
             dataFormat={resp => resp.data}
             slug={this.props.slug}
             data={ ageSelected ? `/api/data?measures=Low-Access to Food by Age&drilldowns=Age Group,County&Age Group=${dropdownValue}&Year=all` : `/api/data?measures=Low-Access to Food by Race&drilldowns=Race Group,County&Race Group=${dropdownValue}&Year=all` }
             title="Map of Store Access By Demographics" />
 
           {/* Create a Geomap based on dropdown choice for all the counties in Michigan. */}
-          <Geomap ref={comp => this.viz = comp } config={{
+          <Geomap ref={comp => this.viz1 = comp } config={{
             data: ageSelected ? `/api/data?measures=Low-Access to Food by Age&drilldowns=Age Group,County&Age Group=${dropdownValue}&Year=all` : `/api/data?measures=Low-Access to Food by Race&drilldowns=Race Group,County&Race Group=${dropdownValue}&Year=all`,
             groupBy: "ID County",
             colorScale: ageSelected ? "Low-Access to Food by Age" : "Low-Access to Food by Race",

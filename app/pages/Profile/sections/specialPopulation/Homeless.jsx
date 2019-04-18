@@ -123,13 +123,13 @@ class Homeless extends SectionColumns {
           <div className="viz">
             <Options
               component={this}
-              componentKey="viz"
+              componentKey="viz1"
               dataFormat={resp => resp.data}
               slug={this.props.slug}
               data={ `/api/data?measures=Sheltered Homeless Population,Unsheltered Homeless Population&drilldowns=Sub-group&Geography=${meta.id}&Year=all` }
               title={ "Chart of Homeless Individuals vs Families" } />
             {/* Draw a lineplot for sheltered homeless population. */}
-            <LinePlot ref={comp => this.viz = comp} config={{
+            <LinePlot ref={comp => this.viz1 = comp} config={{
               data: `/api/data?measures=Sheltered Homeless Population,Unsheltered Homeless Population&drilldowns=Sub-group&Geography=${meta.id}&Year=all`,
               discrete: "x",
               height: 200,
@@ -158,12 +158,12 @@ class Homeless extends SectionColumns {
         <div className="viz u-text-right">
           <Options
             component={this}
-            componentKey="viz"
+            componentKey="viz2"
             dataFormat={resp => resp.data}
             slug={this.props.slug}
             data={ `/api/data?measures=Sheltered Homeless Population&drilldowns=Category&Geography=${meta.id}&Year=all` }
             title="Chart of Sheltered Homeless Demographics" />
-          <BarChart ref={comp => this.viz = comp} config={{
+          <BarChart ref={comp => this.viz2 = comp} config={{
             data: `/api/data?measures=Sheltered Homeless Population&drilldowns=Category&Geography=${meta.id}&Year=all`,
             height: 300,
             groupBy: "Category",
@@ -187,12 +187,12 @@ class Homeless extends SectionColumns {
 
           <Options
             component={this}
-            componentKey="viz"
+            componentKey="viz3"
             dataFormat={resp => resp.data}
             slug={this.props.slug}
             data={ `/api/data?measures=Unsheltered Homeless Population&drilldowns=Category&Geography=${meta.id}&Year=all` }
             title="Chart of Unsheltered Homeless Demographics" />
-          <BarChart ref={comp => this.viz = comp} config={{
+          <BarChart ref={comp => this.viz3 = comp} config={{
             data: `/api/data?measures=Unsheltered Homeless Population&drilldowns=Category&Geography=${meta.id}&Year=all`,
             groupBy: "Category",
             height: 300,

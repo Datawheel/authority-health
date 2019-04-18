@@ -109,7 +109,7 @@ class RiskyBehaviors extends SectionColumns {
             {dropdownValue === drugTypes[0] &&
           <Options
             component={this}
-            componentKey="viz"
+            componentKey="viz1"
             dataFormat={resp => resp.data}
             slug={this.props.slug}
             data={ `/api/data?measures=Smoking Status Current,Smoking Status Former,Smoking Status Never&drilldowns=End Year&Geography=${id}` }
@@ -119,7 +119,7 @@ class RiskyBehaviors extends SectionColumns {
             {/* TODO: distribution bar */}
             {dropdownValue === drugTypes[0]
               ? <div>
-                <Pie ref={comp => this.viz = comp} config={{
+                <Pie ref={comp => this.viz1 = comp} config={{
                   data: `/api/data?measures=Smoking Status Current,Smoking Status Former,Smoking Status Never&drilldowns=End Year&Geography=${id}`, // MiBRFS - All Years
                   height: 250,
                   value: d => d[d.SmokingType],

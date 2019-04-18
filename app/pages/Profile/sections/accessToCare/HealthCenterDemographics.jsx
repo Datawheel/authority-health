@@ -14,6 +14,7 @@ import Stat from "components/Stat";
 // import zipcodes from "utils/zipcodes";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const formatRaceNames = d => d.replace("Health Center Patients", "");
 const lowerCaseRaceName = d => d.trim() === "Black" || d.trim() === "White" ? d.toLowerCase() : d;
@@ -152,25 +153,35 @@ class HealthCenterDemographics extends SectionColumns {
           <Contact slug={this.props.slug} />
         </article>
 
-        {/* Draw a BarChart to show data for health center data by race */}
-        <Pie config={{
-          data: isZipLevelDataAvailable ? `/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Geography=${meta.id}&Year=all` : "/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Year=all",
-          groupBy: "RaceType",
-          value: d => d[d.RaceType],
-          label: d => d.RaceType.replace(" Health Center Patients", ""),
-          time: "Year",
-          shapeConfig: {
-            Path: {
-              fillOpacity: 1
-            }
-          },
-          tooltipConfig: {title: d => d.RaceType, tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d[d.RaceType])], ["Geography", d => isZipLevelDataAvailable ? d.Geography : "Wayne County"]]}
-        }}
-        dataFormat={resp => {
-          this.setState({sources: updateSource(resp.source, this.state.sources)});
-          return formatRaceAndEthnicityData(resp);
-        }}
-        />
+        <div className="viz u-text-right">
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ isZipLevelDataAvailable ? `/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Geography=${meta.id}&Year=all` : "/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Year=all" }
+            title="Chart of Health Center Demographics" />
+            
+          {/* Draw a Pie chart to show data for health center data by race */}
+          <Pie ref={comp => this.viz = comp } config={{
+            data: isZipLevelDataAvailable ? `/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Geography=${meta.id}&Year=all` : "/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Year=all",
+            groupBy: "RaceType",
+            value: d => d[d.RaceType],
+            label: d => d.RaceType.replace(" Health Center Patients", ""),
+            time: "Year",
+            shapeConfig: {
+              Path: {
+                fillOpacity: 1
+              }
+            },
+            tooltipConfig: {title: d => d.RaceType, tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d[d.RaceType])], ["Geography", d => isZipLevelDataAvailable ? d.Geography : "Wayne County"]]}
+          }}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return formatRaceAndEthnicityData(resp);
+          }}
+          />
+        </div>
 
         {/* Draw Geomap to show health center count for each zip code in the Wayne county */}
         {/* <Geomap config={{

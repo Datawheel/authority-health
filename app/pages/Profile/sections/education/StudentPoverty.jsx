@@ -12,6 +12,7 @@ import Contact from "components/Contact";
 import Stat from "components/Stat";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 const formatLabel = d => {
@@ -95,37 +96,47 @@ class StudentPoverty extends SectionColumns {
             <Contact slug={this.props.slug} />
           </article>
 
-          {/* Draw a Barchart to show Level Of School for students in poverty. */}
-          <BarChart config={{
-            data: `/api/data?measures=Poverty by Schooling&drilldowns=Level of School,Poverty Status&Geography=${meta.id}&Year=all`,
-            discrete: "x",
-            height: 400,
-            legend: false,
-            label: d => formatLabel(d["Level of School"]),
-            groupBy: "Level of School",
-            x: "Level of School",
-            y: "share",
-            time: "Year",
-            xSort: (a, b) => a["ID Level of School"] - b["ID Level of School"],
-            xConfig: {
-              labelRotation: false,
-              tickFormat: d => formatLabel(d),
-              title: "Level of School"
-            },
-            yConfig: {
-              tickFormat: d => formatPopulation(d),
-              title: "Share"
-            },
-            shapeConfig: {
-              label: false
-            },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
-          }}
-          dataFormat={resp => {
-            this.setState({sources: updateSource(resp.source, this.state.sources)});
-            return formatLevelOfSchoolData(resp.data)[0];
-          }}
-          />
+          <div className="viz u-text-right">
+            <Options
+              component={this}
+              componentKey="viz"
+              dataFormat={resp => resp.data}
+              slug={this.props.slug}
+              data={ `/api/data?measures=Poverty by Schooling&drilldowns=Level of School,Poverty Status&Geography=${meta.id}&Year=all` }
+              title="Chart of Student Poverty" />
+
+            {/* Draw a Barchart to show Level Of School for students in poverty. */}
+            <BarChart ref={comp => this.viz = comp} config={{
+              data: `/api/data?measures=Poverty by Schooling&drilldowns=Level of School,Poverty Status&Geography=${meta.id}&Year=all`,
+              discrete: "x",
+              height: 400,
+              legend: false,
+              label: d => formatLabel(d["Level of School"]),
+              groupBy: "Level of School",
+              x: "Level of School",
+              y: "share",
+              time: "Year",
+              xSort: (a, b) => a["ID Level of School"] - b["ID Level of School"],
+              xConfig: {
+                labelRotation: false,
+                tickFormat: d => formatLabel(d),
+                title: "Level of School"
+              },
+              yConfig: {
+                tickFormat: d => formatPopulation(d),
+                title: "Share"
+              },
+              shapeConfig: {
+                label: false
+              },
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
+            }}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return formatLevelOfSchoolData(resp.data)[0];
+            }}
+            />
+          </div>
         </SectionColumns>
       );
     }

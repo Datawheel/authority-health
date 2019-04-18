@@ -14,6 +14,7 @@ import rangeFormatter from "utils/rangeFormatter";
 import growthCalculator from "utils/growthCalculator";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -79,9 +80,20 @@ class Rentals extends SectionColumns {
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
 
-          {/* Create a LinePlot. */}
-          {rentAmountDataAvailable &&
-            <LinePlot config={{
+          <div className="viz">
+            {rentAmountDataAvailable &&
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ rentAmountData }
+            title="Chart of Rentals per Month" />
+            }
+
+            {/* Create a LinePlot. */}
+            {rentAmountDataAvailable &&
+            <LinePlot ref={comp => this.viz = comp } config={{
               data: rentAmountData,
               discrete: "x",
               height: 175,
@@ -96,37 +108,50 @@ class Rentals extends SectionColumns {
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => `$${formatAbbreviate(d["Rent Amount"])}`]]}
             }}
             />
-          }
+            }
+          </div>
         </article>
 
-        {rentersByIncomePercentageAvailable
-          ? <BarChart config={{
-            data: `https://acs.datausa.io/api/data?measures=Renters by Income Percentage&drilldowns=Household Income&Geography=${meta.id}&Year=all`,
-            discrete: "x",
-            legend: false,
-            groupBy: "Household Income",
-            x: d => d["Household Income"],
-            y: "share",
-            time: "Year",
-            title: d => `Percentage of Renters Across All Income Levels in ${d[0].Geography}`,
-            xSort: (a, b) => a["ID Household Income"] - b["ID Household Income"],
-            xConfig: {
-              labelRotation: false,
-              tickFormat: d => rangeFormatter(d),
-              title: "Household Income"
-            },
-            yConfig: {
-              tickFormat: d => formatPercentage(d),
-              title: "Percentage of Renters"
-            },
-            shapeConfig: {label: false},
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
-          }}
-          dataFormat={resp => {
-            this.setState({sources: updateSource(resp.source, this.state.sources)});
-            return formatRentersByIncomePercentage(resp.data);
-          }}
-          /> : null}
+        <div className="viz u-text-right">
+          {rentersByIncomePercentageAvailable &&
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ `https://acs.datausa.io/api/data?measures=Renters by Income Percentage&drilldowns=Household Income&Geography=${meta.id}&Year=all` }
+            title="Chart of Renters Percentage" />
+          }
+
+          {rentersByIncomePercentageAvailable
+            ? <BarChart ref={comp => this.viz = comp } config={{
+              data: `https://acs.datausa.io/api/data?measures=Renters by Income Percentage&drilldowns=Household Income&Geography=${meta.id}&Year=all`,
+              discrete: "x",
+              legend: false,
+              groupBy: "Household Income",
+              x: d => d["Household Income"],
+              y: "share",
+              time: "Year",
+              title: d => `Percentage of Renters Across All Income Levels in ${d[0].Geography}`,
+              xSort: (a, b) => a["ID Household Income"] - b["ID Household Income"],
+              xConfig: {
+                labelRotation: false,
+                tickFormat: d => rangeFormatter(d),
+                title: "Household Income"
+              },
+              yConfig: {
+                tickFormat: d => formatPercentage(d),
+                title: "Percentage of Renters"
+              },
+              shapeConfig: {label: false},
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
+            }}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return formatRentersByIncomePercentage(resp.data);
+            }}
+            /> : null}
+        </div>
       </SectionColumns>
     );
   }

@@ -14,6 +14,7 @@ import places from "utils/places";
 import CensusTractDefinition from "components/CensusTractDefinition";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const formatPropertyValue = d => `$${formatAbbreviate(d)}`;
 
@@ -104,10 +105,10 @@ class Homeownership extends SectionColumns {
 
     let topChildrenGeographyData;
     if (meta.level === "county") {
-      topChildrenGeographyData = formatGeomapPropertyValueData(medianHousingValueForAllPlaces, meta, childrenTractIds)[1]; 
-    } 
+      topChildrenGeographyData = formatGeomapPropertyValueData(medianHousingValueForAllPlaces, meta, childrenTractIds)[1];
+    }
     else {
-      topChildrenGeographyData = formatGeomapPropertyValueData(medianHousingValueForAllTracts, meta, childrenTractIds)[1]; 
+      topChildrenGeographyData = formatGeomapPropertyValueData(medianHousingValueForAllTracts, meta, childrenTractIds)[1];
     }
 
     return (
@@ -133,29 +134,39 @@ class Homeownership extends SectionColumns {
           <p>{medianHousingValueForCurrentProfileAvailable ? <span>In {topMedianHousingUnitsValueForProfile.Year}, the median property value in {topMedianHousingUnitsValueForProfile.Geography}, was ${commas(topMedianHousingUnitsValueForProfile["Property Value"])}.</span> : ""} </p>
           <p>{occupancyDataAvailable ? <span>{formatAbbreviate(topOccupancyData.share)}% of households in {topOccupancyData.Geography} were occupied in {topOccupancyData.Year}.</span> : ""}</p>
           <p>The following map shows the median property value for <CensusTractDefinition text="census tracts" /> in Wayne County.</p>
-          
+
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
         </article>
 
-        <Geomap config={{
-          data: meta.level === "county" ? "https://acs.datausa.io/api/data?measures=Property Value&Geography=04000US26:places&Year=all" : "https://acs.datausa.io/api/data?measures=Property Value&Geography=05000US26163:children&Year=all",
-          groupBy: "ID Geography",
-          label: d => formatGeomapLabel(d, meta, tractToPlace),
-          colorScale: "Property Value",
-          colorScaleConfig: {
-            axisConfig: {tickFormat: d => formatPropertyValue(d)}
-          },
-          time: "Year",
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Median Property Value", d => `$${formatAbbreviate(d["Property Value"])}`]]},
-          topojson: meta.level === "county" ? "/topojson/place.json" : "/topojson/tract.json",
-          topojsonFilter: d => formatTopojsonFilter(d, meta, childrenTractIds)
-        }}
-        dataFormat={resp => {
-          this.setState({sources: updateSource(resp.source, this.state.sources)});
-          return resp.data;
-        }}
-        />
+        <div className="viz u-text-right">
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ meta.level === "county" ? "https://acs.datausa.io/api/data?measures=Property Value&Geography=04000US26:places&Year=all" : "https://acs.datausa.io/api/data?measures=Property Value&Geography=05000US26163:children&Year=all" }
+            title="Map of Homeownership" />
+
+          <Geomap ref={comp => this.viz = comp} config={{
+            data: meta.level === "county" ? "https://acs.datausa.io/api/data?measures=Property Value&Geography=04000US26:places&Year=all" : "https://acs.datausa.io/api/data?measures=Property Value&Geography=05000US26163:children&Year=all",
+            groupBy: "ID Geography",
+            label: d => formatGeomapLabel(d, meta, tractToPlace),
+            colorScale: "Property Value",
+            colorScaleConfig: {
+              axisConfig: {tickFormat: d => formatPropertyValue(d)}
+            },
+            time: "Year",
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Median Property Value", d => `$${formatAbbreviate(d["Property Value"])}`]]},
+            topojson: meta.level === "county" ? "/topojson/place.json" : "/topojson/tract.json",
+            topojsonFilter: d => formatTopojsonFilter(d, meta, childrenTractIds)
+          }}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return resp.data;
+          }}
+          />
+        </div>
       </SectionColumns>
     );
   }

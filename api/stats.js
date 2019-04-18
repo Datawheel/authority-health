@@ -213,7 +213,9 @@ module.exports = function(app) {
     currentLevelLocations.forEach((d, i) => d.medianIncomeRank = i + 1);
 
     currentLocationMeasureData.rankData = currentLevelLocations;
-    currentLocationMeasureData.tractToPlace = cache.tractToPlace;
+    const zipAndTractToPlace = cache.zipAndTractToPlace;
+    currentLocationMeasureData.zipToPlace = zipAndTractToPlace.zipToPlace;
+    currentLocationMeasureData.tractToPlace = zipAndTractToPlace.tractToPlace;
 
     res.json(currentLocationMeasureData);
   });

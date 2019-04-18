@@ -15,6 +15,7 @@ import ZipRegionDefinition from "components/ZipRegionDefinition";
 import CensusTractDefinition from "components/CensusTractDefinition";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const formatPercentage = (d, mutiplyBy100 = false) => mutiplyBy100 ? `${formatAbbreviate(d * 100)}%` : `${formatAbbreviate(d)}%`;
 
@@ -104,102 +105,122 @@ class RiskyBehaviors extends SectionColumns {
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
 
-          {/* Draw a Pie chart to show smoking status: former, current & never. */}
-          {/* TODO: distribution bar */}
-          {dropdownValue === drugTypes[0]
-            ? <div>
-              <Pie config={{
-                data: `/api/data?measures=Smoking Status Current,Smoking Status Former,Smoking Status Never&drilldowns=End Year&Geography=${id}`, // MiBRFS - All Years
-                height: 250,
-                value: d => d[d.SmokingType],
-                legend: false,
-                groupBy: "SmokingType",
-                label: d => {
-                  const wordsArr = d.SmokingType.split(" ");
-                  return `${wordsArr[2]}`;
-                },
-                time: "End Year",
-                title: d => `Smoking Status in ${d[0].Geography}`,
-                shapeConfig: {
-                  Path: {
-                    fillOpacity: 1
-                  }
-                },
-                tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Prevalence", d => formatPercentage(d[d.SmokingType], true)], ["County", d => d.Geography]]}
-              }}
-              dataFormat={resp => {
-                const data = [];
-                resp.data.forEach(d => {
-                  resp.source[0].measures.forEach(smokingType => {
-                    if (d[smokingType] !== null) {
-                      data.push(Object.assign({}, d, {SmokingType: smokingType}));
+          <div className="viz">
+            {dropdownValue === drugTypes[0] &&
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ `/api/data?measures=Smoking Status Current,Smoking Status Former,Smoking Status Never&drilldowns=End Year&Geography=${id}` }
+            title="Chart of Drinking Status" />
+            }
+            {/* Draw a Pie chart to show smoking status: former, current & never. */}
+            {/* TODO: distribution bar */}
+            {dropdownValue === drugTypes[0]
+              ? <div>
+                <Pie ref={comp => this.viz = comp} config={{
+                  data: `/api/data?measures=Smoking Status Current,Smoking Status Former,Smoking Status Never&drilldowns=End Year&Geography=${id}`, // MiBRFS - All Years
+                  height: 250,
+                  value: d => d[d.SmokingType],
+                  legend: false,
+                  groupBy: "SmokingType",
+                  label: d => {
+                    const wordsArr = d.SmokingType.split(" ");
+                    return `${wordsArr[2]}`;
+                  },
+                  time: "End Year",
+                  title: d => `Smoking Status in ${d[0].Geography}`,
+                  shapeConfig: {
+                    Path: {
+                      fillOpacity: 1
                     }
+                  },
+                  tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Prevalence", d => formatPercentage(d[d.SmokingType], true)], ["County", d => d.Geography]]}
+                }}
+                dataFormat={resp => {
+                  const data = [];
+                  resp.data.forEach(d => {
+                    resp.source[0].measures.forEach(smokingType => {
+                      if (d[smokingType] !== null) {
+                        data.push(Object.assign({}, d, {SmokingType: smokingType}));
+                      }
+                    });
                   });
-                });
-                this.setState({sources: updateSource(resp.source, this.state.sources)});
-                return data;
-              }}
-              />
-            </div> : null }
+                  this.setState({sources: updateSource(resp.source, this.state.sources)});
+                  return data;
+                }}
+                />
+              </div> : null }
+          </div>
         </article>
 
-        {/* Create a Geomap based on the dropdown choice. */}
-        {isSecondHandSmokeOrMonthlyAlcoholSelected
-          ? <Geomap config={{
-            data: `/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=all`,
-            groupBy: "ID Zip Region",
-            colorScale: dropdownValue,
-            colorScaleConfig: {
-              axisConfig: {tickFormat: d => formatPercentage(d, true)},
-              // smoking is bad
-              color: [
-                styles.white,
-                styles["danger-light"],
-                styles.danger,
-                styles["danger-dark"]
-              ]
-            },
-            label: d => d["Zip Region"],
-            time: "End Year",
-            title: `${dropdownValue} for Zip Regions in Wayne County`,
-            tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Behavior", `${dropdownValue}`], ["Prevalence", d => formatPercentage(d[dropdownValue], true)]]},
-            topojson: "/topojson/zipregions.json",
-            topojsonId: d => d.properties.REGION,
-            topojsonFilter: () => true
-          }}
-          dataFormat={resp => {
-            this.setState({sources: updateSource(resp.source, this.state.sources)});
-            return resp.data;
-          }}
-          />
-          : <Geomap config={{
-            data: `/api/data?measures=${dropdownValue}&drilldowns=Tract&Year=all`,
-            groupBy: "ID Tract",
-            colorScale: dropdownValue,
-            colorScaleConfig: {
-              axisConfig: {tickFormat: d => formatPercentage(d)},
-              // smoking is bad
-              color: [
-                styles.white,
-                styles["danger-light"],
-                styles.danger,
-                styles["danger-dark"]
-              ]
-            },
-            label: d => `${d.Tract}, ${tractToPlace[d["ID Tract"]]}`,
-            time: "Year",
-            title: `${dropdownValue} for Census Tracts within Detroit, Livonia, Dearborn and Westland`,
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Behavior", `${dropdownValue}`], ["Prevalence", d => formatPercentage(d[dropdownValue])]]},
-            topojson: "/topojson/tract.json",
-            topojsonId: d => d.id,
-            topojsonFilter: d => d.id.startsWith("14000US26163")
-          }}
-          dataFormat={resp => {
-            this.setState({sources: updateSource(resp.source, this.state.sources)});
-            return resp.data;
-          }}
-          />
-        }
+        <div className="viz u-text-right">
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ `/api/data?measures=${dropdownValue}&drilldowns=${ isSecondHandSmokeOrMonthlyAlcoholSelected ? "Zip Region" : "Tract" }&Year=all` }
+            title="Map of Risky Behaviors" />
+          {/* Create a Geomap based on the dropdown choice. */}
+          {isSecondHandSmokeOrMonthlyAlcoholSelected
+            ? <Geomap ref={comp => this.viz = comp } config={{
+              data: `/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=all`,
+              groupBy: "ID Zip Region",
+              colorScale: dropdownValue,
+              colorScaleConfig: {
+                axisConfig: {tickFormat: d => formatPercentage(d, true)},
+                // smoking is bad
+                color: [
+                  styles.white,
+                  styles["danger-light"],
+                  styles.danger,
+                  styles["danger-dark"]
+                ]
+              },
+              label: d => d["Zip Region"],
+              time: "End Year",
+              title: `${dropdownValue} for Zip Regions in Wayne County`,
+              tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Behavior", `${dropdownValue}`], ["Prevalence", d => formatPercentage(d[dropdownValue], true)]]},
+              topojson: "/topojson/zipregions.json",
+              topojsonId: d => d.properties.REGION,
+              topojsonFilter: () => true
+            }}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return resp.data;
+            }}
+            />
+            : <Geomap ref={comp => this.viz = comp } config={{
+              data: `/api/data?measures=${dropdownValue}&drilldowns=Tract&Year=all`,
+              groupBy: "ID Tract",
+              colorScale: dropdownValue,
+              colorScaleConfig: {
+                axisConfig: {tickFormat: d => formatPercentage(d)},
+                // smoking is bad
+                color: [
+                  styles.white,
+                  styles["danger-light"],
+                  styles.danger,
+                  styles["danger-dark"]
+                ]
+              },
+              label: d => `${d.Tract}, ${tractToPlace[d["ID Tract"]]}`,
+              time: "Year",
+              title: `${dropdownValue} for Census Tracts within Detroit, Livonia, Dearborn and Westland`,
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Behavior", `${dropdownValue}`], ["Prevalence", d => formatPercentage(d[dropdownValue])]]},
+              topojson: "/topojson/tract.json",
+              topojsonId: d => d.id,
+              topojsonFilter: d => d.id.startsWith("14000US26163")
+            }}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return resp.data;
+            }}
+            />
+          }
+        </div>
       </SectionColumns>
     );
   }

@@ -12,6 +12,7 @@ import Glossary from "components/Glossary";
 import Stat from "components/Stat";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const commas = format(",d");
 
@@ -83,21 +84,31 @@ class FoodAvailability extends SectionColumns {
           <Contact slug={this.props.slug} />
         </article>
 
-        {/* Draw a Pie chart to show types of stores and restaurants. */}
-        <Pie config={{
-          data,
-          groupBy: ["Group", "Sub-category"],
-          label: d => d["Sub-category"] instanceof Array ? titleCase(d.Group) : titleCase(d["Sub-category"]),
-          height: 400,
-          shapeConfig: {
-            Path: {
-              fillOpacity: 1
-            }
-          },
-          value: d => d["Number of Food Stores"],
-          tooltipConfig: {tbody: [["Count", d => `${commas(d["Number of Food Stores"])} in ${d.Year}`], ["County", d => d.Geography]]}
-        }}
-        />
+        <div className="viz u-text-right">
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ data }
+            title="Chart of Food Availability" />
+            
+          {/* Draw a Pie chart to show types of stores and restaurants. */}
+          <Pie ref={comp => this.viz = comp } config={{
+            data,
+            groupBy: ["Group", "Sub-category"],
+            label: d => d["Sub-category"] instanceof Array ? titleCase(d.Group) : titleCase(d["Sub-category"]),
+            height: 400,
+            shapeConfig: {
+              Path: {
+                fillOpacity: 1
+              }
+            },
+            value: d => d["Number of Food Stores"],
+            tooltipConfig: {tbody: [["Count", d => `${commas(d["Number of Food Stores"])} in ${d.Year}`], ["County", d => d.Geography]]}
+          }}
+          />
+        </div>
       </SectionColumns>
     );
   }

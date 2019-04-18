@@ -13,6 +13,7 @@ import Stat from "components/Stat";
 import rangeFormatter from "utils/rangeFormatter";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
@@ -82,15 +83,25 @@ class DisabilityStatus extends SectionColumns {
           />
           {/* Write short paragraph describing stats and barchart. */}
           {disabilityStatusAvailable ? <p>In {topDisabilityStatus.Year}, the most common disabled age group was {rangeFormatter(topDisabilityStatus.Age)} years making up {formatPopulation(topDisabilityStatus.share)} of all disabled citizens within this age group in {topDisabilityStatus.Geography}.</p> : ""}
-          {healthCoverageTypeAvailable ? <p>The chart here shows the health coverage breakdown of the disabled population in {filteredHealthCoverageType[0].Geography}.</p> : ""}
-          
+          {healthCoverageTypeAvailable ? <p>The chart here shows the health coverage breakdown of the disabled population by age in {filteredHealthCoverageType[0].Geography}.</p> : ""}
+
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
         </article>
 
-        {/* Show barchart for each age group type with public, private and no health insurance coverage*/}
-        {healthCoverageTypeAvailable
-          ? <BarChart config={{
+        <div className="viz u-text-right">
+          {healthCoverageTypeAvailable &&
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ `/api/data?measures=Population in Disability&drilldowns=Coverage Status,Coverage Type,Disability Status,Age&Geography=${meta.id}&Year=all` }
+            title={ `Chart of Disability Status in ${meta.name}` } />
+          }
+          {/* Show barchart for each age group type with public, private and no health insurance coverage*/}
+          {healthCoverageTypeAvailable &&
+          <BarChart ref={comp => this.viz = comp} config={{
             data: `/api/data?measures=Population in Disability&drilldowns=Coverage Status,Coverage Type,Disability Status,Age&Geography=${meta.id}&Year=all`,
             discrete: "y",
             height: 400,
@@ -116,7 +127,8 @@ class DisabilityStatus extends SectionColumns {
             this.setState({sources: updateSource(resp.source, this.state.sources)});
             return formatHealthCoverageTypeData(resp.data);
           }}
-          /> : null}
+          />}
+        </div>
       </SectionColumns>
     );
   }

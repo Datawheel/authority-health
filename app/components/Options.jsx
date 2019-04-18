@@ -213,11 +213,11 @@ class Options extends Component {
 
     return <div className="Options">
 
-      <Button iconName="th" className="option view-table pt-minimal" id={`options-button-${slug}-view-table`} onClick={this.toggleDialog.bind(this, "view-table")}>
+      <Button iconName="th" className="option view-table pt-minimal font-xxs" id={`options-button-${slug}-view-table`} onClick={this.toggleDialog.bind(this, "view-table")}>
         View Data
       </Button>
 
-      <Button iconName="export" className="option save-image pt-minimal" id={`options-button-${slug}-save-image`} onClick={this.toggleDialog.bind(this, "save-image")}>
+      <Button iconName="export" className="option save-image pt-minimal font-xxs" id={`options-button-${slug}-save-image`} onClick={this.toggleDialog.bind(this, "save-image")}>
         Save Image
       </Button>
 

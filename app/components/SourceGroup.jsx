@@ -27,7 +27,7 @@ export default class SourceGroup extends Component {
             orgName = orgName.replace("the Feeding America", "Feeding America");
 
             return <span key={i} className="source-item">
-              { i && i === sources.length - 1 ? <span> and</span> : null }
+              { i && i === sources.length - 1 ? <span> and </span> : null }
               { org && <Tooltip content={orgDesc} className={orgDesc ? "active" : ""} tooltipClassName="source-group-tooltip" disabled={!orgDesc}>
                 { datasetLink && orgName ? <a className="link" href={datasetLink} target="_blank" rel="noopener noreferrer" dangerouslySetInnerHTML={{__html: orgName}} /> : <span dangerouslySetInnerHTML={{__html: orgName}} /> }
               </Tooltip> }

@@ -15,6 +15,7 @@ import StatGroup from "components/StatGroup";
 import rangeFormatter from "utils/rangeFormatter";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const definitions = [
   {term: "Poverty", definition: "The Census Bureau uses a set of money income thresholds that vary by family size and composition to determine who is in poverty. If a family's total income is less than the family's threshold, then that family and every individual in it is considered in poverty. The official poverty thresholds do not vary geographically, but they are updated for inflation using Consumer Price Index (CPI-U). The official poverty definition uses money income before taxes and does not include capital gains or noncash benefits (such as public housing, Medicaid, and food stamps)."}
@@ -134,8 +135,18 @@ class Poverty extends SectionColumns {
           <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
 
-          {povertyByRaceAvailable &&
-            <BarChart config={{
+          <div className="viz">
+            {povertyByRaceAvailable &&
+            <Options
+              component={this}
+              componentKey="viz"
+              dataFormat={resp => resp.data}
+              slug={this.props.slug}
+              data={ `https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Race&Geography=${meta.id}&Year=all` }
+              title="Chart of Poverty by Race" />
+            }
+            {povertyByRaceAvailable &&
+            <BarChart ref={comp => this.viz = comp } config={{
               data: `https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Race&Geography=${meta.id}&Year=all`,
               discrete: "y",
               height: 300,
@@ -156,37 +167,50 @@ class Poverty extends SectionColumns {
               return formatPovertyByRaceData(resp.data)[0];
             }}
             />
-          }
+            }
+          </div>
         </article>
 
-        {povertyByAgeAndGenderAvailable
-          ? <BarChart config={{
-            data: `https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Age,Gender&Geography=${meta.id}&Year=all`,
-            discrete: "x",
-            groupBy: "Gender",
-            x: "Age",
-            y: "share",
-            time: "Year",
-            title: d => `Population in Poverty by Age and Gender in ${d[0].Geography}`,
-            xSort: (a, b) => a["ID Age"] - b["ID Age"],
-            xConfig: {
-              labelRotation: false,
-              tickFormat: d => rangeFormatter(d)
-            },
-            yConfig: {
-              tickFormat: d => formatPopulation(d),
-              title: "Share"
-            },
-            shapeConfig: {
-              label: false
-            },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
-          }}
-          dataFormat={resp => {
-            this.setState({sources: updateSource(resp.source, this.state.sources)});
-            return formatPovertyByAgeAndGender(resp.data)[0];
-          }}
-          /> : null}
+        <div className="viz u-text-right">
+          {povertyByAgeAndGenderAvailable &&
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ `https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Age,Gender&Geography=${meta.id}&Year=all` }
+            title="Chart of Poverty by Age and Gender" />
+          }
+          {povertyByAgeAndGenderAvailable
+            ? <BarChart ref={comp => this.viz = comp } config={{
+              data: `https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Age,Gender&Geography=${meta.id}&Year=all`,
+              discrete: "x",
+              height: 400,
+              groupBy: "Gender",
+              x: "Age",
+              y: "share",
+              time: "Year",
+              title: d => `Population in Poverty by Age and Gender in ${d[0].Geography}`,
+              xSort: (a, b) => a["ID Age"] - b["ID Age"],
+              xConfig: {
+                labelRotation: false,
+                tickFormat: d => rangeFormatter(d)
+              },
+              yConfig: {
+                tickFormat: d => formatPopulation(d),
+                title: "Share"
+              },
+              shapeConfig: {
+                label: false
+              },
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
+            }}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return formatPovertyByAgeAndGender(resp.data)[0];
+            }}
+            /> : null}
+        </div>
       </SectionColumns>
     );
   }

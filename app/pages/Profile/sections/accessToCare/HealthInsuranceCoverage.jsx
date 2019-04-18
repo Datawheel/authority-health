@@ -15,6 +15,7 @@ import Stat from "components/Stat";
 import StatGroup from "components/StatGroup";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -192,50 +193,69 @@ class HealthInsuranceCoverage extends SectionColumns {
             <SourceGroup sources={this.state.sources} />
             <Contact slug={this.props.slug} />
 
-            <BarChart config={{
-              data: `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status,Sex,Age&Geography=${geoId}&Year=all`,
-              discrete: "x",
-              height: 250,
-              groupBy: "Sex",
-              x: "Age",
-              y: "share",
-              time: "ID Year",
-              title: d => `Health Insurance Coverage by Age and Gender in ${d[0].Geography}`,
-              xSort: (a, b) => a["ID Age"] - b["ID Age"],
-              xConfig: {
-                labelRotation: false,
-                tickFormat: d => rangeFormatter(d)
-              },
-              yConfig: {tickFormat: d => formatPercentage(d)},
-              shapeConfig: {
-                label: false
-              },
-              tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
+            <div className="viz">
+              <Options
+                component={this}
+                componentKey="viz"
+                dataFormat={resp => resp.data}
+                slug={this.props.slug}
+                data={ `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status,Sex,Age&Geography=${geoId}&Year=all` }
+                title="Chart of Health Insurance Coverage" />
+              <BarChart ref={comp => this.viz = comp} config={{
+                data: `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status,Sex,Age&Geography=${geoId}&Year=all`,
+                discrete: "x",
+                height: 250,
+                groupBy: "Sex",
+                x: "Age",
+                y: "share",
+                time: "ID Year",
+                title: d => `Health Insurance Coverage by Age and Gender in ${d[0].Geography}`,
+                xSort: (a, b) => a["ID Age"] - b["ID Age"],
+                xConfig: {
+                  labelRotation: false,
+                  tickFormat: d => rangeFormatter(d)
+                },
+                yConfig: {tickFormat: d => formatPercentage(d)},
+                shapeConfig: {
+                  label: false
+                },
+                tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
+              }}
+              dataFormat={resp => {
+                this.setState({sources: updateSource(resp.source, this.state.sources)});
+                return formatCoverageData(resp.data);
+              }}
+              />
+            </div>
+          </article>
+
+          <div className="viz u-text-right">
+            <Options
+              component={this}
+              componentKey="viz"
+              dataFormat={resp => resp.data}
+              slug={this.props.slug}
+              data={ `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=${meta.id}:children&Year=all` }
+              title="Map of Health Insurance Coverage" />
+
+            <Geomap ref={comp => this.viz = comp } config={{
+              data: `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=${meta.id}:children&Year=all`,
+              groupBy: meta.level === "county" ? "ID Place" : "ID Geography",
+              colorScale: "share",
+              title: `Health Insurance Coverage for ${meta.level === "county" ? "Places" : "Census Tracts"} in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`,
+              colorScaleConfig: {axisConfig: {tickFormat: d => formatPercentage(d)}},
+              time: "Year",
+              label: d => formatGeomapLabel(d, meta, tractToPlace),
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]},
+              topojson: meta.level === "county" ? "/topojson/place.json" : "/topojson/tract.json",
+              topojsonFilter: d => formatTopojsonFilter(d, meta, childrenTractIds)
             }}
             dataFormat={resp => {
               this.setState({sources: updateSource(resp.source, this.state.sources)});
-              return formatCoverageData(resp.data);
+              return formatGeomapCoverageData(resp.data, meta, childrenTractIds)[0];
             }}
             />
-          </article>
-
-          <Geomap config={{
-            data: `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=${meta.id}:children&Year=latest`,
-            groupBy: meta.level === "county" ? "ID Place" : "ID Geography",
-            colorScale: "share",
-            title: `Health Insurance Coverage for ${meta.level === "county" ? "Places" : "Census Tracts"} in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`,
-            colorScaleConfig: {axisConfig: {tickFormat: d => formatPercentage(d)}},
-            time: "Year",
-            label: d => formatGeomapLabel(d, meta, tractToPlace),
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]},
-            topojson: meta.level === "county" ? "/topojson/place.json" : "/topojson/tract.json",
-            topojsonFilter: d => formatTopojsonFilter(d, meta, childrenTractIds)
-          }}
-          dataFormat={resp => {
-            this.setState({sources: updateSource(resp.source, this.state.sources)});
-            return formatGeomapCoverageData(resp.data, meta, childrenTractIds)[0];
-          }}
-          />
+          </div>
         </SectionColumns>
       );
     }
@@ -252,7 +272,6 @@ HealthInsuranceCoverage.need = [
   fetchData("nationOverallCoverage", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Nation=01000US&Year=latest", d => d.data),
   fetchData("stateOverallCoverage", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&State=04000US26&Year=latest", d => d.data),
   fetchData("wayneCountyOverallCoverage", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=05000US26163&Year=latest", d => d.data),
-  fetchData("currentLevelOverallCoverage", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=<id>&Year=latest", d => d.data),
   fetchData("coverageDataForChildrenGeography", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=<id>:children&Year=latest", d => d.data)
 ];
 

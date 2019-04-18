@@ -10,6 +10,7 @@ import Disclaimer from "components/Disclaimer";
 import Stat from "components/Stat";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -89,53 +90,72 @@ class StoreAccessByDemographic extends SectionColumns {
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
 
-          {/* Create a BarChart based on the dropdown choice. */}
-          <BarChart config={{
-            data: ageSelected ? `/api/data?measures=Low-Access to Food by Age&drilldowns=Age Group&Geography=${meta.id}&Year=all` : `/api/data?measures=Low-Access to Food by Race&drilldowns=Race Group&Geography=${meta.id}&Year=all`,
-            discrete: "y",
-            height: 200,
-            legend: false,
-            groupBy: ageSelected ? "Age Group" : "Race Group",
-            x: ageSelected ? "Low-Access to Food by Age" : "Low-Access to Food by Race",
-            y: ageSelected ? "Age Group" : "Race Group",
-            xConfig: {
-              tickFormat: d => formatPercentage(d)
+          <div className="viz">
+            <Options
+              component={this}
+              componentKey="viz"
+              dataFormat={resp => resp.data}
+              slug={this.props.slug}
+              data={ ageSelected ? `/api/data?measures=Low-Access to Food by Age&drilldowns=Age Group&Geography=${meta.id}&Year=all` : `/api/data?measures=Low-Access to Food by Race&drilldowns=Race Group&Geography=${meta.id}&Year=all` }
+              title="Chart of Low Access to Food by Age" />
+            {/* Create a BarChart based on the dropdown choice. */}
+            <BarChart ref={comp => this.viz = comp} config={{
+              data: ageSelected ? `/api/data?measures=Low-Access to Food by Age&drilldowns=Age Group&Geography=${meta.id}&Year=all` : `/api/data?measures=Low-Access to Food by Race&drilldowns=Race Group&Geography=${meta.id}&Year=all`,
+              discrete: "y",
+              height: 200,
+              legend: false,
+              groupBy: ageSelected ? "Age Group" : "Race Group",
+              x: ageSelected ? "Low-Access to Food by Age" : "Low-Access to Food by Race",
+              y: ageSelected ? "Age Group" : "Race Group",
+              xConfig: {
+                tickFormat: d => formatPercentage(d)
+              },
+              yConfig: {
+                barConfig: {stroke: "transparent"},
+                ticks: []
+              },
+              time: "Year",
+              title: d => `Low Access to Food Store in ${d[0].Geography}`,
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", d => ageSelected ? `${d["Age Group"]}` : `${d["Race Group"]}`], ["Low-Access Rate", d => ageSelected ? formatPercentage(d["Low-Access to Food by Age"]) : formatPercentage(d["Low-Access to Food by Race"])], ["County", d => d.Geography]]}
+            }}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return resp.data;
+            }}
+            />
+          </div>
+        </article>
+
+        <div className="viz u-text-right">
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ ageSelected ? `/api/data?measures=Low-Access to Food by Age&drilldowns=Age Group,County&Age Group=${dropdownValue}&Year=all` : `/api/data?measures=Low-Access to Food by Race&drilldowns=Race Group,County&Race Group=${dropdownValue}&Year=all` }
+            title="Map of Store Access By Demographics" />
+
+          {/* Create a Geomap based on dropdown choice for all the counties in Michigan. */}
+          <Geomap ref={comp => this.viz = comp } config={{
+            data: ageSelected ? `/api/data?measures=Low-Access to Food by Age&drilldowns=Age Group,County&Age Group=${dropdownValue}&Year=all` : `/api/data?measures=Low-Access to Food by Race&drilldowns=Race Group,County&Race Group=${dropdownValue}&Year=all`,
+            groupBy: "ID County",
+            colorScale: ageSelected ? "Low-Access to Food by Age" : "Low-Access to Food by Race",
+            colorScaleConfig: {
+              axisConfig: {tickFormat: d => formatPercentage(d)}
             },
-            yConfig: {
-              barConfig: {stroke: "transparent"},
-              ticks: []
-            },
+            label: d => d.County,
             time: "Year",
-            title: d => `Low Access to Food Store in ${d[0].Geography}`,
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", d => ageSelected ? `${d["Age Group"]}` : `${d["Race Group"]}`], ["Low-Access Rate", d => ageSelected ? formatPercentage(d["Low-Access to Food by Age"]) : formatPercentage(d["Low-Access to Food by Race"])], ["County", d => d.Geography]]}
+            title: "Low Access to Food Store for Counties in Michigan",
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", dropdownValue], ["Low-Access Rate", d => ageSelected ? formatPercentage(d["Low-Access to Food by Age"]) : formatPercentage(d["Low-Access to Food by Race"])]]},
+            topojson: "/topojson/county.json",
+            topojsonFilter: d => d.id.startsWith("05000US26")
           }}
           dataFormat={resp => {
             this.setState({sources: updateSource(resp.source, this.state.sources)});
             return resp.data;
           }}
           />
-        </article>
-
-        {/* Create a Geomap based on dropdown choice for all the counties in Michigan. */}
-        <Geomap config={{
-          data: ageSelected ? `/api/data?measures=Low-Access to Food by Age&drilldowns=Age Group,County&Age Group=${dropdownValue}&Year=all` : `/api/data?measures=Low-Access to Food by Race&drilldowns=Race Group,County&Race Group=${dropdownValue}&Year=all`,
-          groupBy: "ID County",
-          colorScale: ageSelected ? "Low-Access to Food by Age" : "Low-Access to Food by Race",
-          colorScaleConfig: {
-            axisConfig: {tickFormat: d => formatPercentage(d)}
-          },
-          label: d => d.County,
-          time: "Year",
-          title: "Low Access to Food Store for Counties in Michigan",
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", dropdownValue], ["Low-Access Rate", d => ageSelected ? formatPercentage(d["Low-Access to Food by Age"]) : formatPercentage(d["Low-Access to Food by Race"])]]},
-          topojson: "/topojson/county.json",
-          topojsonFilter: d => d.id.startsWith("05000US26")
-        }}
-        dataFormat={resp => {
-          this.setState({sources: updateSource(resp.source, this.state.sources)});
-          return resp.data;
-        }}
-        />
+        </div>
       </SectionColumns>
     );
   }

@@ -16,6 +16,7 @@ import Disclaimer from "components/Disclaimer";
 import growthCalculator from "utils/growthCalculator";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -117,32 +118,42 @@ class OccurrenceByCancerSite extends SectionColumns {
           <Contact slug={this.props.slug} />
         </article>
 
-        {/* Draw a LinePlot to show age adjusted data for the selected cancer types. */}
-        <LinePlot config={{
-          data: isItemsListEmpty ? "/api/data?measures=Age-Adjusted Cancer Rate,Age-Adjusted Cancer Rate Lower 95 Percent Confidence Interval,Age-Adjusted Cancer Rate Upper 95 Percent Confidence Interval&Cancer Site=All Invasive Cancer Sites Combined&drilldowns=MSA&Year=all" : `/api/data?measures=Age-Adjusted Cancer Rate,Age-Adjusted Cancer Rate Lower 95 Percent Confidence Interval,Age-Adjusted Cancer Rate Upper 95 Percent Confidence Interval&Cancer Site=${dropdownSelected}&drilldowns=MSA&Year=all`,
-          discrete: "x",
-          groupBy: "Cancer Site",
-          legend: false,
-          x: "Year",
-          y: "Age-Adjusted Cancer Rate",
-          xConfig: {
-            labelRotation: false
-          },
-          yConfig: {
-            tickFormat: d => d,
-            title: "Occurrence per 100,000 People"
-          },
-          confidence: [d => d["Age-Adjusted Cancer Rate Lower 95 Percent Confidence Interval"], d => d["Age-Adjusted Cancer Rate Upper 95 Percent Confidence Interval"]],
-          confidenceConfig: {
-            fillOpacity: 0.2
-          },
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
-        }}
-        dataFormat={resp => {
-          this.setState({sources: updateSource(resp.source, this.state.sources)});
-          return resp.data;
-        }}
-        />
+        <div className="viz u-text-right">
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ isItemsListEmpty ? "/api/data?measures=Age-Adjusted Cancer Rate,Age-Adjusted Cancer Rate Lower 95 Percent Confidence Interval,Age-Adjusted Cancer Rate Upper 95 Percent Confidence Interval&Cancer Site=All Invasive Cancer Sites Combined&drilldowns=MSA&Year=all" : `/api/data?measures=Age-Adjusted Cancer Rate,Age-Adjusted Cancer Rate Lower 95 Percent Confidence Interval,Age-Adjusted Cancer Rate Upper 95 Percent Confidence Interval&Cancer Site=${dropdownSelected}&drilldowns=MSA&Year=all` }
+            title="Chart of Occurrence by Cancer Site" />
+            
+          {/* Draw a LinePlot to show age adjusted data for the selected cancer types. */}
+          <LinePlot ref={comp => this.viz = comp } config={{
+            data: isItemsListEmpty ? "/api/data?measures=Age-Adjusted Cancer Rate,Age-Adjusted Cancer Rate Lower 95 Percent Confidence Interval,Age-Adjusted Cancer Rate Upper 95 Percent Confidence Interval&Cancer Site=All Invasive Cancer Sites Combined&drilldowns=MSA&Year=all" : `/api/data?measures=Age-Adjusted Cancer Rate,Age-Adjusted Cancer Rate Lower 95 Percent Confidence Interval,Age-Adjusted Cancer Rate Upper 95 Percent Confidence Interval&Cancer Site=${dropdownSelected}&drilldowns=MSA&Year=all`,
+            discrete: "x",
+            groupBy: "Cancer Site",
+            legend: false,
+            x: "Year",
+            y: "Age-Adjusted Cancer Rate",
+            xConfig: {
+              labelRotation: false
+            },
+            yConfig: {
+              tickFormat: d => d,
+              title: "Occurrence per 100,000 People"
+            },
+            confidence: [d => d["Age-Adjusted Cancer Rate Lower 95 Percent Confidence Interval"], d => d["Age-Adjusted Cancer Rate Upper 95 Percent Confidence Interval"]],
+            confidenceConfig: {
+              fillOpacity: 0.2
+            },
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
+          }}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return resp.data;
+          }}
+          />
+        </div>
       </SectionColumns>
     );
   }

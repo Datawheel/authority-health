@@ -14,6 +14,7 @@ import Stat from "components/Stat";
 import StatGroup from "components/StatGroup";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const commas = format(",d");
 
@@ -135,26 +136,36 @@ class FoodStamps extends SectionColumns {
           <Contact slug={this.props.slug} />
         </article>
 
-        {publicAssistanceDataAvailable
-          ? <LinePlot config={{
-            data: `/api/data?measures=Food-Stamp Population&drilldowns=Public Assistance or Snap&Geography=${meta.id}&Year=all`,
-            discrete: "x",
-            height: 400,
-            groupBy: "Public Assistance or Snap",
-            x: "Year",
-            y: "share",
-            yConfig: {
-              tickFormat: d => `${formatPercentage(d)}`,
-              title: "Share"
-            },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => `${formatPercentage(d.share)}`], [titleCase(meta.level), d => d.Geography]]}
-          }}
-          dataFormat={resp => {
-            this.setState({sources: updateSource(resp.source, this.state.sources)});
-            return formatPublicAssistanceData(resp.data);
-          }}
-          /> : null
-        }
+        <div className="viz u-text-right">
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ `/api/data?measures=Food-Stamp Population&drilldowns=Public Assistance or Snap&Geography=${meta.id}&Year=all` }
+            title="Chart of Food Stamps" />
+            
+          {publicAssistanceDataAvailable
+            ? <LinePlot ref={comp => this.viz = comp } config={{
+              data: `/api/data?measures=Food-Stamp Population&drilldowns=Public Assistance or Snap&Geography=${meta.id}&Year=all`,
+              discrete: "x",
+              height: 400,
+              groupBy: "Public Assistance or Snap",
+              x: "Year",
+              y: "share",
+              yConfig: {
+                tickFormat: d => `${formatPercentage(d)}`,
+                title: "Share"
+              },
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => `${formatPercentage(d.share)}`], [titleCase(meta.level), d => d.Geography]]}
+            }}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return formatPublicAssistanceData(resp.data);
+            }}
+            /> : null
+          }
+        </div>
       </SectionColumns>
     );
   }

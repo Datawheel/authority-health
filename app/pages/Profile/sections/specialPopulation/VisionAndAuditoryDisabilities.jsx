@@ -17,6 +17,7 @@ import StatGroup from "components/StatGroup";
 import places from "utils/places";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Options from "components/Options";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 const formatTopojsonFilter = (d, meta, childrenTractIds) => {
@@ -234,8 +235,18 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
 
-          {isVisionDisabilitySelected && visionDisabilityDataAvailable &&
-            <BarChart config={{
+          <div className="viz">
+            {isVisionDisabilitySelected && visionDisabilityDataAvailable &&
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ `/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status,Age,Sex&Geography=${meta.id}&Year=all` }
+            title= {"Chart of Vision Disability by Age and Gender"} />
+            }
+            {isVisionDisabilitySelected && visionDisabilityDataAvailable &&
+            <BarChart ref={comp => this.viz = comp } config={{
               data: `/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status,Age,Sex&Geography=${meta.id}&Year=all`,
               height: 250,
               discrete: "x",
@@ -262,9 +273,18 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             }}
             />}
 
-          {!isVisionDisabilitySelected && hearingDisabilityDataAvailable &&
-            <BarChart config={{
-              data: `/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status,Age,Sex&Geography=${meta.id}&Year=latest`,
+            {!isVisionDisabilitySelected && hearingDisabilityDataAvailable &&
+              <Options
+                component={this}
+                componentKey="viz"
+                dataFormat={resp => resp.data}
+                slug={this.props.slug}
+                data={ `/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status,Age,Sex&Geography=${meta.id}&Year=all` }
+                title= {"Chart of Hearing Disability by Age and Gender"} />
+            }
+            {!isVisionDisabilitySelected && hearingDisabilityDataAvailable &&
+            <BarChart ref={comp => this.viz = comp } config={{
+              data: `/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status,Age,Sex&Geography=${meta.id}&Year=all`,
               height: 250,
               discrete: "x",
               groupBy: "Sex",
@@ -289,31 +309,42 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
               return formatData(resp.data, "Hearing")[0];
             }}
             /> }
+          </div>
         </article>
 
-        <Geomap config={{
-          data: isVisionDisabilitySelected ? `/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status&Geography=${meta.id}:children&Year=all` : `/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status&Geography=${meta.id}:children&Year=all`,
-          groupBy: meta.level === "county" ? "ID Place" : "ID Geography",
-          colorScale: "share",
-          colorScaleConfig: {
-            axisConfig: {tickFormat: d => formatPercentage(d)},
-            color: [
-              styles.white,
-              styles["danger-light"]
-            ]
-          },
-          title: `${dropdownValue} Population by ${meta.level === "county" ? "Places" : "Census Tracts"} in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`,
-          time: "Year",
-          label: d => formatGeomapLabel(d, meta, tractToPlace),
-          tooltipConfig: {tbody: [["Year", d => d.Year], ["Disability", dropdownValue], ["Share", d => formatPercentage(d.share)]]},
-          topojson: meta.level === "county" ? "/topojson/place.json" : "/topojson/tract.json",
-          topojsonFilter: d => formatTopojsonFilter(d, meta, childrenTractIds)
-        }}
-        dataFormat={resp => {
-          this.setState({sources: updateSource(resp.source, this.state.sources)});
-          return isVisionDisabilitySelected ? formatGeomapData(resp.data, meta, childrenTractIds, "Vision")[0] : formatGeomapData(resp.data, meta, childrenTractIds, "Hearing")[0];
-        }}
-        />
+        <div className="viz u-text-right">
+          <Options
+            component={this}
+            componentKey="viz"
+            dataFormat={resp => resp.data}
+            slug={this.props.slug}
+            data={ isVisionDisabilitySelected ? `/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status&Geography=${meta.id}:children&Year=all` : `/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status&Geography=${meta.id}:children&Year=all` }
+            title= {`Map of ${dropdownValue}`} />
+
+          <Geomap ref={comp => this.viz = comp } config={{
+            data: isVisionDisabilitySelected ? `/api/data?measures=Vision Disabilities&drilldowns=Vision Disability Status&Geography=${meta.id}:children&Year=all` : `/api/data?measures=Hearing Disabilities&drilldowns=Hearing Disability Status&Geography=${meta.id}:children&Year=all`,
+            groupBy: meta.level === "county" ? "ID Place" : "ID Geography",
+            colorScale: "share",
+            colorScaleConfig: {
+              axisConfig: {tickFormat: d => formatPercentage(d)},
+              color: [
+                styles.white,
+                styles["danger-light"]
+              ]
+            },
+            title: `${dropdownValue} Population by ${meta.level === "county" ? "Places" : "Census Tracts"} in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`,
+            time: "Year",
+            label: d => formatGeomapLabel(d, meta, tractToPlace),
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Disability", dropdownValue], ["Share", d => formatPercentage(d.share)]]},
+            topojson: meta.level === "county" ? "/topojson/place.json" : "/topojson/tract.json",
+            topojsonFilter: d => formatTopojsonFilter(d, meta, childrenTractIds)
+          }}
+          dataFormat={resp => {
+            this.setState({sources: updateSource(resp.source, this.state.sources)});
+            return isVisionDisabilitySelected ? formatGeomapData(resp.data, meta, childrenTractIds, "Vision")[0] : formatGeomapData(resp.data, meta, childrenTractIds, "Hearing")[0];
+          }}
+          />
+        </div>
       </SectionColumns>
     );
   }

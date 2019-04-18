@@ -16,12 +16,12 @@ packages/*/static/reports
 .env
 .envrc
 
-# editor specific files
-.vscode/*
-jsconfig.json
-
 # docker files
 dockerfiles/nginx/certs/*
 dockerfiles/nginx/conf.d/default.conf
 
+# pm2 config
+*.config.js
+
+# flickr script helper
 google_auth.json

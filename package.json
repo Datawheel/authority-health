@@ -10,7 +10,7 @@
     "flickr": "node scripts/flickr-scrape.js",
     "locales": "canon-locales",
     "setup": "canon-setup",
-    "start": "canon-start",
+    "start": "node index.js",
     "release": "canon-release",
     "topojson": "node scripts/topojson.js"
   },
@@ -27,8 +27,8 @@
   "dependencies": {
     "@blueprintjs/labs": "^0.14.4",
     "@blueprintjs/table": "^1.31.3",
-    "@datawheel/canon-core": "^0.16.27",
-    "@datawheel/canon-logiclayer": "^0.3.15",
+    "@datawheel/canon-core": "^0.16.32",
+    "@datawheel/canon-logiclayer": "^0.3.18",
     "@datawheel/canon-vizbuilder": "^0.2.11",
     "d3plus-format": "^0.1.4",
     "flickr-sdk": "^3.8.0",

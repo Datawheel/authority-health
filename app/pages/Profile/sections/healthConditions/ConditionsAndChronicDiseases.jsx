@@ -97,7 +97,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
 
     return (
       <SectionColumns>
-        <SectionTitle>Conditons & Chronic Diseases</SectionTitle>
+        <SectionTitle>Conditions & Chronic Diseases</SectionTitle>
         <article>
           {/* Create a dropdown for different types of health conditions. */}
           <label className="pt-label pt-inline" htmlFor="health-conditions-dropdown">
@@ -212,7 +212,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
 }
 
 ConditionsAndChronicDiseases.defaultProps = {
-  slug: "conditons-and-chronic-diseases"
+  slug: "conditions-and-chronic-diseases"
 };
 
 ConditionsAndChronicDiseases.need = [

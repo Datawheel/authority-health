@@ -69,7 +69,7 @@ class PhysicalInactivity extends SectionColumns {
           {/* Show top stats for the Male and Female Physical Inactivity data. */}
           {/* And write short paragraphs explaining Barchart and top stats for the Physical Inactivity data. */}
           <StatGroup
-            title={"prevelance by gender"}
+            title={"Prevalence by gender"}
             year={topPhysicalInactivityMaleData.Year}
             stats={[
               {
@@ -136,7 +136,7 @@ class PhysicalInactivity extends SectionColumns {
             slug={this.props.slug}
             data={ physicalInactivity.data }
             title="Map of Physical Inactivity" />
-            
+
           {/* Geomap to show Physical health and physical Inactivity for tracts in the Wayne County. */}
           <Geomap ref={comp => this.viz = comp } config={{
             data: physicalInactivity.data, // only 1 year data available.

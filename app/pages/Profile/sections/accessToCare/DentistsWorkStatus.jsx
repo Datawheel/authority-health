@@ -77,6 +77,9 @@ class DentistsWorkStatus extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Dentists Work Status</SectionTitle>
         <article>
+          {!isDataAvailableForCurrentGeography &&
+            <Disclaimer>Data is shown for {dentistsByWorkingHours.data[0].Geography}</Disclaimer>
+          }
           <Stat
             title={"Private Practice"}
             year={topTypeOfActiveDentist.Year}
@@ -102,9 +105,6 @@ class DentistsWorkStatus extends SectionColumns {
           <p>In {recentYearGpPediatricDentists.Year}, {formatPercentage(recentYearGpPediatricDentists.share)} of all dentists in {recentYearGpPediatricDentists.Geography} work in either pediatrics or general practice, with only {formatPercentage(recentYearOtherSpecialtyDentists.share)} practicing a speciality dental field.</p>
           <p>The following chart shows the breakdown of dentists who do not work in a private practice.</p>
 
-          {!isDataAvailableForCurrentGeography &&
-            <Disclaimer>Data is shown for {dentistsByWorkingHours.data[0].Geography}</Disclaimer>
-          }
           <Contact slug={this.props.slug} />
         </article>
 

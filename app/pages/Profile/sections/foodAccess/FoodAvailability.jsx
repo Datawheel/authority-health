@@ -67,6 +67,9 @@ class FoodAvailability extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Food Availability</SectionTitle>
         <article>
+          {!isFoodStoreDataAvailableForCurrentGeography &&
+            <Disclaimer>Data is shown for {topStore.Geography}</Disclaimer>
+          }
           <Stat
             title={"most number of food store available"}
             year={topStore.Year}
@@ -76,9 +79,6 @@ class FoodAvailability extends SectionColumns {
           <p>In {topStore.Year}, the most available food stores in {topStore.Geography} were {topStore["Sub-category"].toLowerCase()} ({commas(topStore["Number of Food Stores"])}) out of all food store types.</p>
           <p>The chart here shows the share of fast-food restaurants, full-service restaurants, convenience stores, grocery stores, specialized food stores, supercenters and farmers market in {meta.name}.</p>
 
-          {!isFoodStoreDataAvailableForCurrentGeography &&
-            <Disclaimer>Data is shown for {topStore.Geography}</Disclaimer>
-          }
           <SourceGroup sources={this.state.sources} />
           <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
@@ -92,7 +92,7 @@ class FoodAvailability extends SectionColumns {
             slug={this.props.slug}
             data={ data }
             title="Chart of Food Availability" />
-            
+
           {/* Draw a Pie chart to show types of stores and restaurants. */}
           <Pie ref={comp => this.viz = comp } config={{
             data,

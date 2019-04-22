@@ -59,6 +59,10 @@ class PhysicalInactivity extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Physical Inactivity</SectionTitle>
         <article>
+          {!isPhysicalInactivityBySexAvailableForCurrentlocation
+            ? <Disclaimer>Data is shown for {physicalInactivityPrevalenceBySex.data[0].Geography} and census tract level for four cities</Disclaimer>
+            : <Disclaimer>Data is shown at the census tract level for four cities</Disclaimer>
+          }
           <Stat
             title={"Location with highest prevalence"}
             year={topRecentYearData.Year}
@@ -91,9 +95,6 @@ class PhysicalInactivity extends SectionColumns {
           <p>In {topPhysicalInactivityFemaleData.Year}, {formatPercentage(topPhysicalInactivityMaleData["Age-Adjusted Physical Inactivity"])} of the male population and {formatPercentage(topPhysicalInactivityFemaleData["Age-Adjusted Physical Inactivity"])} of the female population in {}
             {topPhysicalInactivityFemaleData.Geography} were physically inactive, as compared to {formatPercentage(stateLevelMaleData["Age-Adjusted Physical Inactivity"])} of the male and {formatPercentage(stateLevelFemaleData["Age-Adjusted Physical Inactivity"])} of the female population in Michigan overall.</p>
 
-          {!isPhysicalInactivityBySexAvailableForCurrentlocation &&
-            <Disclaimer>Data is shown for {physicalInactivityPrevalenceBySex.data[0].Geography}</Disclaimer>
-          }
           <SourceGroup sources={this.state.sources} />
           <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />

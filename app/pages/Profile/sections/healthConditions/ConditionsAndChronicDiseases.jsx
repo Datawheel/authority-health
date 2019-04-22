@@ -107,6 +107,10 @@ class ConditionsAndChronicDiseases extends SectionColumns {
             </select>
           </label>
 
+          {isHealthConditionWeightedValueSelected
+            ? <Disclaimer>Data is shown at the zip region level</Disclaimer>
+            : <Disclaimer>Data is shown at the census tract level for four cities</Disclaimer>
+          }
           {/* Show top stats for the dropdown selected. */}
           { isHealthConditionWeightedValueSelected
             ? <Stat
@@ -134,10 +138,6 @@ class ConditionsAndChronicDiseases extends SectionColumns {
             : <p>The map here shows the percentage of adults who have ever been diagnosed with {dropdownValue === "COPD" ? "COPD" : formatDropdownChoiceName(dropdownValue).toLowerCase()} within each census tract in Detroit, Livonia, Dearborn and Westland.</p>
           }
 
-          {isHealthConditionWeightedValueSelected
-            ? <Disclaimer>Data is shown at the zip region level</Disclaimer>
-            : <Disclaimer>Data is shown at the census tract level</Disclaimer>
-          }
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
         </article>

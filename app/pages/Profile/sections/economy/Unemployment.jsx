@@ -80,6 +80,9 @@ class Unemployment extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Unemployment</SectionTitle>
         <article>
+          {!isUnemploymentRateAvailableForCurrentLocation &&
+            <Disclaimer>Unemployment rate data is shown for {unemploymentRate.data[0].Geography}</Disclaimer>
+          }
           <StatGroup
             title={"working full-time by gender"}
             year={workExperienceAvailable ? getMaleFullTimeData[0].Year : ""}
@@ -105,9 +108,6 @@ class Unemployment extends SectionColumns {
             {} In {recentYearUnemploymentRate.Year}, the overall unemploymemt rate in {recentYearUnemploymentRate.Geography} was {formatPercentage(recentYearUnemploymentRate["Unemployment Rate"])}.
           </p>
 
-          {!isUnemploymentRateAvailableForCurrentLocation &&
-            <Disclaimer>unemployment rate data is shown for {unemploymentRate.data[0].Geography}</Disclaimer>
-          }
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
 

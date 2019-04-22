@@ -34,6 +34,9 @@ class FoodInsecurity extends SectionColumns {
         <SectionColumns>
           <SectionTitle>Food Insecurity</SectionTitle>
           <article>
+            {!isInsecurityRateDataAvailableForCurrentGeography &&
+              <Disclaimer>Data is shown for {location}</Disclaimer>
+            }
             <Stat
               title={"Child Insecurity"}
               year={childInsecurity.Year}
@@ -43,9 +46,6 @@ class FoodInsecurity extends SectionColumns {
             <p>In {childInsecurity.Year}, {childInsecurity["Food Insecurity Rate"]}% of the children and {adultInsecurityRate}% of the adults in {location} had food insecurity.</p>
             <p>Food insecurity refers to <a href="https://www.ers.usda.gov/topics/food-nutrition-assistance/food-security-in-the-us.aspx">USDA’s measure</a> of lack of access, at times, to enough food for an active, healthy life for all household members and limited or uncertain availability of nutritionally adequate foods.</p>
 
-            {!isInsecurityRateDataAvailableForCurrentGeography &&
-              <Disclaimer>Data is shown for {location}</Disclaimer>
-            }
             <SourceGroup sources={this.state.sources} />
           </article>
           <Stat

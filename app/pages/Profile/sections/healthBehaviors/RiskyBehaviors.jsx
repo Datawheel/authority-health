@@ -87,6 +87,10 @@ class RiskyBehaviors extends SectionColumns {
             </select>
           </label>
 
+          {isSecondHandSmokeOrMonthlyAlcoholSelected
+            ? <Disclaimer>Data is shown at the zip region level</Disclaimer>
+            : <Disclaimer>Data is shown at the census tract level for four cities</Disclaimer>
+          }
           <Stat
             title={isSecondHandSmokeOrMonthlyAlcoholSelected ? "Zip region with highest prevalence" : "Tract with highest prevalence"}
             value={isSecondHandSmokeOrMonthlyAlcoholSelected ? topSecondHandSmokeAndMonthlyAlcoholData["Zip Region"] : `${topTractSmokingDrinkingData.Tract}, ${topTractPlace}`}
@@ -98,10 +102,6 @@ class RiskyBehaviors extends SectionColumns {
             : <p>In {topTractSmokingDrinkingData.Year}, {formatPercentage(topTractSmokingDrinkingData[dropdownValue])} of the population of <CensusTractDefinition text={topTractSmokingDrinkingData.Tract} />{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} had the highest prevalence of {dropdownValue.toLowerCase()} out of census tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
 
-          {isSecondHandSmokeOrMonthlyAlcoholSelected
-            ? <Disclaimer>Data is shown at the zip region level</Disclaimer>
-            : <Disclaimer>Data is shown at the census tract level</Disclaimer>
-          }
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
 

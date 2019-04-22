@@ -70,6 +70,11 @@ class StoreAccessByDemographic extends SectionColumns {
               {raceAndAgeTypes.map(item => <option key={item} value={item}>{item}</option>)}
             </select>
           </label>
+          {!isCurrentLocationDataAvailable &&
+            <Disclaimer>
+              Data is shown for { ageSelected ? foodAccessByAge.data[0].Geography : foodAccessByRace.data[0].Geography }
+            </Disclaimer>
+          }
           {/* Show top stats for Age and Race groups based on the drilldown value. */}
           <Stat
             title={ageSelected ? "Most at risk demographic" : "Top Food Access by Race"}
@@ -82,11 +87,6 @@ class StoreAccessByDemographic extends SectionColumns {
           <p>Low access to healthy food is defined as being far from a supermarket, supercenter, or large grocery store.</p>
           <p>The following map shows the low access rate for {dropdownValue.split(" ").length === 1 ? formatRaceText(dropdownValue).toLowerCase() : formatRaceText(dropdownValue)} with low access to food stores across all counties in Michigan.</p>
 
-          {!isCurrentLocationDataAvailable &&
-            <Disclaimer>
-              data is shown for { ageSelected ? foodAccessByAge.data[0].Geography : foodAccessByRace.data[0].Geography }
-            </Disclaimer>
-          }
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
 

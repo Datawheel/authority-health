@@ -126,6 +126,10 @@ class HealthCenterDemographics extends SectionColumns {
             </div>
           } */}
 
+          {(!isZipLevelDataAvailable && meta.name !== "") &&
+            <Disclaimer>Data is shown for Wayne County</Disclaimer>
+          }
+
           {isZipLevelDataAvailable
             ? <Stat
               title={"Most common race"}
@@ -146,9 +150,6 @@ class HealthCenterDemographics extends SectionColumns {
 
           <p> The following chart shows the health center visitors breakdown across all race/ethnicity groups in {isZipLevelDataAvailable ? topZipLevelData.Geography : "Wayne County"}.</p>
 
-          {(!isZipLevelDataAvailable && meta.name !== "") &&
-            <Disclaimer>Data is shown for Wayne County</Disclaimer>
-          }
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
         </article>
@@ -161,7 +162,7 @@ class HealthCenterDemographics extends SectionColumns {
             slug={this.props.slug}
             data={ isZipLevelDataAvailable ? `/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Geography=${meta.id}&Year=all` : "/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Year=all" }
             title="Chart of Health Center Demographics" />
-            
+
           {/* Draw a Pie chart to show data for health center data by race */}
           <Pie ref={comp => this.viz = comp } config={{
             data: isZipLevelDataAvailable ? `/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Geography=${meta.id}&Year=all` : "/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Year=all",

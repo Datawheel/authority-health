@@ -90,6 +90,9 @@ class FoodStamps extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Food Stamps</SectionTitle>
         <article>
+          {!isSnapWicDataAvailableForCurrentGeography &&
+            <Disclaimer>SNAP and WIC data is shown for {snapWicData.data[0].Geography}</Disclaimer>
+          }
           <StatGroup
             title="authorized stores by program"
             stats={[
@@ -129,9 +132,6 @@ class FoodStamps extends SectionColumns {
           <p>In {topPublicAssistanceData.Year}, {shareOfPopulationWithFoodStamps} of the population in {topPublicAssistanceData.Geography} had food stamps, out of which {formatPercentage(topPublicAssistanceData.share)} of the population were given food stamps in cash.</p>
           <p>The chart here shows the share of population who gets food stamps in cash out of the population with food stamps.</p>
 
-          {!isSnapWicDataAvailableForCurrentGeography &&
-            <Disclaimer>snap and wic data is shown for {snapWicData.data[0].Geography}</Disclaimer>
-          }
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
         </article>
@@ -144,7 +144,7 @@ class FoodStamps extends SectionColumns {
             slug={this.props.slug}
             data={ `/api/data?measures=Food-Stamp Population&drilldowns=Public Assistance or Snap&Geography=${meta.id}&Year=all` }
             title="Chart of Food Stamps" />
-            
+
           {publicAssistanceDataAvailable
             ? <LinePlot ref={comp => this.viz = comp } config={{
               data: `/api/data?measures=Food-Stamp Population&drilldowns=Public Assistance or Snap&Geography=${meta.id}&Year=all`,

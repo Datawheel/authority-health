@@ -10,6 +10,7 @@ import styles from "style.yml";
 import Contact from "components/Contact";
 import Stat from "components/Stat";
 import StatGroup from "components/StatGroup";
+import Disclaimer from "components/Disclaimer";
 import ZipRegionDefinition from "components/ZipRegionDefinition";
 import CensusTractDefinition from "components/CensusTractDefinition";
 import {updateSource} from "utils/helper";
@@ -141,6 +142,11 @@ class ObesityAndDiabetes extends SectionColumns {
               {dropdownList.map(item => <option key={item} value={item}>{formatDropdownName(item)}</option>)}
             </select>
           </label>
+
+          {isBMIWeightedDataValueSelected
+            ? <Disclaimer>Data is shown for Wayne County and zip region level</Disclaimer>
+            : <Disclaimer>Data is shown for Wayne County and census tract level for four cities</Disclaimer>
+          }
 
           {/* Show top stats for the dropdown selected. */}
           {isBMIWeightedDataValueSelected

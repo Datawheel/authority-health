@@ -124,6 +124,10 @@ class PreventiveCare extends SectionColumns {
             </select>
           </label>
 
+          {isPreventativeCareWeightedValueSelected
+            ? <Disclaimer>Data is shown at the zip region level</Disclaimer>
+            : <Disclaimer>Data is shown at the census tract level for four cities</Disclaimer>
+          }
           {/* Show top stats for the dropdown selected. */}
           <Stat
             title={"Location with highest share"}
@@ -142,10 +146,6 @@ class PreventiveCare extends SectionColumns {
             : <p>The map here shows {formatDropdownNames(dropdownValue).toLowerCase()} for census tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
 
-          {isPreventativeCareWeightedValueSelected
-            ? <Disclaimer>Data is shown at the zip region level</Disclaimer>
-            : <Disclaimer>Data is shown at the census tract level</Disclaimer>
-          }
           <SourceGroup sources={this.state.sources} />
           <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />

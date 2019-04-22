@@ -94,7 +94,6 @@ class WaterQuality extends SectionColumns {
         {this.props.meta.level !== "tract" &&
           <Disclaimer>Data is shown at the census tract level.</Disclaimer>
         }
-
         {/* Geomap to show Lead and Mercury level in water for all tracts in the Wayne County. */}
         <Geomap config={{
           data: chartData,

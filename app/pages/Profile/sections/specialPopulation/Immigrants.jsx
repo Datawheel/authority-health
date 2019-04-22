@@ -92,7 +92,7 @@ const formatGeomapData = (data, meta, childrenTractIds, totalImmigrantsSelected 
 const getGeomapTitle = (meta, dropdownValue) => {
   if (meta.level === "county") return `City with most immigrtants ${dropdownValue === "Total Immigrants" ? "" : "in poverty"} in Wayne County`;
   else if (meta.level === "tract") return `Census tract with most immigrants ${dropdownValue === "Total Immigrants" ? "" : "in poverty"} in Wayne County`;
-  else return `Census tract with most immigrtants ${dropdownValue === "Total Immigrants" ? "" : "in poverty"} in ${meta.name}`;
+  else return `Census tract with most immigrants ${dropdownValue === "Total Immigrants" ? "" : "in poverty"} in ${meta.name}`;
 };
 
 const getGeomapQualifier = (data, meta) => {

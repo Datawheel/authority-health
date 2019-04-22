@@ -9,6 +9,7 @@ import styles from "style.yml";
 import Contact from "components/Contact";
 import Stat from "components/Stat";
 import zipcodes from "utils/zipcodes";
+import Disclaimer from "components/Disclaimer";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
 import Options from "components/Options";
@@ -16,7 +17,6 @@ import Options from "components/Options";
 const formatPercentage = d => `${formatAbbreviate(d * 100)}%`;
 
 const formatGeomapZipLabel = (d, meta, zipToPlace) => {
-  if (meta.level === "place") return `${d.Zip}, ${meta.name}`;
   const cityName = zipToPlace[d["ID Zip"]];
   return cityName === undefined ? d.Zip : `${d.Zip}, ${cityName}`;
 };
@@ -41,6 +41,7 @@ class DropoutRate extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Dropout Rate</SectionTitle>
         <article>
+          <Disclaimer>Data is shown at the zip level</Disclaimer>
           {/* Top stats about High School Dropout Rate. */}
           <Stat
             title="Zip code with highest high school dropout rate"

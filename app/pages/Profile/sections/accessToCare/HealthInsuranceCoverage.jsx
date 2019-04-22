@@ -153,6 +153,9 @@ class HealthInsuranceCoverage extends SectionColumns {
         <SectionColumns>
           <SectionTitle>Health Insurance Coverage</SectionTitle>
           <article>
+            {!isCoverageDataAvailableForCurrentGeography &&
+              <Disclaimer>Data is shown for {coverageData.data[0].Geography}</Disclaimer>
+            }
             <div>
               <StatGroup
                 title={"most covered age group by gender"}
@@ -187,9 +190,6 @@ class HealthInsuranceCoverage extends SectionColumns {
             }
             <p>The age groups for men and women most likely to have health care coverage in {maleCoverageData[0].Geography} were {topMaleAgeGroup} years for men and {topFemaleAgeGroup} years for women.</p>
 
-            {!isCoverageDataAvailableForCurrentGeography &&
-              <Disclaimer>Data is shown for {coverageData.data[0].Geography}</Disclaimer>
-            }
             <SourceGroup sources={this.state.sources} />
             <Contact slug={this.props.slug} />
 

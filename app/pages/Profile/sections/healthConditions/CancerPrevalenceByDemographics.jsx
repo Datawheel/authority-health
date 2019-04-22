@@ -89,6 +89,7 @@ class CancerPrevalenceByDemographics extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Cancer Prevalence by Demographic</SectionTitle>
         <article>
+          <Disclaimer>Data only available for the Detroit-Warren-Dearborn, MI metro area.</Disclaimer>
           <p>Click on the box to select a cancer type and display its data in the bar charts to the right. You can select up to 5 types of cancer.</p>
           <div className="field-container">
             <MultiSelect
@@ -112,7 +113,6 @@ class CancerPrevalenceByDemographics extends SectionColumns {
           <p>In {topOccuranceByRaceAndEthnicity.Year}, the race/ethnicity group in the {topOccuranceByRaceAndEthnicity.MSA} with the highest overall cancer rate was {topOccuranceByRaceAndEthnicity.Race} {topOccuranceByRaceAndEthnicity.Ethnicity} ({formatAbbreviate(topOccuranceByRaceAndEthnicity["Age-Adjusted Cancer Rate"])} per 100,000 people).</p>
           <p>The following charts shows the occurrence rate per 100,000 people in {topOccuranceByRaceAndEthnicity.MSA} with gender breakdown and the race and Ethnicity breakdowns for {isItemsListEmpty ? topOccuranceByRaceAndEthnicity["Cancer Site"].toLowerCase() : "the selected cancer site(s)"}.</p>
 
-          <Disclaimer>Data only available for the Detroit-Warren-Dearborn, MI metro area.</Disclaimer>
           <SourceGroup sources={this.state.sources} />
           <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />

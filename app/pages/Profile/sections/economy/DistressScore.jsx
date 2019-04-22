@@ -9,6 +9,7 @@ import styles from "style.yml";
 
 import Contact from "components/Contact";
 import Glossary from "components/Glossary";
+import Disclaimer from "components/Disclaimer";
 import Stat from "components/Stat";
 import zipcodes from "utils/zipcodes";
 import {updateSource} from "utils/helper";
@@ -27,7 +28,6 @@ const definitions = [
 ];
 
 const formatGeomapZipLabel = (d, meta, zipToPlace) => {
-  if (meta.level === "place") return `${d.Zip}, ${meta.name}`;
   const cityName = zipToPlace[d["ID Zip"]];
   return cityName === undefined ? d.Zip : `${d.Zip}, ${cityName}`;
 };
@@ -50,6 +50,7 @@ class DistressScore extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Distress Score</SectionTitle>
         <article>
+          <Disclaimer>Data is shown at the zip level</Disclaimer>
           <Stat
             title="Zip code with highest Distress Score"
             year={topDistressScoreData.Year}
@@ -72,7 +73,7 @@ class DistressScore extends SectionColumns {
             slug={this.props.slug}
             data={ "/api/data?measures=Distress Score&drilldowns=Zip&Year=all" }
             title="Map of Distress Score" />
-            
+
           {/* Draw Geomap to show distress scores for each zip code in the Wayne county. */}
           <Geomap ref={comp => this.viz = comp } config={{
             data: "/api/data?measures=Distress Score&drilldowns=Zip&Year=all",

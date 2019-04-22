@@ -92,6 +92,7 @@ class OccurrenceByCancerSite extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Occurrence by Cancer Site</SectionTitle>
         <article>
+          <Disclaimer>Data only available for the Detroit-Warren-Dearborn, MI metro area.</Disclaimer>
           <p>Click on the box to select a cancer type and display its data in the line chart to the right. You can select up to 5 types of cancer.</p>
           <div className="field-container">
             <MultiSelect
@@ -112,7 +113,6 @@ class OccurrenceByCancerSite extends SectionColumns {
           <p className="u-margin-top-sm">In {mostRecentYearOccuranceRate.Year}, the cancer rate in the {mostRecentYearOccuranceRate.MSA} was {formatAbbreviate(mostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])} per 100,000 people. This represents a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "growth"} from the previous year ({formatAbbreviate(secondMostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])} per 100,000 people).</p>
           <p>The following chart shows the occurrence rate per 100,000 people in {mostRecentYearOccuranceRate.MSA} for {isItemsListEmpty ? mostRecentYearOccuranceRate["Cancer Site"].toLowerCase() : "the selected cancer site(s)"}.</p>
 
-          <Disclaimer>Data only available for the Detroit-Warren-Dearborn, MI metro area.</Disclaimer>
           <SourceGroup sources={this.state.sources} />
           <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
@@ -126,7 +126,7 @@ class OccurrenceByCancerSite extends SectionColumns {
             slug={this.props.slug}
             data={ isItemsListEmpty ? "/api/data?measures=Age-Adjusted Cancer Rate,Age-Adjusted Cancer Rate Lower 95 Percent Confidence Interval,Age-Adjusted Cancer Rate Upper 95 Percent Confidence Interval&Cancer Site=All Invasive Cancer Sites Combined&drilldowns=MSA&Year=all" : `/api/data?measures=Age-Adjusted Cancer Rate,Age-Adjusted Cancer Rate Lower 95 Percent Confidence Interval,Age-Adjusted Cancer Rate Upper 95 Percent Confidence Interval&Cancer Site=${dropdownSelected}&drilldowns=MSA&Year=all` }
             title="Chart of Occurrence by Cancer Site" />
-            
+
           {/* Draw a LinePlot to show age adjusted data for the selected cancer types. */}
           <LinePlot ref={comp => this.viz = comp } config={{
             data: isItemsListEmpty ? "/api/data?measures=Age-Adjusted Cancer Rate,Age-Adjusted Cancer Rate Lower 95 Percent Confidence Interval,Age-Adjusted Cancer Rate Upper 95 Percent Confidence Interval&Cancer Site=All Invasive Cancer Sites Combined&drilldowns=MSA&Year=all" : `/api/data?measures=Age-Adjusted Cancer Rate,Age-Adjusted Cancer Rate Lower 95 Percent Confidence Interval,Age-Adjusted Cancer Rate Upper 95 Percent Confidence Interval&Cancer Site=${dropdownSelected}&drilldowns=MSA&Year=all`,

@@ -3,7 +3,7 @@
 const axios = require("axios");
 
 const domain = "https://data.authorityhealth.org/";
-const levels = ["County", "Place", "Zip", "Tract"];
+const levels = ["county", "place", "zip", "tract"];
 
 /** */
 async function run() {
@@ -11,7 +11,11 @@ async function run() {
   let attrs = await axios.get(`${domain}api/search/?limit=1000`)
     .then(resp => resp.data);
 
-  attrs = attrs.sort((a, b) => levels.indexOf(a.hierarchy) - levels.indexOf(b.hierarchy));
+  attrs = attrs.sort((a, b) => {
+    const levelDiff = levels.indexOf(a.level) - levels.indexOf(b.level);
+    if (levelDiff !== 0) return levelDiff;
+    else return b.zvalue - a.zvalue;
+  });
 
   for (let i = 0; i < attrs.length; i++) {
     const {id, name} = attrs[i];

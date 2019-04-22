@@ -31,20 +31,6 @@ const formatCommuteTimeData = commuteTimeData => {
   return [commuteTimeData, topRecentYearCommuteTime];
 };
 
-const formatNumberOfVehiclesData = numberOfVehiclesData => {
-  nest()
-    .key(d => d.Year)
-    .entries(numberOfVehiclesData)
-    .forEach(group => {
-      const total = sum(group.values, d => d["Commute Means by Gender"]);
-      group.values.forEach(d => total !== 0 ? d.share = d["Commute Means by Gender"] / total * 100 : d.share = 0);
-    });
-  const topRecentYearNumberOfVehicles = numberOfVehiclesData.sort((a, b) => b.share - a.share)[0];
-  const topAverageVehiclesPerHousehold = numberOfVehiclesData[0].share + numberOfVehiclesData[1].share;
-
-  return [numberOfVehiclesData, topRecentYearNumberOfVehicles, topAverageVehiclesPerHousehold];
-};
-
 const formatTransportationMeans = transportationMeans => {
   nest()
     .key(d => d.Year)
@@ -72,11 +58,17 @@ class Transportation extends SectionColumns {
     const transportationMeansAvailable = transportationMeans.length !== 0;
 
     // Get data for number of vehicles.
-    let topAverageVehiclesPerHousehold, topRecentYearNumberOfVehicles;
+    let averageVehiclesPerHousehold, topAverageVehiclesPerHousehold;
     if (numberOfVehiclesDataAvailable) {
-      const getRecentYearNumberOfVehiclesData = formatNumberOfVehiclesData(numberOfVehiclesData);
-      topRecentYearNumberOfVehicles = getRecentYearNumberOfVehiclesData[1];
-      topAverageVehiclesPerHousehold = getRecentYearNumberOfVehiclesData[2];
+      nest()
+        .key(d => d.Year)
+        .entries(numberOfVehiclesData)
+        .forEach(group => {
+          const total = sum(group.values, d => d["Commute Means by Gender"]);
+          group.values.forEach(d => total !== 0 ? d.averageShare = d["Commute Means by Gender"] / total * 100 : d.averageShare = 0);
+        });
+      averageVehiclesPerHousehold = numberOfVehiclesData.sort((a, b) => b.averageShare - a.averageShare);
+      topAverageVehiclesPerHousehold = averageVehiclesPerHousehold[0].averageShare + averageVehiclesPerHousehold[1].averageShare;
     }
 
     // Get data for commute time.
@@ -109,8 +101,8 @@ class Transportation extends SectionColumns {
           />
           <Stat
             title="Average vehicles per household"
-            year={numberOfVehiclesDataAvailable ? topRecentYearNumberOfVehicles.Year : ""}
-            value={numberOfVehiclesDataAvailable ? rangeFormatter(topRecentYearNumberOfVehicles["Vehicles Available"]) : "N/A"}
+            year={numberOfVehiclesDataAvailable ? averageVehiclesPerHousehold[0].Year : ""}
+            value={numberOfVehiclesDataAvailable ? rangeFormatter(averageVehiclesPerHousehold[0]["Vehicles Available"]) : "N/A"}
             qualifier={numberOfVehiclesDataAvailable ? `(${formatPercentage(topAverageVehiclesPerHousehold)})` : ""}
           />
           <p>
@@ -159,7 +151,20 @@ class Transportation extends SectionColumns {
             }}
             dataFormat={resp => {
               this.setState({sources: updateSource(resp.source, this.state.sources)});
-              return  formatNumberOfVehiclesData(resp.data)[0];
+              // find share of each gender for each number of vehicles per household.
+              nest()
+                .key(d => d.Year)
+                .entries(resp.data)
+                .forEach(group => {
+                  nest()
+                    .key(d => d["ID Vehicles Available"])
+                    .entries(group.values)
+                    .forEach(numOfVehicles => {
+                      const total = sum(numOfVehicles.values, d => d["Commute Means by Gender"]);
+                      numOfVehicles.values.forEach(d => total !== 0 ? d.share = d["Commute Means by Gender"] / total * 100 : d.share = 0);
+                    });
+                });
+              return  resp.data;
             }}
             />
             }
@@ -234,7 +239,6 @@ class Transportation extends SectionColumns {
               return formatTransportationMeans(resp.data)[0];
             }}
             /> : null}
-
         </div>
 
       </SectionColumns>

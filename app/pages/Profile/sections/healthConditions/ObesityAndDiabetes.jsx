@@ -144,8 +144,8 @@ class ObesityAndDiabetes extends SectionColumns {
           </label>
 
           {isBMIWeightedDataValueSelected
-            ? <Disclaimer>Data is shown for Wayne County and zip region level</Disclaimer>
-            : <Disclaimer>Data is shown for Wayne County and census tract level for four cities</Disclaimer>
+            ? <Disclaimer>Data is shown for zip region level</Disclaimer>
+            : <Disclaimer>Data is shown for census tract level for four cities</Disclaimer>
           }
 
           {/* Show top stats for the dropdown selected. */}
@@ -164,6 +164,7 @@ class ObesityAndDiabetes extends SectionColumns {
             />
           }
 
+          <Disclaimer>Data is shown for {topFemaleData.Geography}</Disclaimer>
           {/* Show top stats for the Male and Female Diabetes/Obesity data. */}
           <StatGroup
             title={`${dropdownValue} prevelance by gender`}

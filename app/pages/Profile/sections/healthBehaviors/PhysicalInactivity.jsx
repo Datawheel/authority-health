@@ -39,7 +39,7 @@ class PhysicalInactivity extends SectionColumns {
 
   render() {
 
-    const {meta, physicalInactivity, physicalInactivityPrevalenceBySex, stateLevelDataBySex} = this.props;
+    const {physicalInactivity, physicalInactivityPrevalenceBySex, stateLevelDataBySex} = this.props;
     const isPhysicalInactivityBySexAvailableForCurrentlocation = physicalInactivityPrevalenceBySex.source[0].substitutions.length === 0;
 
     // We don't find latest year data here (as we usually do for other topics) since we have only 1 year data for physical inactivity and physical health.
@@ -60,7 +60,7 @@ class PhysicalInactivity extends SectionColumns {
         <SectionTitle>Physical Inactivity</SectionTitle>
         <article>
           {!isPhysicalInactivityBySexAvailableForCurrentlocation
-            ? <Disclaimer>Data is shown for {physicalInactivityPrevalenceBySex.data[0].Geography} and census tract level for four cities</Disclaimer>
+            ? <Disclaimer>Data is shown for census tract level for four cities</Disclaimer>
             : <Disclaimer>Data is shown at the census tract level for four cities</Disclaimer>
           }
           <Stat
@@ -70,6 +70,8 @@ class PhysicalInactivity extends SectionColumns {
             qualifier={`${formatPercentage(topRecentYearData["Physical Inactivity"])} of the population of this census tract`}
           />
 
+
+          <Disclaimer>Data is shown for {physicalInactivityPrevalenceBySex.data[0].Geography}</Disclaimer>
           {/* Show top stats for the Male and Female Physical Inactivity data. */}
           {/* And write short paragraphs explaining Barchart and top stats for the Physical Inactivity data. */}
           <StatGroup

@@ -28,6 +28,27 @@
   /* offset swoosh */
   right: 8px;
   margin-left: calc(0 - var(--gutter-xs)); /* offset padding */
+
+  /* BETA */
+  &:after {
+    @mixin min-xs {
+      content: "BETA";
+      display: block;
+      /* typography */
+      font-size: 8px;
+      letter-spacing: 0.125em;
+      /* theming */
+      color: var(--curry);
+      /* positioning */
+      position: absolute;
+      top: 35px;
+      right: -20px;
+    }
+    /* fudge into place on bigger screens */
+    @mixin min-sm { margin-top: 1px; }
+    @mixin min-md { margin-top: 2px; }
+    @mixin min-lg { margin-top: 3px; }
+  }
 }
 
 .main-nav-list {

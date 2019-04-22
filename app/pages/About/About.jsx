@@ -35,6 +35,10 @@ export default class Home extends Component {
             <li>selecting topics and metrics via a drop-down menu, or</li>
             <li>producing a community report by inputting a city name or zip code.</li>
           </ol>
+
+          <h2>Providing feedback</h2>
+
+          <p>We’d love to hear your thoughts. Please email <a href="mailto:pophealth@authorityhealth.org">pophealth@authorityhealth.org</a> for feedback and suggestions for the site.</p>
         </div>
       </div>
     );

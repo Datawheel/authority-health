@@ -12,6 +12,8 @@ import zipcodes from "utils/zipcodes";
 import Stat from "components/Stat";
 import styles from "style.yml";
 
+import "./Introduction.css";
+
 const formatRaceName = d => {
   d = d.replace("Alone", "").replace("Black", "black").replace("White", "white").replace("Asian", "asian");
   if (d.trim() === "Some Other Race") return d.toLowerCase();
@@ -120,7 +122,7 @@ class Introduction extends SectionColumns {
     return (
       <SectionColumns>
         <SectionTitle>Introduction</SectionTitle>
-        <article>
+        <article className="top-stats">
           <p>
             {level === "zip" ? `Zip code ${population[0].Geography}` : population[0].Geography} has a population of {formatAbbreviate(population[0].Population)} people{meta.level === "county" ? "" : <span> which makes it the {formatRankSuffix(currentLocationRankData.populationRank)} largest of {rankData.length} {formatLevelNames(meta.level)} in Wayne County</span>}
             {}, with the life expectancy of {lifeExpectancyAvailable ? formatAbbreviate(lifeExpectancy[0]["Life Expectancy"]) : "N/A"} {lifeExpectancyAvailable ? onCityOrZipLevel ? <span>(in {lifeExpectancy[0].Geography})</span> : "" : ""}.
@@ -130,144 +132,178 @@ class Introduction extends SectionColumns {
           </p>
           {populationByRaceAndEthnicityAvailable
             ? <p>
-              Most of the population in {topRaceAndEthnicity[0].Geography} is {formatEthnicityName(topRaceAndEthnicity[0].Ethnicity)} {}
-              {formatRaceName(topRaceAndEthnicity[0].Race)} ({formatAbbreviate(topRaceAndEthnicity[0].share)}%), followed by {}
-              {formatEthnicityName(topRaceAndEthnicity[1].Ethnicity)} {formatRaceName(topRaceAndEthnicity[1].Race)}
-              ({formatAbbreviate(topRaceAndEthnicity[1].share)}%).
+              {formatAbbreviate(topRaceAndEthnicity[0].share)}% of the population in {topRaceAndEthnicity[0].Geography} is {formatRaceName(topRaceAndEthnicity[0].Race)} ({formatEthnicityName(topRaceAndEthnicity[0].Ethnicity)}), followed by {formatAbbreviate(topRaceAndEthnicity[1].share)}% {formatRaceName(topRaceAndEthnicity[1].Race)} ({formatEthnicityName(topRaceAndEthnicity[1].Ethnicity)}).
             </p>
             : null}
           <p>In {level === "zip" ? `Zip code ${currentLocationRankData.name}` : currentLocationRankData.name}, the median household income is {formatAbbreviate(currentLocationRankData.medianIncome)}{meta.level === "county" ? "." : <span>, which ranks it at {formatRankSuffix(currentLocationRankData.medianIncomeRank)} largest of all {formatLevelNames(meta.level)} in Wayne County.</span>}</p>
           <p>
             Social and economic factors, such as income, education, and access to health care, impact health outcomes for all Americans. For example, in many low income areas in the country, there are higher rates of chronic diseases, like high blood pressure and diabetes. The summary to the right highlights some of the social and health conditions for {population[0].Geography}.
           </p>
-        </article>
-        <div className="top-stats viz">
           <Stat
             title={"Health Insurance Coverage"}
             year={topOverallCoverage.Year}
             value={formatPercentage(topOverallCoverage.share)}
             qualifier={`of the population in ${meta.name} had coverage`}
           />
-
+          <Stat
+            title="Population by Race and Ethnicity"
+          />
           <Treemap config={{
             data: `https://acs.datausa.io/api/data?measures=Hispanic Population&drilldowns=Race,Ethnicity&Geography=${meta.id}&Year=all`,
-            height: 250, 
+            height: 250,
             sum: "Hispanic Population",
             groupBy: ["Race", "Ethnicity"],
-            label: d => `${formatEthnicityName(d.Ethnicity)}, ${d.Race.replace("Alone", "")}`,
+            label: d => `${d.Race.replace("Alone", "")} (${formatEthnicityName(d.Ethnicity)})`,
             time: "Year",
-            title: d => `Population by Race and Ethnicity in ${d[0].Geography}`,
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
           dataFormat={resp => formatRaceAndEthnicityData(resp.data)[0]}
           />
+        </article>
+        <div className="top-stats viz">
 
-          <Geomap config={{
-            data: "/api/data?measures=Distress Score&drilldowns=Zip&Year=all",
-            height: 250,
-            groupBy: "Zip",
-            colorScale: "Distress Score",
-            colorScaleConfig: {
-              // having a high distress score is bad
-              color: [
-                styles.success,
-                styles["danger-light"],
-                styles.danger,
-                styles["danger-dark"]
-              ]
-            },
-            legend: false,
-            label: d => formatGeomapZipLabel(d, meta, zipToPlace),
-            time: "Year",
-            title: `Distress Score by Zip Codes in ${meta.name}`,
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Distress Score", d => `${formatAbbreviate(d["Distress Score"])} percentile`]]},
-            topojson: "/topojson/zipcodes.json",
-            topojsonId: d => d.properties.ZCTA5CE10,
-            topojsonFilter: d => filteredZips.includes(d.properties.ZCTA5CE10)
-          }}
-          dataFormat={resp => resp.data}
-          />
+          <div>
+
+            <Stat
+              title="Distress Score"
+              qualifier={`Zip Codes in ${meta.name}     `}
+            />
+            <Geomap config={{
+              data: "/api/data?measures=Distress Score&drilldowns=Zip&Year=all",
+              height: 250,
+              groupBy: "Zip",
+              colorScale: "Distress Score",
+              colorScaleConfig: {
+                // having a high distress score is bad
+                color: [
+                  styles.success,
+                  styles["danger-light"],
+                  styles.danger,
+                  styles["danger-dark"]
+                ]
+              },
+              legend: false,
+              label: d => formatGeomapZipLabel(d, meta, zipToPlace),
+              ocean: "transparent",
+              tiles: false,
+              time: "Year",
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Distress Score", d => `${formatAbbreviate(d["Distress Score"])} percentile`]]},
+              topojson: "/topojson/zipcodes.json",
+              topojsonId: d => d.properties.ZCTA5CE10,
+              topojsonFilter: d => filteredZips.includes(d.properties.ZCTA5CE10),
+              zoom: false
+            }}
+            dataFormat={resp => resp.data}
+            />
+
+          </div>
+
+          <div>
+            <Stat
+              title="Poor Physical Health"
+              qualifier="Zip Regions in Wayne County"
+            />
+            <Geomap config={{
+              data: "/api/data?measures=Poor Physical Health 14 Or More Days&drilldowns=Zip Region&Year=all",
+              height: 300,
+              groupBy: "ID Zip Region",
+              colorScale: "Poor Physical Health 14 Or More Days",
+              colorScaleConfig: {
+                axisConfig: {tickFormat: d => formatPercentage(d, true)},
+                // having high disease prevalency is bad
+                color: [
+                  styles["danger-light"],
+                  styles.danger,
+                  styles["danger-dark"]
+                ]
+              },
+              label: d => d["Zip Region"],
+              ocean: "transparent",
+              tiles: false,
+              time: "End Year",
+              tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Condition", "Poor Physical Health 14 Or More Days"], ["Prevalence", d => `${formatPercentage(d["Poor Physical Health 14 Or More Days"], true)}`]]},
+              topojson: "/topojson/zipregions.json",
+              topojsonId: d => d.properties.REGION,
+              topojsonFilter: () => true,
+              zoom: false
+            }}
+            dataFormat={resp => resp.data}
+            />
+          </div>
+
         </div>
 
         <div className="top-stats viz">
-          <Geomap config={{
-            // Getting data fo a particular tract ID so that we get all tracts data in Wayne County. 
-            // We cannot use meta.id here because we do not get tracts when on Wayne County.
-            data: "/api/data?measures=Life Expectancy&Geography=14000US26163561300:children&Year=all",
-            height: 250,
-            groupBy: "ID Geography",
-            colorScale: "Life Expectancy",
-            legend: false,
-            label: d => formatGeomapTractLabel(d, meta, tractToPlace),
-            time: "End Year",
-            title: `Life Expectancy by Census Tracts in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`,
-            tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Life Expectancy", d => d["Life Expectancy"]]]},
-            topojson: "/topojson/tract.json",
-            topojsonFilter: d => formatTopojsonFilter(d, meta, childrenTractIds)
-          }}
-          dataFormat={resp => {
-            let filteredChildrenGeography = [];
-            if (meta.level === "county" || meta.level === "tract") {
-              filteredChildrenGeography = resp.data;
-            }
-            else {
-              resp.data.forEach(d => {
-                if (childrenTractIds.includes(d["ID Geography"])) filteredChildrenGeography.push(d);
-              });
-            }
-            return filteredChildrenGeography;
-          }}
-          />
 
-          <Geomap config={{
-            data: "/api/data?measures=Poor Mental Health 14 Or More Days&drilldowns=Zip Region&Year=all",
-            height: 250,
-            groupBy: "ID Zip Region",
-            colorScale: "Poor Mental Health 14 Or More Days",
-            colorScaleConfig: {
-              axisConfig: {tickFormat: d => formatPercentage(d, true)},
-              // having high disease prevalency is bad
-              color: [
-                styles["danger-light"],
-                styles.danger,
-                styles["danger-dark"]
-              ]
-            },
-            label: d => d["Zip Region"],
-            time: "End Year",
-            title: "Poor Mental Health by Zip Regions in Wayne County",
-            tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Condition", "Poor Mental Health 14 Or More Days"], ["Prevalence", d => `${formatPercentage(d["Poor Mental Health 14 Or More Days"], true)}`]]},
-            topojson: "/topojson/zipregions.json",
-            topojsonId: d => d.properties.REGION,
-            topojsonFilter: () => true
-          }}
-          dataFormat={resp => resp.data}
-          />
+          <div>
+            <Stat
+              title="Life Expectancy"
+              qualifier={`Census Tracts in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`}
+            />
+            <Geomap config={{
+              // Getting data fo a particular tract ID so that we get all tracts data in Wayne County.
+              // We cannot use meta.id here because we do not get tracts when on Wayne County.
+              data: "/api/data?measures=Life Expectancy&Geography=14000US26163561300:children&Year=all",
+              height: 250,
+              groupBy: "ID Geography",
+              colorScale: "Life Expectancy",
+              legend: false,
+              label: d => formatGeomapTractLabel(d, meta, tractToPlace),
+              ocean: "transparent",
+              tiles: false,
+              time: "End Year",
+              tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Life Expectancy", d => d["Life Expectancy"]]]},
+              topojson: "/topojson/tract.json",
+              topojsonFilter: d => formatTopojsonFilter(d, meta, childrenTractIds),
+              zoom: false
+            }}
+            dataFormat={resp => {
+              let filteredChildrenGeography = [];
+              if (meta.level === "county" || meta.level === "tract") {
+                filteredChildrenGeography = resp.data;
+              }
+              else {
+                resp.data.forEach(d => {
+                  if (childrenTractIds.includes(d["ID Geography"])) filteredChildrenGeography.push(d);
+                });
+              }
+              return filteredChildrenGeography;
+            }}
+            />
+          </div>
 
-          <Geomap config={{
-            data: "/api/data?measures=Poor Physical Health 14 Or More Days&drilldowns=Zip Region&Year=all",
-            height: 250,
-            groupBy: "ID Zip Region",
-            colorScale: "Poor Physical Health 14 Or More Days",
-            colorScaleConfig: {
-              axisConfig: {tickFormat: d => formatPercentage(d, true)},
-              // having high disease prevalency is bad
-              color: [
-                styles["danger-light"],
-                styles.danger,
-                styles["danger-dark"]
-              ]
-            },
-            label: d => d["Zip Region"],
-            time: "End Year",
-            title: "Poor Physical Health by Zip Regions in Wayne County",
-            tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Condition", "Poor Physical Health 14 Or More Days"], ["Prevalence", d => `${formatPercentage(d["Poor Physical Health 14 Or More Days"], true)}`]]},
-            topojson: "/topojson/zipregions.json",
-            topojsonId: d => d.properties.REGION,
-            topojsonFilter: () => true
-          }}
-          dataFormat={resp => resp.data}
-          />
+          <div>
+            <Stat
+              title="Poor Mental Health"
+              qualifier="Zip Regions in Wayne County"
+            />
+            <Geomap config={{
+              data: "/api/data?measures=Poor Mental Health 14 Or More Days&drilldowns=Zip Region&Year=all",
+              height: 300,
+              groupBy: "ID Zip Region",
+              colorScale: "Poor Mental Health 14 Or More Days",
+              colorScaleConfig: {
+                axisConfig: {tickFormat: d => formatPercentage(d, true)},
+                // having high disease prevalency is bad
+                color: [
+                  styles["danger-light"],
+                  styles.danger,
+                  styles["danger-dark"]
+                ]
+              },
+              label: d => d["Zip Region"],
+              ocean: "transparent",
+              tiles: false,
+              time: "End Year",
+              tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Condition", "Poor Mental Health 14 Or More Days"], ["Prevalence", d => `${formatPercentage(d["Poor Mental Health 14 Or More Days"], true)}`]]},
+              topojson: "/topojson/zipregions.json",
+              topojsonId: d => d.properties.REGION,
+              topojsonFilter: () => true,
+              zoom: false
+            }}
+            dataFormat={resp => resp.data}
+            />
+          </div>
         </div>
       </SectionColumns>
     );

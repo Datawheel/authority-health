@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "cache": "node scripts/cache.js",
     "build": "canon-build",
     "dev": "canon-dev",
     "flickr": "node scripts/flickr-scrape.js",

@@ -16,6 +16,11 @@ export default class Footer extends Component {
       {title: "Background", link: "/about"}
       // {title: "Glossary", link: "/glossary"}
     ];
+    // contact link array
+    const contactLinks = [
+      {title: "Email us", link: "mailto:pophealth@authorityhealth.org"}
+      // {title: "Glossary", link: "/glossary"}
+    ];
 
     // loop through arrays and create corresponding list items
     const exploreLinkItems = exploreLinks.map(exploreLink =>
@@ -31,6 +36,13 @@ export default class Footer extends Component {
         <Link className="footer-nav-link title font-xs" to={aboutLink.link}>
           {aboutLink.title}
         </Link>
+      </li>
+    );
+    const contactLinkItems = contactLinks.map(contactLink =>
+      <li className="footer-nav-item" key={contactLink.title}>
+        <a className="footer-nav-link title font-xs" href={contactLink.link}>
+          {contactLink.title}
+        </a>
       </li>
     );
 
@@ -86,6 +98,12 @@ export default class Footer extends Component {
               <h3>About</h3>
               <ul className="footer-nav-list u-list-reset">
                 { aboutLinkItems }
+              </ul>
+            </div>
+            <div className="footer-nav-inner">
+              <h3>Contact</h3>
+              <ul className="footer-nav-list u-list-reset">
+                { contactLinkItems }
               </ul>
             </div>
           </nav>

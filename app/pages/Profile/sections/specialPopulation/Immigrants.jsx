@@ -91,7 +91,7 @@ const formatGeomapData = (data, meta, childrenTractIds, totalImmigrantsSelected 
 
 const getGeomapTitle = (meta, dropdownValue) => {
   if (meta.level === "county") return `City with most immigrtants ${dropdownValue === "Total Immigrants" ? "" : "in poverty"} in Wayne County`;
-  else if (meta.level === "tract") return `Census tract with most immigrtants ${dropdownValue === "Total Immigrants" ? "" : "in poverty"} in Wayne County`;
+  else if (meta.level === "tract") return `Census tract with most immigrants ${dropdownValue === "Total Immigrants" ? "" : "in poverty"} in Wayne County`;
   else return `Census tract with most immigrtants ${dropdownValue === "Total Immigrants" ? "" : "in poverty"} in ${meta.name}`;
 };
 
@@ -260,7 +260,7 @@ class Immigrants extends SectionColumns {
             slug={this.props.slug}
             data={ totalImmigrantsSelected ? `/api/data?measures=Poverty by Nativity&drilldowns=Nativity&Geography=${meta.id}:children&Year=all` : `/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Poverty Status&Geography=${meta.id}:children&Year=all` }
             title={ `Map of ${dropdownValue} by ${meta.level === "county" ? "Places" : "Census Tracts"} in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}` } />
-          
+
           <Geomap ref={comp => this.viz = comp } config={{
             data: totalImmigrantsSelected ? `/api/data?measures=Poverty by Nativity&drilldowns=Nativity&Geography=${meta.id}:children&Year=all` : `/api/data?measures=Poverty by Nativity&drilldowns=Nativity,Poverty Status&Geography=${meta.id}:children&Year=all`,
             groupBy: meta.level === "county" ? "ID Place" : "ID Geography",

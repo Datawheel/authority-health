@@ -165,7 +165,7 @@ class AirQuality extends SectionColumns {
             <p>Air quality is unhealthy for sensitive groups when the AQI is between 101 to 150. Although general public is not likely to be affected at this AQI range, people with lung disease, older adults and children are at a greater risk from exposure to ozone, whereas persons with heart and lung disease, older adults and children are at greater risk from the presence of particles in the air.</p>
           </div>}
 
-          <p>The chart here shows the {dropdownValue.toLocaleLowerCase()} {dropdownValue !== "Air Quality Days" ? "over years" : ""} in {airQualityDays.data[0].Geography}.</p>
+          <p>The chart here shows the {dropdownValue === "Air Pollutants" ? "most common" : ""} {dropdownValue.toLocaleLowerCase()} {dropdownValue !== "Air Quality Days" ? "over years" : ""} in {airQualityDays.data[0].Geography}.</p>
 
           <SourceGroup sources={this.state.sources} />
           {dropdownValue !== "Air Pollutants" ? <Glossary definitions={definitions} /> : <Glossary definitions={pollutantDefinitions} />}

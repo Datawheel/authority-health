@@ -1,0 +1,18 @@
+.top-stats {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  & .stat {
+    margin-top: 20px;
+    &:first-child {
+      margin-top: 0;
+    }
+    & .stat-value {
+      margin-bottom: 0;
+    }
+  }
+  & .viz {
+    flex: none;
+    margin: 0 !important;
+  }
+}

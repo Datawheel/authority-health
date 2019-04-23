@@ -59,7 +59,7 @@ export default class Footer extends Component {
         title: "Wayne County, Michigan",
         link: "http://waynecounty.com/",
         src: "wayne-county-seal",
-        svg: false
+        svg: true
       },
       {
         title: "Datawheel",

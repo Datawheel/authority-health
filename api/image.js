@@ -21,7 +21,7 @@ module.exports = function(app) {
       }
       else {
         res.sendFile(`${process.cwd()}/static/images/profile/${size}/${id}.jpg`, err => {
-          if (err) res.status(err.status);
+          if (err && err.status) res.status(err.status);
           res.end();
         });
       }

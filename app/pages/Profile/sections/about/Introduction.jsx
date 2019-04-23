@@ -8,11 +8,23 @@ import {Geomap, Treemap} from "d3plus-react";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import growthCalculator from "utils/growthCalculator";
+import Glossary from "components/Glossary";
 import zipcodes from "utils/zipcodes";
 import Stat from "components/Stat";
 import styles from "style.yml";
 
 import "./Introduction.css";
+
+const definitions = [
+  {term: "The Distressed Communities Index (DCI) combines seven complementary economic indicators into a single holistic and comparative measure of community well-being. The seven component metrics of the DCI are", definition: ""},
+  {term: "1. No high school diploma", definition: "Percent of the 25+ population without a high school diploma or equivalent."},
+  {term: "2. Housing vacancy rate", definition: "Percent of habitable housing that is unoccupied, excluding properties that are for seasonal, recreational, or occasional use."},
+  {term: "3. Adults not working", definition: "Percent of the prime-age population (25-64) not currently in work."},
+  {term: "4. Poverty rate", definition: "Percent of the population living under the poverty line."},
+  {term: "5. Median income ratio", definition: "Median household income as a percent of the state’s median household income (to account for cost of living differences across states)."},
+  {term: "6. Change in employment", definition: "Percent change in the number of jobs."},
+  {term: "7. Change in establishments", definition: "Percent change in the number of business establishments."}
+];
 
 const formatRaceName = d => {
   d = d.replace("Alone", "").replace("Black", "black").replace("White", "white").replace("Asian", "asian").trim();
@@ -195,6 +207,7 @@ class Introduction extends SectionColumns {
             }}
             dataFormat={resp => resp.data}
             />
+            <Glossary definitions={definitions} />
 
           </div>
 

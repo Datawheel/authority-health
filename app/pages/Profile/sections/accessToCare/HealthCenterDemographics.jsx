@@ -4,14 +4,12 @@ import {connect} from "react-redux";
 import {nest} from "d3-collection";
 import {Pie} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
-// import axios from "axios";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
 import Disclaimer from "components/Disclaimer";
 import Stat from "components/Stat";
-// import zipcodes from "utils/zipcodes";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
 import Options from "components/Options";
@@ -19,7 +17,6 @@ import Options from "components/Options";
 const formatRaceNames = d => d.replace("Health Center Patients", "");
 const lowerCaseRaceName = d => d.trim() === "Black" || d.trim() === "White" ? d.toLowerCase() : d;
 const formatPercentage = d => `${formatAbbreviate(d * 100)}%`;
-// const formatDropdownName = d => d === "Health Centers" ? "Number of Health Centers" : d;
 
 const formatRaceAndEthnicityData = raceAndEthnicityData => {
   // Add RaceType property to raceAndEthnicityData so that each race type can have individual object.
@@ -54,29 +51,9 @@ class HealthCenterDemographics extends SectionColumns {
     this.state = {sources: []};
   }
 
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     healthCenterData: this.props.healthCenterData,
-  //     dropdownValue: "Health Centers"
-  //   };
-  // }
-
-  // Handler function for dropdown onChange event.
-  // handleChange = event => {
-  //   this.setState({dropdownValue: event.target.value});
-  //   axios.get(`/api/data?measures=${event.target.value}&drilldowns=Zip&Year=latest`)
-  //     .then(resp => this.setState({healthCenterData: resp.data}));
-  // }
-
   render() {
     const {meta, raceAndEthnicityData, raceAndEthnicityZipLevelData} = this.props;
     const isZipLevelDataAvailable = raceAndEthnicityZipLevelData.data.length !== 0;
-    // const {healthCenterData, dropdownValue} = this.state;
-    // const dropdownList = ["Health Centers", "Health Center Penetration", "Low-Income Health Center Penetration", "Uninsured Health Center Penetration"];
-
-    // Get the current dropdown value data for latest year.
-    // const topRecentYearDropdownValueData = healthCenterData.data.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
 
     const recentYearData = formatRaceAndEthnicityData(raceAndEthnicityData).sort((a, b) => b[b.RaceType] - a[a.RaceType]);
     const topMostRaceData = recentYearData[0];
@@ -95,39 +72,12 @@ class HealthCenterDemographics extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Health Center Demographics</SectionTitle>
         <article>
-          {/* Create a dropdown list. */}
-          {/* <label className="pt-label pt-inline" htmlFor="health-center-dropdown">
-            Show data for
-            <select id="health-center-dropdown" onChange={this.handleChange}>
-              {dropdownList.map(item => <option key={item} value={item}>{formatDropdownName(item)}</option>)}
-            </select>
-          </label> */}
-          {/* Show top stats for each dropdown choice. */}
-          {/* {isHealthCentersSelected
-            ? <div>
-              <Stat
-                title={`Zip Code with the most ${dropdownValue}`}
-                year={`${topRecentYearDropdownValueData.Year}`}
-                value={topRecentYearDropdownValueData.Zip}
-                qualifier={`${topRecentYearDropdownValueData[dropdownValue]} Health Centers`}
-              />
-              <p>In {topRecentYearDropdownValueData.Year}, the zip code in Wayne County with the most {dropdownValue} was {topRecentYearDropdownValueData.Zip} ({topRecentYearDropdownValueData[dropdownValue]} health centers).</p>
-              <p>The following map shows the total number of health centers for all zip codes in Wayne County.</p>
-            </div>
-            : <div>
-              <Stat
-                title="Zip Code with the most health center visits"
-                year={`${topRecentYearDropdownValueData.Year}`}
-                value={topRecentYearDropdownValueData.Zip}
-                qualifier={formatPercentage(topRecentYearDropdownValueData[dropdownValue])}
-              />
-              <p> In {topRecentYearDropdownValueData.Year}, the zip code in Wayne County with the most {dropdownValue.toLowerCase()} was {topRecentYearDropdownValueData.Zip} ({formatPercentage(topRecentYearDropdownValueData[dropdownValue])}).</p>
-              <p>The following map shows the share of {dropdownValue.toLowerCase()} for all zip codes in Wayne County.</p>
-            </div>
-          } */}
-
-          {(!isZipLevelDataAvailable && meta.name !== "") &&
+          {(!isZipLevelDataAvailable && meta.level !== "county" && meta.name !== "") &&
             <Disclaimer>Data is shown for Wayne County</Disclaimer>
+          }
+          {
+            meta.level === "tract" && isZipLevelDataAvailable &&
+            <Disclaimer>Data is shown for zip {raceAndEthnicityZipLevelData.data[0].Geography}</Disclaimer>
           }
 
           {isZipLevelDataAvailable
@@ -183,25 +133,6 @@ class HealthCenterDemographics extends SectionColumns {
           }}
           />
         </div>
-
-        {/* Draw Geomap to show health center count for each zip code in the Wayne county */}
-        {/* <Geomap config={{
-          data: "/api/data?measures=Health Centers,Health Center Penetration,Low-Income Health Center Penetration,Uninsured Health Center Penetration&drilldowns=Zip&Year=all",
-          groupBy: d => d["ID Zip"].slice(7),
-          colorScale: dropdownValue,
-          colorScaleConfig: {
-            axisConfig: {tickFormat: isHealthCentersSelected ? d => d : d => formatPercentage(d)}
-          },
-          label: d => d.Zip,
-          height: 400,
-          time: "Year",
-          tooltipConfig: isHealthCentersSelected ? {tbody: [["Year", d => d.Year], ["Health Centers", d => d[dropdownValue]]]} : {tbody: [["Year", d => d.Year], ["Visitor", dropdownValue], ["Share", d => formatPercentage(d[dropdownValue])]]},
-          topojson: "/topojson/zipcodes.json",
-          topojsonFilter: d => zipcodes.includes(d.properties.ZCTA5CE10),
-          topojsonId: d => d.properties.ZCTA5CE10
-        }}
-        dataFormat={resp => resp.data}
-        /> */}
       </SectionColumns>
     );
   }
@@ -212,14 +143,12 @@ HealthCenterDemographics.defaultProps = {
 };
 
 HealthCenterDemographics.need = [
-  // fetchData("healthCenterData", "/api/data?measures=Health Centers&drilldowns=Zip&Year=latest"),
   fetchData("raceAndEthnicityData", "/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Year=latest"),
   fetchData("raceAndEthnicityZipLevelData", "/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Geography=<id>&Year=latest")
 ];
 
 const mapStateToProps = state => ({
   meta: state.data.meta,
-  // healthCenterData: state.data.healthCenterData,
   raceAndEthnicityData: state.data.raceAndEthnicityData,
   raceAndEthnicityZipLevelData: state.data.raceAndEthnicityZipLevelData
 });

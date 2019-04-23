@@ -15,12 +15,12 @@ import styles from "style.yml";
 import "./Introduction.css";
 
 const formatRaceName = d => {
-  d = d.replace("Alone", "").replace("Black", "black").replace("White", "white").replace("Asian", "asian");
+  d = d.replace("Alone", "").replace("Black", "black").replace("White", "white").replace("Asian", "asian").trim();
   if (d.trim() === "Some Other Race") return d.toLowerCase();
   if (d.trim() === "Two or More Races") return d.toLowerCase();
   return d;
 };
-const formatEthnicityName = d => d.replace("Not Hispanic or Latino", "non-Hispanic").replace("or Latino", "");
+const formatEthnicityName = d => d.replace("Not Hispanic or Latino", "non-Hispanic").replace("or Latino", "").trim();
 
 const formatRankSuffix = d => {
   if (d % 10 === 1 && d !== 11) return `${d}st`;
@@ -112,7 +112,7 @@ class Introduction extends SectionColumns {
 
     const total = currentLevelOverallCoverage[0]["Population by Insurance Coverage"] + currentLevelOverallCoverage[1]["Population by Insurance Coverage"];
     const topOverallCoverage = currentLevelOverallCoverage.filter(d => d["Health Insurance Coverage Status"] === "With Health Insurance Coverage")[0];
-    topOverallCoverage.share = topOverallCoverage["Population by Insurance Coverage"] / total * 100;
+    topOverallCoverage.share = total !== 0 ? topOverallCoverage["Population by Insurance Coverage"] / total * 100 : 0;
 
     // Filter zips for Geomap based on the profile you are on.
     let filteredZips = [];
@@ -126,7 +126,7 @@ class Introduction extends SectionColumns {
           <p>
             {level === "zip" ? `Zip code ${population[0].Geography}` : population[0].Geography} has a population of {formatAbbreviate(population[0].Population)} people{meta.level === "county" ? "" : <span> which makes it the {formatRankSuffix(currentLocationRankData.populationRank)} largest of {rankData.length} {formatLevelNames(meta.level)} in Wayne County</span>}
             {}, with the life expectancy of {lifeExpectancyAvailable ? formatAbbreviate(lifeExpectancy[0]["Life Expectancy"]) : "N/A"} {lifeExpectancyAvailable ? onCityOrZipLevel ? <span>(in {lifeExpectancy[0].Geography})</span> : "" : ""}.
-            The most common age group for male is {populationByAgeAndGenderAvailable ? getTopMaleData.Age.toLowerCase() : "N/A"} and for female it is {populationByAgeAndGenderAvailable ? getTopFemaleData.Age.toLowerCase() : "N/A"}.
+            The most common age group for male is {populationByAgeAndGenderAvailable && population[0].Population !== 0 ? getTopMaleData.Age.toLowerCase() : "N/A"} and for female it is {populationByAgeAndGenderAvailable && population[0].Population !== 0 ? getTopFemaleData.Age.toLowerCase() : "N/A"}.
             Between {population[population.length - 1].Year} and {population[0].Year} the population of {population[0].Geography} {populationGrowth < 0 ? "reduced" : "increased"} from {formatAbbreviate(population[population.length - 1].Population)} to {formatAbbreviate(population[0].Population)},
             {} {populationGrowth < 0 ? "a decline" : "an increase"} of {populationGrowth < 0 ? `${populationGrowth * -1}%` : isNaN(populationGrowth) ? "N/A" : `${populationGrowth}%`}.
           </p>
@@ -166,7 +166,7 @@ class Introduction extends SectionColumns {
 
             <Stat
               title="Distress Score"
-              qualifier={`Zip Codes in ${meta.name}     `}
+              qualifier={`Zip Codes in ${meta.name}`}
             />
             <Geomap config={{
               data: "/api/data?measures=Distress Score&drilldowns=Zip&Year=all",
@@ -241,8 +241,8 @@ class Introduction extends SectionColumns {
               qualifier={`Census Tracts in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`}
             />
             <Geomap config={{
-              // Getting data fo a particular tract ID so that we get all tracts data in Wayne County.
-              // We cannot use meta.id here because we do not get tracts when on Wayne County.
+              // Getting data for a particular tract ID so that we get all tracts data in Wayne County.
+              // We cannot use meta.id here because we do not get tracts for Wayne County id.
               data: "/api/data?measures=Life Expectancy&Geography=14000US26163561300:children&Year=all",
               height: 250,
               groupBy: "ID Geography",

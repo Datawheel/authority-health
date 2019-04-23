@@ -107,6 +107,7 @@ tooltip
 ----------------------------------- */
 
 .d3plus-tooltip {
+	z-index: 21;
 	& .d3plus-tooltip-title {
 		color: var(--dark-3);
 		font-family: var(--body-font);

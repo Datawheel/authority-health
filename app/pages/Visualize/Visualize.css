@@ -231,6 +231,12 @@
         &:only-child {
           height: calc(100vh - var(--nav-height) - var(--gutter-md) - var(--gutter-md));
         }
+        & .wrapper {
+          margin: 15px;
+          & .viz > svg {
+            overflow: visible;
+          }
+        }
       }
     }
   }

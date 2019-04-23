@@ -33,6 +33,8 @@ const formatHouseholdSnapData = householdSnapData => {
       group.values.forEach(d => total !== 0 ? d.share = d["SNAP Receipts"] / total * 100 : d.share = 0);
     });
   const filterSnapRecievedData = householdSnapData.filter(d => d["ID Snap Receipt"] === 0);
+
+  // We need to find totalShare for each group to show stats for top most group.
   nest()
     .key(d => d["ID Number of workers"])
     .entries(filterSnapRecievedData)
@@ -116,7 +118,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
             slug={this.props.slug}
             data={ `/api/data?measures=SNAP Receipts&drilldowns=Snap Receipt,Family type,Number of workers&Geography=${meta.id}&Year=all` }
             title="Chart of Household Income From Public Assistance" />
-            
+
           {householdSnapDataAvailable
             ? <BarChart ref={comp => this.viz = comp } config={{
               data: `/api/data?measures=SNAP Receipts&drilldowns=Snap Receipt,Family type,Number of workers&Geography=${meta.id}&Year=all`,

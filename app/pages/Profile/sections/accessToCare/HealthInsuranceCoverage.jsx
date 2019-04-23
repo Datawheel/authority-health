@@ -135,13 +135,13 @@ class HealthInsuranceCoverage extends SectionColumns {
     if (coverageDataAvailable) {
       const recentYearCoverageData = formatCoverageData(coverageData.data);
       const femaleCoverageData = recentYearCoverageData.filter(d => d.Sex === "Female").sort((a, b) => b.share - a.share);
-      topFemaleAgeGroup = rangeFormatter(femaleCoverageData[0].Age);
       topFemaleShare = formatPercentage(femaleCoverageData[0].share);
+      topFemaleAgeGroup = femaleCoverageData[0].share !== 0 ? rangeFormatter(femaleCoverageData[0].Age) : "N/A";
 
       maleCoverageData = recentYearCoverageData.filter(d => d.Sex === "Male").sort((a, b) => b.share - a.share);
-      topMaleAgeGroup = rangeFormatter(maleCoverageData[0].Age);
-      ageGroupYear = maleCoverageData[0].Year;
       topMaleShare = formatPercentage(maleCoverageData[0].share);
+      topMaleAgeGroup = maleCoverageData[0].share !== 0 ? rangeFormatter(maleCoverageData[0].Age) : "N/A";
+      ageGroupYear = maleCoverageData[0].Year;
       geoId = maleCoverageData[0]["ID Geography"];
       geography = femaleCoverageData[0].Geography;
     }

@@ -100,13 +100,13 @@ class Poverty extends SectionColumns {
               {
                 title: "Female",
                 year: povertyByAgeAndGenderAvailable ? topFemalePovertyData.Year : "",
-                value: povertyByAgeAndGenderAvailable ? `${rangeFormatter(topFemalePovertyData.Age)} Years` : "N/A",
+                value: povertyByAgeAndGenderAvailable && topFemalePovertyData.share !== 0 ? `${rangeFormatter(topFemalePovertyData.Age)} Years` : "N/A",
                 qualifier: povertyByAgeAndGenderAvailable ? `${formatPopulation(topFemalePovertyData.share)} of the female population in ${topFemalePovertyData.Geography}` : ""
               },
               {
                 title: "Male",
                 year: povertyByAgeAndGenderAvailable ? topMalePovertyData.Year : "",
-                value: povertyByAgeAndGenderAvailable ? `${rangeFormatter(topMalePovertyData.Age)} Years` : "N/A",
+                value: povertyByAgeAndGenderAvailable && topFemalePovertyData.share !== 0 ? `${rangeFormatter(topMalePovertyData.Age)} Years` : "N/A",
                 qualifier: povertyByAgeAndGenderAvailable ? `${formatPopulation(topMalePovertyData.share)} of the male population in ${topMalePovertyData.Geography}` : "",
                 color: "terra-cotta"
               }
@@ -128,7 +128,7 @@ class Poverty extends SectionColumns {
             : null
           }
 
-          {povertyByAgeAndGenderAvailable ? <p>In {topMalePovertyData.Year}, most common male age in poverty was {topMalePovertyData.Age.toLowerCase()} ({formatPopulation(topMalePovertyData.share)} of the male population) while most common female age was {topFemalePovertyData.Age.toLowerCase()} ({formatPopulation(topFemalePovertyData.share)} of the female population) in {topFemalePovertyData.Geography}.</p> : ""}
+          {povertyByAgeAndGenderAvailable ? <p>In {topMalePovertyData.Year}, most common male age in poverty was {povertyByAgeAndGenderAvailable && topMalePovertyData.share !== 0 ? topMalePovertyData.Age.toLowerCase() : "N/A"} ({formatPopulation(topMalePovertyData.share)} of the male population) while most common female age was {povertyByAgeAndGenderAvailable && topFemalePovertyData.share !== 0 ? topFemalePovertyData.Age.toLowerCase() : "N/A"} ({formatPopulation(topFemalePovertyData.share)} of the female population) in {topFemalePovertyData.Geography}.</p> : ""}
           {povertyByRaceAvailable ? <p>In {topPovertyByRace.Year}, the majority race in poverty was {topPovertyByRace.Race} ({formatPopulation(topPovertyByRace.share)} of the total population in {topPovertyByRace.Geography}).</p> : ""}
 
           <SourceGroup sources={this.state.sources} />

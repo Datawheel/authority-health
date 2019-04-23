@@ -119,6 +119,7 @@ class Homeownership extends SectionColumns {
             title="Median property value"
             year={medianHousingValueForCurrentProfileAvailable ? topMedianHousingUnitsValueForProfile.Year : ""}
             value={medianHousingValueForCurrentProfileAvailable ? `$${commas(topMedianHousingUnitsValueForProfile["Property Value"])}` : "N/A"}
+            qualifier={medianHousingValueForCurrentProfileAvailable ? `in ${topMedianHousingUnitsValueForProfile.Geography}` : `in ${meta.name}`}
           />
           <Stat
             title={getGeomapTitle(meta)}

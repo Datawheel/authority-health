@@ -61,7 +61,7 @@ class FoodStamps extends SectionColumns {
     const publicAssistanceDataAvailable = publicAssistanceData.length !== 0;
     const topPublicAssistanceData = formatPublicAssistanceData(publicAssistanceData)[0];
     const currentYearPopulation = population.filter(d => d.Year === topPublicAssistanceData.Year)[0];
-    const shareOfPopulationWithFoodStamps = formatPercentage(topPublicAssistanceData.total / currentYearPopulation.Population * 100);
+    const shareOfPopulationWithFoodStamps = currentYearPopulation.Population !== 0 ? formatPercentage(topPublicAssistanceData.total / currentYearPopulation.Population * 100) : `${0}%`;
 
     // Get latest year SNAP and WIC authorized stores data
     const snapWicArr = ["SNAP", "WIC"];

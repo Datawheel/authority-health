@@ -53,7 +53,7 @@ const formatCoverageData = coverageData => {
 const findOverallCoverage = data => {
   const total = data[0]["Population by Insurance Coverage"] + data[1]["Population by Insurance Coverage"];
   const filteredData = data.filter(d => d["Health Insurance Coverage Status"] === "With Health Insurance Coverage")[0];
-  filteredData.share = filteredData["Population by Insurance Coverage"] / total * 100;
+  filteredData.share = total !== 0 ? filteredData["Population by Insurance Coverage"] / total * 100 : 0;
   return filteredData;
 };
 

@@ -53,7 +53,7 @@ const findEnrolledInSchoolPercentage = data => {
       group.values.forEach(d => total !== 0 ? d.enrolledShare = d["Poverty by Schooling"] / total * 100 : d.enrolledShare = 0);
     });
   const notEnrolledInSchool = data.filter(d => d["ID Level of School"] === 7);
-  return 100 - notEnrolledInSchool[0].enrolledShare - notEnrolledInSchool[1].enrolledShare;
+  return notEnrolledInSchool[0].enrolledShare === 0 && notEnrolledInSchool[1].enrolledShare === 0 ? 0 : 100 - notEnrolledInSchool[0].enrolledShare - notEnrolledInSchool[1].enrolledShare;
 };
 
 class StudentPoverty extends SectionColumns {

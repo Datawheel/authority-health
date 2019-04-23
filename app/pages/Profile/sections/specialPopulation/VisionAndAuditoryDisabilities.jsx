@@ -172,13 +172,13 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
                   {
                     title: "Female",
                     year: visionDisabilityDataAvailable ? topFemaleVisionDisabilityData.Year : "",
-                    value: visionDisabilityDataAvailable ? rangeFormatter(topFemaleVisionDisabilityData.Age) : "N/A",
+                    value: visionDisabilityDataAvailable && topFemaleVisionDisabilityData.share !== 0 ? rangeFormatter(topFemaleVisionDisabilityData.Age) : "N/A",
                     qualifier: visionDisabilityDataAvailable ? `${formatPercentage(topFemaleVisionDisabilityData.share)} of the population in ${topFemaleVisionDisabilityData.Geography}` : ""
                   },
                   {
                     title: "Male",
                     year: visionDisabilityDataAvailable ? topMaleVisionDisabilityData.Year : "N/A",
-                    value: visionDisabilityDataAvailable ? rangeFormatter(topMaleVisionDisabilityData.Age) : "N/A",
+                    value: visionDisabilityDataAvailable && topMaleVisionDisabilityData.share !== 0 ? rangeFormatter(topMaleVisionDisabilityData.Age) : "N/A",
                     qualifier: visionDisabilityDataAvailable ? `${formatPercentage(topMaleVisionDisabilityData.share)} of the population in ${topMaleVisionDisabilityData.Geography}` : "",
                     color: "terra-cotta"
                   }
@@ -199,13 +199,13 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
                   {
                     title: "Female",
                     year: hearingDisabilityDataAvailable ? topFemaleHearingDisabilityData.Year : "",
-                    value: hearingDisabilityDataAvailable ? rangeFormatter(topFemaleHearingDisabilityData.Age) : "N/A",
+                    value: hearingDisabilityDataAvailable && topFemaleHearingDisabilityData.share !== 0 ? rangeFormatter(topFemaleHearingDisabilityData.Age) : "N/A",
                     qualifier: hearingDisabilityDataAvailable ? `${formatPercentage(topFemaleHearingDisabilityData.share)} of the population in ${topFemaleHearingDisabilityData.Geography}` : ""
                   },
                   {
                     title: "Male",
                     year: hearingDisabilityDataAvailable ? topMaleHearingDisabilityData.Year : "",
-                    value: hearingDisabilityDataAvailable ? rangeFormatter(topMaleHearingDisabilityData.Age) : "N/A",
+                    value: hearingDisabilityDataAvailable && topMaleHearingDisabilityData.share !== 0 ? rangeFormatter(topMaleHearingDisabilityData.Age) : "N/A",
                     qualifier: hearingDisabilityDataAvailable ? `${formatPercentage(topMaleHearingDisabilityData.share)} of the population in ${topMaleHearingDisabilityData.Geography}` : "",
                     color: "terra-cotta"
                   }
@@ -223,12 +223,12 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
           {isVisionDisabilitySelected
             ? <p>
               {visionDisabilityDataAvailable ? <span>In {topMaleVisionDisabilityData.Year}, the age groups most likely to have vision disability in { }
-                {topMaleVisionDisabilityData.Geography} were {rangeFormatter(topMaleVisionDisabilityData.Age)} years for men and {rangeFormatter(topFemaleVisionDisabilityData.Age)} { }
+                {topMaleVisionDisabilityData.Geography} were {topMaleVisionDisabilityData.share !== 0 ? rangeFormatter(topMaleVisionDisabilityData.Age) : "N/A"} years for men and {topFemaleVisionDisabilityData.share !== 0 ? rangeFormatter(topFemaleVisionDisabilityData.Age) : "N/A"} { }
             years for women.</span> : ""}
             </p>
             : <p>
               {hearingDisabilityDataAvailable ? <span>In {topMaleHearingDisabilityData.Year}, the age groups most likely to have hearing disability in { }
-                {topMaleHearingDisabilityData.Geography} were {rangeFormatter(topMaleHearingDisabilityData.Age)} years for men and {rangeFormatter(topFemaleHearingDisabilityData.Age)} { }
+                {topMaleHearingDisabilityData.Geography} were {topMaleHearingDisabilityData.share !== 0 ? rangeFormatter(topMaleHearingDisabilityData.Age) : "N/A"} years for men and {topFemaleHearingDisabilityData.share !== 0 ? rangeFormatter(topFemaleHearingDisabilityData.Age) : "N/A"} { }
            years for women.</span> : ""}
             </p>}
 

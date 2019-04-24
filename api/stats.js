@@ -1,9 +1,5 @@
 const axios = require("axios");
-const d3 = require("d3-scale");
-const {formatAbbreviate} = require("d3plus-format");
 const {titleCase} = require("d3plus-text");
-
-const formatters = require("../app/utils/formatters");
 const {CANON_LOGICLAYER_CUBE} = process.env;
 
 const regionLookup = {
@@ -90,7 +86,7 @@ const prefixMap = {
   "ZRX": "zip_region"
 };
 
-// groupBy function groups object by property.
+/** groupBy function groups object by property. **/
 function groupBy(objectArray, property) {
   return objectArray.reduce((acc, obj) => {
     const key = obj[property];
@@ -102,6 +98,7 @@ function groupBy(objectArray, property) {
   }, {});
 }
 
+/** find parent geography for current location **/
 function findParentGeoLevels(groupedObj) {
   const result = [];
   // If groupedObj has zip level data, then check for the zip region as well.
@@ -120,10 +117,6 @@ function findParentGeoLevels(groupedObj) {
 module.exports = function(app) {
 
   const {cache, db} = app.settings;
-
-  app.get("/api/topstats", async(req, res) => {
-    res.json(cache.stats);
-  });
 
   app.get("/api/stats/:id", async(req, res) => {
     const {id} = req.params;
@@ -147,48 +140,7 @@ module.exports = function(app) {
     // Select top most parent from multiple same level parents with max overlap_size.
     const geoLevels = findParentGeoLevels(groupedValues);
 
-    // Add current location ID at the beginning of the geoLevels array.
-    geoLevels.unshift(id);
-
     const currentLocationMeasureData = {};
-    const healthTopics = [];
-    const socialDeterminants = [];
-
-    // cache.cube has all the measure and year data. To view data in browser go to the /api/cubes url.
-    const cubeYearData = cache.cube.years;
-
-    // Check if measure data is available for locations in geoLevels array and set their rank.
-    Object.entries(cache.stats).forEach(statTopic => {
-      statTopic[1].forEach(d => {
-        const matchId = geoLevels.find(parentId => d.data.hasOwnProperty(parentId));
-        const value = d.data[matchId];
-        if (value !== undefined) {
-          const scale = d3.scaleLinear()
-            .domain(d.domain)
-            .range([-1, 0, 1]);
-
-          const statData = {
-            measure: d.measure,
-            geoId: matchId,
-            rank: scale(value),
-            value: formatters.hasOwnProperty(d.measure) ? formatters[d.measure](formatAbbreviate(value)) : formatAbbreviate(value),
-            years: d.cube.startsWith("acs_yg") ? 5 : cubeYearData[d.cube].years.length, // if its a shared acs cube (which is not in Authority Health cubes), then set the years to 5.
-            latestYear: d.latestYear,
-            yearDimension: d.hasOwnProperty("yearDimension") ? true : false
-          };
-          statTopic[0] === "healthTopics" ? healthTopics.push(statData) : socialDeterminants.push(statData);
-        }
-      });
-    });
-
-    // Sort and slice each topStat data and add it to the currentLocationMeasureData.
-    currentLocationMeasureData.healthTopics = healthTopics.sort((a, b) => Math.abs(b.rank) - Math.abs(a.rank));
-    currentLocationMeasureData.healthTopics = currentLocationMeasureData.healthTopics.length > 3 ? currentLocationMeasureData.healthTopics.slice(0, 3) : currentLocationMeasureData.healthTopics;
-
-    currentLocationMeasureData.socialDeterminants = socialDeterminants.sort((a, b) => Math.abs(b.rank) - Math.abs(a.rank)).slice(0, 3);
-    currentLocationMeasureData.socialDeterminants = currentLocationMeasureData.socialDeterminants.length > 3 ? currentLocationMeasureData.socialDeterminants.slice(0, 3) : currentLocationMeasureData.socialDeterminants;
-
-    currentLocationMeasureData.total = healthTopics.length + socialDeterminants.length;
     currentLocationMeasureData.locations = geoLevels;
 
     // Get all Place/Tract/Zip meta data which are in the Wayne County.
@@ -197,13 +149,13 @@ module.exports = function(app) {
     const population = cache.pops;
     const medianIncome = cache.medianIncome;
     const currLevel = titleCase(prefixMap[id.slice(0, 3)]);
-    
+
     const currentLevelLocations = allLocations.filter(d => d.hierarchy === currLevel);
     currentLevelLocations.forEach(location => {
       population.hasOwnProperty(location.id) ? location.population = population[location.id] : location.population = 0;
       medianIncome.hasOwnProperty(location.id) ? location.medianIncome = medianIncome[location.id] : location.medianIncome = 0;
     });
-    
+
     // Sort and rank loctions based on their population.
     currentLevelLocations.sort((a, b) => b.population - a.population);
     currentLevelLocations.forEach((d, i) => d.populationRank = i + 1);

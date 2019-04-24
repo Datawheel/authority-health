@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
+import {Helmet} from "react-helmet";
 import {Icon} from "@blueprintjs/core";
 import {fetchData, TopicTitle} from "@datawheel/canon-core";
 import ProfileHeader from "./components/ProfileHeader";
@@ -60,6 +61,8 @@ class Profile extends Component {
 
     return (
       <div className="profile">
+        <Helmet title={level === "zip" ? `Zip Code ${name}` : name} />
+
         <ProfileHeader
           title={level === "zip" ? `Zip Code ${name}` : name}
           id={id}

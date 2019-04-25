@@ -52,6 +52,7 @@ class WageDistribution extends SectionColumns {
             title="Wage GINI"
             year={wageGinidataAvailable ? wageGinidata[0].Year : ""}
             value={wageGinidataAvailable ? wageGini : "N/A"}
+            qualifier={wageGinidataAvailable ? `in ${wageGinidata[0].Geography}` : ""}
           />
           {wageGinidataAvailable ? <p>In {wageGinidata[0].Year}, the income inequality in {wageGinidata[0].Geography} was {wageGini}, using the GINI coefficient. The GINI index measures the extent to which the distribution of income among individuals or households within an economy deviates from a perfectly equal distribution. Values range from 0 to 1, with 0 being perfect equality (every household earns equal income), and 1 being absolute inequality (one household earns all the income).</p> : ""}
           {wageDistributionDataAvailable ? <p>The following chart shows the household income buckets and share for each bucket in {wageDistributionData[0].Geography}.</p> : ""}

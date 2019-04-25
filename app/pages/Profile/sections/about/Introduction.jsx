@@ -7,6 +7,8 @@ import {formatAbbreviate} from "d3plus-format";
 import {Geomap, Treemap} from "d3plus-react";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
+import ZipRegionDefinition from "components/ZipRegionDefinition";
+import CensusTractDefinition from "components/CensusTractDefinition";
 import growthCalculator from "utils/growthCalculator";
 import Glossary from "components/Glossary";
 import zipcodes from "utils/zipcodes";
@@ -175,7 +177,6 @@ class Introduction extends SectionColumns {
         <div className="top-stats viz">
 
           <div>
-
             <Stat
               title="Distress Score"
               qualifier={`Zip Codes in ${meta.name}`}
@@ -214,7 +215,7 @@ class Introduction extends SectionColumns {
           <div>
             <Stat
               title="Poor Physical Health"
-              qualifier="Zip Regions in Wayne County"
+              qualifier={<p className="stat-value-qualifier font-xs"><ZipRegionDefinition text="Zip Regions" /> in Wayne County</p>}
             />
             <Geomap config={{
               data: "/api/data?measures=Poor Physical Health 14 Or More Days&drilldowns=Zip Region&Year=all",
@@ -251,7 +252,7 @@ class Introduction extends SectionColumns {
           <div>
             <Stat
               title="Life Expectancy"
-              qualifier={`Census Tracts in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`}
+              qualifier={<p className="stat-value-qualifier font-xs"><CensusTractDefinition text="Census Tracts" /> in {meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}</p>}
             />
             <Geomap config={{
               // Getting data for a particular tract ID so that we get all tracts data in Wayne County.
@@ -288,7 +289,7 @@ class Introduction extends SectionColumns {
           <div>
             <Stat
               title="Poor Mental Health"
-              qualifier="Zip Regions in Wayne County"
+              qualifier={<p className="stat-value-qualifier font-xs"><ZipRegionDefinition text="Zip Regions" /> in Wayne County</p>}
             />
             <Geomap config={{
               data: "/api/data?measures=Poor Mental Health 14 Or More Days&drilldowns=Zip Region&Year=all",

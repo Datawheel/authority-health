@@ -29,6 +29,10 @@
   right: 8px;
   margin-left: calc(0 - var(--gutter-xs)); /* offset padding */
 
+  /* shrink logo on small screens */
+  @mixin max-sm { width: 8rem; }
+  @mixin max-xs { width: 7rem; }
+
   /* BETA */
   &:after {
     @mixin min-xs {
@@ -42,6 +46,7 @@
       /* positioning */
       position: absolute;
       top: 35px;
+      margin-top: -7px;
       right: -20px;
     }
     /* fudge into place on bigger screens */

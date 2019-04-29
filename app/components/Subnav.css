@@ -7,7 +7,8 @@
   height: var(--nav-height);
   z-index: 2; /* in front of section titles */
 }
-.subnav-list {
+.subnav-list,
+.subnav-select-label {
   /* layout */
   @add-mixin centered-container;
   padding-top: 0;
@@ -60,4 +61,26 @@
   & span {
     display: inline-block;
   }
+}
+
+/* select menu (small screens only) */
+.subnav-select-label {
+  line-height: 1.4rem;
+  top: 0.7rem;
+}
+
+.subnav-select-text {
+  flex: 1 0 auto;
+  margin-right: 0.75em;
+  top: 0.25em;
+  color: var(--light-3);
+
+  /* hide label on small screens */
+  @mixin max-xxs {
+    @mixin visually-hidden;
+  }
+}
+
+.subnav-select {
+  color: var(--white);
 }

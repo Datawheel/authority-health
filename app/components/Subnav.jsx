@@ -9,7 +9,7 @@ class Subnav extends Component {
   constructor() {
     super();
     this.state = {
-      currentSection: "home"
+      currentSection: "Introduction"
     };
   }
 
@@ -50,6 +50,9 @@ class Subnav extends Component {
             onChange={e => this.selectSection(e)}
             value={currentSection}
           >
+            <option value="introduction">
+              Introduction
+            </option>
             {PROFILE_SECTIONS.map(section =>
               <option key={`${section.link}-option-link`} value={section.link}>
                 {section.title}

@@ -28,6 +28,7 @@ const groupings = [
   "Period of Service",
   "Type of Crime",
   "Pollutant",
+  "Travel Time",
   // Health center demographics
   "American Indian/Alaska Native Health Center Patients",
   "Black Health Center Patients",

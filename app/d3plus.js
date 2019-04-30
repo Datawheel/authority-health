@@ -218,6 +218,8 @@ export default {
     fontFamily: () => typeface,
     fontSize: () => fontSizeSm
   },
+  // default visualization height
+  height: 400,
   // axis defaults (see line 8)
   xConfig: axisConfig,
   yConfig: axisConfig

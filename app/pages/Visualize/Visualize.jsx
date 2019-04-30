@@ -9,7 +9,7 @@ export default class Visualize extends React.Component {
     return <div className="vizbuilder-container">
       <Vizbuilder
         src={[
-          "https://ah-birch-api.datawheel.us/"
+          "https://ah-cedar-api.datawheel.us/"
           // "https://acs-api.datausa.io/"
         ]}
         defaultGroup={[

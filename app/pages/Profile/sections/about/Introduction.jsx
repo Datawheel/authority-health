@@ -170,11 +170,17 @@ class Introduction extends SectionColumns {
             height: 250,
             sum: "Hispanic Population",
             groupBy: ["Race", "Ethnicity"],
-            label: d => `${d.Race instanceof Array ? "Other Races" : d.Race.replace("Alone", "")}${d.Ethnicity instanceof Array ? "" : ` (${formatEthnicityName(d.Ethnicity)})` }`,
+            label: d => `${ d.Race instanceof Array
+              ? "Other Races"
+              : d.Race.replace("Alone", "")
+            }${ d.Ethnicity instanceof Array
+              ? ""
+              : ` (${formatEthnicityName(d.Ethnicity)})`
+            }`,
             time: "Year",
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
-          dataFormat={ resp => formatRaceAndEthnicityData(resp.data) }
+          dataFormat={ resp => formatRaceAndEthnicityData(resp.data)[0] }
           />
         </article>
         <div className="top-stats viz">

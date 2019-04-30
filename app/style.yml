@@ -223,3 +223,18 @@ color-Violent crime: "#D45D59"
 "color-Gulf War (1990s)": "#A64281"
 "color-Gulf War (2001-)": "#D45D59"
 "color-Other": "#869299"
+
+# air quality
+"color-CO": "#5673CC"
+"color-NO2": "#6F59D4"
+"color-Ozone": "#8842A6"
+"color-PM10": "#A64281"
+"color-PM2.5": "#D45D59"
+"color-SO2": "#CF7A1F"
+
+"color-hazardous days": "#D45D59"
+"color-very unhealthy days": "#CF7A1F"
+"color-unhealthy days": "#C99C20"
+"color-unhealthy for sensitive groups days": "#B5A604"
+"color-moderate days": "#8B9909"
+"color-good days": "#53A355"

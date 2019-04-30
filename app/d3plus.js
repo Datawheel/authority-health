@@ -27,6 +27,7 @@ const groupings = [
   "Family type",
   "Period of Service",
   "Type of Crime",
+  "Pollutant",
   // Health center demographics
   "American Indian/Alaska Native Health Center Patients",
   "Black Health Center Patients",
@@ -36,13 +37,15 @@ const groupings = [
   // smoking status
   "Smoking Status Current",
   "Smoking Status Former",
-  "Smoking Status Never"
+  "Smoking Status Never",
+  // air quality
+  "Category" // air quality days
 ];
 
 /** function to lookup & assign color scheme */
 function colorLogic(d) {
-
-  // console.log(d["Period of Service"]);
+  // console.log(grouping, d[grouping]);
+  // styles[`color-${d[grouping]}`] ? console.log(styles[`color-${d[grouping]}`]) : null;
 
   // lookup grouping color schemes in style.yml
   for (const grouping of groupings) {

@@ -182,19 +182,25 @@ class AirQuality extends SectionColumns {
             data={ `/api/data?measures=Air Quality Days&drilldowns=Category&Geography=${meta.id}&Year=all` }
             title="Chart of Air Quality Days" />
           }
+
+
           {/* Lineplot to show air quality days over the years. */}
           {dropdownValue === "Air Quality Days" &&
         <BarChart ref={comp => this.viz = comp} config={{
           data: `/api/data?measures=Air Quality Days&drilldowns=Category&Geography=${meta.id}&Year=all`,
           groupBy: "Category",
           height: 400,
-          label: d => `${titleCase(d.Category)}`,
+          label: d => titleCase(d.Category),
           x: "Category",
           y: "Air Quality Days",
           time: "Year",
           xSort: (a, b) => a["ID Category"] - b["ID Category"],
           xConfig: {
-            tickFormat: d => titleCase(formatAirQualityDaysName(d))
+            tickFormat: d => titleCase(formatAirQualityDaysName(d)),
+            // hide vertical grid lines
+            gridConfig: {
+              opacity: 0
+            }
           },
           yConfig: {
             tickFormat: d => titleCase(d),
@@ -208,6 +214,7 @@ class AirQuality extends SectionColumns {
         dataFormat={resp => {
           this.setState({sources: updateSource(resp.source, this.state.sources)});
           const data = resp.data.filter(d => d.Year !== "2018");
+          console.log(data);
           return data;
         }}
         />}
@@ -227,7 +234,6 @@ class AirQuality extends SectionColumns {
             data: `/api/data?measures=Air Pollutant Days&drilldowns=Pollutant&Geography=${meta.id}&Year=all`,
             discrete: "x",
             height: 400,
-            legend: false,
             groupBy: "Pollutant",
             x: "Year",
             y: "Air Pollutant Days",
@@ -239,6 +245,7 @@ class AirQuality extends SectionColumns {
           dataFormat={resp => {
             this.setState({sources: updateSource(resp.source, this.state.sources)});
             const data = resp.data.filter(d => d.Year !== "2018");
+            // console.log(data);
             return data;
           }}
           />}

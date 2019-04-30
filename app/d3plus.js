@@ -9,6 +9,7 @@ import styles from "style.yml";
 const groupings = [
   "Group",
   "Age Group",
+  "Race",
   "Race Group",
   "RaceType",
   "SmokingType",
@@ -46,8 +47,10 @@ function colorLogic(d) {
   // lookup grouping color schemes in style.yml
   for (const grouping of groupings) {
     if (d[grouping]) {
-      // console.log(grouping + ":", d[grouping]);
-      // styles[`color-${d[grouping]}`] ? console.log(styles[`color-${d[grouping]}`]) : null;
+      // console.log(grouping, d[grouping]);
+      // console.log(styles[`color-${d[grouping]}`]
+      //   ? styles[`color-${d[grouping]}`]
+      //   : styles["majorelle-dark"]);
       return styles[`color-${d[grouping]}`]
         ? styles[`color-${d[grouping]}`]
         : styles["majorelle-dark"];

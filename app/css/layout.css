@@ -217,12 +217,15 @@ layout
 
     /* override canon typography */
     & article {
+      margin: 0;
       font-family: inherit;
       color: inherit;
 
       /* style direct child paragraphs only */
       & > p {
         @add-mixin font-sm;
+        width: 42em;
+        max-width: 100%;
         margin-bottom: 0.75em; /* override blueprint */
 
         &:last-child {

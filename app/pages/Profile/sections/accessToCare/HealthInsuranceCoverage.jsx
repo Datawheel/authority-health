@@ -158,7 +158,7 @@ class HealthInsuranceCoverage extends SectionColumns {
             }
             <div>
               <StatGroup
-                title={"most covered age group by gender"}
+                title={"most covered age groups by gender"}
                 year={ageGroupYear}
                 stats={[
                   {

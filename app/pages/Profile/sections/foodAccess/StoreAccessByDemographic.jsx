@@ -77,15 +77,15 @@ class StoreAccessByDemographic extends SectionColumns {
           }
           {/* Show top stats for Age and Race groups based on the drilldown value. */}
           <Stat
-            title={ageSelected ? "Most at risk demographic" : "Top Food Access by Race"}
+            title={ageSelected ? "Most at risk age group" : "Top Food Access by Race"}
             year={topFoodAccessData.Year}
             value={ageSelected ? topFoodAccessData["Age Group"] : topFoodAccessData["Race Group"]}
             qualifier={ageSelected ? `${formatPercentage(topFoodAccessData["Low-Access to Food by Age"])} of all ${topFoodAccessData["Age Group"].toLowerCase()} in ${topFoodAccessData.Geography} has low access` : `${formatPercentage(topFoodAccessData["Low-Access to Food by Race"])} of total population in ${topFoodAccessData.Geography} has low access`}
           />
           {/* Write a paragraph for top stats based on the dropdown choice. */}
-          <p>In {topFoodAccessData.Year}, {ageSelected ? `between children and seniors age groups, ${topFoodAccessData["Age Group"].toLowerCase()}` : topFoodAccessData["Race Group"].toLowerCase()} were the largest {ageSelected ? "age" : "race"} group ({ageSelected ? `${formatPercentage(topFoodAccessData["Low-Access to Food by Age"])} of all ${topFoodAccessData["Age Group"].toLowerCase()}` : `${formatPercentage(topFoodAccessData["Low-Access to Food by Race"])} of the population`}) in {topFoodAccessData.Geography} with low access to food stores.</p>
+          <p>In {topFoodAccessData.Year}, {ageSelected ? `between children and seniors, ${topFoodAccessData["Age Group"].toLowerCase()}` : topFoodAccessData["Race Group"].toLowerCase()} were the most at risk {ageSelected ? "age" : "race"} group for low access to food stores ({ageSelected ? `${formatPercentage(topFoodAccessData["Low-Access to Food by Age"])} of all ${topFoodAccessData["Age Group"].toLowerCase()}` : `${formatPercentage(topFoodAccessData["Low-Access to Food by Race"])} of the population`}) in {topFoodAccessData.Geography}.</p>
           <p>Low access to healthy food is defined as being far from a supermarket, supercenter, or large grocery store.</p>
-          <p>The following map shows the low access rate for {dropdownValue.split(" ").length === 1 ? formatRaceText(dropdownValue).toLowerCase() : formatRaceText(dropdownValue)} with low access to food stores across all counties in Michigan.</p>
+          <p>The following map shows the rates for {dropdownValue.split(" ").length === 1 ? formatRaceText(dropdownValue).toLowerCase() : formatRaceText(dropdownValue)} with low access to food stores across all counties in Michigan.</p>
 
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
@@ -115,7 +115,7 @@ class StoreAccessByDemographic extends SectionColumns {
                 ticks: []
               },
               time: "Year",
-              title: d => `Low Access to Food Store in ${d[0].Geography}`,
+              title: d => `${ageSelected ? "Age Group Access" : "Race/Ethnicity Access"} in ${d[0].Geography}`,
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", d => ageSelected ? `${d["Age Group"]}` : `${d["Race Group"]}`], ["Low-Access Rate", d => ageSelected ? formatPercentage(d["Low-Access to Food by Age"]) : formatPercentage(d["Low-Access to Food by Race"])], ["County", d => d.Geography]]}
             }}
             dataFormat={resp => {
@@ -145,7 +145,7 @@ class StoreAccessByDemographic extends SectionColumns {
             },
             label: d => d.County,
             time: "Year",
-            title: "Low Access to Food Store for Counties in Michigan",
+            title: `${dropdownValue} Access for Counties in Michigan`,
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Demographic", dropdownValue], ["Low-Access Rate", d => ageSelected ? formatPercentage(d["Low-Access to Food by Age"]) : formatPercentage(d["Low-Access to Food by Race"])]]},
             topojson: "/topojson/county.json",
             topojsonFilter: d => d.id.startsWith("05000US26")

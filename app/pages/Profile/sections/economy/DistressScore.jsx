@@ -57,7 +57,7 @@ class DistressScore extends SectionColumns {
             value={topDistressScoreData.Zip}
             qualifier={`(${formatAbbreviate(topDistressScoreData["Distress Score"])} percentile)`}
           />
-          <p>In {topDistressScoreData.Year}, the maximum distress score was observed in the zip code {topDistressScoreData.Zip} with {formatAbbreviate(topDistressScoreData["Distress Score"])} percentile with 0 percentile being least distressed (desired outcome) and 100 percentile being most distressed (unfavorable outcome).</p>
+          <p>In {topDistressScoreData.Year}, the highest distress score was observed in the zip code {topDistressScoreData.Zip} ({formatAbbreviate(topDistressScoreData["Distress Score"])} percentile), 0 percentile would be the least distressed (desired outcome), and 100 percentile would be the most distressed (unfavorable outcome).</p>
           <p>The following map shows the distress score percentile for each zip code in Wayne County.</p>
 
           <SourceGroup sources={this.state.sources} />

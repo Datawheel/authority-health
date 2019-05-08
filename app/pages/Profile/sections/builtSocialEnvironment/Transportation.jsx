@@ -191,7 +191,7 @@ class Transportation extends SectionColumns {
               x: "Travel Time",
               y: "share",
               time: "Year",
-              title: d => `Distribution of Commute Time in ${d[0].Geography}`,
+              title: d => `Distribution of Commute Times in ${d[0].Geography}`,
               xSort: (a, b) => a["ID Travel Time"] - b["ID Travel Time"],
               xConfig: {
                 tickFormat: d => d.replace("Minutes", "").trim(),

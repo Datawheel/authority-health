@@ -128,9 +128,9 @@ class FoodStamps extends SectionColumns {
               }
             ]}
           />
-          <p>The monthly average number of SNAP-authorized stores in {county} in {snapLatestYear} was {commas(snapLatestYearValue)} and there were {commas(wicLatestYearValue)} WIC-authorized stores in {wicLatestYear}.</p>
+          <p>The monthly average number of SNAP-authorized stores in {county} in {snapLatestYear} was {commas(snapLatestYearValue)}, and there were {commas(wicLatestYearValue)} WIC-authorized stores in {wicLatestYear}.</p>
           <p>In {topPublicAssistanceData.Year}, {shareOfPopulationWithFoodStamps} of the population in {topPublicAssistanceData.Geography} had food stamps, out of which {formatPercentage(topPublicAssistanceData.share)} of the population were given food stamps in cash.</p>
-          <p>The chart here shows the share of population who gets food stamps in cash out of the population with food stamps.</p>
+          <p>The chart here shows the share of the population who gets food stamps in cash out of the population with food stamps.</p>
 
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
@@ -150,6 +150,7 @@ class FoodStamps extends SectionColumns {
               data: `/api/data?measures=Food-Stamp Population&drilldowns=Public Assistance or Snap&Geography=${meta.id}&Year=all`,
               discrete: "x",
               height: 400,
+              baseline: 0,
               groupBy: "Public Assistance or Snap",
               x: "Year",
               y: "share",
@@ -157,6 +158,7 @@ class FoodStamps extends SectionColumns {
                 tickFormat: d => `${formatPercentage(d)}`,
                 title: "Share"
               },
+              title: "Food Stamp Population Using Cash Assistance",
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => `${formatPercentage(d.share)}`], [titleCase(meta.level), d => d.Geography]]}
             }}
             dataFormat={resp => {

@@ -79,9 +79,8 @@ const formatGeomapData = (data, meta, childrenTractIds, disability = "Vision") =
 };
 
 const getGeomapTitle = (meta, disability) => {
-  if (meta.level === "county") return `City with most ${disability} disability in Wayne County`;
-  else if (meta.level === "tract") return `Census Tract with most ${disability} disability in Wayne County`;
-  else return `Census Tract with most ${disability} disability in ${meta.name}`;
+  if (meta.level === "county" || meta.level === "tract") return `Location with the highest ${disability} disability in Wayne County`;
+  else return `Location with the highest ${disability} disability in ${meta.name}`;
 };
 
 const getGeomapQualifier = (data, meta) => {
@@ -166,7 +165,7 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
           {isVisionDisabilitySelected
             ? <div>
               <StatGroup
-                title={"age groups with vision disability by gender"}
+                title={"Most common age groups with vision disability by gender"}
                 year={visionDisabilityDataAvailable ? topMaleVisionDisabilityData.Year : ""}
                 stats={[
                   {
@@ -193,7 +192,7 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             </div>
             : <div>
               <StatGroup
-                title={"age groups with hearing disability by gender"}
+                title={"Most common age groups with hearing disability by gender"}
                 year={hearingDisabilityDataAvailable ? topMaleHearingDisabilityData.Year : ""}
                 stats={[
                   {
@@ -222,14 +221,14 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
 
           {isVisionDisabilitySelected
             ? <p>
-              {visionDisabilityDataAvailable ? <span>In {topMaleVisionDisabilityData.Year}, the age groups most likely to have vision disability in { }
-                {topMaleVisionDisabilityData.Geography} were {topMaleVisionDisabilityData.share !== 0 ? rangeFormatter(topMaleVisionDisabilityData.Age) : "N/A"} years for men and {topFemaleVisionDisabilityData.share !== 0 ? rangeFormatter(topFemaleVisionDisabilityData.Age) : "N/A"} { }
-            years for women.</span> : ""}
+              {visionDisabilityDataAvailable ? <span>In {topMaleVisionDisabilityData.Year}, the age groups most likely to have a vision disability in { }
+                {topMaleVisionDisabilityData.Geography} were {topFemaleVisionDisabilityData.share !== 0 ? rangeFormatter(topFemaleVisionDisabilityData.Age) : "N/A"} years for women and {topMaleVisionDisabilityData.share !== 0 ? rangeFormatter(topMaleVisionDisabilityData.Age) : "N/A"} { }
+            years for men.</span> : ""}
             </p>
             : <p>
-              {hearingDisabilityDataAvailable ? <span>In {topMaleHearingDisabilityData.Year}, the age groups most likely to have hearing disability in { }
-                {topMaleHearingDisabilityData.Geography} were {topMaleHearingDisabilityData.share !== 0 ? rangeFormatter(topMaleHearingDisabilityData.Age) : "N/A"} years for men and {topFemaleHearingDisabilityData.share !== 0 ? rangeFormatter(topFemaleHearingDisabilityData.Age) : "N/A"} { }
-           years for women.</span> : ""}
+              {hearingDisabilityDataAvailable ? <span>In {topMaleHearingDisabilityData.Year}, the age groups most likely to have a hearing disability in { }
+                {topMaleHearingDisabilityData.Geography} were {topFemaleHearingDisabilityData.share !== 0 ? rangeFormatter(topFemaleHearingDisabilityData.Age) : "N/A"} years for women and {topMaleHearingDisabilityData.share !== 0 ? rangeFormatter(topMaleHearingDisabilityData.Age) : "N/A"} { }
+           years for men.</span> : ""}
             </p>}
 
           <SourceGroup sources={this.state.sources} />

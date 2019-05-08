@@ -71,13 +71,13 @@ class FoodAvailability extends SectionColumns {
             <Disclaimer>Data is shown for {topStore.Geography}</Disclaimer>
           }
           <Stat
-            title={"most number of food store available"}
+            title={"most common food store"}
             year={topStore.Year}
             value={titleCase(topStore["Sub-category"])}
             qualifier={`${commas(topStore["Number of Food Stores"])} in ${topStore.Geography}`}
           />
-          <p>In {topStore.Year}, the most available food stores in {topStore.Geography} were {topStore["Sub-category"].toLowerCase()} ({commas(topStore["Number of Food Stores"])}) out of all food store types.</p>
-          <p>The chart here shows the share of fast-food restaurants, full-service restaurants, convenience stores, grocery stores, specialized food stores, supercenters and farmers market in {meta.name}.</p>
+          <p>In {topStore.Year}, the most common food store type available in {topStore.Geography} was {topStore["Sub-category"].toLowerCase()} ({commas(topStore["Number of Food Stores"])}).</p>
+          <p>The chart here shows the share of fast-food restaurants, full-service restaurants, convenience stores, grocery stores, specialized food stores, supercenters and farmers market in {topStore.Geography}.</p>
 
           <SourceGroup sources={this.state.sources} />
           <Glossary definitions={definitions} />

@@ -5,7 +5,6 @@ import {titleCase} from "d3plus-text";
 import axios from "axios";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
-import {Classes, Tooltip} from "@blueprintjs/core";
 
 import Contact from "components/Contact";
 import Disclaimer from "components/Disclaimer";
@@ -34,8 +33,6 @@ const pollutantDefinitions = [
   {term: "Carbon Monoxide (CO)", definition: "Potential health effects from exposure to carbon monoxide are - flu-like symptoms such as headaches, dizziness, disorientation, nausea and fatigue, chest pain in people with coronary heart disease, at higher concentration: impaired vision and coordination, dizziness and confusion, and potentially serious health effects on unborn babies when exposed to high levels."},
   {term: "Sulphur Dioxide (S02)", definition: "Potential health effects from exposure to sulphur dioxide are - narrowing of the airways leading to wheezing, chest tightness and shortness of breath, more frequent asthma attacks in people with asthma and exacerbation of cardiovascular diseases."}
 ];
-
-const goodQualityDefinition = <p>Good quality air pertains to the degree which the air is clean, clear and free from pollutants such as smoke, dust and smog among other gaseous impurities in the air.</p>;
 
 const formatAirQualityDaysName = d => d.replace(" days", "");
 

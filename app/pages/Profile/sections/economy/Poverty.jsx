@@ -113,14 +113,14 @@ class Poverty extends SectionColumns {
             ]}
           />
           <Stat
-            title="race most impacted by poverty"
+            title="race/ethnicity most impacted by poverty"
             year={povertyByRaceAvailable ? topPovertyByRace.Year : ""}
             value={povertyByRaceAvailable ? topPovertyByRace.Race : "N/A"}
             qualifier={povertyByRaceAvailable ? `${formatPopulation(topPovertyByRace.share)} of the total population in ${topPovertyByRace.Geography}` : ""}
           />
           {immigrantsInPovertyAvailable && formatPopulation(immigrantsInPovertyData.share) !== "0%"
             ? <Stat
-              title="immigrants most impacted by poverty"
+              title="immigrants impacted by poverty"
               year={immigrantsInPovertyAvailable ? immigrantsInPovertyData.Year : ""}
               value={immigrantsInPovertyAvailable ? formatPopulation(immigrantsInPovertyData.share) : "N/A"}
               qualifier={immigrantsInPovertyAvailable ? `of the total population in ${immigrantsInPovertyData.Geography}` : ""}
@@ -128,8 +128,8 @@ class Poverty extends SectionColumns {
             : null
           }
 
-          {povertyByAgeAndGenderAvailable ? <p>In {topMalePovertyData.Year}, most common male age in poverty was {povertyByAgeAndGenderAvailable && topMalePovertyData.share !== 0 ? topMalePovertyData.Age.toLowerCase() : "N/A"} ({formatPopulation(topMalePovertyData.share)} of the male population) while most common female age was {povertyByAgeAndGenderAvailable && topFemalePovertyData.share !== 0 ? topFemalePovertyData.Age.toLowerCase() : "N/A"} ({formatPopulation(topFemalePovertyData.share)} of the female population) in {topFemalePovertyData.Geography}.</p> : ""}
-          {povertyByRaceAvailable ? <p>In {topPovertyByRace.Year}, the majority race in poverty was {topPovertyByRace.Race} ({formatPopulation(topPovertyByRace.share)} of the total population in {topPovertyByRace.Geography}).</p> : ""}
+          {povertyByAgeAndGenderAvailable ? <p>In {topMalePovertyData.Year}, the most common male age in poverty was {povertyByAgeAndGenderAvailable && topMalePovertyData.share !== 0 ? topMalePovertyData.Age.toLowerCase() : "N/A"} ({formatPopulation(topMalePovertyData.share)} of the male population) while the most common female age was {povertyByAgeAndGenderAvailable && topFemalePovertyData.share !== 0 ? topFemalePovertyData.Age.toLowerCase() : "N/A"} ({formatPopulation(topFemalePovertyData.share)} of the female population) in {topFemalePovertyData.Geography}.</p> : ""}
+          {povertyByRaceAvailable ? <p>In {topPovertyByRace.Year}, the most common race/ethnicity in poverty was {topPovertyByRace.Race} ({formatPopulation(topPovertyByRace.share)} of the total population in {topPovertyByRace.Geography}).</p> : ""}
 
           <SourceGroup sources={this.state.sources} />
           <Glossary definitions={definitions} />
@@ -155,7 +155,7 @@ class Poverty extends SectionColumns {
               y: "Race",
               x: "share",
               time: "Year",
-              title: d => `Population in Poverty by Race in ${d[0].Geography}`,
+              title: d => `Population in Poverty by Race/Ethnicity in ${d[0].Geography}`,
               xConfig: {
                 tickFormat: d => formatPopulation(d),
                 title: "Share"

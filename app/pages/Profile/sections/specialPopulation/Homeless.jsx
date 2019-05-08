@@ -101,20 +101,20 @@ class Homeless extends SectionColumns {
             title={"Most common Sheltered demographic"}
             year={topShelteredHomelessCategory.Year}
             value={topShelteredHomelessCategory.Category}
-            qualifier={formatPercentage(topShelteredHomelessCategory.shelteredShare)}
+            qualifier={`${formatPercentage(topShelteredHomelessCategory.shelteredShare)} of sheltered population`}
           />
           <Stat
             title={"Most common Unsheltered demographic"}
             year={topUnshelteredHomelessCategory.Year}
             value={topUnshelteredHomelessCategory.Category}
-            qualifier={formatPercentage(topUnshelteredHomelessCategory.unshelteredShare)}
+            qualifier={`${formatPercentage(topUnshelteredHomelessCategory.unshelteredShare)} of unsheltered population`}
           />
 
           <p>In {totalHomelessData.data[0].Year}, {formatPercentage(totalHomelessPopulation)} of the population in {totalHomelessData.data[0].Geography} was homeless. { }
           The most common sheltered demographic was {topShelteredHomelessCategory.Category.toLowerCase()} ({formatPercentage(topShelteredHomelessCategory.shelteredShare)}) { }
-          and unsheltered demographic was {topUnshelteredHomelessCategory.Category.toLowerCase()} ({formatPercentage(topUnshelteredHomelessCategory.unshelteredShare)}).</p>
+          and the most common unsheltered demographic was {topUnshelteredHomelessCategory.Category.toLowerCase()} ({formatPercentage(topUnshelteredHomelessCategory.unshelteredShare)}).</p>
 
-          <p>Following charts shows different categories and types of sheltered and unsheltered homeless population in {totalHomelessData.data[0].Geography} and percentages for each one of them.</p>
+          <p>The following charts show the different categories and types of sheltered and unsheltered homeless population in {totalHomelessData.data[0].Geography}.</p>
 
           <SourceGroup sources={this.state.sources} />
           <Glossary definitions={definitions} />

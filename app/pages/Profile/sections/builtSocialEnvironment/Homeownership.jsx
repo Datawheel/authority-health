@@ -132,9 +132,9 @@ class Homeownership extends SectionColumns {
             year={constructionDateDataAvailable ? `AS OF ${constructionDateData[0].Year}` : ""}
             value={constructionDateDataAvailable ? constructionDateData[0]["Construction Date"] : "N/A"}
           />
-          <p>{medianHousingValueForCurrentProfileAvailable ? <span>In {topMedianHousingUnitsValueForProfile.Year}, the median property value in {topMedianHousingUnitsValueForProfile.Geography}, was ${commas(topMedianHousingUnitsValueForProfile["Property Value"])}.</span> : ""} </p>
-          <p>{occupancyDataAvailable ? <span>{formatAbbreviate(topOccupancyData.share)}% of households in {topOccupancyData.Geography} were occupied in {topOccupancyData.Year}.</span> : ""}</p>
-          <p>The following map shows the median property value for <CensusTractDefinition text="census tracts" /> in Wayne County.</p>
+          <p>{medianHousingValueForCurrentProfileAvailable ? <span>In {topMedianHousingUnitsValueForProfile.Year}, the median property value in {topMedianHousingUnitsValueForProfile.Geography}, was ${commas(topMedianHousingUnitsValueForProfile["Property Value"])}.</span> : ""}
+            {occupancyDataAvailable ? <span> {formatAbbreviate(topOccupancyData.share)}% of the households in {topOccupancyData.Geography} were occupied as of {topOccupancyData.Year}.</span> : ""}</p>
+          <p>The following map shows the median property value for the <CensusTractDefinition text="census tracts" /> in {topOccupancyData.Geography}.</p>
 
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />

@@ -29,7 +29,10 @@ const definitions = [
 ];
 
 const formatRaceName = d => {
-  d = d.replace("Alone", "").replace("Black", "black").replace("White", "white").replace("Asian", "asian").trim();
+  d = d.replace("Alone", "")
+    .replace("Black", "black")
+    .replace("White", "white")
+    .replace("Asian", "asian").trim();
   if (d.trim() === "Some Other Race") return d.toLowerCase();
   if (d.trim() === "Two or More Races") return d.toLowerCase();
   return d;
@@ -168,11 +171,17 @@ class Introduction extends SectionColumns {
             height: 250,
             sum: "Hispanic Population",
             groupBy: ["Race", "Ethnicity"],
-            label: d => `${d.Race.replace("Alone", "")} (${formatEthnicityName(d.Ethnicity)})`,
+            label: d => `${ d.Race instanceof Array
+              ? "Other Races"
+              : d.Race.replace("Alone", "")
+            }${ d.Ethnicity instanceof Array
+              ? ""
+              : ` (${formatEthnicityName(d.Ethnicity)})`
+            }`,
             time: "Year",
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
-          dataFormat={resp => formatRaceAndEthnicityData(resp.data)[0]}
+          dataFormat={ resp => formatRaceAndEthnicityData(resp.data)[0] }
           />
         </article>
         <div className="top-stats viz">

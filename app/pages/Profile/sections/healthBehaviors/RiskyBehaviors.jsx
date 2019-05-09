@@ -117,41 +117,40 @@ class RiskyBehaviors extends SectionColumns {
             }
             {/* Draw a Pie chart to show smoking status: former, current & never. */}
             {/* TODO: distribution bar */}
-            {dropdownValue === drugTypes[0]
-              ? <div>
-                <Pie ref={comp => this.viz1 = comp} config={{
-                  data: `/api/data?measures=Smoking Status Current,Smoking Status Former,Smoking Status Never&drilldowns=End Year&Geography=${id}`, // MiBRFS - All Years
-                  height: 250,
-                  value: d => d[d.SmokingType],
-                  legend: false,
-                  groupBy: "SmokingType",
-                  label: d => {
-                    const wordsArr = d.SmokingType.split(" ");
-                    return `${wordsArr[2]}`;
-                  },
-                  time: "End Year",
-                  title: d => `Smoking Status in ${d[0].Geography}`,
-                  shapeConfig: {
-                    Path: {
-                      fillOpacity: 1
+            {dropdownValue === drugTypes[0] &&
+              <Pie ref={comp => this.viz1 = comp} config={{
+                data: `/api/data?measures=Smoking Status Current,Smoking Status Former,Smoking Status Never&drilldowns=End Year&Geography=${id}`, // MiBRFS - All Years
+                height: 250,
+                value: d => d[d.SmokingType],
+                legend: false,
+                groupBy: "SmokingType",
+                label: d => {
+                  const wordsArr = d.SmokingType.split(" ");
+                  return `${wordsArr[2]}`;
+                },
+                time: "End Year",
+                title: d => `Smoking Status in ${d[0].Geography}`,
+                shapeConfig: {
+                  Path: {
+                    fillOpacity: 1
+                  }
+                },
+                tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Prevalence", d => formatPercentage(d[d.SmokingType], true)], ["County", d => d.Geography]]}
+              }}
+              dataFormat={resp => {
+                const data = [];
+                resp.data.forEach(d => {
+                  resp.source[0].measures.forEach(smokingType => {
+                    if (d[smokingType] !== null) {
+                      data.push(Object.assign({}, d, {SmokingType: smokingType}));
                     }
-                  },
-                  tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Prevalence", d => formatPercentage(d[d.SmokingType], true)], ["County", d => d.Geography]]}
-                }}
-                dataFormat={resp => {
-                  const data = [];
-                  resp.data.forEach(d => {
-                    resp.source[0].measures.forEach(smokingType => {
-                      if (d[smokingType] !== null) {
-                        data.push(Object.assign({}, d, {SmokingType: smokingType}));
-                      }
-                    });
                   });
-                  this.setState({sources: updateSource(resp.source, this.state.sources)});
-                  return data;
-                }}
-                />
-              </div> : null }
+                });
+                this.setState({sources: updateSource(resp.source, this.state.sources)});
+                return data;
+              }}
+              />
+            }
           </div>
         </article>
 

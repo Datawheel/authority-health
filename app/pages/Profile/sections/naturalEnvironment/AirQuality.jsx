@@ -117,7 +117,7 @@ class AirQuality extends SectionColumns {
             <Disclaimer>Data is shown for {airQualityDays.data[0].Geography}</Disclaimer>
           }
           {dropdownValue === "Air Quality Days" &&
-          <div>
+          <div className="article-inner-container">
             <Stat
               title={"Most common air quality days"}
               year={topAirQualityDays.Year}
@@ -129,7 +129,7 @@ class AirQuality extends SectionColumns {
           </div>}
 
           {dropdownValue === "Air Pollutants" &&
-          <div>
+          <div className="article-inner-container">
             <Stat
               title={"Most common air pollutant"}
               year={topRecentYearAirPollutant.Year}
@@ -141,7 +141,7 @@ class AirQuality extends SectionColumns {
             <p>The glossary below gives further details about common air pollutants and their health effects.</p>
           </div>}
           {dropdownValue === "Median Air Quality Index" &&
-          <div>
+          <div className="article-inner-container">
             <Stat
               title={"Median Air Quality Index"}
               year={airQualityMedianAQIs[0].Year}
@@ -151,7 +151,7 @@ class AirQuality extends SectionColumns {
             <p>The glossary below explains air quality index (AQI) and different types of air quality with respect to AQI.</p>
           </div>}
           {dropdownValue === "Unhealthy Air for Sensitive Groups" &&
-          <div>
+          <div className="article-inner-container">
             <Stat
               title={"unhealthy air for sensitive groups"}
               year={sensitiveGroupData[0].Year}

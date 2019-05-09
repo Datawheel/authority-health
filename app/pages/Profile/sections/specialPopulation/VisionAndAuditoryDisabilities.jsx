@@ -163,7 +163,7 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
           </label>
 
           {isVisionDisabilitySelected
-            ? <div>
+            ? <div className="article-inner-container">
               <StatGroup
                 title={"Most common age groups with vision disability by gender"}
                 year={visionDisabilityDataAvailable ? topMaleVisionDisabilityData.Year : ""}
@@ -190,7 +190,7 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
                 qualifier={getGeomapQualifier(topChildrenGeographyStats, meta)}
               />
             </div>
-            : <div>
+            : <div className="article-inner-container">
               <StatGroup
                 title={"Most common age groups with hearing disability by gender"}
                 year={hearingDisabilityDataAvailable ? topMaleHearingDisabilityData.Year : ""}

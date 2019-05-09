@@ -166,7 +166,7 @@ class ReadingAssessment extends SectionColumns {
               }))}
             />
 
-            : <div>
+            : <div className="article-inner-container">
               {/* fourth grade stats */}
               <StatGroup
                 title={`4th grade average scores${ !isOverallSelected ? ` by ${dropdownValue}` : "" }`}

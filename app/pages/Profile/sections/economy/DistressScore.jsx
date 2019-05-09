@@ -87,7 +87,16 @@ class DistressScore extends SectionColumns {
                 styles["danger-light"],
                 styles.danger,
                 styles["danger-dark"]
-              ]
+              ],
+              legendConfig: {
+                // format range scale using formatAbbreviate function
+                label: d => {
+                  const arr = d.id.split(" ");
+                  const startRange = formatAbbreviate(parseFloat(arr[0]));
+                  const endRange = formatAbbreviate(parseFloat(arr[2]));
+                  return `${startRange} - ${endRange}`;
+                }
+              }
             },
             height: 400,
             time: "Year",

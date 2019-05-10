@@ -142,8 +142,8 @@ class PreventiveCare extends SectionColumns {
             : <p>In {topDropdownData.Year}, {formatPercentage(topDropdownData[dropdownValue])} of the population of <CensusTractDefinition text={topDropdownData.Tract}/>{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} had {getArticle(dropdownValue)} {formatDropdownNames(dropdownValue).toLowerCase()} out of all tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
           {isPreventativeCareWeightedValueSelected
-            ? <p>The map here shows {formatDropdownNames(dropdownValue).toLowerCase()} for zip regions in Wayne County.</p>
-            : <p>The map here shows {formatDropdownNames(dropdownValue).toLowerCase()} for census tracts in Detroit, Livonia, Dearborn and Westland.</p>
+            ? <p>The map here shows {formatDropdownNames(dropdownValue).toLowerCase()} rate for zip regions in Wayne County.</p>
+            : <p>The map here shows {formatDropdownNames(dropdownValue).toLowerCase()} rate for census tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
 
           <SourceGroup sources={this.state.sources} />

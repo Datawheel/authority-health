@@ -79,10 +79,10 @@ class DisabilityStatus extends SectionColumns {
             title="Largest age group with a disibility"
             year={disabilityStatusAvailable ? topDisabilityStatus.Year : ""}
             value={disabilityStatusAvailable && topDisabilityStatus.share !== 0 ? rangeFormatter(topDisabilityStatus.Age) : "N/A"}
-            qualifier={disabilityStatusAvailable ? `(${formatPopulation(topDisabilityStatus.share)})` : ""}
+            qualifier={disabilityStatusAvailable ? `(${formatPopulation(topDisabilityStatus.share)} of the population in ${topDisabilityStatus.Geography})` : ""}
           />
           {/* Write short paragraph describing stats and barchart. */}
-          {disabilityStatusAvailable ? <p>In {topDisabilityStatus.Year}, the most common disabled age group was {topDisabilityStatus.share !== 0 ? rangeFormatter(topDisabilityStatus.Age) : "N/A"} years making up {formatPopulation(topDisabilityStatus.share)} of all disabled citizens within this age group in {topDisabilityStatus.Geography}.</p> : ""}
+          {disabilityStatusAvailable ? <p>In {topDisabilityStatus.Year}, the most common disabled age group was {topDisabilityStatus.share !== 0 ? rangeFormatter(topDisabilityStatus.Age) : "N/A"}, making up {formatPopulation(topDisabilityStatus.share)} of all citizens in {topDisabilityStatus.Geography}.</p> : ""}
           {healthCoverageTypeAvailable ? <p>The chart here shows the health coverage breakdown of the disabled population by age in {filteredHealthCoverageType[0].Geography}.</p> : ""}
 
           <SourceGroup sources={this.state.sources} />
@@ -111,8 +111,7 @@ class DisabilityStatus extends SectionColumns {
             x: "share",
             time: "Year",
             yConfig: {
-              tickFormat: d => rangeFormatter(d),
-              title: "Age group"
+              tickFormat: d => rangeFormatter(d)
             },
             xConfig: {
               tickFormat: d => formatPopulation(d)

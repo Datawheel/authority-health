@@ -111,7 +111,7 @@ class CancerPrevalenceByDemographics extends SectionColumns {
           <p></p>
           <p>In {occuranceByGender[0].Year}, the overall prevalence of cancer in the {occuranceByGender[0].MSA} for men and women was {formatAbbreviate(occuranceByGender[1]["Age-Adjusted Cancer Rate"])} and {formatAbbreviate(occuranceByGender[0]["Age-Adjusted Cancer Rate"])} per 100,000 people, respectively.</p>
           <p>In {topOccuranceByRaceAndEthnicity.Year}, the race/ethnicity group in the {topOccuranceByRaceAndEthnicity.MSA} with the highest overall cancer rate was {topOccuranceByRaceAndEthnicity.Race} {topOccuranceByRaceAndEthnicity.Ethnicity} ({formatAbbreviate(topOccuranceByRaceAndEthnicity["Age-Adjusted Cancer Rate"])} per 100,000 people).</p>
-          <p>The following charts shows the occurrence rate per 100,000 people in {topOccuranceByRaceAndEthnicity.MSA} with gender breakdown and the race and Ethnicity breakdowns for {isItemsListEmpty ? topOccuranceByRaceAndEthnicity["Cancer Site"].toLowerCase() : "the selected cancer site(s)"}.</p>
+          <p>The following charts shows the occurrence rate per 100,000 people in {topOccuranceByRaceAndEthnicity.MSA} by gender and race/ethnicity for {isItemsListEmpty ? topOccuranceByRaceAndEthnicity["Cancer Site"].toLowerCase() : "the selected cancer site(s)"}.</p>
 
           <SourceGroup sources={this.state.sources} />
           <Glossary definitions={definitions} />
@@ -137,6 +137,7 @@ class CancerPrevalenceByDemographics extends SectionColumns {
             x: "share",
             y: "Cancer Site",
             time: "Year",
+            title: "Gender Breakdown",
             xConfig: {
               tickFormat: d => formatPercentage(d),
               labelRotation: false
@@ -184,6 +185,7 @@ class CancerPrevalenceByDemographics extends SectionColumns {
             label: d => `${d.Ethnicity} ${d.Race}`,
             x: "share",
             y: "Cancer Site",
+            title: "Race/Ethnicity Breakdown",
             time: "Year",
             xConfig: {
               tickFormat: d => formatPercentage(d),

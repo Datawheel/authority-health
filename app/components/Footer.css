@@ -75,11 +75,17 @@
     }
   }
 
-  /* scale down logos a bit on small screens */
+  /* keep logo sizes in check */
   & .footer-logo-img {
     max-width: 8rem; /* fallback */
     max-width: calc(7rem + 1.5vw);
     max-height: 3rem; /* fallback */
     max-height: calc(1.75rem + 1.5vw);
+
+    /* shrink logos on small screens */
+    @mixin max-xs {
+      max-width: calc(5rem + 1.5vw);
+      max-height: calc(1.25rem + 1.5vw);
+    }
   }
 }

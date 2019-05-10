@@ -89,8 +89,8 @@ class StudentPoverty extends SectionColumns {
               value={formatPopulation(enrolledInSchoolPercentage)}
               qualifier={`of the population in ${topLevelOfSchoolData.Geography}`}
             />
-            <p>In {topLevelOfSchoolData.Year}, the most common education level of students in {topLevelOfSchoolData.Geography} living in poverty were {topLevelOfSchoolData["Level of School"].toLowerCase()} ({formatPopulation(topLevelOfSchoolData.share)} of the population enrolled in this grade) and {formatPopulation(enrolledInSchoolPercentage)} of the total population was enrolled in school in {topLevelOfSchoolData.Geography}.</p>
-            <p>The following chart shows the level of school and the share of students in poverty that were enrolled in school.</p>
+            <p>In {topLevelOfSchoolData.Year}, the most common education level of students in {topLevelOfSchoolData.Geography} living in poverty were enrolled in {formatLabel(topLevelOfSchoolData["Level of School"]).toLowerCase()} ({formatPopulation(topLevelOfSchoolData.share)} of the population enrolled in this grade) and {formatPopulation(enrolledInSchoolPercentage)} of the total population was enrolled in school in {topLevelOfSchoolData.Geography}.</p>
+            <p>The following chart shows each level of school and the share of students in poverty that were enrolled.</p>
 
             <SourceGroup sources={this.state.sources} />
             <Contact slug={this.props.slug} />

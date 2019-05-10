@@ -31,7 +31,7 @@ class FoodInsecurity extends SectionColumns {
 
     return (
       <div className="section-title-stat-inner">
-        <SectionColumns>
+        <section className="section">
           <SectionTitle>Food Insecurity</SectionTitle>
           <article>
             {!isInsecurityRateDataAvailableForCurrentGeography &&
@@ -43,21 +43,17 @@ class FoodInsecurity extends SectionColumns {
               value={`${childInsecurity["Food Insecurity Rate"]}%`}
               qualifier={`of the children in ${location}`}
             />
+            <Stat
+              title={"Adult Insecurity"}
+              year={adultInsecurity.Year}
+              value={`${adultInsecurityRate}%`}
+              qualifier={`of the adults in ${location}`}
+            />
             <p>In {childInsecurity.Year}, {childInsecurity["Food Insecurity Rate"]}% of the children and {adultInsecurityRate}% of the adults in {location} had food insecurity.</p>
-            <p>Food insecurity refers to <a href="https://www.ers.usda.gov/topics/food-nutrition-assistance/food-security-in-the-us.aspx">USDA’s measure</a> of lack of access, at times, to enough food for an active, healthy life for all household members and limited or uncertain availability of nutritionally adequate foods.</p>
-
+            <p>Food insecurity refers to <a href="https://www.ers.usda.gov/topics/food-nutrition-assistance/food-security-in-the-us.aspx">USDA’s measure</a> of lack of access, at times, to enough food for an active, healthy life for all household members and limited or uncertain availability of nutritionally adequate foods.</p>
             <SourceGroup sources={this.state.sources} />
           </article>
-          <Stat
-            title={"Adult Insecurity"}
-            year={adultInsecurity.Year}
-            value={`${adultInsecurityRate}%`}
-            qualifier={`of the adults in ${location}`}
-          />
-
-          {/* added empty div for proper alignment of above text  */}
-          <div></div>
-        </SectionColumns>
+        </section>
       </div>
     );
   }

@@ -9,6 +9,7 @@ import styles from "style.yml";
 const groupings = [
   "Group",
   "Age Group",
+  "Race",
   "Race Group",
   "RaceType",
   "SmokingType",
@@ -26,6 +27,8 @@ const groupings = [
   "Family type",
   "Period of Service",
   "Type of Crime",
+  "Pollutant",
+  "Travel Time",
   // Health center demographics
   "American Indian/Alaska Native Health Center Patients",
   "Black Health Center Patients",
@@ -35,19 +38,23 @@ const groupings = [
   // smoking status
   "Smoking Status Current",
   "Smoking Status Former",
-  "Smoking Status Never"
+  "Smoking Status Never",
+  // air quality
+  "Category" // air quality days
 ];
 
 /** function to lookup & assign color scheme */
 function colorLogic(d) {
-
-  // console.log(d["Period of Service"]);
+  // console.log(grouping, d[grouping]);
+  // styles[`color-${d[grouping]}`] ? console.log(styles[`color-${d[grouping]}`]) : null;
 
   // lookup grouping color schemes in style.yml
   for (const grouping of groupings) {
     if (d[grouping]) {
-      // console.log(grouping + ":", d[grouping]);
-      // styles[`color-${d[grouping]}`] ? console.log(styles[`color-${d[grouping]}`]) : null;
+      // console.log(grouping, d[grouping]);
+      // console.log(styles[`color-${d[grouping]}`]
+      //   ? styles[`color-${d[grouping]}`]
+      //   : styles["majorelle-dark"]);
       return styles[`color-${d[grouping]}`]
         ? styles[`color-${d[grouping]}`]
         : styles["majorelle-dark"];
@@ -218,6 +225,8 @@ export default {
     fontFamily: () => typeface,
     fontSize: () => fontSizeSm
   },
+  // default visualization height
+  height: 400,
   // axis defaults (see line 8)
   xConfig: axisConfig,
   yConfig: axisConfig

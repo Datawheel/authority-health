@@ -16,7 +16,6 @@ import SourceGroup from "components/SourceGroup";
 import Options from "components/Options";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
-const filterTimeBucket = d => d.split(" ").filter(d => d !== "Minutes").join("");
 const formatMinutes = d => d.replace("Minutes", "minute");
 
 const formatCommuteTimeData = commuteTimeData => {
@@ -192,10 +191,10 @@ class Transportation extends SectionColumns {
               x: "Travel Time",
               y: "share",
               time: "Year",
-              title: d => `Distribution of Commute Time in ${d[0].Geography}`,
+              title: d => `Distribution of Commute Times in ${d[0].Geography}`,
               xSort: (a, b) => a["ID Travel Time"] - b["ID Travel Time"],
               xConfig: {
-                tickFormat: d => filterTimeBucket(d),
+                tickFormat: d => d.replace("Minutes", "").trim(),
                 title: "Commute Time in Minutes"
               },
               yConfig: {

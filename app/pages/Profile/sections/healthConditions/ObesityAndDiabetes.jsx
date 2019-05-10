@@ -144,8 +144,8 @@ class ObesityAndDiabetes extends SectionColumns {
           </label>
 
           {isBMIWeightedDataValueSelected
-            ? <Disclaimer>Data is shown for zip region level</Disclaimer>
-            : <Disclaimer>Data is shown for census tract level for four cities</Disclaimer>
+            ? <Disclaimer>Data is shown at the zip region level</Disclaimer>
+            : <Disclaimer>Data is shown at the census tract level for four cities</Disclaimer>
           }
 
           {/* Show top stats for the dropdown selected. */}
@@ -229,8 +229,7 @@ class ObesityAndDiabetes extends SectionColumns {
               time: "ID Year",
               title: `${isDiabetesSelected ? "Diabetes" : "Obesity"} Rate by Gender in Wayne County`,
               xConfig: {
-                tickFormat: d => formatPercentage(d),
-                title: isDiabetesSelected ? "Diabetes Rate" : "Obesity Rate"
+                tickFormat: d => formatPercentage(d)
               },
               yConfig: {
                 barConfig: {
@@ -275,7 +274,7 @@ class ObesityAndDiabetes extends SectionColumns {
               },
               label: d => d["Zip Region"],
               time: "End Year",
-              title: `${dropdownValue} for Zip Regions in Wayne County`,
+              title: `${dropdownValue} by Zip Regions in Wayne County`,
               tooltipConfig: isHealthyWeightSelected ? {tbody: [["Year", d => d.Year],
                 ["Condition", `${dropdownValue}`], ["Share", d => `${formatPercentage(d[dropdownValue], true)}`]]} : {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue], true)}`]]},
               topojson: "/topojson/zipregions.json",
@@ -302,7 +301,7 @@ class ObesityAndDiabetes extends SectionColumns {
               },
               label: d => `${d.Tract}, ${tractToPlace[d["ID Tract"]]}`,
               time: "Year",
-              title: `${dropdownValue} for Census Tracts within Detroit, Livonia, Dearborn and Westland`,
+              title: `${dropdownValue} Prevalence by Census Tracts within Detroit, Livonia, Dearborn and Westland`,
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue])}`]]},
               topojson: "/topojson/tract.json",
               topojsonId: d => d.id,

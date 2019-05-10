@@ -84,7 +84,7 @@ class Unemployment extends SectionColumns {
             <Disclaimer>Unemployment rate data is shown for {unemploymentRate.data[0].Geography}</Disclaimer>
           }
           <StatGroup
-            title={"working full-time by gender"}
+            title={"full-time employment by gender"}
             year={workExperienceAvailable ? getMaleFullTimeData[0].Year : ""}
             stats={[
               {
@@ -103,9 +103,9 @@ class Unemployment extends SectionColumns {
             ]}
           />
           <p>
-            {workExperienceAvailable ? <span>In {getMaleFullTimeData[0].Year}, the percentage of the working population in {getMaleFullTimeData[0].Geography} that worked full-time was {formatPercentage(getMaleFullTimeData[0].share)} for men and {formatPercentage(getFemaleFullTimeData[0].share)} for women.</span> : ""}
+            {workExperienceAvailable ? <span>In {getMaleFullTimeData[0].Year}, the gender breakdown of the working population in {getMaleFullTimeData[0].Geography} that worked full-time was {formatPercentage(getMaleFullTimeData[0].share)} for men and {formatPercentage(getFemaleFullTimeData[0].share)} for women.</span> : ""}
             {employmentStatusAvailable ? <span> The most common unemployed age group for men was {getTopMaleUnemploymemtData.Age.toLowerCase()} ({formatPercentage(getTopMaleUnemploymemtData.share)}), and the most common female unemployed age group for women was {getTopFemaleUnemploymemtData.Age.toLowerCase()} ({formatPercentage(getTopFemaleUnemploymemtData.share)}).</span> : ""}
-            {} In {recentYearUnemploymentRate.Year}, the overall unemploymemt rate in {recentYearUnemploymentRate.Geography} was {formatPercentage(recentYearUnemploymentRate["Unemployment Rate"])}.
+            {} In {recentYearUnemploymentRate.Year}, the overall unemployment rate in {recentYearUnemploymentRate.Geography} was {formatPercentage(recentYearUnemploymentRate["Unemployment Rate"])}.
           </p>
 
           <SourceGroup sources={this.state.sources} />

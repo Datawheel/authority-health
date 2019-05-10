@@ -9,7 +9,11 @@ typography
   text-align: left;
 }
 .u-text-right {
-  text-align: right;
+  text-align: left;
+
+  @add-mixin min-sm {
+    text-align: right;
+  }
 }
 .u-text-center {
   text-align: center;

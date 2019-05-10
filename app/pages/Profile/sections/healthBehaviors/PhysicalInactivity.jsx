@@ -1,6 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
-import {BarChart, Geomap} from "d3plus-react";
+import {Geomap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
@@ -60,8 +60,8 @@ class PhysicalInactivity extends SectionColumns {
         <SectionTitle>Physical Inactivity</SectionTitle>
         <article>
           {!isPhysicalInactivityBySexAvailableForCurrentlocation
-            ? <Disclaimer>Data is shown for census tract level for four cities</Disclaimer>
-            : <Disclaimer>Data is shown at the census tract level for four cities</Disclaimer>
+            ? <Disclaimer>Data is shown at the census tract level for four cities</Disclaimer>
+            : null
           }
           <Stat
             title={"Location with highest prevalence"}
@@ -93,9 +93,9 @@ class PhysicalInactivity extends SectionColumns {
               }
             ]}
           />
-          <p>In {topRecentYearData.Year}, {formatPercentage(topRecentYearData["Physical Inactivity"])} of the population of <CensusTractDefinition text={topRecentYearData.Tract} />{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} were physically inactive out of all census tracts in Detroit, Livonia, Dearborn and Westland.</p>
+          <p>In {topRecentYearData.Year}, {formatPercentage(topRecentYearData["Physical Inactivity"])} of the population of <CensusTractDefinition text={topRecentYearData.Tract} />{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} were physically inactive, the highest out of all census tracts in Detroit, Livonia, Dearborn and Westland.</p>
           <p>In {topPhysicalInactivityFemaleData.Year}, {formatPercentage(topPhysicalInactivityMaleData["Age-Adjusted Physical Inactivity"])} of the male population and {formatPercentage(topPhysicalInactivityFemaleData["Age-Adjusted Physical Inactivity"])} of the female population in {}
-            {topPhysicalInactivityFemaleData.Geography} were physically inactive, as compared to {formatPercentage(stateLevelMaleData["Age-Adjusted Physical Inactivity"])} of the male and {formatPercentage(stateLevelFemaleData["Age-Adjusted Physical Inactivity"])} of the female population in Michigan overall.</p>
+            {topPhysicalInactivityFemaleData.Geography} were physically inactive, as compared to {formatPercentage(stateLevelMaleData["Age-Adjusted Physical Inactivity"])} and {formatPercentage(stateLevelFemaleData["Age-Adjusted Physical Inactivity"])} in Michigan overall.</p>
 
           <SourceGroup sources={this.state.sources} />
           <Glossary definitions={definitions} />

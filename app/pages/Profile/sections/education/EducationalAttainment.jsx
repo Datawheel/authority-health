@@ -86,9 +86,9 @@ class EducationalAttainment extends SectionColumns {
                 }
               ]}
             />
-            <p>In {topFemaleData.Year}, the most common education level attained in {topFemaleData.Geography} by female was {formatLabels(topFemaleData["Educational Attainment"]).toLowerCase()} ({formatPopulation(topFemaleData.share)}) {}
-             and for male it was {formatLabels(topMaleData["Educational Attainment"]).toLowerCase()} ({formatPopulation(topMaleData.share)}).</p>
-            <p>The following chart shows educational attainment of male and female in {topMaleData.Geography}.</p>
+            <p>In {topFemaleData.Year}, the most common education level attained in {topFemaleData.Geography} by women was {formatLabels(topFemaleData["Educational Attainment"]).toLowerCase()} ({formatPopulation(topFemaleData.share)}) {}
+             and for men it was {formatLabels(topMaleData["Educational Attainment"]).toLowerCase()} ({formatPopulation(topMaleData.share)}).</p>
+            <p>The following chart shows educational attainment by gender in {topMaleData.Geography}.</p>
 
             <SourceGroup sources={this.state.sources} />
             <Contact slug={this.props.slug} />
@@ -114,10 +114,10 @@ class EducationalAttainment extends SectionColumns {
               x: "Educational Attainment",
               y: "share",
               time: "ID Year",
+              title: "Educational Attainment by Gender",
               xSort: (a, b) => a["ID Educational Attainment"] - b["ID Educational Attainment"],
               xConfig: {
-                tickFormat: d => formatLabels(d),
-                title: "Educational Attainment by Gender"
+                tickFormat: d => formatLabels(d)
               },
               yConfig: {
                 tickFormat: d => formatPopulation(d),

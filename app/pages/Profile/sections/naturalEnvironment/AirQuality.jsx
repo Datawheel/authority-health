@@ -5,7 +5,6 @@ import {titleCase} from "d3plus-text";
 import axios from "axios";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
-import {Classes, Tooltip} from "@blueprintjs/core";
 
 import Contact from "components/Contact";
 import Disclaimer from "components/Disclaimer";
@@ -34,8 +33,6 @@ const pollutantDefinitions = [
   {term: "Carbon Monoxide (CO)", definition: "Potential health effects from exposure to carbon monoxide are - flu-like symptoms such as headaches, dizziness, disorientation, nausea and fatigue, chest pain in people with coronary heart disease, at higher concentration: impaired vision and coordination, dizziness and confusion, and potentially serious health effects on unborn babies when exposed to high levels."},
   {term: "Sulphur Dioxide (S02)", definition: "Potential health effects from exposure to sulphur dioxide are - narrowing of the airways leading to wheezing, chest tightness and shortness of breath, more frequent asthma attacks in people with asthma and exacerbation of cardiovascular diseases."}
 ];
-
-const goodQualityDefinition = <p>Good quality air pertains to the degree which the air is clean, clear and free from pollutants such as smoke, dust and smog among other gaseous impurities in the air.</p>;
 
 const formatAirQualityDaysName = d => d.replace(" days", "");
 
@@ -120,7 +117,7 @@ class AirQuality extends SectionColumns {
             <Disclaimer>Data is shown for {airQualityDays.data[0].Geography}</Disclaimer>
           }
           {dropdownValue === "Air Quality Days" &&
-          <div>
+          <div className="article-inner-container">
             <Stat
               title={"Most common air quality days"}
               year={topAirQualityDays.Year}
@@ -132,7 +129,7 @@ class AirQuality extends SectionColumns {
           </div>}
 
           {dropdownValue === "Air Pollutants" &&
-          <div>
+          <div className="article-inner-container">
             <Stat
               title={"Most common air pollutant"}
               year={topRecentYearAirPollutant.Year}
@@ -144,7 +141,7 @@ class AirQuality extends SectionColumns {
             <p>The glossary below gives further details about common air pollutants and their health effects.</p>
           </div>}
           {dropdownValue === "Median Air Quality Index" &&
-          <div>
+          <div className="article-inner-container">
             <Stat
               title={"Median Air Quality Index"}
               year={airQualityMedianAQIs[0].Year}
@@ -154,7 +151,7 @@ class AirQuality extends SectionColumns {
             <p>The glossary below explains air quality index (AQI) and different types of air quality with respect to AQI.</p>
           </div>}
           {dropdownValue === "Unhealthy Air for Sensitive Groups" &&
-          <div>
+          <div className="article-inner-container">
             <Stat
               title={"unhealthy air for sensitive groups"}
               year={sensitiveGroupData[0].Year}
@@ -182,19 +179,25 @@ class AirQuality extends SectionColumns {
             data={ `/api/data?measures=Air Quality Days&drilldowns=Category&Geography=${meta.id}&Year=all` }
             title="Chart of Air Quality Days" />
           }
+
+
           {/* Lineplot to show air quality days over the years. */}
           {dropdownValue === "Air Quality Days" &&
         <BarChart ref={comp => this.viz = comp} config={{
           data: `/api/data?measures=Air Quality Days&drilldowns=Category&Geography=${meta.id}&Year=all`,
           groupBy: "Category",
           height: 400,
-          label: d => `${titleCase(d.Category)}`,
+          label: d => titleCase(d.Category),
           x: "Category",
           y: "Air Quality Days",
           time: "Year",
           xSort: (a, b) => a["ID Category"] - b["ID Category"],
           xConfig: {
-            tickFormat: d => titleCase(formatAirQualityDaysName(d))
+            tickFormat: d => titleCase(formatAirQualityDaysName(d)),
+            // hide vertical grid lines
+            gridConfig: {
+              opacity: 0
+            }
           },
           yConfig: {
             tickFormat: d => titleCase(d),
@@ -208,6 +211,7 @@ class AirQuality extends SectionColumns {
         dataFormat={resp => {
           this.setState({sources: updateSource(resp.source, this.state.sources)});
           const data = resp.data.filter(d => d.Year !== "2018");
+          console.log(data);
           return data;
         }}
         />}
@@ -227,7 +231,6 @@ class AirQuality extends SectionColumns {
             data: `/api/data?measures=Air Pollutant Days&drilldowns=Pollutant&Geography=${meta.id}&Year=all`,
             discrete: "x",
             height: 400,
-            legend: false,
             groupBy: "Pollutant",
             x: "Year",
             y: "Air Pollutant Days",
@@ -239,6 +242,7 @@ class AirQuality extends SectionColumns {
           dataFormat={resp => {
             this.setState({sources: updateSource(resp.source, this.state.sources)});
             const data = resp.data.filter(d => d.Year !== "2018");
+            // console.log(data);
             return data;
           }}
           />}

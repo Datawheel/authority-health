@@ -156,33 +156,31 @@ class HealthInsuranceCoverage extends SectionColumns {
             {!isCoverageDataAvailableForCurrentGeography &&
               <Disclaimer>Data is shown for {coverageData.data[0].Geography}</Disclaimer>
             }
-            <div>
-              <StatGroup
-                title={"most covered age group by gender"}
-                year={ageGroupYear}
-                stats={[
-                  {
-                    title: "Female",
-                    year: ageGroupYear,
-                    value: topFemaleAgeGroup,
-                    qualifier: `${topFemaleShare} of the population in ${geography} within this age group`
-                  },
-                  {
-                    title: "Male",
-                    year: ageGroupYear,
-                    value: topMaleAgeGroup,
-                    qualifier: `${topMaleShare} of the population in ${geography} within this age group`,
-                    color: "terra-cotta"
-                  }
-                ]}
-              />
-              <Stat
-                title={getGeomapTitle(meta)}
-                year={topRecentYearChildrenGeographyData.Year}
-                value={formatGeomapLabel(topRecentYearChildrenGeographyData, meta, tractToPlace)}
-                qualifier={getGeomapQualifier(topRecentYearChildrenGeographyData, meta)}
-              />
-            </div>
+            <StatGroup
+              title={"most covered age groups by gender"}
+              year={ageGroupYear}
+              stats={[
+                {
+                  title: "Female",
+                  year: ageGroupYear,
+                  value: topFemaleAgeGroup,
+                  qualifier: `${topFemaleShare} of the population in ${geography} within this age group`
+                },
+                {
+                  title: "Male",
+                  year: ageGroupYear,
+                  value: topMaleAgeGroup,
+                  qualifier: `${topMaleShare} of the population in ${geography} within this age group`,
+                  color: "terra-cotta"
+                }
+              ]}
+            />
+            <Stat
+              title={getGeomapTitle(meta)}
+              year={topRecentYearChildrenGeographyData.Year}
+              value={formatGeomapLabel(topRecentYearChildrenGeographyData, meta, tractToPlace)}
+              qualifier={getGeomapQualifier(topRecentYearChildrenGeographyData, meta)}
+            />
 
             {meta.level !== "county"
               ? <p>In {nationCoverage.Year}, {formatPercentage(currentLevelCoverage.share)} of the population in {currentLevelCoverage.Geography} had health coverage, compared to {formatPercentage(countyCoverage.share)} in Wayne County, {formatPercentage(stateCoverage.share)} in Michigan and {formatPercentage(nationCoverage.share)} in the United States.</p>

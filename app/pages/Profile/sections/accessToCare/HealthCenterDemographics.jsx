@@ -82,17 +82,17 @@ class HealthCenterDemographics extends SectionColumns {
 
           {isZipLevelDataAvailable
             ? <Stat
-              title={"Most common race"}
+              title={"Most common race utilizing health centers"}
               year={`${topZipLevelData.Year}`}
               value={formatRaceNames(topZipLevelData.RaceType)}
-              qualifier={`${formatPercentage(topZipLevelData[topZipLevelData.RaceType])} of the population in ${topZipLevelData.Geography} utilizing health centers`}
+              qualifier={`${formatPercentage(topZipLevelData[topZipLevelData.RaceType])} of the population in ${topZipLevelData.Geography}`}
             /> : null}
 
           <Stat
-            title={"Most common race"}
+            title={"Most common race utilizing health centers"}
             year={`${topMostRaceData.Year}`}
             value={formatRaceNames(topMostRaceData.RaceType)}
-            qualifier={`${formatPercentage(topMostRaceData[topMostRaceData.RaceType])} of the population in Wayne County utilizing health centers`}
+            qualifier={`${formatPercentage(topMostRaceData[topMostRaceData.RaceType])} of the population in Wayne County`}
           />
 
           {isZipLevelDataAvailable ? <p>In {topZipLevelData.Year}, {lowerCaseRaceName(formatRaceNames(topZipLevelData.RaceType))} residents of {`zip ${topZipLevelData.Geography}`} visited health centers more than any other race/ethnicity group that utilizes services offered by health centers ({formatPercentage(topZipLevelData[topZipLevelData.RaceType])} of the health center population), as compared to the {lowerCaseRaceName(formatRaceNames(topMostRaceData.RaceType))} residents in Wayne County ({formatPercentage(topMostRaceData[topMostRaceData.RaceType])} of the health center population).</p>
@@ -125,7 +125,10 @@ class HealthCenterDemographics extends SectionColumns {
                 fillOpacity: 1
               }
             },
-            tooltipConfig: {title: d => d.RaceType, tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d[d.RaceType])], ["Geography", d => isZipLevelDataAvailable ? d.Geography : "Wayne County"]]}
+            tooltipConfig: {
+              title: d => d.RaceType,
+              tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d[d.RaceType])], ["Geography", d => isZipLevelDataAvailable ? d.Geography : "Wayne County"]]
+            }
           }}
           dataFormat={resp => {
             this.setState({sources: updateSource(resp.source, this.state.sources)});

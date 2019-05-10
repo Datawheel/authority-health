@@ -44,7 +44,7 @@ class DropoutRate extends SectionColumns {
           <Disclaimer>Data is shown at the zip level</Disclaimer>
           {/* Top stats about High School Dropout Rate. */}
           <Stat
-            title="Zip code with highest high school dropout rate"
+            title="highest high school dropout rate"
             year={topDropoutRate.Year}
             value={topDropoutRate.Zip}
             qualifier={`${formatPercentage(topDropoutRate["High School Dropout Rate"])} of the population in this zip code`}

@@ -154,7 +154,7 @@ class ReadingAssessment extends SectionColumns {
               {dropdownList.map(item => <option key={item} value={item}>{item}</option>)}
             </select>
           </label>
-          <p>The following chart shows the average reading assessment score {isParentsEducationSelected ? "for 8th grade students" : ""} in Detroit {isOverallSelected ? "compared to Michigan and the United States" : isParentsEducationSelected ? `by their ${dropdownValue.toLowerCase()}` : `by ${dropdownValue === "ELL" || dropdownValue === "NSLP" ? dropdownValue : dropdownValue.toLowerCase()}`}.</p>
+          <p>The following chart shows the average reading assessment scores {isParentsEducationSelected ? "for 8th grade students" : ""} in Detroit {isOverallSelected ? "compared to Michigan and the United States" : isParentsEducationSelected ? `by their ${dropdownValue.toLowerCase()}` : `by ${dropdownValue === "ELL" || dropdownValue === "NSLP" ? dropdownValue : dropdownValue.toLowerCase()}`}.</p>
           {isParentsEducationSelected
             ? <StatGroup
               title="Parental education level (Detroit)"
@@ -166,10 +166,10 @@ class ReadingAssessment extends SectionColumns {
               }))}
             />
 
-            : <div>
+            : <div className="article-inner-container">
               {/* fourth grade stats */}
               <StatGroup
-                title={`4th grade average score${ !isOverallSelected ? ` by ${dropdownValue}` : "" }`}
+                title={`4th grade average scores${ !isOverallSelected ? ` by ${dropdownValue}` : "" }`}
                 year={stat1FourthGrade.Year}
                 stats={[
                   {
@@ -201,7 +201,7 @@ class ReadingAssessment extends SectionColumns {
               />
               {/* eighth grade stats */}
               <StatGroup
-                title={`8th grade average score${ !isOverallSelected ? ` by ${dropdownValue}` : "" }`}
+                title={`8th grade average scores${ !isOverallSelected ? ` by ${dropdownValue}` : "" }`}
                 year={stat1EighthGrade.Year}
                 stats={[
                   {
@@ -255,11 +255,12 @@ class ReadingAssessment extends SectionColumns {
             legend: false,
             x: "Grade",
             xConfig: {
-              title: "Grade"
+              // title: "Grade"
+              tickFormat: d => `${d}th Grade`
             },
             y: isOverallSelected ? "Average Reading Score" : `Average Reading Score by ${dropdownValue}`,
             yConfig: {
-              title: `Average Reading Score by ${dropdownValue}`
+              title: isOverallSelected ? "Average Reading Score" : `Average Reading Score by ${dropdownValue}`
             },
             groupPadding: 25,
             barPadding: 3,

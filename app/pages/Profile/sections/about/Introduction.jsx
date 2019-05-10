@@ -29,7 +29,10 @@ const definitions = [
 ];
 
 const formatRaceName = d => {
-  d = d.replace("Alone", "").replace("Black", "black").replace("White", "white").replace("Asian", "asian").trim();
+  d = d.replace("Alone", "")
+    .replace("Black", "black")
+    .replace("White", "white")
+    .replace("Asian", "asian").trim();
   if (d.trim() === "Some Other Race") return d.toLowerCase();
   if (d.trim() === "Two or More Races") return d.toLowerCase();
   return d;
@@ -37,6 +40,7 @@ const formatRaceName = d => {
 const formatEthnicityName = d => d.replace("Not Hispanic or Latino", "non-Hispanic").replace("or Latino", "").trim();
 
 const formatRankSuffix = d => {
+  if (d === 1) return "";
   if (d % 10 === 1 && d !== 11) return `${d}st`;
   if (d % 10 === 2 && d !== 12) return `${d}nd`;
   if (d % 10 === 3 && d !== 13) return `${d}rd`;
@@ -138,10 +142,10 @@ class Introduction extends SectionColumns {
         <SectionTitle>Introduction</SectionTitle>
         <article className="top-stats">
           <p>
-            {level === "zip" ? `Zip code ${population[0].Geography}` : population[0].Geography} has a population of {formatAbbreviate(population[0].Population)} people{meta.level === "county" ? "" : <span> which makes it the {formatRankSuffix(currentLocationRankData.populationRank)} largest of {rankData.length} {formatLevelNames(meta.level)} in Wayne County</span>}
-            {}, with the life expectancy of {lifeExpectancyAvailable ? formatAbbreviate(lifeExpectancy[0]["Life Expectancy"]) : "N/A"} {lifeExpectancyAvailable ? onCityOrZipLevel ? <span>(in {lifeExpectancy[0].Geography})</span> : "" : ""}.
-            The most common age group for male is {populationByAgeAndGenderAvailable && population[0].Population !== 0 ? getTopMaleData.Age.toLowerCase() : "N/A"} and for female it is {populationByAgeAndGenderAvailable && population[0].Population !== 0 ? getTopFemaleData.Age.toLowerCase() : "N/A"}.
-            Between {population[population.length - 1].Year} and {population[0].Year} the population of {population[0].Geography} {populationGrowth < 0 ? "reduced" : "increased"} from {formatAbbreviate(population[population.length - 1].Population)} to {formatAbbreviate(population[0].Population)},
+            {level === "zip" ? `Zip code ${population[0].Geography}` : population[0].Geography} has a population of {formatAbbreviate(population[0].Population)} people{meta.level === "county" ? "" : <span> which makes it the {formatRankSuffix(currentLocationRankData.populationRank)} largest of the {rankData.length} {formatLevelNames(meta.level)} in Wayne County</span>}
+            {}, with an average life expectancy of {lifeExpectancyAvailable ? formatAbbreviate(lifeExpectancy[0]["Life Expectancy"]) : "N/A"} {lifeExpectancyAvailable ? onCityOrZipLevel ? <span>(in {lifeExpectancy[0].Geography})</span> : "" : ""}.
+            The most common age group for men is {populationByAgeAndGenderAvailable && population[0].Population !== 0 ? getTopMaleData.Age.toLowerCase() : "N/A"} and for women it is {populationByAgeAndGenderAvailable && population[0].Population !== 0 ? getTopFemaleData.Age.toLowerCase() : "N/A"}.
+            Between {population[population.length - 1].Year} and {population[0].Year} the population of {population[0].Geography} {populationGrowth < 0 ? "decreased" : "increased"} from {formatAbbreviate(population[population.length - 1].Population)} to {formatAbbreviate(population[0].Population)},
             {} {populationGrowth < 0 ? "a decline" : "an increase"} of {populationGrowth < 0 ? `${populationGrowth * -1}%` : isNaN(populationGrowth) ? "N/A" : `${populationGrowth}%`}.
           </p>
           {populationByRaceAndEthnicityAvailable
@@ -149,7 +153,7 @@ class Introduction extends SectionColumns {
               {formatAbbreviate(topRaceAndEthnicity[0].share)}% of the population in {topRaceAndEthnicity[0].Geography} is {formatRaceName(topRaceAndEthnicity[0].Race)} ({formatEthnicityName(topRaceAndEthnicity[0].Ethnicity)}), followed by {formatAbbreviate(topRaceAndEthnicity[1].share)}% {formatRaceName(topRaceAndEthnicity[1].Race)} ({formatEthnicityName(topRaceAndEthnicity[1].Ethnicity)}).
             </p>
             : null}
-          <p>In {level === "zip" ? `Zip code ${currentLocationRankData.name}` : currentLocationRankData.name}, the median household income is {formatAbbreviate(currentLocationRankData.medianIncome)}{meta.level === "county" ? "." : <span>, which ranks it at {formatRankSuffix(currentLocationRankData.medianIncomeRank)} largest of all {formatLevelNames(meta.level)} in Wayne County.</span>}</p>
+          <p>In {level === "zip" ? `Zip code ${currentLocationRankData.name}` : currentLocationRankData.name}, the median household income is ${formatAbbreviate(currentLocationRankData.medianIncome)}{meta.level === "county" ? "." : <span>, which ranks it as the {formatRankSuffix(currentLocationRankData.medianIncomeRank)} highest of all {formatLevelNames(meta.level)} in Wayne County.</span>}</p>
           <p>
             Social and economic factors, such as income, education, and access to health care, impact health outcomes for all Americans. For example, in many low income areas in the country, there are higher rates of chronic diseases, like high blood pressure and diabetes. The summary to the right highlights some of the social and health conditions for {population[0].Geography}.
           </p>
@@ -167,11 +171,17 @@ class Introduction extends SectionColumns {
             height: 250,
             sum: "Hispanic Population",
             groupBy: ["Race", "Ethnicity"],
-            label: d => `${d.Race.replace("Alone", "")} (${formatEthnicityName(d.Ethnicity)})`,
+            label: d => `${ d.Race instanceof Array
+              ? "Other Races"
+              : d.Race.replace("Alone", "")
+            }${ d.Ethnicity instanceof Array
+              ? ""
+              : ` (${formatEthnicityName(d.Ethnicity)})`
+            }`,
             time: "Year",
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
-          dataFormat={resp => formatRaceAndEthnicityData(resp.data)[0]}
+          dataFormat={ resp => formatRaceAndEthnicityData(resp.data)[0] }
           />
         </article>
         <div className="top-stats viz">

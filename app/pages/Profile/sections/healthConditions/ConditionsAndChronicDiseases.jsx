@@ -18,12 +18,30 @@ import Options from "components/Options";
 
 const formatPercentage = (d, mutiplyBy100 = false) => mutiplyBy100 ? `${formatAbbreviate(d * 100)}%` : `${formatAbbreviate(d)}%`;
 
-const formatDropdownChoiceName = d => d === "Physical Health" ? "Poor General Health Days" : d;
+const formatDropdownChoiceName = d => {
+  if (d === "Ever Heart Attack") return "Heart Attack";
+  if (d === "Ever Depressive") return "Depression";
+  if (d === "Mental Health") return "Mental Health (Census Tract)";
+  if (d === "Poor Mental Health 14 Or More Days") return "Mental Health (Zip Region)";
+  if (d === "Gen Health Fair Or Poor") return "General Health (Zip Region)";
+  if (d === "Physical Health") return "General Health (Census Tract)";
+  if (d === "Current Asthma") return "Adults With Asthma";
+  return d;
+};
 
 const getArticle = dropdownValue => {
   const firstLetter = dropdownValue[0];
   if (["A", "E", "I", "O", "U"].includes(firstLetter)) return "an";
   return "a";
+};
+
+const formatDropdownParagraphText = d => {
+  if (d === "COPD") return d;
+  if (d === "Physical Health" || d === "Gen Health Fair Or Poor") return "fair or poor general health";
+  if (d === "Poor Mental Health 14 Or More Days") return "poor mental health";
+  if (d === "Ever Heart Attack") return "heart attack";
+  if (d === "Ever Depressive") return "depression";
+  return d.toLowerCase();
 };
 
 class ConditionsAndChronicDiseases extends SectionColumns {
@@ -78,8 +96,8 @@ class ConditionsAndChronicDiseases extends SectionColumns {
     // Include all the measures in the dropdown list.
     const {dropdownValue, healthConditionData, healthConditionWeightedData, countyLevelData} = this.state;
     const dropdownList = ["Arthritis", "COPD", "Chronic Kidney Disease", "Coronary Heart Disease", "Current Asthma", "High Blood Pressure", "High Cholesterol",
-      "Mental Health", "Stroke", "Teeth Loss", "Cardiovascular Disease", "Ever Depressive",
-      "Ever Heart Attack", "Heart Disease", "Poor Mental Health 14 Or More Days", "Physical Health", "Gen Health Fair Or Poor"];
+      "Stroke", "Teeth Loss", "Cardiovascular Disease", "Ever Depressive", "Ever Heart Attack", "Heart Disease",
+      "Mental Health", "Poor Mental Health 14 Or More Days", "Physical Health", "Gen Health Fair Or Poor"];
 
     // Check if the selected dropdown values are from the healthConditionWeightedData.
     const isHealthConditionWeightedValueSelected = dropdownValue === "Cardiovascular Disease" ||
@@ -129,13 +147,14 @@ class ConditionsAndChronicDiseases extends SectionColumns {
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           { isHealthConditionWeightedValueSelected
-            ? <p>In {topDropdownWeightedData["End Year"]}, {formatPercentage(topDropdownWeightedData[dropdownValue], true)} of the population of the {topDropdownWeightedData["Zip Region"]} <ZipRegionDefinition text="zip region" /> had {getArticle(dropdownValue)} {dropdownValue.toLowerCase()} diagnosis, the highest prevelence of all zip regions in Wayne County, as compared to {formatPercentage(countyLevelData[0][dropdownValue], true)} overall in Wayne County.</p>
-            : <p>In {topDropdownValueTract.Year}, {formatPercentage(topDropdownValueTract[dropdownValue])} of the population of <CensusTractDefinition text={topDropdownValueTract.Tract} />{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} had {getArticle(dropdownValue)} {dropdownValue === "COPD" ? "COPD" : formatDropdownChoiceName(dropdownValue).toLowerCase()} diagnosis, the highest prevalence out of all tracts in Detroit, Livonia, Dearborn and Westland.</p>
+            ? <p>In {topDropdownWeightedData["End Year"]}, {formatPercentage(topDropdownWeightedData[dropdownValue], true)} of the population of the {topDropdownWeightedData["Zip Region"]} <ZipRegionDefinition text="zip region" /> had {getArticle(formatDropdownParagraphText(dropdownValue))} {formatDropdownParagraphText(dropdownValue)} diagnosis, the highest prevelence of all zip regions in Wayne County, as compared to {formatPercentage(countyLevelData[0][dropdownValue], true)} overall in Wayne County.</p>
+            : <p>In {topDropdownValueTract.Year}, {formatPercentage(topDropdownValueTract[dropdownValue])} of the population of <CensusTractDefinition text={topDropdownValueTract.Tract} />{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} had {getArticle(formatDropdownParagraphText(dropdownValue))} {formatDropdownParagraphText(dropdownValue)} diagnosis, the highest prevalence out of all tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
-          {dropdownValue === "Physical Health" ? <p>Poor general health days is the proportion of adults who reported that their health, in general, was either fair or poor.</p> : ""}
+          {dropdownValue === "Poor Mental Health 14 Or More Days" && <p>Poor mental health is defined as reporting mental health as not good concerning stress, depression, or problems with emotions for 14 or more out of the past 30 days.</p>}
+          {dropdownValue === "Physical Health" && <p>Fair or poor general health is the proportion of adults who reported that their health, in general, was either fair or poor.</p>}
           { isHealthConditionWeightedValueSelected
-            ? <p>The map here shows the percentage of adults who have ever been diagnosed with {dropdownValue.toLowerCase()} within each zip region in Wayne County.</p>
-            : <p>The map here shows the percentage of adults who have ever been diagnosed with {dropdownValue === "COPD" ? "COPD" : formatDropdownChoiceName(dropdownValue).toLowerCase()} within each census tract in Detroit, Livonia, Dearborn and Westland.</p>
+            ? <p>The map here shows the percentage of adults who have ever been diagnosed with {formatDropdownParagraphText(dropdownValue)} within each zip region in Wayne County.</p>
+            : <p>The map here shows the percentage of adults who have {dropdownValue === "Poor Mental Health 14 Or More Days" ? "reported" : dropdownValue === "Current Asthma" ? "reported they currently have asthma" : "ever been diagnosed with" } {dropdownValue !== "Current Asthma" ? formatDropdownParagraphText(dropdownValue) : ""} within each census tract in Detroit, Livonia, Dearborn and Westland.</p>
           }
 
           <SourceGroup sources={this.state.sources} />

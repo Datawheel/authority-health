@@ -204,15 +204,8 @@ class Introduction extends SectionColumns {
                   styles.danger,
                   styles["danger-dark"]
                 ],
-                legendConfig: {
-                  // format range scale using formatAbbreviate function
-                  label: d => {
-                    const arr = d.id.split(" ");
-                    const startRange = formatAbbreviate(parseFloat(arr[0]));
-                    const endRange = formatAbbreviate(parseFloat(arr[2]));
-                    return `${startRange} - ${endRange}`;
-                  }
-                }
+                // format geomap legend range
+                axisConfig: {tickFormat: d => `${formatAbbreviate(d)}%`}
               },
               legend: false,
               label: d => formatGeomapZipLabel(d, meta, zipToPlace),

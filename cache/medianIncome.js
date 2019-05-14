@@ -6,16 +6,16 @@ module.exports = async function() {
 
   const levels = ["County", "Place", "Zip", "Tract"];
   const medianIncomeQueries = levels
-    .map(level => client.cube("acs_yg_household_income_5")
+    .map(level => client.cube("acs_ygr_median_household_income_race_5")
       .then(c => {
         const query = c.query
           .drilldown("Geography", level, level)
-          .measure("Household Income")
+          .measure("Household Income by Race")
           .cut("[Year].[Year].[Year].&[2017]");
         return client.query(query, "jsonrecords");
       })
       .then(resp => resp.data.data.reduce((acc, d) => {
-        acc[d[`ID ${level}`]] = d["Household Income"];
+        acc[d[`ID ${level}`]] = d["Household Income by Race"];
         return acc;
       }, {}))
       .catch(err => {

@@ -72,12 +72,18 @@ const formatGeomapCoverageData = (data, meta, childrenTractIds) => {
       if (childrenTractIds.includes(d["ID Geography"])) filteredChildrenGeography.push(d);
     });
   }
+
   nest()
     .key(d => d.Year)
     .entries(filteredChildrenGeography)
     .forEach(group => {
-      const total = sum(group.values, d => d["Population by Insurance Coverage"]);
-      group.values.forEach(d => total !== 0 ? d.share = d["Population by Insurance Coverage"] / total * 100 : d.share = 0);
+      nest()
+        .key(d => meta.level === "county" ? d["ID Place"] : d["ID Geography"])
+        .entries(group.values)
+        .forEach(geography => {
+          const total = sum(geography.values, d => d["Population by Insurance Coverage"]);
+          geography.values.forEach(d => total !== 0 ? d.share = d["Population by Insurance Coverage"] / total * 100 : d.share = 0);
+        });
     });
   const filteredWithCoverageData = filteredChildrenGeography.filter(d => d["ID Health Insurance Coverage Status"] === 0);
   const topRecentYearData = filteredChildrenGeography.sort((a, b) => b.share - a.share)[0];

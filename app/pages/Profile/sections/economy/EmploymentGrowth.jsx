@@ -67,7 +67,7 @@ class EmploymentGrowth extends SectionColumns {
             label: d => formatGeomapZipLabel(d, meta, zipToPlace),
             colorScale: "Percent Change in Employment",
             colorScaleConfig: {
-              axisConfig: {tickFormat: d => `${d}%`},
+              axisConfig: {tickFormat: d => `${formatAbbreviate(d)}%`},
               color: [styles["danger-dark"], styles["light-3"], styles["success-dark"]]
             },
             height: 400,

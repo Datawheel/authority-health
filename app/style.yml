@@ -45,12 +45,14 @@ black:   "#24292F"
 
 # main color
 brand: "#70BADA"
-brand-light: "#B1E2F7"
+brand-white: "#B1E2F7"
+brand-light: "#95C8DE"
 brand-dark: "#2F93BE"
 
 # extended palette
 curry: "#E3C05D"
-curry-light: "#FFE7A6"
+curry-white: "#FFE7A6"
+curry-light: "#E6CD8A"
 curry-dark: "#C99C20"
 
 amber-dark: "#B5A604"
@@ -58,19 +60,23 @@ amber-dark: "#B5A604"
 olive-dark: "#8B9909"
 
 shamrock: "#84BD85"
-shamrock-light: "#CFE6CF"
+shamrock-white: "#CFE6CF"
+shamrock-light: "#ADCCAD"
 shamrock-dark: "#53A355"
 
 sea-green-dark: "#2AA8A8"
 
 pacific: "#70BADA"
-pacific-light: "#B1E2F7"
+pacific-white: "#B1E2F7"
+pacific-light: "#95C8DE"
 pacific-dark: "#2F93BE"
 
 silver-lake-dark: "#5673CC"
 
 majorelle: "#AD9FED"
-majorelle-light: "#DAD1FF"
+majorelle-white: "#DAD1FF"
+majorelle-light: "#BBB1E6"
+majorelle-medium: "#8E7CE0"
 majorelle-dark: "#6F59D4"
 
 levender-dark: "#8842A6"
@@ -78,7 +84,9 @@ levender-dark: "#8842A6"
 maroon-dark: "#A64281"
 
 terra-cotta: "#DF6F6F"
-terra-cotta-light: "#FFD3D1"
+terra-white-white: "#FFD3D1"
+terra-cotta-light: "#E6AFAD"
+terra-cotta-medium: "#EFA1A0"
 terra-cotta-dark: "#D45D59"
 
 carrot-dark: "#CF7A1F"
@@ -86,7 +94,7 @@ carrot-dark: "#CF7A1F"
 # UI colors
 # NOTE: danger == terra-cotta, caution == curry, success == shamrock
 danger: "#DF6F6F"
-danger-light: "#FFD3D1"
+danger-light: "#E6AFAD"
 danger-dark: "#D45D59"
 
 caution: "#E3C05D"
@@ -94,7 +102,7 @@ caution-light: "#FFE7A6"
 caution-dark: "#C99C20"
 
 success: "#84BD85"
-success-light: "#CFE6CF"
+success-light: "#ADCCAD"
 success-dark: "#53A355"
 
 # Assigned color schemes for visualizations

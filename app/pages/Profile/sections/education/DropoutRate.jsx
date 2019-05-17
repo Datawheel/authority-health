@@ -74,8 +74,9 @@ class DropoutRate extends SectionColumns {
               axisConfig: {tickFormat: d => formatPercentage(d)},
               // dropping out is bad
               color: [
+                styles["terra-cotta-white"],
                 styles["danger-light"],
-                styles.danger,
+                styles["terra-cotta-medium"],
                 styles["danger-dark"]
               ]
             },

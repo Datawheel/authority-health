@@ -267,16 +267,18 @@ class ObesityAndDiabetes extends SectionColumns {
                 axisConfig: {tickFormat: d => formatPercentage(d, true)},
                 // having high disease prevalency is bad
                 color: [
+                  styles["terra-cotta-white"],
                   styles["danger-light"],
-                  styles.danger,
+                  styles["terra-cotta-medium"],
                   styles["danger-dark"]
                 ]
               },
               label: d => d["Zip Region"],
               time: "End Year",
               title: `${dropdownValue} by Zip Regions in Wayne County`,
-              tooltipConfig: isHealthyWeightSelected ? {tbody: [["Year", d => d.Year],
-                ["Condition", `${dropdownValue}`], ["Share", d => `${formatPercentage(d[dropdownValue], true)}`]]} : {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue], true)}`]]},
+              tooltipConfig: isHealthyWeightSelected
+                ? {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Share", d => `${formatPercentage(d[dropdownValue], true)}`]]}
+                : {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue], true)}`]]},
               topojson: "/topojson/zipregions.json",
               topojsonId: d => d.properties.REGION,
               topojsonFilter: () => true
@@ -294,8 +296,9 @@ class ObesityAndDiabetes extends SectionColumns {
                 axisConfig: {tickFormat: d => formatPercentage(d)},
                 // having high disease prevalency is bad
                 color: [
+                  styles["terra-cotta-white"],
                   styles["danger-light"],
-                  styles.danger,
+                  styles["terra-cotta-medium"],
                   styles["danger-dark"]
                 ]
               },

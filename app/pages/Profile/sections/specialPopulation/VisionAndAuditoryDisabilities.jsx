@@ -327,8 +327,10 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             colorScaleConfig: {
               axisConfig: {tickFormat: d => formatPercentage(d)},
               color: [
-                styles.white,
-                styles["danger-light"]
+                styles["terra-cotta-white"],
+                styles["danger-light"],
+                styles["terra-cotta-medium"],
+                styles["danger-dark"]
               ]
             },
             title: `${dropdownValue} Population by ${meta.level === "county" ? "Places" : "Census Tracts"} in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`,

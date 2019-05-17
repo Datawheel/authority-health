@@ -81,11 +81,13 @@ class DistressScore extends SectionColumns {
             label: d => formatGeomapZipLabel(d, meta, zipToPlace),
             colorScale: "Distress Score",
             colorScaleConfig: {
-            // having a high distress score is bad
+              // having a high distress score is bad
               color: [
                 styles.success,
+                styles["shamrock-white"],
+                styles["terra-cotta-white"],
                 styles["danger-light"],
-                styles.danger,
+                styles["terra-cotta-medium"],
                 styles["danger-dark"]
               ],
               // format geomap legend range

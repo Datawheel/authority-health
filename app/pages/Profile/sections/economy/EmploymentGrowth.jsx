@@ -68,7 +68,13 @@ class EmploymentGrowth extends SectionColumns {
             colorScale: "Percent Change in Employment",
             colorScaleConfig: {
               axisConfig: {tickFormat: d => `${formatAbbreviate(d)}%`},
-              color: [styles["danger-dark"], styles["light-3"], styles["success-dark"]]
+              color: [
+                styles["danger-dark"],
+                styles["terra-cotta-light"],
+                styles["light-2"],
+                styles["success-light"],
+                styles["success-dark"]
+              ]
             },
             height: 400,
             time: "Year",

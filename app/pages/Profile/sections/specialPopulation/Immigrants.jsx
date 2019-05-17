@@ -270,15 +270,15 @@ class Immigrants extends SectionColumns {
               axisConfig: {tickFormat: d => formatPercentage(d)},
               color: dropdownValue === "Immigrants in Poverty"
                 ? [
-                  styles.white,
+                  styles["terra-cotta-white"],
                   styles["danger-light"],
-                  styles.danger,
+                  styles["terra-cotta-medium"],
                   styles["danger-dark"]
                 ]
                 : [
-                  styles.white,
+                  styles["majorelle-white"],
                   styles["majorelle-light"],
-                  styles.majorelle,
+                  styles["majorelle-medium"],
                   styles["majorelle-dark"]
                 ]
             },

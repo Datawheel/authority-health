@@ -199,13 +199,17 @@ class Introduction extends SectionColumns {
               colorScaleConfig: {
                 // having a high distress score is bad
                 color: [
-                  styles.success,
+                  styles["success-light"],
                   styles["danger-light"],
-                  styles.danger,
                   styles["danger-dark"]
                 ],
                 // format geomap legend range
                 axisConfig: {tickFormat: d => `${formatAbbreviate(d)}%`}
+              },
+              shapeConfig: {
+                Path: {
+                  fillOpacity: 0.9
+                }
               },
               legend: false,
               label: d => formatGeomapZipLabel(d, meta, zipToPlace),
@@ -238,10 +242,15 @@ class Introduction extends SectionColumns {
                 axisConfig: {tickFormat: d => formatPercentage(d, true)},
                 // having high disease prevalency is bad
                 color: [
-                  styles["danger-light"],
-                  styles.danger,
+                  styles["terra-cotta-white"],
+                  styles["terra-cotta-medium"],
                   styles["danger-dark"]
                 ]
+              },
+              shapeConfig: {
+                Path: {
+                  fillOpacity: 0.9
+                }
               },
               label: d => d["Zip Region"],
               ocean: "transparent",
@@ -275,6 +284,11 @@ class Introduction extends SectionColumns {
               colorScale: "Life Expectancy",
               legend: false,
               label: d => formatGeomapTractLabel(d, meta, tractToPlace),
+              shapeConfig: {
+                Path: {
+                  fillOpacity: 0.9
+                }
+              },
               ocean: "transparent",
               tiles: false,
               time: "End Year",
@@ -312,10 +326,15 @@ class Introduction extends SectionColumns {
                 axisConfig: {tickFormat: d => formatPercentage(d, true)},
                 // having high disease prevalency is bad
                 color: [
-                  styles["danger-light"],
-                  styles.danger,
+                  styles["terra-cotta-white"],
+                  styles["terra-cotta-medium"],
                   styles["danger-dark"]
                 ]
+              },
+              shapeConfig: {
+                Path: {
+                  fillOpacity: 0.9
+                }
               },
               label: d => d["Zip Region"],
               ocean: "transparent",

@@ -179,8 +179,9 @@ class ConditionsAndChronicDiseases extends SectionColumns {
                 axisConfig: {tickFormat: d => formatPercentage(d, true)},
                 // having high disease prevalency is bad
                 color: [
+                  styles["terra-cotta-white"],
                   styles["danger-light"],
-                  styles.danger,
+                  styles["terra-cotta-medium"],
                   styles["danger-dark"]
                 ]
               },
@@ -205,8 +206,9 @@ class ConditionsAndChronicDiseases extends SectionColumns {
                 axisConfig: {tickFormat: d => formatPercentage(d)},
                 // having high disease prevalency is bad
                 color: [
+                  styles["terra-cotta-white"],
                   styles["danger-light"],
-                  styles.danger,
+                  styles["terra-cotta-medium"],
                   styles["danger-dark"]
                 ]
               },

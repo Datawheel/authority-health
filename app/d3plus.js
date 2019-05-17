@@ -138,9 +138,9 @@ export default {
   colorScaleConfig: {
     // default to green
     color: [
-      styles.white,
+      styles["majorelle-white"],
       styles["majorelle-light"],
-      styles.majorelle,
+      styles["majorelle-medium"],
       styles["majorelle-dark"]
     ],
     // the key itself

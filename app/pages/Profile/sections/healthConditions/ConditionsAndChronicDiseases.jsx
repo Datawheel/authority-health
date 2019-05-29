@@ -115,7 +115,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
 
     return (
       <SectionColumns>
-        <SectionTitle>Conditions & Chronic Diseases</SectionTitle>
+        <SectionTitle>Conditions and Chronic Diseases</SectionTitle>
         <article>
           {/* Create a dropdown for different types of health conditions. */}
           <label className="pt-label pt-inline" htmlFor="health-conditions-dropdown">

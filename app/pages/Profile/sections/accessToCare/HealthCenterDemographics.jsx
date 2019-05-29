@@ -14,7 +14,7 @@ import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
 import Options from "components/Options";
 
-const formatRaceNames = d => d.replace("Health Center Patients", "");
+const formatRaceNames = d => d.replace("Health Center Patients", "").trim();
 const lowerCaseRaceName = d => d.trim() === "Black" || d.trim() === "White" ? d.toLowerCase() : d;
 const formatPercentage = d => `${formatAbbreviate(d * 100)}%`;
 
@@ -95,10 +95,10 @@ class HealthCenterDemographics extends SectionColumns {
             qualifier={`${formatPercentage(topMostRaceData[topMostRaceData.RaceType])} of the population in Wayne County`}
           />
 
-          {isZipLevelDataAvailable ? <p>In {topZipLevelData.Year}, {lowerCaseRaceName(formatRaceNames(topZipLevelData.RaceType))} residents of {`zip ${topZipLevelData.Geography}`} visited health centers more than any other race/ethnicity group that utilizes services offered by health centers ({formatPercentage(topZipLevelData[topZipLevelData.RaceType])} of the health center population), as compared to the {lowerCaseRaceName(formatRaceNames(topMostRaceData.RaceType))} residents in Wayne County ({formatPercentage(topMostRaceData[topMostRaceData.RaceType])} of the health center population).</p>
-            : <p>In {topMostRaceData.Year}, {lowerCaseRaceName(formatRaceNames(topMostRaceData.RaceType))} residents of Wayne County visited health centers more than any other reported race/ethnicity group that utilizes services offered by health centers ({formatPercentage(topMostRaceData[topMostRaceData.RaceType])} of the health center population). This is followed by {lowerCaseRaceName(formatRaceNames(topSecondRaceData.RaceType))} residents ({formatPercentage(topSecondRaceData[topSecondRaceData.RaceType])}) and then {lowerCaseRaceName(formatRaceNames(topThirdRaceData.RaceType))} residents ({formatPercentage(topThirdRaceData[topThirdRaceData.RaceType])}).</p>}
+          {isZipLevelDataAvailable ? <p>In {topZipLevelData.Year}, {formatPercentage(topZipLevelData[topZipLevelData.RaceType])} of the health center visiting population in {`zip ${topZipLevelData.Geography}`} were {lowerCaseRaceName(formatRaceNames(topZipLevelData.RaceType))}, compared to {lowerCaseRaceName(formatRaceNames(topMostRaceData.RaceType))} residents in Wayne County ({formatPercentage(topMostRaceData[topMostRaceData.RaceType])}).</p>
+            : <p>In {topMostRaceData.Year}, {formatPercentage(topMostRaceData[topMostRaceData.RaceType])} of the health center visiting population in Wayne County were {lowerCaseRaceName(formatRaceNames(topMostRaceData.RaceType))}, followed by {lowerCaseRaceName(formatRaceNames(topSecondRaceData.RaceType))} ({formatPercentage(topSecondRaceData[topSecondRaceData.RaceType])}) and then {lowerCaseRaceName(formatRaceNames(topThirdRaceData.RaceType))} ({formatPercentage(topThirdRaceData[topThirdRaceData.RaceType])}).</p>}
 
-          <p> The following chart shows the health center visitors breakdown across all reported race/ethnicity groups in {isZipLevelDataAvailable ? topZipLevelData.Geography : "Wayne County"}.</p>
+          <p> The following chart shows the health center visitors breakdown across all reported racial groups in {isZipLevelDataAvailable ? topZipLevelData.Geography : "Wayne County"}.</p>
 
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />

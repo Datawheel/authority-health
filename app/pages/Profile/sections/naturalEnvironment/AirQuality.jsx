@@ -211,7 +211,6 @@ class AirQuality extends SectionColumns {
         dataFormat={resp => {
           this.setState({sources: updateSource(resp.source, this.state.sources)});
           const data = resp.data.filter(d => d.Year !== "2018");
-          console.log(data);
           return data;
         }}
         />}

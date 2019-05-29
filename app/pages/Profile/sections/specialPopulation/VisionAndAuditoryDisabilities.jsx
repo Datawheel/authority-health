@@ -152,7 +152,7 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
 
     return (
       <SectionColumns>
-        <SectionTitle>Vision & Auditory Disabilities</SectionTitle>
+        <SectionTitle>Vision and Auditory Disabilities</SectionTitle>
         <article>
           {/* Create a dropdown for total immigrants and immigrants in poverty choices. */}
           <label className="pt-label pt-inline" htmlFor="health-center-dropdown">

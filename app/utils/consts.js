@@ -41,8 +41,8 @@ module.exports = {
       icon: "tree"
     },
     {
-      title: "Special Population",
-      link: "special-population",
+      title: "Special Populations",
+      link: "special-populations",
       icon: "people"
     }
   ]

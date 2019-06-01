@@ -34,6 +34,15 @@ const pollutantDefinitions = [
   {term: "Sulphur Dioxide (S02)", definition: "Potential health effects from exposure to sulphur dioxide are - narrowing of the airways leading to wheezing, chest tightness and shortness of breath, more frequent asthma attacks in people with asthma and exacerbation of cardiovascular diseases."}
 ];
 
+const getAQILevel = value => {
+  if (value >= 0 && value <= 50) return "Good";
+  else if (value >= 51 && value <= 100) return "Moderate";
+  else if (value >= 101 && value <= 150) return "Unhealthy for Sensitive Groups";
+  else if (value >= 151 && value <= 200) return "Unhealthy";
+  else if (value >= 201 && value <= 300) return "Very Unhealthy";
+  else return "Hazardous";
+};
+
 const formatAirQualityDaysName = d => d.replace(" days", "");
 
 class AirQuality extends SectionColumns {
@@ -146,6 +155,7 @@ class AirQuality extends SectionColumns {
               title={"Median Air Quality Index"}
               year={airQualityMedianAQIs[0].Year}
               value={airQualityMedianAQIs[0]["Median AQI"]}
+              qualifier={getAQILevel(airQualityMedianAQIs[0]["Median AQI"])}
             />
             <p>In {airQualityMedianAQIs[0].Year}, the median air quality index was {airQualityMedianAQIs[0]["Median AQI"]} in {airQualityMedianAQIs[0].Geography}.</p>
             <p>The glossary below explains air quality index (AQI) and different types of air quality with respect to AQI.</p>

@@ -1,6 +1,5 @@
 import React from "react";
 import {connect} from "react-redux";
-import {nest} from "d3-collection";
 import {LinePlot} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
@@ -164,11 +163,6 @@ OccurrenceByCancerSite.defaultProps = {
 };
 
 OccurrenceByCancerSite.need = [
-  fetchData("sortedCancerTypes", "/api/data?measures=Cancer Diagnosis&drilldowns=Cancer Site&Year=all&order=Cancer Diagnosis&sort=desc", d => {
-    const cancerList = [];
-    nest().key(d => d["Cancer Site"]).entries(d.data).forEach(group => cancerList.push(group.key));
-    return cancerList;
-  }),
   fetchData("occuranceRate", "/api/data?measures=Age-Adjusted Cancer Rate&drilldowns=MSA&Cancer Site=All Invasive Cancer Sites Combined&Year=all", d => d.data) // getting all year data to find growthRate.
 ];
 

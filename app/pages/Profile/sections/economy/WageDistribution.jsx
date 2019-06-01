@@ -83,8 +83,7 @@ class WageDistribution extends SectionColumns {
               time: "Year",
               xSort: (a, b) => a["ID Household Income Bucket"] - b["ID Household Income Bucket"],
               xConfig: {
-                tickFormat: d => rangeFormatter(d),
-                title: "Household Income Bucket"
+                tickFormat: d => rangeFormatter(d)
               },
               yConfig: {
                 tickFormat: d => formatPopulation(d),
@@ -93,6 +92,7 @@ class WageDistribution extends SectionColumns {
               shapeConfig: {
                 label: false
               },
+              title: "Household Income Distribution",
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}
             dataFormat={resp => {

@@ -24,6 +24,8 @@ const definitions = [
   {term: "All Invasive Cancer Sites Combined", definition: "All invasive cancer sites combined are the summary or combined aggregate total for all invasive cancer sites, except urinary bladder, which includes invasive and in situ."}
 ];
 
+const formatRace = race => race.replace("Black or ", "");
+
 class CancerPrevalenceByDemographics extends SectionColumns {
 
   constructor(props) {
@@ -109,9 +111,9 @@ class CancerPrevalenceByDemographics extends SectionColumns {
 
           {/* Added empty <p> element for some space between the dropdown choice and text*/}
           <p></p>
-          <p>In {occuranceByGender[0].Year}, the overall prevalence of cancer in the {occuranceByGender[0].MSA} for men and women was {formatAbbreviate(occuranceByGender[1]["Age-Adjusted Cancer Rate"])} and {formatAbbreviate(occuranceByGender[0]["Age-Adjusted Cancer Rate"])} per 100,000 people, respectively.</p>
-          <p>In {topOccuranceByRaceAndEthnicity.Year}, the race/ethnicity group in the {topOccuranceByRaceAndEthnicity.MSA} with the highest overall cancer rate was {topOccuranceByRaceAndEthnicity.Race} {topOccuranceByRaceAndEthnicity.Ethnicity} ({formatAbbreviate(topOccuranceByRaceAndEthnicity["Age-Adjusted Cancer Rate"])} per 100,000 people).</p>
-          <p>The following charts shows the occurrence rate per 100,000 people in {topOccuranceByRaceAndEthnicity.MSA} by gender and race/ethnicity for {isItemsListEmpty ? topOccuranceByRaceAndEthnicity["Cancer Site"].toLowerCase() : "the selected cancer site(s)"}.</p>
+          <p>In {occuranceByGender[0].Year}, the overall prevalence of cancer in the Detroit-Warren-Dearborn Metro Area was {formatAbbreviate(occuranceByGender[1]["Age-Adjusted Cancer Rate"])} for men and {formatAbbreviate(occuranceByGender[0]["Age-Adjusted Cancer Rate"])} for women, per 100,000 people.</p>
+          <p>In {topOccuranceByRaceAndEthnicity.Year}, the race/ethnicity group in the Detroit-Warren-Dearborn Metro Area with the highest overall cancer rate was {topOccuranceByRaceAndEthnicity.Ethnicity} {formatRace(topOccuranceByRaceAndEthnicity.Race)} ({formatAbbreviate(topOccuranceByRaceAndEthnicity["Age-Adjusted Cancer Rate"])} per 100,000 people).</p>
+          <p>The following charts shows the occurrence rate per 100,000 people in Detroit-Warren-Dearborn Metro Area by gender and race/ethnicity for {isItemsListEmpty ? topOccuranceByRaceAndEthnicity["Cancer Site"].toLowerCase() : "the selected cancer site(s)"}.</p>
 
           <SourceGroup sources={this.state.sources} />
           <Glossary definitions={definitions} />
@@ -182,7 +184,7 @@ class CancerPrevalenceByDemographics extends SectionColumns {
             legend: false,
             groupBy: ["Cancer Site", d => `${d.Ethnicity} ${d.Race}`],
             stacked: true,
-            label: d => `${d.Ethnicity} ${d.Race}`,
+            label: d => `${d.Ethnicity} ${formatRace(d.Race)}`,
             x: "share",
             y: "Cancer Site",
             title: "Race/Ethnicity Breakdown",
@@ -227,11 +229,6 @@ CancerPrevalenceByDemographics.defaultProps = {
 };
 
 CancerPrevalenceByDemographics.need = [
-  fetchData("sortedCancerTypes", "/api/data?measures=Cancer Diagnosis&drilldowns=Cancer Site&Year=all&order=Cancer Diagnosis&sort=desc", d => {
-    const cancerList = [];
-    nest().key(d => d["Cancer Site"]).entries(d.data).forEach(group => cancerList.push(group.key));
-    return cancerList;
-  }),
   fetchData("occuranceByGender", "/api/data?measures=Age-Adjusted Cancer Rate&drilldowns=Sex,MSA&Cancer Site=All Invasive Cancer Sites Combined&Year=latest", d => d.data),
   fetchData("occuranceByRaceAndEthnicity", "/api/data?measures=Age-Adjusted Cancer Rate&drilldowns=Race,Ethnicity,MSA&Cancer Site=All Invasive Cancer Sites Combined&Year=latest", d => d.data)
 ];

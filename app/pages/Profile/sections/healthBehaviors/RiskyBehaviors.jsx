@@ -93,7 +93,7 @@ class RiskyBehaviors extends SectionColumns {
           }
           <Stat
             title={isSecondHandSmokeOrMonthlyAlcoholSelected ? "Zip region with highest prevalence" : "Tract with highest prevalence"}
-            value={isSecondHandSmokeOrMonthlyAlcoholSelected ? topSecondHandSmokeAndMonthlyAlcoholData["Zip Region"] : `${topTractSmokingDrinkingData.Tract}, ${topTractPlace}`}
+            value={isSecondHandSmokeOrMonthlyAlcoholSelected ?  <ZipRegionDefinition text={topSecondHandSmokeAndMonthlyAlcoholData["Zip Region"]} /> : <p><CensusTractDefinition text={topTractSmokingDrinkingData.Tract} />{ topTractPlace ? `, ${topTractPlace}` : "" }</p>}
             year={isSecondHandSmokeOrMonthlyAlcoholSelected ? topSecondHandSmokeAndMonthlyAlcoholData["End Year"] : topTractSmokingDrinkingData.Year}
             qualifier={isSecondHandSmokeOrMonthlyAlcoholSelected ? `${formatPercentage(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue], true)} of the population of this zip region` : `${formatPercentage(topTractSmokingDrinkingData[dropdownValue])} of the population of this census tract`}
           />

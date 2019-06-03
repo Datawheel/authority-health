@@ -134,13 +134,13 @@ class ConditionsAndChronicDiseases extends SectionColumns {
             ? <Stat
               title={"Location with highest prevalence"}
               year={topDropdownWeightedData["End Year"]}
-              value={topDropdownWeightedData["Zip Region"]}
+              value={<ZipRegionDefinition text={topDropdownWeightedData["Zip Region"]} />}
               qualifier={`${formatPercentage(topDropdownWeightedData[dropdownValue], true)} of the population in this zip region`}
             />
             : <Stat
               title={"Location with highest prevalence"}
               year={topDropdownValueTract.Year}
-              value={`${topDropdownValueTract.Tract}${ topTractPlace ? `, ${topTractPlace}` : "" }`}
+              value={<p><CensusTractDefinition text={topDropdownValueTract.Tract} />{ topTractPlace ? `, ${topTractPlace}` : "" }</p>}
               qualifier={`${formatPercentage(topDropdownValueTract[dropdownValue])} of the population in this tract`}
             />
           }

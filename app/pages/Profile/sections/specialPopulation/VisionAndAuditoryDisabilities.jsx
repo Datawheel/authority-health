@@ -17,6 +17,7 @@ import StatGroup from "components/StatGroup";
 import places from "utils/places";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import CensusTractDefinition from "components/CensusTractDefinition";
 import Options from "components/Options";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
@@ -186,7 +187,7 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
               <Stat
                 title={getGeomapTitle(meta, "Vision")}
                 year={topChildrenGeographyStats.Year}
-                value={formatGeomapLabel(topChildrenGeographyStats, meta, tractToPlace)}
+                value={meta.level === "place" || meta.level === "tract" ? <CensusTractDefinition text={formatGeomapLabel(topChildrenGeographyStats, meta, tractToPlace)} /> : formatGeomapLabel(topChildrenGeographyStats, meta, tractToPlace)}
                 qualifier={getGeomapQualifier(topChildrenGeographyStats, meta)}
               />
             </div>
@@ -213,7 +214,7 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
               <Stat
                 title={getGeomapTitle(meta, "Hearing")}
                 year={topChildrenGeographyStats.Year}
-                value={formatGeomapLabel(topChildrenGeographyStats, meta, tractToPlace)}
+                value={meta.level === "place" || meta.level === "tract" ? <CensusTractDefinition text={formatGeomapLabel(topChildrenGeographyStats, meta, tractToPlace)} /> : formatGeomapLabel(topChildrenGeographyStats, meta, tractToPlace)}
                 qualifier={getGeomapQualifier(topChildrenGeographyStats, meta)}
               />
             </div>

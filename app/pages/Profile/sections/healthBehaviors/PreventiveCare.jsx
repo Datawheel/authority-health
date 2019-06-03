@@ -132,7 +132,7 @@ class PreventiveCare extends SectionColumns {
           <Stat
             title={"Location with highest share"}
             year={isPreventativeCareWeightedValueSelected ? topDropdownData["End Year"] : topDropdownData.Year}
-            value={isPreventativeCareWeightedValueSelected ? topDropdownData["Zip Region"] : `${topDropdownData.Tract}, ${topTractPlace}`}
+            value={isPreventativeCareWeightedValueSelected ? <ZipRegionDefinition text={topDropdownData["Zip Region"]} /> : <p><CensusTractDefinition text={topDropdownData.Tract} />{ topTractPlace ? `, ${topTractPlace}` : "" }</p>}
             qualifier={isPreventativeCareWeightedValueSelected ? `${formatPercentage(topDropdownData[dropdownValue], true)} of the population of this zip region` : `${formatPercentage(topDropdownData[dropdownValue])} of the population of this census tract`}
           />
 

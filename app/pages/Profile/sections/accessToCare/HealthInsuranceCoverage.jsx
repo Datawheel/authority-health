@@ -13,6 +13,7 @@ import rangeFormatter from "utils/rangeFormatter";
 import places from "utils/places";
 import Stat from "components/Stat";
 import StatGroup from "components/StatGroup";
+import CensusTractDefinition from "components/CensusTractDefinition";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
 import Options from "components/Options";
@@ -184,7 +185,7 @@ class HealthInsuranceCoverage extends SectionColumns {
             <Stat
               title={getGeomapTitle(meta)}
               year={topRecentYearChildrenGeographyData.Year}
-              value={formatGeomapLabel(topRecentYearChildrenGeographyData, meta, tractToPlace)}
+              value={meta.level === "place" || meta.level === "tract" ? <CensusTractDefinition text={formatGeomapLabel(topRecentYearChildrenGeographyData, meta, tractToPlace)} /> : formatGeomapLabel(topRecentYearChildrenGeographyData, meta, tractToPlace)}
               qualifier={getGeomapQualifier(topRecentYearChildrenGeographyData, meta)}
             />
 

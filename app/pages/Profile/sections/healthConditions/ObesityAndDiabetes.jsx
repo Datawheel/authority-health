@@ -153,13 +153,13 @@ class ObesityAndDiabetes extends SectionColumns {
             ? <Stat
               title={isHealthyWeightSelected ? "Location with highest share" : "Location with highest prevalence"}
               year={topDropdownWeightedData["End Year"]}
-              value={topDropdownWeightedData["Zip Region"]}
+              value={<ZipRegionDefinition text={topDropdownWeightedData["Zip Region"]} />}
               qualifier={`${formatPercentage(topDropdownWeightedData[dropdownValue], true)} of the population of this zip region`}
             />
             : <Stat
               title={"Location with highest prevalence"}
               year={topDropdownValueTract.Year}
-              value={`${topDropdownValueTract.Tract}${ topTractPlace ? `, ${topTractPlace}` : "" }`}
+              value={<p><CensusTractDefinition text={topDropdownValueTract.Tract} />{ topTractPlace ? `, ${topTractPlace}` : "" }</p>}
               qualifier={`${formatPercentage(topDropdownValueTract[dropdownValue])} of the population of this census tract`}
             />
           }

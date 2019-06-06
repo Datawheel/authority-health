@@ -120,6 +120,24 @@ export default {
         fontMax: fontSizeLg
       }
     },
+    // sets all BarChart labels to "styles.white"
+    Bar: {
+      labelConfig: {
+        fontColor: styles.white
+      }
+    },
+    // sets all Pie chart labels to "styles.white"
+    Circle: {
+      labelConfig: {
+        fontColor: styles.white
+      }
+    },
+    // set all Treemap labels to "styles.white"
+    Rect: {
+      labelConfig: {
+        fontColor: styles.white
+      }
+    },
     // line charts
     Line: {
       stroke: colorLogic,

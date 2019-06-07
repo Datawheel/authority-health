@@ -110,7 +110,7 @@ class OccurrenceByCancerSite extends SectionColumns {
           </div>
 
           <p className="u-margin-top-sm">In {mostRecentYearOccuranceRate.Year}, the cancer rate in the {mostRecentYearOccuranceRate.MSA} was {formatAbbreviate(mostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])} per 100,000 people. This represents a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "growth"} from the previous year ({formatAbbreviate(secondMostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])} per 100,000 people).</p>
-          <p>The following chart shows the occurrence rate per 100,000 people in {mostRecentYearOccuranceRate.MSA} for {isItemsListEmpty ? mostRecentYearOccuranceRate["Cancer Site"].toLowerCase() : "the selected cancer site(s)"}.</p>
+          <p>The following chart shows the occurrence rate per 100,000 people (and the associated upper and lower 95% confidence intervals) in {mostRecentYearOccuranceRate.MSA} for {isItemsListEmpty ? mostRecentYearOccuranceRate["Cancer Site"].toLowerCase() : "the selected cancer site(s)"}.</p>
 
           <SourceGroup sources={this.state.sources} />
           <Glossary definitions={definitions} />
@@ -145,7 +145,7 @@ class OccurrenceByCancerSite extends SectionColumns {
             confidenceConfig: {
               fillOpacity: 0.2
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["LCI", d => formatAbbreviate(d["Age-Adjusted Cancer Rate Lower 95 Percent Confidence Interval"])], ["UCI", d => formatAbbreviate(d["Age-Adjusted Cancer Rate Upper 95 Percent Confidence Interval"])], ["Metro Area", d => d.MSA]]}
           }}
           dataFormat={resp => {
             this.setState({sources: updateSource(resp.source, this.state.sources)});

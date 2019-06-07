@@ -157,8 +157,7 @@ class Poverty extends SectionColumns {
               time: "Year",
               title: d => `Population in Poverty by Race/Ethnicity in ${d[0].Geography}`,
               xConfig: {
-                tickFormat: d => formatPopulation(d),
-                title: "Share"
+                tickFormat: d => formatPopulation(d)
               },
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}

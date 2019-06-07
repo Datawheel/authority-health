@@ -18,7 +18,7 @@ import SourceGroup from "components/SourceGroup";
 import Options from "components/Options";
 
 const definitions = [
-  {term: "Poverty", definition: "The Census Bureau uses a set of money income thresholds that vary by family size and composition to determine who is in poverty. If a family's total income is less than the family's threshold, then that family and every individual in it is considered in poverty. The official poverty thresholds do not vary geographically, but they are updated for inflation using Consumer Price Index (CPI-U). The official poverty definition uses money income before taxes and does not include capital gains or noncash benefits (such as public housing, Medicaid, and food stamps)."}
+  {term: "Poverty", definition: <p>The Census Bureau uses a set of <a href="https://www.census.gov/data/tables/time-series/demo/income-poverty/historical-poverty-thresholds.html">money income thresholds</a> that vary by family size and composition to determine who is in poverty. If a family's total income is less than the family's threshold, then that family and every individual in it is considered in poverty. The official poverty thresholds do not vary geographically, but they are updated for inflation using Consumer Price Index (CPI-U). The official poverty definition uses money income before taxes and does not include capital gains or noncash benefits (such as public housing, Medicaid, and food stamps).</p>}
 ];
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;

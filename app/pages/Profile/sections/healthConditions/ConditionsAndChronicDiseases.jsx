@@ -20,6 +20,7 @@ const formatPercentage = (d, mutiplyBy100 = false) => mutiplyBy100 ? `${formatAb
 
 const formatDropdownChoiceName = d => {
   if (d === "Ever Heart Attack") return "Heart Attack";
+  if (d === "Teeth Loss") return "Loss of Teeth";
   if (d === "Ever Depressive") return "Depression";
   if (d === "Mental Health") return "Mental Health (Census Tract)";
   if (d === "Poor Mental Health 14 Or More Days") return "Mental Health (Zip Region)";
@@ -41,6 +42,7 @@ const formatDropdownParagraphText = d => {
   if (d === "Poor Mental Health 14 Or More Days") return "poor mental health";
   if (d === "Ever Heart Attack") return "heart attack";
   if (d === "Ever Depressive") return "depression";
+  if (d === "Teeth Loss") return "loss of teeth";
   return d.toLowerCase();
 };
 
@@ -147,8 +149,8 @@ class ConditionsAndChronicDiseases extends SectionColumns {
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           { isHealthConditionWeightedValueSelected
-            ? <p>In {topDropdownWeightedData["End Year"]}, {formatPercentage(topDropdownWeightedData[dropdownValue], true)} of the population of the {topDropdownWeightedData["Zip Region"]} <ZipRegionDefinition text="zip region" /> had {getArticle(formatDropdownParagraphText(dropdownValue))} {formatDropdownParagraphText(dropdownValue)} diagnosis, the highest prevelence of all zip regions in Wayne County, as compared to {formatPercentage(countyLevelData[0][dropdownValue], true)} overall in Wayne County.</p>
-            : <p>In {topDropdownValueTract.Year}, {formatPercentage(topDropdownValueTract[dropdownValue])} of the population of <CensusTractDefinition text={topDropdownValueTract.Tract} />{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} had {getArticle(formatDropdownParagraphText(dropdownValue))} {formatDropdownParagraphText(dropdownValue)} diagnosis, the highest prevalence out of all tracts in Detroit, Livonia, Dearborn and Westland.</p>
+            ? <p>In {topDropdownWeightedData["End Year"]}, {formatPercentage(topDropdownWeightedData[dropdownValue], true)} of the population of the {topDropdownWeightedData["Zip Region"]} <ZipRegionDefinition text="zip region" /> reported {getArticle(formatDropdownParagraphText(dropdownValue))} diagnosis of {formatDropdownParagraphText(dropdownValue)}, the highest prevelence of all zip regions in Wayne County, as compared to {formatPercentage(countyLevelData[0][dropdownValue], true)} overall in Wayne County.</p>
+            : <p>In {topDropdownValueTract.Year}, {formatPercentage(topDropdownValueTract[dropdownValue])} of the population of <CensusTractDefinition text={topDropdownValueTract.Tract} />{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} reported {getArticle(formatDropdownParagraphText(dropdownValue))} diagnosis of {formatDropdownParagraphText(dropdownValue)}, the highest prevalence out of all tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
           {dropdownValue === "Poor Mental Health 14 Or More Days" && <p>Poor mental health is defined as reporting mental health as not good concerning stress, depression, or problems with emotions for 14 or more out of the past 30 days.</p>}
           {dropdownValue === "Physical Health" && <p>Fair or poor general health is the proportion of adults who reported that their health, in general, was either fair or poor.</p>}

@@ -12,7 +12,16 @@ import Disclaimer from "components/Disclaimer";
 import Stat from "components/Stat";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Glossary from "components/Glossary";
 import Options from "components/Options";
+
+const definitions = [
+  {term: "Assaultive Offence Includes", definition: "Homicide, Robbery, CSC, Assault, Arson, Other Sex Offense, Burglary, Weapons Possession, etc."},
+  {term: "Non-Assaultive Offence Includes", definition: "Larceny, Fraud, Forgery/Embezzle, Motor Vehicle, Malicious Destruction, Drugs, OUIL 3rd, etc."},
+  {term: "Probation", definition: "A term of supervision afforded either a convicted felon or a convicted misdemeanant by a court as an alternative to prison or jail, although some judges may sentence offenders to a combination of both probation and jail or boot camp."},
+  {term: "Prison", definition: "A correctional facility where offenders serve a felony sentence imposed by the court under the supervision of the Michigan Department of Corrections."},
+  {term: "Jail", definition: " A county institution that houses persons awaiting trial, unsentenced felons and misdemeanants, and sentenced misdemeanants and felons."}
+];
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
@@ -113,6 +122,7 @@ class Incarceration extends SectionColumns {
           <p>This chart shows the percentages of punishments broken down by offense type for all convicted crimes in {topIncarcerationData.Geography}.</p>
 
           <SourceGroup sources={this.state.sources} />
+          <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
         </article>
 

@@ -18,7 +18,13 @@ import places from "utils/places";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
 import CensusTractDefinition from "components/CensusTractDefinition";
+import Glossary from "components/Glossary";
 import Options from "components/Options";
+
+const definitions = [
+  {term: "Vision Disability", definition: "In the American Housing Survey, a person with a vision disability is blind or has serious difficulty reading or driving due to a visual impairment even when wearing glasses."},
+  {term: "Hearing Disability", definition: "In the American Housing Survey, a person with a hearing disability is deaf or has a hearing impairment that makes it very difficult to hear conversations, televisions, or radio broadcasts."}
+];
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 const formatTopojsonFilter = (d, meta, childrenTractIds) => {
@@ -233,6 +239,7 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             </p>}
 
           <SourceGroup sources={this.state.sources} />
+          <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
 
           <div className="viz">

@@ -10,7 +10,6 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
 import Disclaimer from "components/Disclaimer";
-import Stat from "components/Stat";
 import StatGroup from "components/StatGroup";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
@@ -39,7 +38,7 @@ const formatPublicAssistanceData = publicAssistanceData => {
   return withCashFoodStamps;
 };
 
-class FoodStamps extends SectionColumns {
+class PublicFoodAssistance extends SectionColumns {
 
   constructor(props) {
     super(props);
@@ -88,7 +87,7 @@ class FoodStamps extends SectionColumns {
 
     return (
       <SectionColumns>
-        <SectionTitle>Food Stamps</SectionTitle>
+        <SectionTitle>Public Food Assistance</SectionTitle>
         <article>
           {!isSnapWicDataAvailableForCurrentGeography &&
             <Disclaimer>SNAP and WIC data is shown for {snapWicData.data[0].Geography}</Disclaimer>
@@ -173,11 +172,11 @@ class FoodStamps extends SectionColumns {
   }
 }
 
-FoodStamps.defaultProps = {
-  slug: "food-stamps"
+PublicFoodAssistance.defaultProps = {
+  slug: "public-food-assistance"
 };
 
-FoodStamps.need = [
+PublicFoodAssistance.need = [
   fetchData("publicAssistanceData", "/api/data?measures=Food-Stamp Population&drilldowns=Public Assistance or Snap&Geography=<id>&Year=latest", d => d.data),
   fetchData("snapWicData", "/api/data?measures=Number of Nutrition Assistance Stores&drilldowns=Assistance Type&Geography=<id>&Year=all") // getting all year data since WIC and SNAP both have different latest years.
 ];
@@ -189,4 +188,4 @@ const mapStateToProps = state => ({
   snapWicData: state.data.snapWicData
 });
 
-export default connect(mapStateToProps)(FoodStamps);
+export default connect(mapStateToProps)(PublicFoodAssistance);

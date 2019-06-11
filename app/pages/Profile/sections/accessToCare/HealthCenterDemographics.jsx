@@ -66,8 +66,6 @@ class HealthCenterDemographics extends SectionColumns {
       topZipLevelData = recentYearZipLevelData[0];
     }
 
-    // const isHealthCentersSelected = dropdownValue === "Health Centers";
-
     return (
       <SectionColumns>
         <SectionTitle>Health Center Demographics</SectionTitle>

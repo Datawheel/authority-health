@@ -92,9 +92,9 @@ const formatGeomapCoverageData = (data, meta, childrenTractIds) => {
 };
 
 const getGeomapTitle = meta => {
-  if (meta.level === "county") return "Most covered population within places in Wayne County";
-  else if (meta.level === "tract") return "Most covered population within census tracts in Wayne County";
-  else return `Most covered population within tracts in ${meta.name}`;
+  if (meta.level === "county") return "Most covered place in Wayne County";
+  else if (meta.level === "tract") return "Most covered census tract in Wayne County";
+  else return `Most covered census tract in ${meta.name}`;
 };
 
 const getGeomapQualifier = (data, meta) => {

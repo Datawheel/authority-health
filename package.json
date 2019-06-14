@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "cache": "node scripts/cache.js",
+    "cube2csv": "node scripts/cube2csv.js",
     "build": "canon-build",
     "dev": "canon-dev",
     "flickr": "node scripts/flickr-scrape.js",

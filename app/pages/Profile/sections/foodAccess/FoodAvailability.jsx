@@ -18,7 +18,13 @@ const commas = format(",d");
 
 const definitions = [
   {term: "Full Service Restaurants", definition: "Full service restaurants are establishments with a relatively broad menu along with table, counter and/or booth service and a wait staff. These establishments offer meals and snacks for immediate consumption primarily on-premise, though they may also offer takeout service."},
-  {term: "Fast-Food Restaurants", definition: "Fast-food restaurant are establishments whose patrons generally order or select items and pay before eating. Food and drink may be consumed on premises, taken out, or delivered to customers' locations."}
+  {term: "Fast-Food Restaurants", definition: "Fast-food restaurant are establishments whose patrons generally order or select items and pay before eating. Food and drink may be consumed on premises, taken out, or delivered to customers' locations."},
+  {term: "Convenience Stores,", definition: "A small grocery store, selling a limited variety of food and nonfood products, typically open extended hours. Customers normally use a convenience store to purchase a few items, whereas grocery stores are used for large, volume purchases. Convenience stores normally have less than 2,500 square feet of total under-roof floor space. Many convenience stores operate gasoline pumps."},
+  {term: "Grocery Stores", definition: "A grocery store is a retail shop that primarily sells food. A grocer is a bulk seller of food. Grocery stores also offer non-perishable foods that are packaged in bottles, boxes, and cans; some also have bakeries, butchers, delis, and fresh produce."},
+  {term: "Specialized Food Stores", definition: "A foodstore primarily engaged in the retail sale of a single food category such as meat and seafood markets, dairy stores, candy and nut stores, and retail bakeries."},
+  {term: "Supercenters", definition: "A large combination supermarket and discount general merchandise store, with grocery products accounting for up to 40 percent of selling area."},
+  {term: "Clube Stores", definition: "A membership-based wholesale-retail hybrid outlet, serving both small businesses and individual consumers. Both grocery products (in large and multipack sizes) and a wide variety of general merchandise are offered."},
+  {term: "Farmers Market", definition: "A farmers’ market is a common area where several farmers gather on a recurring basis to sell a variety of fresh fruits, vegetables, and other farm products directly to consumers."}
 ];
 
 class FoodAvailability extends SectionColumns {
@@ -77,7 +83,7 @@ class FoodAvailability extends SectionColumns {
             qualifier={`${commas(topStore["Number of Food Stores"])} in ${topStore.Geography}`}
           />
           <p>In {topStore.Year}, the most common food store type available in {topStore.Geography} was {topStore["Sub-category"].toLowerCase()} ({commas(topStore["Number of Food Stores"])}).</p>
-          <p>The chart here shows the share of fast-food restaurants, full-service restaurants, convenience stores, grocery stores, specialized food stores, supercenters and farmers market in {topStore.Geography}.</p>
+          <p>The chart here shows the shares of fast-food restaurants, full-service restaurants, convenience stores, grocery stores, specialized food stores, supercenters and farmers markets in {topStore.Geography}.</p>
 
           <SourceGroup sources={this.state.sources} />
           <Glossary definitions={definitions} />

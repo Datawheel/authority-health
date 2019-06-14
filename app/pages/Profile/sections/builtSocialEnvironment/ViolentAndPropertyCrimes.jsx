@@ -36,7 +36,8 @@ const definitions = [
   {term: "Robbery", definition: "Robbery is the crime of taking or attempting to take anything of value by force, threat of force, or by putting the victim in fear."},
   {term: "Rape", definition: "Rape is defined in most jurisdictions as sexual intercourse, or other forms of sexual penetration, committed by a perpetrator against a victim without their consent."},
   {term: "Murder and Non-negligent Manslaughter", definition: "Murder and non-negligent manslaughter are described by UCR as the willful (non-negligent) killing of one human being by another or a death that results from the commission of another criminal act."},
-  {term: "Arson", definition: "Arson is the crime of willfully and maliciously burning of property (such as a building) especially with criminal or fraudulent intent."}
+  {term: "Arson", definition: "Arson is the crime of willfully and maliciously burning of property (such as a building) especially with criminal or fraudulent intent."},
+  {term: "Aggravated Assault", definition: "Aggravated assault is the crime of physically attacking another person which results in serious bodily harm and/or is made with a deadly or dangerous weapon such as a gun, knife, sword, ax or blunt instrument."}
 ];
 
 class ViolentAndPropertyCrimes extends SectionColumns {

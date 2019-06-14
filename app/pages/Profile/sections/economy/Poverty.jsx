@@ -39,14 +39,14 @@ const formatPovertyByRaceData = povertyByRace => {
 };
 
 const formatPovertyByAgeAndGender = povertyByAgeAndGender => {
+  const belowPovertyLevelByAgeAndGender = povertyByAgeAndGender.filter(d => d["ID Poverty Status"] === 0);
   nest()
     .key(d => d.Year)
-    .entries(povertyByAgeAndGender)
+    .entries(belowPovertyLevelByAgeAndGender)
     .forEach(group => {
       const total = sum(group.values, d => d["Poverty Population"]);
       group.values.forEach(d => total !== 0 ? d.share = d["Poverty Population"] / total * 100 : d.share = 0);
     });
-  const belowPovertyLevelByAgeAndGender = povertyByAgeAndGender.filter(d => d["ID Poverty Status"] === 0);
   const topMalePovertyData = belowPovertyLevelByAgeAndGender.filter(d => d.Gender === "Male").sort((a, b) => b.share - a.share)[0];
   const topFemalePovertyData = belowPovertyLevelByAgeAndGender.filter(d => d.Gender === "Female").sort((a, b) => b.share - a.share)[0];
   return [belowPovertyLevelByAgeAndGender, topMalePovertyData, topFemalePovertyData];
@@ -183,6 +183,7 @@ class Poverty extends SectionColumns {
           {povertyByAgeAndGenderAvailable
             ? <BarChart ref={comp => this.viz2 = comp } config={{
               data: `https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Age,Gender&Geography=${meta.id}&Year=all`,
+              stacked: true,
               discrete: "x",
               height: 400,
               groupBy: "Gender",

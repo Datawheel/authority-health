@@ -90,7 +90,7 @@ class HealthCenterDemographics extends SectionColumns {
             title={"Most common race utilizing health centers"}
             year={`${topMostRaceData.Year}`}
             value={formatRaceNames(topMostRaceData.RaceType)}
-            qualifier={`${formatPercentage(topMostRaceData[topMostRaceData.RaceType])} of the population in Wayne County`}
+            qualifier={`${formatPercentage(topMostRaceData[topMostRaceData.RaceType])} of the health center visiting population in Wayne County`}
           />
 
           {isZipLevelDataAvailable ? <p>In {topZipLevelData.Year}, {formatPercentage(topZipLevelData[topZipLevelData.RaceType])} of the health center visiting population in {`zip ${topZipLevelData.Geography}`} were {lowerCaseRaceName(formatRaceNames(topZipLevelData.RaceType))}, compared to {lowerCaseRaceName(formatRaceNames(topMostRaceData.RaceType))} residents in Wayne County ({formatPercentage(topMostRaceData[topMostRaceData.RaceType])}).</p>

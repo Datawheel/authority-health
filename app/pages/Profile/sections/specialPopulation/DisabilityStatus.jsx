@@ -110,7 +110,7 @@ class DisabilityStatus extends SectionColumns {
             y: "Age",
             x: "share",
             time: "Year",
-            title: d => `Percentage of Disabled Population Within Each Age Group in ${d[0].Geography}`,
+            title: d => `Disabled Population by Age and Health Coverage in ${d[0].Geography}`,
             yConfig: {
               tickFormat: d => rangeFormatter(d)
             },

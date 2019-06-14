@@ -32,6 +32,20 @@ const getArticle = dropdownValue => {
   return "a";
 };
 
+const corePreventiveText = (share, cesusTract, dropdownValue, topTractPlace) => <span>{share} of older {dropdownValue === "Core Preventive Services for Older Women" ? "women" : "men"} in {<CensusTractDefinition text={cesusTract}/>}{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} received a set of core preventive services.</span>;
+
+const formatWomenText = dropdownValue => {
+  if (dropdownValue === "Pap Smear Test") return "women";
+  if (dropdownValue === "Mammography") return "women aged 50–74 years";
+  return "";
+};
+
+const formatText = dropdownValue => {
+  if (dropdownValue === "Sleep Less Than 7 Hours") return "reported sleeping less than 7 hours.";
+  if (dropdownValue === "Cholesterol Screening") return "reported being screened for high cholesterol.";
+  return "";
+};
+
 const definitions = [
   {term: "Annual Checkup", definition: "Visits to doctor for routine checkup within the past year among adults aged ≥18 years."},
   {term: "Core Preventive Services for Older Men", definition: "Older adults aged ≥65 years who are up to date on a core set of clinical preventive services by age and sex (Number of men aged ≥65 years reporting having received all of the following: an influenza vaccination in the past year; a PPV ever; and either a fecal occult blood test (FOBT) within the past year, a sigmoidoscopy within the past 5 years and a FOBT within the past 3 years, or a colonoscopy within the past 10 years)."},
@@ -138,8 +152,8 @@ class PreventiveCare extends SectionColumns {
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           {isPreventativeCareWeightedValueSelected
-            ? <p>In {topDropdownData["End Year"]}, {formatPercentage(topDropdownData[dropdownValue], true)} of the population of the {topDropdownData["Zip Region"]} <ZipRegionDefinition text="zip region" /> had {getArticle(dropdownValue)} {formatDropdownNames(dropdownValue).toLowerCase()}, as compared to {formatPercentage(countyLevelData[0][dropdownValue], true)} overall for Wayne County.</p>
-            : <p>In {topDropdownData.Year}, {formatPercentage(topDropdownData[dropdownValue])} of the population of <CensusTractDefinition text={topDropdownData.Tract}/>{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} had {getArticle(dropdownValue)} {formatDropdownNames(dropdownValue).toLowerCase()} out of all tracts in Detroit, Livonia, Dearborn and Westland.</p>
+            ? <p>In {topDropdownData["End Year"]}, {formatPercentage(topDropdownData[dropdownValue], true)} of the {dropdownValue === "Had Flu Vaccine" || dropdownValue === "Had Pneumonia Vaccine" ? "65 and older" : "adult"} population of the {topDropdownData["Zip Region"]} <ZipRegionDefinition text="zip region" /> had {dropdownValue === "Sleep Less Than 7 Hours" ? formatText(dropdownValue) : <span>{getArticle(dropdownValue)} {formatDropdownNames(dropdownValue).toLowerCase()}</span>}, as compared to {formatPercentage(countyLevelData[0][dropdownValue], true)} overall for Wayne County.</p>
+            : <p>In {topDropdownData.Year}, {dropdownValue === "Core Preventive Services for Older Men" || dropdownValue === "Core Preventive Services for Older Women" ? corePreventiveText(formatPercentage(topDropdownData[dropdownValue]), topDropdownData.Tract, dropdownValue, topTractPlace) : <span>{formatPercentage(topDropdownData[dropdownValue])} of {dropdownValue === "Pap Smear Test" || dropdownValue === "Mammography" ? formatWomenText(dropdownValue) : "the adult population"} {dropdownValue === "Colorectal Cancer Screening" ? "aged 50–75 years" : ""} of <CensusTractDefinition text={topDropdownData.Tract}/>{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} had {dropdownValue === "Cholesterol Screening" ? formatText(dropdownValue) : <span>{getArticle(dropdownValue)} {formatDropdownNames(dropdownValue).toLowerCase()}.</span>}</span>} This rate is the highest of all census tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
           {isPreventativeCareWeightedValueSelected
             ? <p>The map here shows {formatDropdownNames(dropdownValue).toLowerCase()} rate for zip regions in Wayne County.</p>

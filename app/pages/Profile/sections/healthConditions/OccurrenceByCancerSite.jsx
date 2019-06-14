@@ -109,7 +109,7 @@ class OccurrenceByCancerSite extends SectionColumns {
             </MultiSelect>
           </div>
 
-          <p className="u-margin-top-sm">In {mostRecentYearOccuranceRate.Year}, the cancer rate in the {mostRecentYearOccuranceRate.MSA} was {formatAbbreviate(mostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])} per 100,000 people. This represents a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "growth"} from the previous year ({formatAbbreviate(secondMostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])} per 100,000 people).</p>
+          <p className="u-margin-top-sm">In {mostRecentYearOccuranceRate.Year}, the prevalence of newly diagnosed cancer cases in the {mostRecentYearOccuranceRate.MSA} was {formatAbbreviate(mostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])} per 100,000 people. This represents a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "growth"} from the previous year ({formatAbbreviate(secondMostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])} per 100,000 people).</p>
           <p>The following chart shows the occurrence rate per 100,000 people (and the associated upper and lower 95% confidence intervals) in {mostRecentYearOccuranceRate.MSA} for {isItemsListEmpty ? mostRecentYearOccuranceRate["Cancer Site"].toLowerCase() : "the selected cancer site(s)"}.</p>
 
           <SourceGroup sources={this.state.sources} />

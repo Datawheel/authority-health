@@ -111,7 +111,7 @@ class CancerPrevalenceByDemographics extends SectionColumns {
 
           {/* Added empty <p> element for some space between the dropdown choice and text*/}
           <p></p>
-          <p>In {occuranceByGender[0].Year}, the overall prevalence of cancer in the Detroit-Warren-Dearborn Metro Area was {formatAbbreviate(occuranceByGender[1]["Age-Adjusted Cancer Rate"])} for men and {formatAbbreviate(occuranceByGender[0]["Age-Adjusted Cancer Rate"])} for women, per 100,000 people.</p>
+          <p>In {occuranceByGender[0].Year}, the overall prevalence of newly diagnosed cancer cases in the Detroit-Warren-Dearborn Metro Area was {formatAbbreviate(occuranceByGender[1]["Age-Adjusted Cancer Rate"])} for men and {formatAbbreviate(occuranceByGender[0]["Age-Adjusted Cancer Rate"])} for women, per 100,000 people.</p>
           <p>In {topOccuranceByRaceAndEthnicity.Year}, the race/ethnicity group in the Detroit-Warren-Dearborn Metro Area with the highest overall cancer rate was {topOccuranceByRaceAndEthnicity.Ethnicity} {formatRace(topOccuranceByRaceAndEthnicity.Race)} ({formatAbbreviate(topOccuranceByRaceAndEthnicity["Age-Adjusted Cancer Rate"])} per 100,000 people).</p>
           <p>The following charts shows the occurrence rate per 100,000 people in Detroit-Warren-Dearborn Metro Area by gender and race/ethnicity for {isItemsListEmpty ? topOccuranceByRaceAndEthnicity["Cancer Site"].toLowerCase() : "the selected cancer site(s)"}.</p>
 
@@ -162,7 +162,7 @@ class CancerPrevalenceByDemographics extends SectionColumns {
                   .entries(cancerType.values)
                   .forEach(group => {
                     const total = sum(group.values, d => d["Cancer Diagnosis"]);
-                    group.values.forEach(d => d.share = d["Cancer Diagnosis"] / total * 100);
+                    group.values.forEach(d => d.share = total !== 0 ? d["Cancer Diagnosis"] / total * 100 : 0);
                   });
               });
             return resp.data;

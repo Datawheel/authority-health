@@ -78,13 +78,13 @@ class StudentPoverty extends SectionColumns {
           <article>
             {/* Top stats about Level Of School. */}
             <Stat
-              title="Most impoverished level"
+              title="Most impoverished education level"
               year={topLevelOfSchoolData.Year}
               value={formatLabel(topLevelOfSchoolData["Level of School"])}
               qualifier={`${formatPopulation(topLevelOfSchoolData.share)} of the population enrolled in this grade in ${topLevelOfSchoolData.Geography}`}
             />
             <Stat
-              title={"Enrolled Population"}
+              title={"percentage of enrolled population in poverty"}
               year={topLevelOfSchoolData.Year} // topLevelOfSchoolData share same data as enrolledInSchoolPercentage, hence topLevelOfSchoolData can be used here to get Year, etc.
               value={formatPopulation(enrolledInSchoolPercentage)}
               qualifier={`of the population in ${topLevelOfSchoolData.Geography}`}

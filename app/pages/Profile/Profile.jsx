@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Helmet} from "react-helmet";
+import {nest} from "d3-collection";
 import {Icon} from "@blueprintjs/core";
 import {fetchData, TopicTitle} from "@datawheel/canon-core";
 import ProfileHeader from "./components/ProfileHeader";
@@ -10,7 +11,7 @@ import "./Profile.css";
 import Introduction from "./sections/about/Introduction";
 import FoodInsecurity from "./sections/foodAccess/FoodInsecurity";
 import FoodAvailability from "./sections/foodAccess/FoodAvailability";
-import FoodStamps from "./sections/foodAccess/FoodStamps";
+import PublicFoodAssistance from "./sections/foodAccess/PublicFoodAssistance";
 import StoreAccessByDemographic from "./sections/foodAccess/StoreAccessByDemographic";
 import PreventiveCare from "./sections/healthBehaviors/PreventiveCare";
 import RiskyBehaviors from "./sections/healthBehaviors/RiskyBehaviors";
@@ -120,7 +121,7 @@ class Profile extends Component {
         <div className="section-container">
           <FoodInsecurity />
           <FoodAvailability />
-          <FoodStamps />
+          <PublicFoodAssistance />
           <StoreAccessByDemographic />
         </div>
 
@@ -177,7 +178,7 @@ class Profile extends Component {
           <AirQuality />
         </div>
 
-        <TopicTitle slug="special-population">
+        <TopicTitle slug="special-populations">
           <div className="section-container">
             <Icon iconName="people" />
             Special Populations
@@ -201,7 +202,7 @@ class Profile extends Component {
 Profile.need = [
   Introduction,
   FoodAvailability,
-  FoodStamps,
+  PublicFoodAssistance,
   FoodInsecurity,
   StoreAccessByDemographic,
   CancerPrevalenceByDemographics,
@@ -245,7 +246,12 @@ Profile.need = [
   fetchData("childrenTractIds", "/api/geo/children/<id>/?level=Tract"),
   fetchData("childrenZipIds", "/api/geo/children/<id>/?level=Zip"),
   fetchData("population", "https://acs.datausa.io/api/data?measures=Population&Geography=<id>&year=all"),
-  fetchData("currentLevelOverallCoverage", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=<id>&Year=latest", d => d.data)
+  fetchData("currentLevelOverallCoverage", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=<id>&Year=latest", d => d.data),
+  fetchData("sortedCancerTypes", "/api/data?measures=Cancer Diagnosis&drilldowns=Cancer Site&Year=all&order=Cancer Site&sort=asc", d => {
+    const cancerList = [];
+    nest().key(d => d["Cancer Site"]).entries(d.data).forEach(group => cancerList.push(group.key));
+    return cancerList;
+  })
 ];
 
 const mapStateToProps = state => ({

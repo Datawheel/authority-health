@@ -17,7 +17,8 @@ import Options from "components/Options";
 
 const definitions = [
   {term: "Sheltered Homeless", definition: "According to U.S. Department of Housing and Urban Development, a person is considered sheltered homeless when he/she resides in a an emergency shelter or in transitional housing or supportive housing for homeless persons who originally came from the streets or emergency shelters."},
-  {term: "Unsheltered Homeless", definition: "According to U.S. Department of Housing and Urban Development, a person is considered unsheltered homeless when he/she resides in a place not meant for human habitation, such as cars, parks, sidewalks, abandoned buildings (on the street)."}
+  {term: "Unsheltered Homeless", definition: "According to U.S. Department of Housing and Urban Development, a person is considered unsheltered homeless when he/she resides in a place not meant for human habitation, such as cars, parks, sidewalks, abandoned buildings (on the street)."},
+  {term: "Children of Parenting Youth", definition: "Persons who are 24 and younger who are the parents or legal guardians of one or more children who are present with or sleeping in the same place as that youth parent, or who are pregnant."}
 ];
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
@@ -64,7 +65,9 @@ const formatTypesOfHomeless = typesOfHomeless => {
       const total = sum(group.values, d => d[d.HomelessType]);
       group.values.forEach(d => d.share = d[d.HomelessType] / total * 100);
     });
-  return data;
+
+  const shelteredData = data.filter(d => d.HomelessType !== "Unsheltered Homeless Population");
+  return shelteredData;
 };
 
 class Homeless extends SectionColumns {

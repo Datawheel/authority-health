@@ -11,11 +11,19 @@ import styles from "style.yml";
 import Contact from "components/Contact";
 import Disclaimer from "components/Disclaimer";
 import Stat from "components/Stat";
+import Glossary from "components/Glossary";
 import ZipRegionDefinition from "components/ZipRegionDefinition";
 import CensusTractDefinition from "components/CensusTractDefinition";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
 import Options from "components/Options";
+
+const definitions = [
+  {term: "Current Smoking", definition: "Current Smoking is defined as someone who has smoked greater than 100 cigarettes (including hand rolled cigarettes, cigars, cigarillos etc) in their lifetime and has smoked in the last 28 days."},
+  {term: "Binge Drinking", definition: "Binge drinking is defined as the consumption of five or more alcoholic drinks on one occasion in the past month."},
+  {term: "Secondhand Smoke Exposure", definition: "Secondhand smoke is a mixture of the smoke that comes from the burning end of a cigarette, cigar, or pipe, and the smoke breathed out by the smoker. It contains more than 7,000 chemicals. Hundreds of those chemicals are toxic and about 70 can cause cancer."},
+  {term: "Monthly Alcohol Consumption", definition: ""}
+];
 
 const formatPercentage = (d, mutiplyBy100 = false) => mutiplyBy100 ? `${formatAbbreviate(d * 100)}%` : `${formatAbbreviate(d)}%`;
 
@@ -93,7 +101,7 @@ class RiskyBehaviors extends SectionColumns {
           }
           <Stat
             title={isSecondHandSmokeOrMonthlyAlcoholSelected ? "Zip region with highest prevalence" : "Tract with highest prevalence"}
-            value={isSecondHandSmokeOrMonthlyAlcoholSelected ? topSecondHandSmokeAndMonthlyAlcoholData["Zip Region"] : `${topTractSmokingDrinkingData.Tract}, ${topTractPlace}`}
+            value={isSecondHandSmokeOrMonthlyAlcoholSelected ?  <ZipRegionDefinition text={topSecondHandSmokeAndMonthlyAlcoholData["Zip Region"]} /> : <p><CensusTractDefinition text={topTractSmokingDrinkingData.Tract} />{ topTractPlace ? `, ${topTractPlace}` : "" }</p>}
             year={isSecondHandSmokeOrMonthlyAlcoholSelected ? topSecondHandSmokeAndMonthlyAlcoholData["End Year"] : topTractSmokingDrinkingData.Year}
             qualifier={isSecondHandSmokeOrMonthlyAlcoholSelected ? `${formatPercentage(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue], true)} of the population of this zip region` : `${formatPercentage(topTractSmokingDrinkingData[dropdownValue])} of the population of this census tract`}
           />
@@ -103,6 +111,7 @@ class RiskyBehaviors extends SectionColumns {
           }
 
           <SourceGroup sources={this.state.sources} />
+          <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
 
           <div className="viz">

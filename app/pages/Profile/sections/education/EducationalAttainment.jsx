@@ -88,6 +88,7 @@ class EducationalAttainment extends SectionColumns {
             />
             <p>In {topFemaleData.Year}, the most common education level attained in {topFemaleData.Geography} by women was {formatLabels(topFemaleData["Educational Attainment"]).toLowerCase()} ({formatPopulation(topFemaleData.share)}) {}
              and for men it was {formatLabels(topMaleData["Educational Attainment"]).toLowerCase()} ({formatPopulation(topMaleData.share)}).</p>
+            <p>Attainment is defined as the highest level of education, regardless of whether they are continuing or not.</p>
             <p>The following chart shows educational attainment by gender in {topMaleData.Geography}.</p>
 
             <SourceGroup sources={this.state.sources} />

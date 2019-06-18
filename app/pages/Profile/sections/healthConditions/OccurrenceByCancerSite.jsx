@@ -1,6 +1,5 @@
 import React from "react";
 import {connect} from "react-redux";
-import {nest} from "d3-collection";
 import {LinePlot} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
@@ -110,8 +109,8 @@ class OccurrenceByCancerSite extends SectionColumns {
             </MultiSelect>
           </div>
 
-          <p className="u-margin-top-sm">In {mostRecentYearOccuranceRate.Year}, the cancer rate in the {mostRecentYearOccuranceRate.MSA} was {formatAbbreviate(mostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])} per 100,000 people. This represents a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "growth"} from the previous year ({formatAbbreviate(secondMostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])} per 100,000 people).</p>
-          <p>The following chart shows the occurrence rate per 100,000 people in {mostRecentYearOccuranceRate.MSA} for {isItemsListEmpty ? mostRecentYearOccuranceRate["Cancer Site"].toLowerCase() : "the selected cancer site(s)"}.</p>
+          <p className="u-margin-top-sm">In {mostRecentYearOccuranceRate.Year}, the prevalence of newly diagnosed cancer cases in the {mostRecentYearOccuranceRate.MSA} was {formatAbbreviate(mostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])} per 100,000 people. This represents a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "growth"} from the previous year ({formatAbbreviate(secondMostRecentYearOccuranceRate["Age-Adjusted Cancer Rate"])} per 100,000 people).</p>
+          <p>The following chart shows the occurrence rate per 100,000 people (and the associated upper and lower 95% confidence intervals) in {mostRecentYearOccuranceRate.MSA} for {isItemsListEmpty ? mostRecentYearOccuranceRate["Cancer Site"].toLowerCase() : "the selected cancer site(s)"}.</p>
 
           <SourceGroup sources={this.state.sources} />
           <Glossary definitions={definitions} />
@@ -146,7 +145,7 @@ class OccurrenceByCancerSite extends SectionColumns {
             confidenceConfig: {
               fillOpacity: 0.2
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["LCI", d => formatAbbreviate(d["Age-Adjusted Cancer Rate Lower 95 Percent Confidence Interval"])], ["UCI", d => formatAbbreviate(d["Age-Adjusted Cancer Rate Upper 95 Percent Confidence Interval"])], ["Metro Area", d => d.MSA]]}
           }}
           dataFormat={resp => {
             this.setState({sources: updateSource(resp.source, this.state.sources)});
@@ -164,11 +163,6 @@ OccurrenceByCancerSite.defaultProps = {
 };
 
 OccurrenceByCancerSite.need = [
-  fetchData("sortedCancerTypes", "/api/data?measures=Cancer Diagnosis&drilldowns=Cancer Site&Year=all&order=Cancer Diagnosis&sort=desc", d => {
-    const cancerList = [];
-    nest().key(d => d["Cancer Site"]).entries(d.data).forEach(group => cancerList.push(group.key));
-    return cancerList;
-  }),
   fetchData("occuranceRate", "/api/data?measures=Age-Adjusted Cancer Rate&drilldowns=MSA&Cancer Site=All Invasive Cancer Sites Combined&Year=all", d => d.data) // getting all year data to find growthRate.
 ];
 

@@ -102,11 +102,11 @@ class Unemployment extends SectionColumns {
               }
             ]}
           />
-          <p>
-            {workExperienceAvailable ? <span>In {getMaleFullTimeData[0].Year}, the gender breakdown of the working population in {getMaleFullTimeData[0].Geography} that worked full-time was {formatPercentage(getMaleFullTimeData[0].share)} for men and {formatPercentage(getFemaleFullTimeData[0].share)} for women.</span> : ""}
-            {employmentStatusAvailable ? <span> The most common unemployed age group for men was {getTopMaleUnemploymemtData.Age.toLowerCase()} ({formatPercentage(getTopMaleUnemploymemtData.share)}), and the most common female unemployed age group for women was {getTopFemaleUnemploymemtData.Age.toLowerCase()} ({formatPercentage(getTopFemaleUnemploymemtData.share)}).</span> : ""}
-            {} In {recentYearUnemploymentRate.Year}, the overall unemployment rate in {recentYearUnemploymentRate.Geography} was {formatPercentage(recentYearUnemploymentRate["Unemployment Rate"])}.
-          </p>
+
+          {workExperienceAvailable ? <p>In {getMaleFullTimeData[0].Year}, the gender breakdown of the working population in {getMaleFullTimeData[0].Geography} that worked full-time was {formatPercentage(getMaleFullTimeData[0].share)} for men and {formatPercentage(getFemaleFullTimeData[0].share)} for women.</p> : ""}
+
+          {employmentStatusAvailable ? <p>The most common unemployed age group for men was {getTopMaleUnemploymemtData.Age.toLowerCase()} ({formatPercentage(getTopMaleUnemploymemtData.share)}), and for women was {getTopFemaleUnemploymemtData.Age.toLowerCase()} ({formatPercentage(getTopFemaleUnemploymemtData.share)}).</p> : ""}
+          <p> In {recentYearUnemploymentRate.Year}, the overall unemployment rate in {recentYearUnemploymentRate.Geography} was {formatPercentage(recentYearUnemploymentRate["Unemployment Rate"])}.</p>
 
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />

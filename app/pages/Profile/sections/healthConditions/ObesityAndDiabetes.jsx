@@ -153,13 +153,13 @@ class ObesityAndDiabetes extends SectionColumns {
             ? <Stat
               title={isHealthyWeightSelected ? "Location with highest share" : "Location with highest prevalence"}
               year={topDropdownWeightedData["End Year"]}
-              value={topDropdownWeightedData["Zip Region"]}
+              value={<ZipRegionDefinition text={topDropdownWeightedData["Zip Region"]} />}
               qualifier={`${formatPercentage(topDropdownWeightedData[dropdownValue], true)} of the population of this zip region`}
             />
             : <Stat
               title={"Location with highest prevalence"}
               year={topDropdownValueTract.Year}
-              value={`${topDropdownValueTract.Tract}${ topTractPlace ? `, ${topTractPlace}` : "" }`}
+              value={<p><CensusTractDefinition text={topDropdownValueTract.Tract} />{ topTractPlace ? `, ${topTractPlace}` : "" }</p>}
               qualifier={`${formatPercentage(topDropdownValueTract[dropdownValue])} of the population of this census tract`}
             />
           }
@@ -192,8 +192,8 @@ class ObesityAndDiabetes extends SectionColumns {
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           {isBMIWeightedDataValueSelected
-            ? <p>In {topDropdownWeightedData["End Year"]}, {formatPercentage(topDropdownWeightedData[dropdownValue], true)} of the population of the {topDropdownWeightedData["Zip Region"]} <ZipRegionDefinition text="zip region" /> had {dropdownValue.toLowerCase()}, the highest {isHealthyWeightSelected ? "share" : "prevalence"} out of all zip regions in Wayne County.</p>
-            : <p>In {topDropdownValueTract.Year}, {formatPercentage(topDropdownValueTract[dropdownValue])} of the population of <CensusTractDefinition text={topDropdownValueTract.Tract} />{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} had {dropdownValue.toLowerCase()}, the highest prevalence out of all tracts in Detroit, Livonia, Dearborn and Westland.</p>
+            ? <p>In {topDropdownWeightedData["End Year"]}, {formatPercentage(topDropdownWeightedData[dropdownValue], true)} of the population of the {topDropdownWeightedData["Zip Region"]} <ZipRegionDefinition text="zip region" /> had a BMI indicating {dropdownValue.replace("BMI", "").toLowerCase().trim()}. This represents the highest {isHealthyWeightSelected ? "share" : "prevalence"} out of all zip regions in Wayne County.</p>
+            : <p>In {topDropdownValueTract.Year}, {formatPercentage(topDropdownValueTract[dropdownValue])} of the population of <CensusTractDefinition text={topDropdownValueTract.Tract} />{topTractPlace !== undefined ? ` in ${topTractPlace}` : ""} had {dropdownValue.toLowerCase()}. This is the highest prevalence out of all tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
 
           {/* Write short paragraphs explaining Barchart and top stats for the Diabetes/Obesity data. */}
@@ -202,9 +202,8 @@ class ObesityAndDiabetes extends SectionColumns {
             {topMaleData.Geography} {isDiabetesSelected ? "had diabetes" : "were obese"}, compared to {isDiabetesSelected ? formatPercentage(stateLevelMaleDiabetes["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(stateLevelMaleObesity["Age-Adjusted Obesity Prevalence"])} of the male {}
             and {isDiabetesSelected ? formatPercentage(stateLevelFemaleDiabetes["Age-Adjusted Diabetes Prevalence"]) : formatPercentage(stateLevelFemaleObesity["Age-Adjusted Obesity Prevalence"])} of the female population in Michigan.</p>
 
-          {/* <Disclaimer>
-            {isBMIWeightedDataValueSelected ? "data is shown at the zip region level" : "data is shown at the census tract level" }
-          </Disclaimer> */}
+          {dropdownValue === "BMI Underweight" && <p>Estimates can only be reported for subgroups if they are based on a sample size of at least 50 respondents and/or have a relative standard error of 30 percent or less. Zip regions with too few cases of underweight therefore are not reported.</p>}
+
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
 
@@ -266,12 +265,18 @@ class ObesityAndDiabetes extends SectionColumns {
               colorScaleConfig: {
                 axisConfig: {tickFormat: d => formatPercentage(d, true)},
                 // having high disease prevalency is bad
-                color: [
-                  styles["terra-cotta-white"],
-                  styles["danger-light"],
-                  styles["terra-cotta-medium"],
-                  styles["danger-dark"]
-                ]
+                color: dropdownValue !== "BMI Healthy Weight"
+                  ? [
+                    styles["terra-cotta-white"],
+                    styles["danger-light"],
+                    styles["terra-cotta-medium"],
+                    styles["danger-dark"]
+                  ] : [
+                    styles["majorelle-white"],
+                    styles["majorelle-light"],
+                    styles["majorelle-medium"],
+                    styles["majorelle-dark"]
+                  ]
               },
               label: d => d["Zip Region"],
               time: "End Year",

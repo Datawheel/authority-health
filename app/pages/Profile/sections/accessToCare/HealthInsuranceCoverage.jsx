@@ -13,6 +13,7 @@ import rangeFormatter from "utils/rangeFormatter";
 import places from "utils/places";
 import Stat from "components/Stat";
 import StatGroup from "components/StatGroup";
+import CensusTractDefinition from "components/CensusTractDefinition";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
 import Options from "components/Options";
@@ -91,9 +92,9 @@ const formatGeomapCoverageData = (data, meta, childrenTractIds) => {
 };
 
 const getGeomapTitle = meta => {
-  if (meta.level === "county") return "Most covered population within places in Wayne County";
-  else if (meta.level === "tract") return "Most covered population within census tracts in Wayne County";
-  else return `Most covered population within tracts in ${meta.name}`;
+  if (meta.level === "county") return "Most covered place in Wayne County";
+  else if (meta.level === "tract") return "Most covered census tract in Wayne County";
+  else return `Most covered census tract in ${meta.name}`;
 };
 
 const getGeomapQualifier = (data, meta) => {
@@ -184,7 +185,7 @@ class HealthInsuranceCoverage extends SectionColumns {
             <Stat
               title={getGeomapTitle(meta)}
               year={topRecentYearChildrenGeographyData.Year}
-              value={formatGeomapLabel(topRecentYearChildrenGeographyData, meta, tractToPlace)}
+              value={meta.level === "place" || meta.level === "tract" ? <CensusTractDefinition text={formatGeomapLabel(topRecentYearChildrenGeographyData, meta, tractToPlace)} /> : formatGeomapLabel(topRecentYearChildrenGeographyData, meta, tractToPlace)}
               qualifier={getGeomapQualifier(topRecentYearChildrenGeographyData, meta)}
             />
 

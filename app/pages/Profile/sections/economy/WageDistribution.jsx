@@ -28,6 +28,12 @@ const formatWageDistributionData = wageDistributionData => {
   return wageDistributionData;
 };
 
+const wageGiniComparison = (currentLevelGini, nationalLevelGini) => {
+  if (currentLevelGini < nationalLevelGini) return ["higher than", "less"];
+  else if (currentLevelGini > nationalLevelGini) return ["lower than", "more"];
+  else return ["equal to", ""];
+};
+
 class WageDistribution extends SectionColumns {
 
   constructor(props) {
@@ -37,7 +43,7 @@ class WageDistribution extends SectionColumns {
 
   render() {
 
-    const {meta, wageDistributionData, wageGinidata} = this.props;
+    const {meta, wageDistributionData, wageGinidata, nationalWageGini} = this.props;
 
     const wageDistributionDataAvailable = wageDistributionData.length !== 0;
     const wageGinidataAvailable = wageGinidata.length !== 0;
@@ -54,7 +60,13 @@ class WageDistribution extends SectionColumns {
             value={wageGinidataAvailable ? wageGini : "N/A"}
             qualifier={wageGinidataAvailable ? `in ${wageGinidata[0].Geography}` : ""}
           />
-          {wageGinidataAvailable ? <p>In {wageGinidata[0].Year}, the income inequality in {wageGinidata[0].Geography} was {wageGini}, using the GINI coefficient. The GINI index measures the extent to which the distribution of income among individuals or households within an economy deviates from a perfectly equal distribution. Values range from 0 to 1, with 0 being perfect equality (every household earns equal income), and 1 being absolute inequality (one household earns all the income).</p> : ""}
+
+          {wageGinidataAvailable ? <p>In {wageGinidata[0].Year}, the income inequality in {wageGinidata[0].Geography} was {wageGini}, using the GINI coefficient. {}
+            This was {wageGiniComparison(nationalWageGini[0]["Wage GINI"], wageGini)[0]} the national average of {nationalWageGini[0]["Wage GINI"]}. {}
+          In other words, wages are distributed {wageGiniComparison(nationalWageGini[0]["Wage GINI"], wageGini)[1]} evenly in Detroit, MI in comparison to the national average.</p> : ""}
+
+          <p>The GINI index measures the extent to which the distribution of income among individuals or households within an economy deviates from a perfectly equal distribution. Values range from 0 to 1, with 0 being perfect equality (every household earns equal income), and 1 being absolute inequality (one household earns all the income).</p>
+
           {wageDistributionDataAvailable ? <p>The following chart shows the household income buckets and share for each bucket in {wageDistributionData[0].Geography}.</p> : ""}
 
           <SourceGroup sources={this.state.sources} />
@@ -83,8 +95,7 @@ class WageDistribution extends SectionColumns {
               time: "Year",
               xSort: (a, b) => a["ID Household Income Bucket"] - b["ID Household Income Bucket"],
               xConfig: {
-                tickFormat: d => rangeFormatter(d),
-                title: "Household Income Bucket"
+                tickFormat: d => rangeFormatter(d)
               },
               yConfig: {
                 tickFormat: d => formatPopulation(d),
@@ -93,6 +104,7 @@ class WageDistribution extends SectionColumns {
               shapeConfig: {
                 label: false
               },
+              title: "Household Income Distribution",
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}
             dataFormat={resp => {
@@ -112,13 +124,15 @@ WageDistribution.defaultProps = {
 
 WageDistribution.need = [
   fetchData("wageDistributionData", "https://acs.datausa.io/api/data?measures=Household Income&drilldowns=Household Income Bucket&Geography=<id>&Year=latest", d => d.data),
-  fetchData("wageGinidata", "https://acs.datausa.io/api/data?measures=Wage GINI&Geography=<id>&Year=latest", d => d.data)
+  fetchData("wageGinidata", "https://acs.datausa.io/api/data?measures=Wage GINI&Geography=<id>&Year=latest", d => d.data),
+  fetchData("nationalWageGini", "https://acs.datausa.io/api/data?measures=Wage GINI&Geography=01000US&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({
   meta: state.data.meta,
   wageDistributionData: state.data.wageDistributionData,
-  wageGinidata: state.data.wageGinidata
+  wageGinidata: state.data.wageGinidata,
+  nationalWageGini: state.data.nationalWageGini
 });
 
 export default connect(mapStateToProps)(WageDistribution);

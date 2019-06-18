@@ -14,6 +14,7 @@ import Stat from "components/Stat";
 import places from "utils/places";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import CensusTractDefinition from "components/CensusTractDefinition";
 import Options from "components/Options";
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
@@ -209,7 +210,7 @@ class Immigrants extends SectionColumns {
               <Stat
                 title={getGeomapTitle(meta, dropdownValue)}
                 year={topStats.Year}
-                value={formatGeomapLabel(topStats, meta, tractToPlace)}
+                value={meta.level === "place" || meta.level === "tract" ? <CensusTractDefinition text={formatGeomapLabel(topStats, meta, tractToPlace)} /> : formatGeomapLabel(topStats, meta, tractToPlace)}
                 qualifier={getGeomapQualifier(topStats, meta)}
               />
 
@@ -233,7 +234,7 @@ class Immigrants extends SectionColumns {
               <Stat
                 title={getGeomapTitle(meta, dropdownValue)}
                 year={topStats.Year}
-                value={formatGeomapLabel(topStats, meta, tractToPlace)}
+                value={meta.level === "place" || meta.level === "tract" ? <CensusTractDefinition text={formatGeomapLabel(topStats, meta, tractToPlace)} /> : formatGeomapLabel(topStats, meta, tractToPlace)}
                 qualifier={getGeomapQualifier(topStats, meta)}
               />
 

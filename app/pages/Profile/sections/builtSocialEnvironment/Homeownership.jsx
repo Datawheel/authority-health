@@ -35,9 +35,9 @@ const formatGeomapLabel = (d, meta, tractToPlace) => {
 };
 
 const getGeomapTitle = meta => {
-  if (meta.level === "county") return "Highest median property value within places in Wayne County";
-  else if (meta.level === "tract") return "Highest median property value within census tracts in Wayne County";
-  else return `Highest median property value within tracts in ${meta.name}`;
+  if (meta.level === "county") return "Lowest median property value within places in Wayne County";
+  else if (meta.level === "tract") return "Lowest median property value within census tracts in Wayne County";
+  else return `Lowest median property value within tracts in ${meta.name}`;
 };
 
 const formatGeomapPropertyValueData = (data, meta, childrenTractIds) => {
@@ -55,7 +55,7 @@ const formatGeomapPropertyValueData = (data, meta, childrenTractIds) => {
       if (childrenTractIds.includes(d["ID Geography"])) filteredChildrenGeography.push(d);
     });
   }
-  const topRecentYearData = filteredChildrenGeography.sort((a, b) => b["Property Value"] - a["Property Value"])[0];
+  const topRecentYearData = filteredChildrenGeography.sort((a, b) => a["Property Value"] - b["Property Value"])[0];
   return [filteredChildrenGeography, topRecentYearData];
 };
 

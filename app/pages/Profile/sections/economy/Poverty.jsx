@@ -18,7 +18,7 @@ import SourceGroup from "components/SourceGroup";
 import Options from "components/Options";
 
 const definitions = [
-  {term: "Poverty", definition: "The Census Bureau uses a set of money income thresholds that vary by family size and composition to determine who is in poverty. If a family's total income is less than the family's threshold, then that family and every individual in it is considered in poverty. The official poverty thresholds do not vary geographically, but they are updated for inflation using Consumer Price Index (CPI-U). The official poverty definition uses money income before taxes and does not include capital gains or noncash benefits (such as public housing, Medicaid, and food stamps)."}
+  {term: "Poverty", definition: <p>The Census Bureau uses a set of <a href="https://www.census.gov/data/tables/time-series/demo/income-poverty/historical-poverty-thresholds.html">money income thresholds</a> that vary by family size and composition to determine who is in poverty. If a family's total income is less than the family's threshold, then that family and every individual in it is considered in poverty. The official poverty thresholds do not vary geographically, but they are updated for inflation using Consumer Price Index (CPI-U). The official poverty definition uses money income before taxes and does not include capital gains or noncash benefits (such as public housing, Medicaid, and food stamps).</p>}
 ];
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
@@ -39,14 +39,14 @@ const formatPovertyByRaceData = povertyByRace => {
 };
 
 const formatPovertyByAgeAndGender = povertyByAgeAndGender => {
+  const belowPovertyLevelByAgeAndGender = povertyByAgeAndGender.filter(d => d["ID Poverty Status"] === 0);
   nest()
     .key(d => d.Year)
-    .entries(povertyByAgeAndGender)
+    .entries(belowPovertyLevelByAgeAndGender)
     .forEach(group => {
       const total = sum(group.values, d => d["Poverty Population"]);
       group.values.forEach(d => total !== 0 ? d.share = d["Poverty Population"] / total * 100 : d.share = 0);
     });
-  const belowPovertyLevelByAgeAndGender = povertyByAgeAndGender.filter(d => d["ID Poverty Status"] === 0);
   const topMalePovertyData = belowPovertyLevelByAgeAndGender.filter(d => d.Gender === "Male").sort((a, b) => b.share - a.share)[0];
   const topFemalePovertyData = belowPovertyLevelByAgeAndGender.filter(d => d.Gender === "Female").sort((a, b) => b.share - a.share)[0];
   return [belowPovertyLevelByAgeAndGender, topMalePovertyData, topFemalePovertyData];
@@ -157,8 +157,7 @@ class Poverty extends SectionColumns {
               time: "Year",
               title: d => `Population in Poverty by Race/Ethnicity in ${d[0].Geography}`,
               xConfig: {
-                tickFormat: d => formatPopulation(d),
-                title: "Share"
+                tickFormat: d => formatPopulation(d)
               },
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
             }}
@@ -184,6 +183,7 @@ class Poverty extends SectionColumns {
           {povertyByAgeAndGenderAvailable
             ? <BarChart ref={comp => this.viz2 = comp } config={{
               data: `https://acs.datausa.io/api/data?measures=Poverty Population&drilldowns=Poverty Status,Age,Gender&Geography=${meta.id}&Year=all`,
+              stacked: true,
               discrete: "x",
               height: 400,
               groupBy: "Gender",

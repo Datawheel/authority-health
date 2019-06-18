@@ -15,7 +15,7 @@ import Options from "components/Options";
 const formatPercentage = d => `${formatAbbreviate(d)}%`;
 
 const formatRaceText = d => {
-  if (d === "Asian" || d === "Black" || d === "White") return `${d}(s)`;
+  if (d === "Asian" || d === "Black" || d === "White" || d === "Multiracial") return `${d}s`;
   else if (d === "American Indian or Alaska Native") return "American Indians or Alaska Natives";
   else if (d === "Hawaiian or Pacific Islander") return "Hawaiians or Pacific Islanders";
   else return d;
@@ -77,15 +77,15 @@ class StoreAccessByDemographic extends SectionColumns {
           }
           {/* Show top stats for Age and Race groups based on the drilldown value. */}
           <Stat
-            title={ageSelected ? "Most at risk age group" : "Top Food Access by Race"}
+            title={ageSelected ? "Most at risk age group" : "Most at risk race group"}
             year={topFoodAccessData.Year}
             value={ageSelected ? topFoodAccessData["Age Group"] : topFoodAccessData["Race Group"]}
             qualifier={ageSelected ? `${formatPercentage(topFoodAccessData["Low-Access to Food by Age"])} of all ${topFoodAccessData["Age Group"].toLowerCase()} in ${topFoodAccessData.Geography} has low access` : `${formatPercentage(topFoodAccessData["Low-Access to Food by Race"])} of total population in ${topFoodAccessData.Geography} has low access`}
           />
           {/* Write a paragraph for top stats based on the dropdown choice. */}
-          <p>In {topFoodAccessData.Year}, {ageSelected ? `between children and seniors, ${topFoodAccessData["Age Group"].toLowerCase()}` : topFoodAccessData["Race Group"].toLowerCase()} were the most at risk {ageSelected ? "age" : "race"} group for low access to food stores ({ageSelected ? `${formatPercentage(topFoodAccessData["Low-Access to Food by Age"])} of all ${topFoodAccessData["Age Group"].toLowerCase()}` : `${formatPercentage(topFoodAccessData["Low-Access to Food by Race"])} of the population`}) in {topFoodAccessData.Geography}.</p>
+          <p>In {topFoodAccessData.Year}, {ageSelected ? `between children and seniors, ${topFoodAccessData["Age Group"].toLowerCase()}` : `${topFoodAccessData["Race Group"] === "Hispanic ethnicity" ? topFoodAccessData["Race Group"].toLowerCase() : topFoodAccessData["Race Group"].toLowerCase()}s`} were the most at risk {ageSelected ? "age" : "race"} group for low access to food stores ({ageSelected ? `${formatPercentage(topFoodAccessData["Low-Access to Food by Age"])} of all ${topFoodAccessData["Age Group"].toLowerCase()}` : `${formatPercentage(topFoodAccessData["Low-Access to Food by Race"])} of the population`}) in {topFoodAccessData.Geography}.</p>
           <p>Low access to healthy food is defined as being far from a supermarket, supercenter, or large grocery store.</p>
-          <p>The following map shows the rates for {dropdownValue.split(" ").length === 1 ? formatRaceText(dropdownValue).toLowerCase() : formatRaceText(dropdownValue)} with low access to food stores across all counties in Michigan.</p>
+          <p>The following map shows the rates for {dropdownValue === "Hispanic ethnicity" ? "people of" : ""} {dropdownValue.split(" ").length === 1 ? formatRaceText(dropdownValue).toLowerCase() : formatRaceText(dropdownValue)} with low access to food stores across all counties in Michigan.</p>
 
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
@@ -112,7 +112,7 @@ class StoreAccessByDemographic extends SectionColumns {
               },
               yConfig: {
                 barConfig: {stroke: "transparent"},
-                ticks: []
+                tickFormat: d => ageSelected ? "" : d
               },
               time: "Year",
               title: d => `${ageSelected ? "Age Group Access" : "Race/Ethnicity Access"} in ${d[0].Geography}`,

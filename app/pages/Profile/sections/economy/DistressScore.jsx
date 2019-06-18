@@ -57,8 +57,8 @@ class DistressScore extends SectionColumns {
             value={topDistressScoreData.Zip}
             qualifier={`(${formatAbbreviate(topDistressScoreData["Distress Score"])} percentile)`}
           />
-          <p>In {topDistressScoreData.Year}, the highest distress score was observed in the zip code {topDistressScoreData.Zip} ({formatAbbreviate(topDistressScoreData["Distress Score"])} percentile), 0 percentile would be the least distressed (desired outcome), and 100 percentile would be the most distressed (unfavorable outcome).</p>
-          <p>The following map shows the distress score percentile for each zip code in Wayne County.</p>
+          <p>In {topDistressScoreData.Year}, the highest distress score was observed in the zip code {topDistressScoreData.Zip} ({formatAbbreviate(topDistressScoreData["Distress Score"])}), 0 would be the least distressed (desired outcome), and 100 would be the most distressed (unfavorable outcome).</p>
+          <p>The following map shows the distress score for each zip code in Wayne County.</p>
 
           <SourceGroup sources={this.state.sources} />
           <Glossary definitions={definitions} />
@@ -95,7 +95,7 @@ class DistressScore extends SectionColumns {
             },
             height: 400,
             time: "Year",
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Distress Score", d => `${formatAbbreviate(d["Distress Score"])} percentile`]]},
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Distress Score", d => `${formatAbbreviate(d["Distress Score"])}`]]},
             topojson: "/topojson/zipcodes.json",
             topojsonFilter: d => zipcodes.includes(d.properties.ZCTA5CE10),
             topojsonId: d => d.properties.ZCTA5CE10

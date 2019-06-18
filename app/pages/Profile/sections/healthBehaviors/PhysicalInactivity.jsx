@@ -66,7 +66,7 @@ class PhysicalInactivity extends SectionColumns {
           <Stat
             title={"Location with highest prevalence"}
             year={topRecentYearData.Year}
-            value={`${topRecentYearData.Tract}, ${topTractPlace}`}
+            value={<p><CensusTractDefinition text={topRecentYearData.Tract} />{ topTractPlace ? `, ${topTractPlace}` : "" }</p>}
             qualifier={`${formatPercentage(topRecentYearData["Physical Inactivity"])} of the population of this census tract`}
           />
 

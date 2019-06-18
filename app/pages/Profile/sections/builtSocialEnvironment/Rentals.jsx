@@ -68,7 +68,7 @@ class Rentals extends SectionColumns {
           />
           {/* Show stats for Renter-Occupied Housing Units with Extra Pay on Utilities for most recent year. */}
           <Stat
-            title="Units with utilities included"
+            title="Units with utilities included in rent"
             year={utilitiesDataAvailable ? utilitiesData[0].Year : ""}
             value={utilitiesDataAvailable ? `${formatPercentage(recentYearNoExtraUtilitiesPercentage)}` : "N/A"}
           />

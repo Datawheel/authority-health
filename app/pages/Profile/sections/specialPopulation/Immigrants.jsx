@@ -40,14 +40,17 @@ const findTotalImmigrants = data => {
 };
 
 const findImmigrantsInPoverty = data => {
-  const total = sum(data, d => d["Poverty by Nativity"]);
-  const filteredData = data.filter(d => d.Nativity === "Foreign Born" && d["ID Poverty Status"] === 0)[0];
-  filteredData.share = total !== 0 ? filteredData["Poverty by Nativity"] / total * 100 : 0;
-  return filteredData;
+  // Filter immigrants data from the total population.
+  const filteredImmigrantsData = data.filter(d => d.Nativity === "Foreign Born");
+  const total = sum(filteredImmigrantsData, d => d["Poverty by Nativity"]);
+  const filteredPovertyData = filteredImmigrantsData.filter(d => d["ID Poverty Status"] === 0)[0];
+  filteredPovertyData.share = total !== 0 ? filteredPovertyData["Poverty by Nativity"] / total * 100 : 0;
+  return filteredPovertyData;
 };
 
 const formatGeomapData = (data, meta, childrenTractIds, totalImmigrantsSelected = true) => {
   let filteredChildrenGeography = [];
+  let immigrantsPovertyData;
   if (meta.level === "tract") {
     filteredChildrenGeography = data;
   }
@@ -66,26 +69,37 @@ const formatGeomapData = (data, meta, childrenTractIds, totalImmigrantsSelected 
       .key(d => d.Year)
       .entries(filteredChildrenGeography)
       .forEach(group => {
-        const total = sum(group.values, d => d["Poverty by Nativity"]);
-        group.values.forEach(d => {
-          if (d["ID Nativity"] === 1) total !== 0 ? d.share = d["Poverty by Nativity"] / total * 100 : d.share = 0;
-        });
+        nest()
+          .key(d => d["ID Geography"])
+          .entries(group.values)
+          .forEach(eachGeography => {
+            const total = sum(eachGeography.values, d => d["Poverty by Nativity"]);
+            eachGeography.values.forEach(d => {
+              if (d["ID Nativity"] === 1) total !== 0 ? d.share = d["Poverty by Nativity"] / total * 100 : d.share = 0;
+            });
+          });
       });
   }
   else {
+    immigrantsPovertyData = filteredChildrenGeography.filter(d => d.Nativity === "Foreign Born");
     nest()
       .key(d => d.Year)
-      .entries(filteredChildrenGeography)
+      .entries(immigrantsPovertyData)
       .forEach(group => {
-        const total = sum(group.values, d => d["Poverty by Nativity"]);
-        group.values.forEach(d => {
-          if (d["ID Nativity"] === 1 && d["ID Poverty Status"] === 1) total !== 0 ? d.share = d["Poverty by Nativity"] / total * 100 : d.share = 0;
-        });
+        nest()
+          .key(d => d["ID Geography"])
+          .entries(group.values)
+          .forEach(eachGeography => {
+            const total = sum(eachGeography.values, d => d["Poverty by Nativity"]);
+            eachGeography.values.forEach(d => {
+              if (d["ID Poverty Status"] === 0) total !== 0 ? d.share = d["Poverty by Nativity"] / total * 100 : d.share = 0;
+            });
+          });
       });
   }
 
   // Find the top immigrant data for the recent year.
-  const filteredImmigrantsData = totalImmigrantsSelected ? filteredChildrenGeography.filter(d => d["ID Nativity"] === 1) : filteredChildrenGeography.filter(d => d["ID Nativity"] === 1 && d["ID Poverty Status"] === 1);
+  const filteredImmigrantsData = totalImmigrantsSelected ? filteredChildrenGeography.filter(d => d["ID Nativity"] === 1) : immigrantsPovertyData;
   const topImmigrantsData = filteredImmigrantsData.sort((a, b) => b.share - a.share)[0];
   return [filteredImmigrantsData, topImmigrantsData];
 };
@@ -229,7 +243,7 @@ class Immigrants extends SectionColumns {
                 title={"Immigrants in poverty"}
                 year={immigrantsPovertyDataForCurrentLocationAvailable ? currentLevelImmigrantsData.Year : ""}
                 value={immigrantsPovertyDataForCurrentLocationAvailable ? formatPercentage(currentLevelImmigrantsData.share) : "N/A"}
-                qualifier={immigrantsDataForCurrentLocationAvailable ? `of the population in ${meta.level !== "county" ? currentLevelImmigrantsData.Geography : "Wayne County"}` : ""}
+                qualifier={immigrantsDataForCurrentLocationAvailable ? `of the total number of immigrants in ${meta.level !== "county" ? currentLevelImmigrantsData.Geography : "Wayne County"}` : ""}
               />
               <Stat
                 title={getGeomapTitle(meta, dropdownValue)}

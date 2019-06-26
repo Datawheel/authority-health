@@ -13,7 +13,12 @@ import Stat from "components/Stat";
 import rangeFormatter from "utils/rangeFormatter";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
+import Glossary from "components/Glossary";
 import Options from "components/Options";
+
+const definitions = [
+  {term: "Disability", definition: "Census Bureau defines disability as a long-lasting physical, mental, or emotional condition. This condition can make it difficult for a person to do activities such as walking, climbing stairs, dressing, bathing, learning, or remembering. This condition can also impede a person from being able to go outside the home alone or to work at a job or business."}
+];
 
 const formatPopulation = d => `${formatAbbreviate(d)}%`;
 
@@ -86,6 +91,7 @@ class DisabilityStatus extends SectionColumns {
           {healthCoverageTypeAvailable ? <p>The chart here shows the health coverage breakdown of the disabled population by age in {filteredHealthCoverageType[0].Geography}.</p> : ""}
 
           <SourceGroup sources={this.state.sources} />
+          <Glossary definitions={definitions} />
           <Contact slug={this.props.slug} />
         </article>
 

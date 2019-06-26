@@ -167,7 +167,7 @@ class ObesityAndDiabetes extends SectionColumns {
           <Disclaimer>Data is shown for {topFemaleData.Geography}</Disclaimer>
           {/* Show top stats for the Male and Female Diabetes/Obesity data. */}
           <StatGroup
-            title={`${dropdownValue} prevelance by gender`}
+            title={`${dropdownValue === "Diabetes" ?  "diabetes" : "obesity"} prevalance by gender`}
             year={topDropdownValueTract.Year}
             stats={[
               {

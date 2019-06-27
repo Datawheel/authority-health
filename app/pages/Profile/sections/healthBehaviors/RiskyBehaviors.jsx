@@ -19,13 +19,15 @@ import SourceGroup from "components/SourceGroup";
 import Options from "components/Options";
 
 const definitions = [
-  {term: "Current Smoking", definition: "Current Smoking is defined as someone who has smoked greater than 100 cigarettes (including hand rolled cigarettes, cigars, cigarillos etc) in their lifetime and has smoked in the last 28 days."},
+  {term: "Current Smoking", definition: "Current smoking is defined as someone who has smoked greater than 100 cigarettes (including hand rolled cigarettes, cigars, cigarillos etc) in their lifetime and has smoked in the last 28 days."},
   {term: "Binge Drinking", definition: "Binge drinking is defined as the consumption of five or more alcoholic drinks on one occasion in the past month."},
   {term: "Secondhand Smoke Exposure", definition: "Secondhand smoke is a mixture of the smoke that comes from the burning end of a cigarette, cigar, or pipe, and the smoke breathed out by the smoker. It contains more than 7,000 chemicals. Hundreds of those chemicals are toxic and about 70 can cause cancer."},
-  {term: "Monthly Alcohol Consumption", definition: ""}
+  {term: "Any Alcohol Consumption", definition: "Any alcohol consumption is defined as some form of alcohol consumption within the past month."}
 ];
 
 const formatPercentage = (d, mutiplyBy100 = false) => mutiplyBy100 ? `${formatAbbreviate(d * 100)}%` : `${formatAbbreviate(d)}%`;
+
+const formatMonthlyAlcohol = d => d === "Monthly Alcohol Consumption" ? d.replace("Monthly", "Any") : d;
 
 class RiskyBehaviors extends SectionColumns {
 
@@ -91,7 +93,7 @@ class RiskyBehaviors extends SectionColumns {
           <label className="pt-label pt-inline" htmlFor="risky-behaviors-dropdown">
             Show data for
             <select id="risky-behaviors-dropdown" onChange={this.handleChange}>
-              {drugTypes.map(item => <option key={item} value={item}>{item}</option>)}
+              {drugTypes.map(item => <option key={item} value={item}>{formatMonthlyAlcohol(item)}</option>)}
             </select>
           </label>
 
@@ -106,7 +108,7 @@ class RiskyBehaviors extends SectionColumns {
             qualifier={isSecondHandSmokeOrMonthlyAlcoholSelected ? `${formatPercentage(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue], true)} of the population of this zip region` : `${formatPercentage(topTractSmokingDrinkingData[dropdownValue])} of the population of this census tract`}
           />
           {isSecondHandSmokeOrMonthlyAlcoholSelected
-            ? <p>In {topSecondHandSmokeAndMonthlyAlcoholData["End Year"]}, {topSecondHandSmokeAndMonthlyAlcoholData["Zip Region"]} <ZipRegionDefinition text="zip region" /> had the highest prevalence of {dropdownValue.toLowerCase()} ({formatPercentage(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue], true)} of the population), as compared to {formatPercentage(countyLevelData[0][dropdownValue], true)} overall for Wayne County.</p>
+            ? <p>In {topSecondHandSmokeAndMonthlyAlcoholData["End Year"]}, {topSecondHandSmokeAndMonthlyAlcoholData["Zip Region"]} <ZipRegionDefinition text="zip region" /> had the highest prevalence of {formatMonthlyAlcohol(dropdownValue).toLowerCase()} ({formatPercentage(topSecondHandSmokeAndMonthlyAlcoholData[dropdownValue], true)} of the population), as compared to {formatPercentage(countyLevelData[0][dropdownValue], true)} overall for Wayne County.</p>
             : <p>In {topTractSmokingDrinkingData.Year}, <CensusTractDefinition text={topTractSmokingDrinkingData.Tract} />{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} had the highest prevalence of {dropdownValue.toLowerCase()} out of census tracts in Detroit, Livonia, Dearborn and Westland ({formatPercentage(topTractSmokingDrinkingData[dropdownValue])} of the population).</p>
           }
 
@@ -189,8 +191,8 @@ class RiskyBehaviors extends SectionColumns {
               },
               label: d => d["Zip Region"],
               time: "End Year",
-              title: `${dropdownValue} for Zip Regions in Wayne County`,
-              tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Behavior", `${dropdownValue}`], ["Prevalence", d => formatPercentage(d[dropdownValue], true)]]},
+              title: `${formatMonthlyAlcohol(dropdownValue)} for Zip Regions in Wayne County`,
+              tooltipConfig: {tbody: [["Year", d => d["End Year"]], ["Behavior", `${formatMonthlyAlcohol(dropdownValue)}`], ["Prevalence", d => formatPercentage(d[dropdownValue], true)]]},
               topojson: "/topojson/zipregions.json",
               topojsonId: d => d.properties.REGION,
               topojsonFilter: () => true

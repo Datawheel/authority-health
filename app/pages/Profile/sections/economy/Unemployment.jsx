@@ -133,7 +133,8 @@ class Unemployment extends SectionColumns {
               time: "Year",
               xSort: (a, b) => a["ID Age"] - b["ID Age"],
               xConfig: {
-                tickFormat: d => rangeFormatter(d)
+                tickFormat: d => rangeFormatter(d),
+                labelRotation: true
               },
               yConfig: {
                 tickFormat: d => formatPercentage(d),

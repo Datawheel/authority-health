@@ -1,11 +1,14 @@
 import React from "react";
+import {connect} from "react-redux";
 import Vizbuilder from "@datawheel/canon-vizbuilder";
 import places from "../../utils/places";
 import zipcodes from "../../utils/zipcodes";
 import "./Visualize.css";
 
-export default class Visualize extends React.Component {
+class Visualize extends React.Component {
+
   render() {
+
     return <div className="vizbuilder-container">
       <Vizbuilder
         src={[
@@ -36,20 +39,27 @@ export default class Visualize extends React.Component {
         topojson={{
           "County": {
             topojson: "/topojson/county.json",
-            topojsonFilter: d => d.id.startsWith("05000US26")
+            topojsonFilter: d => d.id.startsWith("05000US26"),
+            topojsonId: d => d.id
           },
           "Place": {
             topojson: "/topojson/place.json",
-            topojsonFilter: d => places.includes(d.id)
+            topojsonFilter: d => places.includes(d.id),
+            topojsonId: d => d.id
           },
           "Tract": {
             topojson: "/topojson/tract.json",
-            topojsonFilter: d => d.id.startsWith("14000US26163")
+            topojsonFilter: d => d.id.startsWith("14000US26163"),
+            topojsonId: d => d.id
           },
           "Zip": {
             topojson: "/topojson/zipcodes.json",
-            topojsonFilter: d => zipcodes.includes(d.properties.ZCTA5CE10),
-            topojsonId: d => d.properties.ZCTA5CE10
+            topojsonFilter: d => {
+              const {vizbuilder} = this.props;
+              const acs = vizbuilder && vizbuilder.query.cube ? vizbuilder.query.cube.name.indexOf("acs_") === 0 : false;
+              return acs ? true : zipcodes.includes(d.properties.ZCTA5CE10);
+            },
+            topojsonId: d => `86000US${d.properties.ZCTA5CE10}`
           },
           "Zip Region": {
             topojson: "/topojson/zipregions.json",
@@ -68,4 +78,7 @@ export default class Visualize extends React.Component {
       />
     </div>;
   }
+
 }
+
+export default connect(state => ({vizbuilder: state.vizbuilder}))(Visualize);

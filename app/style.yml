@@ -156,11 +156,12 @@ color-Violent crime: "#D45D59"
 
 
 # health center demographics
-"color-American Indian/Alaska Native Health Center Patients": "#6F59D4"
-"color-Black Health Center Patients": "#A64281"
-"color-Hispanic Health Center Patients": "#D45D59"
-"color-Non-white Health Center Patients": "#B5A604"
-"color-White Health Center Patients": "#CF7A1F"
+"color-Asian Health Center Patient Population": "#8842A6"
+"color-American Indian/Alaska Native Health Center Patient Population": "#6F59D4"
+"color-Black Health Center Patient Population": "#A64281"
+"color-Hispanic Health Center Patient Population": "#D45D59"
+"color-Non-white Health Center Patient Population": "#B5A604"
+"color-White Health Center Patient Population": "#CF7A1F"
 
 # smoking
 "color-Smoking Status Current": "#D45D59"

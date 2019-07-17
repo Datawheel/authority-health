@@ -30,11 +30,12 @@ const groupings = [
   "Pollutant",
   "Travel Time",
   // Health center demographics
-  "American Indian/Alaska Native Health Center Patients",
-  "Black Health Center Patients",
-  "Hispanic Health Center Patients",
-  "Non-white Health Center Patients",
-  "White Health Center Patients",
+  "American Indian/Alaska Native Health Center Patient Population",
+  "Asian Health Center Patient Population",
+  "Black Health Center Patient Population",
+  "Hispanic Health Center Patient Population",
+  "Non-white Health Center Patient Population",
+  "White Health Center Patient Population",
   // smoking status
   "Smoking Status Current",
   "Smoking Status Former",

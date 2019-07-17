@@ -14,7 +14,7 @@ import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
 import Options from "components/Options";
 
-const formatRaceNames = d => d.replace("Health Center Patients", "").trim();
+const formatRaceNames = d => d.replace("Health Center Patient Population", "").trim();
 const lowerCaseRaceName = d => d.trim() === "Black" || d.trim() === "White" ? d.toLowerCase() : d;
 const formatPercentage = d => `${formatAbbreviate(d * 100)}%`;
 
@@ -29,9 +29,9 @@ const formatRaceAndEthnicityData = raceAndEthnicityData => {
         const result = group.values.reduce((acc, currentValue) => {
           if (acc === null && currentValue[d] !== null) {
             // Non-white race population is the sum of all the race population minus White population.
-            if (d === "Non-white Health Center Patients") {
-              d = "White Health Center Patients";
-              currentValue[d] = 1 - currentValue["Non-white Health Center Patients"];
+            if (d === "Non-white Health Center Patient Population") {
+              d = "White Health Center Patient Population";
+              currentValue[d] = 1 - currentValue["Non-white Health Center Patient Population"];
               return Object.assign({}, currentValue, {RaceType: d});
             }
             return Object.assign({}, currentValue, {RaceType: d});
@@ -108,15 +108,15 @@ class HealthCenterDemographics extends SectionColumns {
             componentKey="viz"
             dataFormat={resp => resp.data}
             slug={this.props.slug}
-            data={ isZipLevelDataAvailable ? `/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Geography=${meta.id}&Year=all` : "/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Year=all" }
+            data={ isZipLevelDataAvailable ? `/api/data?measures=Non-white Health Center Patient Population,Hispanic Health Center Patient Population,Black Health Center Patient Population,Asian Health Center Patient Population,American Indian/Alaska Native Health Center Patient Population&Geography=${meta.id}&Year=all` : "/api/data?measures=Non-white Health Center Patient Population,Hispanic Health Center Patient Population,Black Health Center Patient Population,Asian Health Center Patient Population,American Indian/Alaska Native Health Center Patient Population&Year=all" }
             title="Chart of Health Center Demographics" />
 
           {/* Draw a Pie chart to show data for health center data by race */}
           <Pie ref={comp => this.viz = comp } config={{
-            data: isZipLevelDataAvailable ? `/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Geography=${meta.id}&Year=all` : "/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Year=all",
+            data: isZipLevelDataAvailable ? `/api/data?measures=Non-white Health Center Patient Population,Hispanic Health Center Patient Population,Black Health Center Patient Population,Asian Health Center Patient Population,American Indian/Alaska Native Health Center Patient Population&Geography=${meta.id}&Year=all` : "/api/data?measures=Non-white Health Center Patient Population,Hispanic Health Center Patient Population,Black Health Center Patient Population,Asian Health Center Patient Population,American Indian/Alaska Native Health Center Patient Population&Year=all",
             groupBy: "RaceType",
             value: d => d[d.RaceType],
-            label: d => d.RaceType.replace(" Health Center Patients", ""),
+            label: d => d.RaceType.replace(" Health Center Patient Population", ""),
             time: "Year",
             shapeConfig: {
               Path: {
@@ -144,8 +144,8 @@ HealthCenterDemographics.defaultProps = {
 };
 
 HealthCenterDemographics.need = [
-  fetchData("raceAndEthnicityData", "/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Year=latest"),
-  fetchData("raceAndEthnicityZipLevelData", "/api/data?measures=Non-white Health Center Patients,Hispanic Health Center Patients,Black Health Center Patients,Asian Health Center Patients,American Indian/Alaska Native Health Center Patients&Geography=<id>&Year=latest")
+  fetchData("raceAndEthnicityData", "/api/data?measures=Non-white Health Center Patient Population,Hispanic Health Center Patient Population,Black Health Center Patient Population,Asian Health Center Patient Population,American Indian/Alaska Native Health Center Patient Population&Year=latest"),
+  fetchData("raceAndEthnicityZipLevelData", "/api/data?measures=Non-white Health Center Patient Population,Hispanic Health Center Patient Population,Black Health Center Patient Population,Asian Health Center Patient Population,American Indian/Alaska Native Health Center Patient Population&Geography=<id>&Year=latest")
 ];
 
 const mapStateToProps = state => ({

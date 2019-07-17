@@ -2,7 +2,7 @@ const title = "Authority Health Data Portal";
 
 export default {
   link: [
-    {rel: "icon", href: "images/favicon.ico"}
+    {rel: "icon", href: "/images/favicon.ico?v=2"}
   ],
   meta: [
     {charset: "utf-8"},

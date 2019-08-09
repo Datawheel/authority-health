@@ -6,6 +6,7 @@ import {BarChart, Geomap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 import {titleCase} from "d3plus-text";
 import axios from "axios";
+import {color} from "d3-color";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import styles from "style.yml";
@@ -341,6 +342,16 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
                 styles["danger-dark"]
               ]
             },
+            shapeConfig: {
+              Path: {
+                stroke(d, i) {
+                  if (meta.level === "tract" && (d["ID Geography"] === meta.id || d.id === meta.id)) return styles["terra-cotta-dark"];
+                  const c = typeof this._shapeConfig.Path.fill === "function" ? this._shapeConfig.Path.fill(d, i) : this._shapeConfig.Path.fill;
+                  return color(c).darker();
+                },
+                strokeWidth: d => meta.level === "tract" && (d["ID Geography"] === meta.id || d.id === meta.id) ? 2 : 1
+              }
+            },
             title: `${dropdownValue} Population by ${meta.level === "county" ? "Places" : "Census Tracts"} in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`,
             time: "Year",
             label: d => formatGeomapLabel(d, meta, tractToPlace),
@@ -351,6 +362,12 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
           dataFormat={resp => {
             this.setState({sources: updateSource(resp.source, this.state.sources)});
             return isVisionDisabilitySelected ? formatGeomapData(resp.data, meta, childrenTractIds, "Vision")[0] : formatGeomapData(resp.data, meta, childrenTractIds, "Hearing")[0];
+          }}
+          topojsonFormat={resp => {
+            if (meta.level === "tract") {
+              resp.objects.tracts.geometries.sort((a, b) => a.id === meta.id ? 1 : b.id === meta.id ? -1 : 0);
+            }
+            return resp;
           }}
           />
         </div>

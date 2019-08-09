@@ -3,6 +3,8 @@ import {connect} from "react-redux";
 import {Geomap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 import axios from "axios";
+import {color} from "d3-color";
+import styles from "style.yml";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -126,6 +128,8 @@ class PreventiveCare extends SectionColumns {
       topTractPlace = tractToPlace[topDropdownData["ID Tract"]];
     }
 
+    const {meta} = this.props;
+
     return (
       <SectionColumns>
         <SectionTitle>Preventive Care</SectionTitle>
@@ -203,6 +207,16 @@ class PreventiveCare extends SectionColumns {
                 axisConfig: {tickFormat: d => formatPercentage(d)}
               },
               label: d => `${d.Tract}, ${tractToPlace[d["ID Tract"]]}`,
+              shapeConfig: {
+                Path: {
+                  stroke(d, i) {
+                    if (meta.level === "tract" && (d["ID Tract"] === meta.id || d.id === meta.id)) return styles["curry-light"];
+                    const c = typeof this._shapeConfig.Path.fill === "function" ? this._shapeConfig.Path.fill(d, i) : this._shapeConfig.Path.fill;
+                    return color(c).darker();
+                  },
+                  strokeWidth: d => meta.level === "tract" && (d["ID Tract"] === meta.id || d.id === meta.id) ? 2 : 1
+                }
+              },
               time: "Year",
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Preventive Care", `${formatDropdownNames(dropdownValue)}`], ["Share", d => `${formatPercentage(d[dropdownValue])}`]]},
               topojson: "/topojson/tract.json",
@@ -212,6 +226,12 @@ class PreventiveCare extends SectionColumns {
             dataFormat={resp => {
               this.setState({sources: updateSource(resp.source, this.state.sources)});
               return resp.data;
+            }}
+            topojsonFormat={resp => {
+              if (meta.level === "tract") {
+                resp.objects.tracts.geometries.sort((a, b) => a.id === meta.id ? 1 : b.id === meta.id ? -1 : 0);
+              }
+              return resp;
             }}
             />}
         </div>
@@ -229,6 +249,7 @@ PreventiveCare.need = [
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
   topStats: state.data.topStats,
   preventiveCareData: state.data.preventiveCareData
 });

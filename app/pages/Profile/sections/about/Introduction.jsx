@@ -109,7 +109,6 @@ class Introduction extends SectionColumns {
     const lifeExpectancyAvailable = lifeExpectancy.length !== 0;
 
     const onCityOrZipLevel = level === "place" || level === "zip";
-    const highlightSelf = level === "tract";
 
     const populationGrowth = formatAbbreviate(growthCalculator(population[0].Population, population[population.length - 1].Population));
 
@@ -290,11 +289,11 @@ class Introduction extends SectionColumns {
                 Path: {
                   fillOpacity: 0.9,
                   stroke(d, i) {
-                    if (highlightSelf && d["ID Geography"] === meta.id) return styles["curry-light"];
+                    if (level === "tract" && d["ID Geography"] === meta.id) return styles["curry-light"];
                     const c = typeof this._shapeConfig.Path.fill === "function" ? this._shapeConfig.Path.fill(d, i) : this._shapeConfig.Path.fill;
                     return color(c).darker();
                   },
-                  strokeWidth: d => highlightSelf && d["ID Geography"] === meta.id ? 2 : 1
+                  strokeWidth: d => level === "tract" && d["ID Geography"] === meta.id ? 2 : 1
                 }
               },
               ocean: "transparent",
@@ -318,7 +317,7 @@ class Introduction extends SectionColumns {
               return filteredChildrenGeography;
             }}
             topojsonFormat={resp => {
-              if (highlightSelf) {
+              if (level === "tract") {
                 resp.objects.tracts.geometries.sort((a, b) => a.id === meta.id ? 1 : b.id === meta.id ? -1 : 0);
               }
               return resp;

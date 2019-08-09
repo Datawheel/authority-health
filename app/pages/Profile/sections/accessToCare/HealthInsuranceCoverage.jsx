@@ -6,6 +6,8 @@ import {BarChart, Geomap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 import {titleCase} from "d3plus-text";
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
+import {color} from "d3-color";
+import styles from "style.yml";
 
 import Contact from "components/Contact";
 import Disclaimer from "components/Disclaimer";
@@ -249,6 +251,16 @@ class HealthInsuranceCoverage extends SectionColumns {
               colorScale: "share",
               title: `Health Insurance Coverage for ${meta.level === "county" ? "Places" : "Census Tracts"} in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`,
               colorScaleConfig: {axisConfig: {tickFormat: d => formatPercentage(d)}},
+              shapeConfig: {
+                Path: {
+                  stroke(d, i) {
+                    if (meta.level === "tract" && (d["ID Geography"] === meta.id || d.id === meta.id)) return styles["curry-light"];
+                    const c = typeof this._shapeConfig.Path.fill === "function" ? this._shapeConfig.Path.fill(d, i) : this._shapeConfig.Path.fill;
+                    return color(c).darker();
+                  },
+                  strokeWidth: d => meta.level === "tract" && (d["ID Geography"] === meta.id || d.id === meta.id) ? 2 : 1
+                }
+              },
               time: "Year",
               label: d => formatGeomapLabel(d, meta, tractToPlace),
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.share)]]},
@@ -258,6 +270,12 @@ class HealthInsuranceCoverage extends SectionColumns {
             dataFormat={resp => {
               this.setState({sources: updateSource(resp.source, this.state.sources)});
               return formatGeomapCoverageData(resp.data, meta, childrenTractIds)[0];
+            }}
+            topojsonFormat={resp => {
+              if (meta.level === "tract") {
+                resp.objects.tracts.geometries.sort((a, b) => a.id === meta.id ? 1 : b.id === meta.id ? -1 : 0);
+              }
+              return resp;
             }}
             />
           </div>

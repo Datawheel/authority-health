@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {Geomap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 import axios from "axios";
+import {color} from "d3-color";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 import styles from "style.yml";
@@ -94,6 +95,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
 
   render() {
     const {tractToPlace} = this.props.topStats;
+    const {meta} = this.props;
 
     // Include all the measures in the dropdown list.
     const {dropdownValue, healthConditionData, healthConditionWeightedData, countyLevelData} = this.state;
@@ -216,6 +218,16 @@ class ConditionsAndChronicDiseases extends SectionColumns {
               },
               label: d => `${d.Tract}, ${tractToPlace[d["ID Tract"]]}`,
               height: 400,
+              shapeConfig: {
+                Path: {
+                  stroke(d, i) {
+                    if (meta.level === "tract" && (d["ID Tract"] === meta.id || d.id === meta.id)) return styles["terra-cotta-dark"];
+                    const c = typeof this._shapeConfig.Path.fill === "function" ? this._shapeConfig.Path.fill(d, i) : this._shapeConfig.Path.fill;
+                    return color(c).darker();
+                  },
+                  strokeWidth: d => meta.level === "tract" && (d["ID Tract"] === meta.id || d.id === meta.id) ? 2 : 1
+                }
+              },
               time: "Year",
               tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue])}`]]},
               topojson: "/topojson/tract.json",
@@ -225,6 +237,12 @@ class ConditionsAndChronicDiseases extends SectionColumns {
             dataFormat={resp => {
               this.setState({sources: updateSource(resp.source, this.state.sources)});
               return resp.data;
+            }}
+            topojsonFormat={resp => {
+              if (meta.level === "tract") {
+                resp.objects.tracts.geometries.sort((a, b) => a.id === meta.id ? 1 : b.id === meta.id ? -1 : 0);
+              }
+              return resp;
             }}
             />
           }
@@ -243,6 +261,7 @@ ConditionsAndChronicDiseases.need = [
 ];
 
 const mapStateToProps = state => ({
+  meta: state.data.meta,
   topStats: state.data.topStats,
   healthConditionData: state.data.healthConditionData
 });

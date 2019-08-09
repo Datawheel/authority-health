@@ -2,6 +2,7 @@ import React from "react";
 import {connect} from "react-redux";
 import {Geomap} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
+import {color} from "d3-color";
 
 import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
@@ -54,6 +55,8 @@ class PhysicalInactivity extends SectionColumns {
     // Find recent year data for stateLevelDataBySex.
     const stateLevelMaleData = stateLevelDataBySex.filter(d => d.Sex === "Male")[0];
     const stateLevelFemaleData = stateLevelDataBySex.filter(d => d.Sex === "Female")[0];
+
+    const {meta} = this.props;
 
     return (
       <SectionColumns>
@@ -156,11 +159,27 @@ class PhysicalInactivity extends SectionColumns {
                 styles["danger-dark"]
               ]
             },
+            shapeConfig: {
+              Path: {
+                stroke(d, i) {
+                  if (meta.level === "tract" && (d["ID Tract"] === meta.id || d.id === meta.id)) return styles["terra-cotta-dark"];
+                  const c = typeof this._shapeConfig.Path.fill === "function" ? this._shapeConfig.Path.fill(d, i) : this._shapeConfig.Path.fill;
+                  return color(c).darker();
+                },
+                strokeWidth: d => meta.level === "tract" && (d["ID Tract"] === meta.id || d.id === meta.id) ? 2 : 1
+              }
+            },
             time: "Year",
             title: "Physical Inactivity for Census Tracts within Detroit, Livonia, Dearborn and Westland",
             tooltipConfig: {tbody: [["Year", d => d.Year], ["Condition", "Physical Inactivity"], ["Prevalence", d => `${formatPercentage(d["Physical Inactivity"])}`]]},
             topojson: "/topojson/tract.json",
             topojsonFilter: d => d.id.startsWith("14000US26163")
+          }}
+          topojsonFormat={resp => {
+            if (meta.level === "tract") {
+              resp.objects.tracts.geometries.sort((a, b) => a.id === meta.id ? 1 : b.id === meta.id ? -1 : 0);
+            }
+            return resp;
           }}
           />
         </div>

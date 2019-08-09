@@ -190,7 +190,7 @@ class Introduction extends SectionColumns {
           <div>
             <Stat
               title="Distress Score"
-              qualifier={<p className="stat-value-qualifier font-xs">Zip Codes in {meta.name}</p>}
+              qualifier={<p className="stat-value-qualifier font-xs">Zip Codes in {meta.level === "county" || meta.level === "zip" ? "Wayne County" : meta.name}</p>}
             />
             <Geomap config={{
               data: "/api/data?measures=Distress Score&drilldowns=Zip&Year=all",
@@ -209,7 +209,15 @@ class Introduction extends SectionColumns {
               },
               shapeConfig: {
                 Path: {
-                  fillOpacity: 0.9
+                  fillOpacity: 0.9,
+                  stroke(d, i) {
+                    if (level === "zip" && (d["ID Zip"] === meta.id || d.properties && d.properties.ZCTA5CE10 === meta.id.slice(7))) {
+                      return styles["curry-light"];
+                    }
+                    const c = typeof this._shapeConfig.Path.fill === "function" ? this._shapeConfig.Path.fill(d, i) : this._shapeConfig.Path.fill;
+                    return color(c).darker();
+                  },
+                  strokeWidth: d => level === "zip" && (d["ID Zip"] === meta.id || d.properties && d.properties.ZCTA5CE10 === meta.id.slice(7)) ? 2 : 1
                 }
               },
               legend: false,
@@ -224,6 +232,13 @@ class Introduction extends SectionColumns {
               zoom: false
             }}
             dataFormat={resp => resp.data}
+            topojsonFormat={resp => {
+              if (level === "zip") {
+                const zip = meta.id.slice(7);
+                resp.objects.mi_michigan_zip_codes_geo.geometries.sort((a, b) => a.properties.ZCTA5CE10 === zip ? 1 : b.properties.ZCTA5CE10 === zip ? -1 : 0);
+              }
+              return resp;
+            }}
             />
             <Glossary definitions={definitions} />
 

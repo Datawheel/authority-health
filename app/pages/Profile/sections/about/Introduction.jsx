@@ -2,6 +2,7 @@ import React from "react";
 import {connect} from "react-redux";
 import {nest} from "d3-collection";
 import {sum} from "d3-array";
+import {color} from "d3-color";
 import {titleCase} from "d3plus-text";
 import {formatAbbreviate} from "d3plus-format";
 import {Geomap, Treemap} from "d3plus-react";
@@ -108,6 +109,7 @@ class Introduction extends SectionColumns {
     const lifeExpectancyAvailable = lifeExpectancy.length !== 0;
 
     const onCityOrZipLevel = level === "place" || level === "zip";
+    const highlightSelf = level === "tract";
 
     const populationGrowth = formatAbbreviate(growthCalculator(population[0].Population, population[population.length - 1].Population));
 
@@ -286,7 +288,13 @@ class Introduction extends SectionColumns {
               label: d => formatGeomapTractLabel(d, meta, tractToPlace),
               shapeConfig: {
                 Path: {
-                  fillOpacity: 0.9
+                  fillOpacity: 0.9,
+                  stroke(d, i) {
+                    if (highlightSelf && d["ID Geography"] === meta.id) return styles["curry-light"];
+                    const c = typeof this._shapeConfig.Path.fill === "function" ? this._shapeConfig.Path.fill(d, i) : this._shapeConfig.Path.fill;
+                    return color(c).darker();
+                  },
+                  strokeWidth: d => highlightSelf && d["ID Geography"] === meta.id ? 2 : 1
                 }
               },
               ocean: "transparent",
@@ -308,6 +316,12 @@ class Introduction extends SectionColumns {
                 });
               }
               return filteredChildrenGeography;
+            }}
+            topojsonFormat={resp => {
+              if (highlightSelf) {
+                resp.objects.tracts.geometries.sort((a, b) => a.id === meta.id ? 1 : b.id === meta.id ? -1 : 0);
+              }
+              return resp;
             }}
             />
           </div>

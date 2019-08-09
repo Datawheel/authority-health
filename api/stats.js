@@ -144,13 +144,13 @@ module.exports = function(app) {
     currentLocationMeasureData.locations = geoLevels;
 
     // Get all Place/Tract/Zip meta data which are in the Wayne County.
-    const allLocations = await db.search.findAll().then(results => results.map(resp => resp.toJSON()));
+    const currentLevelLocations = await db.search.findAll({where: {hierarchy: currLevel}})
+      .then(results => results.map(resp => resp.toJSON()));
 
     const population = cache.pops;
     const medianIncome = cache.medianIncome;
     const currLevel = titleCase(prefixMap[id.slice(0, 3)]);
 
-    const currentLevelLocations = allLocations.filter(d => d.hierarchy === currLevel);
     currentLevelLocations.forEach(location => {
       population.hasOwnProperty(location.id) ? location.population = population[location.id] : location.population = 0;
       medianIncome.hasOwnProperty(location.id) ? location.medianIncome = medianIncome[location.id] : location.medianIncome = 0;

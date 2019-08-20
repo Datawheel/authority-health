@@ -107,7 +107,7 @@
     & .select-label {
       display: inline-block;
       padding: 3px 5px 3px 8px;
-      white-space: normal;
+      white-space: nowrap;
     }
     & .grouping-items, & .filter-items {
       & .pt-popover-content {

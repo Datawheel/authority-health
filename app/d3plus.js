@@ -1,9 +1,19 @@
 import styles from "style.yml";
 
-/**
-  The object exported by this file will be used as a base config for any
-  d3plus-react visualization rendered on the page.
-*/
+const bad = styles.danger;
+const typeface = "Lato, sans-serif";
+const defaultFontColor = styles["dark-3"];
+const headingFontColor = styles.black;
+const fontSizeSm = 12;
+const fontSizeLg = 18;
+
+const badMeasures = [
+  "Low-Income Not Served by Health Centers",
+  "Percent Change in Health Center Uninsured Patient Population (1-Year)",
+  "Poverty Rate"
+];
+
+export {badMeasures};
 
 // create array of category groupings to loop through
 const groupings = [
@@ -63,16 +73,8 @@ function colorLogic(d) {
   }
 
   // if a visualization is totally purple, it probably doesn't yet have a color scheme assigned
-  // else {
-  return styles["majorelle-dark"];
-  // }
+  return Object.keys(d).some(v => badMeasures.includes(v)) ? bad : styles["majorelle-dark"];
 }
-
-const typeface = "Lato, sans-serif";
-const defaultFontColor = styles["dark-3"];
-const headingFontColor = styles.black;
-const fontSizeSm = 12;
-const fontSizeLg = 18;
 
 // shared styles for y & x axis
 const axisConfig = {

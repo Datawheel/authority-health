@@ -3,11 +3,71 @@ import {connect} from "react-redux";
 import Vizbuilder from "@datawheel/canon-vizbuilder";
 import places from "../../utils/places";
 import zipcodes from "../../utils/zipcodes";
+import {badMeasures} from "d3plus.js";
+import colors from "style.yml";
 import "./Visualize.css";
+
+const measureConfig = {};
+badMeasures.forEach(measure => {
+  measureConfig[measure] = {
+    colorScaleConfig: {
+      color: colors.danger
+    }
+  };
+});
+
+const negativeMeasures = [
+  "Percent Change in Health Center Uninsured Patient Population (1-Year)"
+];
+
+negativeMeasures.forEach(measure => {
+  measureConfig[measure] = {
+    colorScaleConfig: {
+      color: [
+        colors["danger-dark"],
+        colors.danger,
+        colors["danger-light"],
+        colors.white
+      ]
+    }
+  };
+});
+
+const divergingMeasures = [
+  "Percent Change in Employment",
+  "Percent Change in Establishments",
+  "Percent Change in Health Center Medicare and Private Insurance Patients (1-Year)",
+  "Percent Change in Health Center Medicare and Private Insurance Patients (2-Year)",
+  "Percent Change in Health Center Patients (1-Year)",
+  "Percent Change in Health Center Patients (2-Year)"
+];
+
+divergingMeasures.forEach(measure => {
+  measureConfig[measure] = {
+    colorScaleConfig: {
+      color: [
+        colors.danger,
+        colors["danger-light"],
+        colors.white,
+        colors["success-light"],
+        colors.success
+      ]
+    }
+  };
+});
 
 class Visualize extends React.Component {
 
   render() {
+
+    const {charts} = this.props.vizbuilder;
+    const {cube} = this.props.vizbuilder.query;
+
+    if (cube) {
+      if (cube.name === "UDS Mapper - Heatlh Centers") {
+        this.props.vizbuilder.charts = charts.filter(d => d.chartType !== "lineplot");
+      }
+    }
 
     return <div className="vizbuilder-container">
       <Vizbuilder
@@ -16,14 +76,28 @@ class Visualize extends React.Component {
           // "https://acs-api.datausa.io/"
         ]}
         defaultGroup={[
-          "Geography.Zip",
-          "Geography.Zip Region",
-          "Geography.Place",
-          "Geography.Tract",
           "Gender.Gender",
-          "Age.Age"
+          "Sex.Sex",
+          "Age.Age",
+          "Race.Race",
+          "Hours.Hours",
+          "Specialty.Specialty",
+          "Disability.Disability",
+          "ELL.ELL",
+          "NSLP.NSLP",
+          "Parents Education.Parents Education",
+          "Level of School.Level of School",
+          "Category.Sub-category",
+          "Category.Category",
+          "Assitance Type.Assistance Type",
+          "Public Assistance or Snap.Public Assistance or Snap",
+          "Geography.Tract",
+          "Geography.Place",
+          "Geography.Zip",
+          "Geography.Zip Region"
         ]}
         defaultMeasure="Number of Food Stores"
+        measureConfig={measureConfig}
         tableLogic={cubes => {
           const cube = cubes.find(d => d.name.match(/_5/));
           return cube || cubes[0];
@@ -31,9 +105,8 @@ class Visualize extends React.Component {
         config={{
           colorScalePosition: "bottom",
           detectResizeDelay: 100,
-          shapeConfig: {
-            hoverOpacity: 1
-          },
+          height: undefined,
+          width: undefined,
           zoomScroll: true
         }}
         topojson={{
@@ -68,8 +141,8 @@ class Visualize extends React.Component {
           }
         }}
         visualizations={[
-          "geomap",
           "treemap",
+          "geomap",
           "barchart",
           "lineplot",
           "histogram",

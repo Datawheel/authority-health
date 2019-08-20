@@ -107,6 +107,7 @@ tooltip
 ----------------------------------- */
 
 .d3plus-tooltip {
+	max-width: 250px;
 	z-index: 21;
 	& .d3plus-tooltip-title {
 		color: var(--dark-3);

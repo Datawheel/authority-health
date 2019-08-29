@@ -49,7 +49,7 @@ const formatText = dropdownValue => {
 };
 
 const definitions = [
-  {term: "Annual Checkup", definition: "Visits to doctor for routine checkup within the past year among adults aged ≥18 years."},
+  {term: "Adults With Annual Checkups", definition: "Visits to doctor for routine checkup within the past year among adults aged ≥18 years."},
   {term: "Core Preventive Services for Older Men", definition: "Older adults aged ≥65 years who are up to date on a core set of clinical preventive services by age and sex (Number of men aged ≥65 years reporting having received all of the following: an influenza vaccination in the past year; a PPV ever; and either a fecal occult blood test (FOBT) within the past year, a sigmoidoscopy within the past 5 years and a FOBT within the past 3 years, or a colonoscopy within the past 10 years)."},
   {term: "Core Preventive Services for Older Women", definition: "Older adults aged ≥65 years who are up to date on a core set of clinical preventive services by age and sex (Number of women aged ≥65 years reporting having received all of the following: an influenza vaccination in the past year; a pneumococcal vaccination (PPV) ever; either a fecal occult blood test (FOBT) within the past year, a sigmoidoscopy within the past 5 years and a FOBT within the past 3 years, or a colonoscopy within the previous 10 years; and a mammogram in the past 2 years)."},
   {term: "Dental Visit", definition: "Visits to dentist or dental clinic among adults aged ≥18 years."},
@@ -71,7 +71,7 @@ class PreventiveCare extends SectionColumns {
   constructor(props) {
     super(props);
     this.state = {
-      dropdownValue: "Annual Checkup",
+      dropdownValue: "Adults With Annual Checkups",
       preventiveCareWeightedData: [],
       countyLevelData: [],
       preventiveCareData: this.props.preventiveCareData,
@@ -115,7 +115,7 @@ class PreventiveCare extends SectionColumns {
 
   render() {
     const {dropdownValue, preventiveCareData, preventiveCareWeightedData, isPreventativeCareWeightedValueSelected, countyLevelData} = this.state;
-    const dropdownList = ["Annual Checkup", "Core Preventive Services for Older Men", "Core Preventive Services for Older Women",
+    const dropdownList = ["Adults With Annual Checkups", "Core Preventive Services for Older Men", "Core Preventive Services for Older Women",
       "Dental Visit", "Colorectal Cancer Screening", "Pap Smear Test", "Mammography", "Cholesterol Screening", "Taking Blood Pressure Medication", "Sleep Less Than 7 Hours",
       "Had Flu Vaccine", "Had Pneumonia Vaccine", "Had Routine Checkup Last Year", "FOBT or Endoscopy", "HIV Tested"];
 
@@ -245,7 +245,7 @@ PreventiveCare.defaultProps = {
 };
 
 PreventiveCare.need = [
-  fetchData("preventiveCareData", "/api/data?measures=Annual Checkup&drilldowns=Tract&Year=latest", d => d.data) // 500 Cities
+  fetchData("preventiveCareData", "/api/data?measures=Adults With Annual Checkups&drilldowns=Tract&Year=latest", d => d.data) // 500 Cities
 ];
 
 const mapStateToProps = state => ({

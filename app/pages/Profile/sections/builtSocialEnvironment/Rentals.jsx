@@ -54,17 +54,17 @@ class Rentals extends SectionColumns {
     if (rentersByIncomePercentageAvailable) topIncomeToPayMostRent = formatRentersByIncomePercentage(rentersByIncomePercentage).sort((a, b) => b.share - a.share)[0];
 
     let growthRate;
-    if (rentAmountDataAvailable) growthRate = growthCalculator(rentAmountData[0]["Rent Amount"], rentAmountData[1]["Rent Amount"]);
+    if (rentAmountDataAvailable) growthRate = growthCalculator(rentAmountData[0]["Median Rent Amount"], rentAmountData[1]["Median Rent Amount"]);
 
     return (
       <SectionColumns>
         <SectionTitle>Rentals</SectionTitle>
         <article>
-          {/* Show recent Year Rent amount. */}
+          {/* Show recent Year Median Rent amount. */}
           <Stat
             title="Median Rent"
             year={rentAmountDataAvailable ? rentAmountData[0].Year : ""}
-            value={rentAmountDataAvailable ? `$${formatAbbreviate(rentAmountData[0]["Rent Amount"])}/month` : "N/A"}
+            value={rentAmountDataAvailable ? `$${formatAbbreviate(rentAmountData[0]["Median Rent Amount"])}/month` : "N/A"}
           />
           {/* Show stats for Renter-Occupied Housing Units with Extra Pay on Utilities for most recent year. */}
           <Stat
@@ -73,7 +73,7 @@ class Rentals extends SectionColumns {
             value={utilitiesDataAvailable ? `${formatPercentage(recentYearNoExtraUtilitiesPercentage)}` : "N/A"}
           />
 
-          <p>{rentAmountDataAvailable ? <span>In {rentAmountData[0].Year}, the median price for a rental unit in {rentAmountData[0].Geography} was ${formatAbbreviate(rentAmountData[0]["Rent Amount"])}/month. This is a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "increase"} from the previous year (${formatAbbreviate(rentAmountData[1]["Rent Amount"])}/month).</span> : ""}
+          <p>{rentAmountDataAvailable ? <span>In {rentAmountData[0].Year}, the median price for a rental unit in {rentAmountData[0].Geography} was ${formatAbbreviate(rentAmountData[0]["Median Rent Amount"])}/month. This is a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "increase"} from the previous year (${formatAbbreviate(rentAmountData[1]["Median Rent Amount"])}/month).</span> : ""}
             {utilitiesDataAvailable ? <span> {formatPercentage(recentYearNoExtraUtilitiesPercentage)} of the rental properties in {utilitiesData[0].Geography} include utilities with the price of rent.</span> : ""}</p>
           <p>{rentersByIncomePercentageAvailable ? <span>The average household income bracket of renters in {topIncomeToPayMostRent.Geography} is {rangeFormatter(topIncomeToPayMostRent["Household Income"])}.</span> : ""}</p>
 
@@ -99,13 +99,13 @@ class Rentals extends SectionColumns {
               height: 175,
               groupBy: "Geography",
               x: "Year",
-              y: "Rent Amount",
+              y: "Median Rent Amount",
               yConfig: {
                 tickFormat: d => `$${formatAbbreviate(d)}`,
                 title: "Rent Per Month"
               },
               title: d => `Median Rent Over Time in ${d[0].Geography}`,
-              tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => `$${formatAbbreviate(d["Rent Amount"])}`]]}
+              tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => `$${formatAbbreviate(d["Median Rent Amount"])}`]]}
             }}
             />
             }
@@ -162,7 +162,7 @@ Rentals.defaultProps = {
 };
 
 Rentals.need = [
-  fetchData("rentAmountData", "/api/data?measures=Rent Amount&Geography=<id>&Year=all", d => d.data), // gets all year data to find growthRate
+  fetchData("rentAmountData", "/api/data?measures=Median Rent Amount&Geography=<id>&Year=all", d => d.data), // gets all year data to find growthRate
   fetchData("utilitiesData", "/api/data?measures=Renter-Occupied Housing Units&drilldowns=Inclusion of Utilities in Rent&Geography=<id>&Year=latest", d => d.data),
   fetchData("rentersByIncomePercentage", "https://acs.datausa.io/api/data?measures=Renters by Income Percentage&drilldowns=Household Income&Geography=<id>&Year=latest", d => d.data)
 ];

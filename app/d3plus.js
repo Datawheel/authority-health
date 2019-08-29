@@ -30,7 +30,7 @@ const groupings = [
   "Sex of Partner",
   "Responsibility Length",
   "Offense",
-  "Rent Amount",
+  "Median Rent Amount",
   "Household Income Bucket",
   "Household Income",
   "Level of School",

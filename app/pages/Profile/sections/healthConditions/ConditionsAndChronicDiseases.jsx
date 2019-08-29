@@ -52,7 +52,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
   constructor(props) {
     super(props);
     this.state = {
-      dropdownValue: "Arthritis",
+      dropdownValue: "Adults With Arthritis",
       healthConditionWeightedData: [],
       countyLevelData: [],
       healthConditionData: this.props.healthConditionData,
@@ -99,7 +99,9 @@ class ConditionsAndChronicDiseases extends SectionColumns {
 
     // Include all the measures in the dropdown list.
     const {dropdownValue, healthConditionData, healthConditionWeightedData, countyLevelData} = this.state;
-    const dropdownList = ["Arthritis", "COPD", "Chronic Kidney Disease", "Coronary Heart Disease", "Current Asthma", "High Blood Pressure", "High Cholesterol",
+    const dropdownList = [
+      "Adults With Arthritis", "Adults With COPD", "Adults With Chronic Kidney Disease",
+      "Adults With Coronary Heart Disease", "Current Asthma", "High Blood Pressure", "High Cholesterol",
       "Stroke", "Teeth Loss", "Cardiovascular Disease", "Ever Depressive", "Ever Heart Attack", "Heart Disease",
       "Mental Health", "Poor Mental Health 14 Or More Days", "Physical Health", "Gen Health Fair Or Poor"];
 
@@ -257,7 +259,7 @@ ConditionsAndChronicDiseases.defaultProps = {
 };
 
 ConditionsAndChronicDiseases.need = [
-  fetchData("healthConditionData", "/api/data?measures=Arthritis&drilldowns=Tract&Year=latest", d => d.data)
+  fetchData("healthConditionData", "/api/data?measures=Adults With Arthritis&drilldowns=Tract&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({

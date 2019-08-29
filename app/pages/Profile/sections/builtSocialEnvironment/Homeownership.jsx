@@ -132,7 +132,7 @@ class Homeownership extends SectionColumns {
           <Stat
             title="Median construction year"
             year={constructionDateDataAvailable ? `AS OF ${constructionDateData[0].Year}` : ""}
-            value={constructionDateDataAvailable ? constructionDateData[0]["Construction Date"] : "N/A"}
+            value={constructionDateDataAvailable ? constructionDateData[0]["Construction Year"] : "N/A"}
           />
           <p>{medianHousingValueForCurrentProfileAvailable ? <span>In {topMedianHousingUnitsValueForProfile.Year}, the median property value in {topMedianHousingUnitsValueForProfile.Geography}, was ${commas(topMedianHousingUnitsValueForProfile["Property Value"])}.</span> : ""}
             {occupancyDataAvailable ? <span> {formatAbbreviate(topOccupancyData.share)}% of the households in {topOccupancyData.Geography} were occupied as of {topOccupancyData.Year}.</span> : ""}</p>
@@ -200,7 +200,7 @@ Homeownership.need = [
   fetchData("medianHousingValueForCurrentProfile", "https://acs.datausa.io/api/data?measures=Property Value&Geography=<id>&Year=latest", d => d.data),
   fetchData("medianHousingValueForAllPlaces", "https://acs.datausa.io/api/data?measures=Property Value&Geography=04000US26:places&Year=latest", d => d.data),
   fetchData("medianHousingValueForAllTracts", "https://acs.datausa.io/api/data?measures=Property Value&Geography=05000US26163:children&Year=latest", d => d.data),
-  fetchData("constructionDateData", "/api/data?measures=Construction Date&Geography=<id>&Year=latest", d => d.data)
+  fetchData("constructionDateData", "/api/data?measures=Construction Year&Geography=<id>&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({

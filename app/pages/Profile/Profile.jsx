@@ -246,7 +246,7 @@ Profile.need = [
   fetchData("childrenTractIds", "/api/geo/children/<id>/?level=Tract"),
   fetchData("childrenZipIds", "/api/geo/children/<id>/?level=Zip"),
   fetchData("population", "https://acs.datausa.io/api/data?measures=Population&Geography=<id>&year=all"),
-  fetchData("currentLevelOverallCoverage", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=<id>&Year=latest", d => d.data),
+  fetchData("currentLevelOverallCoverage", "/api/data?measures=Population Size by Insurance Coverage Status&drilldowns=Health Insurance Coverage Status&Geography=<id>&Year=latest", d => d.data),
   fetchData("sortedCancerTypes", "/api/data?measures=Cancer Diagnosis&drilldowns=Cancer Site&Year=all&order=Cancer Site&sort=asc", d => {
     const cancerList = [];
     nest().key(d => d["Cancer Site"]).entries(d.data).forEach(group => cancerList.push(group.key));

@@ -129,9 +129,9 @@ class Introduction extends SectionColumns {
       topRaceAndEthnicity = formatRaceAndEthnicityData(populationByRaceAndEthnicity)[1];
     }
 
-    const total = currentLevelOverallCoverage[0]["Population by Insurance Coverage"] + currentLevelOverallCoverage[1]["Population by Insurance Coverage"];
+    const total = currentLevelOverallCoverage[0]["Population Size by Insurance Coverage Status"] + currentLevelOverallCoverage[1]["Population Size by Insurance Coverage Status"];
     const topOverallCoverage = currentLevelOverallCoverage.filter(d => d["Health Insurance Coverage Status"] === "With Health Insurance Coverage")[0];
-    topOverallCoverage.share = total !== 0 ? topOverallCoverage["Population by Insurance Coverage"] / total * 100 : 0;
+    topOverallCoverage.share = total !== 0 ? topOverallCoverage["Population Size by Insurance Coverage Status"] / total * 100 : 0;
 
     // Filter zips for Geomap based on the profile you are on.
     let filteredZips = [];

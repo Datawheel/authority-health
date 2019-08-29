@@ -45,8 +45,8 @@ const formatCoverageData = coverageData => {
         .key(d => d["ID Age"])
         .entries(group.values)
         .forEach(ageGroup => {
-          const total = sum(ageGroup.values, d => d["Population by Insurance Coverage"]);
-          ageGroup.values.forEach(d => total !== 0 ? d.share = d["Population by Insurance Coverage"] / total * 100 : d.share = 0);
+          const total = sum(ageGroup.values, d => d["Population Size by Insurance Coverage Status"]);
+          ageGroup.values.forEach(d => total !== 0 ? d.share = d["Population Size by Insurance Coverage Status"] / total * 100 : d.share = 0);
         });
     });
   const filteredRecentYearData = coverageData.filter(d => d["ID Health Insurance Coverage Status"] === 0);
@@ -54,9 +54,9 @@ const formatCoverageData = coverageData => {
 };
 
 const findOverallCoverage = data => {
-  const total = data[0]["Population by Insurance Coverage"] + data[1]["Population by Insurance Coverage"];
+  const total = data[0]["Population Size by Insurance Coverage Status"] + data[1]["Population Size by Insurance Coverage Status"];
   const filteredData = data.filter(d => d["Health Insurance Coverage Status"] === "With Health Insurance Coverage")[0];
-  filteredData.share = total !== 0 ? filteredData["Population by Insurance Coverage"] / total * 100 : 0;
+  filteredData.share = total !== 0 ? filteredData["Population Size by Insurance Coverage Status"] / total * 100 : 0;
   return filteredData;
 };
 
@@ -84,8 +84,8 @@ const formatGeomapCoverageData = (data, meta, childrenTractIds) => {
         .key(d => meta.level === "county" ? d["ID Place"] : d["ID Geography"])
         .entries(group.values)
         .forEach(geography => {
-          const total = sum(geography.values, d => d["Population by Insurance Coverage"]);
-          geography.values.forEach(d => total !== 0 ? d.share = d["Population by Insurance Coverage"] / total * 100 : d.share = 0);
+          const total = sum(geography.values, d => d["Population Size by Insurance Coverage Status"]);
+          geography.values.forEach(d => total !== 0 ? d.share = d["Population Size by Insurance Coverage Status"] / total * 100 : d.share = 0);
         });
     });
   const filteredWithCoverageData = filteredChildrenGeography.filter(d => d["ID Health Insurance Coverage Status"] === 0);
@@ -206,10 +206,10 @@ class HealthInsuranceCoverage extends SectionColumns {
                 componentKey="viz1"
                 dataFormat={resp => resp.data}
                 slug={this.props.slug}
-                data={ `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status,Sex,Age&Geography=${geoId}&Year=all` }
+                data={ `/api/data?measures=Population Size by Insurance Coverage Status&drilldowns=Health Insurance Coverage Status,Sex,Age&Geography=${geoId}&Year=all` }
                 title="Chart of Health Insurance Coverage" />
               <BarChart ref={comp => this.viz1 = comp} config={{
-                data: `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status,Sex,Age&Geography=${geoId}&Year=all`,
+                data: `/api/data?measures=Population Size by Insurance Coverage Status&drilldowns=Health Insurance Coverage Status,Sex,Age&Geography=${geoId}&Year=all`,
                 discrete: "x",
                 height: 250,
                 groupBy: "Sex",
@@ -242,11 +242,11 @@ class HealthInsuranceCoverage extends SectionColumns {
               componentKey="viz2"
               dataFormat={resp => resp.data}
               slug={this.props.slug}
-              data={ `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=${meta.id}:children&Year=all` }
+              data={ `/api/data?measures=Population Size by Insurance Coverage Status&drilldowns=Health Insurance Coverage Status&Geography=${meta.id}:children&Year=all` }
               title="Map of Health Insurance Coverage" />
 
             <Geomap ref={comp => this.viz2 = comp } config={{
-              data: `/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=${meta.id}:children&Year=all`,
+              data: `/api/data?measures=Population Size by Insurance Coverage Status&drilldowns=Health Insurance Coverage Status&Geography=${meta.id}:children&Year=all`,
               groupBy: meta.level === "county" ? "ID Place" : "ID Geography",
               colorScale: "share",
               title: `Health Insurance Coverage for ${meta.level === "county" ? "Places" : "Census Tracts"} in ${meta.level === "county" || meta.level === "tract" ? "Wayne County" : meta.name}`,
@@ -291,11 +291,11 @@ HealthInsuranceCoverage.defaultProps = {
 };
 
 HealthInsuranceCoverage.need = [
-  fetchData("coverageData", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status,Sex,Age&Geography=<id>&Year=latest"),
-  fetchData("nationOverallCoverage", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Nation=01000US&Year=latest", d => d.data),
-  fetchData("stateOverallCoverage", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&State=04000US26&Year=latest", d => d.data),
-  fetchData("wayneCountyOverallCoverage", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=05000US26163&Year=latest", d => d.data),
-  fetchData("coverageDataForChildrenGeography", "/api/data?measures=Population by Insurance Coverage&drilldowns=Health Insurance Coverage Status&Geography=<id>:children&Year=latest", d => d.data)
+  fetchData("coverageData", "/api/data?measures=Population Size by Insurance Coverage Status&drilldowns=Health Insurance Coverage Status,Sex,Age&Geography=<id>&Year=latest"),
+  fetchData("nationOverallCoverage", "/api/data?measures=Population Size by Insurance Coverage Status&drilldowns=Health Insurance Coverage Status&Nation=01000US&Year=latest", d => d.data),
+  fetchData("stateOverallCoverage", "/api/data?measures=Population Size by Insurance Coverage Status&drilldowns=Health Insurance Coverage Status&State=04000US26&Year=latest", d => d.data),
+  fetchData("wayneCountyOverallCoverage", "/api/data?measures=Population Size by Insurance Coverage Status&drilldowns=Health Insurance Coverage Status&Geography=05000US26163&Year=latest", d => d.data),
+  fetchData("coverageDataForChildrenGeography", "/api/data?measures=Population Size by Insurance Coverage Status&drilldowns=Health Insurance Coverage Status&Geography=<id>:children&Year=latest", d => d.data)
 ];
 
 const mapStateToProps = state => ({

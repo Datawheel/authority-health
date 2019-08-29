@@ -91,10 +91,10 @@ class Visualize extends React.Component {
           "Category.Category",
           "Assitance Type.Assistance Type",
           "Public Assistance or Snap.Public Assistance or Snap",
-          "Geography.Tract",
-          "Geography.Place",
           "Geography.Zip",
-          "Geography.Zip Region"
+          "Geography.Zip Region",
+          "Geography.Tract",
+          "Geography.Place"
         ]}
         defaultMeasure="Number of Food Stores"
         measureConfig={measureConfig}

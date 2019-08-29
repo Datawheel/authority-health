@@ -76,6 +76,7 @@ class Visualize extends React.Component {
           // "https://acs-api.datausa.io/"
         ]}
         defaultGroup={[
+          "Coverage Status.Coverage Status",
           "Gender.Gender",
           "Sex.Sex",
           "Age.Age",

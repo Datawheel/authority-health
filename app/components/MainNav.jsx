@@ -31,17 +31,15 @@ class MainNav extends Component {
           />}
 
           <ul className="main-nav-list u-list-reset font-xs">
-            <li className="main-nav-item">
-              <Link to="/profile" className="main-nav-link">Locations</Link>
-            </li>
 
             <li className="main-nav-item">
-              <Link to="/charts" className="main-nav-link">Charts</Link>
+              <Link to="/charts" className="main-nav-link">Chart Builder</Link>
             </li>
 
             <li className="main-nav-item">
               <Link to="/about" className="main-nav-link">About</Link>
             </li>
+
           </ul>
         </div>
       </nav>

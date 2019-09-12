@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import ProfileTile from "./ProfileTile";
-import {Link} from "react-router";
 import "./ProfileTileList.css";
 
 export default class ProfileTileList extends Component {
@@ -9,20 +8,36 @@ export default class ProfileTileList extends Component {
 
     const profiles = [
       {
+        name: "Wayne County",
+        id: "05000US26163"
+      },
+      {
         name: "Detroit",
         id: "16000US2622000"
       },
       {
-        name: "Romulus",
-        id: "16000US2669420"
+        name: "Dearborn",
+        id: "16000US2621000"
       },
       {
         name: "Livonia",
         id: "16000US2649000"
       },
       {
-        name: "Dearborn heights",
+        name: "Westland",
+        id: "16000US2686000"
+      },
+      {
+        name: "Taylor",
+        id: "16000US2679000"
+      },
+      {
+        name: "Dearborn Heights",
         id: "16000US2621020"
+      },
+      {
+        name: "Lincoln Park",
+        id: "16000US2647800"
       }
     ];
 
@@ -30,12 +45,7 @@ export default class ProfileTileList extends Component {
       <div className="profile-tile-section section-container u-padding-top-off">
 
         <div className="profile-tile-header">
-          <h2>Location profiles (714 total)</h2>
-          {/* random location link */}
-          <Link className="profile-tile-link link font-xs u-uppercase" to="/profile">
-            Random location
-            <span className="profile-tile-link-icon pt-icon pt-icon-random" />
-          </Link>
+          <h2>Top locations</h2>
         </div>
 
         <div className="profile-tile-list g-container">

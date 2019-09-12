@@ -93,10 +93,15 @@ class Search extends Component {
       if (active && event.target === this.input) {
 
         const highlighted = document.querySelector(".highlighted");
+        const results = document.querySelectorAll(".results > li");
 
         if (key === ENTER && highlighted) {
           this.setState({active: false});
           router.push(highlighted.querySelector("a").href);
+        }
+        else if (key === ENTER && results.length) {
+          this.setState({active: false});
+          router.push(results[0].querySelector("a").href);
         }
         else if (key === DOWN || key === UP) {
 
@@ -104,8 +109,6 @@ class Search extends Component {
             if (key === DOWN) document.querySelector(".results > li:first-child").classList.add("highlighted");
           }
           else {
-
-            const results = document.querySelectorAll(".results > li");
 
             const currentIndex = [].indexOf.call(results, highlighted);
 

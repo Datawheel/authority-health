@@ -76,12 +76,19 @@ async function run() {
   files
     .forEach(file => {
       const contents = shell.cat(file);
-      const matches = contents.matchAll(/fetchData\([\s]*\"[A-z]+\"\,[\s]*\"([^\"]+)\"/gm);
-      for (const match of matches) {
+      const regex = new RegExp(/fetchData\([\s]*\"[A-z]+\"\,[\s]*\"([^\"]+)\"/gm);
+      let match;
+      while ((match = regex.exec(contents)) !== null) {
         let url = match[1];
         if (url.indexOf("/") === 0) url = `${domain}${url}`;
         urls.push(url);
       }
+      // const matches = contents.matchAll(/fetchData\([\s]*\"[A-z]+\"\,[\s]*\"([^\"]+)\"/gm);
+      // for (const match of matches) {
+      //   let url = match[1];
+      //   if (url.indexOf("/") === 0) url = `${domain}${url}`;
+      //   urls.push(url);
+      // }
     });
 
   console.log(`${files.length} files analyzed`);
@@ -97,17 +104,17 @@ async function run() {
     .then(resp => resp.data);
 
   attrs = attrs
-    // .sort((a, b) => {
-    //   const levelDiff = levels.indexOf(a.level) - levels.indexOf(b.level);
-    //   if (levelDiff !== 0) return levelDiff;
-    //   else return b.zvalue - a.zvalue;
-    // })
     .sort((a, b) => {
-      const levelDiff = levels.indexOf(b.level) - levels.indexOf(a.level);
+      const levelDiff = levels.indexOf(a.level) - levels.indexOf(b.level);
       if (levelDiff !== 0) return levelDiff;
-      else return a.zvalue - b.zvalue;
-    })
-    .slice(8, 10);
+      else return b.zvalue - a.zvalue;
+    });
+  // .sort((a, b) => {
+  //   const levelDiff = levels.indexOf(b.level) - levels.indexOf(a.level);
+  //   if (levelDiff !== 0) return levelDiff;
+  //   else return a.zvalue - b.zvalue;
+  // })
+  // .slice(8, 10);
 
   const fullURLs = generalURLs.concat(d3Array.merge(attrs
     .map(attr => dataURLs.map(url => url.replace(/\<id\>/g, attr.id)))));

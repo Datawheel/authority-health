@@ -14,7 +14,7 @@ const domain = "https://ah-cedar.datawheel.us";
 const levels = ["county", "place", "zip", "tract"];
 
 const throttle = new PromiseThrottle({
-  requestsPerSecond: 10,
+  requestsPerSecond: 1,
   promiseImplementation: Promise
 });
 

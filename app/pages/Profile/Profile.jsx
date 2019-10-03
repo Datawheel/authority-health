@@ -20,14 +20,10 @@ import CancerPrevalenceByDemographics from "./sections/healthConditions/CancerPr
 import OccurrenceByCancerSite from "./sections/healthConditions/OccurrenceByCancerSite";
 import ObesityAndDiabetes from "./sections/healthConditions/ObesityAndDiabetes";
 import ConditionsAndChronicDiseases from "./sections/healthConditions/ConditionsAndChronicDiseases";
-// import DentistsDemographic from "./sections/accessToCare/DentistsDemographic";
-// import DentistsWorkStatus from "./sections/accessToCare/DentistsWorkStatus";
 import HealthCenterDemographics from "./sections/accessToCare/HealthCenterDemographics";
 import HealthInsuranceCoverage from "./sections/accessToCare/HealthInsuranceCoverage";
-// import GrandparentCaregivers from "./sections/specialPopulation/GrandparentCaregivers";
 import Veterans from "./sections/specialPopulation/Veterans";
 import Immigrants from "./sections/specialPopulation/Immigrants";
-// import DomesticPartners from "./sections/specialPopulation/DomesticPartners";
 import DisabilityStatus from "./sections/specialPopulation/DisabilityStatus";
 import Homeless from "./sections/specialPopulation/Homeless";
 import Incarceration from "./sections/specialPopulation/Incarceration";
@@ -38,7 +34,6 @@ import Transportation from "./sections/builtSocialEnvironment/Transportation";
 import ViolentAndPropertyCrimes from "./sections/builtSocialEnvironment/ViolentAndPropertyCrimes";
 import EmploymentGrowth from "./sections/economy/EmploymentGrowth";
 import Unemployment from "./sections/economy/Unemployment";
-// import ConsumerPriceIndex from "./sections/economy/ConsumerPriceIndex";
 import DistressScore from "./sections/economy/DistressScore";
 import HouseholdIncomeFromPublicAssistance from "./sections/economy/HouseholdIncomeFromPublicAssistance";
 import WageDistribution from "./sections/economy/WageDistribution";
@@ -47,8 +42,7 @@ import EducationalAttainment from "./sections/education/EducationalAttainment";
 import DropoutRate from "./sections/education/DropoutRate";
 import StudentPoverty from "./sections/education/StudentPoverty";
 import ReadingAssessment from "./sections/education/ReadingAssessment";
-// import WaterQuality from "./sections/naturalEnvironment/WaterQuality";
-// import AirQuality from "./sections/naturalEnvironment/AirQuality";
+import AirQuality from "./sections/naturalEnvironment/AirQuality";
 
 class Profile extends Component {
 
@@ -107,8 +101,6 @@ class Profile extends Component {
         </TopicTitle>
         <div className="section-container">
           <HealthCenterDemographics />
-          {/* <DentistsDemographic /> */}
-          {/* <DentistsWorkStatus /> */}
           <HealthInsuranceCoverage />
         </div>
 
@@ -134,7 +126,6 @@ class Profile extends Component {
         <div className="section-container">
           <EmploymentGrowth />
           <Unemployment />
-          {/* <ConsumerPriceIndex /> */}
           <DistressScore />
           <HouseholdIncomeFromPublicAssistance />
           <WageDistribution />
@@ -167,7 +158,7 @@ class Profile extends Component {
           <ViolentAndPropertyCrimes />
         </div>
 
-        {/* <TopicTitle slug="natural-environment">
+        <TopicTitle slug="natural-environment">
           <div className="section-container">
             <Icon iconName="tree" />
             Natural Environment
@@ -175,7 +166,7 @@ class Profile extends Component {
         </TopicTitle>
         <div className="section-container">
           <AirQuality />
-        </div> */}
+        </div>
 
         <TopicTitle slug="special-populations">
           <div className="section-container">
@@ -184,9 +175,7 @@ class Profile extends Component {
           </div>
         </TopicTitle>
         <div className="section-container">
-          {/* <GrandparentCaregivers /> */}
           <Immigrants />
-          {/* <DomesticPartners /> */}
           <DisabilityStatus />
           <VisionAndAuditoryDisabilities />
           <Homeless />
@@ -212,13 +201,9 @@ Profile.need = [
   PreventiveCare,
   RiskyBehaviors,
   HealthCenterDemographics,
-  // DentistsDemographic,
-  // DentistsWorkStatus,
   HealthInsuranceCoverage,
-  // GrandparentCaregivers,
   Homeless,
   Immigrants,
-  // DomesticPartners,
   DisabilityStatus,
   VisionAndAuditoryDisabilities,
   Incarceration,
@@ -227,7 +212,6 @@ Profile.need = [
   Rentals,
   Transportation,
   ViolentAndPropertyCrimes,
-  // ConsumerPriceIndex,
   DistressScore,
   EmploymentGrowth,
   HouseholdIncomeFromPublicAssistance,
@@ -238,8 +222,7 @@ Profile.need = [
   EducationalAttainment,
   ReadingAssessment,
   StudentPoverty,
-  // WaterQuality,
-  // AirQuality,
+  AirQuality,
   fetchData("topStats", "/api/stats/<id>"),
   fetchData("meta", "/api/search?id=<id>", resp => resp[0]),
   fetchData("childrenTractIds", "/api/geo/children/<id>/?level=Tract"),

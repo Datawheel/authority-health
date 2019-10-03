@@ -48,7 +48,7 @@ import DropoutRate from "./sections/education/DropoutRate";
 import StudentPoverty from "./sections/education/StudentPoverty";
 import ReadingAssessment from "./sections/education/ReadingAssessment";
 // import WaterQuality from "./sections/naturalEnvironment/WaterQuality";
-import AirQuality from "./sections/naturalEnvironment/AirQuality";
+// import AirQuality from "./sections/naturalEnvironment/AirQuality";
 
 class Profile extends Component {
 
@@ -167,16 +167,15 @@ class Profile extends Component {
           <ViolentAndPropertyCrimes />
         </div>
 
-        <TopicTitle slug="natural-environment">
+        {/* <TopicTitle slug="natural-environment">
           <div className="section-container">
             <Icon iconName="tree" />
             Natural Environment
           </div>
         </TopicTitle>
         <div className="section-container">
-          {/* <WaterQuality /> */}
           <AirQuality />
-        </div>
+        </div> */}
 
         <TopicTitle slug="special-populations">
           <div className="section-container">
@@ -240,7 +239,7 @@ Profile.need = [
   ReadingAssessment,
   StudentPoverty,
   // WaterQuality,
-  AirQuality,
+  // AirQuality,
   fetchData("topStats", "/api/stats/<id>"),
   fetchData("meta", "/api/search?id=<id>", resp => resp[0]),
   fetchData("childrenTractIds", "/api/geo/children/<id>/?level=Tract"),

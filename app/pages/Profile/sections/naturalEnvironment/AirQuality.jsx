@@ -99,6 +99,7 @@ class AirQuality extends SectionColumns {
   render() {
 
     const {meta, airQualityDays} = this.props;
+    if (!airQualityDays.data.length) return null;
     const {dropdownValue, airQualityMedianAQIs, airPollutants, sensitiveGroupData} = this.state;
 
     const dropdownList = ["Air Quality Days", "Air Pollutants", "Median Air Quality Index", "Unhealthy Air for Sensitive Groups"];
@@ -329,7 +330,7 @@ AirQuality.defaultProps = {
 
 AirQuality.need = [
   // Fetching data for 2017 since 2018 data is not available for all 365 days.
-  fetchData("airQualityDays", "/api/data?measures=Air Quality Days&drilldowns=Category&Geography=<id>&Year=2017")
+  fetchData("airQualityDays", "/api/data?measures=Air Quality Days&drilldowns=Category&Geography=<id>&Year=latest")
 ];
 
 const mapStateToProps = state => ({

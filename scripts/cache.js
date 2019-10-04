@@ -47,7 +47,6 @@ function writeProgress() {
 /** */
 async function createRequest(url) {
   return throttle.add(() => axios({url, method: "GET", timeout: 1000 * 30}) // 30 second timeout
-    .then(resp => resp.data)
     .then(() => {
       counter++;
       writeProgress();
@@ -69,36 +68,7 @@ function sleep(ms) {
 /** */
 async function run() {
 
-  const folder = path.join(process.cwd(), "app/pages/Profile/");
-  let urls = [];
-  const files = readFiles(folder);
-
-  files
-    .forEach(file => {
-      const contents = shell.cat(file);
-      const regex = new RegExp(/fetchData\([\s]*\"[A-z]+\"\,[\s]*\"([^\"]+)\"/gm);
-      let match;
-      while ((match = regex.exec(contents)) !== null) {
-        let url = match[1];
-        if (url.indexOf("/") === 0) url = `${domain}${url}`;
-        urls.push(url);
-      }
-      // const matches = contents.matchAll(/fetchData\([\s]*\"[A-z]+\"\,[\s]*\"([^\"]+)\"/gm);
-      // for (const match of matches) {
-      //   let url = match[1];
-      //   if (url.indexOf("/") === 0) url = `${domain}${url}`;
-      //   urls.push(url);
-      // }
-    });
-
-  console.log(`${files.length} files analyzed`);
-  urls = Array.from(new Set(urls));
-  console.log(`${urls.length} unique URLs detected`);
-
-  const dataURLs = urls.filter(url => url.includes("<id>"));
-  const generalURLs = urls.filter(url => !url.includes("<id>"));
-  console.log(`${dataURLs.length} URLs are profile specific`);
-  console.log(`${generalURLs.length} URLs are profile agnostic`);
+  const profileOnly = process.argv.includes("profile");
 
   let attrs = await axios.get(`${domain}/api/search/?limit=1000`)
     .then(resp => resp.data);
@@ -116,31 +86,63 @@ async function run() {
   // })
   // .slice(8, 10);
 
-  const fullURLs = generalURLs.concat(d3Array.merge(attrs
-    .map(attr => dataURLs.map(url => url.replace(/\<id\>/g, attr.id)))));
+  if (!profileOnly) {
 
-  console.log("");
-  total = fullURLs.length;
-  await Promise.all(fullURLs.map(createRequest));
-  console.log("");
+    const folder = path.join(process.cwd(), "app/pages/Profile/");
+    let urls = [];
+    const files = readFiles(folder);
 
-  const retryMax = 5;
-  while (retries.length && round < retryMax) {
-    console.log("waiting 30 seconds before retrying timeouts...");
-    await sleep(1000 * 30); // 30 seconds
-    counter = 0;
-    round++;
-    total = retries.length;
-    const requests = retries.map(createRequest);
-    retries = [];
-    await Promise.all(requests);
+    files
+      .forEach(file => {
+        const contents = shell.cat(file);
+        const regex = new RegExp(/fetchData\([\s]*\"[A-z]+\"\,[\s]*\"([^\"]+)\"/gm);
+        let match;
+        while ((match = regex.exec(contents)) !== null) {
+          let url = match[1];
+          if (url.indexOf("/") === 0) url = `${domain}${url}`;
+          urls.push(url);
+        }
+      });
+
+    console.log(`${files.length} files analyzed`);
+    urls = Array.from(new Set(urls));
+    console.log(`${urls.length} unique URLs detected`);
+
+    const dataURLs = urls.filter(url => url.includes("<id>"));
+    const generalURLs = urls.filter(url => !url.includes("<id>"));
+    console.log(`${dataURLs.length} URLs are profile specific`);
+    console.log(`${generalURLs.length} URLs are profile agnostic`);
+
+    const fullURLs = generalURLs.concat(d3Array.merge(attrs
+      .map(attr => dataURLs.map(url => url.replace(/\<id\>/g, attr.id)))));
+
     console.log("");
-  }
-  if (retries.length) {
-    console.log("unable to cache the following data calls:");
-    console.log(retries);
+    total = fullURLs.length;
+    await Promise.all(fullURLs.map(createRequest));
     console.log("");
-    retries = [];
+
+    const retryMax = 5;
+    while (retries.length && round < retryMax) {
+      console.log("waiting 30 seconds before retrying timeouts...");
+      await sleep(1000 * 30); // 30 seconds
+      counter = 0;
+      round++;
+      total = retries.length;
+      const requests = retries.map(createRequest);
+      retries = [];
+      await Promise.all(requests);
+      console.log("");
+    }
+
+    if (retries.length) {
+      console.log(`unable to cache ${retries.length} data calls`);
+      const file = "./scripts/cache-data-errors.csv";
+      console.log(`error URLs written to ${file}`);
+      fs.writeFileSync(file, retries.join("\n"), "utf8");
+      console.log("");
+      retries = [];
+    }
+
   }
 
   const profiles = attrs.map(attr => `https://data.authorityhealth.org/profile/${attr.id}`);
@@ -152,9 +154,14 @@ async function run() {
   console.log("");
 
   if (retries.length) {
-    console.log("unable to cache the following profiles:");
-    console.log(retries);
+    console.log(`unable to cache ${retries.length} profiles`);
+    const file = "./scripts/cache-profile-errors.csv";
+    console.log(`error URLs written to ${file}`);
+    fs.writeFileSync(file, retries.join("\n"), "utf8");
+    console.log("");
   }
+
+  shell.exit(0);
 
 }
 

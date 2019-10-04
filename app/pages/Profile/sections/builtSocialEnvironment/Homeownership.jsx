@@ -123,12 +123,12 @@ class Homeownership extends SectionColumns {
             value={medianHousingValueForCurrentProfileAvailable ? `$${commas(topMedianHousingUnitsValueForProfile["Property Value"])}` : "N/A"}
             qualifier={medianHousingValueForCurrentProfileAvailable ? `in ${topMedianHousingUnitsValueForProfile.Geography}` : `in ${meta.name}`}
           />
-          <Stat
+          {topChildrenGeographyData && <Stat
             title={getGeomapTitle(meta)}
             year={topChildrenGeographyData.Year}
             value={`$${commas(topChildrenGeographyData["Property Value"])}`}
             qualifier={formatGeomapLabel(topChildrenGeographyData, meta, tractToPlace)}
-          />
+          />}
           <Stat
             title="Median construction year"
             year={constructionDateDataAvailable ? `AS OF ${constructionDateData[0].Year}` : ""}

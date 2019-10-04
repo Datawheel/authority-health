@@ -54,7 +54,7 @@ class Rentals extends SectionColumns {
     if (rentersByIncomePercentageAvailable) topIncomeToPayMostRent = formatRentersByIncomePercentage(rentersByIncomePercentage).sort((a, b) => b.share - a.share)[0];
 
     let growthRate;
-    if (rentAmountDataAvailable) growthRate = growthCalculator(rentAmountData[0]["Median Rent Amount"], rentAmountData[1]["Median Rent Amount"]);
+    if (rentAmountDataAvailable && rentAmountData.length > 1) growthRate = growthCalculator(rentAmountData[0]["Median Rent Amount"], rentAmountData[1]["Median Rent Amount"]);
 
     return (
       <SectionColumns>
@@ -73,9 +73,14 @@ class Rentals extends SectionColumns {
             value={utilitiesDataAvailable ? `${formatPercentage(recentYearNoExtraUtilitiesPercentage)}` : "N/A"}
           />
 
-          <p>{rentAmountDataAvailable ? <span>In {rentAmountData[0].Year}, the median price for a rental unit in {rentAmountData[0].Geography} was ${formatAbbreviate(rentAmountData[0]["Median Rent Amount"])}/month. This is a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "increase"} from the previous year (${formatAbbreviate(rentAmountData[1]["Median Rent Amount"])}/month).</span> : ""}
-            {utilitiesDataAvailable ? <span> {formatPercentage(recentYearNoExtraUtilitiesPercentage)} of the rental properties in {utilitiesData[0].Geography} include utilities with the price of rent.</span> : ""}</p>
-          <p>{rentersByIncomePercentageAvailable ? <span>The average household income bracket of renters in {topIncomeToPayMostRent.Geography} is {rangeFormatter(topIncomeToPayMostRent["Household Income"])}.</span> : ""}</p>
+          <p>
+            { rentAmountDataAvailable ? <span>In {rentAmountData[0].Year}, the median price for a rental unit in {rentAmountData[0].Geography} was ${formatAbbreviate(rentAmountData[0]["Median Rent Amount"])}/month.</span> : null }
+            { growthRate ? <span>This is a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "increase"} from the previous year (${formatAbbreviate(rentAmountData[1]["Median Rent Amount"])}/month).</span> : null }
+            { utilitiesDataAvailable ? <span> {formatPercentage(recentYearNoExtraUtilitiesPercentage)} of the rental properties in {utilitiesData[0].Geography} include utilities with the price of rent.</span> : null }
+          </p>
+          <p>
+            { rentersByIncomePercentageAvailable ? <span>The average household income bracket of renters in {topIncomeToPayMostRent.Geography} is {rangeFormatter(topIncomeToPayMostRent["Household Income"])}.</span> : null }
+          </p>
 
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
@@ -92,22 +97,22 @@ class Rentals extends SectionColumns {
             }
 
             {/* Create a LinePlot. */}
-            {rentAmountDataAvailable &&
-            <LinePlot ref={comp => this.viz1 = comp } config={{
-              data: rentAmountData,
-              discrete: "x",
-              height: 175,
-              groupBy: "Geography",
-              x: "Year",
-              y: "Median Rent Amount",
-              yConfig: {
-                tickFormat: d => `$${formatAbbreviate(d)}`,
-                title: "Rent Per Month"
-              },
-              title: d => `Median Rent Over Time in ${d[0].Geography}`,
-              tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => `$${formatAbbreviate(d["Median Rent Amount"])}`]]}
-            }}
-            />
+            {rentAmountDataAvailable && rentAmountData.length > 1
+              ? <LinePlot ref={comp => this.viz1 = comp } config={{
+                data: rentAmountData,
+                discrete: "x",
+                height: 175,
+                groupBy: "Geography",
+                x: "Year",
+                y: "Median Rent Amount",
+                yConfig: {
+                  tickFormat: d => `$${formatAbbreviate(d)}`,
+                  title: "Rent Per Month"
+                },
+                title: d => `Median Rent Over Time in ${d[0].Geography}`,
+                tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => `$${formatAbbreviate(d["Median Rent Amount"])}`]]}
+              }}
+              /> : null
             }
           </div>
         </article>

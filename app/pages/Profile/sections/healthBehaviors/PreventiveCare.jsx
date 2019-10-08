@@ -34,7 +34,7 @@ const getArticle = dropdownValue => {
   return "a";
 };
 
-const corePreventiveText = (share, cesusTract, dropdownValue, topTractPlace) => <span>{share} of older {dropdownValue === "Core Preventive Services for Older Women" ? "women" : "men"} in {<CensusTractDefinition text={cesusTract}/>}{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} received a set of core preventive services.</span>;
+const corePreventiveText = (share, cesusTract, dropdownValue, topTractPlace) => <span>{share} of older {dropdownValue.includes("Women") ? "women" : "men"} in {<CensusTractDefinition text={cesusTract}/>}{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} received a set of core preventive services.</span>;
 
 const formatWomenText = dropdownValue => {
   if (dropdownValue === "Pap Smear Test") return "women";
@@ -48,21 +48,23 @@ const formatText = dropdownValue => {
   return "";
 };
 
+const encodeMeasure = d => d.replace(/\+/g, "%2B");
+
 const definitions = [
   {term: "Adults With Annual Checkups", definition: "Visits to doctor for routine checkup within the past year among adults aged ≥18 years."},
-  {term: "Core Preventive Services for Older Men", definition: "Older adults aged ≥65 years who are up to date on a core set of clinical preventive services by age and sex (Number of men aged ≥65 years reporting having received all of the following: an influenza vaccination in the past year; a PPV ever; and either a fecal occult blood test (FOBT) within the past year, a sigmoidoscopy within the past 5 years and a FOBT within the past 3 years, or a colonoscopy within the past 10 years)."},
-  {term: "Core Preventive Services for Older Women", definition: "Older adults aged ≥65 years who are up to date on a core set of clinical preventive services by age and sex (Number of women aged ≥65 years reporting having received all of the following: an influenza vaccination in the past year; a pneumococcal vaccination (PPV) ever; either a fecal occult blood test (FOBT) within the past year, a sigmoidoscopy within the past 5 years and a FOBT within the past 3 years, or a colonoscopy within the previous 10 years; and a mammogram in the past 2 years)."},
+  {term: "Men Aged 65+ Who Are Up-to-date on Core Preventive Services", definition: "Older adults aged ≥65 years who are up to date on a core set of clinical preventive services by age and sex (Number of men aged ≥65 years reporting having received all of the following: an influenza vaccination in the past year; a PPV ever; and either a fecal occult blood test (FOBT) within the past year, a sigmoidoscopy within the past 5 years and a FOBT within the past 3 years, or a colonoscopy within the past 10 years)."},
+  {term: "Women Aged 65+ Who Are Up-to-date on Core Preventive Services", definition: "Older adults aged ≥65 years who are up to date on a core set of clinical preventive services by age and sex (Number of women aged ≥65 years reporting having received all of the following: an influenza vaccination in the past year; a pneumococcal vaccination (PPV) ever; either a fecal occult blood test (FOBT) within the past year, a sigmoidoscopy within the past 5 years and a FOBT within the past 3 years, or a colonoscopy within the previous 10 years; and a mammogram in the past 2 years)."},
   {term: "Dental Visit", definition: "Visits to dentist or dental clinic among adults aged ≥18 years."},
-  {term: "Colorectal Cancer Screening", definition: "Fecal occult blood test, sigmoidoscopy, or colonoscopy among adults aged 50–75 years."},
+  {term: "Adults Aged 50-75 Years With Colorectal Cancer Screening", definition: "Fecal occult blood test, sigmoidoscopy, or colonoscopy among adults aged 50–75 years."},
   {term: "Pap Smear Test", definition: "Papanicolaou smear use among adult women aged 21–65 years."},
   {term: "Mammography", definition: "Mammography use among women aged 50–74 years."},
-  {term: "Cholesterol Screening", definition: "Cholesterol screening among adults aged ≥18 years."},
+  {term: "Adults With Cholesterol Screening", definition: "Cholesterol screening among adults aged ≥18 years."},
   {term: "Taking Blood Pressure Medication", definition: "Taking medicine for high blood pressure control among adults aged ≥18 years with high blood pressure."},
   {term: "Sleep Less Than 7 Hours", definition: "Sleeping less than 7 hours among adults aged ≥18 years."},
-  {term: "Flu Vaccine", definition: "Among adults aged 65 years and older, the proportion who reported that they had a flu vaccine, either by an injection in the arm or sprayed in the nose during the past 12 months."},
-  {term: "Pneumonia Vaccine", definition: "Among adults aged 65 years and older, the proportion who reported that they ever had a pneumococcal vaccine."},
-  {term: "Routine Checkup Last Year", definition: "The proportion of adults who reported that they did not have a routine checkup in the past year."},
-  {term: "Appropriate Colorectal Cancer Screening", definition: "Among adults aged 50 years and older, the proportion who had either a fecal occult blood test within the past year, a sigmoidoscopy within the past five years, or a colonoscopy within the past ten years."},
+  {term: "Had Flu Vaccine", definition: "Among adults aged 65 years and older, the proportion who reported that they had a flu vaccine, either by an injection in the arm or sprayed in the nose during the past 12 months."},
+  {term: "Had Pneumonia Vaccine", definition: "Among adults aged 65 years and older, the proportion who reported that they ever had a pneumococcal vaccine."},
+  {term: "Had Routine Checkup Last Year", definition: "The proportion of adults who reported that they did not have a routine checkup in the past year."},
+  {term: "Adults Aged 50-75 Years With Colorectal Cancer Screening", definition: "Among adults aged 50 years and older, the proportion who had either a fecal occult blood test within the past year, a sigmoidoscopy within the past five years, or a colonoscopy within the past ten years."},
   {term: "HIV Tested", definition: "Among adults aged 18 - 64 years, the proportion who reported that they ever had been tested for HIV, apart from tests that were part of a blood donation."}
 ];
 
@@ -88,9 +90,9 @@ class PreventiveCare extends SectionColumns {
     dropdownValue === "Had Routine Checkup Last Year" ||
     dropdownValue === "FOBT or Endoscopy" ||
     dropdownValue === "HIV Tested") {
-      axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=latest`) // MiBRFS - All Years
+      axios.get(`/api/data?measures=${encodeMeasure(dropdownValue)}&drilldowns=Zip Region&Year=latest`) // MiBRFS - All Years
         .then(resp => {
-          axios.get(`/api/data?measures=${dropdownValue}&Geography=05000US26163&Year=latest`) // Get Wayne County data for comparison. Only available for MiBRFS cube and not 500 cities.
+          axios.get(`/api/data?measures=${encodeMeasure(dropdownValue)}&Geography=05000US26163&Year=latest`) // Get Wayne County data for comparison. Only available for MiBRFS cube and not 500 cities.
             .then(d => {
               this.setState({
                 preventiveCareWeightedData: resp.data.data,
@@ -102,7 +104,7 @@ class PreventiveCare extends SectionColumns {
         });
     }
     else {
-      axios.get(`/api/data?measures=${dropdownValue}&drilldowns=Tract&Year=latest`)
+      axios.get(`/api/data?measures=${encodeMeasure(dropdownValue)}&drilldowns=Tract&Year=latest`)
         .then(resp => {
           this.setState({
             preventiveCareData: resp.data.data,
@@ -115,12 +117,13 @@ class PreventiveCare extends SectionColumns {
 
   render() {
     const {dropdownValue, preventiveCareData, preventiveCareWeightedData, isPreventativeCareWeightedValueSelected, countyLevelData} = this.state;
-    const dropdownList = ["Adults With Annual Checkups", "Core Preventive Services for Older Men", "Core Preventive Services for Older Women",
-      "Dental Visit", "Colorectal Cancer Screening", "Pap Smear Test", "Mammography", "Cholesterol Screening", "Taking Blood Pressure Medication", "Sleep Less Than 7 Hours",
-      "Had Flu Vaccine", "Had Pneumonia Vaccine", "Had Routine Checkup Last Year", "FOBT or Endoscopy", "HIV Tested"];
+
+    const preventativeMeasure = dropdownValue === "Men Aged 65+ Who Are Up-to-date on Core Preventive Services" || dropdownValue === "Women Aged 65+ Who Are Up-to-date on Core Preventive Services";
 
     // Find recent year top data for the selected dropdown value.
-    const topDropdownData = isPreventativeCareWeightedValueSelected ? preventiveCareWeightedData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0] : preventiveCareData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
+    const topDropdownData = isPreventativeCareWeightedValueSelected
+      ? preventiveCareWeightedData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0]
+      : preventiveCareData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
 
     const {tractToPlace} = this.props.topStats;
     let topTractPlace;
@@ -138,7 +141,7 @@ class PreventiveCare extends SectionColumns {
           <label className="pt-label pt-inline" htmlFor="preventive-care-dropdown">
             Show data for
             <select id="preventive-care-dropdown" onChange={this.handleChange}>
-              {dropdownList.map(item => <option key={item} value={item}>{formatDropdownNames(item)}</option>)}
+              {definitions.map((item, i) => <option key={i} value={item.term}>{formatDropdownNames(item.term)}</option>)}
             </select>
           </label>
 
@@ -157,7 +160,7 @@ class PreventiveCare extends SectionColumns {
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           {isPreventativeCareWeightedValueSelected
             ? <p>In {topDropdownData["End Year"]}, {formatPercentage(topDropdownData[dropdownValue], true)} of the {dropdownValue === "Had Flu Vaccine" || dropdownValue === "Had Pneumonia Vaccine" ? "65 and older" : "adult"} population of the {topDropdownData["Zip Region"]} <ZipRegionDefinition text="zip region" /> had {dropdownValue === "Sleep Less Than 7 Hours" ? formatText(dropdownValue) : <span>{getArticle(dropdownValue)} {formatDropdownNames(dropdownValue).toLowerCase()}</span>}, as compared to {formatPercentage(countyLevelData[0][dropdownValue], true)} overall for Wayne County.</p>
-            : <p>In {topDropdownData.Year}, {dropdownValue === "Core Preventive Services for Older Men" || dropdownValue === "Core Preventive Services for Older Women" ? corePreventiveText(formatPercentage(topDropdownData[dropdownValue]), topDropdownData.Tract, dropdownValue, topTractPlace) : <span>{formatPercentage(topDropdownData[dropdownValue])} of {dropdownValue === "Pap Smear Test" || dropdownValue === "Mammography" ? formatWomenText(dropdownValue) : "the adult population"} {dropdownValue === "Colorectal Cancer Screening" ? "aged 50–75 years" : ""} of <CensusTractDefinition text={topDropdownData.Tract}/>{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} had {dropdownValue === "Cholesterol Screening" ? formatText(dropdownValue) : <span>{getArticle(dropdownValue)} {formatDropdownNames(dropdownValue).toLowerCase()}.</span>}</span>} This rate is the highest of all census tracts in Detroit, Livonia, Dearborn and Westland.</p>
+            : <p>In {topDropdownData.Year}, {preventativeMeasure ? corePreventiveText(formatPercentage(topDropdownData[dropdownValue]), topDropdownData.Tract, dropdownValue, topTractPlace) : <span>{formatPercentage(topDropdownData[dropdownValue])} of {dropdownValue === "Pap Smear Test" || dropdownValue === "Mammography" ? formatWomenText(dropdownValue) : "the adult population"} {dropdownValue === "Adults Aged 50-75 Years With Colorectal Cancer Screening" ? "aged 50–75 years" : ""} of <CensusTractDefinition text={topDropdownData.Tract}/>{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} had {dropdownValue === "Cholesterol Screening" ? formatText(dropdownValue) : <span>{getArticle(dropdownValue)} {formatDropdownNames(dropdownValue).toLowerCase()}.</span>}</span>} This rate is the highest of all census tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
           {isPreventativeCareWeightedValueSelected
             ? <p>The map here shows {formatDropdownNames(dropdownValue).toLowerCase()} rate for zip regions in Wayne County.</p>
@@ -175,12 +178,12 @@ class PreventiveCare extends SectionColumns {
             componentKey="viz"
             dataFormat={resp => resp.data}
             slug={this.props.slug}
-            data={ `/api/data?measures=${dropdownValue}&drilldowns=${ isPreventativeCareWeightedValueSelected ? "Zip Region" : "Tract" }&Year=all` }
+            data={ `/api/data?measures=${encodeMeasure(dropdownValue)}&drilldowns=${ isPreventativeCareWeightedValueSelected ? "Zip Region" : "Tract" }&Year=all` }
             title="Map of Preventive Care" />
           {/* Geomap to show Preventive care data for selected dropdown Value. */}
           {isPreventativeCareWeightedValueSelected
             ? <Geomap ref={comp => this.viz = comp } config={{
-              data: `/api/data?measures=${dropdownValue}&drilldowns=Zip Region&Year=all`,
+              data: `/api/data?measures=${encodeMeasure(dropdownValue)}&drilldowns=Zip Region&Year=all`,
               groupBy: "ID Zip Region",
               colorScale: dropdownValue,
               colorScaleConfig: {
@@ -200,7 +203,7 @@ class PreventiveCare extends SectionColumns {
             }}
             />
             : <Geomap ref={comp => this.viz = comp } config={{
-              data: `/api/data?measures=${dropdownValue}&drilldowns=Tract&Year=all`,
+              data: `/api/data?measures=${encodeMeasure(dropdownValue)}&drilldowns=Tract&Year=all`,
               groupBy: "ID Tract",
               colorScale: dropdownValue,
               colorScaleConfig: {

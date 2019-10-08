@@ -30,7 +30,7 @@
     "@blueprintjs/table": "^1.31.3",
     "@datawheel/canon-core": "^0.16.34",
     "@datawheel/canon-logiclayer": "^0.3.24",
-    "@datawheel/canon-vizbuilder": "^0.2.26",
+    "@datawheel/canon-vizbuilder": "^0.2.27",
     "flickr-sdk": "^3.8.0",
     "google-spreadsheet": "^2.0.7",
     "jszip": "^3.2.1",

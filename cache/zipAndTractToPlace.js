@@ -5,7 +5,7 @@ const readline = require("readline");
 const {CANON_LOGICLAYER_CUBE} = process.env;
 
 const throttle = new PromiseThrottle({
-  requestsPerSecond: 50,
+  requestsPerSecond: 25,
   promiseImplementation: Promise
 });
 

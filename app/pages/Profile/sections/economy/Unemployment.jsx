@@ -81,31 +81,30 @@ class Unemployment extends SectionColumns {
         <SectionTitle>Unemployment</SectionTitle>
         <article>
           {!isUnemploymentRateAvailableForCurrentLocation &&
-            <Disclaimer>Unemployment rate Data is only available for {unemploymentRate.data[0].Geography}</Disclaimer>
+            <Disclaimer>Unemployment data is only available for {unemploymentRate.data[0].Geography}</Disclaimer>
           }
           <StatGroup
-            title={"full-time employment by gender"}
-            year={workExperienceAvailable ? getMaleFullTimeData[0].Year : ""}
+            title={"top unemployed gender/age groups"}
+            year={employmentStatusAvailable ? getTopMaleUnemploymemtData.Year : ""}
             stats={[
               {
-                title: "Female",
-                year: workExperienceAvailable ? getFemaleFullTimeData[0].Year : "",
-                value: workExperienceAvailable ? formatPercentage(getFemaleFullTimeData[0].share) : "N/A",
-                qualifier: workExperienceAvailable ? `of the full-time working population in ${getFemaleFullTimeData[0].Geography}` : ""
+                title: "Male",
+                year: employmentStatusAvailable ? getTopMaleUnemploymemtData.Year : "",
+                value: employmentStatusAvailable ? getTopFemaleUnemploymemtData.Age.toLowerCase() : "N/A",
+                qualifier: employmentStatusAvailable ? `${formatPercentage(getTopMaleUnemploymemtData.share)} of the population in ${getTopMaleUnemploymemtData.Geography}` : "",
+                color: "terra-cotta"
               },
               {
-                title: "Male",
-                year: workExperienceAvailable ? getMaleFullTimeData[0].Year : "",
-                value: workExperienceAvailable ? formatPercentage(getMaleFullTimeData[0].share) : "N/A",
-                qualifier: workExperienceAvailable ? `of the full-time working population in ${getMaleFullTimeData[0].Geography}` : "",
-                color: "terra-cotta"
+                title: "Female",
+                year: employmentStatusAvailable ? getTopFemaleUnemploymemtData.Year : "",
+                value: employmentStatusAvailable ? getTopMaleUnemploymemtData.Age.toLowerCase() : "N/A",
+                qualifier: employmentStatusAvailable ? `${formatPercentage(getTopFemaleUnemploymemtData.share)} of the population in ${getTopFemaleUnemploymemtData.Geography}` : ""
               }
             ]}
           />
 
-          {workExperienceAvailable ? <p>In {getMaleFullTimeData[0].Year}, the gender breakdown of the working population in {getMaleFullTimeData[0].Geography} that worked full-time was {formatPercentage(getMaleFullTimeData[0].share)} for men and {formatPercentage(getFemaleFullTimeData[0].share)} for women.</p> : ""}
+          {employmentStatusAvailable ? <p>In {getTopMaleUnemploymemtData.Year}, the most common unemployed age group for men was {getTopMaleUnemploymemtData.Age.toLowerCase()} ({formatPercentage(getTopMaleUnemploymemtData.share)}), and for women was {getTopFemaleUnemploymemtData.Age.toLowerCase()} ({formatPercentage(getTopFemaleUnemploymemtData.share)}).</p> : ""}
 
-          {employmentStatusAvailable ? <p>The most common unemployed age group for men was {getTopMaleUnemploymemtData.Age.toLowerCase()} ({formatPercentage(getTopMaleUnemploymemtData.share)}), and for women was {getTopFemaleUnemploymemtData.Age.toLowerCase()} ({formatPercentage(getTopFemaleUnemploymemtData.share)}).</p> : ""}
           <p> In {recentYearUnemploymentRate.Year}, the overall unemployment rate in {recentYearUnemploymentRate.Geography} was {formatPercentage(recentYearUnemploymentRate["Unemployment Rate"])}.</p>
 
           <SourceGroup sources={this.state.sources} />

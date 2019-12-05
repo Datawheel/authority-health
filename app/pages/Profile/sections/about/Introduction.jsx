@@ -33,9 +33,9 @@ const formatRaceName = d => {
   d = d.replace("Alone", "")
     .replace("Black", "black")
     .replace("White", "white")
-    .replace("Asian", "asian").trim();
-  if (d.trim() === "Some Other Race") return d.toLowerCase();
-  if (d.trim() === "Two or More Races") return d.toLowerCase();
+    .trim();
+  if (d === "Some Other Race") return d.toLowerCase();
+  if (d === "Two or More Races") return d.toLowerCase();
   return d;
 };
 const formatEthnicityName = d => d.replace("Not Hispanic or Latino", "non-Hispanic").replace("or Latino", "").trim();
@@ -144,8 +144,7 @@ class Introduction extends SectionColumns {
         <article className="top-stats">
           <p>
             {level === "zip" ? `Zip code ${population[0].Geography}` : population[0].Geography} has a population of {formatAbbreviate(population[0].Population)} people{meta.level === "county" ? "" : <span> which makes it the {formatRankSuffix(currentLocationRankData.populationRank)} largest of the {rankData.length} {formatLevelNames(meta.level)} in Wayne County</span>}
-            {}, with an average life expectancy of {lifeExpectancyAvailable ? formatAbbreviate(lifeExpectancy[0]["Life Expectancy"]) : "N/A"} {lifeExpectancyAvailable ? onCityOrZipLevel ? <span>(in {lifeExpectancy[0].Geography})</span> : "" : ""}.
-            The most common age group for men is {populationByAgeAndGenderAvailable && population[0].Population !== 0 ? getTopMaleData.Age.toLowerCase() : "N/A"} and for women it is {populationByAgeAndGenderAvailable && population[0].Population !== 0 ? getTopFemaleData.Age.toLowerCase() : "N/A"}.
+            {lifeExpectancyAvailable ? `, with an average life expectancy of ${formatAbbreviate(lifeExpectancy[0]["Life Expectancy"])} years${onCityOrZipLevel ? ` (in ${lifeExpectancy[0].Geography})` : ""}.` : "."} The most common age group for men is {populationByAgeAndGenderAvailable && population[0].Population !== 0 ? getTopMaleData.Age.toLowerCase() : "N/A"} and for women it is {populationByAgeAndGenderAvailable && population[0].Population !== 0 ? getTopFemaleData.Age.toLowerCase() : "N/A"}.
             Between {population[population.length - 1].Year} and {population[0].Year} the population of {population[0].Geography} {populationGrowth < 0 ? "decreased" : "increased"} from {formatAbbreviate(population[population.length - 1].Population)} to {formatAbbreviate(population[0].Population)},
             {} {populationGrowth < 0 ? "a decline" : "an increase"} of {populationGrowth < 0 ? `${populationGrowth * -1}%` : isNaN(populationGrowth) ? "N/A" : `${populationGrowth}%`}.
           </p>

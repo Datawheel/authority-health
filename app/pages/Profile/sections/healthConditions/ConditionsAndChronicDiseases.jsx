@@ -38,13 +38,12 @@ const getArticle = dropdownValue => {
 };
 
 const formatDropdownParagraphText = d => {
-  if (d === "COPD") return d;
   if (d === "Physical Health" || d === "Gen Health Fair Or Poor") return "fair or poor general health";
-  if (d === "Poor Mental Health 14 Or More Days") return "poor mental health";
+  if (d === "Mental Health" || d === "Poor Mental Health 14 Or More Days") return "poor mental health";
   if (d === "Ever Heart Attack") return "heart attack";
   if (d === "Ever Depressive") return "depression";
   if (d === "Teeth Loss") return "loss of teeth";
-  return d.toLowerCase();
+  return d.toLowerCase().replace("adults with ", "").replace("copd", "COPD");
 };
 
 class ConditionsAndChronicDiseases extends SectionColumns {

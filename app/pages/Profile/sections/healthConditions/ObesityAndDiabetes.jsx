@@ -148,9 +148,10 @@ class ObesityAndDiabetes extends SectionColumns {
             </select>
           </label>
 
-          {isBMIWeightedDataValueSelected
-            ? <Disclaimer>Data is only available at the zip region level.</Disclaimer>
-            : <Disclaimer>Data is only available at the census tract level for a subset of cities in Wayne County (Detroit, Dearborn, Livonia, and Westland).{missingProfile ? ` ${meta.name} (highlighted in green) is not included within those cities.` : ""}</Disclaimer>
+          {dropdownValue === "BMI Underweight" ? <Disclaimer>Underweight BMI data is very sparse and only available at the zip region level.</Disclaimer>
+            : isBMIWeightedDataValueSelected
+              ? <Disclaimer>Data is only available at the zip region level.</Disclaimer>
+              : <Disclaimer>Data is only available at the census tract level for a subset of cities in Wayne County (Detroit, Dearborn, Livonia, and Westland).{missingProfile ? ` ${meta.name} (highlighted in green) is not included within those cities.` : ""}</Disclaimer>
           }
 
           {/* Show top stats for the dropdown selected. */}

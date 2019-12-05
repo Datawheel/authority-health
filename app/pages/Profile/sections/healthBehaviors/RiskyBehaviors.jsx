@@ -21,7 +21,7 @@ import Options from "components/Options";
 
 const definitions = [
   {term: "Current Smoking", definition: "Current smoking is defined as someone who has smoked greater than 100 cigarettes (including hand rolled cigarettes, cigars, cigarillos etc) in their lifetime and has smoked in the last 28 days."},
-  {term: "Binge Drinking", definition: "Binge drinking is defined as the consumption of five or more alcoholic drinks on one occasion in the past month."},
+  {term: "Adults Who Binge Drink", definition: "Binge drinking is defined as the consumption of five or more alcoholic drinks on one occasion in the past month."},
   {term: "Secondhand Smoke Exposure", definition: "Secondhand smoke is a mixture of the smoke that comes from the burning end of a cigarette, cigar, or pipe, and the smoke breathed out by the smoker. It contains more than 7,000 chemicals. Hundreds of those chemicals are toxic and about 70 can cause cancer."},
   {term: "Any Alcohol Consumption", definition: "Any alcohol consumption is defined as some form of alcohol consumption within the past month."}
 ];
@@ -74,7 +74,7 @@ class RiskyBehaviors extends SectionColumns {
     const {id} = this.props.meta;
     const {dropdownValue, secondHandSmokeAndMonthlyAlcohol, allTractSmokingDrinkingData, countyLevelData} = this.state;
 
-    const drugTypes = ["Current Smoking", "Binge Drinking", "Secondhand Smoke Exposure", "Monthly Alcohol Consumption"];
+    const drugTypes = ["Current Smoking", "Adults Who Binge Drink", "Secondhand Smoke Exposure", "Monthly Alcohol Consumption"];
 
     const isSecondHandSmokeOrMonthlyAlcoholSelected = dropdownValue === "Secondhand Smoke Exposure" || dropdownValue === "Monthly Alcohol Consumption";
     const topSecondHandSmokeAndMonthlyAlcoholData = secondHandSmokeAndMonthlyAlcohol.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];

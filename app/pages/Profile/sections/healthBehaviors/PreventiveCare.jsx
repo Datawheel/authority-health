@@ -71,7 +71,6 @@ const definitions = [
   {term: "Men Aged 65+ Who Are Up-to-date on Core Preventive Services", definition: "Older adults aged ≥65 years who are up to date on a core set of clinical preventive services by age and sex (Number of men aged ≥65 years reporting having received all of the following: an influenza vaccination in the past year; a PPV ever; and either a fecal occult blood test (FOBT) within the past year, a sigmoidoscopy within the past 5 years and a FOBT within the past 3 years, or a colonoscopy within the past 10 years)."},
   {term: "Women Aged 65+ Who Are Up-to-date on Core Preventive Services", definition: "Older adults aged ≥65 years who are up to date on a core set of clinical preventive services by age and sex (Number of women aged ≥65 years reporting having received all of the following: an influenza vaccination in the past year; a pneumococcal vaccination (PPV) ever; either a fecal occult blood test (FOBT) within the past year, a sigmoidoscopy within the past 5 years and a FOBT within the past 3 years, or a colonoscopy within the previous 10 years; and a mammogram in the past 2 years)."},
   {term: "Dental Visit", definition: "Visits to dentist or dental clinic among adults aged ≥18 years."},
-  {term: "Adults Aged 50-75 Years With Colorectal Cancer Screening", definition: "Fecal occult blood test, sigmoidoscopy, or colonoscopy among adults aged 50–75 years."},
   {term: "Pap Smear Test", definition: "Papanicolaou smear use among adult women aged 21–65 years."},
   {term: "Mammography", definition: "Mammography use among women aged 50–74 years."},
   {term: "Adults With Cholesterol Screening", definition: "Cholesterol screening among adults aged ≥18 years."},
@@ -83,6 +82,8 @@ const definitions = [
   {term: "Adults Aged 50-75 Years With Colorectal Cancer Screening", definition: "Among adults aged 50 years and older, the proportion who had either a fecal occult blood test within the past year, a sigmoidoscopy within the past five years, or a colonoscopy within the past ten years."},
   {term: "HIV Tested", definition: "Among adults aged 18 - 64 years, the proportion who reported that they ever had been tested for HIV, apart from tests that were part of a blood donation."}
 ];
+
+definitions.sort((a, b) => formatDropdownNames(a.term).localeCompare(formatDropdownNames(b.term)));
 
 class PreventiveCare extends SectionColumns {
 

@@ -126,11 +126,11 @@ class CancerPrevalenceByDemographics extends SectionColumns {
             componentKey="viz1"
             dataFormat={resp => resp.data}
             slug={this.props.slug}
-            data={ isItemsListEmpty ? "/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Sex,MSA&Cancer Site=All Invasive Cancer Sites Combined&Year=all" : `/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Sex,MSA&Cancer Site=${dropdownSelected}&Year=all` }
+            data={ isItemsListEmpty ? "/api/data?measures=Cancer Diagnosis Count,Age-Adjusted Cancer Rate&drilldowns=Sex,MSA&Cancer Site=All Invasive Cancer Sites Combined&Year=all" : `/api/data?measures=Cancer Diagnosis Count,Age-Adjusted Cancer Rate&drilldowns=Sex,MSA&Cancer Site=${dropdownSelected}&Year=all` }
             title="Chart of Cancer Prevalence By Gender" />
           {/* Draw a barchart to show Cancer by Sex for selected cancer type. */}
           <BarChart ref={comp => this.viz1 = comp } config={{
-            data: isItemsListEmpty ? "/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Sex,MSA&Cancer Site=All Invasive Cancer Sites Combined&Year=all" : `/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Sex,MSA&Cancer Site=${dropdownSelected}&Year=all`,
+            data: isItemsListEmpty ? "/api/data?measures=Cancer Diagnosis Count,Age-Adjusted Cancer Rate&drilldowns=Sex,MSA&Cancer Site=All Invasive Cancer Sites Combined&Year=all" : `/api/data?measures=Cancer Diagnosis Count,Age-Adjusted Cancer Rate&drilldowns=Sex,MSA&Cancer Site=${dropdownSelected}&Year=all`,
             discrete: "y",
             height: 200,
             legend: false,
@@ -161,8 +161,8 @@ class CancerPrevalenceByDemographics extends SectionColumns {
                   .key(d => d.Year)
                   .entries(cancerType.values)
                   .forEach(group => {
-                    const total = sum(group.values, d => d["Cancer Diagnosis"]);
-                    group.values.forEach(d => d.share = total !== 0 ? d["Cancer Diagnosis"] / total * 100 : 0);
+                    const total = sum(group.values, d => d["Cancer Diagnosis Count"]);
+                    group.values.forEach(d => d.share = total !== 0 ? d["Cancer Diagnosis Count"] / total * 100 : 0);
                   });
               });
             return resp.data;
@@ -174,11 +174,11 @@ class CancerPrevalenceByDemographics extends SectionColumns {
             componentKey="viz2"
             dataFormat={resp => resp.data}
             slug={this.props.slug}
-            data={ isItemsListEmpty ? "/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Race,Ethnicity,MSA&Cancer Site=All Invasive Cancer Sites Combined&Year=all" : `/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Race,Ethnicity,MSA&Cancer Site=${dropdownSelected}&Year=all` }
+            data={ isItemsListEmpty ? "/api/data?measures=Cancer Diagnosis Count,Age-Adjusted Cancer Rate&drilldowns=Race,Ethnicity,MSA&Cancer Site=All Invasive Cancer Sites Combined&Year=all" : `/api/data?measures=Cancer Diagnosis Count,Age-Adjusted Cancer Rate&drilldowns=Race,Ethnicity,MSA&Cancer Site=${dropdownSelected}&Year=all` }
             title="Chart of Cancer Prevalence By Race and Ethnicty" />
           {/* Draw a barchart to show Cancer by Race and Ethnicity for selected cancer type. */}
           <BarChart ref={comp => this.viz2 = comp } config={{
-            data: isItemsListEmpty ? "/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Race,Ethnicity,MSA&Cancer Site=All Invasive Cancer Sites Combined&Year=all" : `/api/data?measures=Cancer Diagnosis,Age-Adjusted Cancer Rate&drilldowns=Race,Ethnicity,MSA&Cancer Site=${dropdownSelected}&Year=all`,
+            data: isItemsListEmpty ? "/api/data?measures=Cancer Diagnosis Count,Age-Adjusted Cancer Rate&drilldowns=Race,Ethnicity,MSA&Cancer Site=All Invasive Cancer Sites Combined&Year=all" : `/api/data?measures=Cancer Diagnosis Count,Age-Adjusted Cancer Rate&drilldowns=Race,Ethnicity,MSA&Cancer Site=${dropdownSelected}&Year=all`,
             discrete: "y",
             height: 200,
             legend: false,
@@ -210,8 +210,8 @@ class CancerPrevalenceByDemographics extends SectionColumns {
                   .key(d => d.Year)
                   .entries(cancerType.values)
                   .forEach(group => {
-                    const total = sum(group.values, d => d["Cancer Diagnosis"]);
-                    group.values.forEach(d => d.share = d["Cancer Diagnosis"] / total * 100);
+                    const total = sum(group.values, d => d["Cancer Diagnosis Count"]);
+                    group.values.forEach(d => d.share = d["Cancer Diagnosis Count"] / total * 100);
                   });
               });
             return resp.data;

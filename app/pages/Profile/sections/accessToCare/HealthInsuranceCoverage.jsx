@@ -172,13 +172,13 @@ class HealthInsuranceCoverage extends SectionColumns {
                 {
                   title: "Female",
                   year: ageGroupYear,
-                  value: topFemaleAgeGroup,
+                  value: `${topFemaleAgeGroup} years`,
                   qualifier: `${topFemaleShare} of the population in ${geography} within this age group`
                 },
                 {
                   title: "Male",
                   year: ageGroupYear,
-                  value: topMaleAgeGroup,
+                  value: `${topMaleAgeGroup} years`,
                   qualifier: `${topMaleShare} of the population in ${geography} within this age group`,
                   color: "terra-cotta"
                 }

@@ -104,7 +104,7 @@ class Incarceration extends SectionColumns {
         <SectionTitle>Incarceration</SectionTitle>
         <article>
           {!isIncarcerationDataAvailableForCurrentGeography &&
-            <Disclaimer>Data is shown for {incarcerationData.data[0].Geography}</Disclaimer>
+            <Disclaimer>Data is only available for {incarcerationData.data[0].Geography}</Disclaimer>
           }
           <Stat
             title="Most common crime"

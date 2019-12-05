@@ -345,7 +345,7 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             shapeConfig: {
               Path: {
                 stroke(d, i) {
-                  if (meta.level === "tract" && (d["ID Geography"] === meta.id || d.id === meta.id)) return styles["terra-cotta-dark"];
+                  if (meta.level === "tract" && (d["ID Geography"] === meta.id || d.id === meta.id)) return styles["shamrock-dark"];
                   const c = typeof this._shapeConfig.Path.fill === "function" ? this._shapeConfig.Path.fill(d, i) : this._shapeConfig.Path.fill;
                   return color(c).darker();
                 },

@@ -68,7 +68,7 @@ class ViolentAndPropertyCrimes extends SectionColumns {
         <SectionTitle>Violent and Property Crimes</SectionTitle>
         <article>
           {!isPlaceDataAvailable &&
-            <Disclaimer>Data is shown for Wayne County</Disclaimer>
+            <Disclaimer>Data is only available for Wayne County</Disclaimer>
           }
           {/* Show stats and short paragraph for each type of crime. */}
           <Stat

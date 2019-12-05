@@ -90,7 +90,7 @@ class PublicFoodAssistance extends SectionColumns {
         <SectionTitle>Public Food Assistance</SectionTitle>
         <article>
           {!isSnapWicDataAvailableForCurrentGeography &&
-            <Disclaimer>SNAP and WIC data is shown for {snapWicData.data[0].Geography}</Disclaimer>
+            <Disclaimer>SNAP and WIC Data is only available for {snapWicData.data[0].Geography}</Disclaimer>
           }
           <StatGroup
             title="authorized stores by program"

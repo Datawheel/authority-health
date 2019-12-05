@@ -50,7 +50,7 @@ class DistressScore extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Distress Score</SectionTitle>
         <article>
-          <Disclaimer>Data is shown at the zip level</Disclaimer>
+          <Disclaimer>Data is only available at the zip level</Disclaimer>
           <Stat
             title="Zip code with highest Distress Score"
             year={topDistressScoreData.Year}

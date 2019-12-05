@@ -133,6 +133,10 @@ class PreventiveCare extends SectionColumns {
 
     const {meta} = this.props;
 
+    const missingProfile = meta.level === "tract" && !isPreventativeCareWeightedValueSelected
+      ? !preventiveCareData.find(d => d["ID Tract"] === meta.id)
+      : false;
+
     return (
       <SectionColumns>
         <SectionTitle>Preventive Care</SectionTitle>
@@ -146,8 +150,8 @@ class PreventiveCare extends SectionColumns {
           </label>
 
           {isPreventativeCareWeightedValueSelected
-            ? <Disclaimer>Data is shown at the zip region level</Disclaimer>
-            : <Disclaimer>Data is shown at the census tract level for four cities</Disclaimer>
+            ? <Disclaimer>Data is only available at the zip region level.</Disclaimer>
+            : <Disclaimer>Data is only available at the census tract level for a subset of cities in Wayne County (Detroit, Dearborn, Livonia, and Westland).{missingProfile ? ` ${meta.name} (highlighted in yellow) is not included within those cities.` : ""}</Disclaimer>
           }
           {/* Show top stats for the dropdown selected. */}
           <Stat

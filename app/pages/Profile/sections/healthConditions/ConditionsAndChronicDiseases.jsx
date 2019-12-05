@@ -119,6 +119,10 @@ class ConditionsAndChronicDiseases extends SectionColumns {
 
     const topDropdownWeightedData = healthConditionWeightedData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
 
+    const missingProfile = meta.level === "tract" && !isHealthConditionWeightedValueSelected
+      ? !healthConditionData.find(d => d["ID Tract"] === meta.id)
+      : false;
+
     return (
       <SectionColumns>
         <SectionTitle>Conditions and Chronic Diseases</SectionTitle>
@@ -132,8 +136,8 @@ class ConditionsAndChronicDiseases extends SectionColumns {
           </label>
 
           {isHealthConditionWeightedValueSelected
-            ? <Disclaimer>Data is shown at the zip region level</Disclaimer>
-            : <Disclaimer>Data is shown at the census tract level for four cities</Disclaimer>
+            ? <Disclaimer>Data is only available at the zip region level.</Disclaimer>
+            : <Disclaimer>Data is only available at the census tract level for a subset of cities in Wayne County (Detroit, Dearborn, Livonia, and Westland).{missingProfile ? ` ${meta.name} (highlighted in green) is not included within those cities.` : ""}</Disclaimer>
           }
           {/* Show top stats for the dropdown selected. */}
           { isHealthConditionWeightedValueSelected
@@ -223,7 +227,7 @@ class ConditionsAndChronicDiseases extends SectionColumns {
               shapeConfig: {
                 Path: {
                   stroke(d, i) {
-                    if (meta.level === "tract" && (d["ID Tract"] === meta.id || d.id === meta.id)) return styles["terra-cotta-dark"];
+                    if (meta.level === "tract" && (d["ID Tract"] === meta.id || d.id === meta.id)) return styles["shamrock-dark"];
                     const c = typeof this._shapeConfig.Path.fill === "function" ? this._shapeConfig.Path.fill(d, i) : this._shapeConfig.Path.fill;
                     return color(c).darker();
                   },

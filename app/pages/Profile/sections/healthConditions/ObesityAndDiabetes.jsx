@@ -132,6 +132,10 @@ class ObesityAndDiabetes extends SectionColumns {
     const topMaleData = isDiabetesSelected ? topDiabetesMaleData : topObesityMaleData;
     const topFemaleData = isDiabetesSelected ? topDiabetesFemaleData : topObesityFemaleData;
 
+    const missingProfile = meta.level === "tract" && !isBMIWeightedDataValueSelected
+      ? !obesityAndDibetesDataValue.find(d => d["ID Tract"] === meta.id)
+      : false;
+
     return (
       <SectionColumns>
         <SectionTitle>Obesity and Diabetes</SectionTitle>
@@ -145,8 +149,8 @@ class ObesityAndDiabetes extends SectionColumns {
           </label>
 
           {isBMIWeightedDataValueSelected
-            ? <Disclaimer>Data is shown at the zip region level</Disclaimer>
-            : <Disclaimer>Data is shown at the census tract level for four cities</Disclaimer>
+            ? <Disclaimer>Data is only available at the zip region level.</Disclaimer>
+            : <Disclaimer>Data is only available at the census tract level for a subset of cities in Wayne County (Detroit, Dearborn, Livonia, and Westland).{missingProfile ? ` ${meta.name} (highlighted in green) is not included within those cities.` : ""}</Disclaimer>
           }
 
           {/* Show top stats for the dropdown selected. */}
@@ -165,7 +169,7 @@ class ObesityAndDiabetes extends SectionColumns {
             />
           }
 
-          <Disclaimer>Data is shown for {topFemaleData.Geography}</Disclaimer>
+          <Disclaimer>Data is only available for {topFemaleData.Geography}.</Disclaimer>
           {/* Show top stats for the Male and Female Diabetes/Obesity data. */}
           <StatGroup
             title={`${dropdownValue === "Diabetes" ?  "diabetes" : "obesity"} prevalance by gender`}
@@ -311,7 +315,7 @@ class ObesityAndDiabetes extends SectionColumns {
               shapeConfig: {
                 Path: {
                   stroke(d, i) {
-                    if (meta.level === "tract" && (d["ID Tract"] === meta.id || d.id === meta.id)) return styles["terra-cotta-dark"];
+                    if (meta.level === "tract" && (d["ID Tract"] === meta.id || d.id === meta.id)) return styles["shamrock-dark"];
                     const c = typeof this._shapeConfig.Path.fill === "function" ? this._shapeConfig.Path.fill(d, i) : this._shapeConfig.Path.fill;
                     return color(c).darker();
                   },

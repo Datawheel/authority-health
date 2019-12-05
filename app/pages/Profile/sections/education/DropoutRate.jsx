@@ -41,7 +41,7 @@ class DropoutRate extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Dropout Rate</SectionTitle>
         <article>
-          <Disclaimer>Data is shown at the zip level</Disclaimer>
+          <Disclaimer>Data is only available at the zip level</Disclaimer>
           {/* Top stats about High School Dropout Rate. */}
           <Stat
             title="highest high school dropout rate"

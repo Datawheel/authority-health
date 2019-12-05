@@ -163,7 +163,7 @@ class HealthInsuranceCoverage extends SectionColumns {
           <SectionTitle>Health Insurance Coverage</SectionTitle>
           <article>
             {!isCoverageDataAvailableForCurrentGeography &&
-              <Disclaimer>Data is shown for {coverageData.data[0].Geography}</Disclaimer>
+              <Disclaimer>Data is only available for {coverageData.data[0].Geography}</Disclaimer>
             }
             <StatGroup
               title={"most covered age groups by gender"}

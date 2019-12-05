@@ -124,7 +124,7 @@ class AirQuality extends SectionColumns {
           </label>
 
           {!isAirQualityDaysAvailableForCurrentGeography &&
-            <Disclaimer>Data is shown for {airQualityDays.data[0].Geography}</Disclaimer>
+            <Disclaimer>Data is only available for {airQualityDays.data[0].Geography}</Disclaimer>
           }
           {dropdownValue === "Air Quality Days" &&
           <div className="article-inner-container">

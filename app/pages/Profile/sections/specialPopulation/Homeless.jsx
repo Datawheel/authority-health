@@ -93,7 +93,7 @@ class Homeless extends SectionColumns {
         <SectionTitle>Homeless</SectionTitle>
         <article>
           {!isHomelessDataAvailableForCurrentGeography &&
-            <Disclaimer>Data is shown for {topShelteredHomelessCategory.Geography}</Disclaimer>
+            <Disclaimer>Data is only available for {topShelteredHomelessCategory.Geography}</Disclaimer>
           }
           <Stat
             title={"Homeless rate"}

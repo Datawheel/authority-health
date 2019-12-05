@@ -88,6 +88,10 @@ class RiskyBehaviors extends SectionColumns {
 
     const {meta} = this.props;
 
+    const missingProfile = meta.level === "tract" && !isSecondHandSmokeOrMonthlyAlcoholSelected
+      ? !allTractSmokingDrinkingData.find(d => d["ID Tract"] === meta.id)
+      : false;
+
     return (
       <SectionColumns>
         <SectionTitle>Risky Behaviors</SectionTitle>
@@ -101,8 +105,8 @@ class RiskyBehaviors extends SectionColumns {
           </label>
 
           {isSecondHandSmokeOrMonthlyAlcoholSelected
-            ? <Disclaimer>Data is shown at the zip region level</Disclaimer>
-            : <Disclaimer>Data is shown at the census tract level for four cities</Disclaimer>
+            ? <Disclaimer>Data is only available at the zip region level.</Disclaimer>
+            : <Disclaimer>Data is only available at the census tract level for a subset of cities in Wayne County (Detroit, Dearborn, Livonia, and Westland).{missingProfile ? ` ${meta.name} (highlighted in green) is not included within those cities.` : ""}</Disclaimer>
           }
           <Stat
             title={isSecondHandSmokeOrMonthlyAlcoholSelected ? "Zip region with highest prevalence" : "Tract with highest prevalence"}
@@ -223,7 +227,7 @@ class RiskyBehaviors extends SectionColumns {
               shapeConfig: {
                 Path: {
                   stroke(d, i) {
-                    if (meta.level === "tract" && (d["ID Tract"] === meta.id || d.id === meta.id)) return styles["terra-cotta-dark"];
+                    if (meta.level === "tract" && (d["ID Tract"] === meta.id || d.id === meta.id)) return styles["shamrock-dark"];
                     const c = typeof this._shapeConfig.Path.fill === "function" ? this._shapeConfig.Path.fill(d, i) : this._shapeConfig.Path.fill;
                     return color(c).darker();
                   },

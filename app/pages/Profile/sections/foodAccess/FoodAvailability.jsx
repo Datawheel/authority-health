@@ -42,7 +42,7 @@ class FoodAvailability extends SectionColumns {
   }
 
   render() {
-    const {meta, foodStores} = this.props;
+    const {foodStores} = this.props;
     const isFoodStoreDataAvailableForCurrentGeography = foodStores.source[0].substitutions.length === 0;
 
     const storeTypes = ["Farmers' markets", "Convenience stores", "Grocery stores", "Specialized food stores", "Supercenters and club stores"];
@@ -74,7 +74,7 @@ class FoodAvailability extends SectionColumns {
         <SectionTitle>Food Availability</SectionTitle>
         <article>
           {!isFoodStoreDataAvailableForCurrentGeography &&
-            <Disclaimer>Data is shown for {topStore.Geography}</Disclaimer>
+            <Disclaimer>Data is only available for {topStore.Geography}</Disclaimer>
           }
           <Stat
             title={"most common food store"}

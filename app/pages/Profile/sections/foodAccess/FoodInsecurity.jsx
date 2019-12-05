@@ -45,7 +45,7 @@ class FoodInsecurity extends SectionColumns {
           <SectionTitle>Food Insecurity</SectionTitle>
           <article>
             {!isInsecurityRateDataAvailableForCurrentGeography &&
-              <Disclaimer>Data is shown for {location}</Disclaimer>
+              <Disclaimer>Data is only available for {location}</Disclaimer>
             }
             <Stat
               title={"Child Insecurity"}

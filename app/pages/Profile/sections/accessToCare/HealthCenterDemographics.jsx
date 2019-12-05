@@ -71,11 +71,11 @@ class HealthCenterDemographics extends SectionColumns {
         <SectionTitle>Health Center Demographics</SectionTitle>
         <article>
           {(!isZipLevelDataAvailable && meta.level !== "county" && meta.name !== "") &&
-            <Disclaimer>Data is shown for Wayne County</Disclaimer>
+            <Disclaimer>Data is only available for Wayne County</Disclaimer>
           }
           {
             meta.level === "tract" && isZipLevelDataAvailable &&
-            <Disclaimer>Data is shown for zip {raceAndEthnicityZipLevelData.data[0].Geography}</Disclaimer>
+            <Disclaimer>Data is only available for zip {raceAndEthnicityZipLevelData.data[0].Geography}</Disclaimer>
           }
 
           {isZipLevelDataAvailable

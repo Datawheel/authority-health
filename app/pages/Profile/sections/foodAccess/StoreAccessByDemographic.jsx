@@ -72,7 +72,7 @@ class StoreAccessByDemographic extends SectionColumns {
           </label>
           {!isCurrentLocationDataAvailable &&
             <Disclaimer>
-              Data is shown for { ageSelected ? foodAccessByAge.data[0].Geography : foodAccessByRace.data[0].Geography }
+              Data is only available for { ageSelected ? foodAccessByAge.data[0].Geography : foodAccessByRace.data[0].Geography }
             </Disclaimer>
           }
           {/* Show top stats for Age and Race groups based on the drilldown value. */}

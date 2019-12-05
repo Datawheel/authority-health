@@ -58,12 +58,16 @@ class PhysicalInactivity extends SectionColumns {
 
     const {meta} = this.props;
 
+    const missingProfile = meta.level === "tract" && !isPhysicalInactivityBySexAvailableForCurrentlocation
+      ? !physicalInactivity.data.find(d => d["ID Tract"] === meta.id)
+      : false;
+
     return (
       <SectionColumns>
         <SectionTitle>Physical Inactivity</SectionTitle>
         <article>
           {!isPhysicalInactivityBySexAvailableForCurrentlocation
-            ? <Disclaimer>Data is shown at the census tract level for four cities</Disclaimer>
+            ? <Disclaimer>Data is only available at the census tract level for a subset of cities in Wayne County (Detroit, Dearborn, Livonia, and Westland).{missingProfile ? ` ${meta.name} (highlighted in green) is not included within those cities.` : ""}</Disclaimer>
             : null
           }
           <Stat
@@ -74,7 +78,7 @@ class PhysicalInactivity extends SectionColumns {
           />
 
 
-          <Disclaimer>Data is shown for {physicalInactivityPrevalenceBySex.data[0].Geography}</Disclaimer>
+          <Disclaimer>Data is only available for {physicalInactivityPrevalenceBySex.data[0].Geography}</Disclaimer>
           {/* Show top stats for the Male and Female Physical Inactivity data. */}
           {/* And write short paragraphs explaining Barchart and top stats for the Physical Inactivity data. */}
           <StatGroup
@@ -162,7 +166,7 @@ class PhysicalInactivity extends SectionColumns {
             shapeConfig: {
               Path: {
                 stroke(d, i) {
-                  if (meta.level === "tract" && (d["ID Tract"] === meta.id || d.id === meta.id)) return styles["terra-cotta-dark"];
+                  if (meta.level === "tract" && (d["ID Tract"] === meta.id || d.id === meta.id)) return styles["shamrock-dark"];
                   const c = typeof this._shapeConfig.Path.fill === "function" ? this._shapeConfig.Path.fill(d, i) : this._shapeConfig.Path.fill;
                   return color(c).darker();
                 },

@@ -36,7 +36,7 @@ class EmploymentGrowth extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Employment Growth</SectionTitle>
         <article>
-          <Disclaimer>Data is shown at the zip level</Disclaimer>
+          <Disclaimer>Data is only available at the zip level</Disclaimer>
           <Stat
             title={"Zip Code with the largest employment growth"}
             year={topEmploymentRateData.Year}

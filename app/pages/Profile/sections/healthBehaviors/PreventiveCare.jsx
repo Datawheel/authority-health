@@ -21,16 +21,32 @@ import Options from "components/Options";
 const formatPercentage = (d, mutiplyBy100 = false) => mutiplyBy100 ? `${formatAbbreviate(d * 100)}%` : `${formatAbbreviate(d)}%`;
 
 const formatDropdownNames = d => {
-  if (d === "FOBT or Endoscopy") return "Appropriate Colorectal Cancer Screening";
-  return d.replace("Had", "");
+  if (d === "FOBT or Endoscopy") return "Adults Aged 50+ Who Received Appropriate FOBT or Endoscopy";
+  return d
+    .replace("Had ", "")
+    .replace("Mammography", "Mammograms")
+    .replace("Tested", "Tests");
+};
+
+const formatTextNames = d => {
+  if (d === "FOBT or Endoscopy") return "Adults Aged 50+ Who Received Appropriate FOBT or Endoscopy";
+  if (d === "Sleep Less Than 7 Hours") return "less than 7 hours of sleep";
+  return d.toLowerCase()
+    .replace("had ", "")
+    .replace("adults with ", "")
+    .replace("adults aged 50-75 years with ", "")
+    .replace("hiv ", "HIV ")
+    .replace("tested", "test")
+    .replace("mammography", "mammogram");
 };
 
 const getArticle = dropdownValue => {
-  const firstLetter = dropdownValue[0];
-  if (["A", "E", "I", "O", "U"].includes(firstLetter)) return "an";
-  const firstWord = dropdownValue.split(" ")[0];
-  if (firstWord === "Taking") return "been";
-  if (firstWord === "Sleep" || firstWord === "HIV") return "";
+  const d = formatTextNames(dropdownValue);
+  const firstLetter = d[0];
+  const firstWord = d.split(" ")[0];
+  if (["a", "e", "i", "o", "u"].includes(firstLetter) || firstWord === "HIV") return "an";
+  if (firstWord === "taking") return "been";
+  if (firstWord === "less") return "";
   return "a";
 };
 
@@ -163,12 +179,12 @@ class PreventiveCare extends SectionColumns {
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           {isPreventativeCareWeightedValueSelected
-            ? <p>In {topDropdownData["End Year"]}, {formatPercentage(topDropdownData[dropdownValue], true)} of the {dropdownValue === "Had Flu Vaccine" || dropdownValue === "Had Pneumonia Vaccine" ? "65 and older" : "adult"} population of the {topDropdownData["Zip Region"]} <ZipRegionDefinition text="zip region" /> had {dropdownValue === "Sleep Less Than 7 Hours" ? formatText(dropdownValue) : <span>{getArticle(dropdownValue)} {formatDropdownNames(dropdownValue).toLowerCase()}</span>}, as compared to {formatPercentage(countyLevelData[0][dropdownValue], true)} overall for Wayne County.</p>
-            : <p>In {topDropdownData.Year}, {preventativeMeasure ? corePreventiveText(formatPercentage(topDropdownData[dropdownValue]), topDropdownData.Tract, dropdownValue, topTractPlace) : <span>{formatPercentage(topDropdownData[dropdownValue])} of {dropdownValue === "Pap Smear Test" || dropdownValue === "Mammography" ? formatWomenText(dropdownValue) : "the adult population"} {dropdownValue === "Adults Aged 50-75 Years With Colorectal Cancer Screening" ? "aged 50–75 years" : ""} of <CensusTractDefinition text={topDropdownData.Tract}/>{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} had {dropdownValue === "Cholesterol Screening" ? formatText(dropdownValue) : <span>{getArticle(dropdownValue)} {formatDropdownNames(dropdownValue).toLowerCase()}.</span>}</span>} This rate is the highest of all census tracts in Detroit, Livonia, Dearborn and Westland.</p>
+            ? <p>In {topDropdownData["End Year"]}, {formatPercentage(topDropdownData[dropdownValue], true)} of the {dropdownValue === "Had Flu Vaccine" || dropdownValue === "Had Pneumonia Vaccine" ? "65 and older" : "adult"} population of the {topDropdownData["Zip Region"]} <ZipRegionDefinition text="zip region" /> had {dropdownValue === "Sleep Less Than 7 Hours" ? formatText(dropdownValue) : <span>{getArticle(dropdownValue)} {formatTextNames(dropdownValue)}</span>}, as compared to {formatPercentage(countyLevelData[0][dropdownValue], true)} overall for Wayne County.</p>
+            : <p>In {topDropdownData.Year}, {preventativeMeasure ? corePreventiveText(formatPercentage(topDropdownData[dropdownValue]), topDropdownData.Tract, dropdownValue, topTractPlace) : <span>{formatPercentage(topDropdownData[dropdownValue])} of {dropdownValue === "Pap Smear Test" || dropdownValue === "Mammography" ? formatWomenText(dropdownValue) : "the adult population"} {dropdownValue === "Adults Aged 50-75 Years With Colorectal Cancer Screening" ? "aged 50–75 years" : ""} of <CensusTractDefinition text={topDropdownData.Tract}/>{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} had {dropdownValue === "Cholesterol Screening" ? formatText(dropdownValue) : <span>{getArticle(dropdownValue)} {formatTextNames(dropdownValue).replace(/s$/m, "")}.</span>}</span>} This rate is the highest of all census tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
           {isPreventativeCareWeightedValueSelected
-            ? <p>The map here shows {formatDropdownNames(dropdownValue).toLowerCase()} rate for zip regions in Wayne County.</p>
-            : <p>The map here shows {formatDropdownNames(dropdownValue).toLowerCase()} rate for census tracts in Detroit, Livonia, Dearborn and Westland.</p>
+            ? <p>The map here shows the rate of {formatTextNames(dropdownValue).replace(/([^s])$/m, "$1s").replace("sleeps", "sleep").replace("years", "year").replace("checkup ", "checkups ")} for zip regions in Wayne County.</p>
+            : <p>The map here shows the rate of {formatTextNames(dropdownValue).replace(/([^s])$/m, "$1s").replace("sleeps", "sleep").replace("years", "year").replace("checkup ", "checkups ")} for census tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
 
           <SourceGroup sources={this.state.sources} />

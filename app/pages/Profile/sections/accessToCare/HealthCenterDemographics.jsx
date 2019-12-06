@@ -87,14 +87,20 @@ class HealthCenterDemographics extends SectionColumns {
             /> : null}
 
           <Stat
-            title={"Most common race utilizing health centers"}
+            title={"Most common race utilizing health centers in Wayne County"}
             year={`${topMostRaceData.Year}`}
             value={formatRaceNames(topMostRaceData.RaceType)}
             qualifier={`${formatPercentage(topMostRaceData[topMostRaceData.RaceType])} of the health center visiting population in Wayne County`}
           />
 
-          {isZipLevelDataAvailable ? <p>In {topZipLevelData.Year}, {formatPercentage(topZipLevelData[topZipLevelData.RaceType])} of the health center visiting population in {`zip ${topZipLevelData.Geography}`} were {lowerCaseRaceName(formatRaceNames(topZipLevelData.RaceType))}, compared to {lowerCaseRaceName(formatRaceNames(topMostRaceData.RaceType))} residents in Wayne County ({formatPercentage(topMostRaceData[topMostRaceData.RaceType])}).</p>
-            : <p>In {topMostRaceData.Year}, {formatPercentage(topMostRaceData[topMostRaceData.RaceType])} of the health center visiting population in Wayne County were {lowerCaseRaceName(formatRaceNames(topMostRaceData.RaceType))}, followed by {lowerCaseRaceName(formatRaceNames(topSecondRaceData.RaceType))} ({formatPercentage(topSecondRaceData[topSecondRaceData.RaceType])}) and then {lowerCaseRaceName(formatRaceNames(topThirdRaceData.RaceType))} ({formatPercentage(topThirdRaceData[topThirdRaceData.RaceType])}).</p>}
+          { isZipLevelDataAvailable
+            ? <p>
+              In {topZipLevelData.Year}, the most common race visiting health centers in zip code {topZipLevelData.Geography} was {lowerCaseRaceName(formatRaceNames(topZipLevelData.RaceType))} ({formatPercentage(topZipLevelData[topZipLevelData.RaceType])} of population), and the most common race visiting health centers in Wayne County was {lowerCaseRaceName(formatRaceNames(topMostRaceData.RaceType))} ({formatPercentage(topMostRaceData[topMostRaceData.RaceType])} of population).
+            </p>
+            : <p>
+              In {topMostRaceData.Year}, {formatPercentage(topMostRaceData[topMostRaceData.RaceType])} of the health center visiting population in Wayne County were {lowerCaseRaceName(formatRaceNames(topMostRaceData.RaceType))}, followed by {lowerCaseRaceName(formatRaceNames(topSecondRaceData.RaceType))} ({formatPercentage(topSecondRaceData[topSecondRaceData.RaceType])}) and then {lowerCaseRaceName(formatRaceNames(topThirdRaceData.RaceType))} ({formatPercentage(topThirdRaceData[topThirdRaceData.RaceType])}).
+            </p>
+          }
 
           <p> The following chart shows the health center visitors breakdown across all reported racial groups in {isZipLevelDataAvailable ? topZipLevelData.Geography : "Wayne County"}.</p>
 

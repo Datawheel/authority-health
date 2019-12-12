@@ -101,8 +101,8 @@ const formatGeomapData = (data, meta, childrenTractIds, totalImmigrantsSelected 
 
   // Find the top immigrant data for the recent year.
   const filteredImmigrantsData = totalImmigrantsSelected ? filteredChildrenGeography.filter(d => d["ID Nativity"] === 1) : immigrantsPovertyData;
-  const topImmigrantsData = filteredImmigrantsData.sort((a, b) => b.share - a.share)[0];
-  return [filteredImmigrantsData, topImmigrantsData];
+  const topImmigrantsData = filteredImmigrantsData.sort((a, b) => b.share - a.share);
+  return [filteredImmigrantsData, topImmigrantsData.filter(d => d.share === topImmigrantsData[0].share)];
 };
 
 const getGeomapTitle = (meta, dropdownValue) => {
@@ -112,8 +112,8 @@ const getGeomapTitle = (meta, dropdownValue) => {
 };
 
 const getGeomapQualifier = (data, meta) => {
-  if (meta.level === "county") return `${formatPercentage(data.share)} of the total population in this city`;
-  return `${formatPercentage(data.share)} of the immigrant population in this census tract`;
+  if (meta.level === "county") return `${formatPercentage(data[0].share)} of the total population in ${data.length > 1 ? "these cities" : "this city"}`;
+  return `${formatPercentage(data[0].share)} of the immigrant population in ${data.length > 1 ? "these census tracts" : "this census tract"}`;
 };
 
 class Immigrants extends SectionColumns {
@@ -224,8 +224,8 @@ class Immigrants extends SectionColumns {
               />
               <Stat
                 title={getGeomapTitle(meta, dropdownValue)}
-                year={topStats.Year}
-                value={meta.level === "place" || meta.level === "tract" ? <CensusTractDefinition text={formatGeomapLabel(topStats, meta, tractToPlace)} /> : formatGeomapLabel(topStats, meta, tractToPlace)}
+                year={topStats[0].Year}
+                value={meta.level === "place" || meta.level === "tract" ? <CensusTractDefinition text={formatGeomapLabel(topStats[0], meta, tractToPlace)} /> : formatGeomapLabel(topStats[0], meta, tractToPlace)}
                 qualifier={getGeomapQualifier(topStats, meta)}
               />
 
@@ -235,7 +235,7 @@ class Immigrants extends SectionColumns {
                 : <p>In {USImmigrantsData.Year}, {formatPercentage(wayneCountyImmigrantsData.share)} of the population in Wayne County were immigrants, compared to {}
                   {formatPercentage(michiganImmigrantsData.share)} in Michigan, and {formatPercentage(USImmigrantsData.share)} in the United States.</p>
               }
-              <p>{`${getGeomapTitle(meta, dropdownValue)} was ${topStats.Geography} (${getGeomapQualifier(topStats, meta)}).`}</p>
+              <p>{`${getGeomapTitle(meta, dropdownValue)} was ${topStats[0].Geography} (${getGeomapQualifier(topStats, meta)}).`}</p>
               {immigrantsDataForCurrentLocationAvailable ? <p>The map here shows the {meta.level === "county" ? "cities" : "tracts"} in {meta.level === "county" || meta.level === "tracts" ? "Wayne County" : `${meta.name}`} by the percentage of their immigrant population.</p> : ""}
             </div>
 
@@ -247,9 +247,9 @@ class Immigrants extends SectionColumns {
                 qualifier={immigrantsDataForCurrentLocationAvailable ? `of the total number of immigrants in ${meta.level !== "county" ? currentLevelImmigrantsData.Geography : "Wayne County"}` : ""}
               />
               <Stat
-                title={getGeomapTitle(meta, dropdownValue)}
-                year={topStats.Year}
-                value={meta.level === "place" || meta.level === "tract" ? <CensusTractDefinition text={formatGeomapLabel(topStats, meta, tractToPlace)} /> : formatGeomapLabel(topStats, meta, tractToPlace)}
+                title={topStats.length > 1 ? `Number of ${meta.level === "county" ? "Places" : "Census Tracts"} with the most immigrants in poverty` : getGeomapTitle(meta, dropdownValue)}
+                year={topStats[0].Year}
+                value={topStats.length > 1 ? `${topStats.length} ${meta.level === "county" ? "Places" : "Census Tracts"}` : meta.level === "place" || meta.level === "tract" ? <CensusTractDefinition text={formatGeomapLabel(topStats[0], meta, tractToPlace)} /> : formatGeomapLabel(topStats[0], meta, tractToPlace)}
                 qualifier={getGeomapQualifier(topStats, meta)}
               />
 
@@ -259,7 +259,7 @@ class Immigrants extends SectionColumns {
                 : <p>In {wayneCountyImmigrantsData.Year}, {formatPercentage(wayneCountyImmigrantsData.share)} of the population in in Wayne County were immigrants in poverty, compared to {}
                   {formatPercentage(michiganImmigrantsData.share)} in Michigan and {formatPercentage(USImmigrantsData.share)} in the United States.</p>
               }
-              <p>{`${getGeomapTitle(meta, dropdownValue)} was ${topStats.Geography} (${getGeomapQualifier(topStats, meta)}).`}</p>
+              <p>{`${topStats.length > 1 ? `There are ${topStats.length} census tracts in ${meta.name} with the most immigrants in poverty` : `${getGeomapTitle(meta, dropdownValue)} was ${topStats[0].Geography}`} (${getGeomapQualifier(topStats, meta)}).`}</p>
               {immigrantsDataForCurrentLocationAvailable ? <p>The map here shows the {meta.level === "county" ? "cities" : "tracts"} in {meta.level === "county" || meta.level === "tracts" ? "Wayne County" : `${meta.name}`} by the percentage of their immigrant population that is in poverty.</p> : ""}
             </div>
           }

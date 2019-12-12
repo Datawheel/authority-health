@@ -80,7 +80,7 @@ class StoreAccessByDemographic extends SectionColumns {
             title={ageSelected ? "Most at risk age group" : "Most at risk race group"}
             year={topFoodAccessData.Year}
             value={ageSelected ? topFoodAccessData["Age Group"] : topFoodAccessData["Race Group"]}
-            qualifier={ageSelected ? `${formatPercentage(topFoodAccessData["Low-Access to Food by Age"])} of all ${topFoodAccessData["Age Group"].toLowerCase()} in ${topFoodAccessData.Geography} has low access` : `${formatPercentage(topFoodAccessData["Low-Access to Food by Race"])} of total population in ${topFoodAccessData.Geography} has low access`}
+            qualifier={ageSelected ? `${formatPercentage(topFoodAccessData["Low-Access to Food by Age"])} of all ${topFoodAccessData["Age Group"].toLowerCase()} in ${topFoodAccessData.Geography} has low food store access` : `${formatPercentage(topFoodAccessData["Low-Access to Food by Race"])} of total population in ${topFoodAccessData.Geography} has low food store access`}
           />
           {/* Write a paragraph for top stats based on the dropdown choice. */}
           <p>In {topFoodAccessData.Year}, {ageSelected ? `between children and seniors, ${topFoodAccessData["Age Group"].toLowerCase()}` : `${topFoodAccessData["Race Group"] === "Hispanic ethnicity" ? topFoodAccessData["Race Group"].toLowerCase() : topFoodAccessData["Race Group"].toLowerCase()}s`} were the most at risk {ageSelected ? "age" : "race"} group for low access to food stores ({ageSelected ? `${formatPercentage(topFoodAccessData["Low-Access to Food by Age"])} of all ${topFoodAccessData["Age Group"].toLowerCase()}` : `${formatPercentage(topFoodAccessData["Low-Access to Food by Race"])} of the population`}) in {topFoodAccessData.Geography}.</p>

@@ -106,14 +106,14 @@ const formatGeomapData = (data, meta, childrenTractIds, totalImmigrantsSelected 
 };
 
 const getGeomapTitle = (meta, dropdownValue) => {
-  if (meta.level === "county") return `The city with most immigrtants ${dropdownValue === "Total Immigrants" ? "" : "in poverty"} in Wayne County`;
-  else if (meta.level === "tract") return `The census tract with most immigrants ${dropdownValue === "Total Immigrants" ? "" : "in poverty"} in Wayne County`;
-  else return `The census tract with most immigrants ${dropdownValue === "Total Immigrants" ? "" : "in poverty"} in ${meta.name}`;
+  if (meta.level === "county") return `The city with the most immigrtants ${dropdownValue === "Total Immigrants" ? "" : "in poverty"} in Wayne County`;
+  else if (meta.level === "tract") return `The census tract with the most immigrants ${dropdownValue === "Total Immigrants" ? "" : "in poverty"} in Wayne County`;
+  else return `The census tract with the most immigrants ${dropdownValue === "Total Immigrants" ? "" : "in poverty"} in ${meta.name}`;
 };
 
 const getGeomapQualifier = (data, meta) => {
   if (meta.level === "county") return `${formatPercentage(data.share)} of the total population in this city`;
-  return `${formatPercentage(data.share)} of the population in this census tract`;
+  return `${formatPercentage(data.share)} of the immigrant population in this census tract`;
 };
 
 class Immigrants extends SectionColumns {
@@ -236,7 +236,7 @@ class Immigrants extends SectionColumns {
                   {formatPercentage(michiganImmigrantsData.share)} in Michigan, and {formatPercentage(USImmigrantsData.share)} in the United States.</p>
               }
               <p>{`${getGeomapTitle(meta, dropdownValue)} was ${topStats.Geography} (${getGeomapQualifier(topStats, meta)}).`}</p>
-              {immigrantsDataForCurrentLocationAvailable ? <p>The map here shows the {meta.level === "county" ? "cities" : "tracts"} in {meta.level === "county" || meta.level === "tracts" ? "Wayne County" : `${meta.name}`} by their percentage of immigrants.</p> : ""}
+              {immigrantsDataForCurrentLocationAvailable ? <p>The map here shows the {meta.level === "county" ? "cities" : "tracts"} in {meta.level === "county" || meta.level === "tracts" ? "Wayne County" : `${meta.name}`} by the percentage of their immigrant population.</p> : ""}
             </div>
 
             : <div className="font-sm">
@@ -260,7 +260,7 @@ class Immigrants extends SectionColumns {
                   {formatPercentage(michiganImmigrantsData.share)} in Michigan and {formatPercentage(USImmigrantsData.share)} in the United States.</p>
               }
               <p>{`${getGeomapTitle(meta, dropdownValue)} was ${topStats.Geography} (${getGeomapQualifier(topStats, meta)}).`}</p>
-              {immigrantsDataForCurrentLocationAvailable ? <p>The map here shows the {meta.level === "county" ? "cities" : "tracts"} in {meta.level === "county" || meta.level === "tracts" ? "Wayne County" : `${meta.name}`} by their percentage of immigrants in poverty.</p> : ""}
+              {immigrantsDataForCurrentLocationAvailable ? <p>The map here shows the {meta.level === "county" ? "cities" : "tracts"} in {meta.level === "county" || meta.level === "tracts" ? "Wayne County" : `${meta.name}`} by the percentage of their immigrant population that is in poverty.</p> : ""}
             </div>
           }
 

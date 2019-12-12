@@ -75,11 +75,11 @@ class Rentals extends SectionColumns {
 
           <p>
             { rentAmountDataAvailable ? <span>In {rentAmountData[0].Year}, the median price for a rental unit in {rentAmountData[0].Geography} was ${formatAbbreviate(rentAmountData[0]["Median Rent Amount"])}/month.</span> : null }
-            { growthRate ? <span>This is a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "increase"} from the previous year (${formatAbbreviate(rentAmountData[1]["Median Rent Amount"])}/month).</span> : null }
-            { utilitiesDataAvailable ? <span> {formatPercentage(recentYearNoExtraUtilitiesPercentage)} of the rental properties in {utilitiesData[0].Geography} include utilities with the price of rent.</span> : null }
+            { growthRate ? <span> This is a {growthRate < 0 ? formatPercentage(growthRate * -1) : formatPercentage(growthRate)} {growthRate < 0 ? "decline" : "increase"} from the previous year (${formatAbbreviate(rentAmountData[1]["Median Rent Amount"])}/month).</span> : null }
           </p>
           <p>
-            { rentersByIncomePercentageAvailable ? <span>The average household income bracket of renters in {topIncomeToPayMostRent.Geography} is {rangeFormatter(topIncomeToPayMostRent["Household Income"])}.</span> : null }
+            { utilitiesDataAvailable ? <span> {formatPercentage(recentYearNoExtraUtilitiesPercentage)} of the rental properties in {utilitiesData[0].Geography} include utilities with the price of rent.</span> : null }
+            { rentersByIncomePercentageAvailable ? <span> The most common household income bracket of renters in {topIncomeToPayMostRent.Geography} is {rangeFormatter(topIncomeToPayMostRent["Household Income"])}.</span> : null }
           </p>
 
           <SourceGroup sources={this.state.sources} />
@@ -137,12 +137,12 @@ class Rentals extends SectionColumns {
               x: d => d["Household Income"],
               y: "share",
               time: "Year",
-              title: d => `Percentage of Renters Across All Income Levels in ${d[0].Geography}`,
+              title: d => `Distribution of Renters in ${d[0].Geography} Across Income Brackets`,
               xSort: (a, b) => a["ID Household Income"] - b["ID Household Income"],
               xConfig: {
                 labelRotation: false,
                 tickFormat: d => rangeFormatter(d),
-                title: "Household Income"
+                title: "Household Income Bracket"
               },
               yConfig: {
                 tickFormat: d => formatPercentage(d),

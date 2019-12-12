@@ -99,7 +99,7 @@ class Transportation extends SectionColumns {
             qualifier={transportationMeansAvailable ? `(${formatPercentage(topRecentYearModeOfTransport.share)})` : ""}
           />
           <Stat
-            title="Average vehicles per household"
+            title="Most common number of vehicles per household"
             year={numberOfVehiclesDataAvailable ? averageVehiclesPerHousehold[0].Year : ""}
             value={numberOfVehiclesDataAvailable ? rangeFormatter(averageVehiclesPerHousehold[0]["Vehicles Available"]) : "N/A"}
             qualifier={numberOfVehiclesDataAvailable ? `(${formatPercentage(topAverageVehiclesPerHousehold)})` : ""}
@@ -163,7 +163,7 @@ class Transportation extends SectionColumns {
                       numOfVehicles.values.forEach(d => total !== 0 ? d.share = d["Commute Means by Gender"] / total * 100 : d.share = 0);
                     });
                 });
-              return  resp.data;
+              return resp.data;
             }}
             />
             }

@@ -123,10 +123,12 @@ class Unemployment extends SectionColumns {
             {/* Barchart to show population by age and gender over the years for selected geography. */}
             {workExperienceAvailable &&
             <BarChart ref={comp => this.viz1 = comp} config={{
+              barPadding: 0,
               data: `/api/data?measures=Population by Employment Status&drilldowns=Employment Status,Age,Sex&Geography=${meta.id}&Year=all`,
               discrete: "x",
               height: 250,
-              groupBy: ["Employment Status", "Sex"],
+              groupBy: "Sex",
+              groupPadding: 2,
               x: "Age",
               y: "share",
               time: "Year",
@@ -147,7 +149,7 @@ class Unemployment extends SectionColumns {
             }}
             dataFormat={resp => {
               this.setState({sources: updateSource(resp.source, this.state.sources)});
-              return formatEmploymentStatusData(resp.data)[0];
+              return formatEmploymentStatusData(resp.data)[0].sort((a, b) => b["ID Sex"] - a["ID Sex"]);
             }}
             />
             }

@@ -163,7 +163,7 @@ class Transportation extends SectionColumns {
                       numOfVehicles.values.forEach(d => total !== 0 ? d.share = d["Commute Means by Gender"] / total * 100 : d.share = 0);
                     });
                 });
-              return resp.data;
+              return resp.data.sort((a, b) => b["ID Gender"] - a["ID Gender"]);
             }}
             />
             }

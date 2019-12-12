@@ -230,7 +230,7 @@ class HealthInsuranceCoverage extends SectionColumns {
               }}
               dataFormat={resp => {
                 this.setState({sources: updateSource(resp.source, this.state.sources)});
-                return formatCoverageData(resp.data);
+                return formatCoverageData(resp.data).sort((a, b) => b["ID Sex"] - a["ID Sex"]);
               }}
               />
             </div>

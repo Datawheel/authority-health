@@ -131,7 +131,7 @@ class EducationalAttainment extends SectionColumns {
             }}
             dataFormat={resp => {
               this.setState({sources: updateSource(resp.source, this.state.sources)});
-              return formatEducationalAttainmentData(resp.data)[0];
+              return formatEducationalAttainmentData(resp.data)[0].sort((a, b) => b["ID Sex"] - a["ID Sex"]);
             }}
             />
           </div>

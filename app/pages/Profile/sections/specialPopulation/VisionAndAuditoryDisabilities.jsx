@@ -277,7 +277,7 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             }}
             dataFormat={resp => {
               this.setState({sources: updateSource(resp.source, this.state.sources)});
-              return formatData(resp.data, "Vision")[0];
+              return formatData(resp.data, "Vision")[0].sort((a, b) => b["ID Sex"] - a["ID Sex"]);
             }}
             />}
 
@@ -314,7 +314,7 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
             }}
             dataFormat={resp => {
               this.setState({sources: updateSource(resp.source, this.state.sources)});
-              return formatData(resp.data, "Hearing")[0];
+              return formatData(resp.data, "Hearing")[0].sort((a, b) => b["ID Sex"] - a["ID Sex"]);
             }}
             /> }
           </div>

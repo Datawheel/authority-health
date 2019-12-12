@@ -23,7 +23,7 @@ const definitions = [
   {term: "Grocery Stores", definition: "A grocery store is a retail shop that primarily sells food. A grocer is a bulk seller of food. Grocery stores also offer non-perishable foods that are packaged in bottles, boxes, and cans; some also have bakeries, butchers, delis, and fresh produce."},
   {term: "Specialized Food Stores", definition: "A foodstore primarily engaged in the retail sale of a single food category such as meat and seafood markets, dairy stores, candy and nut stores, and retail bakeries."},
   {term: "Supercenters", definition: "A large combination supermarket and discount general merchandise store, with grocery products accounting for up to 40 percent of selling area."},
-  {term: "Clube Stores", definition: "A membership-based wholesale-retail hybrid outlet, serving both small businesses and individual consumers. Both grocery products (in large and multipack sizes) and a wide variety of general merchandise are offered."},
+  {term: "Club Stores", definition: "A membership-based wholesale-retail hybrid outlet, serving both small businesses and individual consumers. Both grocery products (in large and multipack sizes) and a wide variety of general merchandise are offered."},
   {term: "Farmers Market", definition: "A farmers’ market is a common area where several farmers gather on a recurring basis to sell a variety of fresh fruits, vegetables, and other farm products directly to consumers."}
 ];
 

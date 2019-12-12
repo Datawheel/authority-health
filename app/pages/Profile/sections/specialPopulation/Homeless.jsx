@@ -18,7 +18,10 @@ import Options from "components/Options";
 const definitions = [
   {term: "Sheltered Homeless", definition: "According to U.S. Department of Housing and Urban Development, a person is considered sheltered homeless when he/she resides in a an emergency shelter or in transitional housing or supportive housing for homeless persons who originally came from the streets or emergency shelters."},
   {term: "Unsheltered Homeless", definition: "According to U.S. Department of Housing and Urban Development, a person is considered unsheltered homeless when he/she resides in a place not meant for human habitation, such as cars, parks, sidewalks, abandoned buildings (on the street)."},
-  {term: "Children of Parenting Youth", definition: "Persons who are 24 and younger who are the parents or legal guardians of one or more children who are present with or sleeping in the same place as that youth parent, or who are pregnant."}
+  {term: "Parenting Youth", definition: "A youth who identifies as the parent or legal guardian of one or more children who are present with or sleeping in the same place as that youth parent, where there is no person over age 24 in the household."},
+  {term: "Chronically Homeless", definition: "HUD defines a “chronically homeless” individual as someone who has been homeless and living or residing in a place not meant for human habitation, a safe haven, or in an emergency shelter continuously for at least 1 year or on at least four separate occasions in the last 3 years where the combined length of time homeless in those occasions is at least 12 months, and also has a disability."},
+  {term: "Unaccompanied Youth", definition: "Persons who are age 24 or younger, who are not part of a family with children, and who are not accompanied by their parent or guardian during their episode of homelessness. This also includes two or more youth age 24 or younger who are presenting together as a family without children."},
+  {term: "Homeless Veteran", definition: "The United States Code defines the term “homeless veteran” as “a veteran who is homeless (as that term is defined in section 103(a) of the McKinney-Vento Homeless Assistance Act)"}
 ];
 
 const formatPercentage = d => `${formatAbbreviate(d)}%`;

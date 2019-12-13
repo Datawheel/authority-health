@@ -1,7 +1,7 @@
 import React from "react";
 import {connect} from "react-redux";
 import {nest} from "d3-collection";
-import {sum} from "d3-array";
+import {mean, sum} from "d3-array";
 import {color} from "d3-color";
 import {titleCase} from "d3plus-text";
 import {formatAbbreviate} from "d3plus-format";
@@ -96,6 +96,7 @@ class Introduction extends SectionColumns {
       populationByAgeAndGender,
       populationByRaceAndEthnicity,
       lifeExpectancy,
+      lifeExpectancyChildren,
       topStats,
       childrenTractIds,
       childrenZipIds,
@@ -106,7 +107,13 @@ class Introduction extends SectionColumns {
 
     const populationByAgeAndGenderAvailable = populationByAgeAndGender.length !== 0;
     const populationByRaceAndEthnicityAvailable = populationByRaceAndEthnicity.length !== 0;
-    const lifeExpectancyAvailable = lifeExpectancy.length !== 0;
+
+    const meanLifeExpectancy = ["county", "tract"].includes(level)
+      ? lifeExpectancy[0]["Life Expectancy"]
+      : mean(
+        lifeExpectancyChildren.filter(d => childrenTractIds.includes(d["ID Geography"])),
+        d => d["Life Expectancy"]
+      );
 
     const onCityOrZipLevel = level === "place" || level === "zip";
 
@@ -143,8 +150,7 @@ class Introduction extends SectionColumns {
         <SectionTitle>Introduction</SectionTitle>
         <article className="top-stats">
           <p>
-            {level === "zip" ? `Zip code ${population[0].Geography}` : population[0].Geography} has a population of {formatAbbreviate(population[0].Population)} people{meta.level === "county" ? "" : <span> which makes it the {formatRankSuffix(currentLocationRankData.populationRank)} largest of the {rankData.length} {formatLevelNames(meta.level)} in Wayne County</span>}
-            {lifeExpectancyAvailable ? `, with an average life expectancy of ${formatAbbreviate(lifeExpectancy[0]["Life Expectancy"])} years${onCityOrZipLevel ? ` (in ${lifeExpectancy[0].Geography})` : ""}.` : "."} The most common age group for men is {populationByAgeAndGenderAvailable && population[0].Population !== 0 ? getTopMaleData.Age.toLowerCase() : "N/A"} and for women it is {populationByAgeAndGenderAvailable && population[0].Population !== 0 ? getTopFemaleData.Age.toLowerCase() : "N/A"}.
+            {level === "zip" ? `Zip code ${population[0].Geography}` : population[0].Geography} has a population of {formatAbbreviate(population[0].Population)} people{meta.level === "county" ? "" : <span> which makes it the {formatRankSuffix(currentLocationRankData.populationRank)} largest of the {rankData.length} {formatLevelNames(meta.level)} in Wayne County</span>}, with an average life expectancy of {formatAbbreviate(meanLifeExpectancy)} years{onCityOrZipLevel ? ` (average of all census tracts in ${meta.name})` : ""}. The most common age group for men is {populationByAgeAndGenderAvailable && population[0].Population !== 0 ? getTopMaleData.Age.toLowerCase() : "N/A"} and for women it is {populationByAgeAndGenderAvailable && population[0].Population !== 0 ? getTopFemaleData.Age.toLowerCase() : "N/A"}.
             Between {population[population.length - 1].Year} and {population[0].Year} the population of {population[0].Geography} {populationGrowth < 0 ? "decreased" : "increased"} from {formatAbbreviate(population[population.length - 1].Population)} to {formatAbbreviate(population[0].Population)},
             {} {populationGrowth < 0 ? "a decline" : "an increase"} of {populationGrowth < 0 ? `${populationGrowth * -1}%` : isNaN(populationGrowth) ? "N/A" : `${populationGrowth}%`}.
           </p>
@@ -387,7 +393,8 @@ Introduction.defaultProps = {
 };
 
 Introduction.need = [
-  fetchData("lifeExpectancy", "/api/data?measures=Life Expectancy&Geography=<id>&Year=latest", d => d.data), // Year data not available
+  fetchData("lifeExpectancy", "/api/data?measures=Life Expectancy&Geography=<id>&Year=latest", d => d.data),
+  fetchData("lifeExpectancyChildren", "/api/data?measures=Life Expectancy&Geography=<id>:children&Year=latest", d => d.data),
   fetchData("populationByAgeAndGender", "/api/data?measures=Population by Sex and Age&drilldowns=Age,Sex&Geography=<id>&Year=latest", d => d.data),
   fetchData("populationByRaceAndEthnicity", "https://acs.datausa.io/api/data?measures=Hispanic Population&drilldowns=Race,Ethnicity&Geography=<id>&Year=latest")
 ];
@@ -399,6 +406,7 @@ const mapStateToProps = state => ({
   childrenTractIds: state.data.childrenTractIds,
   population: state.data.population.data,
   lifeExpectancy: state.data.lifeExpectancy,
+  lifeExpectancyChildren: state.data.lifeExpectancyChildren,
   populationByAgeAndGender: state.data.populationByAgeAndGender,
   populationByRaceAndEthnicity: state.data.populationByRaceAndEthnicity.data,
   currentLevelOverallCoverage: state.data.currentLevelOverallCoverage

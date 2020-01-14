@@ -109,7 +109,7 @@ class Introduction extends SectionColumns {
     const populationByRaceAndEthnicityAvailable = populationByRaceAndEthnicity.length !== 0;
 
     const meanLifeExpectancy = ["county", "tract"].includes(level)
-      ? lifeExpectancy[0]["Life Expectancy"]
+      ? lifeExpectancy.length ? lifeExpectancy[0]["Life Expectancy"] : "N/A"
       : mean(
         lifeExpectancyChildren.filter(d => childrenTractIds.includes(d["ID Geography"])),
         d => d["Life Expectancy"]
@@ -159,7 +159,7 @@ class Introduction extends SectionColumns {
               {formatAbbreviate(topRaceAndEthnicity[0].share)}% of the population in {topRaceAndEthnicity[0].Geography} is {formatRaceName(topRaceAndEthnicity[0].Race)} ({formatEthnicityName(topRaceAndEthnicity[0].Ethnicity)}), followed by {formatAbbreviate(topRaceAndEthnicity[1].share)}% {formatRaceName(topRaceAndEthnicity[1].Race)} ({formatEthnicityName(topRaceAndEthnicity[1].Ethnicity)}).
             </p>
             : null}
-          { currentLocationRankData.medianIncome ? <p>In {level === "zip" ? `zip code ${currentLocationRankData.name}` : currentLocationRankData.name}, the median household income is ${formatAbbreviate(currentLocationRankData.medianIncome)}{meta.level === "county" ? "." : <span>, which ranks it as the {formatRankSuffix(currentLocationRankData.medianIncomeRank)} highest of all {formatLevelNames(meta.level)} in Wayne County.</span>}</p> : null}
+          <p>In {level === "zip" ? `zip code ${currentLocationRankData.name}` : currentLocationRankData.name}, the median household income is {currentLocationRankData.medianIncome ? `$${formatAbbreviate(currentLocationRankData.medianIncome)}` : "N/A"}{meta.level === "county" || !currentLocationRankData.medianIncome ? "." : <span>, which ranks it as the {formatRankSuffix(currentLocationRankData.medianIncomeRank)} highest of all {formatLevelNames(meta.level)} in Wayne County.</span>}</p>
           <p>
             Social and economic factors, such as income, education, and access to health care, impact health outcomes for all Americans. For example, in many low income areas in the country, there are higher rates of chronic diseases, like high blood pressure and diabetes. The summary to the right highlights some of the social and health conditions for {population[0].Geography}.
           </p>

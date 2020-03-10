@@ -4,6 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
+    "acsCubes": "node scripts/acsCubes.js",
     "cache": "node scripts/cache.js",
     "cube2csv": "node scripts/cube2csv.js",
     "build": "canon-build",

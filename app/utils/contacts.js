@@ -1,102 +1,102 @@
 export default [
   {
     slug: "air-quality",
-    embed: "http://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;138;Air%20Pollution%20Control"
+    embed: "https://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;138;Air%20Pollution%20Control"
   },
   {
     slug: "cancer-prevalence-by-demographic",
-    embed: "http://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;138;Cancer%20Clinics"
+    embed: "https://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;138;Cancer%20Clinics"
   },
   {
     slug: "conditons-and-chronic-diseases",
-    embed: "http://navigateresources.net/tici/Subcategory.aspx?;Detroit;44444;;N;0;138;HEALTH%20CARE;;114"
+    embed: "https://navigateresources.net/tici/Subcategory.aspx?;Detroit;44444;;N;0;138;HEALTH%20CARE;;114"
   },
   {
     slug: "coverage",
-    embed: "http://navigateresources.net/tici/MatchList.aspx?n;Detroit;44444;;N;0;138;Health%20Insurance"
+    embed: "https://navigateresources.net/tici/MatchList.aspx?n;Detroit;44444;;N;0;138;Health%20Insurance"
   },
   {
     slug: "dentists-work-status",
-    embed: "http://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;138;Dentist%20Referrals;Dentist%20Referrals;Partial"
+    embed: "https://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;138;Dentist%20Referrals;Dentist%20Referrals;Partial"
   },
   {
     slug: "disability-status",
-    embed: "http://navigateresources.net/tici/MatchList.aspx?n;Detroit;44444;;N;0;138;Disability%20Benefits"
+    embed: "https://navigateresources.net/tici/MatchList.aspx?n;Detroit;44444;;N;0;138;Disability%20Benefits"
   },
   {
     slug: "educational-attainment",
-    embed: "http://navigateresources.net/tici/Subcategory.aspx?;Detroit;44444;;N;0;138;EDUCATION;;111"
+    embed: "https://navigateresources.net/tici/Subcategory.aspx?;Detroit;44444;;N;0;138;EDUCATION;;111"
   },
   {
     slug: "food-availability",
-    embed: "http://navigateresources.net/tici/Subcategory.aspx?;Detroit;44444;;N;0;139;FOOD%20/%20MEALS;;113"
+    embed: "https://navigateresources.net/tici/Subcategory.aspx?;Detroit;44444;;N;0;139;FOOD%20/%20MEALS;;113"
   },
   {
     slug: "food-stamps",
-    embed: "http://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;139;Food%20Stamps/SNAP;Food%20Stamps/SNAP;Partial"
+    embed: "https://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;139;Food%20Stamps/SNAP;Food%20Stamps/SNAP;Partial"
   },
   {
     slug: "grandparent-caregivers",
-    embed: "http://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;139;Adoption%20and%20Foster/Kinship%20Care%20Support%20Groups;Adoption%20and%20Foster/Kinship%20Care%20Support%20Groups;Partial"
+    embed: "https://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;139;Adoption%20and%20Foster/Kinship%20Care%20Support%20Groups;Adoption%20and%20Foster/Kinship%20Care%20Support%20Groups;Partial"
   },
   {
     slug: "health-center-demographics",
-    embed: "http://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;139;Community%20Clinics;Community%20Clinics;PartialHealth Care"
+    embed: "https://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;139;Community%20Clinics;Community%20Clinics;PartialHealth Care"
   },
   {
     slug: "homeless",
-    embed: "http://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;139;At%20Risk/Homeless%20Housing%20Related%20Assistance%20Programs;At%20Risk/Homeless%20Housing%20Related%20Assistance%20Programs;Partial"
+    embed: "https://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;139;At%20Risk/Homeless%20Housing%20Related%20Assistance%20Programs;At%20Risk/Homeless%20Housing%20Related%20Assistance%20Programs;Partial"
   },
   {
     slug: "homeownership",
-    embed: "http://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;140;Homebuyer/Home%20Purchase%20Counseling;Homebuyer/Home%20Purchase%20Counseling;Partial"
+    embed: "https://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;140;Homebuyer/Home%20Purchase%20Counseling;Homebuyer/Home%20Purchase%20Counseling;Partial"
   },
   {
     slug: "household-income-from-public-assistance",
-    embed: "http://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;139;Food%20Stamps/SNAP;Food%20Stamps/SNAP;Partial"
+    embed: "https://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;139;Food%20Stamps/SNAP;Food%20Stamps/SNAP;Partial"
   },
   {
     slug: "incarceration",
-    embed: "http://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;140;Prisoner%20Locator%20Services;Prisoner%20Locator%20Services;Partial"
+    embed: "https://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;140;Prisoner%20Locator%20Services;Prisoner%20Locator%20Services;Partial"
   },
   {
     slug: "incarceration",
-    embed: "http://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;140;Prisoner%20Locator%20Services;Prisoner%20Locator%20Services;Partial"
+    embed: "https://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;140;Prisoner%20Locator%20Services;Prisoner%20Locator%20Services;Partial"
   },
   {
     slug: "obesity-and-diabetes",
-    embed: "http://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;140;Diabetes%20Screening;Diabetes%20Screening;Partial"
+    embed: "https://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;140;Diabetes%20Screening;Diabetes%20Screening;Partial"
   },
   {
     slug: "occurrence-by-cancer-site",
-    embed: "http://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;138;Cancer%20Clinics"
+    embed: "https://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;138;Cancer%20Clinics"
   },
   {
     slug: "physical-health-and-inactivity",
-    embed: "http://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;140;Parent/Child%20Activity%20Groups;Parent/Child%20Activity%20Groups;Partial"
+    embed: "https://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;140;Parent/Child%20Activity%20Groups;Parent/Child%20Activity%20Groups;Partial"
   },
   {
     slug: "poverty",
-    embed: "http://navigateresources.net/tici/Subcategory.aspx?;Detroit;44444;;N;0;141;INCOME%20SUPPORT%20/%20ASSISTANCE;;116"
+    embed: "https://navigateresources.net/tici/Subcategory.aspx?;Detroit;44444;;N;0;141;INCOME%20SUPPORT%20/%20ASSISTANCE;;116"
   },
   {
     slug: "preventive-care",
-    embed: "http://navigateresources.net/tici/Subcategory.aspx?;Detroit;44444;;N;0;142;HEALTH%20CARE;;114"
+    embed: "https://navigateresources.net/tici/Subcategory.aspx?;Detroit;44444;;N;0;142;HEALTH%20CARE;;114"
   },
   {
     slug: "risky-behaviors",
-    embed: "http://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;142;Substance%20Use%20Disorder%20Counseling;Substance%20Use%20Disorder%20Counseling;Partial"
+    embed: "https://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;142;Substance%20Use%20Disorder%20Counseling;Substance%20Use%20Disorder%20Counseling;Partial"
   },
   {
     slug: "veterans",
-    embed: "http://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;142;Veteran%20Benefits%20Assistance;Veteran%20Benefits%20Assistance;Partial"
+    embed: "https://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;142;Veteran%20Benefits%20Assistance;Veteran%20Benefits%20Assistance;Partial"
   },
   {
     slug: "vision-and-auditory-disabilities",
-    embed: "http://navigateresources.net/tici/Subcategory.aspx?;Detroit;44444;;N;0;142;HEALTH%20CARE;;135"
+    embed: "https://navigateresources.net/tici/Subcategory.aspx?;Detroit;44444;;N;0;142;HEALTH%20CARE;;135"
   },
   {
     slug: "water-quality",
-    embed: "http://navigateresources.net/tici/MatchList.aspx?k;Dearborn;0;;N;0;143;Water%20Quality%20Assurance;Water%20Quality%20Assurance;Partial"
+    embed: "https://navigateresources.net/tici/MatchList.aspx?k;Dearborn;0;;N;0;143;Water%20Quality%20Assurance;Water%20Quality%20Assurance;Partial"
   }
 ];

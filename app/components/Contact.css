@@ -1,17 +1,5 @@
 @import "../css/mixins.css";
 
-/* .contact-button:not([class*="pt-intent-"]) {
-  background-color: var(--brand-dark);
-  background-image: none;
-  color: white;
-  &:before {
-    color: white;
-  }
-  &:hover {
-    background-color: var(--brand-dark);
-  }
-} */
-
 .contact-tooltip {
   @mixin font-sm;
   width: 300px;
@@ -19,41 +7,31 @@
 
 .contact-dialog {
   padding-bottom: 0;
-  & .pt-dialog-body {
-    margin: 0;
-    max-height: 60vh;
-    overflow-x: hidden;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  & .agency-list {
-    list-style: none;
-    margin: 25px;
-    padding-left: 0;
-    & .contact-agency {
-      color: var(--majorelle-dark);
+  height: 90vh;
+  overflow: hidden;
+  max-width: 1100px;
+  width: 95%;
+  & .pt-dialog-header {
+    background-color: var(--dark-3);
+    & .pt-icon-large {
+      color: var(--light-3);
     }
-    & .contact-list {
-      list-style: none;
-      margin: 10px 0 25px;
-      padding-left: 0;
-      & .contact {
-        margin-bottom: 10px;
-        & .contact-subAgency, & .contact-title {
-          line-height: 1.25;
-        }
-        & .contact-address {
-          line-height: 1.25;
-        }
-        & .has-icon {
-          align-items: center;
-          display: flex;
-          & .pt-icon-standard {
-            font-size: 10px;
-            margin-right: 8px;
-          }
-        }
-      }
+    & .pt-dialog-header-title {
+      @mixin font-sm;
+      color: var(--white);
+    }
+  }
+  & .pt-dialog-body {
+    background-color: var(--dark-3);
+    margin: 0;
+    max-height: none;
+    overflow: hidden;
+    padding: 0 10px 10px;
+    & .tic-iframe {
+      border: 0;
+      border-radius: 5px;
+      height: 100%;
+      width: 100%;
     }
   }
 }

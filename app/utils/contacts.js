@@ -97,6 +97,6 @@ export default [
   },
   {
     slug: "water-quality",
-    embed: "https://navigateresources.net/tici/MatchList.aspx?k;Dearborn;0;;N;0;143;Water%20Quality%20Assurance;Water%20Quality%20Assurance;Partial"
+    embed: "https://navigateresources.net/tici/MatchList.aspx?k;Detroit;44444;;N;0;143;Water%20Quality%20Assurance;Water%20Quality%20Assurance;Partial"
   }
 ];

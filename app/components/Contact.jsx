@@ -39,11 +39,14 @@ class Contact extends Component {
       .replace("health center", "health centers")
       .replace("homeless", "homelessness")
       .replace("disability status", "disabilities");
+
     const tooltip = `Community resources for ${topic} can be found here.`;
     let city = "Detroit";
     if (meta.level === "place") city = meta.name;
     if (meta.level === "tract") city = stats.tractToPlace[meta.id] || city;
     if (meta.level === "zip") city = stats.zipToPlace[meta.id] || city;
+
+    const zipCode = "444444";
 
     return (
       <div className="contact section-popover-button">
@@ -52,7 +55,7 @@ class Contact extends Component {
         </Tooltip2>
         <Dialog className="contact-dialog" title={title} iconName={icon} isOpen={open} onClose={toggle}>
           <div className="pt-dialog-body">
-            <iframe className="tic-iframe" src={data.embed.replace("Detroit", city)} />
+            <iframe className="tic-iframe" src={data.embed.replace("Detroit", city).replace("44444", zipCode)} />
           </div>
         </Dialog>
       </div>

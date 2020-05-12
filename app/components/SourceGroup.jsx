@@ -31,7 +31,7 @@ export default class SourceGroup extends Component {
               { org && <Tooltip content={orgDesc} className={orgDesc ? "active" : ""} tooltipClassName="source-group-tooltip" disabled={!orgDesc}>
                 { datasetLink && orgName ? <a className="link" href={datasetLink} target="_blank" rel="noopener noreferrer" dangerouslySetInnerHTML={{__html: orgName}} /> : <span dangerouslySetInnerHTML={{__html: orgName}} /> }
               </Tooltip> }
-              { i < sources.length - 2 && <span>,</span> }
+              { i < sources.length - 2 && <span>, </span> }
               {i === sources.length - 1 && <span>.</span>}
             </span>;
           })

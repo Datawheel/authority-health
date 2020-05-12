@@ -1,6 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
-import {sum} from "d3-array";
+import {max, merge, sum} from "d3-array";
 import {nest} from "d3-collection";
 import {BarChart} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
@@ -84,8 +84,22 @@ class CancerPrevalenceByDemographics extends SectionColumns {
 
     const renderTag = item => <span>{item.title}</span>;
 
-    let dropdownSelected = "";
-    selectedItems.forEach((d, i) => dropdownSelected += i === selectedItems.length - 1 ? `${d.title}` : `${d.title},`);
+    const dropdownSelected = selectedItems.map(d => d.title.replace(/,/g, "%2C")).join(",");
+
+    const barChartDataFormat = resp => {
+      this.setState({sources: updateSource(resp.source, this.state.sources)});
+      const groupedData = nest()
+        .key(d => d["Cancer Site"])
+        .entries(resp.data)
+        .map(cancerType => {
+          const latestYear = max(cancerType.values, d => d["ID Year"]);
+          const latestData = cancerType.values.filter(d => d["ID Year"] === latestYear);
+          const total = sum(latestData, d => d["Cancer Diagnosis Count"]);
+          latestData.forEach(d => d.share = total !== 0 ? d["Cancer Diagnosis Count"] / total * 100 : 0);
+          return latestData;
+        });
+      return merge(groupedData);
+    };
 
     return (
       <SectionColumns>
@@ -138,7 +152,6 @@ class CancerPrevalenceByDemographics extends SectionColumns {
             stacked: true,
             x: "share",
             y: "Cancer Site",
-            time: "Year",
             title: "Gender Breakdown",
             xConfig: {
               tickFormat: d => formatPercentage(d),
@@ -151,22 +164,7 @@ class CancerPrevalenceByDemographics extends SectionColumns {
             tooltipConfig: {tbody: [["Cancer Type", d => d["Cancer Site"]], ["Year", d => d.Year], ["Prevalence", d => formatPercentage(d.share)],
               ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
           }}
-          dataFormat={resp => {
-            this.setState({sources: updateSource(resp.source, this.state.sources)});
-            nest()
-              .key(d => d["Cancer Site"])
-              .entries(resp.data)
-              .forEach(cancerType => {
-                nest()
-                  .key(d => d.Year)
-                  .entries(cancerType.values)
-                  .forEach(group => {
-                    const total = sum(group.values, d => d["Cancer Diagnosis Count"]);
-                    group.values.forEach(d => d.share = total !== 0 ? d["Cancer Diagnosis Count"] / total * 100 : 0);
-                  });
-              });
-            return resp.data;
-          }}
+          dataFormat={barChartDataFormat}
           />
 
           <Options
@@ -188,7 +186,6 @@ class CancerPrevalenceByDemographics extends SectionColumns {
             x: "share",
             y: "Cancer Site",
             title: "Race/Ethnicity Breakdown",
-            time: "Year",
             xConfig: {
               tickFormat: d => formatPercentage(d),
               labelRotation: false
@@ -200,22 +197,7 @@ class CancerPrevalenceByDemographics extends SectionColumns {
             tooltipConfig: {tbody: [["Cancer Type", d => d["Cancer Site"]], ["Year", d => d.Year], ["Prevalence", d => formatPercentage(d.share)],
               ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["Metro Area", d => d.MSA]]}
           }}
-          dataFormat={resp => {
-            this.setState({sources: updateSource(resp.source, this.state.sources)});
-            nest()
-              .key(d => d["Cancer Site"])
-              .entries(resp.data)
-              .forEach(cancerType => {
-                nest()
-                  .key(d => d.Year)
-                  .entries(cancerType.values)
-                  .forEach(group => {
-                    const total = sum(group.values, d => d["Cancer Diagnosis Count"]);
-                    group.values.forEach(d => d.share = d["Cancer Diagnosis Count"] / total * 100);
-                  });
-              });
-            return resp.data;
-          }}
+          dataFormat={barChartDataFormat}
           />
         </div>
 

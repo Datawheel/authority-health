@@ -235,8 +235,9 @@ class PreventiveCare extends SectionColumns {
                 Path: {
                   stroke(d, i) {
                     if (meta.level === "tract" && (d["ID Tract"] === meta.id || d.id === meta.id)) return styles["curry-light"];
+                    else if (d.type === "Feature") return "transparent";
                     const c = typeof this._shapeConfig.Path.fill === "function" ? this._shapeConfig.Path.fill(d, i) : this._shapeConfig.Path.fill;
-                    return color(c).darker();
+                    return color(c).darker(0.6);
                   },
                   strokeWidth: d => meta.level === "tract" && (d["ID Tract"] === meta.id || d.id === meta.id) ? 2 : 1
                 }

@@ -219,8 +219,9 @@ class Introduction extends SectionColumns {
                     if (level === "zip" && (d["ID Zip"] === meta.id || d.properties && d.properties.ZCTA5CE10 === meta.id.slice(7))) {
                       return styles["curry-light"];
                     }
+                    else if (d.type === "Feature") return "transparent";
                     const c = typeof this._shapeConfig.Path.fill === "function" ? this._shapeConfig.Path.fill(d, i) : this._shapeConfig.Path.fill;
-                    return color(c).darker();
+                    return color(c).darker(0.6);
                   },
                   strokeWidth: d => level === "zip" && (d["ID Zip"] === meta.id || d.properties && d.properties.ZCTA5CE10 === meta.id.slice(7)) ? 2 : 1
                 }
@@ -311,7 +312,7 @@ class Introduction extends SectionColumns {
                   stroke(d, i) {
                     if (level === "tract" && d["ID Geography"] === meta.id) return styles["curry-light"];
                     const c = typeof this._shapeConfig.Path.fill === "function" ? this._shapeConfig.Path.fill(d, i) : this._shapeConfig.Path.fill;
-                    return color(c).darker();
+                    return color(c).darker(0.6);
                   },
                   strokeWidth: d => level === "tract" && d["ID Geography"] === meta.id ? 2 : 1
                 }

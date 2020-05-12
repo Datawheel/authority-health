@@ -1,4 +1,5 @@
 import styles from "style.yml";
+import {color} from "d3-color";
 
 const bad = styles.danger;
 const typeface = "Lato, sans-serif";
@@ -154,7 +155,13 @@ export default {
     },
     // keep map locations visible; override in pie charts
     Path: {
-      fillOpacity: 0.75
+      fillOpacity: d => d.type === "Feature" ? 0.5 : 0.75,
+      stroke(d, i) {
+        if (d.type === "Feature") return "transparent";
+        let c = typeof this._shapeConfig.Path.fill === "function" ? this._shapeConfig.Path.fill(d, i) : this._shapeConfig.Path.fill;
+        if (!c) c = typeof this._shapeConfig.fill === "function" ? this._shapeConfig.fill(d, i) : this._shapeConfig.fill;
+        return color(c).darker(0.6);
+      }
     }
   },
   // prevent map scrolljacking

@@ -69,8 +69,10 @@ class ObesityAndDiabetes extends SectionColumns {
         .then(resp => {
           const data = resp.data.data;
           const latestYear = data[0]["End Year"];
+
           // find top value
-          const topRecentYearData = data.filter(d => d["End Year"] === latestYear).sort((a, b) => b["BMI Underweight"] - a["BMI Underweight"]);
+          const topRecentYearData = data
+            .filter(d => d["End Year"] === latestYear);
 
           axios.get(`/api/data?measures=Age-Adjusted Obesity Prevalence&drilldowns=Sex&Geography=${geoId}&Year=latest`) // CDC Wonder - Obesity Prevalence by Sex
             .then(d => {
@@ -109,7 +111,9 @@ class ObesityAndDiabetes extends SectionColumns {
     const isHealthyWeightSelected = dropdownValue === "BMI Healthy Weight";
 
     // Find recent year top data for the selceted dropdown value.
-    const topDropdownWeightedData = BMIWeightedData[0];
+    const topDropdownWeightedData = isBMIWeightedDataValueSelected
+      ? BMIWeightedData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0]
+      : BMIWeightedData[0];
 
     const topDropdownValueTract = obesityAndDibetesDataValue.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
     const topTractPlace = tractToPlace[topDropdownValueTract["ID Tract"]];
@@ -157,7 +161,7 @@ class ObesityAndDiabetes extends SectionColumns {
           {/* Show top stats for the dropdown selected. */}
           {isBMIWeightedDataValueSelected
             ? <Stat
-              title={isHealthyWeightSelected ? "Location with highest share" : "Location with highest prevalence"}
+              title="Location with highest prevalence"
               year={topDropdownWeightedData["End Year"]}
               value={<ZipRegionDefinition text={topDropdownWeightedData["Zip Region"]} />}
               qualifier={`${formatPercentage(topDropdownWeightedData[dropdownValue], true)} of the population of this zip region`}
@@ -198,7 +202,7 @@ class ObesityAndDiabetes extends SectionColumns {
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           {isBMIWeightedDataValueSelected
-            ? <p>In {topDropdownWeightedData["End Year"]}, {formatPercentage(topDropdownWeightedData[dropdownValue], true)} of the population of the {topDropdownWeightedData["Zip Region"]} <ZipRegionDefinition text="zip region" /> had a BMI indicating {dropdownValue.replace("BMI", "").toLowerCase().trim()}. This represents the highest {isHealthyWeightSelected ? "share" : "prevalence"} out of all zip regions in Wayne County.</p>
+            ? <p>In {topDropdownWeightedData["End Year"]}, {formatPercentage(topDropdownWeightedData[dropdownValue], true)} of the population of the {topDropdownWeightedData["Zip Region"]} <ZipRegionDefinition text="zip region" /> had a BMI indicating {dropdownValue === "BMI Healthy Weight" ? "" : "being "}{dropdownValue.replace("BMI", "").toLowerCase().trim()}. This represents the highest {isHealthyWeightSelected ? "share" : "prevalence"} out of all zip regions in Wayne County that have data.</p>
             : <p>In {topDropdownValueTract.Year}, {formatPercentage(topDropdownValueTract[dropdownValue])} of the population of <CensusTractDefinition text={topDropdownValueTract.Tract} />{topTractPlace !== undefined ? ` in ${topTractPlace}` : ""} had {dropdownValue.toLowerCase()}. This is the highest prevalence out of all tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
 
@@ -288,8 +292,8 @@ class ObesityAndDiabetes extends SectionColumns {
               time: "End Year",
               title: `${dropdownValue} by Zip Regions in Wayne County`,
               tooltipConfig: isHealthyWeightSelected
-                ? {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Share", d => `${formatPercentage(d[dropdownValue], true)}`]]}
-                : {tbody: [["Year", d => d.Year], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue], true)}`]]},
+                ? {tbody: [["Year", d => d["End Year"]], ["Condition", `${dropdownValue}`], ["Share", d => `${formatPercentage(d[dropdownValue], true)}`]]}
+                : {tbody: [["Year", d => d["End Year"]], ["Condition", `${dropdownValue}`], ["Prevalence", d => `${formatPercentage(d[dropdownValue], true)}`]]},
               topojson: "/topojson/zipregions.json",
               topojsonId: d => d.properties.REGION,
               topojsonFilter: () => true

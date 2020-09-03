@@ -165,6 +165,17 @@ class HealthInsuranceCoverage extends SectionColumns {
             {!isCoverageDataAvailableForCurrentGeography &&
               <Disclaimer>Data is only available for {coverageData.data[0].Geography}</Disclaimer>
             }
+            <Stat
+              title={getGeomapTitle(meta)}
+              year={topRecentYearChildrenGeographyData.Year}
+              value={meta.level === "place" || meta.level === "tract" ? <CensusTractDefinition text={formatGeomapLabel(topRecentYearChildrenGeographyData, meta, tractToPlace)} /> : formatGeomapLabel(topRecentYearChildrenGeographyData, meta, tractToPlace)}
+              qualifier={getGeomapQualifier(topRecentYearChildrenGeographyData, meta)}
+            />
+
+            {meta.level !== "county"
+              ? <p>In {nationCoverage.Year}, {formatPercentage(currentLevelCoverage.share)} of the population in {currentLevelCoverage.Geography} had health coverage, compared to {formatPercentage(countyCoverage.share)} in Wayne County, {formatPercentage(stateCoverage.share)} in Michigan and {formatPercentage(nationCoverage.share)} in the United States.</p>
+              : <p>In {nationCoverage.Year}, {formatPercentage(countyCoverage.share)} of the population in Wayne County had health coverage, compared to {formatPercentage(stateCoverage.share)} in Michigan and {formatPercentage(nationCoverage.share)} in the United States.</p>
+            }
             <StatGroup
               title={"most covered age groups by gender"}
               year={ageGroupYear}
@@ -184,17 +195,6 @@ class HealthInsuranceCoverage extends SectionColumns {
                 }
               ]}
             />
-            <Stat
-              title={getGeomapTitle(meta)}
-              year={topRecentYearChildrenGeographyData.Year}
-              value={meta.level === "place" || meta.level === "tract" ? <CensusTractDefinition text={formatGeomapLabel(topRecentYearChildrenGeographyData, meta, tractToPlace)} /> : formatGeomapLabel(topRecentYearChildrenGeographyData, meta, tractToPlace)}
-              qualifier={getGeomapQualifier(topRecentYearChildrenGeographyData, meta)}
-            />
-
-            {meta.level !== "county"
-              ? <p>In {nationCoverage.Year}, {formatPercentage(currentLevelCoverage.share)} of the population in {currentLevelCoverage.Geography} had health coverage, compared to {formatPercentage(countyCoverage.share)} in Wayne County, {formatPercentage(stateCoverage.share)} in Michigan and {formatPercentage(nationCoverage.share)} in the United States.</p>
-              : <p>In {nationCoverage.Year}, {formatPercentage(countyCoverage.share)} of the population in Wayne County had health coverage, compared to {formatPercentage(stateCoverage.share)} in Michigan and {formatPercentage(nationCoverage.share)} in the United States.</p>
-            }
             <p>The age groups for men and women most likely to have health care coverage in {maleCoverageData[0].Geography} were {topMaleAgeGroup} years for men and {topFemaleAgeGroup} years for women.</p>
 
             <SourceGroup sources={this.state.sources} />

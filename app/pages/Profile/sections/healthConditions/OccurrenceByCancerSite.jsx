@@ -145,7 +145,12 @@ class OccurrenceByCancerSite extends SectionColumns {
             confidenceConfig: {
               fillOpacity: 0.2
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["LCI", d => formatAbbreviate(d["Age-Adjusted Cancer Rate Lower 95 Percent Confidence Interval"])], ["UCI", d => formatAbbreviate(d["Age-Adjusted Cancer Rate Upper 95 Percent Confidence Interval"])], ["Metro Area", d => d.MSA]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Occurrence per 100,000 people", d => formatAbbreviate(d["Age-Adjusted Cancer Rate"])], ["LCI", d => formatAbbreviate(d["Age-Adjusted Cancer Rate Lower 95 Percent Confidence Interval"])], ["UCI", d => formatAbbreviate(d["Age-Adjusted Cancer Rate Upper 95 Percent Confidence Interval"])], ["Metro Area", d => d.MSA]]},
+            shapeConfig: {
+              Line: {
+                strokeWidth: 3
+              }
+            }
           }}
           dataFormat={resp => {
             this.setState({sources: updateSource(resp.source, this.state.sources)});

@@ -88,10 +88,10 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
         <SectionTitle>Household Income From Public Assistance</SectionTitle>
         <article>
           <Stat
-            title={"Population With Cash Public Assistance Or Food Stamps/SNAP"}
+            title={"Population With Food or Cash Assistance"}
             year={publicAssistanceDataAvailable ? topPublicAssistanceData.Year : ""}
             value={publicAssistanceDataAvailable ? `${formatPercentage(topPublicAssistanceData.share)}` : "N/A"}
-            qualifier={publicAssistanceDataAvailable ? `of the population in ${topPublicAssistanceData.Geography}` : "N/A"}
+            qualifier={publicAssistanceDataAvailable ? `of households in ${topPublicAssistanceData.Geography}` : "N/A"}
           />
           <Stat
             title={"most common number of workers per household on public assistance"}
@@ -100,7 +100,7 @@ class HouseholdIncomeFromPublicAssistance extends SectionColumns {
             qualifier={householdSnapDataAvailable ? `(${formatPercentage(topRecentYearHouseholdSnapData.totalShare)} of the population in ${topRecentYearHouseholdSnapData.Geography})` : ""}
           />
           <p>
-            {publicAssistanceDataAvailable ? <span>In {topPublicAssistanceData.Year}, {formatPercentage(topPublicAssistanceData.share)} of the population in {topPublicAssistanceData.Geography} got cash public assistance or food stamps.</span> : ""}
+            {publicAssistanceDataAvailable ? <span>In {topPublicAssistanceData.Year}, {formatPercentage(topPublicAssistanceData.share)} of households in {topPublicAssistanceData.Geography} got food or cash assistance.</span> : ""}
             {householdSnapDataAvailable ? <span> The most common number of workers per household on public assistance was {topRecentYearHouseholdSnapData["Number of workers"].toLowerCase()} ({formatPercentage(topRecentYearHouseholdSnapData.totalShare)} of the population in {topRecentYearHouseholdSnapData.Geography}).</span> : ""}
           </p>
           {householdSnapDataAvailable ? <p>The following chart shows the number of workers per household on public assistance broken down by family structure.</p> : ""}

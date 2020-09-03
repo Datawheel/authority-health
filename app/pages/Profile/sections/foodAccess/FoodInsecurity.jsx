@@ -60,7 +60,7 @@ class FoodInsecurity extends SectionColumns {
               qualifier={`of the adults in ${location}`}
             />
             <p>In {childInsecurity.Year}, {childInsecurity["Food Insecurity Rate"]}% of the children under 18 and {adultInsecurityRate}% of the adults in {location} had food insecurity.</p>
-            <p>Food insecurity refers to <a href="https://www.ers.usda.gov/topics/food-nutrition-assistance/food-security-in-the-us.aspx">USDA’s measure</a> of lack of access, at times, to enough food for an active, healthy life for all household members and limited or uncertain availability of nutritionally adequate foods.</p>
+            <p>Food security means access by all people at all times to enough food for an active, healthy life. More information about food security can be found on the <a href="https://www.ers.usda.gov/topics/food-nutrition-assistance/food-security-in-the-us.aspx">USDA’s website</a>.</p>
             <SourceGroup sources={this.state.sources} />
           </article>
         </section>

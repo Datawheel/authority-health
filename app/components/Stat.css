@@ -47,3 +47,7 @@
     }
   }
 }
+
+p:not(.disclaimer) ~ .stat, p:not(.disclaimer) ~ .stat-group {
+  margin-top: 1.5em;
+}

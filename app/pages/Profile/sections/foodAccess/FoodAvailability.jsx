@@ -73,8 +73,9 @@ class FoodAvailability extends SectionColumns {
       <SectionColumns>
         <SectionTitle>Food Availability</SectionTitle>
         <article>
-          {!isFoodStoreDataAvailableForCurrentGeography &&
-            <Disclaimer>Data is only available for {topStore.Geography}</Disclaimer>
+          {!isFoodStoreDataAvailableForCurrentGeography
+            ? <Disclaimer>Data is only available for {topStore.Geography}, and is collected across multiple years: 2016 for Farmers&apos; markets and 2014 for all other food store types.</Disclaimer>
+            : <Disclaimer>Data is collected across multiple years: 2016 for Farmers&apos; markets and 2014 for all other food store types.</Disclaimer>
           }
           <Stat
             title={"most common food store"}
@@ -107,11 +108,18 @@ class FoodAvailability extends SectionColumns {
             height: 400,
             shapeConfig: {
               Path: {
-                fillOpacity: 1
+                fillOpacity: 1,
+                labelConfig: {
+                  padding: 0
+                }
               }
             },
             value: d => d["Number of Food Stores"],
-            tooltipConfig: {tbody: [["Count", d => `${commas(d["Number of Food Stores"])} in ${d.Year}`], ["County", d => d.Geography]]}
+            tooltipConfig: {
+              tbody: [
+                ["Year", d => d.Year],
+                ["Number of Stores", d => commas(d["Number of Food Stores"])]
+              ]}
           }}
           />
         </div>

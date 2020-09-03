@@ -90,14 +90,14 @@ class Unemployment extends SectionColumns {
               {
                 title: "Male",
                 year: employmentStatusAvailable ? getTopMaleUnemploymemtData.Year : "",
-                value: employmentStatusAvailable ? getTopFemaleUnemploymemtData.Age.toLowerCase() : "N/A",
+                value: employmentStatusAvailable ? getTopMaleUnemploymemtData.Age.toLowerCase() : "N/A",
                 qualifier: employmentStatusAvailable ? `${formatPercentage(getTopMaleUnemploymemtData.share)} of the population in ${getTopMaleUnemploymemtData.Geography}` : "",
                 color: "terra-cotta"
               },
               {
                 title: "Female",
                 year: employmentStatusAvailable ? getTopFemaleUnemploymemtData.Year : "",
-                value: employmentStatusAvailable ? getTopMaleUnemploymemtData.Age.toLowerCase() : "N/A",
+                value: employmentStatusAvailable ? getTopFemaleUnemploymemtData.Age.toLowerCase() : "N/A",
                 qualifier: employmentStatusAvailable ? `${formatPercentage(getTopFemaleUnemploymemtData.share)} of the population in ${getTopFemaleUnemploymemtData.Geography}` : ""
               }
             ]}

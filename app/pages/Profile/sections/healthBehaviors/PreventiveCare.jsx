@@ -138,9 +138,15 @@ class PreventiveCare extends SectionColumns {
     const preventativeMeasure = dropdownValue === "Men Aged 65+ Who Are Up-to-date on Core Preventive Services" || dropdownValue === "Women Aged 65+ Who Are Up-to-date on Core Preventive Services";
 
     // Find recent year top data for the selected dropdown value.
-    const topDropdownData = isPreventativeCareWeightedValueSelected
-      ? preventiveCareWeightedData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0]
-      : preventiveCareData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0];
+    let topDropdownData = isPreventativeCareWeightedValueSelected
+      ? preventiveCareWeightedData
+      : preventiveCareData;
+
+    topDropdownData = dropdownValue === "Sleep Less Than 7 Hours"
+      ? topDropdownData.sort((a, b) => b[dropdownValue] - a[dropdownValue])[0]
+      : topDropdownData.sort((a, b) => a[dropdownValue] - b[dropdownValue])[0];
+
+    const sortWord = dropdownValue === "Sleep Less Than 7 Hours" ? "highest" : "lowest";
 
     const {tractToPlace} = this.props.topStats;
     let topTractPlace;
@@ -172,7 +178,7 @@ class PreventiveCare extends SectionColumns {
           }
           {/* Show top stats for the dropdown selected. */}
           <Stat
-            title={"Location with highest share"}
+            title={`Location with ${sortWord} share`}
             year={isPreventativeCareWeightedValueSelected ? topDropdownData["End Year"] : topDropdownData.Year}
             value={isPreventativeCareWeightedValueSelected ? <ZipRegionDefinition text={topDropdownData["Zip Region"]} /> : <p><CensusTractDefinition text={topDropdownData.Tract} />{ topTractPlace ? `, ${topTractPlace}` : "" }</p>}
             qualifier={isPreventativeCareWeightedValueSelected ? `${formatPercentage(topDropdownData[dropdownValue], true)} of the population of this zip region` : `${formatPercentage(topDropdownData[dropdownValue])} of the population of this census tract`}
@@ -180,8 +186,8 @@ class PreventiveCare extends SectionColumns {
 
           {/* Write short paragraphs explaining Geomap and top stats for the dropdown value selected. */}
           {isPreventativeCareWeightedValueSelected
-            ? <p>In {topDropdownData["End Year"]}, {formatPercentage(topDropdownData[dropdownValue], true)} of the {dropdownValue === "Had Flu Vaccine" || dropdownValue === "Had Pneumonia Vaccine" ? "65 and older" : "adult"} population of the {topDropdownData["Zip Region"]} <ZipRegionDefinition text="zip region" /> had {dropdownValue === "Sleep Less Than 7 Hours" ? formatText(dropdownValue) : <span>{getArticle(dropdownValue)} {formatTextNames(dropdownValue)}</span>}, as compared to {formatPercentage(countyLevelData[0][dropdownValue], true)} overall for Wayne County.</p>
-            : <p>In {topDropdownData.Year}, {preventativeMeasure ? corePreventiveText(formatPercentage(topDropdownData[dropdownValue]), topDropdownData.Tract, dropdownValue, topTractPlace) : <span>{formatPercentage(topDropdownData[dropdownValue])} of {dropdownValue === "Pap Smear Test" || dropdownValue === "Mammography" ? formatWomenText(dropdownValue) : "the adult population"} {dropdownValue === "Adults Aged 50-75 Years With Colorectal Cancer Screening" ? "aged 50–75 years" : ""} of <CensusTractDefinition text={topDropdownData.Tract}/>{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} had {dropdownValue === "Cholesterol Screening" ? formatText(dropdownValue) : <span>{getArticle(dropdownValue)} {formatTextNames(dropdownValue).replace(/s$/m, "")}.</span>}</span>} This rate is the highest of all census tracts in Detroit, Livonia, Dearborn and Westland.</p>
+            ? <p>In {topDropdownData["End Year"]}, {formatPercentage(topDropdownData[dropdownValue], true)} of the {dropdownValue === "Had Flu Vaccine" || dropdownValue === "Had Pneumonia Vaccine" ? "65 and older" : "adult"} population of the {topDropdownData["Zip Region"]} <ZipRegionDefinition text="zip region" /> had {dropdownValue === "Sleep Less Than 7 Hours" ? formatText(dropdownValue) : <span>{getArticle(dropdownValue)} {formatTextNames(dropdownValue)}</span>}, as compared to {formatPercentage(countyLevelData[0][dropdownValue], true)} overall for Wayne County. This is the {sortWord} of all zip regions in Wayne County.</p>
+            : <p>In {topDropdownData.Year}, {preventativeMeasure ? corePreventiveText(formatPercentage(topDropdownData[dropdownValue]), topDropdownData.Tract, dropdownValue, topTractPlace) : <span>{formatPercentage(topDropdownData[dropdownValue])} of {dropdownValue === "Pap Smear Test" || dropdownValue === "Mammography" ? formatWomenText(dropdownValue) : "the adult population"} {dropdownValue === "Adults Aged 50-75 Years With Colorectal Cancer Screening" ? "aged 50–75 years" : ""} of <CensusTractDefinition text={topDropdownData.Tract}/>{topTractPlace !== undefined ? `, ${topTractPlace}` : ""} had {dropdownValue === "Cholesterol Screening" ? formatText(dropdownValue) : <span>{getArticle(dropdownValue)} {formatTextNames(dropdownValue).replace(/s$/m, "")}.</span>}</span>} This rate is the {sortWord} of all census tracts in Detroit, Livonia, Dearborn and Westland.</p>
           }
           {isPreventativeCareWeightedValueSelected
             ? <p>The map here shows the rate of {formatTextNames(dropdownValue).replace(/([^s])$/m, "$1s").replace("sleeps", "sleep").replace("years", "year").replace("checkup ", "checkups ")} for zip regions in Wayne County.</p>

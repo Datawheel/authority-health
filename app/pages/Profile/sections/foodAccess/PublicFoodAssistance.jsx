@@ -10,6 +10,7 @@ import {fetchData, SectionColumns, SectionTitle} from "@datawheel/canon-core";
 
 import Contact from "components/Contact";
 import Disclaimer from "components/Disclaimer";
+import Stat from "components/Stat";
 import StatGroup from "components/StatGroup";
 import {updateSource} from "utils/helper";
 import SourceGroup from "components/SourceGroup";
@@ -54,13 +55,11 @@ class PublicFoodAssistance extends SectionColumns {
 
   render() {
 
-    const {meta, population, publicAssistanceData, snapWicData} = this.props;
+    const {meta, publicAssistanceData, snapWicData} = this.props;
     const isSnapWicDataAvailableForCurrentGeography = snapWicData.source[0].substitutions.length === 0;
 
     const publicAssistanceDataAvailable = publicAssistanceData.length !== 0;
     const topPublicAssistanceData = formatPublicAssistanceData(publicAssistanceData)[0];
-    const currentYearPopulation = population.filter(d => d.Year === topPublicAssistanceData.Year)[0];
-    const shareOfPopulationWithFoodStamps = currentYearPopulation.Population !== 0 ? formatPercentage(topPublicAssistanceData.total / currentYearPopulation.Population * 100) : `${0}%`;
 
     // Get latest year SNAP and WIC authorized stores data
     const snapWicArr = ["SNAP", "WIC"];
@@ -107,29 +106,19 @@ class PublicFoodAssistance extends SectionColumns {
               }
             ]}
           />
-          <StatGroup
-            title="population with public assistance"
-            year={topPublicAssistanceData ? topPublicAssistanceData.Year : null}
-            stats={[
-              {
-                title: "Food stamps",
-                value: shareOfPopulationWithFoodStamps,
-                qualifier: `of the population in ${meta.name}`
-              },
-              {
-                title: "Cash assistance",
-                value: publicAssistanceDataAvailable
-                  ? `${formatPercentage(topPublicAssistanceData.share)}`
-                  : null,
-                qualifier: publicAssistanceDataAvailable
-                  ? `of the population with food stamps in ${meta.name}`
-                  : null
-              }
-            ]}
-          />
           <p>The monthly average number of SNAP-authorized stores in {county} in {snapLatestYear} was {commas(snapLatestYearValue)}, and there were {commas(wicLatestYearValue)} WIC-authorized stores in {wicLatestYear}.</p>
-          <p>In {topPublicAssistanceData.Year}, {shareOfPopulationWithFoodStamps} of the population in {topPublicAssistanceData.Geography} had food stamps, out of which {formatPercentage(topPublicAssistanceData.share)} were given food stamps in cash.</p>
-          <p>The chart here shows the share of the population who gets food stamps in cash out of the population with food stamps.</p>
+          <Stat
+            title="population with food and cash assistance"
+            year={topPublicAssistanceData ? topPublicAssistanceData.Year : null}
+            value={publicAssistanceDataAvailable
+              ? `${formatPercentage(topPublicAssistanceData.share)}`
+              : null}
+            qualifier={publicAssistanceDataAvailable
+              ? `of households in ${meta.name}`
+              : null}
+          />
+          <p>In {topPublicAssistanceData.Year}, {formatPercentage(topPublicAssistanceData.share)} of {topPublicAssistanceData.Geography} households were given food or cash assistance.</p>
+          <p>The chart here shows the share of the population who gets either food or cash assistance.</p>
 
           <SourceGroup sources={this.state.sources} />
           <Contact slug={this.props.slug} />
@@ -150,15 +139,20 @@ class PublicFoodAssistance extends SectionColumns {
               discrete: "x",
               height: 400,
               baseline: 0,
-              groupBy: "Public Assistance or Snap",
+              groupBy: "Geography",
               x: "Year",
               y: "share",
               yConfig: {
                 tickFormat: d => `${formatPercentage(d)}`,
-                title: "Share"
+                title: "Population %"
               },
-              title: "Food Stamp Population Using Cash Assistance",
-              tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => `${formatPercentage(d.share)}`], [titleCase(meta.level), d => d.Geography]]}
+              title: "Households with Food or Cash Assistance",
+              tooltipConfig: {
+                tbody: [
+                  ["Year", d => d.Year],
+                  ["Population %", d => `${formatPercentage(d.share)}`]
+                ]
+              }
             }}
             dataFormat={resp => {
               this.setState({sources: updateSource(resp.source, this.state.sources)});

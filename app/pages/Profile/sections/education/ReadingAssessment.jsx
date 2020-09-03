@@ -15,15 +15,16 @@ import Options from "components/Options";
 const formatOverallData = (readingScoresByNation, readingScoresByState, readingScoresByCity) => {
   const readingScoresData = [];
   readingScoresByNation.forEach(d => {
-    d.Geography = "Nation";
+    d.Geography = "United States";
+    delete d.Nation;
     readingScoresData.push(d);
   });
   readingScoresByState.forEach(d => {
-    d.Geography = "State";
+    d.Geography = "Michigan";
     readingScoresData.push(d);
   });
   readingScoresByCity.forEach(d => {
-    d.Geography = "City";
+    d.Geography = "Detroit";
     readingScoresData.push(d);
   });
   // Get recent year data.
@@ -33,22 +34,12 @@ const formatOverallData = (readingScoresByNation, readingScoresByState, readingS
 };
 
 const getLabel = (d, isOverallSelected = true, dropdownValue) => {
-  if (isOverallSelected) {
-    if (d.Geography === "Nation") return `${d.Grade}th Grade, United States`;
-    if (d.Geography === "State") return `${d.Grade}th Grade, Michigan`;
-    return `${d.Grade}th Grade, Detroit`;
-  }
+  if (isOverallSelected) return `${d.Grade}th Grade, ${d.Geography}`;
   else {
     if (d[dropdownValue] === "Yes") return `${d.Grade}th Grade, With ${dropdownValue}`;
     if (d[dropdownValue] === "No") return `${d.Grade}th Grade, No ${dropdownValue}`;
     return `${d.Grade}th Grade, ${d[dropdownValue]}`;
   }
-};
-
-const formatGeographyName = d => {
-  if (d === "Nation") return "United States";
-  if (d === "State") return "Michigan";
-  return "Detroit";
 };
 
 const definitions = [
@@ -94,13 +85,13 @@ class ReadingAssessment extends SectionColumns {
 
   render() {
     const {dropdownValue, readingScoresData, readingScoresByNation, readingScoresByState} = this.state;
-    const dropdownList = ["Overall", "Gender", "Race", "ELL", "NSLP", "Disability", "Parents Education"];
+    const dropdownList = ["Overall", "Gender", "Race", "ELL", "NSLP", "Disability", "Parents' Education"];
     const isOverallSelected = dropdownValue === "Overall";
-    const isParentsEducationSelected = dropdownValue === "Parents Education";
+    const isParentsEducationSelected = dropdownValue === "Parents' Education";
 
-    let stat1Value = "City";
-    let stat2Value = "State";
-    const stat3Value = "Nation";
+    let stat1Value = "Detroit";
+    let stat2Value = "Michigan";
+    const stat3Value = "United States";
 
     if (dropdownValue === "Gender") {
       stat1Value = "Female";
@@ -161,8 +152,8 @@ class ReadingAssessment extends SectionColumns {
               year={readingScoresData[0].Year}
               stats={readingScoresData.map(stat => ({
                 key: stat.measure,
-                title: stat["Parents Education"],
-                value: stat["Average Reading Score by Parents Education"]
+                title: stat["Parents' Education"],
+                value: stat["Average Reading Score by Parents' Education"]
               }))}
             />
 
@@ -242,7 +233,10 @@ class ReadingAssessment extends SectionColumns {
           <Options
             component={this}
             componentKey="viz"
-            dataFormat={resp => resp.data}
+            dataFormat={resp => {
+              this.setState({sources: updateSource(resp.source, this.state.sources)});
+              return isOverallSelected ? formatOverallData(readingScoresByNation, readingScoresByState, resp.data)[0] : resp.data;
+            }}
             slug={this.props.slug}
             data={ isOverallSelected ? "/api/data?measures=Average Reading Score&drilldowns=Grade,Place&Year=all" : `/api/data?measures=Average Reading Score by ${dropdownValue}&drilldowns=Grade,${dropdownValue},Place&Year=all` }
             title="Chart of Reading Assessment" />
@@ -265,7 +259,12 @@ class ReadingAssessment extends SectionColumns {
             groupPadding: 25,
             barPadding: 3,
             time: "Year",
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Average Reading Score", d => isOverallSelected ? d["Average Reading Score"] : d[`Average Reading Score by ${dropdownValue}`]], ["Place", d => isOverallSelected ? formatGeographyName(d.Geography) : "Detroit"]]}
+            tooltipConfig: {
+              tbody: [
+                ["Year", d => d.Year],
+                ["Average Reading Score", d => isOverallSelected ? d["Average Reading Score"] : d[`Average Reading Score by ${dropdownValue}`]]
+              ]
+            }
           }}
           dataFormat={resp => {
             this.setState({sources: updateSource(resp.source, this.state.sources)});

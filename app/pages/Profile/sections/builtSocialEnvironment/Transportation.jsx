@@ -105,7 +105,7 @@ class Transportation extends SectionColumns {
             qualifier={numberOfVehiclesDataAvailable ? `(${formatPercentage(topAverageVehiclesPerHousehold)})` : ""}
           />
           <p>
-            {commuteTimeDataAvailable ? <span>As of {topRecentYearCommuteTime.Year}, most of the workforce living in {topRecentYearCommuteTime.Geography} has a {formatMinutes(topRecentYearCommuteTime["Travel Time"])} commute ({formatPercentage(topRecentYearCommuteTime.share)}). </span> : ""}
+            {commuteTimeDataAvailable ? <span>As of {topRecentYearCommuteTime.Year}, most of the workforce living in {topRecentYearCommuteTime.Geography} had a {formatMinutes(topRecentYearCommuteTime["Travel Time"])} commute ({formatPercentage(topRecentYearCommuteTime.share)}). </span> : ""}
             {transportationMeansAvailable ? <span>The majority of commuters {topRecentYearModeOfTransport["Transportation Means"].toLowerCase()} to work ({formatPercentage(topRecentYearModeOfTransport.share)}).</span> : ""}
           </p>
 

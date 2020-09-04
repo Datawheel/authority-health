@@ -106,7 +106,7 @@ const formatGeomapData = (data, meta, childrenTractIds, totalImmigrantsSelected 
 };
 
 const getGeomapTitle = (meta, dropdownValue) => {
-  if (meta.level === "county") return `The city with the most immigrtants ${dropdownValue === "Total Immigrants" ? "" : "in poverty"} in Wayne County`;
+  if (meta.level === "county") return `The city with the most immigrants ${dropdownValue === "Total Immigrants" ? "" : "in poverty"} in Wayne County`;
   else if (meta.level === "tract") return `The census tract with the most immigrants ${dropdownValue === "Total Immigrants" ? "" : "in poverty"} in Wayne County`;
   else return `The census tract with the most immigrants ${dropdownValue === "Total Immigrants" ? "" : "in poverty"} in ${meta.name}`;
 };
@@ -223,7 +223,7 @@ class Immigrants extends SectionColumns {
                 qualifier={immigrantsDataForCurrentLocationAvailable ? `of the population in ${meta.level !== "county" ? currentLevelImmigrantsData.Geography : "Wayne County"}` : ""}
               />
               <Stat
-                title={getGeomapTitle(meta, dropdownValue)}
+                title={getGeomapTitle(meta, dropdownValue).replace(/^The\s/g, "")}
                 year={topStats[0].Year}
                 value={meta.level === "place" || meta.level === "tract" ? <CensusTractDefinition text={formatGeomapLabel(topStats[0], meta, tractToPlace)} /> : formatGeomapLabel(topStats[0], meta, tractToPlace)}
                 qualifier={getGeomapQualifier(topStats, meta)}
@@ -235,7 +235,7 @@ class Immigrants extends SectionColumns {
                 : <p>In {USImmigrantsData.Year}, {formatPercentage(wayneCountyImmigrantsData.share)} of the population in Wayne County were immigrants, compared to {}
                   {formatPercentage(michiganImmigrantsData.share)} in Michigan, and {formatPercentage(USImmigrantsData.share)} in the United States.</p>
               }
-              <p>{`${getGeomapTitle(meta, dropdownValue)} was ${topStats[0].Geography} (${getGeomapQualifier(topStats, meta)}).`}</p>
+              <p>{`${getGeomapTitle(meta, dropdownValue)} was ${formatGeomapLabel(topStats[0], meta, tractToPlace)} (${getGeomapQualifier(topStats, meta)}).`}</p>
               {immigrantsDataForCurrentLocationAvailable ? <p>The map here shows the {meta.level === "county" ? "cities" : "tracts"} in {meta.level === "county" || meta.level === "tracts" ? "Wayne County" : `${meta.name}`} by the percentage of their immigrant population.</p> : ""}
             </div>
 
@@ -244,22 +244,22 @@ class Immigrants extends SectionColumns {
                 title={"Immigrants in poverty"}
                 year={immigrantsPovertyDataForCurrentLocationAvailable ? currentLevelImmigrantsData.Year : ""}
                 value={immigrantsPovertyDataForCurrentLocationAvailable ? formatPercentage(currentLevelImmigrantsData.share) : "N/A"}
-                qualifier={immigrantsDataForCurrentLocationAvailable ? `of the total number of immigrants in ${meta.level !== "county" ? currentLevelImmigrantsData.Geography : "Wayne County"}` : ""}
+                qualifier={immigrantsDataForCurrentLocationAvailable ? `of the immigrant population in ${meta.level !== "county" ? currentLevelImmigrantsData.Geography : "Wayne County"}` : ""}
               />
               <Stat
-                title={topStats.length > 1 ? `Number of ${meta.level === "county" ? "Places" : "Census Tracts"} with the most immigrants in poverty` : getGeomapTitle(meta, dropdownValue)}
+                title={topStats.length > 1 ? `Number of ${meta.level === "county" ? "Places" : "Census Tracts"} with the most immigrants in poverty` : getGeomapTitle(meta, dropdownValue).replace(/^The\s/g, "")}
                 year={topStats[0].Year}
                 value={topStats.length > 1 ? `${topStats.length} ${meta.level === "county" ? "Places" : "Census Tracts"}` : meta.level === "place" || meta.level === "tract" ? <CensusTractDefinition text={formatGeomapLabel(topStats[0], meta, tractToPlace)} /> : formatGeomapLabel(topStats[0], meta, tractToPlace)}
                 qualifier={getGeomapQualifier(topStats, meta)}
               />
 
               {meta.level !== "county"
-                ? <p>In {currentLevelImmigrantsData.Year}, {formatPercentage(currentLevelImmigrantsData.share)} of the population in {currentLevelImmigrantsData.Geography} were immigrants in poverty, compared to {}
+                ? <p>In {currentLevelImmigrantsData.Year}, {formatPercentage(currentLevelImmigrantsData.share)} of the immigrant population in {currentLevelImmigrantsData.Geography} were in poverty, compared to {}
                   {formatPercentage(wayneCountyImmigrantsData.share)} in Wayne County, {formatPercentage(michiganImmigrantsData.share)} in Michigan and {formatPercentage(USImmigrantsData.share)} in the United States.</p>
-                : <p>In {wayneCountyImmigrantsData.Year}, {formatPercentage(wayneCountyImmigrantsData.share)} of the population in in Wayne County were immigrants in poverty, compared to {}
+                : <p>In {wayneCountyImmigrantsData.Year}, {formatPercentage(wayneCountyImmigrantsData.share)} of the immigrant population in Wayne County were living in poverty, compared to {}
                   {formatPercentage(michiganImmigrantsData.share)} in Michigan and {formatPercentage(USImmigrantsData.share)} in the United States.</p>
               }
-              <p>{`${topStats.length > 1 ? `There are ${topStats.length} census tracts in ${meta.name} with the most immigrants in poverty` : `${getGeomapTitle(meta, dropdownValue)} was ${topStats[0].Geography}`} (${getGeomapQualifier(topStats, meta)}).`}</p>
+              <p>{`${topStats.length > 1 ? `There are ${topStats.length} census tracts in ${meta.name} with the most immigrants in poverty` : `${getGeomapTitle(meta, dropdownValue)} was ${formatGeomapLabel(topStats[0], meta, tractToPlace)}`} (${getGeomapQualifier(topStats, meta)}).`}</p>
               {immigrantsDataForCurrentLocationAvailable ? <p>The map here shows the {meta.level === "county" ? "cities" : "tracts"} in {meta.level === "county" || meta.level === "tracts" ? "Wayne County" : `${meta.name}`} by the percentage of their immigrant population that is in poverty.</p> : ""}
             </div>
           }

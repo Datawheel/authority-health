@@ -173,19 +173,19 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
           {isVisionDisabilitySelected
             ? <div className="article-inner-container">
               <StatGroup
-                title={"Most common age groups with vision disability by gender"}
+                title={"Most common age groups with vision disability"}
                 year={visionDisabilityDataAvailable ? topMaleVisionDisabilityData.Year : ""}
                 stats={[
                   {
                     title: "Female",
                     year: visionDisabilityDataAvailable ? topFemaleVisionDisabilityData.Year : "",
-                    value: visionDisabilityDataAvailable && topFemaleVisionDisabilityData.share !== 0 ? rangeFormatter(topFemaleVisionDisabilityData.Age) : "N/A",
+                    value: visionDisabilityDataAvailable && topFemaleVisionDisabilityData.share !== 0 ? `${rangeFormatter(topFemaleVisionDisabilityData.Age)} years` : "N/A",
                     qualifier: visionDisabilityDataAvailable ? `${formatPercentage(topFemaleVisionDisabilityData.share)} of the population in ${topFemaleVisionDisabilityData.Geography}` : ""
                   },
                   {
                     title: "Male",
                     year: visionDisabilityDataAvailable ? topMaleVisionDisabilityData.Year : "N/A",
-                    value: visionDisabilityDataAvailable && topMaleVisionDisabilityData.share !== 0 ? rangeFormatter(topMaleVisionDisabilityData.Age) : "N/A",
+                    value: visionDisabilityDataAvailable && topMaleVisionDisabilityData.share !== 0 ? `${rangeFormatter(topMaleVisionDisabilityData.Age)} years` : "N/A",
                     qualifier: visionDisabilityDataAvailable ? `${formatPercentage(topMaleVisionDisabilityData.share)} of the population in ${topMaleVisionDisabilityData.Geography}` : "",
                     color: "terra-cotta"
                   }
@@ -267,7 +267,7 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
               xConfig: {
                 labelRotation: false,
                 tickFormat: d => rangeFormatter(d),
-                title: "Age distribution"
+                title: "Age Groups"
               },
               yConfig: {tickFormat: d => formatPercentage(d)},
               shapeConfig: {
@@ -304,7 +304,7 @@ class VisionAndAuditoryDisabilities extends SectionColumns {
               xConfig: {
                 labelRotation: false,
                 tickFormat: d => rangeFormatter(d),
-                title: "Age distribution"
+                title: "Age Groups"
               },
               yConfig: {tickFormat: d => formatPercentage(d)},
               shapeConfig: {

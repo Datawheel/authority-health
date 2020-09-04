@@ -16,7 +16,7 @@ import SourceGroup from "components/SourceGroup";
 import Options from "components/Options";
 
 const definitions = [
-  {term: "Sheltered Homeless", definition: "According to U.S. Department of Housing and Urban Development, a person is considered sheltered homeless when he/she resides in a an emergency shelter or in transitional housing or supportive housing for homeless persons who originally came from the streets or emergency shelters."},
+  {term: "Sheltered Homeless", definition: "According to U.S. Department of Housing and Urban Development, a person is considered sheltered homeless when he/she resides in an emergency shelter or in transitional housing or supportive housing for homeless persons who originally came from the streets or emergency shelters."},
   {term: "Unsheltered Homeless", definition: "According to U.S. Department of Housing and Urban Development, a person is considered unsheltered homeless when he/she resides in a place not meant for human habitation, such as cars, parks, sidewalks, abandoned buildings (on the street)."},
   {term: "Parenting Youth", definition: "A youth who identifies as the parent or legal guardian of one or more children who are present with or sleeping in the same place as that youth parent, where there is no person over age 24 in the household."},
   {term: "Chronically Homeless", definition: "HUD defines a “chronically homeless” individual as someone who has been homeless and living or residing in a place not meant for human habitation, a safe haven, or in an emergency shelter continuously for at least 1 year or on at least four separate occasions in the last 3 years where the combined length of time homeless in those occasions is at least 12 months, and also has a disability."},
@@ -174,21 +174,19 @@ class Homeless extends SectionColumns {
             height: 300,
             groupBy: "Category",
             label: d => `${d.Category} (Sheltered)`,
-            y: "shelteredShare",
+            y: "Sheltered Homeless Population",
             x: "Category",
             time: "Year",
             xSort: (a, b) => a.Category.localeCompare(b.Category),
             yConfig: {
-              tickFormat: d => formatPercentage(d),
-              title: "Share"
+              title: "Population"
             },
             title: d => `Sheltered Homeless Demographics in ${d[0].Geography}`,
             shapeConfig: {
               label: false
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.shelteredShare)], ["County", d => d.Geography]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Population", d => formatPercentage(d["Sheltered Homeless Population"])], ["County", d => d.Geography]]}
           }}
-          dataFormat={resp => formatShelteredHomelessCategories(resp.data)[0]}
           />
 
           <Options
@@ -203,21 +201,19 @@ class Homeless extends SectionColumns {
             groupBy: "Category",
             height: 300,
             label: d => `${d.Category} (Unsheltered)`,
-            y: "unshelteredShare",
+            y: "Unsheltered Homeless Population",
             x: "Category",
             time: "Year",
             xSort: (a, b) => a.Category.localeCompare(b.Category),
             yConfig: {
-              tickFormat: d => formatPercentage(d),
-              title: "Share"
+              title: "Population"
             },
             title: d => `Unsheltered Homeless Demographics in ${d[0].Geography}`,
             shapeConfig: {
               label: false
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Share", d => formatPercentage(d.unshelteredShare)], ["County", d => d.Geography]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Population", d => formatPercentage(d["Unsheltered Homeless Population"])], ["County", d => d.Geography]]}
           }}
-          dataFormat={resp => formatUnshelteredHomelessCategories(resp.data)[0]}
           />
         </div>
       </SectionColumns>

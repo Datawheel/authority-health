@@ -83,11 +83,11 @@ class DisabilityStatus extends SectionColumns {
           <Stat
             title="Largest age group with a disibility"
             year={disabilityStatusAvailable ? topDisabilityStatus.Year : ""}
-            value={disabilityStatusAvailable && topDisabilityStatus.share !== 0 ? rangeFormatter(topDisabilityStatus.Age) : "N/A"}
+            value={disabilityStatusAvailable && topDisabilityStatus.share !== 0 ? `${rangeFormatter(topDisabilityStatus.Age)} years` : "N/A"}
             qualifier={disabilityStatusAvailable ? `(${formatPopulation(topDisabilityStatus.share)} of the population in ${topDisabilityStatus.Geography})` : ""}
           />
           {/* Write short paragraph describing stats and barchart. */}
-          {disabilityStatusAvailable ? <p>In {topDisabilityStatus.Year}, the most common disabled age group was {topDisabilityStatus.share !== 0 ? topDisabilityStatus.Age.toLowerCase() : "N/A"}, making up {formatPopulation(topDisabilityStatus.share)} of all citizens in {topDisabilityStatus.Geography} in this age group.</p> : ""}
+          {disabilityStatusAvailable ? <p>In {topDisabilityStatus.Year}, the most commonly disabled age group was {topDisabilityStatus.share !== 0 ? topDisabilityStatus.Age.toLowerCase() : "N/A"}, making up {formatPopulation(topDisabilityStatus.share)} of all citizens in {topDisabilityStatus.Geography}.</p> : ""}
           {healthCoverageTypeAvailable ? <p>The chart here shows the health coverage breakdown of the disabled population by age in {filteredHealthCoverageType[0].Geography}.</p> : ""}
 
           <SourceGroup sources={this.state.sources} />
@@ -118,7 +118,7 @@ class DisabilityStatus extends SectionColumns {
             time: "Year",
             title: d => `Disabled Population by Age and Health Coverage in ${d[0].Geography}`,
             yConfig: {
-              tickFormat: d => rangeFormatter(d)
+              tickFormat: d => `${rangeFormatter(d)} years`
             },
             xConfig: {
               tickFormat: d => formatPopulation(d)
@@ -127,7 +127,7 @@ class DisabilityStatus extends SectionColumns {
             shapeConfig: {
               label: false
             },
-            tooltipConfig: {tbody: [["Year", d => d.Year], ["Age", d => d.Age], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
+            tooltipConfig: {tbody: [["Year", d => d.Year], ["Age Group", d => `${rangeFormatter(d.Age)} years`], ["Share", d => formatPopulation(d.share)], [titleCase(meta.level), d => d.Geography]]}
           }}
           dataFormat={resp => {
             this.setState({sources: updateSource(resp.source, this.state.sources)});

@@ -224,6 +224,9 @@ layout
       /* style direct child paragraphs only */
       /* TODO: replace with <React.Fragment> if updating react to v16 */
       & > p,
+      & > .article-inner-container  {
+        margin-bottom: 0.75em; /* override blueprint */
+      }
       & > .article-inner-container > p {
         @add-mixin font-sm;
         width: 42em;

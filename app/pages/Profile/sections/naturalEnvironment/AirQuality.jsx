@@ -134,7 +134,7 @@ class AirQuality extends SectionColumns {
               value={titleCase(formatAirQualityDaysName(topAirQualityDays.Category))}
               qualifier={`${topAirQualityDays["Air Quality Days"]} of 365 days in Wayne County`}
             />
-            <p>In {topAirQualityDays.Year}, {topAirQualityDays["Air Quality Days"]} of 365 days were {formatAirQualityDaysName(topAirQualityDays.Category)} quality air in {topAirQualityDays.Geography}.</p>
+            <p>In {topAirQualityDays.Year}, {topAirQualityDays["Air Quality Days"]} of 365 days had {formatAirQualityDaysName(topAirQualityDays.Category)} quality air in {topAirQualityDays.Geography}.</p>
             <p>The glossary below explains air quality with respect to air quality index (AQI).</p>
           </div>}
 
@@ -169,11 +169,11 @@ class AirQuality extends SectionColumns {
               value={sensitiveGroupData[0]["Air Quality Days"]}
               qualifier={`of 365 days in ${sensitiveGroupData[0].Geography}`}
             />
-            <p>In {sensitiveGroupData[0].Year}, {sensitiveGroupData[0]["Air Quality Days"]} days were unhealthy air for sensitive groups in {sensitiveGroupData[0].Geography}.</p>
+            <p>In {sensitiveGroupData[0].Year}, {sensitiveGroupData[0]["Air Quality Days"]} days had unhealthy air for sensitive groups in {sensitiveGroupData[0].Geography}.</p>
             <p>Air quality is unhealthy for sensitive groups when the AQI is between 101 to 150. Although general public is not likely to be affected at this AQI range, people with lung disease, older adults and children are at a greater risk from exposure to ozone, whereas persons with heart and lung disease, older adults and children are at greater risk from the presence of particles in the air.</p>
           </div>}
 
-          <p>The chart here shows the {dropdownValue === "Air Pollutants" ? "most common" : ""} {dropdownValue.toLocaleLowerCase()} {dropdownValue !== "Air Quality Days" ? "over years" : ""} in {airQualityDays.data[0].Geography}.</p>
+          <p>The chart here shows the {dropdownValue === "Air Pollutants" ? "most common" : dropdownValue === "Air Quality Days" ? "number of days of each" : dropdownValue === "Unhealthy Air for Sensitive Groups" ? "occurances of" : "" } {dropdownValue.toLocaleLowerCase().replace(/days$/g, "level").replace(/^unhealthy/g, "\"unhealthy").replace(/groups$/g, "groups\"")} in {airQualityDays.data[0].Geography} by year.</p>
 
           <SourceGroup sources={this.state.sources} />
           {dropdownValue !== "Air Pollutants" ? <Glossary definitions={definitions} /> : <Glossary definitions={pollutantDefinitions} />}

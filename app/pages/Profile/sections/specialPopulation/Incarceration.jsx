@@ -16,8 +16,8 @@ import Glossary from "components/Glossary";
 import Options from "components/Options";
 
 const definitions = [
-  {term: "Assaultive Offence Includes", definition: "Homicide, Robbery, CSC, Assault, Arson, Other Sex Offense, Burglary, Weapons Possession, etc."},
-  {term: "Non-Assaultive Offence Includes", definition: "Larceny, Fraud, Forgery/Embezzle, Motor Vehicle, Malicious Destruction, Drugs, OUIL 3rd, etc."},
+  {term: "Assaultive Offence Includes", definition: "Homicide, Robbery, Criminal Sexual Conduct  (CSC), Assault, Arson, Other Sex Offense, Burglary, Weapons Possession, etc."},
+  {term: "Non-Assaultive Offence Includes", definition: "Larceny, Fraud, Forgery/Embezzle, Motor Vehicle, Malicious Destruction, Drugs, Operating Under the Influence of Liquor (OUIL), etc."},
   {term: "Probation", definition: "A term of supervision afforded either a convicted felon or a convicted misdemeanant by a court as an alternative to prison or jail, although some judges may sentence offenders to a combination of both probation and jail or boot camp."},
   {term: "Prison", definition: "A correctional facility where offenders serve a felony sentence imposed by the court under the supervision of the Michigan Department of Corrections."},
   {term: "Jail", definition: " A county institution that houses persons awaiting trial, unsentenced felons and misdemeanants, and sentenced misdemeanants and felons."}

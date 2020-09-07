@@ -236,7 +236,7 @@ class Immigrants extends SectionColumns {
                   {formatPercentage(michiganImmigrantsData.share)} in Michigan, and {formatPercentage(USImmigrantsData.share)} in the United States.</p>
               }
               <p>{`${getGeomapTitle(meta, dropdownValue)} was ${formatGeomapLabel(topStats[0], meta, tractToPlace)} (${getGeomapQualifier(topStats, meta)}).`}</p>
-              {immigrantsDataForCurrentLocationAvailable ? <p>The map here shows the {meta.level === "county" ? "cities" : "tracts"} in {meta.level === "county" || meta.level === "tracts" ? "Wayne County" : `${meta.name}`} by the percentage of their immigrant population.</p> : ""}
+              {immigrantsDataForCurrentLocationAvailable ? <p>The map here shows the {meta.level === "county" ? "cities" : "tracts"} in {meta.level === "county" || meta.level === "tract" ? "Wayne County" : `${meta.name}`} by the percentage of their immigrant population.</p> : ""}
             </div>
 
             : <div className="font-sm">
@@ -260,7 +260,7 @@ class Immigrants extends SectionColumns {
                   {formatPercentage(michiganImmigrantsData.share)} in Michigan and {formatPercentage(USImmigrantsData.share)} in the United States.</p>
               }
               <p>{`${topStats.length > 1 ? `There are ${topStats.length} census tracts in ${meta.name} with the most immigrants in poverty` : `${getGeomapTitle(meta, dropdownValue)} was ${formatGeomapLabel(topStats[0], meta, tractToPlace)}`} (${getGeomapQualifier(topStats, meta)}).`}</p>
-              {immigrantsDataForCurrentLocationAvailable ? <p>The map here shows the {meta.level === "county" ? "cities" : "tracts"} in {meta.level === "county" || meta.level === "tracts" ? "Wayne County" : `${meta.name}`} by the percentage of their immigrant population that is in poverty.</p> : ""}
+              {immigrantsDataForCurrentLocationAvailable ? <p>The map here shows the {meta.level === "county" ? "cities" : "tracts"} in {meta.level === "county" || meta.level === "tract" ? "Wayne County" : `${meta.name}`} by the percentage of their immigrant population that is in poverty.</p> : ""}
             </div>
           }
 

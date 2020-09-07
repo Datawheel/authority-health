@@ -87,8 +87,8 @@ const formatGeomapData = (data, meta, childrenTractIds, disability = "Vision") =
 };
 
 const getGeomapTitle = (meta, disability) => {
-  if (meta.level === "county" || meta.level === "tract") return `Location with the highest ${disability} disability in Wayne County`;
-  else return `Location with the highest ${disability} disability in ${meta.name}`;
+  if (meta.level === "county" || meta.level === "tract") return `Location with the most prevalent ${disability} disability in Wayne County`;
+  else return `Location with the most prevalent ${disability} disability in ${meta.name}`;
 };
 
 const getGeomapQualifier = (data, meta) => {

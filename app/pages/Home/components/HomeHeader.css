@@ -45,6 +45,12 @@
 }
 
 
+.portal-button {
+  display: block;
+  margin-top: var(--gutter-md);
+}
+
+
 /* intro block typography */
 .home-header-intro {
   text-shadow: 0 0.04em 0.5em color(var(--black) a(0.5));

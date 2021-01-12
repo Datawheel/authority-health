@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import Search from "components/Search";
 import {Link} from "react-router";
+import {Button} from "@blueprintjs/core";
 import "./HomeHeader.css";
 
 export default class HomeHeader extends Component {
@@ -33,6 +34,11 @@ export default class HomeHeader extends Component {
                 </a>}
               url="/api/search/"
             />
+            <a href="http://navigateresources.net/tici/" className="portal-button" target="_blank" rel="noopener noreferrer">
+              <Button className="glossary-button pt-minimal font-xxs" iconName="book">
+                Community Resource Portal
+              </Button>
+            </a>
           </div>
 
           {/* map */}

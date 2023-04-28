@@ -34,7 +34,7 @@
     "@datawheel/canon-vizbuilder": "^0.2.27",
     "flickr-sdk": "^3.8.0",
     "google-spreadsheet": "^2.0.7",
-    "jszip": "^3.2.1",
+    "jszip": "^3.8.0",
     "mondrian-rest-client": "^1.1.3",
     "promise-throttle": "^1.0.0",
     "prop-types": "^15.6.2",
